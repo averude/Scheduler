@@ -15,12 +15,12 @@ public class Position implements Serializable {
 
     private String name;// Validation is needed
 
-    @ManyToOne
+    @Column(name = "department_id")
     @JoinColumn(name = "department_id")
-    private Department department;
+    private long departmentId;
 
     @JsonIgnore
-    @OneToMany( mappedBy = "position",
+    @OneToMany( mappedBy = "positionId",
                 cascade = CascadeType.ALL,
                 fetch = FetchType.EAGER,
                 orphanRemoval = true)
@@ -42,12 +42,12 @@ public class Position implements Serializable {
         this.name = name;
     }
 
-    public Department getDepartment() {
-        return department;
+    public long getDepartmentId() {
+        return departmentId;
     }
 
-    public void setDepartment(Department department) {
-        this.department = department;
+    public void setDepartmentId(long departmentId) {
+        this.departmentId = departmentId;
     }
 
     public void setEmployees(Set<Employee> employees) {
@@ -59,13 +59,13 @@ public class Position implements Serializable {
     }
 
     public void addEmployee(Employee employee){
-        employee.setPosition(this);
+        employee.setPositionId(this.getId());
         employees.add(employee);
     }
 
     public void removeEmployee(Employee employee){
-        employee.setPosition(null);
-        employees.add(employee);
+        employee.setPositionId(0);
+        employees.remove(employee);
     }
 
     @Override

@@ -11,10 +11,9 @@ public class Schedule implements Serializable{
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @JsonIgnore
-    @ManyToOne
+    @Column(name = "employee_id")
     @JoinColumn(name = "employee_id")
-    private Employee employee;
+    private long employeeId;
 
     private float hours;// Validation is needed
 
@@ -34,12 +33,12 @@ public class Schedule implements Serializable{
         this.id = id;
     }
 
-    public Employee getEmployee() {
-        return employee;
+    public long getEmployeeId() {
+        return employeeId;
     }
 
-    public void setEmployee(Employee employee) {
-        this.employee = employee;
+    public void setEmployeeId(long employeeId) {
+        this.employeeId = employeeId;
     }
 
     public float getHours() {

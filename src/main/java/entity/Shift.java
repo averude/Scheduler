@@ -18,7 +18,7 @@ public class Shift implements Serializable{
     private String name;// Validation is needed
 
     @JsonIgnore
-    @OneToMany( mappedBy = "shift",
+    @OneToMany( mappedBy = "shiftId",
                 cascade = CascadeType.ALL,
                 fetch = FetchType.EAGER,
                 orphanRemoval = true)
@@ -52,12 +52,12 @@ public class Shift implements Serializable{
     }
 
     public void addEmployee(Employee employee){
-        employee.setShift(this);
+        employee.setShiftId(this.getId());
         employees.add(employee);
     }
 
     public void removeEmployee(Employee employee){
-        employee.setShift(null);
+        employee.setShiftId(0);
         employees.remove(employee);
     }
 

@@ -17,7 +17,7 @@ public class Department implements Serializable {
 
     private String name;// Validation is needed
     @JsonIgnore
-    @OneToMany( mappedBy = "department",
+    @OneToMany( mappedBy = "departmentId",
                 cascade = CascadeType.ALL,
                 fetch = FetchType.EAGER,
                 orphanRemoval = true)
@@ -48,12 +48,12 @@ public class Department implements Serializable {
     }
 
     public void addPosition(Position position){
-        position.setDepartment(this);
+        position.setDepartmentId(this.getId());
         positions.add(position);
     }
 
     public void removePosition(Position position){
-        position.setDepartment(null);
+        position.setDepartmentId(0);
         positions.remove(position);
     }
 

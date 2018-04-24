@@ -17,15 +17,15 @@ public class Employee implements Serializable {
     private String firstName;
     private String secondName;
 
-    @ManyToOne
+    @Column(name = "position_id")
     @JoinColumn(name = "position_id")
-    private Position position;
+    private long positionId;
 
-    @ManyToOne
+    @Column(name = "shift_id")
     @JoinColumn(name = "shift_id")
-    private Shift shift;
+    private long shiftId;
 
-    @OneToMany( mappedBy = "employee",
+    @OneToMany( mappedBy = "employeeId",
                 cascade = CascadeType.ALL,
                 fetch = FetchType.EAGER,
                 orphanRemoval = true)
@@ -55,23 +55,23 @@ public class Employee implements Serializable {
         this.secondName = secondName;
     }
 
-    public Position getPosition() {
-        return position;
+    public long getPositionId() {
+        return positionId;
     }
 
-    public void setPosition(Position position) {
-        this.position = position;
+    public void setPositionId(long positionId) {
+        this.positionId = positionId;
     }
 
-    public Shift getShift() {
-        return shift;
+    public long getShiftId() {
+        return shiftId;
     }
 
-    public void setShift(Shift shift) {
-        this.shift = shift;
+    public void setShiftId(long shiftId) {
+        this.shiftId = shiftId;
     }
 
-    @JsonIgnore
+    @JsonIgnore // Don't know why, but field annotation doesn't work.
     public List<Schedule> getSchedule() {
         return schedules;
     }
@@ -81,12 +81,12 @@ public class Employee implements Serializable {
     }
 
     public void addSchedule(Schedule schedule){
-        schedule.setEmployee(this);
+        schedule.setEmployeeId(this.getId());
         schedules.add(schedule);
     }
 
     public void removeSchedule(Schedule schedule){
-        schedule.setEmployee(null);
+        schedule.setEmployeeId(0);
         schedules.remove(schedule);
     }
 
