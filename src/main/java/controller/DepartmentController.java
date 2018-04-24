@@ -4,18 +4,21 @@ import entity.Department;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import service.DepartmentService;
 
+import java.net.URI;
 import java.util.Collection;
 
 @RestController
 @RequestMapping("/api/v1/departments")
-public class DepartmentController {
+public class DepartmentController extends AbstractController<Department>{
 
     private final DepartmentService departmentService;
 
     @Autowired
     DepartmentController(DepartmentService departmentService) {
+        super(departmentService);
         this.departmentService = departmentService;
     }
 
@@ -27,8 +30,10 @@ public class DepartmentController {
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<?> add(@RequestBody Department department){
         departmentService.create(department);
-        return ResponseEntity.ok("Department with ID:" + department.getId() +
-                " was successfully created");
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest().path("/{id}")
+                .buildAndExpand(department.getId()).toUri();
+        return ResponseEntity.created(location).build();
     }
 
     @RequestMapping(method = RequestMethod.GET,

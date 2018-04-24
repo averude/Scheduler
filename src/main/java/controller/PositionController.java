@@ -4,45 +4,55 @@ import entity.Position;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import service.PositionService;
 
+import java.net.URI;
 import java.util.Collection;
 
 @RestController
 @RequestMapping("/api/v1/departments/{departmentId}/positions")
-public class PositionController {
+public class PositionController extends AbstractController<Position>{
 
     private final PositionService positionService;
 
     @Autowired
     public PositionController(PositionService positionService) {
+        super(positionService);
         this.positionService = positionService;
     }
 
     @RequestMapping(method = RequestMethod.GET)
     public Collection<Position> list(@PathVariable long departmentId){
+        this.validate(departmentId);
         return positionService.getAll(departmentId);
     }
 
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<?> add(@PathVariable long departmentId,
                                  @RequestBody Position position){
+        this.validate(departmentId);
         positionService.createInParent(departmentId, position);
-        return ResponseEntity.ok("New position in department " +
-                "{" + departmentId + "} " +
-                "was created with Id:" + position.getId());
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest().path("/{id}")
+                .buildAndExpand(position.getId()).toUri();
+        return ResponseEntity.created(location).build();
     }
 
     @RequestMapping(method = RequestMethod.GET,
                     value = "/{positionId}")
-    public Position get(@PathVariable long positionId){
+    public Position get(@PathVariable long departmentId,
+                        @PathVariable long positionId){
+        this.validate(departmentId);
         return positionService.getById(positionId);
     }
 
     @RequestMapping(method = RequestMethod.PUT,
                     value = "/{positionId}")
-    public ResponseEntity<?> update(@PathVariable long positionId,
+    public ResponseEntity<?> update(@PathVariable long departmentId,
+                                    @PathVariable long positionId,
                                     @RequestBody Position position){
+        this.validate(departmentId);
         positionService.updateById(positionId, position);
         return ResponseEntity.ok("Position with ID:" + positionId +
                 " was successfully updated");
@@ -50,7 +60,9 @@ public class PositionController {
 
     @RequestMapping(method = RequestMethod.DELETE,
                     value = "/{positionId}")
-    public ResponseEntity<?> delete(@PathVariable long positionId){
+    public ResponseEntity<?> delete(@PathVariable long departmentId,
+                                    @PathVariable long positionId){
+        this.validate(departmentId);
         positionService.deleteById(positionId);
         return ResponseEntity.ok("Position with ID:" + positionId +
                 " was successfully deleted");
