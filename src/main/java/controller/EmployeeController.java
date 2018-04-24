@@ -25,8 +25,6 @@ public class EmployeeController extends AbstractController<Employee>{
     @RequestMapping(method = RequestMethod.GET)
     public Collection<Employee> list(@PathVariable long departmentId,
                                      @PathVariable long positionId){
-        this.validate(departmentId);
-        this.validate(positionId);
         return employeeService.getAll(positionId);
     }
 
@@ -34,8 +32,6 @@ public class EmployeeController extends AbstractController<Employee>{
     public ResponseEntity<?> add(@PathVariable long departmentId,
                                  @PathVariable long positionId,
                                  @RequestBody Employee employee){
-        this.validate(departmentId);
-        this.validate(positionId);
         employeeService.createInParent(positionId, employee);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/{id}")
@@ -48,8 +44,7 @@ public class EmployeeController extends AbstractController<Employee>{
     public Employee get(@PathVariable long departmentId,
                         @PathVariable long positionId,
                         @PathVariable long employeeId){
-        this.validate(departmentId);
-        this.validate(positionId);
+        this.validate(employeeId);
         return employeeService.getById(employeeId);
     }
 
@@ -59,8 +54,7 @@ public class EmployeeController extends AbstractController<Employee>{
                                     @PathVariable long positionId,
                                     @PathVariable long employeeId,
                                     @RequestBody Employee employee){
-        this.validate(departmentId);
-        this.validate(positionId);
+        this.validate(employeeId);
         employeeService.updateById(employeeId, employee);
         return ResponseEntity.ok("Employee with ID:" + employeeId +
                 " was successfully updated");
@@ -71,8 +65,7 @@ public class EmployeeController extends AbstractController<Employee>{
     public ResponseEntity<?> delete(@PathVariable long departmentId,
                                     @PathVariable long positionId,
                                     @PathVariable long employeeId){
-        this.validate(departmentId);
-        this.validate(positionId);
+        this.validate(employeeId);
         employeeService.deleteById(employeeId);
         return ResponseEntity.ok("Employee with ID:" + employeeId +
                 " was successfully deleted");

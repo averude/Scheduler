@@ -24,14 +24,12 @@ public class PositionController extends AbstractController<Position>{
 
     @RequestMapping(method = RequestMethod.GET)
     public Collection<Position> list(@PathVariable long departmentId){
-        this.validate(departmentId);
         return positionService.getAll(departmentId);
     }
 
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<?> add(@PathVariable long departmentId,
                                  @RequestBody Position position){
-        this.validate(departmentId);
         positionService.createInParent(departmentId, position);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/{id}")
@@ -43,7 +41,7 @@ public class PositionController extends AbstractController<Position>{
                     value = "/{positionId}")
     public Position get(@PathVariable long departmentId,
                         @PathVariable long positionId){
-        this.validate(departmentId);
+        this.validate(positionId);
         return positionService.getById(positionId);
     }
 
@@ -52,7 +50,7 @@ public class PositionController extends AbstractController<Position>{
     public ResponseEntity<?> update(@PathVariable long departmentId,
                                     @PathVariable long positionId,
                                     @RequestBody Position position){
-        this.validate(departmentId);
+        this.validate(positionId);
         positionService.updateById(positionId, position);
         return ResponseEntity.ok("Position with ID:" + positionId +
                 " was successfully updated");
@@ -62,7 +60,7 @@ public class PositionController extends AbstractController<Position>{
                     value = "/{positionId}")
     public ResponseEntity<?> delete(@PathVariable long departmentId,
                                     @PathVariable long positionId){
-        this.validate(departmentId);
+        this.validate(positionId);
         positionService.deleteById(positionId);
         return ResponseEntity.ok("Position with ID:" + positionId +
                 " was successfully deleted");

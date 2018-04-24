@@ -39,6 +39,7 @@ public class DepartmentController extends AbstractController<Department>{
     @RequestMapping(method = RequestMethod.GET,
                     value = "/{departmentId}")
     public Department get(@PathVariable long departmentId){
+        this.validate(departmentId);
         return departmentService.getById(departmentId);
     }
 
@@ -46,6 +47,7 @@ public class DepartmentController extends AbstractController<Department>{
                     value = "/{departmentId}")
     public ResponseEntity<?> update(@PathVariable long departmentId,
                                     @RequestBody Department department){
+        this.validate(departmentId);
         departmentService.updateById(departmentId, department);
         return ResponseEntity.ok("Department with ID:" + departmentId +
                 " was successfully updated");
@@ -53,9 +55,9 @@ public class DepartmentController extends AbstractController<Department>{
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/{departmentId}")
     public ResponseEntity<?> delete(@PathVariable long departmentId){
+        this.validate(departmentId);
         departmentService.deleteById(departmentId);
         return ResponseEntity.ok("Department with ID:" + departmentId +
                 " was successfully deleted");
     }
-
 }
