@@ -18,12 +18,10 @@ public class Employee implements Serializable {
     private String secondName;
 
     @Column(name = "position_id")
-    @JoinColumn(name = "position_id")
     private long positionId;
 
     @Column(name = "shift_id")
-    @JoinColumn(name = "shift_id")
-    private long shiftId;
+    private Long shiftId;
 
     @OneToMany( mappedBy = "employeeId",
                 cascade = CascadeType.ALL,
@@ -63,11 +61,11 @@ public class Employee implements Serializable {
         this.positionId = positionId;
     }
 
-    public long getShiftId() {
+    public Long getShiftId() {
         return shiftId;
     }
 
-    public void setShiftId(long shiftId) {
+    public void setShiftId(Long shiftId) {
         this.shiftId = shiftId;
     }
 

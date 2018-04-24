@@ -57,7 +57,7 @@ public class Shift implements Serializable{
     }
 
     public void removeEmployee(Employee employee){
-        employee.setShiftId(0);
+        employee.setShiftId(null);
         employees.remove(employee);
     }
 

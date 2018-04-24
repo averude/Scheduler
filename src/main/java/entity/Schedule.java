@@ -12,14 +12,13 @@ public class Schedule implements Serializable{
     private long id;
 
     @Column(name = "employee_id")
-    @JoinColumn(name = "employee_id")
     private long employeeId;
 
     private float hours;// Validation is needed
 
     private int day;
     private int month;
-    @Column(name = "y")
+    @Column(name = "y") //because of Derby's constraint of the "year" column name
     private int year;
 
     public Schedule() {

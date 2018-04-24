@@ -16,7 +16,6 @@ public class Position implements Serializable {
     private String name;// Validation is needed
 
     @Column(name = "department_id")
-    @JoinColumn(name = "department_id")
     private long departmentId;
 
     @JsonIgnore
