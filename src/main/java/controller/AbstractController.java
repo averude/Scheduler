@@ -13,10 +13,11 @@ public abstract class AbstractController<T extends Serializable> {
         this.genericService = genericService;
     }
 
-    protected void validate(long id){
+    T validate(long id){
         T t = genericService.getById(id);
         if (t == null) {
             throw new EntityNotFoundException(id);
         }
+        return t;
     }
 }

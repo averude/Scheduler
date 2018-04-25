@@ -11,7 +11,7 @@ public abstract class AbstractDAO<T extends Serializable> {
     private Class<T> aClass;
     private SessionFactory sessionFactory;
 
-    public AbstractDAO(Class<T> aClass){
+    AbstractDAO(Class<T> aClass){
         this.aClass = aClass;
     }
 

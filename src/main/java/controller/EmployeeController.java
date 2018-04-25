@@ -23,8 +23,8 @@ public class EmployeeController extends AbstractController<Employee>{
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public Collection<Employee> list(@PathVariable long departmentId,
-                                     @PathVariable long positionId){
+    public Collection<Employee> getAll(@PathVariable long departmentId,
+                                       @PathVariable long positionId){
         return employeeService.getAll(positionId);
     }
 

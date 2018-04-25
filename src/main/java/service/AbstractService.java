@@ -13,11 +13,11 @@ public abstract class AbstractService<T extends Serializable>
 
     private GenericDAO<T> genericDAO;
 
-    public AbstractService() {
+    AbstractService() {
 
     }
 
-    public AbstractService(GenericDAO<T> genericDAO) {
+    AbstractService(GenericDAO<T> genericDAO) {
         this.genericDAO = genericDAO;
     }
 

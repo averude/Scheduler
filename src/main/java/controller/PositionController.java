@@ -23,7 +23,7 @@ public class PositionController extends AbstractController<Position>{
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public Collection<Position> list(@PathVariable long departmentId){
+    public Collection<Position> getAll(@PathVariable long departmentId){
         return positionService.getAll(departmentId);
     }
 
