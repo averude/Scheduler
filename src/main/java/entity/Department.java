@@ -3,6 +3,9 @@ package entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
@@ -15,13 +18,19 @@ public class Department implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    private String name;// Validation is needed
+    @NotNull
+    @Size(  max = 64,
+            min = 3,
+            message = "{}")
+    @Column(nullable = false)
+    private String name;
+
     @JsonIgnore
     @OneToMany( mappedBy = "departmentId",
                 cascade = CascadeType.ALL,
                 fetch = FetchType.EAGER,
                 orphanRemoval = true)
-    private Set<Position> positions = new HashSet<>();
+    private Set<@NotNull @Valid Position> positions = new HashSet<>();
 
     public long getId() {
         return id;

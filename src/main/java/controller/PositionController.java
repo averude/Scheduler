@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import service.PositionService;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.Collection;
 
@@ -29,7 +30,7 @@ public class PositionController extends AbstractController<Position>{
 
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<?> add(@PathVariable long departmentId,
-                                 @RequestBody Position position){
+                                 @Valid @RequestBody Position position){
         positionService.createInParent(departmentId, position);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/{id}")
@@ -49,7 +50,7 @@ public class PositionController extends AbstractController<Position>{
                     value = "/{positionId}")
     public ResponseEntity<?> update(@PathVariable long departmentId,
                                     @PathVariable long positionId,
-                                    @RequestBody Position position){
+                                    @Valid @RequestBody Position position){
         this.validate(positionId);
         positionService.updateById(positionId, position);
         return ResponseEntity.ok("Position with ID:" + positionId +

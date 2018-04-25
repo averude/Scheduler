@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import service.ShiftService;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.Collection;
 
@@ -29,7 +30,7 @@ public class ShiftController extends AbstractController<Shift> {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<?> add(@RequestBody Shift shift){
+    public ResponseEntity<?> add(@Valid @RequestBody Shift shift){
         shiftService.create(shift);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/{id}")
@@ -54,7 +55,7 @@ public class ShiftController extends AbstractController<Shift> {
     @RequestMapping(method = RequestMethod.PUT,
                     value = "/{shiftId}")
     public ResponseEntity<?> update(@PathVariable long shiftId,
-                                    @RequestBody Shift shift){
+                                    @Valid @RequestBody Shift shift){
         this.validate(shiftId);
         shiftService.updateById(shiftId, shift);
         return ResponseEntity.ok("Updated " + shiftId);

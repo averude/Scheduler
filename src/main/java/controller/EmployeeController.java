@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import service.EmployeeService;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.Collection;
 
@@ -31,7 +32,7 @@ public class EmployeeController extends AbstractController<Employee>{
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<?> add(@PathVariable long departmentId,
                                  @PathVariable long positionId,
-                                 @RequestBody Employee employee){
+                                 @Valid @RequestBody Employee employee){
         employeeService.createInParent(positionId, employee);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/{id}")
@@ -53,7 +54,7 @@ public class EmployeeController extends AbstractController<Employee>{
     public ResponseEntity<?> update(@PathVariable long departmentId,
                                     @PathVariable long positionId,
                                     @PathVariable long employeeId,
-                                    @RequestBody Employee employee){
+                                    @Valid @RequestBody Employee employee){
         this.validate(employeeId);
         employeeService.updateById(employeeId, employee);
         return ResponseEntity.ok("Employee with ID:" + employeeId +

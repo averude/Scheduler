@@ -3,6 +3,9 @@ package entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,14 +18,19 @@ public class Shift implements Serializable{
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    private String name;// Validation is needed
+    @NotNull
+    @Size(  max = 64,
+            min = 2,
+            message = "{}")
+    @Column(nullable = false)
+    private String name;
 
     @JsonIgnore
     @OneToMany( mappedBy = "shiftId",
                 cascade = CascadeType.ALL,
                 fetch = FetchType.EAGER,
                 orphanRemoval = true)
-    private List<Employee> employees = new ArrayList<>();
+    private List<@NotNull @Valid Employee> employees = new ArrayList<>();
 
     public Shift() {
     }

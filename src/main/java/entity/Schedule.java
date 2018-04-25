@@ -1,24 +1,46 @@
 package entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 @Entity
-public class Schedule implements Serializable{
+public class Schedule implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @Column(name = "employee_id")
+    @NotNull
+    @Column(name = "employee_id",
+            nullable = false)
     private long employeeId;
 
+    @NotNull
+    @Column(nullable = false)
     private float hours;// Validation is needed
 
+    @NotNull
+    @Size(  max = 31,
+            min = 1,
+            message = "{}")
+    @Column(nullable = false)
     private int day;
+
+    @NotNull
+    @Size(  max = 11,
+            min = 0,
+            message = "{}")
+    @Column(nullable = false)
     private int month;
-    @Column(name = "y") //because of Derby's constraint of the "year" column name
+
+    @NotNull
+    @Size(  max = 2030,
+            min = 2000,
+            message = "{}")
+    @Column(name = "y", //because of Derby's constraint of the "year" column name
+            nullable = false)
     private int year;
 
     public Schedule() {

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import service.DepartmentService;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.Collection;
 
@@ -28,7 +29,7 @@ public class DepartmentController extends AbstractController<Department>{
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<?> add(@RequestBody Department department){
+    public ResponseEntity<?> add(@Valid @RequestBody Department department){
         departmentService.create(department);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/{id}")
@@ -46,7 +47,7 @@ public class DepartmentController extends AbstractController<Department>{
     @RequestMapping(method = RequestMethod.PUT,
                     value = "/{departmentId}")
     public ResponseEntity<?> update(@PathVariable long departmentId,
-                                    @RequestBody Department department){
+                                    @Valid @RequestBody Department department){
         this.validate(departmentId);
         departmentService.updateById(departmentId, department);
         return ResponseEntity.ok("Department with ID:" + departmentId +

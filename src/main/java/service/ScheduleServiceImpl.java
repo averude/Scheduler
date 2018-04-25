@@ -44,14 +44,7 @@ public class ScheduleServiceImpl
     }
 
     @Override
-    @Transactional
-    public List<Schedule> listMonth(long employeeId, int month, int year) {
-        return scheduleDAO.listMonth(employeeId, month, year);
-    }
-
-    @Override
-    @Transactional
-    public Schedule getDay(long employeeId, int day, int month, int year) {
-        return scheduleDAO.getDay(employeeId, day, month, year);
+    public Collection<Schedule> getCurrentMonth(long employeeId) {
+        return null;
     }
 }

@@ -3,6 +3,9 @@ package entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,20 +17,35 @@ public class Employee implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+
+    @NotNull
+    @Size(  max = 20,
+            min = 3,
+            message = "{}")
+    @Column(nullable = false)
     private String firstName;
+
+    @NotNull
+    @Size(  max = 20,
+            min = 3,
+            message = "{}")
+    @Column(nullable = false)
     private String secondName;
 
-    @Column(name = "position_id")
+    @NotNull(message = "{}")
+    @Column(name = "position_id",
+            nullable = false)
     private long positionId;
 
-    @Column(name = "shift_id")
+    @Column(name = "shift_id",
+            nullable = true)
     private Long shiftId;
 
     @OneToMany( mappedBy = "employeeId",
                 cascade = CascadeType.ALL,
                 fetch = FetchType.EAGER,
                 orphanRemoval = true)
-    private List<Schedule> schedules = new ArrayList<>();
+    private List<@NotNull @Valid Schedule> scheduleList = new ArrayList<>();
 
     public long getId() {
         return id;
@@ -71,21 +89,21 @@ public class Employee implements Serializable {
 
     @JsonIgnore // Don't know why, but field annotation doesn't work.
     public List<Schedule> getSchedule() {
-        return schedules;
+        return scheduleList;
     }
 
     public void setSchedule(List<Schedule> scheduleList) {
-        this.schedules = scheduleList;
+        this.scheduleList = scheduleList;
     }
 
     public void addSchedule(Schedule schedule){
         schedule.setEmployeeId(this.getId());
-        schedules.add(schedule);
+        scheduleList.add(schedule);
     }
 
     public void removeSchedule(Schedule schedule){
         schedule.setEmployeeId(0);
-        schedules.remove(schedule);
+        scheduleList.remove(schedule);
     }
 
     @Override
