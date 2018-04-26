@@ -19,17 +19,24 @@ import static org.hibernate.cfg.Environment.*;
 @EnableTransactionManagement
 @ComponentScans(value = {@ComponentScan("dao"), @ComponentScan("service")})
 public class HibernateConf {
+
+    private final Environment env;
+    private Class[] classes = new Class[]{
+            Department.class,   Position.class, Employee.class,
+            Schedule.class,     Shift.class
+    };
+
     @Autowired
-    private Environment env;
+    public HibernateConf(Environment env) {
+        this.env = env;
+    }
 
     @Bean
     public LocalSessionFactoryBean getSessionFactory() {
         LocalSessionFactoryBean factoryBean = new LocalSessionFactoryBean();
         factoryBean.setDataSource(dataSource());
         factoryBean.setHibernateProperties(hibernateProperties());
-        factoryBean.setAnnotatedClasses(Department.class, Position.class, Employee.class,
-                Schedule.class, Shift.class);
-
+        factoryBean.setAnnotatedClasses(classes);
         return factoryBean;
     }
 

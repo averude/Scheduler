@@ -8,6 +8,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import service.PositionService;
 
 import javax.validation.Valid;
+import javax.validation.Validator;
 import java.net.URI;
 import java.util.Collection;
 
