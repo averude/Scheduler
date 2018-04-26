@@ -23,7 +23,6 @@ import java.util.List;
 
 @Configuration
 @EnableWebMvc
-@PropertySource("classpath:validation_messages.properties")
 @ComponentScan(basePackages = {"controller", "validation"})
 public class WebConfig extends WebMvcConfigurationSupport {
 
