@@ -18,21 +18,21 @@ public class Employee implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @NotNull
+    @NotNull(message = "{employee.firstname.null}")
     @Size(  max = 20,
             min = 3,
-            message = "{}")
+            message = "{employee.firstname.size}")
     @Column(nullable = false)
     private String firstName;
 
-    @NotNull
+    @NotNull(message = "{employee.secondname.null}")
     @Size(  max = 20,
             min = 3,
-            message = "{}")
+            message = "{employee.secondname.size}")
     @Column(nullable = false)
     private String secondName;
 
-    @NotNull(message = "{}")
+    @NotNull(message = "{employee.position.null}")
     @Column(name = "position_id",
             nullable = false)
     private long positionId;

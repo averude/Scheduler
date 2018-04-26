@@ -16,14 +16,14 @@ public class Position implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @NotNull
+    @NotNull(message = "{position.name.null}")
     @Size(  max = 64,
             min = 3,
-            message = "{}")
+            message = "{position.name.size}")
     @Column(nullable = false)
     private String name;
 
-    @NotNull(message = "{}")
+    @NotNull(message = "{position.department.null}")
     @Column(name = "department_id",
             nullable = false)
     private long departmentId;

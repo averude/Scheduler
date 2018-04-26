@@ -12,14 +12,14 @@ public class Schedule implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @NotNull
+    @NotNull(message = "{schedule.employee.null}")
     @Column(name = "employee_id",
             nullable = false)
     private long employeeId;
 
-    @NotNull
+    @NotNull(message = "{schedule.hours.null}")
     @Column(nullable = false)
-    private float hours;// Validation is needed
+    private float hours;
 
     @NotNull
     @Size(  max = 31,

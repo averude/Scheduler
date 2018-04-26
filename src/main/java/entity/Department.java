@@ -18,10 +18,10 @@ public class Department implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @NotNull
+    @NotNull(message = "{department.name.empty}")
     @Size(  max = 64,
             min = 3,
-            message = "{}")
+            message = "{department.name.size}")
     @Column(nullable = false)
     private String name;
 

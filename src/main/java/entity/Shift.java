@@ -18,10 +18,10 @@ public class Shift implements Serializable{
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @NotNull
+    @NotNull(message = "{shift.name.null}")
     @Size(  max = 64,
             min = 2,
-            message = "{}")
+            message = "{shift.name.size}")
     @Column(nullable = false)
     private String name;
 
