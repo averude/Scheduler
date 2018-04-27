@@ -2,8 +2,8 @@ package entity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.time.LocalDate;
 
 @Entity
 public class Schedule implements Serializable {
@@ -21,27 +21,9 @@ public class Schedule implements Serializable {
     @Column(nullable = false)
     private Float hours;
 
-    @NotNull
-    @Size(  max = 31,
-            min = 1,
-            message = "{}")
+    @NotNull(message = "{schedule.date.null}")
     @Column(nullable = false)
-    private int day;
-
-    @NotNull
-    @Size(  max = 11,
-            min = 0,
-            message = "{}")
-    @Column(nullable = false)
-    private int month;
-
-    @NotNull
-    @Size(  max = 2030,
-            min = 2000,
-            message = "{}")
-    @Column(name = "y", //because of Derby's constraint of the "year" column name
-            nullable = false)
-    private int year;
+    private LocalDate date;
 
     public Schedule() {
     }
@@ -70,27 +52,11 @@ public class Schedule implements Serializable {
         this.hours = hours;
     }
 
-    public int getDay() {
-        return day;
+    public LocalDate getDate() {
+        return date;
     }
 
-    public void setDay(int day) {
-        this.day = day;
-    }
-
-    public int getMonth() {
-        return month;
-    }
-
-    public void setMonth(int month) {
-        this.month = month;
-    }
-
-    public int getYear() {
-        return year;
-    }
-
-    public void setYear(int year) {
-        this.year = year;
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 }

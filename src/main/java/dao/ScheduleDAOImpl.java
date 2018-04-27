@@ -5,7 +5,8 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import java.time.LocalDate;
+import java.util.Collection;
 
 @Repository
 public class ScheduleDAOImpl extends AbstractDAO<Schedule> implements ScheduleDAO {
@@ -17,27 +18,23 @@ public class ScheduleDAOImpl extends AbstractDAO<Schedule> implements ScheduleDA
     }
 
     @Override
-    public List<Schedule> listMonth(long employeeId, int month, int year) {
-        return this.getCurrentSession()
-                .createQuery("from Schedule " +
-                        "where employee.id = :employeeId " +
-                        "and month=:month and year=:year", Schedule.class)
+    public Collection<Schedule> getMonth(long employeeId,
+                                         LocalDate date) {
+        return getCurrentSession()
+                .createQuery("SELECT s FROM Schedule s " +
+                        "where s.employeeId = :employeeId " +
+                        "and month(s.date) = :month " +
+                        "and year(s.date) = :year", Schedule.class)
                 .setParameter("employeeId", employeeId)
-                .setParameter("month", month)
-                .setParameter("year", year)
+                .setParameter("month", date.getMonthValue())
+                .setParameter("year", date.getYear())
                 .getResultList();
     }
 
     @Override
-    public Schedule getDay(long employeeId, int day, int month, int year) {
-        return this.getCurrentSession()
-                .createQuery("select Schedule from Schedule " +
-                        "where employee.id = :employeeId " +
-                        "and day=:day and month=:month and year=:year", Schedule.class)
-                .setParameter("employeeId", employeeId)
-                .setParameter("day", day)
-                .setParameter("month", month)
-                .setParameter("year", year)
-                .getSingleResult();
+    public Collection<Schedule> getByDate(long employeeId,
+                                          LocalDate fromDate,
+                                          LocalDate toDate) {
+        return null;
     }
 }

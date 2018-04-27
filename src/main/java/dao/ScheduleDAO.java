@@ -2,9 +2,10 @@ package dao;
 
 import entity.Schedule;
 
-import java.util.List;
+import java.time.LocalDate;
+import java.util.Collection;
 
 public interface ScheduleDAO extends GenericDAO<Schedule> {
-    List<Schedule> listMonth(long employeeId, int month, int year);
-    Schedule getDay(long employeeId, int day, int month, int year);
+    Collection<Schedule> getMonth(long employeeId, LocalDate date);
+    Collection<Schedule> getByDate(long employeeId, LocalDate fromDate, LocalDate toDate);
 }

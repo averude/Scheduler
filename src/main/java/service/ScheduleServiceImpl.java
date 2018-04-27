@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.Collection;
-import java.util.List;
 
 @Service
 public class ScheduleServiceImpl
@@ -44,7 +44,9 @@ public class ScheduleServiceImpl
     }
 
     @Override
+    @Transactional
     public Collection<Schedule> getCurrentMonth(long employeeId) {
-        return null;
+        LocalDate localDate = LocalDate.now();
+        return scheduleDAO.getMonth(employeeId, localDate);
     }
 }
