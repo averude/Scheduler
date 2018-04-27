@@ -16,7 +16,7 @@ public class Employee implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Long id;
 
     @NotNull(message = "{employee.firstname.null}")
     @Size(  max = 20,
@@ -35,7 +35,7 @@ public class Employee implements Serializable {
     @NotNull(message = "{employee.position.null}")
     @Column(name = "position_id",
             nullable = false)
-    private long positionId;
+    private Long positionId;
 
     @Column(name = "shift_id",
             nullable = true)
@@ -47,11 +47,11 @@ public class Employee implements Serializable {
                 orphanRemoval = true)
     private List<@NotNull @Valid Schedule> scheduleList = new ArrayList<>();
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -71,11 +71,11 @@ public class Employee implements Serializable {
         this.secondName = secondName;
     }
 
-    public long getPositionId() {
+    public Long getPositionId() {
         return positionId;
     }
 
-    public void setPositionId(long positionId) {
+    public void setPositionId(Long positionId) {
         this.positionId = positionId;
     }
 
@@ -87,7 +87,7 @@ public class Employee implements Serializable {
         this.shiftId = shiftId;
     }
 
-    @JsonIgnore // Don't know why, but field annotation doesn't work.
+    @JsonIgnore // Don't know why, but in this case field annotation doesn't work.
     public List<Schedule> getSchedule() {
         return scheduleList;
     }
@@ -102,7 +102,7 @@ public class Employee implements Serializable {
     }
 
     public void removeSchedule(Schedule schedule){
-        schedule.setEmployeeId(0);
+        schedule.setEmployeeId(null);
         scheduleList.remove(schedule);
     }
 

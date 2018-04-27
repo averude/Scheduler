@@ -16,7 +16,7 @@ public class Department implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Long id;
 
     @NotNull(message = "{department.name.empty}")
     @Size(  max = 64,
@@ -32,11 +32,11 @@ public class Department implements Serializable {
                 orphanRemoval = true)
     private Set<@NotNull @Valid Position> positions = new HashSet<>();
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -62,7 +62,7 @@ public class Department implements Serializable {
     }
 
     public void removePosition(Position position){
-        position.setDepartmentId(0);
+        position.setDepartmentId(null);
         positions.remove(position);
     }
 

@@ -10,16 +10,16 @@ public class Schedule implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Long id;
 
     @NotNull(message = "{schedule.employee.null}")
     @Column(name = "employee_id",
             nullable = false)
-    private long employeeId;
+    private Long employeeId;
 
     @NotNull(message = "{schedule.hours.null}")
     @Column(nullable = false)
-    private float hours;
+    private Float hours;
 
     @NotNull
     @Size(  max = 31,
@@ -46,27 +46,27 @@ public class Schedule implements Serializable {
     public Schedule() {
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public long getEmployeeId() {
+    public Long getEmployeeId() {
         return employeeId;
     }
 
-    public void setEmployeeId(long employeeId) {
+    public void setEmployeeId(Long employeeId) {
         this.employeeId = employeeId;
     }
 
-    public float getHours() {
+    public Float getHours() {
         return hours;
     }
 
-    public void setHours(float hours) {
+    public void setHours(Float hours) {
         this.hours = hours;
     }
 

@@ -14,7 +14,7 @@ public class Position implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Long id;
 
     @NotNull(message = "{position.name.null}")
     @Size(  max = 64,
@@ -26,7 +26,7 @@ public class Position implements Serializable {
     @NotNull(message = "{position.department.null}")
     @Column(name = "department_id",
             nullable = false)
-    private long departmentId;
+    private Long departmentId;
 
     @JsonIgnore
     @OneToMany( mappedBy = "positionId",
@@ -35,11 +35,11 @@ public class Position implements Serializable {
                 orphanRemoval = true)
     private Set<@NotNull @Valid Employee> employees = new HashSet<>();
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -51,11 +51,11 @@ public class Position implements Serializable {
         this.name = name;
     }
 
-    public long getDepartmentId() {
+    public Long getDepartmentId() {
         return departmentId;
     }
 
-    public void setDepartmentId(long departmentId) {
+    public void setDepartmentId(Long departmentId) {
         this.departmentId = departmentId;
     }
 
@@ -73,7 +73,7 @@ public class Position implements Serializable {
     }
 
     public void removeEmployee(Employee employee){
-        employee.setPositionId(0);
+        employee.setPositionId(null);
         employees.remove(employee);
     }
 
