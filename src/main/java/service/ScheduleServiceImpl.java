@@ -33,7 +33,10 @@ public class ScheduleServiceImpl
     @Override
     @Transactional
     public void createInParent(long parentId, Schedule schedule) {
-        employeeDAO.findById(parentId).addSchedule(schedule);
+        if (parentId != schedule.getEmployeeId()){
+            throw new IllegalArgumentException();
+        }
+        scheduleDAO.create(schedule);
     }
 
     @Override
@@ -48,5 +51,16 @@ public class ScheduleServiceImpl
     public Collection<Schedule> getCurrentMonth(long employeeId) {
         LocalDate localDate = LocalDate.now();
         return scheduleDAO.getMonth(employeeId, localDate);
+    }
+
+    @Override
+    @Transactional
+    public Collection<Schedule> getByDate(long employeeId,
+                                          LocalDate from,
+                                          LocalDate to) {
+        if (to == null) {
+            to = LocalDate.now();
+        }
+        return scheduleDAO.getByDate(employeeId, from, to);
     }
 }
