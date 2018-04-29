@@ -1,34 +1,32 @@
 package validation;
 
-import org.springframework.validation.FieldError;
-
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import java.time.LocalDateTime;
 
 public class ErrorDetails {
 
-    private Date timestamp;
+    private LocalDateTime time;
     private String message;
     private List<String> details = new ArrayList<>();
 
-    public ErrorDetails(Date timestamp, String message) {
-        this.timestamp = timestamp;
+    public ErrorDetails(LocalDateTime time, String message) {
+        this.time = time;
         this.message = message;
     }
 
-    public ErrorDetails(Date timestamp, String message, List<String> details) {
-        this.timestamp = timestamp;
+    public ErrorDetails(LocalDateTime time, String message, List<String> details) {
+        this.time = time;
         this.message = message;
         this.details = details;
     }
 
-    public Date getTimestamp() {
-        return timestamp;
+    public LocalDateTime getTime() {
+        return time;
     }
 
-    public void setTimestamp(Date timestamp) {
-        this.timestamp = timestamp;
+    public void setTime(LocalDateTime time) {
+        this.time = time;
     }
 
     public String getMessage() {

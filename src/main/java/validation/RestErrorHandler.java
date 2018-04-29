@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @ControllerAdvice
@@ -22,7 +22,7 @@ public class RestErrorHandler extends ResponseEntityExceptionHandler{
             HttpStatus status,
             WebRequest request) {
         List<FieldError> errorList = ex.getBindingResult().getFieldErrors();
-        ErrorDetails details = new ErrorDetails(new Date(), "Validation Failed");
+        ErrorDetails details = new ErrorDetails(LocalDateTime.now(), "Validation Failed");
         errorList.forEach(fieldError -> details.getDetails().add(fieldError.getDefaultMessage()));
         return new ResponseEntity<>(details, HttpStatus.BAD_REQUEST);
     }
