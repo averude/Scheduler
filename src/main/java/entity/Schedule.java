@@ -4,6 +4,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Entity
 public class Schedule implements Serializable {
@@ -58,5 +59,22 @@ public class Schedule implements Serializable {
 
     public void setDate(LocalDate date) {
         this.date = date;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Schedule schedule = (Schedule) o;
+        return Objects.equals(id, schedule.id) &&
+                Objects.equals(employeeId, schedule.employeeId) &&
+                Objects.equals(hours, schedule.hours) &&
+                Objects.equals(date, schedule.date);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(id, employeeId, hours, date);
     }
 }
