@@ -20,6 +20,7 @@ public class CheckServiceDateParameterValidator implements ConstraintValidator<C
             throw new IllegalArgumentException( "Illegal method signature" );
         }
 
+        //leave null-checking to @NotNull on individual parameters
         if (value[1] == null || value[2] == null) {
             return true;
         }
