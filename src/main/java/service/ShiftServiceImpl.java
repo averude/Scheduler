@@ -4,6 +4,7 @@ import dao.ShiftDAO;
 import entity.Shift;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 
@@ -30,6 +31,7 @@ public class ShiftServiceImpl
     }
 
     @Override
+    @Transactional
     public void updateById(long id, Shift shift) {
         shift.setId(id);
         shiftDAO.update(shift);
