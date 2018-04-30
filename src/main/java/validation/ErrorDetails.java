@@ -7,18 +7,15 @@ import java.time.LocalDateTime;
 public class ErrorDetails {
 
     private LocalDateTime time;
-    private String message;
-    private List<String> details = new ArrayList<>();
+    private List<ErrorDTO> errors = new ArrayList<>();
 
-    public ErrorDetails(LocalDateTime time, String message) {
+    public ErrorDetails(LocalDateTime time) {
         this.time = time;
-        this.message = message;
     }
 
-    public ErrorDetails(LocalDateTime time, String message, List<String> details) {
+    public ErrorDetails(LocalDateTime time, List<ErrorDTO> errors) {
         this.time = time;
-        this.message = message;
-        this.details = details;
+        this.errors = errors;
     }
 
     public LocalDateTime getTime() {
@@ -29,19 +26,23 @@ public class ErrorDetails {
         this.time = time;
     }
 
-    public String getMessage() {
-        return message;
+    public List<ErrorDTO> getErrors() {
+        return errors;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setErrors(List<ErrorDTO> errors) {
+        this.errors = errors;
     }
 
-    public List<String> getDetails() {
-        return details;
+    public void addError(ErrorDTO errorDTO){
+        errors.add(errorDTO);
     }
 
-    public void setDetails(List<String> details) {
-        this.details = details;
+    public void removeError(ErrorDTO errorDTO){
+        errors.remove(errorDTO);
+    }
+
+    public void addError(String message, String details){
+        errors.add(new ErrorDTO(message, details));
     }
 }
