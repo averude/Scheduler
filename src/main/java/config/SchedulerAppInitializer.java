@@ -6,7 +6,7 @@ public class SchedulerAppInitializer
         extends AbstractAnnotationConfigDispatcherServletInitializer {
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        return new Class<?>[] {HibernateConf.class, RootConfig.class};
+        return new Class<?>[] {HibernateConf.class, RootConfig.class, ValidationConf.class};
     }
 
     @Override

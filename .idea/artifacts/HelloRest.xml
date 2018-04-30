@@ -41,6 +41,8 @@
           <element id="library" level="project" name="Maven: org.apache.tomcat:tomcat-juli:9.0.6" />
           <element id="library" level="project" name="Maven: org.hibernate.validator:hibernate-validator:6.0.9.Final" />
           <element id="library" level="project" name="Maven: com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.5" />
+          <element id="library" level="project" name="Maven: javax.el:javax.el-api:3.0.0" />
+          <element id="library" level="project" name="Maven: org.glassfish:javax.el:3.0.0" />
         </element>
       </element>
     </root>
