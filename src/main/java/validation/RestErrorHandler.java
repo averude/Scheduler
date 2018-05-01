@@ -36,8 +36,10 @@ public class RestErrorHandler extends ResponseEntityExceptionHandler{
 
     @Override
     protected ResponseEntity<Object> handleMissingServletRequestParameter(
-            MissingServletRequestParameterException ex, HttpHeaders headers,
-            HttpStatus status, WebRequest request) {
+            MissingServletRequestParameterException ex,
+            HttpHeaders headers,
+            HttpStatus status,
+            WebRequest request) {
         ErrorDetails details = new ErrorDetails(LocalDateTime.now());
         details.addError("Request error",
                 ex.getParameterName() + " parameter is missing");
