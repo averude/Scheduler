@@ -28,7 +28,7 @@ public class Shift implements Serializable{
     @JsonIgnore
     @OneToMany( mappedBy = "shiftId",
                 cascade = CascadeType.ALL,
-                fetch = FetchType.EAGER,
+                fetch = FetchType.LAZY,
                 orphanRemoval = true)
     private List<@NotNull @Valid Employee> employees = new ArrayList<>();
 
@@ -74,7 +74,7 @@ public class Shift implements Serializable{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Shift shift = (Shift) o;
-        return id == shift.id &&
+        return Objects.equals(id, shift.id) &&
                 Objects.equals(name, shift.name);
     }
 

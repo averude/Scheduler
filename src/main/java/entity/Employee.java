@@ -43,7 +43,7 @@ public class Employee implements Serializable {
 
     @OneToMany( mappedBy = "employeeId",
                 cascade = CascadeType.ALL,
-                fetch = FetchType.EAGER,
+                fetch = FetchType.LAZY,
                 orphanRemoval = true)
     private List<@NotNull @Valid Schedule> scheduleList = new ArrayList<>();
 
@@ -111,7 +111,7 @@ public class Employee implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Employee employee = (Employee) o;
-        return id == employee.id &&
+        return Objects.equals(id, employee.id) &&
                 Objects.equals(firstName, employee.firstName) &&
                 Objects.equals(secondName, employee.secondName);
     }

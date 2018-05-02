@@ -28,7 +28,7 @@ public class Department implements Serializable {
     @JsonIgnore
     @OneToMany( mappedBy = "departmentId",
                 cascade = CascadeType.ALL,
-                fetch = FetchType.EAGER,
+                fetch = FetchType.LAZY,
                 orphanRemoval = true)
     private Set<@NotNull @Valid Position> positions = new HashSet<>();
 
@@ -71,8 +71,9 @@ public class Department implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Department that = (Department) o;
-        return id == that.id &&
-                Objects.equals(name, that.name);
+        return Objects.equals(id, that.id) &&
+                Objects.equals(name, that.name) &&
+                Objects.equals(positions, that.positions);
     }
 
     @Override

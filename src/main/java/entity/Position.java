@@ -7,7 +7,9 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
 @Entity
 public class Position implements Serializable {
@@ -31,7 +33,7 @@ public class Position implements Serializable {
     @JsonIgnore
     @OneToMany( mappedBy = "positionId",
                 cascade = CascadeType.ALL,
-                fetch = FetchType.EAGER,
+                fetch = FetchType.LAZY,
                 orphanRemoval = true)
     private Set<@NotNull @Valid Employee> employees = new HashSet<>();
 
@@ -82,7 +84,7 @@ public class Position implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Position position = (Position) o;
-        return id == position.id &&
+        return Objects.equals(id, position.id) &&
                 Objects.equals(name, position.name);
     }
 
