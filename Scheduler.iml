@@ -4,8 +4,13 @@
     <facet type="Spring" name="Spring">
       <configuration>
         <fileset id="fileset" name="Hibernate" removed="false">
-          <file>file://$MODULE_DIR$/src/main/java/config/hibernate.xml</file>
           <file>file://$MODULE_DIR$/src/main/java/config/HibernateConf.java</file>
+        </fileset>
+        <fileset id="fileset2" name="Spring Application Context" removed="false">
+          <file>file://$MODULE_DIR$/src/main/java/config/HibernateConf.java</file>
+          <file>file://$MODULE_DIR$/src/main/java/config/RootConfig.java</file>
+          <file>file://$MODULE_DIR$/src/main/java/config/ValidationConf.java</file>
+          <file>file://$MODULE_DIR$/src/main/java/config/WebConfig.java</file>
         </fileset>
       </configuration>
     </facet>
@@ -71,5 +76,7 @@
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.9.5" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.5" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.9.0" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.datatype:jackson-datatype-hibernate5:2.9.5" level="project" />
+    <orderEntry type="library" name="Maven: javax.transaction:jta:1.1" level="project" />
   </component>
 </module>

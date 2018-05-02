@@ -3,7 +3,10 @@ package config;
 import entity.*;
 import org.apache.tomcat.dbcp.dbcp2.BasicDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
@@ -17,7 +20,7 @@ import static org.hibernate.cfg.Environment.*;
 @Configuration
 @PropertySource("classpath:hibernate.properties")
 @EnableTransactionManagement
-@ComponentScans(value = {@ComponentScan("dao"), @ComponentScan("service")})
+@ComponentScan(basePackages = {"dao", "service"})
 public class HibernateConf {
 
     private final Environment env;

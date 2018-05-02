@@ -1,6 +1,7 @@
 package config;
 
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -14,7 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 
 @Configuration
-@ComponentScan(basePackages = {"controller", "validation"})
+@ComponentScan(basePackages = {"controller"})
 public class WebConfig extends WebMvcConfigurationSupport {
 
     @Override
@@ -31,7 +32,7 @@ public class WebConfig extends WebMvcConfigurationSupport {
     private Jackson2ObjectMapperBuilder builder(){
         Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder();
         builder.indentOutput(true)
-                .modulesToInstall(new ParameterNamesModule())
+                .modulesToInstall(new ParameterNamesModule(), new Hibernate5Module())
                 .featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
                 .dateFormat(new SimpleDateFormat("yyyy-MM-dd"));
         return builder;
