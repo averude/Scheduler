@@ -12,6 +12,12 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
+@Table(
+        name = "shifts",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"name"})
+        }
+)
 public class Shift implements Serializable{
 
     @Id

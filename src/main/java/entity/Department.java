@@ -12,6 +12,12 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
+@Table(
+        name = "departments",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"name"})
+        }
+)
 public class Department implements Serializable {
 
     @Id

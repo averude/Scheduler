@@ -7,6 +7,12 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 @Entity
+@Table(
+        name = "schedule",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"employeeId", "date"})
+        }
+)
 public class Schedule implements Serializable {
 
     @Id
