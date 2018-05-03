@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javax.persistence.PersistenceException;
 import javax.validation.ConstraintViolationException;
 import java.time.LocalDateTime;
 
@@ -53,6 +54,14 @@ public class RestErrorHandler extends ResponseEntityExceptionHandler{
         ex.getConstraintViolations()
                 .forEach(constraintViolation -> details.addError("Constraint violation",
                         constraintViolation.getMessage()));
+        return new ResponseEntity<>(details, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler({PersistenceException.class})
+    public ResponseEntity<Object> handlePersistenceException(PersistenceException ex,
+                                                             WebRequest request){
+        ErrorDetails details = new ErrorDetails(LocalDateTime.now());
+        details.addError("Persistence error", ex.getCause().getLocalizedMessage());
         return new ResponseEntity<>(details, HttpStatus.BAD_REQUEST);
     }
 }
