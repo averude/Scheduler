@@ -1,7 +1,6 @@
 package service;
 
 import dao.EmployeeDAO;
-import dao.PositionDAO;
 import entity.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,25 +13,28 @@ public class EmployeeServiceImpl
         extends AbstractService<Employee> implements EmployeeService {
 
     private final EmployeeDAO employeeDAO;
-    private final PositionDAO positionDAO;
 
     @Autowired
-    public EmployeeServiceImpl(EmployeeDAO employeeDAO, PositionDAO positionDAO) {
+    public EmployeeServiceImpl(EmployeeDAO employeeDAO) {
         super(employeeDAO);
         this.employeeDAO = employeeDAO;
-        this.positionDAO = positionDAO;
     }
+
+    @Override
+    @Transactional
+    public Collection<Employee> findAllInParent(long parentId) {
+        return employeeDAO.getAllPosition(parentId);
+    }
+
 
     @Override
     @Transactional
     public void createInParent(long parentId, Employee employee) {
-        positionDAO.findById(parentId).addEmployee(employee);
-    }
-
-    @Override
-    @Transactional
-    public Collection<Employee> getAll(long parentId) {
-        return positionDAO.findById(parentId).getEmployees();
+        if (parentId != employee.getPositionId()){
+            throw new IllegalArgumentException("URI id of position doesn't " +
+                    "match with position id in Employee entity");
+        }
+        employeeDAO.create(employee);
     }
 
     @Override

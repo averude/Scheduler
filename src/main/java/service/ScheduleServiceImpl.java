@@ -1,6 +1,5 @@
 package service;
 
-import dao.EmployeeDAO;
 import dao.ScheduleDAO;
 import entity.Schedule;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,26 +14,25 @@ public class ScheduleServiceImpl
         extends AbstractService<Schedule> implements ScheduleService {
 
     private final ScheduleDAO scheduleDAO;
-    private final EmployeeDAO employeeDAO;
 
     @Autowired
-    public ScheduleServiceImpl(ScheduleDAO scheduleDAO, EmployeeDAO employeeDAO) {
+    public ScheduleServiceImpl(ScheduleDAO scheduleDAO) {
         super(scheduleDAO);
         this.scheduleDAO = scheduleDAO;
-        this.employeeDAO = employeeDAO;
     }
 
     @Override
     @Transactional
-    public Collection<Schedule> getAll(long parentId) {
-        return employeeDAO.findById(parentId).getSchedule();
+    public Collection<Schedule> findAllInParent(long parentId) {
+        throw new UnsupportedOperationException();
     }
 
     @Override
     @Transactional
     public void createInParent(long parentId, Schedule schedule) {
         if (parentId != schedule.getEmployeeId()){
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("URI id of employee doesn't " +
+                    "match with employee id in Schedule entity");
         }
         scheduleDAO.create(schedule);
     }

@@ -8,9 +8,9 @@ import java.util.Collection;
 
 @Validated
 public interface GenericService<T extends Serializable> {
-    Collection<T> getAll();
-    Collection<T> getAll(@Min(value = 1L, message = "{entity.id.size}")
-                         final long parentId);
+    Collection<T> findAll();
+    Collection<T> findAllInParent(@Min(value = 1L, message = "{entity.id.size}")
+                                  final long parentId);
     T getById(@Min(value = 1L, message = "{entity.id.size}")
               final long id);
     void create(T t);

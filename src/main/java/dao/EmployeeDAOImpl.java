@@ -5,6 +5,8 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
+
 @Repository
 public class EmployeeDAOImpl
         extends AbstractDAO<Employee> implements EmployeeDAO {
@@ -13,5 +15,14 @@ public class EmployeeDAOImpl
     public EmployeeDAOImpl(SessionFactory sessionFactory) {
         super(Employee.class);
         this.setSessionFactory(sessionFactory);
+    }
+
+    @Override
+    public Collection<Employee> getAllPosition(long positionId) {
+        return getCurrentSession()
+                .createQuery("from Employee e " +
+                        "where e.positionId = :positionId", Employee.class)
+                .setParameter("positionId", positionId)
+                .getResultList();
     }
 }

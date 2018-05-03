@@ -2,6 +2,8 @@ package dao;
 
 import entity.Position;
 
-public interface PositionDAO extends GenericDAO<Position> {
+import java.util.Collection;
 
+public interface PositionDAO extends GenericDAO<Position> {
+    Collection<Position> getAllDepartment(long departmentId);
 }

@@ -25,7 +25,7 @@ public class DepartmentController extends AbstractController<Department>{
 
     @RequestMapping(method = RequestMethod.GET)
     public Collection<Department> getAll(){
-        return departmentService.getAll();
+        return departmentService.findAll();
     }
 
     @RequestMapping(method = RequestMethod.POST)

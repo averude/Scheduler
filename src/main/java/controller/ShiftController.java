@@ -26,7 +26,7 @@ public class ShiftController extends AbstractController<Shift> {
 
     @RequestMapping(method = RequestMethod.GET)
     public Collection<Shift> getAll(){
-        return shiftService.getAll();
+        return shiftService.findAll();
     }
 
     @RequestMapping(method = RequestMethod.POST)

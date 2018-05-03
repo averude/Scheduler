@@ -21,7 +21,7 @@ public class ShiftServiceImpl
     }
 
     @Override
-    public Collection<Shift> getAll(long parentId) {
+    public Collection<Shift> findAllInParent(long parentId) {
         throw new UnsupportedOperationException();
     }
 

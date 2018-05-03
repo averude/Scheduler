@@ -22,7 +22,7 @@ public class DepartmentServiceImpl
 
     @Override
     @Transactional
-    public Collection<Department> getAll(long parentId) {
+    public Collection<Department> findAllInParent(long parentId) {
         throw new UnsupportedOperationException();
     }
 

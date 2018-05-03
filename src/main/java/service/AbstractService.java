@@ -27,13 +27,13 @@ public abstract class AbstractService<T extends Serializable>
 
     @Override
     @Transactional
-    public Collection<T> getAll() {
+    public Collection<T> findAll() {
         return genericDAO.findAll();
     }
 
     @Override
     @Transactional
-    public abstract Collection<T> getAll(long parentId);
+    public abstract Collection<T> findAllInParent(long parentId);
 
     @Override
     @Transactional

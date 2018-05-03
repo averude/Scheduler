@@ -21,7 +21,7 @@ public class ScheduleDAOImpl extends AbstractDAO<Schedule> implements ScheduleDA
     public Collection<Schedule> getMonth(long employeeId,
                                          LocalDate date) {
         return getCurrentSession()
-                .createQuery("SELECT s FROM Schedule s " +
+                .createQuery("select s from Schedule s " +
                         "where s.employeeId = :employeeId " +
                         "and month(s.date) = :month " +
                         "and year(s.date) = :year", Schedule.class)
@@ -36,7 +36,7 @@ public class ScheduleDAOImpl extends AbstractDAO<Schedule> implements ScheduleDA
                                           LocalDate from,
                                           LocalDate to) {
         return getCurrentSession()
-                .createQuery("SELECT s FROM Schedule s " +
+                .createQuery("select s from Schedule s " +
                         "where s.employeeId = :employeeId " +
                         "and s.date >= :from " +
                         "and s.date <= :to ", Schedule.class)

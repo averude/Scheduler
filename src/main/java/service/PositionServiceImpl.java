@@ -1,6 +1,5 @@
 package service;
 
-import dao.DepartmentDAO;
 import dao.PositionDAO;
 import entity.Position;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,24 +13,26 @@ public class PositionServiceImpl
         extends AbstractService<Position> implements PositionService {
 
     private final PositionDAO positionDAO;
-    private final DepartmentDAO departmentDAO;
 
     @Autowired
-    public PositionServiceImpl(PositionDAO positionDAO, DepartmentDAO departmentDAO) {
+    public PositionServiceImpl(PositionDAO positionDAO) {
         super(positionDAO);
         this.positionDAO = positionDAO;
-        this.departmentDAO = departmentDAO;
     }
 
     @Override
-    public Collection<Position> getAll(long parentId) {
-        return departmentDAO.findById(parentId).getPositions();
+    public Collection<Position> findAllInParent(long parentId) {
+        return positionDAO.getAllDepartment(parentId);
     }
 
     @Override
     @Transactional
     public void createInParent(long parentId, Position position) {
-        departmentDAO.findById(parentId).addPosition(position);
+        if (position.getDepartmentId() != parentId){
+            throw new IllegalArgumentException("URI id of department doesn't " +
+                    "match with department id in Position entity");
+        }
+        positionDAO.create(position);
     }
 
     @Override

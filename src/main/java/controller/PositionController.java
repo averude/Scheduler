@@ -8,7 +8,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import service.PositionService;
 
 import javax.validation.Valid;
-import javax.validation.Validator;
 import java.net.URI;
 import java.util.Collection;
 
@@ -26,7 +25,7 @@ public class PositionController extends AbstractController<Position>{
 
     @RequestMapping(method = RequestMethod.GET)
     public Collection<Position> getAll(@PathVariable long departmentId){
-        return positionService.getAll(departmentId);
+        return positionService.findAllInParent(departmentId);
     }
 
     @RequestMapping(method = RequestMethod.POST)

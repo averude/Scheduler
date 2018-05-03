@@ -26,7 +26,7 @@ public class EmployeeController extends AbstractController<Employee>{
     @RequestMapping(method = RequestMethod.GET)
     public Collection<Employee> getAll(@PathVariable long departmentId,
                                        @PathVariable long positionId){
-        return employeeService.getAll(positionId);
+        return employeeService.findAllInParent(positionId);
     }
 
     @RequestMapping(method = RequestMethod.POST)
