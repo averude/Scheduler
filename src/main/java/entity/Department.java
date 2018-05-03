@@ -15,7 +15,9 @@ import java.util.Set;
 @Table(
         name = "departments",
         uniqueConstraints = {
-                @UniqueConstraint(columnNames = {"name"})
+                @UniqueConstraint(
+                        name = "departments_unique_constraint",
+                        columnNames = {"name"})
         }
 )
 public class Department implements Serializable {

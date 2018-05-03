@@ -15,8 +15,9 @@ import java.util.Objects;
 @Table(
         name = "employees",
         uniqueConstraints = {
-                @UniqueConstraint(columnNames =
-                        {"firstName", "secondName", "positionId"})
+                @UniqueConstraint(
+                        name = "employees_unique_constraint",
+                        columnNames = {"first_name", "second_name", "position_Id"})
         }
 )
 public class Employee implements Serializable {
@@ -29,14 +30,14 @@ public class Employee implements Serializable {
     @Size(  max = 20,
             min = 3,
             message = "{employee.firstname.size}")
-    @Column(nullable = false)
+    @Column(name = "first_name", nullable = false)
     private String firstName;
 
     @NotNull(message = "{employee.secondname.null}")
     @Size(  max = 20,
             min = 3,
             message = "{employee.secondname.size}")
-    @Column(nullable = false)
+    @Column(name = "second_name", nullable = false)
     private String secondName;
 
     @NotNull(message = "{employee.position.null}")

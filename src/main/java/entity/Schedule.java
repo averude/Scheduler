@@ -10,7 +10,9 @@ import java.util.Objects;
 @Table(
         name = "schedule",
         uniqueConstraints = {
-                @UniqueConstraint(columnNames = {"employeeId", "date"})
+                @UniqueConstraint(
+                        name = "schedule_unique_constraint",
+                        columnNames = {"employee_id", "date"})
         }
 )
 public class Schedule implements Serializable {

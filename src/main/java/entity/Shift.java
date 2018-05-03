@@ -15,7 +15,9 @@ import java.util.Objects;
 @Table(
         name = "shifts",
         uniqueConstraints = {
-                @UniqueConstraint(columnNames = {"name"})
+                @UniqueConstraint(
+                        name = "shifts_unique_constraint",
+                        columnNames = {"name"})
         }
 )
 public class Shift implements Serializable{
