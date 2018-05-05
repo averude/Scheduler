@@ -53,12 +53,23 @@ public class ScheduleServiceImpl
 
     @Override
     @Transactional
-    public Collection<Schedule> getByDate(long employeeId,
-                                          LocalDate from,
-                                          LocalDate to) {
+    public Collection<Schedule> getForEmployeeByDate(long employeeId,
+                                                     LocalDate from,
+                                                     LocalDate to) {
         if (to == null) {
             to = LocalDate.now();
         }
-        return scheduleDAO.getByDate(employeeId, from, to);
+        return scheduleDAO.getForEmployeeByDate(employeeId, from, to);
+    }
+
+    @Override
+    @Transactional
+    public Collection<Schedule> getForDepartmentByDate(long departmentId,
+                                                       LocalDate from,
+                                                       LocalDate to) {
+        if (to == null) {
+            to = LocalDate.now();
+        }
+        return scheduleDAO.getForDepartmentByDate(departmentId, from, to);
     }
 }

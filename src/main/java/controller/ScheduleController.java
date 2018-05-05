@@ -42,14 +42,28 @@ public class ScheduleController {
     }
 
     @RequestMapping(method = RequestMethod.GET,
-                    value = "/{employeeId}/search")
-    public Collection<Schedule> search(@PathVariable long employeeId,
+                    value = "/employee/search")
+    public Collection<Schedule> searchInEmployee(@RequestParam(value = "employeeId", required = true)
+                                       Long employeeId,
                                        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
                                        @RequestParam(value = "from", required = true)
                                        LocalDate from,
                                        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
                                        @RequestParam(value = "to", required = false)
                                        LocalDate to){
-        return scheduleService.getByDate(employeeId, from, to);
+        return scheduleService.getForEmployeeByDate(employeeId, from, to);
+    }
+
+    @RequestMapping(method = RequestMethod.GET,
+                    value = "/department/search")
+    public Collection<Schedule> searchInDepartment(@RequestParam(value = "departmentId", required = true)
+                                         Long departmentId,
+                                         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                         @RequestParam(value = "from", required = true)
+                                         LocalDate from,
+                                         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                         @RequestParam(value = "to", required = false)
+                                         LocalDate to){
+        return scheduleService.getForDepartmentByDate(departmentId, from, to);
     }
 }

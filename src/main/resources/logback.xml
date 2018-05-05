@@ -9,7 +9,7 @@
         </layout>
     </appender>
 
-    <logger name="org.springframework" level="debug" additivity="false">
+    <logger name="org.springframework" level="INFO" additivity="false">
         <appender-ref ref="STDOUT" />
     </logger>
 

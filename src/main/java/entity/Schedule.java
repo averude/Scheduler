@@ -28,7 +28,7 @@ public class Schedule implements Serializable {
 
     @NotNull(message = "{schedule.isholiday.null}")
     @Column(nullable = false)
-    private Boolean isHoliday;
+    private Boolean holiday;
 
     @NotNull(message = "{schedule.hours.null}")
     @Column(nullable = false)
@@ -58,11 +58,11 @@ public class Schedule implements Serializable {
     }
 
     public Boolean getHoliday() {
-        return isHoliday;
+        return holiday;
     }
 
     public void setHoliday(Boolean holiday) {
-        isHoliday = holiday;
+        this.holiday = holiday;
     }
 
     public Float getHours() {
