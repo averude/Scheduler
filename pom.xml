@@ -138,11 +138,13 @@
             <artifactId>jackson-datatype-jsr310</artifactId>
             <version>${jackson.version}</version>
         </dependency>
-        <!---->
+        <!--Support JSON serialization and deserialization
+        of Hibernate specific datatypes and properties;
+        especially lazy-loading aspects.-->
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-hibernate5</artifactId>
-            <version>2.9.5</version>
+            <version>${jackson.version}</version>
         </dependency>
     </dependencies>
     
