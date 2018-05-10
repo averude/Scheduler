@@ -2,6 +2,7 @@ package controller;
 
 import entity.Department;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -58,7 +59,7 @@ public class DepartmentController extends AbstractController<Department>{
     public ResponseEntity<?> delete(@PathVariable long departmentId){
         this.validate(departmentId);
         departmentService.deleteById(departmentId);
-        return ResponseEntity.ok("Department with ID:" + departmentId +
-                " was successfully deleted");
+        return new ResponseEntity<>("Department with ID:" + departmentId +
+                " was successfully deleted", HttpStatus.NO_CONTENT);
     }
 }
