@@ -33,6 +33,9 @@ public class Shift implements Serializable{
     @Column(nullable = false)
     private String name;
 
+    @Column(name = "pattern_id")
+    private Long patternId;
+
     @JsonIgnore
     @OneToMany( mappedBy = "shiftId",
                 cascade = CascadeType.ALL,
@@ -57,6 +60,14 @@ public class Shift implements Serializable{
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Long getPatternId() {
+        return patternId;
+    }
+
+    public void setPatternId(Long patternId) {
+        this.patternId = patternId;
     }
 
     public List<Employee> getEmployees() {

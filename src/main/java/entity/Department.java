@@ -7,9 +7,10 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 @Entity
 @Table(
@@ -38,7 +39,14 @@ public class Department implements Serializable {
                 cascade = CascadeType.ALL,
                 fetch = FetchType.LAZY,
                 orphanRemoval = true)
-    private Set<@NotNull @Valid Position> positions = new HashSet<>();
+    private List<@NotNull @Valid Position> positions = new LinkedList<>();
+
+    @JsonIgnore
+    @OneToMany( mappedBy = "departmentId",
+                cascade = CascadeType.ALL,
+                fetch = FetchType.LAZY,
+                orphanRemoval = true)
+    private List<@NotNull @Valid ShiftPattern> patterns = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -56,12 +64,20 @@ public class Department implements Serializable {
         this.name = name;
     }
 
-    public Set<Position> getPositions() {
+    public List<@NotNull @Valid Position> getPositions() {
         return positions;
     }
 
-    public void setPositions(Set<Position> positions) {
+    public void setPositions(List<@NotNull @Valid Position> positions) {
         this.positions = positions;
+    }
+
+    public List<ShiftPattern> getPatterns() {
+        return patterns;
+    }
+
+    public void setPatterns(List<ShiftPattern> patterns) {
+        this.patterns = patterns;
     }
 
     public void addPosition(Position position){
@@ -72,6 +88,16 @@ public class Department implements Serializable {
     public void removePosition(Position position){
         position.setDepartmentId(null);
         positions.remove(position);
+    }
+
+    public void addPattern(ShiftPattern pattern){
+        pattern.setDepartmentId(this.getId());
+        patterns.add(pattern);
+    }
+
+    public void removePattern(ShiftPattern pattern){
+        pattern.setDepartmentId(null);
+        patterns.remove(pattern);
     }
 
     @Override
