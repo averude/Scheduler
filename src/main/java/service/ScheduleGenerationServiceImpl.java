@@ -19,14 +19,18 @@ public class ScheduleGenerationServiceImpl implements ScheduleGenerationService 
     private final DayTypeDAO dayTypeDAO;
 
     @Autowired
-    public ScheduleGenerationServiceImpl(ScheduleDAO scheduleDAO, DayTypeDAO dayTypeDAO) {
+    public ScheduleGenerationServiceImpl(ScheduleDAO scheduleDAO,
+                                         DayTypeDAO dayTypeDAO) {
         this.scheduleDAO = scheduleDAO;
         this.dayTypeDAO = dayTypeDAO;
     }
 
     @Override
     @Transactional
-    public void generate(long employeeId, LocalDate start, LocalDate stop, int offset) {
+    public void generate(long employeeId,
+                         LocalDate start,
+                         LocalDate stop,
+                         int offset) {
         List<LocalDate> dates = start.datesUntil(stop.plusDays(1))
                                      .collect(Collectors.toList());
         List<DayType> types = dayTypeDAO.findByEmployeeId(employeeId);
