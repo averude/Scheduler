@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.HashSet;
@@ -24,6 +25,7 @@ public class Position implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Positive(message = "{entity.id.negative}")
     private Long id;
 
     @NotNull(message = "{position.name.null}")
@@ -34,6 +36,7 @@ public class Position implements Serializable {
     private String name;
 
     @NotNull(message = "{position.department.null}")
+    @Positive(message = "{position.department.negative}")
     @Column(name = "department_id",
             nullable = false)
     private Long departmentId;

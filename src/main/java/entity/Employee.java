@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -24,12 +25,13 @@ public class Employee implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Positive(message = "{entity.id.negative}")
     private Long id;
 
     @NotNull(message = "{employee.firstname.null}")
-    @Size(  max = 20,
-            min = 3,
-            message = "{employee.firstname.size}")
+    @Size(   max = 20,
+             min = 3,
+             message = "{employee.firstname.size}")
     @Column(name = "first_name", nullable = false)
     private String firstName;
 
@@ -41,10 +43,12 @@ public class Employee implements Serializable {
     private String secondName;
 
     @NotNull(message = "{employee.position.null}")
+    @Positive(message = "{employee.position.negative}")
     @Column(name = "position_id",
             nullable = false)
     private Long positionId;
 
+    @Positive(message = "{employee.shift.negative}")
     @Column(name = "shift_id",
             nullable = true)
     private Long shiftId;

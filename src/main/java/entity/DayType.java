@@ -1,6 +1,10 @@
 package entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 @Entity
@@ -17,17 +21,30 @@ public class DayType implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Positive(message = "{entity.id.negative}")
     private Long id;
 
-    @Column(name = "pattern_id")
+    @NotNull(message = "{daytype.pattern.null}")
+    @Positive(message = "{daytype.pattern.negative}")
+    @Column(name = "pattern_id",
+            nullable = false)
     private Long patternId;
 
-    @Column(name = "order_id")
+    @NotNull(message = "{daytype.order.null}")
+    @Positive(message = "{daytype.order.negative}")
+    @Column(name = "order_id",
+            nullable = false)
     private Long orderId;
 
+    @NotNull(message = "{daytype.name.null}")
+    @Size(  max = 20,
+            min = 3,
+            message = "{daytype.name.size}")
     @Column(nullable = false)
     private String name;
 
+    @NotNull(message = "{daytype.value.null}")
+    @PositiveOrZero(message = "{daytype.value.negative}")
     @Column(nullable = false)
     private Float value;
 

@@ -3,6 +3,9 @@ package entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,11 +24,19 @@ public class ShiftPattern implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Positive(message = "{entity.id.negative}")
     private Long id;
 
-    @Column(name = "department_id")
+    @NotNull(message = "{shiftpattern.department.null}")
+    @Positive(message = "{shiftpattern.department.negative}")
+    @Column(name = "department_id",
+            nullable = false)
     private Long departmentId;
 
+    @NotNull(message = "{shiftpattern.name.null}")
+    @Size(  max = 64,
+            min = 3,
+            message = "{shiftpattern.name.size}")
     @Column(nullable = false)
     private String name;
 

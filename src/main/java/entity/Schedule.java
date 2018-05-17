@@ -2,6 +2,8 @@ package entity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
@@ -19,9 +21,11 @@ public class Schedule implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Positive(message = "{entity.id.negative}")
     private Long id;
 
     @NotNull(message = "{schedule.employee.null}")
+    @Positive(message = "{schedule.employee.negative}")
     @Column(name = "employee_id",
             nullable = false)
     private Long employeeId;
@@ -31,6 +35,7 @@ public class Schedule implements Serializable {
     private Boolean holiday;
 
     @NotNull(message = "{schedule.hours.null}")
+    @PositiveOrZero(message = "{schedule.hours.negative}")
     @Column(nullable = false)
     private Float hours;
 
