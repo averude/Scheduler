@@ -33,8 +33,8 @@ public class EmployeeTest {
     private static final Object[] getInvalidEmployees() {
         return new Object[] {
                 new Object[] {"Ch", "Bronks", -1L, 1L, 1L},
-                new Object[] {"+-+", "Lampard", 10L, 269L, 589L},
-                new Object[] {"Richard", "//", -1L, -1L, -1L},
+                new Object[] {"+", "Lampard", 10L, 269L, 589L},
+                new Object[] {"Richard", "/", -1L, -1L, -1L},
                 new Object[] {"%", "Bryan", 123L, Long.MAX_VALUE, 23L},
                 new Object[] {"Castor", "T", -12L, 123L, 546L}
         };
