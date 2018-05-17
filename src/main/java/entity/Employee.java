@@ -18,7 +18,7 @@ import java.util.Objects;
         uniqueConstraints = {
                 @UniqueConstraint(
                         name = "employees_unique_constraint",
-                        columnNames = {"first_name", "second_name", "position_Id"})
+                        columnNames = {"first_name", "second_name", "position_id"})
         }
 )
 public class Employee implements Serializable {
