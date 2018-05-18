@@ -1,6 +1,7 @@
 package entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
@@ -36,6 +37,8 @@ public class Schedule implements Serializable {
 
     @NotNull(message = "{schedule.hours.null}")
     @PositiveOrZero(message = "{schedule.hours.negative}")
+    @DecimalMax(value = "24",
+                message = "{schedule.hours.max}")
     @Column(nullable = false)
     private Float hours;
 
