@@ -25,7 +25,7 @@ public class ShiftTest {
                 new Object[]{1L, "one", 2L},
                 new Object[]{123L, "two", 123L},
                 new Object[]{null, "три", 14L},
-                new Object[]{12L, "FOUR", 78L}
+                new Object[]{12L, "FOUR", null}
         };
     }
 
@@ -34,7 +34,7 @@ public class ShiftTest {
                 new Object[]{1L, "e", 2L},
                 new Object[]{0L, "two", 4L},
                 new Object[]{-5L, "oh no", 123L},
-                new Object[]{1L, "no way", null}
+                new Object[]{1L, "no way", 0L}
         };
     }
 
