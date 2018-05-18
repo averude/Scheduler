@@ -21,21 +21,23 @@ public class EmployeeTest {
 
     private Employee employee;
 
-    private static final Object[] getValidEmployees() {
+    private static final Object[] getValidEntities() {
         return new Object[] {
                 new Object[] {"Charles", "Bronks", 1L, 1L, 1L},
                 new Object[] {"Frank", "Lampard", 10L, 269L, 589L},
                 new Object[] {"Tobby", "Bryan", 123L, 145L, 23L},
+                new Object[] {"Chris", "Rock", 123L, null, 23L},
                 new Object[] {"Castor", "Troy", 12L, 123L, 546L}
         };
     }
 
-    private static final Object[] getInvalidEmployees() {
+    private static final Object[] getInvalidEntities() {
         return new Object[] {
                 new Object[] {"Ch", "Bronks", 0L, 1L, 1L},
                 new Object[] {"+", "Lampard", 10L, 269L, 589L},
                 new Object[] {"Richard", null, -1L, -1L, -1L},
-                new Object[] {"%", "Bryan", 123L, Long.MAX_VALUE, 23L},
+                new Object[] {"", "Bryan", 123L, Long.MAX_VALUE, 23L},
+                new Object[] {"Chris", "Rock", 123L, -15L, 23L},
                 new Object[] {null, null, null, null, null},
                 new Object[] {"Castor", "T", -12L, 123L, 546L}
         };
@@ -47,13 +49,13 @@ public class EmployeeTest {
     }
 
     @Test
-    @Parameters(method = "getValidEmployees")
-    public void testSuccessEmployeeFields(String firstName,
-                                          String secondName,
-                                          Long posId,
-                                          Long shId,
-                                          Long id){
-        initEmployee(firstName, secondName, posId, shId, id);
+    @Parameters(method = "getValidEntities")
+    public void testSuccessAccessToEntityFields(String firstName,
+                                                String secondName,
+                                                Long posId,
+                                                Long shId,
+                                                Long id){
+        initEntity(firstName, secondName, posId, shId, id);
 
         assertEquals(id, employee.getId());
         assertEquals(firstName, employee.getFirstName());
@@ -63,7 +65,7 @@ public class EmployeeTest {
     }
 
     @Test
-    public void testSuccessEmployeeCollection(){
+    public void testSuccessEntityCollection(){
         Schedule schedule1 = new Schedule();
         Schedule schedule2 = new Schedule();
 
@@ -85,13 +87,13 @@ public class EmployeeTest {
 
     // Validation tests
     @Test
-    @Parameters(method = "getValidEmployees")
-    public void testSuccessEmployeeValidation(String firstName,
-                                              String secondName,
-                                              Long posId,
-                                              Long shId,
-                                              Long id){
-        initEmployee(firstName, secondName, posId, shId, id);
+    @Parameters(method = "getValidEntities")
+    public void testSuccessEntityValidation(String firstName,
+                                            String secondName,
+                                            Long posId,
+                                            Long shId,
+                                            Long id){
+        initEntity(firstName, secondName, posId, shId, id);
 
         Set<ConstraintViolation<Employee>> constraintViolations
                 = validator.validate(employee);
@@ -99,24 +101,24 @@ public class EmployeeTest {
     }
 
     @Test
-    @Parameters(method = "getInvalidEmployees")
-    public void testFailEmployeeValidation(String firstName,
-                                           String secondName,
-                                           Long posId,
-                                           Long shId,
-                                           Long id){
-        initEmployee(firstName, secondName, posId, shId, id);
+    @Parameters(method = "getInvalidEntities")
+    public void testFailEntityValidation(String firstName,
+                                         String secondName,
+                                         Long posId,
+                                         Long shId,
+                                         Long id){
+        initEntity(firstName, secondName, posId, shId, id);
 
         Set<ConstraintViolation<Employee>> constraintViolations
                 = validator.validate(employee);
         assertFalse(constraintViolations.size() == 0);
     }
 
-    private void initEmployee(String firstName,
-                              String secondName,
-                              Long posId,
-                              Long shId,
-                              Long id){
+    private void initEntity(String firstName,
+                            String secondName,
+                            Long posId,
+                            Long shId,
+                            Long id){
         employee.setId(id);
         employee.setFirstName(firstName);
         employee.setSecondName(secondName);
