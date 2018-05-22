@@ -27,8 +27,6 @@ public class ScheduleGenerationServiceTest {
     private ScheduleDAO scheduleDAO = mock(ScheduleDAO.class);
     private DayTypeDAO dayTypeDAO   = mock(DayTypeDAO.class);
 
-    private ArgumentCaptor<Schedule> captor = ArgumentCaptor.forClass(Schedule.class);
-
     private List<DayType> dayTypes = Arrays.asList(
             new DayType(1L, "DAY", 12f),
             new DayType(2L, "BEFORE_NIGHT", 4f),
@@ -37,10 +35,12 @@ public class ScheduleGenerationServiceTest {
     );
 
     private ScheduleGenerationService service;
+    private ArgumentCaptor<Schedule> captor;
 
     @Before
     public void setUp(){
         service = new ScheduleGenerationServiceImpl(scheduleDAO, dayTypeDAO);
+        captor  = ArgumentCaptor.forClass(Schedule.class);
         when(dayTypeDAO.findByEmployeeId(EMPLOYEE_ID)).thenReturn(dayTypes);
     }
 
