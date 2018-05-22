@@ -9,7 +9,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,6 +36,8 @@ public class ScheduleGenerationServiceImpl implements ScheduleGenerationService 
         List<LocalDate> dates = start.datesUntil(stop.plusDays(1))
                                      .collect(Collectors.toList());
         List<DayType> types = dayTypeDAO.findByEmployeeId(employeeId);
+        Collection<Schedule> schedules
+                = scheduleDAO.getForEmployeeByDate(employeeId, start, stop);
 
         int typesSize = types.size();
         int numOfDays = dates.size();
@@ -45,12 +49,22 @@ public class ScheduleGenerationServiceImpl implements ScheduleGenerationService 
 
                 int type_index = (offset + j) % typesSize;
 
-                Schedule sched = new Schedule();
-                sched.setDate(dates.get(day_index));
-                sched.setEmployeeId(employeeId);
-                sched.setHours(types.get(type_index).getValue());
+                Optional<Schedule> s = schedules.stream()
+                        .filter(schedule -> schedule.getDate()
+                                .equals(dates.get(day_index)))
+                        .findFirst();
 
-                scheduleDAO.create(sched);
+                if (s.isPresent()){
+                    Schedule sched = s.get();
+                    sched.setHours(types.get(type_index).getValue());
+                    scheduleDAO.update(sched);
+                } else {
+                    Schedule sched = new Schedule();
+                    sched.setDate(dates.get(day_index));
+                    sched.setEmployeeId(employeeId);
+                    sched.setHours(types.get(type_index).getValue());
+                    scheduleDAO.create(sched);
+                }
             }
         }
     }
