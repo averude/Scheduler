@@ -18,8 +18,9 @@ import static org.mockito.Mockito.*;
 
 public class ScheduleGenerationServiceTest {
 
-    private static final Long EMPLOYEE_ID = 1L;
-    private static final int NUM_OF_DAYS = 31;
+    private static final Long EMPLOYEE_ID   = 1L;
+    private static final int NUM_OF_DAYS    = 31;
+    private static final int OFFSET         = 0;
 
     private LocalDate start = LocalDate.parse("2018-03-01");
     private LocalDate stop  = start.plusDays(NUM_OF_DAYS - 1); //because we need 31th day
@@ -46,7 +47,7 @@ public class ScheduleGenerationServiceTest {
 
     @Test
     public void testGenerateSchedule(){
-        service.generate(EMPLOYEE_ID, start, stop, 0);
+        service.generate(EMPLOYEE_ID, start, stop, OFFSET);
 
         verify(scheduleDAO, times(NUM_OF_DAYS)).create(captor.capture());
         verifyNoMoreInteractions(scheduleDAO);
