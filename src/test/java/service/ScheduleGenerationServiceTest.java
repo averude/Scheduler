@@ -35,6 +35,11 @@ public class ScheduleGenerationServiceTest {
             new DayType(4L, "WEEKEND", 0f)
     );
 
+    private List<Schedule> storedSchedules = Arrays.asList(
+            new Schedule(EMPLOYEE_ID, false, 8f, start),
+            new Schedule(EMPLOYEE_ID, false, 8f, stop)
+    );
+
     private ScheduleGenerationService service;
     private ArgumentCaptor<Schedule> captor;
 
@@ -43,32 +48,21 @@ public class ScheduleGenerationServiceTest {
         service = new ScheduleGenerationServiceImpl(scheduleDAO, dayTypeDAO);
         captor  = ArgumentCaptor.forClass(Schedule.class);
         when(dayTypeDAO.findByEmployeeId(EMPLOYEE_ID)).thenReturn(dayTypes);
+        when(scheduleDAO.getForEmployeeByDate(EMPLOYEE_ID, start, stop)).thenReturn(storedSchedules);
     }
 
     @Test
     public void testGenerateSchedule(){
         service.generate(EMPLOYEE_ID, start, stop, OFFSET);
 
-        verify(scheduleDAO, times(NUM_OF_DAYS)).create(captor.capture());
+        verify(scheduleDAO, times(NUM_OF_DAYS - storedSchedules.size())).create(captor.capture());
+        verify(scheduleDAO, times(storedSchedules.size())).update(captor.capture());
+        verify(scheduleDAO).getForEmployeeByDate(EMPLOYEE_ID, start, stop);
         verifyNoMoreInteractions(scheduleDAO);
 
         List<Schedule> result = captor.getAllValues();
 
         assertFalse(result.isEmpty());
         assertTrue(result.size() == NUM_OF_DAYS);
-
-        LocalDate prev = LocalDate.MIN;
-        for (Schedule schedule : result){
-            assertTrue(schedule.getEmployeeId().equals(EMPLOYEE_ID));
-            System.out.println(
-                    "Employee ID="
-                    + schedule.getEmployeeId()
-                    + ": " + schedule.getDate()
-                    + ": " + schedule.getHours()
-            );
-            LocalDate curr = schedule.getDate();
-            assertTrue(curr.isAfter(prev));
-            prev = curr;
-        }
     }
 }
