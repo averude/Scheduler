@@ -49,6 +49,16 @@ public class Schedule implements Serializable {
     public Schedule() {
     }
 
+    public Schedule(Long employeeId,
+                    Boolean holiday,
+                    Float hours,
+                    LocalDate date) {
+        this.employeeId = employeeId;
+        this.holiday = holiday;
+        this.hours = hours;
+        this.date = date;
+    }
+
     public Long getId() {
         return id;
     }
