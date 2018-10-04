@@ -1,0 +1,21 @@
+<div class="btn-group">
+  <button class="btn btn-dark"
+          (click)="prevMonth()"><</button>
+  <div>
+    {{monthName + ' ' + year}}
+  </div>
+  <button class="btn btn-dark"
+          (click)="nextMonth()">></button>
+</div>
+<table class="table table-striped table-bordered table-sm">
+  <thead app-table-header
+         [daysInMonth]="daysInMonth">
+  </thead>
+  <tbody>
+    <tr *ngFor="let employee of employees"
+        app-table-row
+        [daysInMonth]="daysInMonth"
+        [employee]="employee">
+    </tr>
+  </tbody>
+</table>

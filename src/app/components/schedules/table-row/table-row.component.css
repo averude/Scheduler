@@ -1,0 +1,12 @@
+.weekend {
+  background-color: lavender;
+}
+
+.selected {
+  background-color: indigo;
+  color: white;
+}
+
+.sum {
+  width: 50px;
+}

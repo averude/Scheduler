@@ -1,0 +1,31 @@
+<td>
+  {{
+    employee.secondName
+    + ' '
+    + employee.firstName.charAt(0)
+    + '.'
+    + ' '
+    + employee.patronymic.charAt(0)
+    + '.'
+  }}
+</td>
+<td class="text-center align-middle"
+    *ngFor="let day of daysInMonth"
+    app-table-cell
+    #cell="app-table-cell"
+    [dragging]="dragging"
+    [day]="day"
+    [workDay]="getWorkDay(day)"
+    [class.weekend]="isWeekend(day.getDay())">
+</td>
+<td class="text-center align-middle sum">
+  {{getSum()}}
+</td>
+
+<context-menu #basicMenu>
+  <ng-template *ngFor="let pattern of patterns"
+               contextMenuItem
+               (execute)="generateSchedule(employee.id, $event.item, pattern.id)">
+    {{pattern.name}}
+  </ng-template>
+</context-menu>

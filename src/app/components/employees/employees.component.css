@@ -1,0 +1,8 @@
+.table {
+  user-select: none;
+}
+
+.full-cell-size {
+  width: 100%;
+  display: block;
+}

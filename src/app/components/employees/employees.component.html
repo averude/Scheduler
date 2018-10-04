@@ -1,0 +1,84 @@
+<table class="table table-striped table-sm">
+  <thead>
+    <tr>
+      <th class="text-center">Second Name</th>
+      <th class="text-center">First Name</th>
+      <th class="text-center">Patronymic</th>
+      <th class="text-center">Position</th>
+      <th class="text-center">Shift</th>
+      <th class="text-center"
+          style="width: 10%">Control</th>
+    </tr>
+    <tr app-add-employee
+        [positions]="positions"
+        [shifts]="shifts"
+        (newEmployee)="addEmployee($event)">
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let employee of employees"
+        appEditableRow
+        #row="editableRow">
+      <td>
+        <input type="text"
+               [(ngModel)]="employee.secondName"
+               [disabled]="!row.isEditable"
+               [ngClass]="{'form-control-plaintext': !row.isEditable,
+                           'form-control': row.isEditable}"/>
+      </td>
+      <td>
+        <input type="text"
+               [(ngModel)]="employee.firstName"
+               [disabled]="!row.isEditable"
+               [ngClass]="{'form-control-plaintext': !row.isEditable,
+                           'form-control': row.isEditable}"/>
+      </td>
+      <td>
+        <input type="text"
+               [(ngModel)]="employee.patronymic"
+               [disabled]="!row.isEditable"
+               [ngClass]="{'form-control-plaintext': !row.isEditable,
+                           'form-control': row.isEditable}"/>
+      </td>
+      <td class="align-middle">
+        <select [(ngModel)]="employee.positionId"
+                [disabled]="!row.isEditable"
+                [ngClass]="{'form-control-plaintext': !row.isEditable,
+                           'form-control': row.isEditable}">
+          <!--Placeholder for select element-->
+          <option [ngValue]="undefined || null"
+                  hidden
+                  selected >select position</option>
+          <option *ngFor="let position of positions"
+                  [ngValue]="position.id">
+            {{position.name}}
+          </option>
+        </select>
+      </td>
+      <td>
+        <select [(ngModel)]="employee.shiftId"
+                [disabled]="!row.isEditable"
+                [ngClass]="{'form-control-plaintext': !row.isEditable,
+                           'form-control': row.isEditable}">
+          <!--Placeholder for select element-->
+          <option [ngValue]="undefined || null"
+                  hidden
+                  selected >select shift</option>
+          <option *ngFor="let shift of shifts" [ngValue]="shift.id">
+            {{shift.name}}
+          </option>
+        </select>
+      </td>
+      <td>
+        <button *ngIf="!row.isEditable" class="btn btn-danger full-cell-size"
+                (click)="deleteEmployee(employee)">
+          X
+        </button>
+        <button *ngIf="row.isEditable" class="btn btn-primary full-cell-size"
+                (click)="updateEmployee(employee);row.isEditable=false">
+          Save
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>

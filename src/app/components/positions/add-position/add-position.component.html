@@ -1,0 +1,17 @@
+<td>
+  <input class="form-control"
+         [(ngModel)]="model.name"
+         minlength="3"
+         maxlength="64"
+         placeholder="name"
+         #name="ngModel"
+         required/>
+</td>
+<td>
+
+</td>
+<td>
+  <button class="btn btn-primary full-cell-size"
+          [disabled]="!name.valid"
+          (click)="addPosition()">+</button>
+</td>

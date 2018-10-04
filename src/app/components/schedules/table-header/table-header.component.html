@@ -1,0 +1,13 @@
+<tr class="text-center align-middle">
+  <th rowspan="2">Name</th>
+  <th [attr.colspan]="daysInMonth.length">Schedule</th>
+  <th rowspan="2">Sum</th>
+</tr>
+<tr>
+  <th class="text-center align-middle month-header"
+      *ngFor="let day of daysInMonth"
+      [class.weekend]="isWeekend(day.getDay())">
+    {{day.getDate()}}
+  </th>
+</tr>
+

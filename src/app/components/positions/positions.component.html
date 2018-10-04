@@ -1,0 +1,38 @@
+<table class="table table-striped table-bordered table-sm">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Quantity</th>
+      <th style="width: 10%">Control</th>
+    </tr>
+    <tr app-add-position
+        (newPosition)="addPosition($event)">
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let position of positions"
+        appEditableRow
+        #row="editableRow">
+      <td class="align-middle">
+        <input type="text"
+               [(ngModel)]="position.name"
+               [disabled]="!row.isEditable"
+               [ngClass]="{'form-control-plaintext': !row.isEditable,
+                           'form-control': row.isEditable}"/>
+      </td>
+      <td selectable class="align-middle">
+        {{getQuantity(position.id)}}
+      </td>
+      <td>
+        <button *ngIf="!row.isEditable" class="btn btn-danger full-cell-size"
+                (click)="removePosition(position)">
+          X
+        </button>
+        <button *ngIf="row.isEditable" class="btn btn-primary full-cell-size"
+                (click)="updatePosition(position);row.isEditable=false">
+          Save
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
