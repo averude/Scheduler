@@ -1,6 +1,6 @@
 <td>
   <input class="form-control"
-         [(ngModel)]="model.secondName"
+         [(ngModel)]="newEmployee.secondName"
          minlength="3"
          maxlength="32"
          placeholder="second name"
@@ -11,7 +11,7 @@
   <input class="form-control"
          minlength="3"
          maxlength="32"
-         [(ngModel)]="model.firstName"
+         [(ngModel)]="newEmployee.firstName"
          placeholder="first name"
          #firstName="ngModel"
          required/>
@@ -20,14 +20,14 @@
   <input class="form-control"
          minlength="3"
          maxlength="32"
-         [(ngModel)]="model.patronymic"
+         [(ngModel)]="newEmployee.patronymic"
          placeholder="patronymic"
          #patronymic="ngModel"
          required/>
 </td>
 <td>
   <select class="form-control"
-          [(ngModel)]="model.positionId"
+          [(ngModel)]="newEmployee.positionId"
           #position="ngModel"
           required>
     <option [ngValue]="undefined"
@@ -41,7 +41,7 @@
 </td>
 <td>
   <select class="form-control"
-          [(ngModel)]="model.shiftId"
+          [(ngModel)]="newEmployee.shiftId"
           #shift="ngModel"
           required>
     <option [ngValue]="undefined"

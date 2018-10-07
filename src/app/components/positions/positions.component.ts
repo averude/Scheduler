@@ -23,11 +23,6 @@ export class PositionsComponent implements OnInit {
     return 0;
   }
 
-  addPosition(position: Position) {
-    position.departmentId = this.departmentId;
-    this.positionService.addPosition(position);
-  }
-
   updatePosition(position: Position) {
     this.positionService.updatePosition(position);
   }
@@ -35,5 +30,4 @@ export class PositionsComponent implements OnInit {
   removePosition(position: Position) {
     this.positionService.removePosition(position);
   }
-
 }

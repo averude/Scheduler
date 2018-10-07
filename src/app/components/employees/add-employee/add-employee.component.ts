@@ -1,7 +1,8 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {Position} from '../../../model/position';
-import {Employee} from '../../../model/employee';
-import {Shift} from '../../../model/shift';
+import { Component, Input, OnInit } from '@angular/core';
+import { Position } from '../../../model/position';
+import { Employee } from '../../../model/employee';
+import { Shift } from '../../../model/shift';
+import { EmployeeService } from '../../../services/employee.service';
 
 @Component({
   selector: '[app-add-employee]',
@@ -13,22 +14,18 @@ export class AddEmployeeComponent implements OnInit {
   positions: Position[];
   @Input()
   shifts: Shift[];
-  model: Employee = new Employee();
+  newEmployee: Employee = new Employee();
 
-  @Output()
-  newEmployee: EventEmitter<Employee> = new EventEmitter();
-
-  constructor() { }
+  constructor(private employeeService: EmployeeService) { }
 
   ngOnInit() {}
 
   addEmployee() {
-    this.newEmployee.emit(this.model);
+    this.employeeService.addEmployee(this.newEmployee);
     this.clearModel();
   }
 
   clearModel() {
-    this.model = new Employee();
+    this.newEmployee = new Employee();
   }
-
 }

@@ -22,9 +22,17 @@ export class TableCellComponent implements OnInit {
   ngOnInit() {
   }
 
-  getHours(): number {
-    return (this.workDay !== undefined && this.workDay !== null)
-      ? this.workDay.hours : 0;
+  // Should be refactored
+  getHours(): any {
+    if (this.workDay !== undefined && this.workDay !== null) {
+      if (this.workDay.label !== undefined && this.workDay.label !== null) {
+        return this.workDay.label;
+      } else {
+        return this.workDay.hours;
+      }
+    } else {
+      return 0;
+    }
   }
 
   @HostListener('mousedown')

@@ -4,4 +4,5 @@ export class Schedule {
   date: Date;
   hours: number;
   holiday: boolean;
+  label: string;
 }

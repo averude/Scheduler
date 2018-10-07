@@ -1,8 +1,7 @@
-import {Component, ViewChildren, Input, OnInit, QueryList, HostListener, ContentChildren, ViewChild} from '@angular/core';
+import {Component, ViewChildren, Input, OnInit, QueryList, HostListener, ViewChild} from '@angular/core';
 import {Schedule} from '../../../model/schedule';
 import {Employee} from '../../../model/employee';
 import {ScheduleService} from '../../../services/schedule.service';
-import {SelectableDirective} from '../../../directives/selectable.directive';
 import {TableCellComponent} from '../table-cell/table-cell.component';
 import {ContextMenuComponent, ContextMenuService} from 'ngx-contextmenu';
 import {PatternService} from '../../../services/pattern.service';
@@ -45,23 +44,14 @@ export class TableRowComponent implements OnInit {
       .subscribe(value => this.patterns = value);
   }
 
+  // maybe should be refactored
   getWorkDay(date: Date): Schedule {
     if (this.schedule !== undefined) {
       return this.schedule
         .find(value => value.date.getTime() === date.getTime());
     } else {
-      return this.getEmptySchedule(date);
+      return null;
     }
-  }
-
-  getEmptySchedule(date: Date): Schedule {
-    return {
-      id: 0,
-      date: date,
-      hours: 0,
-      employeeId: this.employee.id,
-      holiday: false
-    };
   }
 
   getSum(): number {
@@ -77,10 +67,6 @@ export class TableRowComponent implements OnInit {
 
   isWeekend(day: number): boolean {
     return day === 0 || day === 6;
-  }
-
-  getContentChildren() {
-    return this.viewChildren;
   }
 
   @HostListener('mousedown')

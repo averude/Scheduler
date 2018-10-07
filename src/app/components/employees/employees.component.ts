@@ -32,10 +32,6 @@ export class EmployeesComponent implements OnInit {
       .subscribe(shifts => this.shifts = shifts);
   }
 
-  addEmployee(employee: Employee) {
-    this.employeeService.addEmployee(employee);
-  }
-
   updateEmployee(employee: Employee) {
     this.employeeService.updateEmployee(employee);
   }
