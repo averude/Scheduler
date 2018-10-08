@@ -44,13 +44,22 @@ export class TableRowComponent implements OnInit {
       .subscribe(value => this.patterns = value);
   }
 
-  // maybe should be refactored
-  getWorkDay(date: Date): Schedule {
+  // should be refactored
+  getValue(date: Date): any {
     if (this.schedule !== undefined) {
-      return this.schedule
+      const workDay = this.schedule
         .find(value => value.date.getTime() === date.getTime());
+      if (workDay !== null && workDay !== undefined) {
+        if (workDay.label !== null && workDay.label !== undefined) {
+          return workDay.label;
+        } else {
+          return workDay.hours;
+        }
+      } else {
+        return 0;
+      }
     } else {
-      return null;
+      return 0;
     }
   }
 
@@ -97,8 +106,10 @@ export class TableRowComponent implements OnInit {
   private generateSchedule(employeeId: number,
                            selectedCells: TableCellComponent[],
                            patternId: number) {
+    this.clearSelection();
+    const dates = selectedCells.map(cell => cell.day);
     this.scheduleGenerationService
-      .generateSchedule(employeeId, selectedCells, patternId);
+      .generateSchedule(employeeId, this.schedule, dates, patternId);
   }
 
   private clearSelection() {

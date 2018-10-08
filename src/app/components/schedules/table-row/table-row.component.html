@@ -1,12 +1,12 @@
 <td>
   {{
-  employee.secondName
-  + ' '
-  + employee.firstName.charAt(0)
-  + '.'
-  + ' '
-  + employee.patronymic.charAt(0)
-  + '.'
+    employee.secondName
+    + ' '
+    + employee.firstName.charAt(0)
+    + '.'
+    + ' '
+    + employee.patronymic.charAt(0)
+    + '.'
   }}
 </td>
 <td class="text-center align-middle"
@@ -15,7 +15,7 @@
     #cell="app-table-cell"
     [dragging]="dragging"
     [day]="day"
-    [workDay]="getWorkDay(day)"
+    [value]="getValue(day)"
     [class.weekend]="isWeekend(day.getDay())">
 </td>
 <td class="text-center align-middle sum">
