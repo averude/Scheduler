@@ -18,7 +18,7 @@ export class AddPositionComponent implements OnInit {
 
   addPosition() {
     this.newPosition.departmentId = 1; // temporary
-    this.positionService.addPosition(this.newPosition);
+    this.positionService.create(this.newPosition);
     this.clearModel();
   }
 

@@ -16,13 +16,13 @@
     [dragging]="dragging"
     [day]="day"
     [value]="getValue(day)"
-    [class.weekend]="isWeekend(day.getDay())">
+    [class.weekend]="isWeekend(day)">
 </td>
 <td class="text-center align-middle sum">
   {{getSum()}}
 </td>
 
-<context-menu #basicMenu>
+<context-menu #patternMenu>
   <ng-template *ngFor="let pattern of patterns"
                contextMenuItem
                (execute)="generateSchedule(employee.id, $event.item, pattern.id)">

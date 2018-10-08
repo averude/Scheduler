@@ -24,19 +24,19 @@ export class EmployeesComponent implements OnInit {
               private shiftService: ShiftService) { }
 
   ngOnInit() {
-    this.employeeService.getEmployees(this.departmentId)
+    this.employeeService.getByDepartmentId(this.departmentId)
       .subscribe(employees => this.employees = employees);
-    this.positionService.getPositions(this.departmentId)
+    this.positionService.getByDepartmentId(this.departmentId)
       .subscribe(positions => this.positions = positions);
-    this.shiftService.getShifts()
+    this.shiftService.findAll()
       .subscribe(shifts => this.shifts = shifts);
   }
 
   updateEmployee(employee: Employee) {
-    this.employeeService.updateEmployee(employee);
+    this.employeeService.update(employee);
   }
 
   deleteEmployee(employee: Employee) {
-    this.employeeService.deleteEmployee(employee);
+    this.employeeService.remove(employee);
   }
 }

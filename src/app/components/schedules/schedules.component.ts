@@ -18,7 +18,7 @@ export class SchedulesComponent implements OnInit {
   constructor(private employeeService: EmployeeService) { }
 
   ngOnInit() {
-    this.employeeService.getEmployees(0)
+    this.employeeService.getByDepartmentId(0)
       .subscribe(value => this.employees = value);
     this.currentDate = new Date();
     this.year = this.currentDate.getFullYear();

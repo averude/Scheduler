@@ -15,7 +15,7 @@ export class PositionsComponent implements OnInit {
   constructor(private positionService: PositionService) { }
 
   ngOnInit() {
-    this.positionService.getPositions(this.departmentId)
+    this.positionService.getByDepartmentId(this.departmentId)
       .subscribe(positions => this.positions = positions);
   }
 
@@ -24,10 +24,10 @@ export class PositionsComponent implements OnInit {
   }
 
   updatePosition(position: Position) {
-    this.positionService.updatePosition(position);
+    this.positionService.update(position);
   }
 
   removePosition(position: Position) {
-    this.positionService.removePosition(position);
+    this.positionService.remove(position);
   }
 }

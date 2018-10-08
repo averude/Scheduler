@@ -19,7 +19,7 @@ export class TableRowComponent implements OnInit {
   @Input() employee: Employee;
 
   @ViewChild(ContextMenuComponent)
-  public basicMenu: ContextMenuComponent;
+  public patternMenu: ContextMenuComponent;
 
   @ViewChildren(TableCellComponent)
   viewChildren: QueryList<TableCellComponent>;
@@ -35,12 +35,12 @@ export class TableRowComponent implements OnInit {
               private contextMenuService: ContextMenuService) { }
 
   ngOnInit() {
-    this.scheduleService.getSchedule(
+    this.scheduleService.getByDate(
         this.daysInMonth[0],
         this.daysInMonth[this.daysInMonth.length - 1],
         this.employee.id
       ).subscribe(value => this.schedule = value);
-    this.patternService.getPatterns()
+    this.patternService.findAll()
       .subscribe(value => this.patterns = value);
   }
 
@@ -74,8 +74,8 @@ export class TableRowComponent implements OnInit {
     }
   }
 
-  isWeekend(day: number): boolean {
-    return day === 0 || day === 6;
+  isWeekend(date: Date): boolean {
+    return date.getDay() === 0 || date.getDay() === 6;
   }
 
   @HostListener('mousedown')
@@ -88,16 +88,18 @@ export class TableRowComponent implements OnInit {
   mouseUp($event: MouseEvent) {
     this.dragging = false;
     this.onContextMenu($event,
-      this.viewChildren.filter(item => item.selected));
+      this.viewChildren
+        .filter(cell => cell.selected)
+        .map(cell => cell.day));
   }
 
-  onContextMenu($event: MouseEvent, item: any[]): void {
-    if (item.length > 0) {
+  onContextMenu($event: MouseEvent, dates: Date[]): void {
+    if (dates.length > 0) {
       setTimeout(() => {
         this.contextMenuService.show.next({
-          contextMenu: this.basicMenu,
+          contextMenu: this.patternMenu,
           event: $event,
-          item: item,
+          item: dates,
         });
         $event.preventDefault();
         $event.stopPropagation();
@@ -106,10 +108,9 @@ export class TableRowComponent implements OnInit {
   }
 
   generateSchedule(employeeId: number,
-                           selectedCells: TableCellComponent[],
-                           patternId: number) {
+                   dates: Date[],
+                   patternId: number) {
     this.clearSelection();
-    const dates = selectedCells.map(cell => cell.day);
     this.scheduleGenerationService
       .generateSchedule(employeeId, this.schedule, dates, patternId);
   }

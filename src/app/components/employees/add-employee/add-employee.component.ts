@@ -21,7 +21,7 @@ export class AddEmployeeComponent implements OnInit {
   ngOnInit() {}
 
   addEmployee() {
-    this.employeeService.addEmployee(this.newEmployee);
+    this.employeeService.create(this.newEmployee);
     this.clearModel();
   }
 
