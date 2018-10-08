@@ -13,13 +13,13 @@ export class ScheduleService {
 
   constructor() { }
 
-  getSchedule(start: Date, end: Date, employeeId: number): Observable<Schedule[]> {
+  getByDate(start: Date, end: Date, employeeId: number): Observable<Schedule[]> {
     return of(this.schedule.filter(
       value => value.employeeId === employeeId)
     ).pipe(delay(600));
   }
 
-  addSchedule(schedule: Schedule) {
+  create(schedule: Schedule) {
     this.schedule.push(schedule);
   }
 }

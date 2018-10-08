@@ -13,11 +13,11 @@ export class EmployeeService {
 
   constructor() { }
 
-  getEmployees(departmentId: number): Observable<Employee[]> {
+  getByDepartmentId(departmentId: number): Observable<Employee[]> {
     return of(this.employees).pipe(delay(500));
   }
 
-  addEmployee(employee: Employee): Observable<number> {
+  create(employee: Employee): Observable<number> {
     employee.id = this.employees
       .map(value => value.id)
       .reduce((a, b) => Math.max(a, b)) + 1;
@@ -25,11 +25,11 @@ export class EmployeeService {
     return of(employee.id);
   }
 
-  updateEmployee(employee: Employee) {
+  update(employee: Employee) {
     //
   }
 
-  deleteEmployee(employee: Employee) {
+  remove(employee: Employee) {
     this.employees.splice(this.findIndex(employee), 1);
   }
 

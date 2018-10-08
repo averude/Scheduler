@@ -16,7 +16,7 @@ export class PatternService {
 
   constructor() { }
 
-  getPatterns(): Observable<Pattern[]> {
+  findAll(): Observable<Pattern[]> {
     return of(this.patterns)
       .pipe(delay(500));
   }

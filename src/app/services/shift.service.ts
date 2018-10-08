@@ -9,19 +9,19 @@ export class ShiftService {
 
   constructor() { }
 
-  getShifts(): Observable<Shift[]> {
+  findAll(): Observable<Shift[]> {
     return of([{id: 1, name: 'Everyday'}, {id: 2, name: '1 shift'}]);
   }
 
-  addShift() {
+  create() {
     //
   }
 
-  updateShift() {
+  update() {
     //
   }
 
-  removeShift() {
+  remove() {
     //
   }
 }

@@ -12,24 +12,24 @@ export class PositionService {
 
   constructor() { }
 
-  getPositions(departmentId: number): Observable<Position[]> {
+  getByDepartmentId(departmentId: number): Observable<Position[]> {
     return of(this.positions
       // .filter(value => value.departmentId === departmentId)
     ).pipe(delay(1000));
   }
 
-  addPosition(position: Position) {
+  create(position: Position) {
     position.id = this.positions
       .map(value => value.id)
       .reduce((prev, curr) => Math.max(prev, curr)) + 1;
     this.positions.push(position);
   }
 
-  updatePosition(position: Position) {
+  update(position: Position) {
     //
   }
 
-  removePosition(position: Position) {
+  remove(position: Position) {
     this.positions.splice(this.findIndex(position), 1);
   }
 

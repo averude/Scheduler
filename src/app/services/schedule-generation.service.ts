@@ -52,7 +52,7 @@ export class ScheduleGenerationService {
             date: dates[date_index],
             label: dayTypes[type_index].label
           });
-          // and then call {this.scheduleService.add}
+          // and then call {this.scheduleService.create}
         }
       }
     }
