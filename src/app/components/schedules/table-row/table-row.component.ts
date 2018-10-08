@@ -91,19 +91,21 @@ export class TableRowComponent implements OnInit {
       this.viewChildren.filter(item => item.selected));
   }
 
-  onContextMenu($event: MouseEvent, item: any): void {
-    setTimeout(() => {
-      this.contextMenuService.show.next({
-        contextMenu: this.basicMenu,
-        event: $event,
-        item: item,
+  onContextMenu($event: MouseEvent, item: any[]): void {
+    if (item.length > 0) {
+      setTimeout(() => {
+        this.contextMenuService.show.next({
+          contextMenu: this.basicMenu,
+          event: $event,
+          item: item,
+        });
+        $event.preventDefault();
+        $event.stopPropagation();
       });
-      $event.preventDefault();
-      $event.stopPropagation();
-    }, 10);
+    }
   }
 
-  private generateSchedule(employeeId: number,
+  generateSchedule(employeeId: number,
                            selectedCells: TableCellComponent[],
                            patternId: number) {
     this.clearSelection();
