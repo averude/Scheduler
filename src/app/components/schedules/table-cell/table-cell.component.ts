@@ -1,5 +1,4 @@
 import {Component, ElementRef, HostListener, Input, OnInit} from '@angular/core';
-import {Schedule} from '../../../model/schedule';
 
 @Component({
   selector: '[app-table-cell]',
@@ -9,7 +8,7 @@ import {Schedule} from '../../../model/schedule';
 })
 export class TableCellComponent implements OnInit {
 
-  @Input() workDay: Schedule;
+  @Input() value: any;
   @Input() day: Date;
 
   className = 'selected';
@@ -20,19 +19,6 @@ export class TableCellComponent implements OnInit {
   constructor(private element: ElementRef) { }
 
   ngOnInit() {
-  }
-
-  // Should be refactored
-  getHours(): any {
-    if (this.workDay !== undefined && this.workDay !== null) {
-      if (this.workDay.label !== undefined && this.workDay.label !== null) {
-        return this.workDay.label;
-      } else {
-        return this.workDay.hours;
-      }
-    } else {
-      return 0;
-    }
   }
 
   @HostListener('mousedown')
