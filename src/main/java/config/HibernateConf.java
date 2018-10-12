@@ -18,7 +18,7 @@ import java.util.Properties;
 import static org.hibernate.cfg.Environment.*;
 
 @Configuration
-@PropertySource("classpath:hibernate.properties")
+@PropertySource("classpath:hibernate-test.properties")
 @EnableTransactionManagement
 @ComponentScan(basePackages = {"dao", "service"})
 public class HibernateConf {
@@ -26,7 +26,8 @@ public class HibernateConf {
     private final Environment env;
     private Class[] classes = new Class[]{
             Department.class,   Position.class, Employee.class,
-            Schedule.class,     Shift.class
+            Schedule.class,     Shift.class,    DayType.class,
+            ShiftPattern.class
     };
 
     @Autowired

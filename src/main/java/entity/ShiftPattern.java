@@ -96,4 +96,14 @@ public class ShiftPattern implements Serializable {
     public void setShifts(List<Shift> shifts) {
         this.shifts = shifts;
     }
+
+    public void addDayType(DayType dayType){
+        dayType.setPatternId(this.getId());
+        dayTypes.add(dayType);
+    }
+
+    public void removeDayType(DayType dayType){
+        dayType.setPatternId(null);
+        dayTypes.remove(dayType);
+    }
 }

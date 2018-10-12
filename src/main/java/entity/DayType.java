@@ -6,6 +6,7 @@ import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.Objects;
 
 @Entity
 @Table(
@@ -13,7 +14,7 @@ import java.io.Serializable;
         uniqueConstraints = {
                 @UniqueConstraint(
                         name = "day_types_unique_constraint",
-                        columnNames = {"name", "value"}
+                        columnNames = {"pattern_id", "label", "value"}
                 )
         }
 )
@@ -37,11 +38,11 @@ public class DayType implements Serializable {
     private Long orderId;
 
     @NotNull(message = "{daytype.name.null}")
-    @Size(  max = 20,
-            min = 3,
+    @Size(  max = 5,
+            min = 1,
             message = "{daytype.name.size}")
     @Column(nullable = false)
-    private String name;
+    private String label;
 
     @NotNull(message = "{daytype.value.null}")
     @PositiveOrZero(message = "{daytype.value.negative}")
@@ -51,9 +52,9 @@ public class DayType implements Serializable {
     public DayType() {
     }
 
-    public DayType(Long orderId, String name, Float value) {
+    public DayType(Long orderId, String label, Float value) {
         this.orderId = orderId;
-        this.name = name;
+        this.label = label;
         this.value = value;
     }
 
@@ -81,12 +82,12 @@ public class DayType implements Serializable {
         this.orderId = orderId;
     }
 
-    public String getName() {
-        return name;
+    public String getLabel() {
+        return label;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setLabel(String name) {
+        this.label = name;
     }
 
     public Float getValue() {
@@ -97,4 +98,21 @@ public class DayType implements Serializable {
         this.value = value;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DayType dayType = (DayType) o;
+        return Objects.equals(id, dayType.id) &&
+                Objects.equals(patternId, dayType.patternId) &&
+                Objects.equals(orderId, dayType.orderId) &&
+                Objects.equals(label, dayType.label) &&
+                Objects.equals(value, dayType.value);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(id, patternId, orderId, label, value);
+    }
 }

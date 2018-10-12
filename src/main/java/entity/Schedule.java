@@ -1,10 +1,7 @@
 package entity;
 
 import javax.persistence.*;
-import javax.validation.constraints.DecimalMax;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.PositiveOrZero;
+import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
@@ -41,6 +38,12 @@ public class Schedule implements Serializable {
                 message = "{schedule.hours.max}")
     @Column(nullable = false)
     private Float hours;
+
+    @Size(  min = 1,
+            max = 5,
+            message = "{schedule.label.size}")
+    @Column(name = "label", nullable = true)
+    private String label;
 
     @NotNull(message = "{schedule.date.null}")
     @Column(nullable = false)
@@ -91,6 +94,14 @@ public class Schedule implements Serializable {
         this.hours = hours;
     }
 
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
     public LocalDate getDate() {
         return date;
     }
@@ -106,12 +117,14 @@ public class Schedule implements Serializable {
         Schedule schedule = (Schedule) o;
         return Objects.equals(id, schedule.id) &&
                 Objects.equals(employeeId, schedule.employeeId) &&
+                Objects.equals(holiday, schedule.holiday) &&
                 Objects.equals(hours, schedule.hours) &&
+                Objects.equals(label, schedule.label) &&
                 Objects.equals(date, schedule.date);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, employeeId, hours, date);
+        return Objects.hash(id, employeeId, holiday, hours, label, date);
     }
 }

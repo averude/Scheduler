@@ -18,7 +18,12 @@ import java.util.Objects;
         uniqueConstraints = {
                 @UniqueConstraint(
                         name = "employees_unique_constraint",
-                        columnNames = {"first_name", "second_name", "position_id"})
+                        columnNames = {
+                                "first_name",
+                                "second_name",
+                                "patronymic",
+                                "position_id"
+                        })
         }
 )
 public class Employee implements Serializable {
@@ -34,6 +39,12 @@ public class Employee implements Serializable {
              message = "{employee.firstname.size}")
     @Column(name = "first_name", nullable = false)
     private String firstName;
+
+    @Size(  max = 20,
+            min = 3,
+            message = "{employee.patronymic.size}")
+    @Column(name = "patronymic", nullable = true)
+    private String patronymic;
 
     @NotNull(message = "{employee.secondname.null}")
     @Size(  max = 20,
@@ -73,6 +84,14 @@ public class Employee implements Serializable {
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
+    }
+
+    public String getPatronymic() {
+        return patronymic;
+    }
+
+    public void setPatronymic(String patronymic) {
+        this.patronymic = patronymic;
     }
 
     public String getSecondName() {
@@ -125,11 +144,14 @@ public class Employee implements Serializable {
         Employee employee = (Employee) o;
         return Objects.equals(id, employee.id) &&
                 Objects.equals(firstName, employee.firstName) &&
-                Objects.equals(secondName, employee.secondName);
+                Objects.equals(patronymic, employee.patronymic) &&
+                Objects.equals(secondName, employee.secondName) &&
+                Objects.equals(positionId, employee.positionId) &&
+                Objects.equals(shiftId, employee.shiftId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstName, secondName);
+        return Objects.hash(id, firstName, patronymic, secondName, positionId, shiftId);
     }
 }
