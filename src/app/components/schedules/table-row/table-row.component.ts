@@ -107,12 +107,20 @@ export class TableRowComponent implements OnInit {
     }
   }
 
+  generateScheduleWithCustomHours(employeeId: number,
+                                  hours: number) {
+    const dates = this.viewChildren.filter(item => item.selected).map(value => value.day);
+    this.clearSelection();
+    this.scheduleGenerationService
+      .generateScheduleWithCustomHours(employeeId, this.schedule, dates, hours);
+  }
+
   generateSchedule(employeeId: number,
                    dates: Date[],
                    patternId: number) {
     this.clearSelection();
     this.scheduleGenerationService
-      .generateSchedule(employeeId, this.schedule, dates, patternId);
+      .generateScheduleByPatternId(employeeId, this.schedule, dates, patternId);
   }
 
   private clearSelection() {

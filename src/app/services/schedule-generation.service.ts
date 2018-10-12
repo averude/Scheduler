@@ -12,14 +12,28 @@ export class ScheduleGenerationService {
   constructor(private patternService: PatternService,
               private scheduleService: ScheduleService) { }
 
-  generateSchedule(employeeId: number,
-                   schedule: Schedule[],
-                   dates: Date[],
-                   patternId: number) {
+  generateScheduleByPatternId(employeeId: number,
+                              schedule: Schedule[],
+                              dates: Date[],
+                              patternId: number) {
     this.patternService.getDayTypes(patternId)
       .subscribe(dayTypes => {
         this.generate(employeeId, schedule, dates, dayTypes, 0);
       });
+  }
+
+  generateScheduleWithCustomHours(employeeId: number,
+                                  schedule: Schedule[],
+                                  dates: Date[],
+                                  hours: string) {
+    const customDayType: DayType[] = [{
+      id: 0,
+      patternId: 0,
+      orderId: 0,
+      label: null,
+      hours: parseFloat(hours)
+    }];
+    this.generate(employeeId, schedule, dates, customDayType, 0);
   }
 
   private generate(employeeId: number,

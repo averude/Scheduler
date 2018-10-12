@@ -23,6 +23,14 @@
 </td>
 
 <context-menu #patternMenu>
+  <ng-template contextMenuItem
+               passive="true">
+    <input class="form-control"
+           type="number"
+           #hours
+           (keyup.enter)="generateScheduleWithCustomHours(employee.id, hours.value)"
+           placeholder="hours"/>
+  </ng-template>
   <ng-template *ngFor="let pattern of patterns"
                contextMenuItem
                (execute)="generateSchedule(employee.id, $event.item, pattern.id)">

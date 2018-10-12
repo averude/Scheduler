@@ -5,7 +5,7 @@ export const DAYTYPES: DayType[] = [
   {id: 2, patternId: 1, orderId: 2, hours: 8.25, label: null},
   {id: 3, patternId: 1, orderId: 3, hours: 8.25, label: null},
   {id: 4, patternId: 1, orderId: 4, hours: 8.25, label: null},
-  {id: 5, patternId: 1, orderId: 5, hours: 7.25, label: null},
+  {id: 5, patternId: 1, orderId: 5, hours: 7, label: null},
   {id: 6, patternId: 1, orderId: 6, hours: 0, label: null},
   {id: 7, patternId: 1, orderId: 7, hours: 0, label: null},
   {id: 8, patternId: 2, orderId: 1, hours: 12, label: 'D'},
