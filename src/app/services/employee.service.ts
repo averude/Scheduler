@@ -1,39 +1,57 @@
 import { Injectable } from '@angular/core';
-import {Employee} from '../model/employee';
-import {EMPLOYEES} from '../datasource/mock-employees';
-import {Observable, of} from 'rxjs';
-import {delay} from 'rxjs/internal/operators';
+import { Employee } from '../model/employee';
+import { Observable } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EmployeeService {
 
-  employees: Employee[] = EMPLOYEES;
+  baseUrl = 'http://localhost:8080/scheduler/api/v1/departments';
+  // baseUrl = 'http://192.168.11.118:8080/scheduler/api/v1/departments';
+  headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+  options = {headers: this.headers};
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
   getByDepartmentId(departmentId: number): Observable<Employee[]> {
-    return of(this.employees).pipe(delay(500));
+    return this.http.get<Employee[]>(
+      `${this.baseUrl}/${departmentId}/employees`,
+      this.options);
   }
 
-  create(employee: Employee): Observable<number> {
-    employee.id = this.employees
-      .map(value => value.id)
-      .reduce((a, b) => Math.max(a, b)) + 1;
-    this.employees.push(employee);
-    return of(employee.id);
+  getByPositionId(departmentId: number,
+                  positionId: number): Observable<Employee[]> {
+    return this.http.get<Employee[]>(
+      `${this.baseUrl}/${departmentId}/positions/${positionId}/employees`,
+      this.options);
   }
 
-  update(employee: Employee) {
-    //
+  create(departmentId: number,
+         positionId: number,
+         employee: Employee): Observable<any> {
+    return this.http.post<number>(
+      `${this.baseUrl}/${departmentId}/positions/${positionId}/employees`,
+      employee,
+      this.options);
   }
 
-  remove(employee: Employee) {
-    this.employees.splice(this.findIndex(employee), 1);
+  update(departmentId: number,
+         positionId: number,
+         employeeId: number,
+         employee: Employee): Observable<any> {
+    return this.http.put(
+      `${this.baseUrl}/${departmentId}/positions/${positionId}/employees/${employeeId}`,
+      employee,
+      this.options);
   }
 
-  private findIndex(employee: Employee): number {
-    return this.employees.indexOf(employee);
+  remove(departmentId: number,
+         positionId: number,
+         employeeId: number): Observable<any> {
+    return this.http.delete(
+      `${this.baseUrl}/${departmentId}/positions/${positionId}/employees/${employeeId}`,
+      this.options);
   }
 }

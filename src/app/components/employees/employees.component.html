@@ -10,6 +10,7 @@
           style="width: 10%">Control</th>
     </tr>
     <tr app-add-employee
+        (employeeCreated)="addEmployee($event)"
         [positions]="positions"
         [shifts]="shifts">
     </tr>
@@ -63,7 +64,8 @@
           <option [ngValue]="undefined || null"
                   hidden
                   selected >select shift</option>
-          <option *ngFor="let shift of shifts" [ngValue]="shift.id">
+          <option *ngFor="let shift of shifts"
+                  [ngValue]="shift.id">
             {{shift.name}}
           </option>
         </select>

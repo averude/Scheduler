@@ -32,11 +32,25 @@ export class EmployeesComponent implements OnInit {
       .subscribe(shifts => this.shifts = shifts);
   }
 
+  addEmployee(employee: Employee) {
+    this.employeeService.create(this.departmentId, employee.positionId, employee)
+      .subscribe(res => {
+        employee.id = res;
+        this.employees.push(employee);
+      }, err => console.log(err));
+  }
+
   updateEmployee(employee: Employee) {
-    this.employeeService.update(employee);
+    this.employeeService.update(this.departmentId, employee.positionId, employee.id, employee)
+      .subscribe(res => console.log(res),
+          err => console.log(err));
   }
 
   deleteEmployee(employee: Employee) {
-    this.employeeService.remove(employee);
+    this.employeeService.remove(this.departmentId, employee.positionId, employee.id)
+      .subscribe(res =>
+        this.employees = this.employees
+          .filter(value => value !== employee),
+          err => console.log(err));
   }
 }

@@ -1,39 +1,47 @@
 import { Injectable } from '@angular/core';
-import {Position} from '../model/position';
-import {POSITIONS} from '../datasource/mock-positions';
-import {Observable, of} from 'rxjs';
-import {delay} from 'rxjs/internal/operators';
+import { Position } from '../model/position';
+import { Observable } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PositionService {
-  positions: Position[] = POSITIONS;
 
-  constructor() { }
+  baseUrl = 'http://localhost:8080/scheduler/api/v1/departments';
+  // baseUrl = 'http://192.168.11.118:8080/scheduler/api/v1/departments';
+  headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+  options = {headers: this.headers};
+
+  constructor(private http: HttpClient) { }
 
   getByDepartmentId(departmentId: number): Observable<Position[]> {
-    return of(this.positions
-      // .filter(value => value.departmentId === departmentId)
-    ).pipe(delay(1000));
+    return this.http.get<Position[]>(
+      `${this.baseUrl}/${departmentId}/positions`,
+      this.options);
   }
 
-  create(position: Position) {
-    position.id = this.positions
-      .map(value => value.id)
-      .reduce((prev, curr) => Math.max(prev, curr)) + 1;
-    this.positions.push(position);
+  create(departmentId: number,
+         position: Position): Observable<any> {
+     return this.http.post<number>(
+       `${this.baseUrl}/${departmentId}/positions`,
+       position,
+       this.options);
   }
 
-  update(position: Position) {
-    //
+  update(departmentId: number,
+         positionId: number,
+         position: Position): Observable<any> {
+    return this.http.put(
+      `${this.baseUrl}/${departmentId}/positions/${positionId}`,
+      position,
+      this.options);
   }
 
-  remove(position: Position) {
-    this.positions.splice(this.findIndex(position), 1);
-  }
-
-  private findIndex(position: Position): number {
-    return this.positions.indexOf(position);
+  remove(departmentId: number,
+         positionId: number): Observable<any> {
+    return this.http.delete(
+      `${this.baseUrl}/${departmentId}/positions/${positionId}`,
+      this.options);
   }
 }
