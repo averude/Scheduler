@@ -13,6 +13,9 @@ import { AddEmployeeComponent } from './components/employees/add-employee/add-em
 import { EditableRowDirective } from './directives/editable-row.directive';
 import { AddPositionComponent } from './components/positions/add-position/add-position.component';
 import { ContextMenuModule } from 'ngx-contextmenu';
+import { HttpClientModule } from '@angular/common/http';
+import { ScheduleLabelPipe } from './pipes/schedule-label.pipe';
+import { MonthNameImpurePipe } from './pipes/month-name-impure.pipe';
 
 @NgModule({
   declarations: [
@@ -25,12 +28,15 @@ import { ContextMenuModule } from 'ngx-contextmenu';
     PositionsComponent,
     AddEmployeeComponent,
     EditableRowDirective,
-    AddPositionComponent
+    AddPositionComponent,
+    ScheduleLabelPipe,
+    MonthNameImpurePipe
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
+    HttpClientModule,
     ContextMenuModule.forRoot({
       autoFocus: true,
       useBootstrap4: true

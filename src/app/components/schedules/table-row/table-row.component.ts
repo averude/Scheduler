@@ -1,4 +1,6 @@
-import {Component, ViewChildren, Input, OnInit, QueryList, HostListener, ViewChild} from '@angular/core';
+import {
+  Component, ViewChildren, Input, OnInit, QueryList, HostListener, ViewChild
+} from '@angular/core';
 import {Schedule} from '../../../model/schedule';
 import {Employee} from '../../../model/employee';
 import {ScheduleService} from '../../../services/schedule.service';
@@ -36,41 +38,31 @@ export class TableRowComponent implements OnInit {
 
   ngOnInit() {
     this.scheduleService.getByDate(
-        this.daysInMonth[0],
-        this.daysInMonth[this.daysInMonth.length - 1],
-        this.employee.id
-      ).subscribe(value => this.schedule = value);
+      this.daysInMonth[0],
+      this.daysInMonth[this.daysInMonth.length - 1],
+      this.employee.id
+    ).subscribe(value => this.schedule = value);
     this.patternService.findAll()
       .subscribe(value => this.patterns = value);
   }
 
-  // should be refactored
-  getValue(date: Date): any {
-    if (this.schedule !== undefined) {
-      const workDay = this.schedule
-        .find(value => value.date.getTime() === date.getTime());
-      if (workDay !== null && workDay !== undefined) {
-        if (workDay.label !== null && workDay.label !== undefined) {
-          return workDay.label;
-        } else {
-          return workDay.hours;
-        }
-      } else {
-        return 0;
-      }
+  getWorkDay(date: Date): Schedule {
+    if (this.schedule) {
+      const dateISO = date.toISOString().split('T')[0];
+      return this.schedule
+        .find(value => value.date === dateISO);
     } else {
-      return 0;
+      return null;
     }
   }
 
-  getSum(): number {
-    if (this.schedule === undefined || this.schedule === null) {
-      return 0;
-    } else {
-      return this.schedule
-        .filter(sched => sched.date.getMonth() === this.daysInMonth[0].getMonth())
+  getSum(data: Schedule[]): number {
+    if (data) {
+      return data
         .map(sched => sched.hours)
         .reduce((prev, curr) => prev + curr, 0);
+    } else {
+      return 0;
     }
   }
 
@@ -107,23 +99,47 @@ export class TableRowComponent implements OnInit {
     }
   }
 
-  generateScheduleWithCustomHours(employeeId: number,
-                                  hours: number) {
-    const dates = this.viewChildren.filter(item => item.selected).map(value => value.day);
-    this.clearSelection();
+  generateScheduleWithCustomHours(hours: string) {
+    const dates = this.viewChildren
+      .filter(item => item.selected)
+      .map(value => value.day);
     this.scheduleGenerationService
-      .generateScheduleWithCustomHours(employeeId, this.schedule, dates, hours);
+      .generateScheduleWithCustomHours(
+        this.employee.id,
+        this.schedule,
+        dates,
+        hours,
+        this.scheduleGeneratedHandler);
   }
 
-  generateSchedule(employeeId: number,
-                   dates: Date[],
+  generateSchedule(dates: Date[],
                    patternId: number) {
-    this.clearSelection();
     this.scheduleGenerationService
-      .generateScheduleByPatternId(employeeId, this.schedule, dates, patternId);
+      .generateScheduleByPatternId(
+        this.employee.id,
+        this.schedule,
+        dates,
+        patternId,
+        this.scheduleGeneratedHandler);
   }
 
-  private clearSelection() {
+  private get scheduleGeneratedHandler(): any {
+    return (createdSchedule, updatedSchedule) => {
+      if (createdSchedule.length > 0) {
+        this.scheduleService.create(this.employee.id, createdSchedule)
+          .subscribe(res => res
+              .forEach(value => this.schedule.push(value)),
+            err => console.log(err));
+      }
+      if (updatedSchedule.length > 0) {
+        this.scheduleService.update(this.employee.id, updatedSchedule)
+          .subscribe(res => console.log(res),
+            err => console.log(err));
+      }
+    };
+  }
+
+  clearSelection() {
     const selectedList = this.viewChildren.filter(item => item.selected);
     if (selectedList.length > 1) {
       selectedList.forEach(selectedItem => selectedItem.deselect());

@@ -5,7 +5,8 @@
       <th>Quantity</th>
       <th style="width: 10%">Control</th>
     </tr>
-    <tr app-add-position>
+    <tr app-add-position
+        (positionCreated)="createPosition($event)">
     </tr>
   </thead>
   <tbody>

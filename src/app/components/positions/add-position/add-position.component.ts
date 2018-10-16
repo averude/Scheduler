@@ -1,6 +1,5 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {Position} from '../../../model/position';
-import {PositionService} from '../../../services/position.service';
 
 @Component({
   selector: '[app-add-position]',
@@ -10,15 +9,17 @@ import {PositionService} from '../../../services/position.service';
 export class AddPositionComponent implements OnInit {
 
   newPosition: Position = new Position();
+  @Output()
+  positionCreated: EventEmitter<Position> = new EventEmitter<Position>();
 
-  constructor(private positionService: PositionService) { }
+  constructor() { }
 
   ngOnInit() {
   }
 
   addPosition() {
     this.newPosition.departmentId = 1; // temporary
-    this.positionService.create(this.newPosition);
+    this.positionCreated.emit(this.newPosition);
     this.clearModel();
   }
 

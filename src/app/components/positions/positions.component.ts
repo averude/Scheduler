@@ -23,11 +23,25 @@ export class PositionsComponent implements OnInit {
     return 0;
   }
 
+  createPosition(position: Position) {
+    this.positionService.create(this.departmentId, position)
+      .subscribe(res => {
+        position.id = res;
+        this.positions.push(position);
+      }, err => console.log(err));
+  }
+
   updatePosition(position: Position) {
-    this.positionService.update(position);
+    this.positionService.update(this.departmentId, position.id, position)
+      .subscribe(res => console.log(res), err => console.log(err));
   }
 
   removePosition(position: Position) {
-    this.positionService.remove(position);
+    this.positionService.remove(this.departmentId, position.id)
+      .subscribe(res => {
+        console.log(res);
+        this.positions = this.positions
+          .filter(value => value !== position);
+      }, err => console.log(err));
   }
 }

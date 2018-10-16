@@ -2,7 +2,7 @@
   <button class="btn btn-dark"
           (click)="prevMonth()"><</button>
   <div>
-    {{monthName + ' ' + year}}
+    {{(currentDate | monthNameImpure) + ' ' + year}}
   </div>
   <button class="btn btn-dark"
           (click)="nextMonth()">></button>

@@ -3,8 +3,7 @@ import {Component, ElementRef, HostListener, Input, OnInit} from '@angular/core'
 @Component({
   selector: '[app-table-cell]',
   templateUrl: './table-cell.component.html',
-  styleUrls: ['./table-cell.component.css'],
-  exportAs: 'app-table-cell'
+  styleUrls: ['./table-cell.component.css']
 })
 export class TableCellComponent implements OnInit {
 

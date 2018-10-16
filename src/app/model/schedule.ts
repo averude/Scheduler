@@ -1,7 +1,7 @@
 export class Schedule {
   id: number;
   employeeId: number;
-  date: Date;
+  date: string;
   hours: number;
   holiday: boolean;
   label: string;

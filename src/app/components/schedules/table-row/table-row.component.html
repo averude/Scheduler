@@ -12,28 +12,28 @@
 <td class="text-center align-middle"
     *ngFor="let day of daysInMonth"
     app-table-cell
-    #cell="app-table-cell"
     [dragging]="dragging"
     [day]="day"
-    [value]="getValue(day)"
+    [value]="getWorkDay(day) | scheduleLabel"
     [class.weekend]="isWeekend(day)">
 </td>
 <td class="text-center align-middle sum">
-  {{getSum()}}
+  {{getSum(schedule)}}
 </td>
 
-<context-menu #patternMenu>
+<context-menu #patternMenu
+              (close)="clearSelection()">
   <ng-template contextMenuItem
                passive="true">
     <input class="form-control"
-           type="number"
+           type="text"
            #hours
-           (keyup.enter)="generateScheduleWithCustomHours(employee.id, hours.value)"
+           (keyup.enter)="generateScheduleWithCustomHours(hours.value)"
            placeholder="hours"/>
   </ng-template>
   <ng-template *ngFor="let pattern of patterns"
                contextMenuItem
-               (execute)="generateSchedule(employee.id, $event.item, pattern.id)">
+               (execute)="generateSchedule($event.item, pattern.id)">
     {{pattern.name}}
   </ng-template>
 </context-menu>
