@@ -7,7 +7,7 @@ import { Schedule } from '../model/schedule';
 })
 export class ScheduleLabelPipe implements PipeTransform {
 
-  transform(value: Schedule, args?: any): string | number {
+  transform(value: Schedule): string | number {
     if (value) {
       if (value.label) {
         return value.label;
