@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { Employee } from '../../model/employee';
-import { EmployeeService } from '../../services/employee.service';
+import { Employee } from '../../../../../model/employee';
+import { EmployeeService } from '../../../../../services/employee.service';
+
 
 @Component({
-  selector: 'app-schedules',
-  templateUrl: './schedules.component.html',
-  styleUrls: ['./schedules.component.css']
+  selector: 'app-schedules-table',
+  templateUrl: './schedules-table.component.html',
+  styleUrls: ['./schedules-table.component.css']
 })
-export class SchedulesComponent implements OnInit {
+export class SchedulesTableComponent implements OnInit {
 
   currentDate: Date;
   daysInMonth: Date[] = [];

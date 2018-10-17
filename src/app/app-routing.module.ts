@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
-import {RouterModule, Routes} from '@angular/router';
-import {EmployeesComponent} from './components/employees/employees.component';
-import {SchedulesComponent} from './components/schedules/schedules.component';
-import {PositionsComponent} from './components/positions/positions.component';
+import { RouterModule, Routes } from '@angular/router';
+import { EmployeesTableComponent } from './modules/admin/employees/components/employees-table/employees-table.component';
+import { PositionsTableComponent } from './modules/admin/positions/components/positions-table/positions-table.component';
+import { SchedulesTableComponent } from './modules/admin/schedules/components/schedules-table/schedules-table.component';
 
 const routes: Routes = [
-  { path: 'employees', component: EmployeesComponent },
-  { path: 'positions', component: PositionsComponent },
-  { path: 'schedule', component: SchedulesComponent }
+  { path: 'employees', component: EmployeesTableComponent },
+  { path: 'positions', component: PositionsTableComponent },
+  { path: 'schedule', component: SchedulesTableComponent }
 ];
 
 @NgModule({

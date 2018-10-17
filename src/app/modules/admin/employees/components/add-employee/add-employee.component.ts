@@ -1,7 +1,7 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import { Position } from '../../../model/position';
-import { Employee } from '../../../model/employee';
-import { Shift } from '../../../model/shift';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Position } from '../../../../../model/position';
+import { Employee } from '../../../../../model/employee';
+import { Shift } from '../../../../../model/shift';
 
 @Component({
   selector: '[app-add-employee]',

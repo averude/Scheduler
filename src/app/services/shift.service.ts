@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import {Observable, of} from 'rxjs';
-import {Shift} from '../model/shift';
+import { Observable, of } from 'rxjs';
+import { Shift } from '../model/shift';
 
 @Injectable({
   providedIn: 'root'

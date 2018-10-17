@@ -1,5 +1,5 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
-import {Position} from '../../../model/position';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Position } from '../../../../../model/position';
 
 @Component({
   selector: '[app-add-position]',

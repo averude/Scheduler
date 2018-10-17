@@ -1,4 +1,10 @@
-import {Component, ElementRef, HostListener, Input, OnInit} from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  Input,
+  OnInit
+} from '@angular/core';
 
 @Component({
   selector: '[app-table-cell]',

@@ -1,17 +1,17 @@
-import {Component, OnInit} from '@angular/core';
-import {Employee} from '../../model/employee';
-import {EmployeeService} from '../../services/employee.service';
-import {Position} from '../../model/position';
-import {PositionService} from '../../services/position.service';
-import {Shift} from '../../model/shift';
-import {ShiftService} from '../../services/shift.service';
+import { Component, OnInit } from '@angular/core';
+import { Employee } from '../../../../../model/employee';
+import { EmployeeService } from '../../../../../services/employee.service';
+import { Position } from '../../../../../model/position';
+import { PositionService } from '../../../../../services/position.service';
+import { Shift } from '../../../../../model/shift';
+import { ShiftService } from '../../../../../services/shift.service';
 
 @Component({
   selector: 'app-employees',
-  templateUrl: './employees.component.html',
-  styleUrls: ['./employees.component.css']
+  templateUrl: './employees-table.component.html',
+  styleUrls: ['./employees-table.component.css']
 })
-export class EmployeesComponent implements OnInit {
+export class EmployeesTableComponent implements OnInit {
 
   departmentId = 1;
   // Data

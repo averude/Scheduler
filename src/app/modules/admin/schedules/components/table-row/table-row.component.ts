@@ -1,14 +1,20 @@
 import {
-  Component, ViewChildren, Input, OnInit, QueryList, HostListener, ViewChild
+  Component,
+  ViewChildren,
+  Input,
+  OnInit,
+  QueryList,
+  HostListener,
+  ViewChild
 } from '@angular/core';
-import {Schedule} from '../../../model/schedule';
-import {Employee} from '../../../model/employee';
-import {ScheduleService} from '../../../services/schedule.service';
-import {TableCellComponent} from '../table-cell/table-cell.component';
-import {ContextMenuComponent, ContextMenuService} from 'ngx-contextmenu';
-import {PatternService} from '../../../services/pattern.service';
-import {Pattern} from '../../../model/pattern';
-import {ScheduleGenerationService} from '../../../services/schedule-generation.service';
+import { TableCellComponent } from '../table-cell/table-cell.component';
+import { ContextMenuComponent, ContextMenuService } from 'ngx-contextmenu';
+import { Employee } from '../../../../../model/employee';
+import { ScheduleService } from '../../../../../services/schedule.service';
+import { ScheduleGenerationService } from '../../../../../services/schedule-generation.service';
+import { PatternService } from '../../../../../services/pattern.service';
+import { Schedule } from '../../../../../model/schedule';
+import { Pattern } from '../../../../../model/pattern';
 
 @Component({
   selector: '[app-table-row]',

@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import {Observable, of} from 'rxjs';
-import {Pattern} from '../model/pattern';
-import {PATTERNS} from '../datasource/mock-patterns';
-import {delay} from 'rxjs/internal/operators';
-import {DayType} from '../model/daytype';
-import {DAYTYPES} from '../datasource/mock-daytypes';
+import { Observable, of } from 'rxjs';
+import { Pattern } from '../model/pattern';
+import { PATTERNS } from '../datasource/mock-patterns';
+import { delay } from 'rxjs/internal/operators';
+import { DayType } from '../model/daytype';
+import { DAYTYPES } from '../datasource/mock-daytypes';
 
 @Injectable({
   providedIn: 'root'

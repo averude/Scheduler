@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { Position } from '../../model/position';
-import { PositionService } from '../../services/position.service';
+import { Position } from '../../../../../model/position';
+import { PositionService } from '../../../../../services/position.service';
 
 @Component({
   selector: 'app-positions',
-  templateUrl: './positions.component.html',
-  styleUrls: ['./positions.component.css']
+  templateUrl: './positions-table.component.html',
+  styleUrls: ['./positions-table.component.css']
 })
-export class PositionsComponent implements OnInit {
+export class PositionsTableComponent implements OnInit {
 
   departmentId = 1;
   positions: Position[];

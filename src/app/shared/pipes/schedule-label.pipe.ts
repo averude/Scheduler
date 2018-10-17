@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { Schedule } from '../model/schedule';
+import { Schedule } from '../../model/schedule';
 
 @Pipe({
   name: 'scheduleLabel',
