@@ -25,11 +25,11 @@ export class ScheduleGenerationService {
   generateScheduleWithCustomHours(employeeId: number,
                                   schedule: Schedule[],
                                   dates: Date[],
-                                  hours: string,
+                                  hours: number,
                                   fn: (createdSchedule: Schedule[],
                                        updatedSchedule: Schedule[]) => void) {
     const dayType = new DayType();
-    dayType.hours = parseFloat(hours);
+    dayType.hours = hours;
     const customDayType: DayType[] = [dayType];
     this.generate(employeeId, schedule, dates, customDayType, 0, fn);
   }
@@ -49,7 +49,6 @@ export class ScheduleGenerationService {
       for (let j = 0; j < typesSize; j++) {
         const date_index = i + j;
         if (date_index >= datesSize) {
-          fn(createdSchedule, updatedSchedule);
           break;
         }
         const type_index = (offset + j) % typesSize;
