@@ -26,11 +26,18 @@
   <ng-template contextMenuItem
                passive="true">
     <input class="form-control"
-           type="text"
-           #hours
-           (keyup.enter)="generateScheduleWithCustomHours(hours.value)"
-           placeholder="hours"/>
+           type="number"
+           step="0.05"
+           [(ngModel)]="customHours"
+           required/>
   </ng-template>
+  <ng-template contextMenuItem
+               [enabled]="customHours >= 0 && customHours <= 24"
+               (execute)="generateScheduleWithCustomHours()">
+    Create custom schedule
+  </ng-template>
+  <ng-template contextMenuItem
+               [divider]="true"></ng-template>
   <ng-template *ngFor="let pattern of patterns"
                contextMenuItem
                (execute)="generateSchedule($event.item, pattern.id)">

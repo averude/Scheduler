@@ -26,6 +26,7 @@ export class TableRowComponent implements OnInit {
   @ViewChildren(TableCellComponent)
   viewChildren: QueryList<TableCellComponent>;
 
+  customHours: number;
   dragging = false;
 
   schedule: Schedule[];
@@ -72,17 +73,13 @@ export class TableRowComponent implements OnInit {
 
   @HostListener('mousedown')
   mouseDown() {
-    this.clearSelection();
     this.dragging = true;
   }
 
   @HostListener('mouseup', ['$event'])
   mouseUp($event: MouseEvent) {
     this.dragging = false;
-    this.onContextMenu($event,
-      this.viewChildren
-        .filter(cell => cell.selected)
-        .map(cell => cell.day));
+    this.onContextMenu($event, this.selectedDates);
   }
 
   onContextMenu($event: MouseEvent, dates: Date[]): void {
@@ -99,16 +96,13 @@ export class TableRowComponent implements OnInit {
     }
   }
 
-  generateScheduleWithCustomHours(hours: string) {
-    const dates = this.viewChildren
-      .filter(item => item.selected)
-      .map(value => value.day);
+  generateScheduleWithCustomHours() {
     this.scheduleGenerationService
       .generateScheduleWithCustomHours(
         this.employee.id,
         this.schedule,
-        dates,
-        hours,
+        this.selectedDates,
+        this.customHours,
         this.scheduleGeneratedHandler);
   }
 
@@ -139,10 +133,15 @@ export class TableRowComponent implements OnInit {
     };
   }
 
+  private get selectedDates(): Date[] {
+    return this.viewChildren
+      .filter(item => item.selected)
+      .map(value => value.day);
+  }
+
   clearSelection() {
-    const selectedList = this.viewChildren.filter(item => item.selected);
-    if (selectedList.length > 1) {
-      selectedList.forEach(selectedItem => selectedItem.deselect());
-    }
+    this.viewChildren
+      .filter(item => item.selected)
+      .forEach(selectedItem => selectedItem.deselect());
   }
 }
