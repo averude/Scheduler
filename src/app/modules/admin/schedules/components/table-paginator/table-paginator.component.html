@@ -1,0 +1,9 @@
+<div class="btn-group">
+  <button class="btn btn-dark"
+          (click)="prevMonth()"><</button>
+  <div>
+    {{(currentDate | monthNameImpure) + ' ' + year}}
+  </div>
+  <button class="btn btn-dark"
+          (click)="nextMonth()">></button>
+</div>

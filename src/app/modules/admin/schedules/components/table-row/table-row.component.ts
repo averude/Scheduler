@@ -5,7 +5,7 @@ import {
   OnInit,
   QueryList,
   HostListener,
-  ViewChild
+  ViewChild, OnDestroy
 } from '@angular/core';
 import { TableCellComponent } from '../table-cell/table-cell.component';
 import { ContextMenuComponent, ContextMenuService } from 'ngx-contextmenu';
@@ -15,42 +15,64 @@ import { ScheduleGenerationService } from '../../../../../services/schedule-gene
 import { PatternService } from '../../../../../services/pattern.service';
 import { Schedule } from '../../../../../model/schedule';
 import { Pattern } from '../../../../../model/pattern';
+import { PaginatorService } from '../../paginator.service';
+import { Subscription } from 'rxjs';
+import { mergeMap } from 'rxjs/internal/operators';
 
 @Component({
   selector: '[app-table-row]',
   templateUrl: './table-row.component.html',
   styleUrls: ['./table-row.component.css']
 })
-export class TableRowComponent implements OnInit {
+export class TableRowComponent implements OnInit, OnDestroy {
 
-  @Input() daysInMonth: Date[];
   @Input() employee: Employee;
 
+  // Context menu variables
   @ViewChild(ContextMenuComponent)
   public patternMenu: ContextMenuComponent;
+  customHours: number;
 
+  // Selection variables
   @ViewChildren(TableCellComponent)
   viewChildren: QueryList<TableCellComponent>;
-
-  customHours: number;
   dragging = false;
 
+  // Table variables
+  daysInMonth: Date[];
   schedule: Schedule[];
   patterns: Pattern[];
+  sum = 0;
+
+  // Observable subscriptions
+  private paginatorSub: Subscription;
 
   constructor(private scheduleService: ScheduleService,
               private scheduleGenerationService: ScheduleGenerationService,
               private patternService: PatternService,
+              private paginatorService: PaginatorService,
               private contextMenuService: ContextMenuService) { }
 
   ngOnInit() {
-    this.scheduleService.getByDate(
-      this.daysInMonth[0],
-      this.daysInMonth[this.daysInMonth.length - 1],
-      this.employee.id
-    ).subscribe(value => this.schedule = value);
+    this.paginatorSub = this.paginatorService.dates
+      .pipe(mergeMap(daysInMonth => {
+          this.daysInMonth = daysInMonth;
+          return this.scheduleService.getByDate(
+            daysInMonth[0],
+            daysInMonth[daysInMonth.length - 1],
+            this.employee.id
+          );
+        }))
+      .subscribe(schedule => {
+        this.schedule = schedule;
+        this.calculateSum();
+      });
     this.patternService.findAll()
-      .subscribe(value => this.patterns = value);
+      .subscribe(patterns => this.patterns = patterns);
+  }
+
+  ngOnDestroy(): void {
+    this.paginatorSub.unsubscribe();
   }
 
   getWorkDay(date: Date): Schedule {
@@ -63,13 +85,11 @@ export class TableRowComponent implements OnInit {
     }
   }
 
-  getSum(data: Schedule[]): number {
-    if (data) {
-      return data
+  calculateSum(): number | void {
+    if (this.schedule) {
+      this.sum = this.schedule
         .map(sched => sched.hours)
         .reduce((prev, curr) => prev + curr, 0);
-    } else {
-      return 0;
     }
   }
 
@@ -127,13 +147,16 @@ export class TableRowComponent implements OnInit {
     return (createdSchedule, updatedSchedule) => {
       if (createdSchedule.length > 0) {
         this.scheduleService.create(this.employee.id, createdSchedule)
-          .subscribe(res => res
-              .forEach(value => this.schedule.push(value)),
-            err => console.log(err));
-      }
+          .subscribe(res => {
+              res.forEach(value => this.schedule.push(value));
+              this.calculateSum();
+            },
+              err => console.log(err)
+          );
+        }
       if (updatedSchedule.length > 0) {
         this.scheduleService.update(this.employee.id, updatedSchedule)
-          .subscribe(res => console.log(res),
+          .subscribe(res => this.calculateSum(),
             err => console.log(err));
       }
     };
