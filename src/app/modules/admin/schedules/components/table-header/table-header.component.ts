@@ -23,7 +23,7 @@ export class TableHeaderComponent implements OnInit, OnDestroy {
     this.sub.unsubscribe();
   }
 
-  isWeekend(day: number): boolean {
-    return day === 0 || day === 6;
+  isWeekend(day: Date): boolean {
+    return day.getDay() === 0 || day.getDay() === 6;
   }
 }

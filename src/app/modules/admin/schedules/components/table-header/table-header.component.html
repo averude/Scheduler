@@ -6,7 +6,7 @@
 <tr>
   <th class="text-center align-middle month-header"
       *ngFor="let day of daysInMonth"
-      [class.weekend]="isWeekend(day.getDay())">
+      [class.weekend]="isWeekend(day)">
     {{day.getDate()}}
   </th>
 </tr>
