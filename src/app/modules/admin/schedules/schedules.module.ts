@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { ContextMenuModule } from 'ngx-contextmenu';
 import { TableHeaderComponent } from './components/table-header/table-header.component';
@@ -7,10 +6,13 @@ import { TableCellComponent } from './components/table-cell/table-cell.component
 import { TableRowComponent } from './components/table-row/table-row.component';
 import { SchedulesTableComponent } from './components/schedules-table/schedules-table.component';
 import { SharedModule } from '../../../shared/shared.module';
+import { CommonModule } from '@angular/common';
+import { TablePaginatorComponent } from './components/table-paginator/table-paginator.component';
+import { PaginatorService } from './paginator.service';
 
 @NgModule({
   imports: [
-    BrowserModule,
+    CommonModule,
     FormsModule,
     SharedModule,
     ContextMenuModule.forRoot({
@@ -19,16 +21,11 @@ import { SharedModule } from '../../../shared/shared.module';
     })],
   declarations: [
     SchedulesTableComponent,
+    TablePaginatorComponent,
     TableRowComponent,
     TableHeaderComponent,
     TableCellComponent
   ],
-  exports: [
-    SchedulesTableComponent,
-    TableRowComponent,
-    TableHeaderComponent,
-    TableCellComponent,
-  ],
-  providers: []
+  providers: [PaginatorService]
 })
 export class SchedulesModule {}

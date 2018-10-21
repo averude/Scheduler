@@ -5,9 +5,18 @@ import { PositionsTableComponent } from './modules/admin/positions/components/po
 import { SchedulesTableComponent } from './modules/admin/schedules/components/schedules-table/schedules-table.component';
 
 const routes: Routes = [
-  { path: 'employees', component: EmployeesTableComponent },
-  { path: 'positions', component: PositionsTableComponent },
-  { path: 'schedule', component: SchedulesTableComponent }
+  {
+    path: 'employees',
+    component: EmployeesTableComponent
+  },
+  {
+    path: 'positions',
+    component: PositionsTableComponent
+  },
+  {
+    path: 'schedule',
+    component: SchedulesTableComponent
+  }
 ];
 
 @NgModule({
