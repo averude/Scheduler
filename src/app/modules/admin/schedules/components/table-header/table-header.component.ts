@@ -1,20 +1,29 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { PaginatorService } from '../../paginator.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: '[app-table-header]',
   templateUrl: './table-header.component.html',
   styleUrls: ['./table-header.component.css']
 })
-export class TableHeaderComponent implements OnInit {
-  @Input() daysInMonth: Date[];
+export class TableHeaderComponent implements OnInit, OnDestroy {
 
-  constructor() { }
+  daysInMonth: Date[];
+  private sub: Subscription;
+
+  constructor(private paginatorService: PaginatorService) { }
 
   ngOnInit() {
+    this.sub = this.paginatorService.dates
+      .subscribe(daysInMonth => this.daysInMonth = daysInMonth);
+  }
+
+  ngOnDestroy(): void {
+    this.sub.unsubscribe();
   }
 
   isWeekend(day: number): boolean {
     return day === 0 || day === 6;
   }
-
 }
