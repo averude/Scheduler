@@ -8,7 +8,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 })
 export class ScheduleService {
 
-  // baseUrl = 'http://192.168.11.118:8080/scheduler/api/v1/schedule';
   baseUrl = 'http://localhost:8080/scheduler/api/v1/schedule';
   headers = new HttpHeaders({ 'Content-Type': 'application/json' });
   options = {headers: this.headers};

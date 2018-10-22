@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Position } from '../../../../../model/position';
 import { PositionService } from '../../../../../services/position.service';
+import { EmployeeService } from '../../../../../services/employee.service';
+import { Employee } from '../../../../../model/employee';
 
 @Component({
   selector: 'app-positions',
@@ -11,16 +13,26 @@ export class PositionsTableComponent implements OnInit {
 
   departmentId = 1;
   positions: Position[];
+  employees: Employee[];
 
-  constructor(private positionService: PositionService) { }
+  constructor(private positionService: PositionService,
+              private employeeService: EmployeeService) { }
 
   ngOnInit() {
     this.positionService.getByDepartmentId(this.departmentId)
       .subscribe(positions => this.positions = positions);
+    this.employeeService.getByDepartmentId(this.departmentId)
+      .subscribe(employees => this.employees = employees);
   }
 
   getQuantity(positionId: number): number {
-    return 0;
+    if (this.employees) {
+      return this.employees
+        .filter(employee => employee.positionId === positionId)
+        .length;
+    } else {
+      return 0;
+    }
   }
 
   createPosition(position: Position) {
