@@ -1,26 +1,31 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { EmployeesTableComponent } from './modules/admin/employees/components/employees-table/employees-table.component';
-import { PositionsTableComponent } from './modules/admin/positions/components/positions-table/positions-table.component';
-import { SchedulesTableComponent } from './modules/admin/schedules/components/schedules-table/schedules-table.component';
+import { ClientComponent } from './modules/client/client.component';
+import { PageNotFoundComponent } from './modules/page-not-found/page-not-found.component';
+import { LoginComponent } from './modules/login/login.component';
 
 const routes: Routes = [
   {
-    path: 'employees',
-    component: EmployeesTableComponent
+    path: 'login',
+    component: LoginComponent
   },
   {
-    path: 'positions',
-    component: PositionsTableComponent
+    path: 'client/:clientId',
+    component: ClientComponent
   },
   {
-    path: 'schedule',
-    component: SchedulesTableComponent
+    path: '',
+    redirectTo: '/login',
+    pathMatch: 'full'
+  },
+  {
+    path: '**',
+    component: PageNotFoundComponent
   }
 ];
 
 @NgModule({
-  imports: [ RouterModule.forRoot(routes) ],
+  imports: [ RouterModule.forRoot(routes, {enableTracing: false}) ],
   exports: [ RouterModule ]
 })
 export class AppRoutingModule { }
