@@ -27,6 +27,12 @@ export class EmployeeService {
       this.options);
   }
 
+  getById(employeeId: number): Observable<Employee> {
+    return this.http.get<Employee>(
+      `${this.baseUrl}/employees/${employeeId}`,
+      this.options);
+  }
+
   create(departmentId: number,
          positionId: number,
          employee: Employee): Observable<any> {
