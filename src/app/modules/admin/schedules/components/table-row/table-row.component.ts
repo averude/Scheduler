@@ -85,7 +85,7 @@ export class TableRowComponent implements OnInit, OnDestroy {
     }
   }
 
-  calculateSum(): number | void {
+  calculateSum(): void {
     if (this.schedule) {
       this.sum = this.schedule
         .map(sched => sched.hours)
