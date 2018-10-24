@@ -66,9 +66,12 @@ export class ScheduleTablePaginatorComponent implements OnInit {
 
   private calcPrevDays(): void {
     this.prevDays.length = 0;
-    const firstDay = this.currDays[0].getDay() - 1;
+    let firstDay = this.currDays[0].getDay();
+    if (firstDay === 0) {
+      firstDay = 7;
+    }
     const daysNum = new Date(this.currYear, this.currMonth, 0).getDate();
-    for (let i = 0, j = firstDay - 1; j >= 0; i++, j--) {
+    for (let i = 0, j = firstDay - 2; j >= 0; i++, j--) {
       this.prevDays[i] = new Date(Date.UTC(
         this.currYear,
         this.currMonth - 1,
@@ -79,8 +82,10 @@ export class ScheduleTablePaginatorComponent implements OnInit {
   private calcNextDays(): void {
     this.nextDays.length = 0;
     const lastDay = this.currDays[this.currDays.length - 1].getDay();
-    for (let i = 0; i < 7 - lastDay; i++) {
-      this.nextDays[i] = new Date(Date.UTC(this.currYear, this.currMonth + 1, i + 1));
+    if (lastDay !== 0) {
+      for (let i = 0; i < 7 - lastDay; i++) {
+        this.nextDays[i] = new Date(Date.UTC(this.currYear, this.currMonth + 1, i + 1));
+      }
     }
   }
 }
