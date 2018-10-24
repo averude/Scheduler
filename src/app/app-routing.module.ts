@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ClientComponent } from './modules/client/client.component';
 import { PageNotFoundComponent } from './modules/page-not-found/page-not-found.component';
 import { LoginComponent } from './modules/login/login.component';
+import { ScheduleTableComponent } from './modules/client/components/schedule-table/schedule-table.component';
 
 const routes: Routes = [
   {
@@ -11,7 +11,7 @@ const routes: Routes = [
   },
   {
     path: 'client/:clientId',
-    component: ClientComponent
+    component: ScheduleTableComponent
   },
   {
     path: '',
