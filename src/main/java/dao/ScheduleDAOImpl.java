@@ -45,22 +45,4 @@ public class ScheduleDAOImpl extends AbstractDAO<Schedule> implements ScheduleDA
                 .setParameter("to", to)
                 .getResultList();
     }
-
-    @Override
-    public Collection<Schedule> getForDepartmentByDate(long departmentId,
-                                                       LocalDate from,
-                                                       LocalDate to) {
-        return getCurrentSession()
-                .createQuery("select s " +
-                        "from Position p " +
-                        "inner join Employee e on p.id = e.positionId " +
-                        "inner join Schedule s on s.employeeId = e.id " +
-                        "where p.departmentId = :departmentId " +
-                        "and s.date >= :from " +
-                        "and s.date <= :to", Schedule.class)
-                .setParameter("departmentId", departmentId)
-                .setParameter("from", from)
-                .setParameter("to", to)
-                .getResultList();
-    }
 }

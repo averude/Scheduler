@@ -22,10 +22,15 @@ public class EmployeeServiceImpl
 
     @Override
     @Transactional
-    public Collection<Employee> findAllInParent(long parentId) {
-        return employeeDAO.getAllPosition(parentId);
+    public Collection<Employee> findAllInDepartment(long departmentId) {
+        return this.employeeDAO.getAllInDepartment(departmentId);
     }
 
+    @Override
+    @Transactional
+    public Collection<Employee> findAllInParent(long parentId) {
+        return employeeDAO.getAllInPosition(parentId);
+    }
 
     @Override
     @Transactional

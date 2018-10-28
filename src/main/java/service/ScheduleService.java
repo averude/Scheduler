@@ -18,12 +18,4 @@ public interface ScheduleService extends GenericService<Schedule> {
             @NotNull(message = "{schedule.date.null}")
             LocalDate from,
             LocalDate to);
-
-    @CheckDateParameters
-    Collection<Schedule> getForDepartmentByDate(
-            @Min(value = 1L, message = "{entity.id.size}")
-            long departmentId,
-            @NotNull(message = "{schedule.date.null}")
-            LocalDate from,
-            LocalDate to);
 }

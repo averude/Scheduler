@@ -41,7 +41,7 @@ public class ScheduleServiceImpl
     @Transactional
     public void updateById(long id, Schedule schedule) {
         schedule.setId(id);
-        scheduleDAO.create(schedule);
+        scheduleDAO.update(schedule);
     }
 
     @Override
@@ -60,16 +60,5 @@ public class ScheduleServiceImpl
             to = LocalDate.now();
         }
         return scheduleDAO.getForEmployeeByDate(employeeId, from, to);
-    }
-
-    @Override
-    @Transactional
-    public Collection<Schedule> getForDepartmentByDate(long departmentId,
-                                                       LocalDate from,
-                                                       LocalDate to) {
-        if (to == null) {
-            to = LocalDate.now();
-        }
-        return scheduleDAO.getForDepartmentByDate(departmentId, from, to);
     }
 }

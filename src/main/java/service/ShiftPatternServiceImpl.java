@@ -1,5 +1,6 @@
 package service;
 
+import dao.DepartmentDAO;
 import dao.ShiftPatternDAO;
 import entity.ShiftPattern;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,21 +14,26 @@ public class ShiftPatternServiceImpl
         extends AbstractService<ShiftPattern> implements ShiftPatternService {
 
     private final ShiftPatternDAO shiftPatternDAO;
+    private final DepartmentDAO departmentDAO;
 
     @Autowired
-    public ShiftPatternServiceImpl(ShiftPatternDAO shiftPatternDAO) {
+    public ShiftPatternServiceImpl(ShiftPatternDAO shiftPatternDAO,
+                                   DepartmentDAO departmentDAO) {
         super(shiftPatternDAO);
         this.shiftPatternDAO = shiftPatternDAO;
+        this.departmentDAO = departmentDAO;
     }
 
     @Override
+    @Transactional
     public Collection<ShiftPattern> findAllInParent(long parentId) {
-        throw new UnsupportedOperationException(); // should be rewritten later
+        return this.departmentDAO.findById(parentId).getPatterns();
     }
 
     @Override
+    @Transactional
     public void createInParent(long parentId, ShiftPattern pattern) {
-        throw new UnsupportedOperationException(); // should be rewritten later
+        this.departmentDAO.findById(parentId).addPattern(pattern);
     }
 
     @Override

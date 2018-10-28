@@ -18,11 +18,24 @@ public class EmployeeDAOImpl
     }
 
     @Override
-    public Collection<Employee> getAllPosition(long positionId) {
+    public Collection<Employee> getAllInPosition(long positionId) {
         return getCurrentSession()
                 .createQuery("from Employee e " +
                         "where e.positionId = :positionId", Employee.class)
                 .setParameter("positionId", positionId)
+                .getResultList();
+    }
+
+    @Override
+    public Collection<Employee> getAllInDepartment(long departmentId) {
+        return getCurrentSession()
+                .createQuery("select e " +
+                        "from Position p " +
+                        "inner join " +
+                        "Employee e " +
+                        "on e.positionId = p.id " +
+                        "where p.departmentId = :departmentId", Employee.class)
+                .setParameter("departmentId", departmentId)
                 .getResultList();
     }
 }
