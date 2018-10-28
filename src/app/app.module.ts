@@ -7,6 +7,8 @@ import { AdminModule } from './modules/admin/admin.module';
 import { ClientModule } from './modules/client/client.module';
 import { PageNotFoundComponent } from './modules/page-not-found/page-not-found.component';
 import { LoginModule } from './modules/login/login.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { RestConfig } from './rest.config';
 
 @NgModule({
   declarations: [
@@ -19,9 +21,10 @@ import { LoginModule } from './modules/login/login.module';
     LoginModule,
     ClientModule,
     AdminModule,
+    BrowserAnimationsModule,
     AppRoutingModule
   ],
-  providers: [],
+  providers: [RestConfig],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
