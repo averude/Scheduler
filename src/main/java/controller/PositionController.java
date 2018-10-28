@@ -11,6 +11,7 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.util.Collection;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api/v1/departments/{departmentId}/positions")
 public class PositionController extends AbstractController<Position>{
@@ -29,13 +30,13 @@ public class PositionController extends AbstractController<Position>{
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<?> add(@PathVariable long departmentId,
-                                 @Valid @RequestBody Position position){
+    public ResponseEntity<Long> create(@PathVariable long departmentId,
+                                       @Valid @RequestBody Position position){
         positionService.createInParent(departmentId, position);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/{id}")
                 .buildAndExpand(position.getId()).toUri();
-        return ResponseEntity.created(location).build();
+        return ResponseEntity.created(location).body(position.getId());
     }
 
     @RequestMapping(method = RequestMethod.GET,

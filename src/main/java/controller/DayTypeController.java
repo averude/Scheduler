@@ -12,6 +12,7 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.util.Collection;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api/v1/departments/{departmentId}/patterns/{patternId}/daytypes")
 public class DayTypeController {
@@ -30,14 +31,14 @@ public class DayTypeController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<?> create(@PathVariable long departmentId,
-                                    @PathVariable long patternId,
-                                    @Valid @RequestBody DayType dayType) {
+    public ResponseEntity<Long> create(@PathVariable long departmentId,
+                                       @PathVariable long patternId,
+                                       @Valid @RequestBody DayType dayType) {
         this.dayTypeService.create(dayType);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/{id}")
                 .buildAndExpand(dayType.getId()).toUri();
-        return ResponseEntity.created(location).build();
+        return ResponseEntity.created(location).body(dayType.getId());
     }
 
     @RequestMapping(method = RequestMethod.GET,

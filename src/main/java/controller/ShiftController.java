@@ -12,8 +12,9 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.util.Collection;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
-@RequestMapping("/api/v1/shifts")
+@RequestMapping("/api/v1/departments/{departmentId}/shifts")
 public class ShiftController extends AbstractController<Shift> {
 
     private final ShiftService shiftService;
@@ -25,17 +26,17 @@ public class ShiftController extends AbstractController<Shift> {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public Collection<Shift> getAll(){
-        return shiftService.findAll();
+    public Collection<Shift> getAll(@PathVariable long departmentId){
+        return shiftService.findAllInParent(departmentId);
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<?> add(@Valid @RequestBody Shift shift){
+    public ResponseEntity<Long> create(@Valid @RequestBody Shift shift){
         shiftService.create(shift);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/{id}")
                 .buildAndExpand(shift.getId()).toUri();
-        return ResponseEntity.created(location).build();
+        return ResponseEntity.created(location).body(shift.getId());
     }
 
     @RequestMapping(method = RequestMethod.GET,

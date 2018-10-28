@@ -11,8 +11,9 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.util.Collection;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
-@RequestMapping("/api/v1/departments/{departmentId}/positions/{positionId}/employees")
+@RequestMapping("/api/v1/departments/{departmentId}")
 public class EmployeeController extends AbstractController<Employee>{
 
     private final EmployeeService employeeService;
@@ -23,25 +24,33 @@ public class EmployeeController extends AbstractController<Employee>{
         this.employeeService = employeeService;
     }
 
-    @RequestMapping(method = RequestMethod.GET)
-    public Collection<Employee> getAll(@PathVariable long departmentId,
-                                       @PathVariable long positionId){
+    @RequestMapping(method = RequestMethod.GET,
+                    value = "/employees")
+    public Collection<Employee> getAllInDepartment(@PathVariable long departmentId) {
+        return employeeService.findAllInDepartment(departmentId);
+    }
+
+    @RequestMapping(method = RequestMethod.GET,
+                    value = "/positions/{positionId}/employees")
+    public Collection<Employee> getAllInPosition(@PathVariable long departmentId,
+                                                 @PathVariable long positionId){
         return employeeService.findAllInParent(positionId);
     }
 
-    @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<?> add(@PathVariable long departmentId,
-                                 @PathVariable long positionId,
-                                 @Valid @RequestBody Employee employee){
+    @RequestMapping(method = RequestMethod.POST,
+                    value = "/positions/{positionId}/employees")
+    public ResponseEntity<Long> create(@PathVariable long departmentId,
+                                       @PathVariable long positionId,
+                                       @Valid @RequestBody Employee employee){
         employeeService.createInParent(positionId, employee);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/{id}")
                 .buildAndExpand(employee.getId()).toUri();
-        return ResponseEntity.created(location).build();
+        return ResponseEntity.created(location).body(employee.getId());
     }
 
     @RequestMapping(method = RequestMethod.GET,
-                    value = "/{employeeId}")
+                    value = "/positions/{positionId}/employees/{employeeId}")
     public Employee get(@PathVariable long departmentId,
                         @PathVariable long positionId,
                         @PathVariable long employeeId){
@@ -50,7 +59,7 @@ public class EmployeeController extends AbstractController<Employee>{
     }
 
     @RequestMapping(method = RequestMethod.PUT,
-                    value = "/{employeeId}")
+                    value = "/positions/{positionId}/employees/{employeeId}")
     public ResponseEntity<?> update(@PathVariable long departmentId,
                                     @PathVariable long positionId,
                                     @PathVariable long employeeId,
@@ -62,7 +71,7 @@ public class EmployeeController extends AbstractController<Employee>{
     }
 
     @RequestMapping(method = RequestMethod.DELETE,
-                    value = "/{employeeId}")
+                    value = "/positions/{positionId}/employees/{employeeId}")
     public ResponseEntity<?> delete(@PathVariable long departmentId,
                                     @PathVariable long positionId,
                                     @PathVariable long employeeId){

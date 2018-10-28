@@ -12,6 +12,7 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.util.Collection;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api/v1/departments/{departmentId}/patterns")
 public class ShiftPatternController extends AbstractController<ShiftPattern> {
@@ -30,13 +31,13 @@ public class ShiftPatternController extends AbstractController<ShiftPattern> {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<?> create(@PathVariable long departmentId,
-                                    @Valid @RequestBody ShiftPattern shiftPattern){
+    public ResponseEntity<Long> create(@PathVariable long departmentId,
+                                       @Valid @RequestBody ShiftPattern shiftPattern){
         this.shiftPatternService.create(shiftPattern);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/{id}")
                 .buildAndExpand(shiftPattern.getId()).toUri();
-        return ResponseEntity.created(location).build();
+        return ResponseEntity.created(location).body(shiftPattern.getId());
     }
 
     @RequestMapping(method = RequestMethod.GET,

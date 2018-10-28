@@ -12,9 +12,10 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.util.Collection;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api/v1/departments")
-public class DepartmentController extends AbstractController<Department>{
+public class DepartmentController extends AbstractController<Department> {
 
     private final DepartmentService departmentService;
 
@@ -22,6 +23,10 @@ public class DepartmentController extends AbstractController<Department>{
     DepartmentController(DepartmentService departmentService) {
         super(departmentService);
         this.departmentService = departmentService;
+        // for tests
+        Department dep = new Department();
+        dep.setName("Test department");
+        this.departmentService.create(dep);
     }
 
     @RequestMapping(method = RequestMethod.GET)
@@ -30,17 +35,17 @@ public class DepartmentController extends AbstractController<Department>{
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<?> add(@Valid @RequestBody Department department){
+    public ResponseEntity<Long> add(@Valid @RequestBody Department department) {
         departmentService.create(department);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/{id}")
                 .buildAndExpand(department.getId()).toUri();
-        return ResponseEntity.created(location).build();
+        return ResponseEntity.created(location).body(department.getId());
     }
 
     @RequestMapping(method = RequestMethod.GET,
                     value = "/{departmentId}")
-    public Department get(@PathVariable long departmentId){
+    public Department get(@PathVariable long departmentId) {
         this.validate(departmentId);
         return departmentService.getById(departmentId);
     }
@@ -48,7 +53,7 @@ public class DepartmentController extends AbstractController<Department>{
     @RequestMapping(method = RequestMethod.PUT,
                     value = "/{departmentId}")
     public ResponseEntity<?> update(@PathVariable long departmentId,
-                                    @Valid @RequestBody Department department){
+                                    @Valid @RequestBody Department department) {
         this.validate(departmentId);
         departmentService.updateById(departmentId, department);
         return ResponseEntity.ok("Department with ID:" + departmentId +
