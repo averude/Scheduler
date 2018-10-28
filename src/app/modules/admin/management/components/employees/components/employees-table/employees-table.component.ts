@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Employee } from '../../../../../model/employee';
-import { EmployeeService } from '../../../../../services/employee.service';
-import { Position } from '../../../../../model/position';
-import { PositionService } from '../../../../../services/position.service';
-import { Shift } from '../../../../../model/shift';
-import { ShiftService } from '../../../../../services/shift.service';
+import { Employee } from '../../../../../../../model/employee';
+import { EmployeeService } from '../../../../../../../services/employee.service';
+import { Position } from '../../../../../../../model/position';
+import { PositionService } from '../../../../../../../services/position.service';
+import { Shift } from '../../../../../../../model/shift';
+import { ShiftService } from '../../../../../../../services/shift.service';
 
 @Component({
   selector: 'app-employees',
@@ -28,7 +28,7 @@ export class EmployeesTableComponent implements OnInit {
       .subscribe(employees => this.employees = employees);
     this.positionService.getByDepartmentId(this.departmentId)
       .subscribe(positions => this.positions = positions);
-    this.shiftService.findAll()
+    this.shiftService.getInDepartment(this.departmentId)
       .subscribe(shifts => this.shifts = shifts);
   }
 
