@@ -5,7 +5,9 @@
   <tbody>
     <tr *ngFor="let employee of employees"
         app-table-row
-        [employee]="employee">
+        [employee]="employee"
+        [patterns]="patterns"
+        [departmentId]="departmentId">
     </tr>
   </tbody>
 </table>

@@ -12,12 +12,12 @@ import { ContextMenuComponent, ContextMenuService } from 'ngx-contextmenu';
 import { Employee } from '../../../../../model/employee';
 import { ScheduleService } from '../../../../../services/schedule.service';
 import { ScheduleGenerationService } from '../../../../../services/schedule-generation.service';
-import { PatternService } from '../../../../../services/pattern.service';
 import { Schedule } from '../../../../../model/schedule';
 import { Pattern } from '../../../../../model/pattern';
 import { PaginatorService } from '../../paginator.service';
 import { Subscription } from 'rxjs';
 import { mergeMap } from 'rxjs/internal/operators';
+import { DayTypeService } from '../../../../../services/daytype.service';
 
 @Component({
   selector: '[app-table-row]',
@@ -26,7 +26,9 @@ import { mergeMap } from 'rxjs/internal/operators';
 })
 export class TableRowComponent implements OnInit, OnDestroy {
 
+  @Input() departmentId: number;
   @Input() employee: Employee;
+  @Input() patterns: Pattern[];
 
   // Context menu variables
   @ViewChild(ContextMenuComponent)
@@ -41,7 +43,6 @@ export class TableRowComponent implements OnInit, OnDestroy {
   // Table variables
   daysInMonth: Date[];
   schedule: Schedule[];
-  patterns: Pattern[];
   sum = 0;
 
   // Observable subscriptions
@@ -49,7 +50,7 @@ export class TableRowComponent implements OnInit, OnDestroy {
 
   constructor(private scheduleService: ScheduleService,
               private scheduleGenerationService: ScheduleGenerationService,
-              private patternService: PatternService,
+              private dayTypeService: DayTypeService,
               private paginatorService: PaginatorService,
               private contextMenuService: ContextMenuService) { }
 
@@ -67,8 +68,6 @@ export class TableRowComponent implements OnInit, OnDestroy {
         this.schedule = schedule;
         this.calculateSum();
       });
-    this.patternService.findAll()
-      .subscribe(patterns => this.patterns = patterns);
   }
 
   ngOnDestroy(): void {
@@ -134,13 +133,15 @@ export class TableRowComponent implements OnInit, OnDestroy {
 
   generateSchedule(dates: Date[],
                    patternId: number) {
-    this.scheduleGenerationService
-      .generateScheduleByPatternId(
-        this.employee.id,
-        this.schedule,
-        dates,
-        patternId,
-        this.scheduleGeneratedHandler);
+    this.dayTypeService.getInPattern(this.departmentId, patternId)
+      .subscribe(dayTypes => this.scheduleGenerationService
+        .generateScheduleByPatternId(
+          this.employee.id,
+          this.schedule,
+          dates,
+          dayTypes,
+          this.scheduleGeneratedHandler)
+      );
   }
 
   private get scheduleGeneratedHandler(): any {
