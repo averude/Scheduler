@@ -50,6 +50,13 @@ public class Department implements Serializable {
                 orphanRemoval = true)
     private List<@NotNull @Valid ShiftPattern> patterns = new ArrayList<>();
 
+    @JsonIgnore
+    @OneToMany( mappedBy = "departmentId",
+                cascade = CascadeType.ALL,
+                fetch = FetchType.LAZY,
+                orphanRemoval = true)
+    private List<@NotNull @Valid Shift> shifts = new ArrayList<>();
+
     public Long getId() {
         return id;
     }
@@ -74,12 +81,20 @@ public class Department implements Serializable {
         this.positions = positions;
     }
 
-    public List<ShiftPattern> getPatterns() {
+    public List<@NotNull @Valid ShiftPattern> getPatterns() {
         return patterns;
     }
 
-    public void setPatterns(List<ShiftPattern> patterns) {
+    public void setPatterns(List<@NotNull @Valid ShiftPattern> patterns) {
         this.patterns = patterns;
+    }
+
+    public List<@NotNull @Valid Shift> getShifts() {
+        return shifts;
+    }
+
+    public void setShifts(List<@NotNull @Valid Shift> shifts) {
+        this.shifts = shifts;
     }
 
     public void addPosition(Position position){
@@ -90,6 +105,16 @@ public class Department implements Serializable {
     public void removePosition(Position position){
         position.setDepartmentId(null);
         positions.remove(position);
+    }
+
+    public void addShift(Shift shift){
+        shift.setDepartmentId(this.getId());
+        shifts.add(shift);
+    }
+
+    public void removeShift(Shift shift){
+        shift.setDepartmentId(null);
+        shifts.remove(shift);
     }
 
     public void addPattern(ShiftPattern pattern){

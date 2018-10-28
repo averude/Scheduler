@@ -18,7 +18,7 @@ import java.util.Objects;
         uniqueConstraints = {
                 @UniqueConstraint(
                         name = "shifts_unique_constraint",
-                        columnNames = {"name"})
+                        columnNames = {"department_id", "name"})
         }
 )
 public class Shift implements Serializable{
@@ -34,6 +34,11 @@ public class Shift implements Serializable{
             message = "{shift.name.size}")
     @Column(nullable = false)
     private String name;
+
+    @NotNull(message = "{shift.department.null}")
+    @Column(name = "department_id",
+            nullable = false)
+    private Long departmentId;
 
     @Positive(message = "{shift.pattern.negative}")
     @Column(name = "pattern_id",
@@ -64,6 +69,14 @@ public class Shift implements Serializable{
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Long getDepartmentId() {
+        return departmentId;
+    }
+
+    public void setDepartmentId(Long departmentId) {
+        this.departmentId = departmentId;
     }
 
     public Long getPatternId() {
