@@ -14,9 +14,15 @@ export class ScheduleTableCellComponent implements OnInit {
   @Input()
   schedule: Schedule;
 
+  @Input()
+  disabled = false;
+
   constructor() { }
 
   ngOnInit() {
   }
 
+  getClass(): string {
+    return this.disabled ? 'schedule-cell-disabled' : 'schedule-cell';
+  }
 }

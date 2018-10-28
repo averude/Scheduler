@@ -1,29 +1,47 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Pattern } from '../model/pattern';
-import { PATTERNS } from '../datasource/mock-patterns';
-import { delay } from 'rxjs/internal/operators';
-import { DayType } from '../model/daytype';
-import { DAYTYPES } from '../datasource/mock-daytypes';
+import { HttpClient } from '@angular/common/http';
+import { RestConfig } from '../rest.config';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PatternService {
 
-  patterns: Pattern[] = PATTERNS;
-  daytypes: DayType[] = DAYTYPES;
+  constructor(private http: HttpClient,
+              private config: RestConfig) { }
 
-  constructor() { }
-
-  findAll(): Observable<Pattern[]> {
-    return of(this.patterns)
-      .pipe(delay(500));
+  getByDepartmentId(departmentId: number): Observable<Pattern[]> {
+    return this.http.get<Pattern[]>(
+      `${this.config.baseUrl}/${departmentId}/patterns`,
+      this.config.options);
   }
 
-  getDayTypes(patternId: number): Observable<DayType[]> {
-    return of(this.daytypes
-        .filter(value => value.patternId === patternId))
-      .pipe(delay(500));
+  create(departmentId: number,
+         pattern: Pattern): Observable<any> {
+    return this.http.post(
+      `${this.config.baseUrl}/${departmentId}/patterns`,
+      pattern,
+      this.config.options
+    );
+  }
+
+  update(departmentId: number,
+         patternId: number,
+         pattern: Pattern): Observable<any> {
+    return this.http.put(
+      `${this.config.baseUrl}/${departmentId}/patterns/${patternId}`,
+      pattern,
+      this.config.options
+    );
+  }
+
+  remove(departmentId: number,
+         patternId: number): Observable<any> {
+    return this.http.delete(
+      `${this.config.baseUrl}/${departmentId}/patterns/${patternId}`,
+      this.config.options
+    );
   }
 }

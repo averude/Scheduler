@@ -2,12 +2,16 @@
 <div class="calendar-container">
   <div class="calendar-head"
        *ngFor="let header of columnHeaders">{{header}}</div>
-  <div class="calendar-other"
-       *ngFor="let day of prevDays">{{day?.getDate()}}</div>
+  <app-schedule-table-cell *ngFor="let day of prevDays"
+                           [disabled]="true"
+                           [date]="day">
+  </app-schedule-table-cell>
   <app-schedule-table-cell *ngFor="let day of currDays"
                            [date]="day"
                            [schedule]="getWorkDay(day)">
   </app-schedule-table-cell>
-  <div class="calendar-other"
-       *ngFor="let day of nextDays">{{day?.getDate()}}</div>
+  <app-schedule-table-cell *ngFor="let day of nextDays"
+                           [disabled]="true"
+                           [date]="day">
+  </app-schedule-table-cell>
 </div>

@@ -1,4 +1,8 @@
-<div class="schedule-cell">
-  <div>{{date?.getDate()}}</div>
-  <div>{{schedule?.label || schedule?.hours || 'none'}}</div>
+<div [ngClass]="getClass()" >
+  <div>
+    {{date?.getDate()}}
+  </div>
+  <div *ngIf="!disabled">
+    {{schedule | scheduleLabel}}
+  </div>
 </div>

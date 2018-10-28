@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { PatternService } from './pattern.service';
 import { DayType } from '../model/daytype';
 import { Schedule } from '../model/schedule';
 
@@ -8,18 +7,15 @@ import { Schedule } from '../model/schedule';
 })
 export class ScheduleGenerationService {
 
-  constructor(private patternService: PatternService) { }
+  constructor() { }
 
   generateScheduleByPatternId(employeeId: number,
                               schedule: Schedule[],
                               dates: Date[],
-                              patternId: number,
+                              dayTypes: DayType[],
                               fn: (createdSchedule: Schedule[],
                                    updatedSchedule: Schedule[]) => void) {
-    this.patternService.getDayTypes(patternId)
-      .subscribe(dayTypes => {
-        this.generate(employeeId, schedule, dates, dayTypes, 0, fn);
-      });
+    this.generate(employeeId, schedule, dates, dayTypes, 0, fn);
   }
 
   generateScheduleWithCustomHours(employeeId: number,

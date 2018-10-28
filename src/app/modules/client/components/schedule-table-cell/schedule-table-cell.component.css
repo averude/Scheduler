@@ -1,6 +1,15 @@
-.schedule-cell {
-  background-color: grey;
+.schedule-cell, .schedule-cell-disabled {
   color: white;
   padding: 20px;
   height: 100px;
 }
+
+.schedule-cell {
+  background-color: grey;
+}
+
+.schedule-cell-disabled {
+  background-color: darkgrey;
+}
+
+

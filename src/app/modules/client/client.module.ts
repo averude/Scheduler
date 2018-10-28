@@ -5,9 +5,14 @@ import { ScheduleTableComponent } from './components/schedule-table/schedule-tab
 import { ScheduleTablePaginatorComponent } from './components/schedule-table-paginator/schedule-table-paginator.component';
 import { PaginatorService } from './paginator.service';
 import { ScheduleTableCellComponent } from './components/schedule-table-cell/schedule-table-cell.component';
+import { SharedModule } from '../../shared/shared.module';
 
 @NgModule({
-  imports: [CommonModule, ClientRoutingModule],
+  imports: [
+    CommonModule,
+    ClientRoutingModule,
+    SharedModule
+  ],
   declarations: [
     ScheduleTableComponent,
     ScheduleTablePaginatorComponent,

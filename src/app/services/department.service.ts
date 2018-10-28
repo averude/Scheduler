@@ -1,20 +1,20 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Department } from '../model/department';
 import { Observable } from 'rxjs';
+import { RestConfig } from '../rest.config';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DepartmentService {
 
-  baseUrl = 'http://localhost:8080/scheduler/api/v1/departments';
-  headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-  options = {headers: this.headers};
-
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,
+              private config: RestConfig) { }
 
   getDepartment(id: number): Observable<Department> {
-    return this.http.get<Department>(`${this.baseUrl}/${id}`, this.options);
+    return this.http.get<Department>(
+      `${this.config.baseUrl}/${id}`,
+      this.config.options);
   }
 }

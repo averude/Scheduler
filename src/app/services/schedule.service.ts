@@ -1,38 +1,36 @@
 import { Injectable } from '@angular/core';
 import { Schedule} from '../model/schedule';
 import { Observable } from 'rxjs';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
+import { RestConfig } from '../rest.config';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ScheduleService {
 
-  baseUrl = 'http://localhost:8080/scheduler/api/v1/schedule';
-  headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-  options = {headers: this.headers};
-
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,
+              private config: RestConfig) { }
 
   getByDate(start: Date, end: Date, employeeId: number): Observable<Schedule[]> {
     const from = start.toISOString().split('T')[0];
     const to = end.toISOString().split('T')[0];
     return this.http.get<Schedule[]>(
-      `${this.baseUrl}/employee/search?employeeId=${employeeId}&from=${from}&to=${to}`,
-      this.options);
+      `${this.config.baseUrl}/employee/search?employeeId=${employeeId}&from=${from}&to=${to}`,
+      this.config.options);
   }
 
   create(employeeId: number, schedule: Schedule[]): Observable<any> {
     return this.http.post<Schedule[]>(
-      `${this.baseUrl}/${employeeId}`,
+      `${this.config.baseUrl}/${employeeId}`,
       schedule,
-      this.options);
+      this.config.options);
   }
 
   update(employeeId: number, schedule: Schedule[]): Observable<any> {
     return this.http.put(
-      `${this.baseUrl}/${employeeId}`,
+      `${this.config.baseUrl}/${employeeId}`,
       schedule,
-      this.options);
+      this.config.options);
   }
 }

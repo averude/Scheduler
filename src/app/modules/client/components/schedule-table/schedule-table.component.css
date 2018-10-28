@@ -2,15 +2,10 @@
   display: grid;
   grid-template-columns: auto auto auto auto auto auto auto;
   grid-gap: 2px 2px;
+  user-select: none;
 }
 
 .calendar-head {
   background-color: gold;
   text-align: center;
-}
-
-.calendar-other {
-  background-color: darkgrey;
-  color: white;
-  padding: 20px;
 }

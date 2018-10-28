@@ -1,46 +1,44 @@
 import { Injectable } from '@angular/core';
 import { Position } from '../model/position';
 import { Observable } from 'rxjs';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
+import { RestConfig } from '../rest.config';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PositionService {
 
-  baseUrl = 'http://localhost:8080/scheduler/api/v1/departments';
-  headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-  options = {headers: this.headers};
-
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,
+              private config: RestConfig) { }
 
   getByDepartmentId(departmentId: number): Observable<Position[]> {
     return this.http.get<Position[]>(
-      `${this.baseUrl}/${departmentId}/positions`,
-      this.options);
+      `${this.config.baseUrl}/${departmentId}/positions`,
+      this.config.options);
   }
 
   create(departmentId: number,
          position: Position): Observable<any> {
      return this.http.post<number>(
-       `${this.baseUrl}/${departmentId}/positions`,
+       `${this.config.baseUrl}/${departmentId}/positions`,
        position,
-       this.options);
+       this.config.options);
   }
 
   update(departmentId: number,
          positionId: number,
          position: Position): Observable<any> {
     return this.http.put(
-      `${this.baseUrl}/${departmentId}/positions/${positionId}`,
+      `${this.config.baseUrl}/${departmentId}/positions/${positionId}`,
       position,
-      this.options);
+      this.config.options);
   }
 
   remove(departmentId: number,
          positionId: number): Observable<any> {
     return this.http.delete(
-      `${this.baseUrl}/${departmentId}/positions/${positionId}`,
-      this.options);
+      `${this.config.baseUrl}/${departmentId}/positions/${positionId}`,
+      this.config.options);
   }
 }

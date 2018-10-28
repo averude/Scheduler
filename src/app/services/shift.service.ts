@@ -1,27 +1,48 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Shift } from '../model/shift';
+import { HttpClient } from '@angular/common/http';
+import { RestConfig } from '../rest.config';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ShiftService {
 
-  constructor() { }
+  constructor(private http: HttpClient,
+              private config: RestConfig) { }
 
-  findAll(): Observable<Shift[]> {
-    return of([{id: 1, name: 'Everyday'}, {id: 2, name: '1 shift'}]);
+  getInDepartment(departmentId: number): Observable<Shift[]> {
+    return this.http.get<Shift[]>(
+      `${this.config.baseUrl}/${departmentId}/shifts`,
+      this.config.options
+    );
   }
 
-  create() {
-    //
+  create(departmentId: number,
+         shift: Shift): Observable<any> {
+    return this.http.post(
+      `${this.config.baseUrl}/${departmentId}/shifts`,
+      shift,
+      this.config.options
+    );
   }
 
-  update() {
-    //
+  update(departmentId: number,
+         shiftId: number,
+         shift: Shift): Observable<any> {
+    return this.http.put(
+      `${this.config.baseUrl}/${departmentId}/shifts/${shiftId}`,
+      shift,
+      this.config.options
+    );
   }
 
-  remove() {
-    //
+  remove(departmentId: number,
+         shiftId: number): Observable<any> {
+    return this.http.delete(
+      `${this.config.baseUrl}/${departmentId}/shifts/${shiftId}`,
+      this.config.options
+    );
   }
 }

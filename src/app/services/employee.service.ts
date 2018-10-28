@@ -1,45 +1,43 @@
 import { Injectable } from '@angular/core';
 import { Employee } from '../model/employee';
 import { Observable } from 'rxjs';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
+import { RestConfig } from '../rest.config';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EmployeeService {
 
-  baseUrl = 'http://localhost:8080/scheduler/api/v1/departments';
-  headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-  options = {headers: this.headers};
-
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,
+              private config: RestConfig) { }
 
   getByDepartmentId(departmentId: number): Observable<Employee[]> {
     return this.http.get<Employee[]>(
-      `${this.baseUrl}/${departmentId}/employees`,
-      this.options);
+      `${this.config.baseUrl}/${departmentId}/employees`,
+      this.config.options);
   }
 
   getByPositionId(departmentId: number,
                   positionId: number): Observable<Employee[]> {
     return this.http.get<Employee[]>(
-      `${this.baseUrl}/${departmentId}/positions/${positionId}/employees`,
-      this.options);
+      `${this.config.baseUrl}/${departmentId}/positions/${positionId}/employees`,
+      this.config.options);
   }
 
   getById(employeeId: number): Observable<Employee> {
     return this.http.get<Employee>(
-      `${this.baseUrl}/employees/${employeeId}`,
-      this.options);
+      `${this.config.baseUrl}/employees/${employeeId}`,
+      this.config.options);
   }
 
   create(departmentId: number,
          positionId: number,
          employee: Employee): Observable<any> {
     return this.http.post<number>(
-      `${this.baseUrl}/${departmentId}/positions/${positionId}/employees`,
+      `${this.config.baseUrl}/${departmentId}/positions/${positionId}/employees`,
       employee,
-      this.options);
+      this.config.options);
   }
 
   update(departmentId: number,
@@ -47,16 +45,16 @@ export class EmployeeService {
          employeeId: number,
          employee: Employee): Observable<any> {
     return this.http.put(
-      `${this.baseUrl}/${departmentId}/positions/${positionId}/employees/${employeeId}`,
+      `${this.config.baseUrl}/${departmentId}/positions/${positionId}/employees/${employeeId}`,
       employee,
-      this.options);
+      this.config.options);
   }
 
   remove(departmentId: number,
          positionId: number,
          employeeId: number): Observable<any> {
     return this.http.delete(
-      `${this.baseUrl}/${departmentId}/positions/${positionId}/employees/${employeeId}`,
-      this.options);
+      `${this.config.baseUrl}/${departmentId}/positions/${positionId}/employees/${employeeId}`,
+      this.config.options);
   }
 }
