@@ -1,0 +1,16 @@
+<mat-drawer-container class="example-container"
+                       hasBackdrop="false">
+  <mat-drawer class="sidebar"
+              opened
+              mode="side"
+              role="navigation">
+    <button class="sidebar-button" routerLink="employees">Employees</button>
+    <button class="sidebar-button" routerLink="positions">Positions</button>
+    <button class="sidebar-button">Shifts</button>
+    <button class="sidebar-button">Patterns</button>
+    <button class="sidebar-button">Constants</button>
+  </mat-drawer>
+  <mat-drawer-content role="main">
+    <router-outlet></router-outlet>
+  </mat-drawer-content>
+</mat-drawer-container>
