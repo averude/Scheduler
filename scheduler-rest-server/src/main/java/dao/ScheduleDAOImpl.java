@@ -1,6 +1,6 @@
 package dao;
 
-import entity.Schedule;
+import entity.WorkDay;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -9,22 +9,22 @@ import java.time.LocalDate;
 import java.util.Collection;
 
 @Repository
-public class ScheduleDAOImpl extends AbstractDAO<Schedule> implements ScheduleDAO {
+public class ScheduleDAOImpl extends AbstractDAO<WorkDay> implements ScheduleDAO {
 
     @Autowired
     public ScheduleDAOImpl(SessionFactory sessionFactory) {
-        super(Schedule.class);
+        super(WorkDay.class);
         this.setSessionFactory(sessionFactory);
     }
 
     @Override
-    public Collection<Schedule> getMonth(long employeeId,
-                                         LocalDate date) {
+    public Collection<WorkDay> getMonth(long employeeId,
+                                        LocalDate date) {
         return getCurrentSession()
-                .createQuery("select s from Schedule s " +
-                        "where s.employeeId = :employeeId " +
-                        "and month(s.date) = :month " +
-                        "and year(s.date) = :year", Schedule.class)
+                .createQuery("select wd from WorkDay wd " +
+                        "where wd.employeeId = :employeeId " +
+                        "and month(wd.date) = :month " +
+                        "and year(wd.date) = :year", WorkDay.class)
                 .setParameter("employeeId", employeeId)
                 .setParameter("month", date.getMonthValue())
                 .setParameter("year", date.getYear())
@@ -32,14 +32,14 @@ public class ScheduleDAOImpl extends AbstractDAO<Schedule> implements ScheduleDA
     }
 
     @Override
-    public Collection<Schedule> getForEmployeeByDate(long employeeId,
-                                                     LocalDate from,
-                                                     LocalDate to) {
+    public Collection<WorkDay> getForEmployeeByDate(long employeeId,
+                                                    LocalDate from,
+                                                    LocalDate to) {
         return getCurrentSession()
-                .createQuery("select s from Schedule s " +
-                        "where s.employeeId = :employeeId " +
-                        "and s.date >= :from " +
-                        "and s.date <= :to ", Schedule.class)
+                .createQuery("select wd from WorkDay wd " +
+                        "where wd.employeeId = :employeeId " +
+                        "and wd.date >= :from " +
+                        "and wd.date <= :to ", WorkDay.class)
                 .setParameter("employeeId", employeeId)
                 .setParameter("from", from)
                 .setParameter("to", to)

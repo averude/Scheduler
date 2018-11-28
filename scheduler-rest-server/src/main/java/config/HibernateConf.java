@@ -26,7 +26,7 @@ public class HibernateConf {
     private final Environment env;
     private Class[] classes = new Class[]{
             Department.class,   Position.class, Employee.class,
-            Schedule.class,     Shift.class,    DayType.class,
+            WorkDay.class,     Shift.class,    DayType.class,
             ShiftPattern.class
     };
 

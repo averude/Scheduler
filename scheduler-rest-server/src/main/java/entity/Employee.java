@@ -68,7 +68,7 @@ public class Employee implements Serializable {
                 cascade = CascadeType.ALL,
                 fetch = FetchType.LAZY,
                 orphanRemoval = true)
-    private List<@NotNull @Valid Schedule> scheduleList = new ArrayList<>();
+    private List<@NotNull @Valid WorkDay> scheduleList = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -119,22 +119,22 @@ public class Employee implements Serializable {
     }
 
     @JsonIgnore // Don't know why, but in this case field annotation doesn't work.
-    public List<Schedule> getSchedule() {
+    public List<WorkDay> getSchedule() {
         return scheduleList;
     }
 
-    public void setSchedule(List<Schedule> scheduleList) {
+    public void setSchedule(List<WorkDay> scheduleList) {
         this.scheduleList = scheduleList;
     }
 
-    public void addSchedule(Schedule schedule){
-        schedule.setEmployeeId(this.getId());
-        scheduleList.add(schedule);
+    public void addWorkDay(WorkDay workDay){
+        workDay.setEmployeeId(this.getId());
+        scheduleList.add(workDay);
     }
 
-    public void removeSchedule(Schedule schedule){
-        schedule.setEmployeeId(null);
-        scheduleList.remove(schedule);
+    public void removeWorkDay(WorkDay workDay){
+        workDay.setEmployeeId(null);
+        scheduleList.remove(workDay);
     }
 
     @Override

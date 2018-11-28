@@ -15,11 +15,11 @@ import java.util.Set;
 import static org.junit.Assert.*;
 
 @RunWith(JUnitParamsRunner.class)
-public class ScheduleTest {
+public class WorkDayTest {
     private static final Validator validator
             = Validation.buildDefaultValidatorFactory().getValidator();
 
-    private Schedule schedule;
+    private WorkDay workDay;
 
     private static final Object[] getValidEntities(){
         return new Object[]{
@@ -45,7 +45,7 @@ public class ScheduleTest {
 
     @Before
     public void setUp(){
-        schedule = new Schedule();
+        workDay = new WorkDay();
     }
 
     @Test
@@ -57,11 +57,11 @@ public class ScheduleTest {
                                                 Boolean isHoliday){
         initEntity(id, hours, employeeId, date, isHoliday);
 
-        assertEquals(id, schedule.getId());
-        assertEquals(hours, schedule.getHours());
-        assertEquals(employeeId, schedule.getEmployeeId());
-        assertEquals(date, schedule.getDate());
-        assertEquals(isHoliday, schedule.getHoliday());
+        assertEquals(id, workDay.getId());
+        assertEquals(hours, workDay.getHours());
+        assertEquals(employeeId, workDay.getEmployeeId());
+        assertEquals(date, workDay.getDate());
+        assertEquals(isHoliday, workDay.getHoliday());
     }
 
     @Test
@@ -77,8 +77,8 @@ public class ScheduleTest {
                                             LocalDate date,
                                             Boolean isHoliday){
         initEntity(id, hours, employeeId, date, isHoliday);
-        Set<ConstraintViolation<Schedule>> constraintViolations
-                = validator.validate(schedule);
+        Set<ConstraintViolation<WorkDay>> constraintViolations
+                = validator.validate(workDay);
         assertTrue(constraintViolations.size() == 0);
     }
 
@@ -90,9 +90,9 @@ public class ScheduleTest {
                                          LocalDate date,
                                          Boolean isHoliday){
         initEntity(id, hours, employeeId, date, isHoliday);
-        Set<ConstraintViolation<Schedule>> constraintViolations
-                = validator.validate(schedule);
-        for (ConstraintViolation<Schedule> cv : constraintViolations){
+        Set<ConstraintViolation<WorkDay>> constraintViolations
+                = validator.validate(workDay);
+        for (ConstraintViolation<WorkDay> cv : constraintViolations){
             System.out.println(cv.getMessage());
         }
         assertFalse(constraintViolations.size() == 0);
@@ -103,10 +103,10 @@ public class ScheduleTest {
                             Long employeeId,
                             LocalDate date,
                             Boolean isHoliday){
-        schedule.setId(id);
-        schedule.setHours(hours);
-        schedule.setEmployeeId(employeeId);
-        schedule.setDate(date);
-        schedule.setHoliday(isHoliday);
+        workDay.setId(id);
+        workDay.setHours(hours);
+        workDay.setEmployeeId(employeeId);
+        workDay.setDate(date);
+        workDay.setHoliday(isHoliday);
     }
 }

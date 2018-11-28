@@ -66,23 +66,23 @@ public class EmployeeTest {
 
     @Test
     public void testSuccessEntityCollection(){
-        Schedule schedule1 = new Schedule();
-        Schedule schedule2 = new Schedule();
+        WorkDay workDay1 = new WorkDay();
+        WorkDay workDay2 = new WorkDay();
 
-        schedule1.setHours(8f);
-        schedule2.setHours(7f);
+        workDay1.setHours(8f);
+        workDay2.setHours(7f);
 
-        employee.addSchedule(schedule1);
+        employee.addWorkDay(workDay1);
         assertEquals(1, employee.getSchedule().size());
-        assertTrue(employee.getSchedule().contains(schedule1));
+        assertTrue(employee.getSchedule().contains(workDay1));
 
-        employee.addSchedule(schedule2);
+        employee.addWorkDay(workDay2);
         assertEquals(2, employee.getSchedule().size());
-        assertTrue(employee.getSchedule().contains(schedule2));
+        assertTrue(employee.getSchedule().contains(workDay2));
 
-        employee.removeSchedule(schedule1);
+        employee.removeWorkDay(workDay1);
         assertEquals(1, employee.getSchedule().size());
-        assertFalse(employee.getSchedule().contains(schedule1));
+        assertFalse(employee.getSchedule().contains(workDay1));
     }
 
     // Validation tests

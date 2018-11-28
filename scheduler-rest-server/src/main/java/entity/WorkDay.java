@@ -15,47 +15,47 @@ import java.util.Objects;
                         columnNames = {"employee_id", "date"})
         }
 )
-public class Schedule implements Serializable {
+public class WorkDay implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Positive(message = "{entity.id.negative}")
     private Long id;
 
-    @NotNull(message = "{schedule.employee.null}")
-    @Positive(message = "{schedule.employee.negative}")
+    @NotNull(message = "{workDay.employee.null}")
+    @Positive(message = "{workDay.employee.negative}")
     @Column(name = "employee_id",
             nullable = false)
     private Long employeeId;
 
-    @NotNull(message = "{schedule.isholiday.null}")
+    @NotNull(message = "{workDay.isholiday.null}")
     @Column(nullable = false)
     private Boolean holiday;
 
-    @NotNull(message = "{schedule.hours.null}")
-    @PositiveOrZero(message = "{schedule.hours.negative}")
+    @NotNull(message = "{workDay.hours.null}")
+    @PositiveOrZero(message = "{workDay.hours.negative}")
     @DecimalMax(value = "24",
-                message = "{schedule.hours.max}")
+                message = "{workDay.hours.max}")
     @Column(nullable = false)
     private Float hours;
 
     @Size(  min = 1,
             max = 5,
-            message = "{schedule.label.size}")
+            message = "{workDay.label.size}")
     @Column(name = "label", nullable = true)
     private String label;
 
-    @NotNull(message = "{schedule.date.null}")
+    @NotNull(message = "{workDay.date.null}")
     @Column(nullable = false)
     private LocalDate date;
 
-    public Schedule() {
+    public WorkDay() {
     }
 
-    public Schedule(Long employeeId,
-                    Boolean holiday,
-                    Float hours,
-                    LocalDate date) {
+    public WorkDay(Long employeeId,
+                   Boolean holiday,
+                   Float hours,
+                   LocalDate date) {
         this.employeeId = employeeId;
         this.holiday = holiday;
         this.hours = hours;
@@ -114,13 +114,13 @@ public class Schedule implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Schedule schedule = (Schedule) o;
-        return Objects.equals(id, schedule.id) &&
-                Objects.equals(employeeId, schedule.employeeId) &&
-                Objects.equals(holiday, schedule.holiday) &&
-                Objects.equals(hours, schedule.hours) &&
-                Objects.equals(label, schedule.label) &&
-                Objects.equals(date, schedule.date);
+        WorkDay workDay = (WorkDay) o;
+        return Objects.equals(id, workDay.id) &&
+                Objects.equals(employeeId, workDay.employeeId) &&
+                Objects.equals(holiday, workDay.holiday) &&
+                Objects.equals(hours, workDay.hours) &&
+                Objects.equals(label, workDay.label) &&
+                Objects.equals(date, workDay.date);
     }
 
     @Override

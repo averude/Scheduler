@@ -1,6 +1,6 @@
 package controller;
 
-import entity.Schedule;
+import entity.WorkDay;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -25,15 +25,15 @@ public class ScheduleController {
 
     @RequestMapping(method = RequestMethod.GET,
                     value = "/{employeeId}")
-    public Collection<Schedule> getSchedule(@PathVariable long employeeId){
+    public Collection<WorkDay> getSchedule(@PathVariable long employeeId){
         return scheduleService.getCurrentMonth(employeeId);
     }
 
     @RequestMapping(method = RequestMethod.POST,
                     value = "/{employeeId}")
-    public ResponseEntity<Collection<Schedule>> create(
+    public ResponseEntity<Collection<WorkDay>> create(
                                 @PathVariable long employeeId,
-                                @Valid @RequestBody Collection<Schedule> schedule){
+                                @Valid @RequestBody Collection<WorkDay> schedule){
         scheduleService.createInParent(employeeId, schedule);
         return ResponseEntity.ok(schedule);
     }
@@ -41,19 +41,19 @@ public class ScheduleController {
     @RequestMapping(method = RequestMethod.PUT,
                     value = "/{employeeId}")
     public ResponseEntity<?> update(@PathVariable long employeeId,
-                                    @Valid @RequestBody Collection<Schedule> schedule) {
+                                    @Valid @RequestBody Collection<WorkDay> schedule) {
         scheduleService.updateCollection(schedule);
-        return ResponseEntity.ok("Schedule was successfully updated");
+        return ResponseEntity.ok("WorkDay was successfully updated");
     }
 
     @RequestMapping(method = RequestMethod.GET,
                     value = "/employee/search")
-    public Collection<Schedule> searchInEmployee(@RequestParam(value = "employeeId", required = true)
+    public Collection<WorkDay> searchInEmployee(@RequestParam(value = "employeeId", required = true)
                                        Long employeeId,
-                                       @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                                @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
                                        @RequestParam(value = "from", required = true)
                                        LocalDate from,
-                                       @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                                @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
                                        @RequestParam(value = "to", required = false)
                                        LocalDate to){
         return scheduleService.getForEmployeeByDate(employeeId, from, to);
