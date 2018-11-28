@@ -33,11 +33,8 @@ public class ScheduleController {
                     value = "/{employeeId}")
     public ResponseEntity<Collection<Schedule>> create(
                                 @PathVariable long employeeId,
-                                @Valid @RequestBody Collection<Schedule> schedule
-    ){
-        for (Schedule workDay: schedule) {
-            scheduleService.createInParent(employeeId, workDay);
-        }
+                                @Valid @RequestBody Collection<Schedule> schedule){
+        scheduleService.createInParent(employeeId, schedule);
         return ResponseEntity.ok(schedule);
     }
 
@@ -45,10 +42,7 @@ public class ScheduleController {
                     value = "/{employeeId}")
     public ResponseEntity<?> update(@PathVariable long employeeId,
                                     @Valid @RequestBody Collection<Schedule> schedule) {
-//        scheduleService.updateById(schedule.getId(), schedule);
-        for (Schedule workDay: schedule) {
-            scheduleService.updateById(workDay.getId(), workDay);
-        }
+        scheduleService.updateCollection(schedule);
         return ResponseEntity.ok("Schedule was successfully updated");
     }
 

@@ -39,9 +39,31 @@ public class ScheduleServiceImpl
 
     @Override
     @Transactional
+    public void createInParent(long parentId, Collection<Schedule> schedule) {
+        for (Schedule workDay : schedule) {
+            this.createInParent(parentId, workDay);
+        }
+    }
+
+    @Override
+    @Transactional
     public void updateById(long id, Schedule schedule) {
         schedule.setId(id);
         scheduleDAO.update(schedule);
+    }
+
+
+    @Override
+    @Transactional
+    public void updateCollection(Collection<Schedule> schedule) {
+        for (Schedule workDay : schedule) {
+            if (workDay.getId() != null) {
+                this.updateById(workDay.getId(), workDay);
+            } else {
+                throw new IllegalArgumentException("Cannot update " +
+                        "workday without ID");
+            }
+        }
     }
 
     @Override
