@@ -11,7 +11,6 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.util.Collection;
 
-@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api/v1/departments/{departmentId}")
 public class EmployeeController extends AbstractController<Employee>{

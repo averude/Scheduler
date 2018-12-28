@@ -11,7 +11,6 @@ import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.Collection;
 
-@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api/v1/schedule")
 public class ScheduleController {
