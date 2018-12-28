@@ -27,7 +27,7 @@ public class HibernateConf {
     private Class[] classes = new Class[]{
             Department.class,   Position.class, Employee.class,
             WorkDay.class,     Shift.class,    DayType.class,
-            ShiftPattern.class
+            ShiftPattern.class, PatternToken.class
     };
 
     @Autowired
