@@ -28,6 +28,11 @@ public class WorkDay implements Serializable {
             nullable = false)
     private Long employeeId;
 
+    @Positive(message = "{workDay.daytype.negative}")
+    @Column(name = "day_type_id",
+            nullable = true)
+    private Long dayTypeId;
+
     @NotNull(message = "{workDay.isholiday.null}")
     @Column(nullable = false)
     private Boolean holiday;
@@ -42,7 +47,7 @@ public class WorkDay implements Serializable {
     @Size(  min = 1,
             max = 5,
             message = "{workDay.label.size}")
-    @Column(name = "label", nullable = true)
+    @Column(nullable = true)
     private String label;
 
     @NotNull(message = "{workDay.date.null}")
@@ -76,6 +81,14 @@ public class WorkDay implements Serializable {
 
     public void setEmployeeId(Long employeeId) {
         this.employeeId = employeeId;
+    }
+
+    public Long getDayTypeId() {
+        return dayTypeId;
+    }
+
+    public void setDayTypeId(Long dayTypeId) {
+        this.dayTypeId = dayTypeId;
     }
 
     public Boolean getHoliday() {
