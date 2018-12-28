@@ -92,9 +92,6 @@ public class WorkDayTest {
         initEntity(id, hours, employeeId, date, isHoliday);
         Set<ConstraintViolation<WorkDay>> constraintViolations
                 = validator.validate(workDay);
-        for (ConstraintViolation<WorkDay> cv : constraintViolations){
-            System.out.println(cv.getMessage());
-        }
         assertFalse(constraintViolations.size() == 0);
     }
 
