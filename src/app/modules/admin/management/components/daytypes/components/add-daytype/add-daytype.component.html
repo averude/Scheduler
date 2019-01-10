@@ -1,0 +1,24 @@
+<td>
+  <input class="form-control"
+         [(ngModel)]="newDayType.name"
+         minlength="3"
+         maxlength="32"
+         placeholder="name"
+         #name="ngModel"
+         required/>
+</td>
+<td>
+  <input class="form-control"
+         minlength="3"
+         maxlength="32"
+         [(ngModel)]="newDayType.label"
+         placeholder="label"
+         #label="ngModel"
+         required/>
+</td>
+<td>
+  <button class="btn btn-primary full-cell-size"
+          [disabled]="!name.valid ||
+                      !label.valid"
+          (click)="addDayType()">+</button>
+</td>

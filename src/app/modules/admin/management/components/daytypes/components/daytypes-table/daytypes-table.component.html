@@ -1,0 +1,43 @@
+<table class="table table-striped table-sm">
+  <thead>
+    <tr>
+      <th class="text-center">Name</th>
+      <th class="text-center">Label</th>
+      <th class="text-center"
+          style="width: 10%">Control</th>
+    </tr>
+    <tr app-add-daytype
+        (dayTypeCreated)="addDayType($event)">
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let dayType of dayTypes"
+        appEditableRow
+        #row="editableRow">
+      <td>
+        <input type="text"
+               [(ngModel)]="dayType.name"
+               [disabled]="!row.isEditable"
+               [ngClass]="{'form-control-plaintext': !row.isEditable,
+                           'form-control': row.isEditable}">
+      </td>
+      <td>
+        <input type="text"
+               [(ngModel)]="dayType.label"
+               [disabled]="!row.isEditable"
+               [ngClass]="{'form-control-plaintext': !row.isEditable,
+                           'form-control': row.isEditable}">
+      </td>
+      <td>
+        <button *ngIf="!row.isEditable" class="btn btn-danger full-cell-size"
+                (click)="deleteDayType(dayType)">
+          X
+        </button>
+        <button *ngIf="row.isEditable" class="btn btn-primary full-cell-size"
+                (click)="updateDayType(dayType);row.isEditable=false">
+          Save
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
