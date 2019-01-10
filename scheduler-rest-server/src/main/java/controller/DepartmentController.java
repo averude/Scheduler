@@ -59,7 +59,8 @@ public class DepartmentController extends AbstractController<Department> {
                 " was successfully updated");
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, value = "/{departmentId}")
+    @RequestMapping(method = RequestMethod.DELETE,
+                    value = "/{departmentId}")
     public ResponseEntity<?> delete(@PathVariable long departmentId){
         this.validate(departmentId);
         departmentService.deleteById(departmentId);

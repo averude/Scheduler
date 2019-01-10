@@ -12,7 +12,7 @@ import java.time.LocalDate;
 import java.util.Collection;
 
 @RestController
-@RequestMapping("/api/v1/schedule")
+@RequestMapping("/api/v1/")
 public class ScheduleController {
 
     private final ScheduleService scheduleService;
@@ -23,13 +23,13 @@ public class ScheduleController {
     }
 
     @RequestMapping(method = RequestMethod.GET,
-                    value = "/{employeeId}")
+                    value = "departments/{departmentId}/schedule/{employeeId}")
     public Collection<WorkDay> getSchedule(@PathVariable long employeeId){
         return scheduleService.getCurrentMonth(employeeId);
     }
 
     @RequestMapping(method = RequestMethod.POST,
-                    value = "/{employeeId}")
+                    value = "departments/{departmentId}/schedule/{employeeId}")
     public ResponseEntity<Collection<WorkDay>> create(
                                 @PathVariable long employeeId,
                                 @Valid @RequestBody Collection<WorkDay> schedule){
@@ -38,7 +38,7 @@ public class ScheduleController {
     }
 
     @RequestMapping(method = RequestMethod.PUT,
-                    value = "/{employeeId}")
+                    value = "departments/{departmentId}/schedule/{employeeId}")
     public ResponseEntity<?> update(@PathVariable long employeeId,
                                     @Valid @RequestBody Collection<WorkDay> schedule) {
         scheduleService.updateCollection(schedule);
@@ -46,7 +46,7 @@ public class ScheduleController {
     }
 
     @RequestMapping(method = RequestMethod.GET,
-                    value = "/employee/search")
+                    value = "schedule/search")
     public Collection<WorkDay> searchInEmployee(@RequestParam(value = "employeeId", required = true)
                                        Long employeeId,
                                                 @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
