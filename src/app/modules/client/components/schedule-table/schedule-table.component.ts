@@ -4,7 +4,7 @@ import { PaginatorService } from '../../paginator.service';
 import { ActivatedRoute } from '@angular/router';
 import { ScheduleService } from '../../../../services/schedule.service';
 import { mergeMap } from 'rxjs/internal/operators';
-import { Schedule } from '../../../../model/schedule';
+import { WorkDay } from '../../../../model/workday';
 
 @Component({
   selector: 'app-client-schedule-table',
@@ -19,7 +19,7 @@ export class ScheduleTableComponent implements OnInit, OnDestroy {
   currDays: Date[] = [];
   nextDays: Date[] = [];
 
-  schedule: Schedule[];
+  schedule: WorkDay[];
 
   private sub: Subscription;
 
@@ -47,7 +47,7 @@ export class ScheduleTableComponent implements OnInit, OnDestroy {
     this.sub.unsubscribe();
   }
 
-  getWorkDay(day: Date): Schedule | void {
+  getWorkDay(day: Date): WorkDay | void {
     if (this.schedule) {
       const dateISO = day.toISOString().split('T')[0];
       return this.schedule

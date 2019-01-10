@@ -1,7 +1,5 @@
 export class DayType {
   id: number;
-  patternId: number;
-  orderId: number;
+  name: string;
   label: string;
-  hours: number;
 }

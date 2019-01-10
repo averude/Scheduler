@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import { DaytypeService } from './daytype.service';
+import { DayTypeService } from './daytype.service';
 
-describe('DaytypeService', () => {
+describe('DayTypeService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: DaytypeService = TestBed.get(DaytypeService);
+    const service: DayTypeService = TestBed.get(DayTypeService);
     expect(service).toBeTruthy();
   });
 });

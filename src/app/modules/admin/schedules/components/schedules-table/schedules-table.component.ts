@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Employee } from '../../../../../model/employee';
 import { EmployeeService } from '../../../../../services/employee.service';
-import { PatternService } from '../../../../../services/pattern.service';
-import { Pattern } from '../../../../../model/pattern';
+import { ShiftPatternService } from '../../../../../services/shiftpattern.service';
+import { ShiftPattern } from '../../../../../model/shiftpattern';
 
 @Component({
   selector: 'app-schedules-table',
@@ -13,10 +13,10 @@ export class SchedulesTableComponent implements OnInit {
 
   departmentId = 1;
   employees: Employee[];
-  patterns: Pattern[];
+  patterns: ShiftPattern[];
 
   constructor(private employeeService: EmployeeService,
-              private patternService: PatternService) { }
+              private patternService: ShiftPatternService) { }
 
   ngOnInit() {
     this.employeeService.getByDepartmentId(this.departmentId)

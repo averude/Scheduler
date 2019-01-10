@@ -12,41 +12,35 @@ export class DayTypeService {
   constructor(private http: HttpClient,
               private config: RestConfig) { }
 
-  getInPattern(departmentId: number,
-               patternId: number): Observable<DayType[]> {
+  getAll(): Observable<DayType[]> {
     return this.http.get<DayType[]>(
-      `${this.config.baseUrl}/${departmentId}/patterns/${patternId}/daytypes`,
-      this.config.options
-    );
+      `${this.config.baseUrl}/daytypes`,
+      this.config.options);
   }
 
-  create(departmentId: number,
-         patternId: number,
-         daytype: DayType): Observable<any> {
+  getById(dayTypeId: number): Observable<DayType> {
+    return this.http.get<DayType>(
+      `${this.config.baseUrl}/daytypes/${dayTypeId}`,
+      this.config.options);
+  }
+
+  create(dayType: DayType): Observable<any> {
     return this.http.post(
-      `${this.config.baseUrl}/${departmentId}/patterns/${patternId}/daytypes`,
-      daytype,
-      this.config.options
-    );
+      `${this.config.baseUrl}/daytypes`,
+      dayType,
+      this.config.options);
   }
 
-  update(departmentId: number,
-         patternId: number,
-         daytypeId: number,
-         daytype: DayType): Observable<any> {
+  update(dayType: DayType): Observable<any> {
     return this.http.put(
-      `${this.config.baseUrl}/${departmentId}/patterns/${patternId}/daytypes/${daytypeId}`,
-      daytype,
-      this.config.options
-    );
+      `${this.config.baseUrl}/daytypes/${dayType.id}`,
+      dayType,
+      this.config.options);
   }
 
-  remove(departmentId: number,
-         patternId: number,
-         daytypeId: number): Observable<any> {
+  delete(dayTypeId: number): Observable<any> {
     return this.http.delete(
-      `${this.config.baseUrl}/${departmentId}/patterns/${patternId}/daytypes/${daytypeId}`,
-      this.config.options
-    );
+      `${this.config.baseUrl}/daytypes/${dayTypeId}`,
+      this.config.options);
   }
 }

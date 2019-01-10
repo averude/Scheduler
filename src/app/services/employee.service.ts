@@ -14,14 +14,14 @@ export class EmployeeService {
 
   getByDepartmentId(departmentId: number): Observable<Employee[]> {
     return this.http.get<Employee[]>(
-      `${this.config.baseUrl}/${departmentId}/employees`,
+      `${this.config.baseUrl}/departments/${departmentId}/employees`,
       this.config.options);
   }
 
   getByPositionId(departmentId: number,
                   positionId: number): Observable<Employee[]> {
     return this.http.get<Employee[]>(
-      `${this.config.baseUrl}/${departmentId}/positions/${positionId}/employees`,
+      `${this.config.baseUrl}/departments/${departmentId}/positions/${positionId}/employees`,
       this.config.options);
   }
 
@@ -35,7 +35,7 @@ export class EmployeeService {
          positionId: number,
          employee: Employee): Observable<any> {
     return this.http.post<number>(
-      `${this.config.baseUrl}/${departmentId}/positions/${positionId}/employees`,
+      `${this.config.baseUrl}/departments/${departmentId}/positions/${positionId}/employees`,
       employee,
       this.config.options);
   }
@@ -45,7 +45,7 @@ export class EmployeeService {
          employeeId: number,
          employee: Employee): Observable<any> {
     return this.http.put(
-      `${this.config.baseUrl}/${departmentId}/positions/${positionId}/employees/${employeeId}`,
+      `${this.config.baseUrl}/departments/${departmentId}/positions/${positionId}/employees/${employeeId}`,
       employee,
       this.config.options);
   }
@@ -54,7 +54,7 @@ export class EmployeeService {
          positionId: number,
          employeeId: number): Observable<any> {
     return this.http.delete(
-      `${this.config.baseUrl}/${departmentId}/positions/${positionId}/employees/${employeeId}`,
+      `${this.config.baseUrl}/departments/${departmentId}/positions/${positionId}/employees/${employeeId}`,
       this.config.options);
   }
 }

@@ -1,27 +1,27 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Pattern } from '../model/pattern';
+import { ShiftPattern } from '../model/shiftpattern';
 import { HttpClient } from '@angular/common/http';
 import { RestConfig } from '../rest.config';
 
 @Injectable({
   providedIn: 'root'
 })
-export class PatternService {
+export class ShiftPatternService {
 
   constructor(private http: HttpClient,
               private config: RestConfig) { }
 
-  getByDepartmentId(departmentId: number): Observable<Pattern[]> {
-    return this.http.get<Pattern[]>(
-      `${this.config.baseUrl}/${departmentId}/patterns`,
+  getByDepartmentId(departmentId: number): Observable<ShiftPattern[]> {
+    return this.http.get<ShiftPattern[]>(
+      `${this.config.baseUrl}/departments/${departmentId}/patterns`,
       this.config.options);
   }
 
   create(departmentId: number,
-         pattern: Pattern): Observable<any> {
+         pattern: ShiftPattern): Observable<any> {
     return this.http.post(
-      `${this.config.baseUrl}/${departmentId}/patterns`,
+      `${this.config.baseUrl}/departments/${departmentId}/patterns`,
       pattern,
       this.config.options
     );
@@ -29,9 +29,9 @@ export class PatternService {
 
   update(departmentId: number,
          patternId: number,
-         pattern: Pattern): Observable<any> {
+         pattern: ShiftPattern): Observable<any> {
     return this.http.put(
-      `${this.config.baseUrl}/${departmentId}/patterns/${patternId}`,
+      `${this.config.baseUrl}/departments/${departmentId}/patterns/${patternId}`,
       pattern,
       this.config.options
     );
@@ -40,7 +40,7 @@ export class PatternService {
   remove(departmentId: number,
          patternId: number): Observable<any> {
     return this.http.delete(
-      `${this.config.baseUrl}/${departmentId}/patterns/${patternId}`,
+      `${this.config.baseUrl}/departments/${departmentId}/patterns/${patternId}`,
       this.config.options
     );
   }

@@ -14,7 +14,7 @@ export class DepartmentService {
 
   getDepartment(id: number): Observable<Department> {
     return this.http.get<Department>(
-      `${this.config.baseUrl}/${id}`,
+      `${this.config.baseUrl}/departments/${id}`,
       this.config.options);
   }
 }

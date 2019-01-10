@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { DayType } from '../model/daytype';
-import { Schedule } from '../model/schedule';
+import { PatternToken } from '../model/patterntoken';
+import { WorkDay } from '../model/workday';
 
 @Injectable({
   providedIn: 'root'
@@ -10,57 +10,57 @@ export class ScheduleGenerationService {
   constructor() { }
 
   generateScheduleByPatternId(employeeId: number,
-                              schedule: Schedule[],
+                              schedule: WorkDay[],
                               dates: Date[],
-                              dayTypes: DayType[],
-                              fn: (createdSchedule: Schedule[],
-                                   updatedSchedule: Schedule[]) => void) {
-    this.generate(employeeId, schedule, dates, dayTypes, 0, fn);
+                              patternTokens: PatternToken[],
+                              fn: (createdSchedule: WorkDay[],
+                                   updatedSchedule: WorkDay[]) => void) {
+    this.generate(employeeId, schedule, dates, patternTokens, 0, fn);
   }
 
   generateScheduleWithCustomHours(employeeId: number,
-                                  schedule: Schedule[],
+                                  schedule: WorkDay[],
                                   dates: Date[],
                                   hours: number,
-                                  fn: (createdSchedule: Schedule[],
-                                       updatedSchedule: Schedule[]) => void) {
-    const dayType = new DayType();
-    dayType.hours = hours;
-    const customDayType: DayType[] = [dayType];
-    this.generate(employeeId, schedule, dates, customDayType, 0, fn);
+                                  fn: (createdSchedule: WorkDay[],
+                                       updatedSchedule: WorkDay[]) => void) {
+    const patternToken = new PatternToken();
+    patternToken.value = hours;
+    const customTokens: PatternToken[] = [patternToken];
+    this.generate(employeeId, schedule, dates, customTokens, 0, fn);
   }
 
   private generate(employeeId: number,
-                   schedule: Schedule[],
+                   schedule: WorkDay[],
                    dates: Date[],
-                   dayTypes: DayType[],
+                   patternTokens: PatternToken[],
                    offset: number,
-                   fn: (createdSchedule: Schedule[],
-                        updatedSchedule: Schedule[]) => void) {
-    const createdSchedule: Schedule[] = [];
-    const updatedSchedule: Schedule[] = [];
+                   fn: (createdSchedule: WorkDay[],
+                        updatedSchedule: WorkDay[]) => void) {
+    const createdSchedule: WorkDay[] = [];
+    const updatedSchedule: WorkDay[] = [];
     const datesSize = dates.length;
-    const typesSize = dayTypes.length;
-    for (let i = 0; i < datesSize; i += typesSize) {
-      for (let j = 0; j < typesSize; j++) {
+    const tokensSize = patternTokens.length;
+    for (let i = 0; i < datesSize; i += tokensSize) {
+      for (let j = 0; j < tokensSize; j++) {
         const date_index = i + j;
         if (date_index >= datesSize) {
           break;
         }
-        const type_index = (offset + j) % typesSize;
+        const token_index = (offset + j) % tokensSize;
         const workDay = schedule
           .find(this.getFindFunction(employeeId, dates[date_index]));
         if (workDay) {
-          workDay.hours = dayTypes[type_index].hours;
-          workDay.label = dayTypes[type_index].label;
+          workDay.hours = patternTokens[token_index].value;
+          workDay.label = patternTokens[token_index].label;
           updatedSchedule.push(workDay);
         } else {
-          const newWorkDay = this.createSchedule(
+          const newWorkDay = this.createWorkDay(
             employeeId,
             false,
-            dayTypes[type_index].hours,
+            patternTokens[token_index].value,
             this.getISODateString(dates[date_index]),
-            dayTypes[type_index].label);
+            patternTokens[token_index].label);
           createdSchedule.push(newWorkDay);
         }
       }
@@ -79,17 +79,17 @@ export class ScheduleGenerationService {
     return date.toISOString().split('T')[0];
   }
 
-  private createSchedule(employeeId: number,
-                         holiday: boolean,
-                         hours: number,
-                         date: string,
-                         label: string): Schedule {
-    const schedule = new Schedule();
-    schedule.employeeId = employeeId;
-    schedule.holiday = holiday;
-    schedule.hours = hours;
-    schedule.date = date;
-    schedule.label = label;
-    return schedule;
+  private createWorkDay(employeeId: number,
+                        holiday: boolean,
+                        hours: number,
+                        date: string,
+                        label: string): WorkDay {
+    const workDay = new WorkDay();
+    workDay.employeeId = employeeId;
+    workDay.holiday = holiday;
+    workDay.hours = hours;
+    workDay.date = date;
+    workDay.label = label;
+    return workDay;
   }
 }

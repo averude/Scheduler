@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Schedule } from '../../../../model/schedule';
+import { WorkDay } from '../../../../model/workday';
 
 @Component({
   selector: 'app-schedule-table-cell',
@@ -12,7 +12,7 @@ export class ScheduleTableCellComponent implements OnInit {
   date: Date;
 
   @Input()
-  schedule: Schedule;
+  schedule: WorkDay;
 
   @Input()
   disabled = false;

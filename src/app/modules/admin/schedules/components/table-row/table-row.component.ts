@@ -12,12 +12,12 @@ import { ContextMenuComponent, ContextMenuService } from 'ngx-contextmenu';
 import { Employee } from '../../../../../model/employee';
 import { ScheduleService } from '../../../../../services/schedule.service';
 import { ScheduleGenerationService } from '../../../../../services/schedule-generation.service';
-import { Schedule } from '../../../../../model/schedule';
-import { Pattern } from '../../../../../model/pattern';
+import { WorkDay } from '../../../../../model/workday';
+import { ShiftPattern } from '../../../../../model/shiftpattern';
 import { PaginatorService } from '../../paginator.service';
 import { Subscription } from 'rxjs';
 import { mergeMap } from 'rxjs/internal/operators';
-import { DayTypeService } from '../../../../../services/daytype.service';
+import { PatternTokenService } from '../../../../../services/patterntoken.service';
 
 @Component({
   selector: '[app-table-row]',
@@ -28,7 +28,7 @@ export class TableRowComponent implements OnInit, OnDestroy {
 
   @Input() departmentId: number;
   @Input() employee: Employee;
-  @Input() patterns: Pattern[];
+  @Input() patterns: ShiftPattern[];
 
   // Context menu variables
   @ViewChild(ContextMenuComponent)
@@ -42,7 +42,7 @@ export class TableRowComponent implements OnInit, OnDestroy {
 
   // Table variables
   daysInMonth: Date[];
-  schedule: Schedule[];
+  schedule: WorkDay[];
   sum = 0;
 
   // Observable subscriptions
@@ -50,7 +50,7 @@ export class TableRowComponent implements OnInit, OnDestroy {
 
   constructor(private scheduleService: ScheduleService,
               private scheduleGenerationService: ScheduleGenerationService,
-              private dayTypeService: DayTypeService,
+              private patternTokenService: PatternTokenService,
               private paginatorService: PaginatorService,
               private contextMenuService: ContextMenuService) { }
 
@@ -74,11 +74,11 @@ export class TableRowComponent implements OnInit, OnDestroy {
     this.paginatorSub.unsubscribe();
   }
 
-  getWorkDay(date: Date): Schedule {
+  getWorkDay(date: Date): WorkDay {
     if (this.schedule) {
       const dateISO = date.toISOString().split('T')[0];
       return this.schedule
-        .find(value => value.date === dateISO);
+        .find(workDay => workDay.date === dateISO);
     } else {
       return null;
     }
@@ -87,7 +87,7 @@ export class TableRowComponent implements OnInit, OnDestroy {
   calculateSum(): void {
     if (this.schedule) {
       this.sum = this.schedule
-        .map(sched => sched.hours)
+        .map(workDay => workDay.hours)
         .reduce((prev, curr) => prev + curr, 0);
     }
   }
@@ -133,13 +133,13 @@ export class TableRowComponent implements OnInit, OnDestroy {
 
   generateSchedule(dates: Date[],
                    patternId: number) {
-    this.dayTypeService.getInPattern(this.departmentId, patternId)
-      .subscribe(dayTypes => this.scheduleGenerationService
+    this.patternTokenService.getInPattern(this.departmentId, patternId)
+      .subscribe(patternTokens => this.scheduleGenerationService
         .generateScheduleByPatternId(
           this.employee.id,
           this.schedule,
           dates,
-          dayTypes,
+          patternTokens,
           this.scheduleGeneratedHandler)
       );
   }
@@ -147,16 +147,24 @@ export class TableRowComponent implements OnInit, OnDestroy {
   private get scheduleGeneratedHandler(): any {
     return (createdSchedule, updatedSchedule) => {
       if (createdSchedule.length > 0) {
-        this.scheduleService.create(this.employee.id, createdSchedule)
+        this.scheduleService.create(
+          this.departmentId,
+          this.employee.id,
+          createdSchedule
+        )
           .subscribe(res => {
-              res.forEach(value => this.schedule.push(value));
+              res.forEach(workDay => this.schedule.push(workDay));
               this.calculateSum();
             },
               err => console.log(err)
           );
         }
       if (updatedSchedule.length > 0) {
-        this.scheduleService.update(this.employee.id, updatedSchedule)
+        this.scheduleService.update(
+          this.departmentId,
+          this.employee.id,
+          updatedSchedule
+        )
           .subscribe(res => this.calculateSum(),
             err => console.log(err));
       }

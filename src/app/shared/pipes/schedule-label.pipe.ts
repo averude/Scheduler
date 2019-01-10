@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { Schedule } from '../../model/schedule';
+import { WorkDay } from '../../model/workday';
 
 @Pipe({
   name: 'scheduleLabel',
@@ -7,7 +7,7 @@ import { Schedule } from '../../model/schedule';
 })
 export class ScheduleLabelPipe implements PipeTransform {
 
-  transform(value: Schedule): string | number {
+  transform(value: WorkDay): string | number {
     if (value) {
       if (value.label) {
         return value.label;
