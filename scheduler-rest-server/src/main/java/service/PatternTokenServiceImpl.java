@@ -25,11 +25,13 @@ public class PatternTokenServiceImpl extends AbstractService<PatternToken>
     }
 
     @Override
+    @Transactional
     public Collection<PatternToken> findAllInParent(long parentId) {
         return shiftPatternDAO.findById(parentId).getSequence();
     }
 
     @Override
+    @Transactional
     public void createInParent(long parentId, PatternToken patternToken) {
         shiftPatternDAO.findById(parentId).addPatternToken(patternToken);
     }

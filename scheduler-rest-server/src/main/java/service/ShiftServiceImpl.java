@@ -25,11 +25,13 @@ public class ShiftServiceImpl
     }
 
     @Override
+    @Transactional
     public Collection<Shift> findAllInParent(long parentId) {
         return departmentDAO.findById(parentId).getShifts();
     }
 
     @Override
+    @Transactional
     public void createInParent(long parentId, Shift shift) {
         departmentDAO.findById(parentId).addShift(shift);
     }
