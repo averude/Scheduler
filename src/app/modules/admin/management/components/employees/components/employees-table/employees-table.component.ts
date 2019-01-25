@@ -28,7 +28,7 @@ export class EmployeesTableComponent implements OnInit {
       .subscribe(employees => this.employees = employees);
     this.positionService.getByDepartmentId(this.departmentId)
       .subscribe(positions => this.positions = positions);
-    this.shiftService.getInDepartment(this.departmentId)
+    this.shiftService.getByDepartmentId(this.departmentId)
       .subscribe(shifts => this.shifts = shifts);
   }
 

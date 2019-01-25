@@ -1,0 +1,11 @@
+<div class="wrapper">
+  <app-pattern-unit *ngFor="let unit of units"
+                    [dayTypes]="dayTypes"
+                    [unit]="unit"></app-pattern-unit>
+</div>
+<div>
+  <button (click)="addUnit()">+</button>
+  <button>-</button>
+  <button>/\</button>
+  <button>\/</button>
+</div>

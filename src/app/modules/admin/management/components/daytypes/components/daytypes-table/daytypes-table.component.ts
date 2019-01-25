@@ -7,7 +7,7 @@ import { DayTypeService } from '../../../../../../../services/daytype.service';
   templateUrl: './daytypes-table.component.html',
   styleUrls: ['./daytypes-table.component.css']
 })
-export class DaytypesTableComponent implements OnInit {
+export class DayTypesTableComponent implements OnInit {
 
   dayTypes: DayType[];
 

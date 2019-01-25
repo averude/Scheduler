@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { PatternToken } from '../model/patterntoken';
+import { PatternUnit } from '../model/patternunit';
 import { WorkDay } from '../model/workday';
 
 @Injectable({
@@ -12,7 +12,7 @@ export class ScheduleGenerationService {
   generateScheduleByPatternId(employeeId: number,
                               schedule: WorkDay[],
                               dates: Date[],
-                              patternTokens: PatternToken[],
+                              patternTokens: PatternUnit[],
                               fn: (createdSchedule: WorkDay[],
                                    updatedSchedule: WorkDay[]) => void) {
     this.generate(employeeId, schedule, dates, patternTokens, 0, fn);
@@ -24,16 +24,16 @@ export class ScheduleGenerationService {
                                   hours: number,
                                   fn: (createdSchedule: WorkDay[],
                                        updatedSchedule: WorkDay[]) => void) {
-    const patternToken = new PatternToken();
+    const patternToken = new PatternUnit();
     patternToken.value = hours;
-    const customTokens: PatternToken[] = [patternToken];
+    const customTokens: PatternUnit[] = [patternToken];
     this.generate(employeeId, schedule, dates, customTokens, 0, fn);
   }
 
   private generate(employeeId: number,
                    schedule: WorkDay[],
                    dates: Date[],
-                   patternTokens: PatternToken[],
+                   patternTokens: PatternUnit[],
                    offset: number,
                    fn: (createdSchedule: WorkDay[],
                         updatedSchedule: WorkDay[]) => void) {

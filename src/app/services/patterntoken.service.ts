@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { RestConfig } from '../rest.config';
 import { Observable } from 'rxjs';
-import { PatternToken } from '../model/patterntoken';
+import { PatternUnit } from '../model/patternunit';
 
 @Injectable({
   providedIn: 'root'
@@ -13,8 +13,8 @@ export class PatternTokenService {
               private config: RestConfig) { }
 
   getInPattern(departmentId: number,
-               patternId: number): Observable<PatternToken[]> {
-    return this.http.get<PatternToken[]>(
+               patternId: number): Observable<PatternUnit[]> {
+    return this.http.get<PatternUnit[]>(
       `${this.config.baseUrl}/departments/${departmentId}/patterns/${patternId}/tokens`,
       this.config.options
     );
@@ -22,7 +22,7 @@ export class PatternTokenService {
 
   create(departmentId: number,
          patternId: number,
-         patternToken: PatternToken): Observable<any> {
+         patternToken: PatternUnit): Observable<any> {
     return this.http.post(
       `${this.config.baseUrl}/departments/${departmentId}/patterns/${patternId}/tokens`,
       patternToken,
@@ -33,7 +33,7 @@ export class PatternTokenService {
   update(departmentId: number,
          patternId: number,
          patternTokenId: number,
-         patternToken: PatternToken): Observable<any> {
+         patternToken: PatternUnit): Observable<any> {
     return this.http.put(
       `${this.config.baseUrl}/departments/${departmentId}/patterns/${patternId}/tokens/${patternTokenId}`,
       patternToken,

@@ -12,7 +12,7 @@ export class ShiftService {
   constructor(private http: HttpClient,
               private config: RestConfig) { }
 
-  getInDepartment(departmentId: number): Observable<Shift[]> {
+  getByDepartmentId(departmentId: number): Observable<Shift[]> {
     return this.http.get<Shift[]>(
       `${this.config.baseUrl}/departments/${departmentId}/shifts`,
       this.config.options

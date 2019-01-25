@@ -1,0 +1,10 @@
+<div class="box">
+  <div *ngFor="let pattern of patterns"
+       (click)="selectPattern(pattern)">
+    {{pattern.name}}
+  </div>
+</div>
+<div>
+  <button>+</button>
+  <button>-</button>
+</div>

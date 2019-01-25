@@ -1,4 +1,4 @@
-export class PatternToken {
+export class PatternUnit {
   id: number;
   patternId: number;
   orderId: number;

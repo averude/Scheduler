@@ -1,0 +1,50 @@
+<table class="table table-striped table-bordered table-sm">
+  <thead>
+    <tr>
+      <th class="text-center">Name</th>
+      <th class="text-center">Shift Pattern</th>
+      <th style="width: 10%">Control</th>
+    </tr>
+    <tr app-add-shift
+        (shiftCreated)="addShift($event)"
+        [patterns]="patterns"></tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let shift of shifts"
+        appEditableRow
+        #row="editableRow">
+      <td>
+        <input type="text"
+               [(ngModel)]="shift.name"
+               [disabled]="!row.isEditable"
+               [ngClass]="{'form-control-plaintext': !row.isEditable,
+                           'form-control': row.isEditable}"/>
+      </td>
+      <td class="align-middle">
+        <select [(ngModel)]="shift.patternId"
+                [disabled]="!row.isEditable"
+                [ngClass]="{'form-control-plaintext': !row.isEditable,
+                           'form-control': row.isEditable}">
+          <!--Placeholder for select element-->
+          <option [ngValue]="undefined || null"
+                  hidden
+                  selected >select pattern</option>
+          <option *ngFor="let pattern of patterns"
+                  [ngValue]="pattern.id">
+            {{pattern.name}}
+          </option>
+        </select>
+      </td>
+      <td>
+        <button *ngIf="!row.isEditable" class="btn btn-danger full-cell-size"
+                (click)="deleteShift(shift)">
+          X
+        </button>
+        <button *ngIf="row.isEditable" class="btn btn-primary full-cell-size"
+                (click)="updateShift(shift);row.isEditable=false">
+          Save
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>

@@ -6,6 +6,9 @@ import { ManagementComponent } from './management/management.component';
 import { ManagementRoutingModule } from './management-routing.module';
 import { EmployeesModule } from './components/employees/employees.module';
 import { PositionsModule } from './components/positions/positions.module';
+import { DayTypesModule } from './components/daytypes/daytypes.module';
+import { ShiftsModule } from './components/shifts/shifts.module';
+import { PatternsModule } from './components/patterns/patterns.module';
 
 @NgModule({
   imports: [
@@ -13,6 +16,9 @@ import { PositionsModule } from './components/positions/positions.module';
     FormsModule,
     EmployeesModule,
     PositionsModule,
+    DayTypesModule,
+    ShiftsModule,
+    PatternsModule,
     MatSidenavModule,
     ManagementRoutingModule
   ],

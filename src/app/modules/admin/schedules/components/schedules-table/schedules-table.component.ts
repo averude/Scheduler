@@ -3,6 +3,7 @@ import { Employee } from '../../../../../model/employee';
 import { EmployeeService } from '../../../../../services/employee.service';
 import { ShiftPatternService } from '../../../../../services/shiftpattern.service';
 import { ShiftPattern } from '../../../../../model/shiftpattern';
+import { EMPLOYEES } from '../../../../../datasource/mock-employees';
 
 @Component({
   selector: 'app-schedules-table',

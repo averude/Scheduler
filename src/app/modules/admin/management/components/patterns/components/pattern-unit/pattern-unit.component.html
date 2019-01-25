@@ -1,0 +1,16 @@
+<div class="box">
+  <select class="unit-select"
+          [(ngModel)]="unit.dayTypeId">
+    <!--Placeholder for select element-->
+    <option [ngValue]="undefined || null"
+            hidden
+            selected >select type</option>
+    <option *ngFor="let dayType of dayTypes"
+            [ngValue]="dayType.id">
+      {{dayType.name}}
+    </option>
+  </select>
+  <input class="unit-hours"
+         placeholder="hours"
+         [(ngModel)]="unit.value">
+</div>

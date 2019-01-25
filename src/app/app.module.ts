@@ -1,30 +1,11 @@
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { AppComponent } from './app.component';
-import { AppRoutingModule } from './app-routing.module';
-import { HttpClientModule } from '@angular/common/http';
-import { AdminModule } from './modules/admin/admin.module';
-import { ClientModule } from './modules/client/client.module';
-import { PageNotFoundComponent } from './modules/page-not-found/page-not-found.component';
-import { LoginModule } from './modules/login/login.module';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { RestConfig } from './rest.config';
+import { BrowserModule } from '@angular/platform-browser';
+import { PatternsComponent } from './modules/admin/management/components/patterns/patterns/patterns.component';
+import { PatternsModule } from './modules/admin/management/components/patterns/patterns.module';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    PageNotFoundComponent
-  ],
-  imports: [
-    BrowserModule,
-    HttpClientModule,
-    LoginModule,
-    ClientModule,
-    AdminModule,
-    BrowserAnimationsModule,
-    AppRoutingModule
-  ],
-  providers: [RestConfig],
-  bootstrap: [AppComponent]
+  imports: [BrowserModule, PatternsModule],
+  declarations: [],
+  bootstrap: [PatternsComponent]
 })
-export class AppModule { }
+export class AppModule {}

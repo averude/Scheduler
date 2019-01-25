@@ -1,10 +1,9 @@
-.example-container {
-  width: 100%;
+.sidebar-container {
   height: 100%;
 }
 
 .sidebar {
-  width: 200px;
+  width: 250px;
   background-color: #aaaaaa;
 }
 
