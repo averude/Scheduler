@@ -18,7 +18,7 @@ public class PositionDAOImpl
     }
 
     @Override
-    public Collection<Position> getAllDepartment(long departmentId) {
+    public Collection<Position> findAllInDepartment(long departmentId) {
         return getCurrentSession()
                 .createQuery("from Position  p " +
                         "where p.departmentId = :departmentId", Position.class)

@@ -33,9 +33,7 @@ public class WebConfig extends WebMvcConfigurationSupport {
     @Override
     protected void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/api/v1/**")
-                .allowedOrigins("http://localhost:4200")
-                .allowedMethods("GET", "POST", "PUT", "DELETE")
-                .allowCredentials(false);
+                .allowedOrigins("http://localhost:4200");
     }
 
     private Jackson2ObjectMapperBuilder builder(){

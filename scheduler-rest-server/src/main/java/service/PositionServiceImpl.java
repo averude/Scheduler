@@ -23,7 +23,7 @@ public class PositionServiceImpl
     @Override
     @Transactional
     public Collection<Position> findAllInParent(long parentId) {
-        return positionDAO.getAllDepartment(parentId);
+        return positionDAO.findAllInDepartment(parentId);
     }
 
     @Override

@@ -2,6 +2,8 @@ package dao;
 
 import entity.Shift;
 
-public interface ShiftDAO extends GenericDAO<Shift> {
+import java.util.Collection;
 
+public interface ShiftDAO extends GenericDAO<Shift> {
+    Collection<Shift> findAllInDepartment(Long departmentId);
 }

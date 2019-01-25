@@ -1,7 +1,6 @@
 package service;
 
 import dao.PatternTokenDAO;
-import dao.ShiftPatternDAO;
 import entity.PatternToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,26 +13,27 @@ public class PatternTokenServiceImpl extends AbstractService<PatternToken>
         implements PatternTokenService {
 
     private final PatternTokenDAO patternTokenDAO;
-    private final ShiftPatternDAO shiftPatternDAO;
 
     @Autowired
-    public PatternTokenServiceImpl(PatternTokenDAO patternTokenDAO,
-                                   ShiftPatternDAO shiftPatternDAO) {
+    public PatternTokenServiceImpl(PatternTokenDAO patternTokenDAO) {
         super(patternTokenDAO);
         this.patternTokenDAO = patternTokenDAO;
-        this.shiftPatternDAO = shiftPatternDAO;
     }
 
     @Override
     @Transactional
     public Collection<PatternToken> findAllInParent(long parentId) {
-        return shiftPatternDAO.findById(parentId).getSequence();
+        return patternTokenDAO.findAllInShiftPattern(parentId);
     }
 
     @Override
     @Transactional
     public void createInParent(long parentId, PatternToken patternToken) {
-        shiftPatternDAO.findById(parentId).addPatternToken(patternToken);
+        if (patternToken.getPatternId() != parentId){
+            throw new IllegalArgumentException("ID of ShiftPattern doesn't " +
+                    "match with ShiftPattern id in PatternToken entity");
+        }
+        patternTokenDAO.create(patternToken);
     }
 
     @Override

@@ -5,5 +5,5 @@ import entity.Position;
 import java.util.Collection;
 
 public interface PositionDAO extends GenericDAO<Position> {
-    Collection<Position> getAllDepartment(long departmentId);
+    Collection<Position> findAllInDepartment(long departmentId);
 }

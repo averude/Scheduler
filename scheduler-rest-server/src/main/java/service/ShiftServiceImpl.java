@@ -1,6 +1,5 @@
 package service;
 
-import dao.DepartmentDAO;
 import dao.ShiftDAO;
 import entity.Shift;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,26 +13,27 @@ public class ShiftServiceImpl
         extends AbstractService<Shift> implements ShiftService {
 
     private final ShiftDAO shiftDAO;
-    private final DepartmentDAO departmentDAO;
 
     @Autowired
-    public ShiftServiceImpl(ShiftDAO shiftDAO,
-                            DepartmentDAO departmentDAO) {
+    public ShiftServiceImpl(ShiftDAO shiftDAO) {
         super(shiftDAO);
         this.shiftDAO = shiftDAO;
-        this.departmentDAO = departmentDAO;
     }
 
     @Override
     @Transactional
     public Collection<Shift> findAllInParent(long parentId) {
-        return departmentDAO.findById(parentId).getShifts();
+        return shiftDAO.findAllInDepartment(parentId);
     }
 
     @Override
     @Transactional
     public void createInParent(long parentId, Shift shift) {
-        departmentDAO.findById(parentId).addShift(shift);
+        if (shift.getDepartmentId() != parentId){
+            throw new IllegalArgumentException("URI id of department doesn't " +
+                    "match with department id in Shift entity");
+        }
+        shiftDAO.create(shift);
     }
 
     @Override
