@@ -1,26 +1,33 @@
-.box {
-  background-color: crimson;
+.unit-box {
+  background-color: darkgray;
   width: max-content;
   border: 1px solid transparent;
-  margin: 10px 0px 10px 0px;
-  padding: 10px 20px 10px 20px;
+  margin: 10px 0 10px 10px;
+  /*padding: 10px 20px 10px 20px;*/
 }
 
-.unit-select {
+.unit-box:hover {
+  background-color: grey;
+}
+
+.control-button-box {
+  display: inline-block;
+  margin: 10px 20px 10px 20px;
+  vertical-align: middle;
+}
+
+.form-box {
+  display: inline-block;
+}
+
+.control-button {
+  display: block;
+  background-color: transparent;
   border-style: none;
-  border-bottom-style: solid;
-  border-bottom-color: inherit;
-  width: 100px;
-  height: 30px;
-  background-color: inherit;
-  box-sizing: border-box;
+  cursor: pointer;
 }
 
-.unit-select:hover {
+.control-button:hover {
   color: white;
 }
 
-.unit-hours {
-  max-width: 100px;
-  height: 30px;
-}
