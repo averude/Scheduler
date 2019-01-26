@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ShiftPattern } from '../../../../../../../model/shiftpattern';
 import { PATTERNS } from '../../../../../../../datasource/mock-patterns';
-import { PatternSwitchService } from '../../pattern-switch.service';
+import { PatternSwitchService } from '../../services/pattern-switch.service';
 import { TOKENS } from '../../../../../../../datasource/mock-patternunits';
 
 @Component({
