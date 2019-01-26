@@ -1,6 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import { PatternUnit } from '../../../../../../../model/patternunit';
 import { DayType } from '../../../../../../../model/daytype';
+import {UnitControlService} from "../../services/unit-control.service";
 
 @Component({
   selector: 'app-pattern-unit',
@@ -13,9 +14,21 @@ export class PatternUnitComponent implements OnInit {
   unit: PatternUnit;
   @Input()
   dayTypes: DayType[];
-  constructor() { }
+
+  constructor(private unitControlService: UnitControlService) { }
 
   ngOnInit() {
   }
 
+  moveUp() {
+    this.unitControlService.moveUp(this.unit);
+  }
+
+  moveDown() {
+    this.unitControlService.moveDown(this.unit);
+  }
+
+  delete() {
+    this.unitControlService.delete(this.unit);
+  }
 }
