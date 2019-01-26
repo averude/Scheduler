@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
-import { PatternUnit } from '../../../../../model/patternunit';
+import { PatternUnit } from '../../../../../../model/patternunit';
 
 @Injectable()
 export class PatternSwitchService {
