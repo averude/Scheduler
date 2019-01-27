@@ -3,6 +3,7 @@ import { Position } from '../../../../../../../model/position';
 import { PositionService } from '../../../../../../../services/position.service';
 import { EmployeeService } from '../../../../../../../services/employee.service';
 import { Employee } from '../../../../../../../model/employee';
+import { NotificationsService } from "angular2-notifications";
 
 @Component({
   selector: 'app-positions',
@@ -15,7 +16,8 @@ export class PositionsTableComponent implements OnInit {
   positions: Position[];
   employees: Employee[];
 
-  constructor(private positionService: PositionService,
+  constructor(private notificationService: NotificationsService,
+              private positionService: PositionService,
               private employeeService: EmployeeService) { }
 
   ngOnInit() {
@@ -40,12 +42,19 @@ export class PositionsTableComponent implements OnInit {
       .subscribe(res => {
         position.id = res;
         this.positions.push(position);
-      }, err => console.log(err));
+        this.notificationService.success(
+          'CREATED',
+          `Position ${position.name} was succesfully created`
+        )
+      });
   }
 
   updatePosition(position: Position) {
     this.positionService.update(this.departmentId, position.id, position)
-      .subscribe(res => console.log(res), err => console.log(err));
+      .subscribe(res => this.notificationService.success(
+        'UPDATED',
+        `Position ${position.name} was succesfully updated`
+      ));
   }
 
   removePosition(position: Position) {
@@ -54,6 +63,10 @@ export class PositionsTableComponent implements OnInit {
         console.log(res);
         this.positions = this.positions
           .filter(value => value !== position);
-      }, err => console.log(err));
+        this.notificationService.success(
+          'DELETED',
+          `Position ${position.name} was succesfully deleted`
+        )
+      });
   }
 }

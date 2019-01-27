@@ -17,7 +17,8 @@ import { ShiftPattern } from '../../../../../model/shiftpattern';
 import { PaginatorService } from '../../paginator.service';
 import { Subscription } from 'rxjs';
 import { mergeMap } from 'rxjs/internal/operators';
-import { PatternTokenService } from '../../../../../services/patterntoken.service';
+import { PatternUnitService } from '../../../../../services/pattern-unit.service';
+import { NotificationsService } from "angular2-notifications";
 
 @Component({
   selector: '[app-table-row]',
@@ -50,9 +51,10 @@ export class TableRowComponent implements OnInit, OnDestroy {
 
   constructor(private scheduleService: ScheduleService,
               private scheduleGenerationService: ScheduleGenerationService,
-              private patternTokenService: PatternTokenService,
+              private patternUnitService: PatternUnitService,
               private paginatorService: PaginatorService,
-              private contextMenuService: ContextMenuService) { }
+              private contextMenuService: ContextMenuService,
+              private notificationService: NotificationsService) { }
 
   ngOnInit() {
     this.paginatorSub = this.paginatorService.dates
@@ -133,13 +135,13 @@ export class TableRowComponent implements OnInit, OnDestroy {
 
   generateSchedule(dates: Date[],
                    patternId: number) {
-    this.patternTokenService.getInPattern(this.departmentId, patternId)
-      .subscribe(patternTokens => this.scheduleGenerationService
+    this.patternUnitService.getInPattern(this.departmentId, patternId)
+      .subscribe(patternUnits => this.scheduleGenerationService
         .generateScheduleByPatternId(
           this.employee.id,
           this.schedule,
           dates,
-          patternTokens,
+          patternUnits,
           this.scheduleGeneratedHandler)
       );
   }
@@ -155,9 +157,8 @@ export class TableRowComponent implements OnInit, OnDestroy {
           .subscribe(res => {
               res.forEach(workDay => this.schedule.push(workDay));
               this.calculateSum();
-            },
-              err => console.log(err)
-          );
+              this.notificationService.success('Sent', 'Schedule sent succesfully');
+            });
         }
       if (updatedSchedule.length > 0) {
         this.scheduleService.update(
@@ -165,8 +166,10 @@ export class TableRowComponent implements OnInit, OnDestroy {
           this.employee.id,
           updatedSchedule
         )
-          .subscribe(res => this.calculateSum(),
-            err => console.log(err));
+          .subscribe(res => {
+              this.calculateSum();
+              this.notificationService.success('Sent', 'Schedule sent succesfully');
+            });
       }
     };
   }

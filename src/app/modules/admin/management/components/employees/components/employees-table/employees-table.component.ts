@@ -5,6 +5,7 @@ import { Position } from '../../../../../../../model/position';
 import { PositionService } from '../../../../../../../services/position.service';
 import { Shift } from '../../../../../../../model/shift';
 import { ShiftService } from '../../../../../../../services/shift.service';
+import { NotificationsService } from "angular2-notifications";
 
 @Component({
   selector: 'app-employees',
@@ -19,7 +20,8 @@ export class EmployeesTableComponent implements OnInit {
   positions:  Position[];
   shifts:     Shift[];
 
-  constructor(private employeeService: EmployeeService,
+  constructor(private notificationService: NotificationsService,
+              private employeeService: EmployeeService,
               private positionService: PositionService,
               private shiftService: ShiftService) { }
 
@@ -37,20 +39,29 @@ export class EmployeesTableComponent implements OnInit {
       .subscribe(res => {
         employee.id = res;
         this.employees.push(employee);
-      }, err => console.log(err));
+        this.notificationService.success(
+          'Created',
+          this.getSuccessMessage(employee, 'created')
+        )
+      });
   }
 
   updateEmployee(employee: Employee) {
     this.employeeService.update(this.departmentId, employee.positionId, employee.id, employee)
-      .subscribe(res => console.log(res),
-          err => console.log(err));
+      .subscribe(res => this.notificationService.success(
+          'Updated',
+          this.getSuccessMessage(employee, 'updated')
+        ));
   }
 
   deleteEmployee(employee: Employee) {
     this.employeeService.remove(this.departmentId, employee.positionId, employee.id)
       .subscribe(res =>
         this.employees = this.employees
-          .filter(value => value !== employee),
-          err => console.log(err));
+          .filter(value => value !== employee));
+  }
+
+  getSuccessMessage(employee: Employee, action: string): string {
+    return `Employee ${employee.secondName} ${employee.firstName} was ${action} with ID:${employee.id}`
   }
 }
