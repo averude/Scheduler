@@ -1,10 +1,19 @@
-<div class="unit-box">
+<div class="list-box">
   <div *ngFor="let pattern of patterns"
+       appEditableRow
+       #element="editableRow"
+       [class.selected]="selectedPattern === pattern"
        (click)="selectPattern(pattern)">
-    {{pattern.name}}
+    <mat-form-field class="pattern-button">
+      <input type="text"
+             matInput
+             [(ngModel)]="pattern.name"
+             [disabled]="!element.isEditable">
+    </mat-form-field>
   </div>
-</div>
-<div>
-  <button>+</button>
-  <button>-</button>
+  <div>
+    <button (click)="addPattern()">+</button>
+    <button (click)="removeSelectedPattern()">-</button>
+    <button (click)="save()">Save</button>
+  </div>
 </div>

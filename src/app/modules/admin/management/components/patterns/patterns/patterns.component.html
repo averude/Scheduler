@@ -1,4 +1,5 @@
-<div class="wrapper">
-  <app-patterns-list></app-patterns-list>
-  <app-pattern-sequence></app-pattern-sequence>
+<div class="sequence-box">
+  <app-patterns-list [departmentId]="departmentId"></app-patterns-list>
+  <app-pattern-sequence [departmentId]="departmentId"
+                        [dayTypes]="dayTypes"></app-pattern-sequence>
 </div>

@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { DayTypeService } from "../../../../../../services/daytype.service";
+import { DayType } from "../../../../../../model/daytype";
 
 @Component({
   selector: 'app-root',
@@ -7,9 +9,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PatternsComponent implements OnInit {
 
-  constructor() { }
+  departmentId = 1;
+  dayTypes: DayType[];
+
+  constructor(private dayTypeService: DayTypeService) { }
 
   ngOnInit() {
+    this.dayTypeService.getAll()
+      .subscribe(dayTypes => this.dayTypes = dayTypes);
   }
 
 }

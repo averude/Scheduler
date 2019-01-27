@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ShiftPattern } from '../../../../../../../model/shiftpattern';
-import { PATTERNS } from '../../../../../../../datasource/mock-patterns';
 import { PatternSwitchService } from '../../services/pattern-switch.service';
-import { TOKENS } from '../../../../../../../datasource/mock-patternunits';
+import { ShiftPatternService } from "../../../../../../../services/shiftpattern.service";
+import { NotificationsService } from "angular2-notifications";
 
 @Component({
   selector: 'app-patterns-list',
@@ -11,15 +11,55 @@ import { TOKENS } from '../../../../../../../datasource/mock-patternunits';
 })
 export class PatternsListComponent implements OnInit {
 
-  patterns: ShiftPattern[] = PATTERNS;
+  @Input() departmentId: number;
 
-  constructor(private switchService: PatternSwitchService) { }
+  patterns: ShiftPattern[] = [];
+  selectedPattern: ShiftPattern;
+
+  constructor(private switchService: PatternSwitchService,
+              private notificationService: NotificationsService,
+              private shiftPatternService: ShiftPatternService) { }
 
   ngOnInit() {
+    this.shiftPatternService
+      .getByDepartmentId(this.departmentId)
+      .subscribe(patterns => this.patterns = patterns);
   }
 
   selectPattern(pattern: ShiftPattern) {
-    this.switchService.changeUnits(TOKENS
-      .filter(value => value.patternId === pattern.id));
+    this.selectedPattern = pattern;
+    this.switchService.changePattern(pattern.id);
+  }
+
+  save() {
+    for (let i = 0; i < this.patterns.length; i++) {
+      this.createOrUpdate(this.patterns[i]);
+    }
+  }
+
+  addPattern() {
+    const newPattern = new ShiftPattern();
+    newPattern.departmentId = this.departmentId;
+    this.patterns.push(newPattern);
+  }
+
+  removeSelectedPattern() {
+    if (this.selectedPattern) {
+      const index = this.patterns
+        .findIndex(pattern => pattern === this.selectedPattern);
+      this.patterns.splice(index, 1);
+    }
+  }
+
+  private createOrUpdate(pattern: ShiftPattern) {
+    if (pattern.id) {
+      this.shiftPatternService.update(this.departmentId, pattern)
+        .subscribe(res => this.notificationService
+          .success('Updated', 'Pattern was successfully updated'));
+    } else {
+      this.shiftPatternService.create(this.departmentId, pattern)
+        .subscribe(res => this.notificationService
+          .success('Created', 'Pattern was successfully created'));
+    }
   }
 }

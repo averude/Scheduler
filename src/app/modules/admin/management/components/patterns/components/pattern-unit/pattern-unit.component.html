@@ -1,16 +1,28 @@
-<div class="box">
-  <select class="unit-select"
-          [(ngModel)]="unit.dayTypeId">
-    <!--Placeholder for select element-->
-    <option [ngValue]="undefined || null"
-            hidden
-            selected >select type</option>
-    <option *ngFor="let dayType of dayTypes"
-            [ngValue]="dayType.id">
-      {{dayType.name}}
-    </option>
-  </select>
-  <input class="unit-hours"
-         placeholder="hours"
-         [(ngModel)]="unit.value">
+<div class="list-box">
+  <div class="control-button-box">
+    <button class="control-button"
+            (click)="moveUp()">▲</button>
+    <button class="control-button"
+            (click)="moveDown()">▼</button>
+  </div>
+  <div class="form-box">
+    <mat-form-field>
+      <input matInput
+             placeholder="hours"
+             [(ngModel)]="unit.value">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-select placeholder="day type"
+                  [(ngModel)]="unit.dayTypeId">
+        <mat-option *ngFor="let dayType of dayTypes"
+                    [value]="dayType.id">
+          {{dayType.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div class="control-button-box">
+    <button class="control-button"
+            (click)="delete()">X</button>
+  </div>
 </div>

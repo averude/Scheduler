@@ -1,8 +1,9 @@
-<div class="wrapper">
+<div class="sequence-box">
   <app-pattern-unit *ngFor="let unit of units"
                     [dayTypes]="dayTypes"
                     [unit]="unit"></app-pattern-unit>
-</div>
-<div>
-  <button (click)="addUnit()">+</button>
+  <div>
+    <button (click)="addUnit()">+</button>
+    <button (click)="save()">Save</button>
+  </div>
 </div>

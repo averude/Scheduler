@@ -1,12 +1,12 @@
-.unit-box {
+.list-box {
   background-color: darkgray;
   width: max-content;
   border: 1px solid transparent;
-  margin: 10px 0 10px 10px;
+  margin: 10px 0 10px 0;
   /*padding: 10px 20px 10px 20px;*/
 }
 
-.unit-box:hover {
+.list-box:hover {
   background-color: grey;
 }
 

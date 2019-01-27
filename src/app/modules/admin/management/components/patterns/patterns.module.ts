@@ -6,13 +6,20 @@ import { SharedModule } from '../../../../../shared/shared.module';
 import { CommonModule } from '@angular/common';
 import { PatternUnitComponent } from './components/pattern-unit/pattern-unit.component';
 import { PatternsComponent } from './patterns/patterns.component';
-import { PatternSwitchService } from './pattern-switch.service';
+import { PatternSwitchService } from './services/pattern-switch.service';
+import { MatFormFieldModule, MatInputModule, MatSelectModule } from "@angular/material";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { UnitControlService } from "./services/unit-control.service";
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
-    SharedModule
+    SharedModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    BrowserAnimationsModule
   ],
   declarations: [
     PatternSequenceComponent,
@@ -20,6 +27,9 @@ import { PatternSwitchService } from './pattern-switch.service';
     PatternUnitComponent,
     PatternsComponent
   ],
-  providers: [PatternSwitchService]
+  providers: [
+    PatternSwitchService,
+    UnitControlService
+  ]
 })
 export class PatternsModule {}

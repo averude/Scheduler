@@ -1,10 +1,12 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { PatternUnit } from '../../../../../../../model/patternunit';
 import { PatternSwitchService } from '../../services/pattern-switch.service';
 import { Subscription } from 'rxjs';
 import { DayType } from '../../../../../../../model/daytype';
-import { DAYTYPES } from '../../../../../../../datasource/mock-daytypes';
 import { UnitControlService } from "../../services/unit-control.service";
+import { mergeMap } from "rxjs/operators";
+import { PatternUnitService } from "../../../../../../../services/pattern-unit.service";
+import { NotificationsService } from "angular2-notifications";
 
 @Component({
   selector: 'app-pattern-sequence',
@@ -13,26 +15,36 @@ import { UnitControlService } from "../../services/unit-control.service";
 })
 export class PatternSequenceComponent implements OnInit, OnDestroy {
 
-  units: PatternUnit[];
+  @Input() departmentId: number;
+  @Input() dayTypes: DayType[];
+
+  units: PatternUnit[] = [];
+  private patternId:    number;
+  // Subscriptions
   private unitsSub:     Subscription;
   private unitUpSub:    Subscription;
   private unitDownSub:  Subscription;
   private unitDelSub:   Subscription;
 
-  dayTypes: DayType[] = DAYTYPES;
-
   constructor(private switchService: PatternSwitchService,
-              private unitControlService: UnitControlService) { }
+              private unitControlService: UnitControlService,
+              private notificationService: NotificationsService,
+              private patternUnitService: PatternUnitService) { }
 
   ngOnInit() {
-    this.unitsSub = this.switchService.units
+    this.unitsSub = this.switchService.patternId
+      .pipe(mergeMap(patternId => {
+        this.patternId = patternId;
+        return this.patternUnitService
+          .getInPattern(this.departmentId, patternId);
+      }))
       .subscribe(units => this.units = units);
     this.unitUpSub = this.unitControlService.getMoveUp()
       .subscribe(unit => this.moveUp(unit));
     this.unitDownSub = this.unitControlService.getMoveDown()
       .subscribe( unit => this.moveDown(unit));
     this.unitDelSub = this.unitControlService.getDelete()
-      .subscribe(unit => this.removeFromUnits(unit));
+      .subscribe(unit => this.removeUnit(unit));
   }
 
   ngOnDestroy(): void {
@@ -42,21 +54,23 @@ export class PatternSequenceComponent implements OnInit, OnDestroy {
     this.unitDelSub.unsubscribe();
   }
 
+  save() {
+    for (let i = 0; i < this.units.length; i++) {
+      this.createOrUpdate(this.units[i]);
+    }
+  }
+
   addUnit() {
-    const patternId = this.units[0].patternId;
-    const lastOrderNum = this.units
-      .sort((a, b) => a.orderId - b.orderId)[this.units.length - 1]
-      .orderId;
     const newUnit = new PatternUnit();
-    newUnit.patternId = patternId;
-    newUnit.orderId = lastOrderNum + 1;
+    newUnit.patternId = this.patternId;
+    newUnit.orderId = this.lastOrderId + 1;
     this.units.push(newUnit);
   }
 
   private moveUp(patternUnit: PatternUnit) {
     const orderNumber = patternUnit.orderId;
     if (orderNumber > 1) {
-      this.swapInUnits(patternUnit, orderNumber - 1);
+      this.swapUnits(patternUnit, orderNumber - 1);
     }
   }
 
@@ -64,11 +78,11 @@ export class PatternSequenceComponent implements OnInit, OnDestroy {
     const size = this.units.length;
     const orderNumber = patternUnit.orderId;
     if (size > orderNumber && orderNumber !== 0) {
-      this.swapInUnits(patternUnit, orderNumber + 1);
+      this.swapUnits(patternUnit, orderNumber + 1);
     }
   }
 
-  private swapInUnits(fromUnit: PatternUnit, to: number) {
+  private swapUnits(fromUnit: PatternUnit, to: number) {
     const fromNum = fromUnit.orderId;
     const toUnit = this.units.find(value => value.orderId === to);
     fromUnit.orderId = to;
@@ -76,12 +90,33 @@ export class PatternSequenceComponent implements OnInit, OnDestroy {
     this.units.sort((a,b) => a.orderId - b.orderId);
   }
 
-  // Keep an eye on this method because it works only with sorted array
-  private removeFromUnits(unit: PatternUnit) {
-    const index = this.units.findIndex(value => value.id === unit.id);
+  // Keep an eye on this method because it works correctly
+  // only with sorted array
+  private removeUnit(unit: PatternUnit) {
+    const index = this.units.findIndex(value => value === unit);
     this.units.splice(index, 1);
     for (let i = index; i < this.units.length; i++) {
       this.units[i].orderId--;
+    }
+  }
+
+  private get lastOrderId(): number {
+    if (this.units.length > 0) {
+      return this.units
+        .sort((a, b) => a.orderId - b.orderId)[this.units.length - 1]
+        .orderId;
+    } else {
+      return 0;
+    }
+  }
+
+  private createOrUpdate(unit: PatternUnit) {
+    if (unit.id) {
+      this.patternUnitService.update(this.departmentId, this.patternId, unit)
+        .subscribe();
+    } else {
+      this.patternUnitService.create(this.departmentId, this.patternId, unit)
+        .subscribe();
     }
   }
 }
