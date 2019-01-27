@@ -29,10 +29,9 @@ export class ShiftService {
   }
 
   update(departmentId: number,
-         shiftId: number,
          shift: Shift): Observable<any> {
     return this.http.put(
-      `${this.config.baseUrl}/departments/${departmentId}/shifts/${shiftId}`,
+      `${this.config.baseUrl}/departments/${departmentId}/shifts/${shift.id}`,
       shift,
       this.config.options
     );

@@ -50,7 +50,7 @@ export class PositionsTableComponent implements OnInit {
   }
 
   updatePosition(position: Position) {
-    this.positionService.update(this.departmentId, position.id, position)
+    this.positionService.update(this.departmentId, position)
       .subscribe(res => this.notificationService.success(
         'UPDATED',
         `Position ${position.name} was succesfully updated`

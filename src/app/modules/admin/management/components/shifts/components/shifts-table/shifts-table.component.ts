@@ -35,7 +35,7 @@ export class ShiftsTableComponent implements OnInit {
   }
 
   updateShift(shift: Shift) {
-    this.shiftService.update(this.departmentId, shift.id, shift)
+    this.shiftService.update(this.departmentId, shift)
       .subscribe(res => console.log(res), err => console.log(err));
   }
 

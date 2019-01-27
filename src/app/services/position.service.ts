@@ -27,10 +27,9 @@ export class PositionService {
   }
 
   update(departmentId: number,
-         positionId: number,
          position: Position): Observable<any> {
     return this.http.put(
-      `${this.config.baseUrl}/departments/${departmentId}/positions/${positionId}`,
+      `${this.config.baseUrl}/departments/${departmentId}/positions/${position.id}`,
       position,
       this.config.options);
   }

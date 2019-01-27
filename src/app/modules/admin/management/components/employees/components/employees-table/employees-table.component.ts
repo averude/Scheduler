@@ -41,16 +41,16 @@ export class EmployeesTableComponent implements OnInit {
         this.employees.push(employee);
         this.notificationService.success(
           'Created',
-          this.getSuccessMessage(employee, 'created')
+          `Employee ${employee.secondName} ${employee.firstName} was created`
         )
       });
   }
 
   updateEmployee(employee: Employee) {
-    this.employeeService.update(this.departmentId, employee.positionId, employee.id, employee)
+    this.employeeService.update(this.departmentId, employee.positionId, employee)
       .subscribe(res => this.notificationService.success(
           'Updated',
-          this.getSuccessMessage(employee, 'updated')
+        `Employee ${employee.secondName} ${employee.firstName} was updated`
         ));
   }
 
@@ -59,9 +59,5 @@ export class EmployeesTableComponent implements OnInit {
       .subscribe(res =>
         this.employees = this.employees
           .filter(value => value !== employee));
-  }
-
-  getSuccessMessage(employee: Employee, action: string): string {
-    return `Employee ${employee.secondName} ${employee.firstName} was ${action} with ID:${employee.id}`
   }
 }

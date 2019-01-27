@@ -42,10 +42,9 @@ export class EmployeeService {
 
   update(departmentId: number,
          positionId: number,
-         employeeId: number,
          employee: Employee): Observable<any> {
     return this.http.put(
-      `${this.config.baseUrl}/departments/${departmentId}/positions/${positionId}/employees/${employeeId}`,
+      `${this.config.baseUrl}/departments/${departmentId}/positions/${positionId}/employees/${employee.id}`,
       employee,
       this.config.options);
   }

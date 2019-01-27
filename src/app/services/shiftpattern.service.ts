@@ -28,10 +28,9 @@ export class ShiftPatternService {
   }
 
   update(departmentId: number,
-         patternId: number,
          pattern: ShiftPattern): Observable<any> {
     return this.http.put(
-      `${this.config.baseUrl}/departments/${departmentId}/patterns/${patternId}`,
+      `${this.config.baseUrl}/departments/${departmentId}/patterns/${pattern.id}`,
       pattern,
       this.config.options
     );
