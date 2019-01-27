@@ -1,25 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
-import { PatternUnit } from '../../../../../../model/patternunit';
 
 @Injectable()
 export class PatternSwitchService {
-  private unitsSubject: Subject<PatternUnit[]> = new Subject<PatternUnit[]>();
-  private selectSubject: Subject<boolean> = new Subject<boolean>();
+  private idSubject: Subject<number> = new Subject<number>();
 
-  changeUnits(units: PatternUnit[]) {
-    this.unitsSubject.next(units);
+  changePattern(patternId: number) {
+    this.idSubject.next(patternId);
   }
 
-  get units(): Observable<PatternUnit[]> {
-    return this.unitsSubject.asObservable();
-  }
-
-  changeSelected(selected: boolean) {
-    this.selectSubject.next(selected);
-  }
-
-  get selected(): Observable<boolean> {
-    return this.selectSubject.asObservable();
+  get patternId(): Observable<number> {
+    return this.idSubject.asObservable();
   }
 }
