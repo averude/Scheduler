@@ -1,6 +1,6 @@
 import {PatternUnit} from '../model/patternunit';
 
-export const TOKENS: PatternUnit[] = [
+export const UNITS: PatternUnit[] = [
   {id: 1, patternId: 1, orderId: 1, dayTypeId: null, value: 8.25, label: null},
   {id: 2, patternId: 1, orderId: 2, dayTypeId: null, value: 8.25, label: null},
   {id: 3, patternId: 1, orderId: 3, dayTypeId: null, value: 8.25, label: null},

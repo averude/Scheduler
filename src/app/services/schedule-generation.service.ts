@@ -12,10 +12,10 @@ export class ScheduleGenerationService {
   generateScheduleByPatternId(employeeId: number,
                               schedule: WorkDay[],
                               dates: Date[],
-                              patternTokens: PatternUnit[],
+                              patternUnits: PatternUnit[],
                               fn: (createdSchedule: WorkDay[],
                                    updatedSchedule: WorkDay[]) => void) {
-    this.generate(employeeId, schedule, dates, patternTokens, 0, fn);
+    this.generate(employeeId, schedule, dates, patternUnits, 0, fn);
   }
 
   generateScheduleWithCustomHours(employeeId: number,
@@ -24,43 +24,43 @@ export class ScheduleGenerationService {
                                   hours: number,
                                   fn: (createdSchedule: WorkDay[],
                                        updatedSchedule: WorkDay[]) => void) {
-    const patternToken = new PatternUnit();
-    patternToken.value = hours;
-    const customTokens: PatternUnit[] = [patternToken];
-    this.generate(employeeId, schedule, dates, customTokens, 0, fn);
+    const patternUnit = new PatternUnit();
+    patternUnit.value = hours;
+    const customUnits: PatternUnit[] = [patternUnit];
+    this.generate(employeeId, schedule, dates, customUnits, 0, fn);
   }
 
   private generate(employeeId: number,
                    schedule: WorkDay[],
                    dates: Date[],
-                   patternTokens: PatternUnit[],
+                   patternUnits: PatternUnit[],
                    offset: number,
                    fn: (createdSchedule: WorkDay[],
                         updatedSchedule: WorkDay[]) => void) {
     const createdSchedule: WorkDay[] = [];
     const updatedSchedule: WorkDay[] = [];
     const datesSize = dates.length;
-    const tokensSize = patternTokens.length;
-    for (let i = 0; i < datesSize; i += tokensSize) {
-      for (let j = 0; j < tokensSize; j++) {
+    const unitsSize = patternUnits.length;
+    for (let i = 0; i < datesSize; i += unitsSize) {
+      for (let j = 0; j < unitsSize; j++) {
         const date_index = i + j;
         if (date_index >= datesSize) {
           break;
         }
-        const token_index = (offset + j) % tokensSize;
+        const unit_index = (offset + j) % unitsSize;
         const workDay = schedule
           .find(this.getFindFunction(employeeId, dates[date_index]));
         if (workDay) {
-          workDay.hours = patternTokens[token_index].value;
-          workDay.label = patternTokens[token_index].label;
+          workDay.hours = patternUnits[unit_index].value;
+          workDay.label = patternUnits[unit_index].label;
           updatedSchedule.push(workDay);
         } else {
           const newWorkDay = this.createWorkDay(
             employeeId,
             false,
-            patternTokens[token_index].value,
+            patternUnits[unit_index].value,
             this.getISODateString(dates[date_index]),
-            patternTokens[token_index].label);
+            patternUnits[unit_index].label);
           createdSchedule.push(newWorkDay);
         }
       }

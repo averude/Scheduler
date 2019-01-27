@@ -7,7 +7,7 @@ import { PatternUnit } from '../model/patternunit';
 @Injectable({
   providedIn: 'root'
 })
-export class PatternTokenService {
+export class PatternUnitService {
 
   constructor(private http: HttpClient,
               private config: RestConfig) { }
@@ -22,30 +22,29 @@ export class PatternTokenService {
 
   create(departmentId: number,
          patternId: number,
-         patternToken: PatternUnit): Observable<any> {
+         patternUnit: PatternUnit): Observable<any> {
     return this.http.post(
       `${this.config.baseUrl}/departments/${departmentId}/patterns/${patternId}/tokens`,
-      patternToken,
+      patternUnit,
       this.config.options
     );
   }
 
   update(departmentId: number,
          patternId: number,
-         patternTokenId: number,
-         patternToken: PatternUnit): Observable<any> {
+         patternUnit: PatternUnit): Observable<any> {
     return this.http.put(
-      `${this.config.baseUrl}/departments/${departmentId}/patterns/${patternId}/tokens/${patternTokenId}`,
-      patternToken,
+      `${this.config.baseUrl}/departments/${departmentId}/patterns/${patternId}/tokens/${patternUnit.id}`,
+      patternUnit,
       this.config.options
     );
   }
 
   remove(departmentId: number,
          patternId: number,
-         patternTokenId: number): Observable<any> {
+         patternUnitId: number): Observable<any> {
     return this.http.delete(
-      `${this.config.baseUrl}/departments/${departmentId}/patterns/${patternId}/tokens/${patternTokenId}`,
+      `${this.config.baseUrl}/departments/${departmentId}/patterns/${patternId}/tokens/${patternUnitId}`,
       this.config.options
     );
   }
