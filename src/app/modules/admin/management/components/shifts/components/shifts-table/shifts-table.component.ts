@@ -31,19 +31,18 @@ export class ShiftsTableComponent implements OnInit {
       .subscribe(res => {
         shift.id = res;
         this.shifts.push(shift);
-      }, err => console.log(err));
+      });
   }
 
   updateShift(shift: Shift) {
     this.shiftService.update(this.departmentId, shift)
-      .subscribe(res => console.log(res), err => console.log(err));
+      .subscribe(res => console.log(res));
   }
 
   deleteShift(shift: Shift) {
     this.shiftService.remove(this.departmentId, shift.id)
       .subscribe(res =>
           this.shifts = this.shifts
-            .filter(value => value !== shift),
-          err => console.log(err));
+            .filter(value => value !== shift));
   }
 }

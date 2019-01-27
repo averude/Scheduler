@@ -23,19 +23,17 @@ export class DayTypesTableComponent implements OnInit {
       .subscribe(res => {
         dayType.id = res;
         this.dayTypes.push(dayType);
-      }, err => console.log(err));
+      });
   }
 
   updateDayType(dayType: DayType) {
     this.dayTypeService.update(dayType)
-      .subscribe(res => console.log(res),
-          err => console.log(err));
+      .subscribe(res => console.log(res));
   }
 
   deleteDayType(dayType: DayType) {
     this.dayTypeService.delete(dayType.id)
       .subscribe(res => this.dayTypes = this.dayTypes
-        .filter(type => type !== dayType),
-          err => console.log(err));
+        .filter(type => type !== dayType));
   }
 }
