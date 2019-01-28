@@ -15,7 +15,7 @@ export class PatternUnitService {
   getByPatternId(departmentId: number,
                  patternId: number): Observable<PatternUnit[]> {
     return this.http.get<PatternUnit[]>(
-      `${this.config.baseUrl}/departments/${departmentId}/patterns/${patternId}/tokens`
+      `${this.config.baseUrl}/departments/${departmentId}/patterns/${patternId}/units`
     );
   }
 
@@ -23,7 +23,7 @@ export class PatternUnitService {
          patternId: number,
          patternUnit: PatternUnit): Observable<any> {
     return this.http.post(
-      `${this.config.baseUrl}/departments/${departmentId}/patterns/${patternId}/tokens`,
+      `${this.config.baseUrl}/departments/${departmentId}/patterns/${patternId}/units`,
       patternUnit
     );
   }
@@ -32,7 +32,7 @@ export class PatternUnitService {
          patternId: number,
          patternUnit: PatternUnit): Observable<any> {
     return this.http.put(
-      `${this.config.baseUrl}/departments/${departmentId}/patterns/${patternId}/tokens/${patternUnit.id}`,
+      `${this.config.baseUrl}/departments/${departmentId}/patterns/${patternId}/units/${patternUnit.id}`,
       patternUnit
     );
   }
@@ -41,7 +41,7 @@ export class PatternUnitService {
          patternId: number,
          patternUnitId: number): Observable<any> {
     return this.http.delete(
-      `${this.config.baseUrl}/departments/${departmentId}/patterns/${patternId}/tokens/${patternUnitId}`
+      `${this.config.baseUrl}/departments/${departmentId}/patterns/${patternId}/units/${patternUnitId}`
     );
   }
 }
