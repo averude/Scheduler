@@ -12,9 +12,9 @@ export class DepartmentService {
   constructor(private http: HttpClient,
               private config: RestConfig) { }
 
-  getDepartment(id: number): Observable<Department> {
+  getById(id: number): Observable<Department> {
     return this.http.get<Department>(
       `${this.config.baseUrl}/departments/${id}`,
-      this.config.options);
+    );
   }
 }

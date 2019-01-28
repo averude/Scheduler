@@ -14,30 +14,30 @@ export class PositionService {
 
   getByDepartmentId(departmentId: number): Observable<Position[]> {
     return this.http.get<Position[]>(
-      `${this.config.baseUrl}/departments/${departmentId}/positions`,
-      this.config.options);
+      `${this.config.baseUrl}/departments/${departmentId}/positions`
+    );
   }
 
   create(departmentId: number,
          position: Position): Observable<any> {
      return this.http.post<number>(
        `${this.config.baseUrl}/departments/${departmentId}/positions`,
-       position,
-       this.config.options);
+       position
+     );
   }
 
   update(departmentId: number,
          position: Position): Observable<any> {
     return this.http.put(
       `${this.config.baseUrl}/departments/${departmentId}/positions/${position.id}`,
-      position,
-      this.config.options);
+      position
+    );
   }
 
   remove(departmentId: number,
          positionId: number): Observable<any> {
     return this.http.delete(
-      `${this.config.baseUrl}/departments/${departmentId}/positions/${positionId}`,
-      this.config.options);
+      `${this.config.baseUrl}/departments/${departmentId}/positions/${positionId}`
+    );
   }
 }

@@ -18,8 +18,8 @@ export class ScheduleService {
     const from = start.toISOString().split('T')[0];
     const to = end.toISOString().split('T')[0];
     return this.http.get<WorkDay[]>(
-      `${this.config.baseUrl}/schedule/search?employeeId=${employeeId}&from=${from}&to=${to}`,
-      this.config.options);
+      `${this.config.baseUrl}/schedule/search?employeeId=${employeeId}&from=${from}&to=${to}`
+    );
   }
 
   create(departmentId: number,
@@ -27,8 +27,8 @@ export class ScheduleService {
          schedule: WorkDay[]): Observable<any> {
     return this.http.post<WorkDay[]>(
       `${this.config.baseUrl}/departments/${departmentId}/schedule/${employeeId}`,
-      schedule,
-      this.config.options);
+      schedule
+    );
   }
 
   update(departmentId: number,
@@ -36,7 +36,7 @@ export class ScheduleService {
          schedule: WorkDay[]): Observable<any> {
     return this.http.put(
       `${this.config.baseUrl}/departments/${departmentId}/schedule/${employeeId}`,
-      schedule,
-      this.config.options);
+      schedule
+    );
   }
 }

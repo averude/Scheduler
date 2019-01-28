@@ -14,16 +14,15 @@ export class ShiftPatternService {
 
   getByDepartmentId(departmentId: number): Observable<ShiftPattern[]> {
     return this.http.get<ShiftPattern[]>(
-      `${this.config.baseUrl}/departments/${departmentId}/patterns`,
-      this.config.options);
+      `${this.config.baseUrl}/departments/${departmentId}/patterns`
+    );
   }
 
   create(departmentId: number,
          pattern: ShiftPattern): Observable<any> {
     return this.http.post(
       `${this.config.baseUrl}/departments/${departmentId}/patterns`,
-      pattern,
-      this.config.options
+      pattern
     );
   }
 
@@ -31,16 +30,14 @@ export class ShiftPatternService {
          pattern: ShiftPattern): Observable<any> {
     return this.http.put(
       `${this.config.baseUrl}/departments/${departmentId}/patterns/${pattern.id}`,
-      pattern,
-      this.config.options
+      pattern
     );
   }
 
   remove(departmentId: number,
          patternId: number): Observable<any> {
     return this.http.delete(
-      `${this.config.baseUrl}/departments/${departmentId}/patterns/${patternId}`,
-      this.config.options
+      `${this.config.baseUrl}/departments/${departmentId}/patterns/${patternId}`
     );
   }
 }

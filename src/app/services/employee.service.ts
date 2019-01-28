@@ -14,21 +14,21 @@ export class EmployeeService {
 
   getByDepartmentId(departmentId: number): Observable<Employee[]> {
     return this.http.get<Employee[]>(
-      `${this.config.baseUrl}/departments/${departmentId}/employees`,
-      this.config.options);
+      `${this.config.baseUrl}/departments/${departmentId}/employees`
+    );
   }
 
   getByPositionId(departmentId: number,
                   positionId: number): Observable<Employee[]> {
     return this.http.get<Employee[]>(
-      `${this.config.baseUrl}/departments/${departmentId}/positions/${positionId}/employees`,
-      this.config.options);
+      `${this.config.baseUrl}/departments/${departmentId}/positions/${positionId}/employees`
+    );
   }
 
   getById(employeeId: number): Observable<Employee> {
     return this.http.get<Employee>(
-      `${this.config.baseUrl}/employees/${employeeId}`,
-      this.config.options);
+      `${this.config.baseUrl}/employees/${employeeId}`
+    );
   }
 
   create(departmentId: number,
@@ -36,8 +36,8 @@ export class EmployeeService {
          employee: Employee): Observable<any> {
     return this.http.post<number>(
       `${this.config.baseUrl}/departments/${departmentId}/positions/${positionId}/employees`,
-      employee,
-      this.config.options);
+      employee
+    );
   }
 
   update(departmentId: number,
@@ -45,15 +45,15 @@ export class EmployeeService {
          employee: Employee): Observable<any> {
     return this.http.put(
       `${this.config.baseUrl}/departments/${departmentId}/positions/${positionId}/employees/${employee.id}`,
-      employee,
-      this.config.options);
+      employee
+    );
   }
 
   remove(departmentId: number,
          positionId: number,
          employeeId: number): Observable<any> {
     return this.http.delete(
-      `${this.config.baseUrl}/departments/${departmentId}/positions/${positionId}/employees/${employeeId}`,
-      this.config.options);
+      `${this.config.baseUrl}/departments/${departmentId}/positions/${positionId}/employees/${employeeId}`
+    );
   }
 }

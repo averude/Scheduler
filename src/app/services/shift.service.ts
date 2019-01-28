@@ -14,8 +14,7 @@ export class ShiftService {
 
   getByDepartmentId(departmentId: number): Observable<Shift[]> {
     return this.http.get<Shift[]>(
-      `${this.config.baseUrl}/departments/${departmentId}/shifts`,
-      this.config.options
+      `${this.config.baseUrl}/departments/${departmentId}/shifts`
     );
   }
 
@@ -23,8 +22,7 @@ export class ShiftService {
          shift: Shift): Observable<any> {
     return this.http.post(
       `${this.config.baseUrl}/departments/${departmentId}/shifts`,
-      shift,
-      this.config.options
+      shift
     );
   }
 
@@ -32,16 +30,14 @@ export class ShiftService {
          shift: Shift): Observable<any> {
     return this.http.put(
       `${this.config.baseUrl}/departments/${departmentId}/shifts/${shift.id}`,
-      shift,
-      this.config.options
+      shift
     );
   }
 
   remove(departmentId: number,
          shiftId: number): Observable<any> {
     return this.http.delete(
-      `${this.config.baseUrl}/departments/${departmentId}/shifts/${shiftId}`,
-      this.config.options
+      `${this.config.baseUrl}/departments/${departmentId}/shifts/${shiftId}`
     );
   }
 }
