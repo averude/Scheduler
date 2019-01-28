@@ -135,7 +135,7 @@ export class TableRowComponent implements OnInit, OnDestroy {
 
   generateSchedule(dates: Date[],
                    patternId: number) {
-    this.patternUnitService.getInPattern(this.departmentId, patternId)
+    this.patternUnitService.getByPatternId(this.departmentId, patternId)
       .subscribe(patternUnits => this.scheduleGenerationService
         .generateScheduleByPatternId(
           this.employee.id,

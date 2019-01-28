@@ -24,9 +24,9 @@ export class AdminComponent implements OnInit {
     // this.department$ = this.route.paramMap.pipe(
     //   switchMap((params: ParamMap) =>
     //     this.departmentService
-    //       .getDepartment(Number.parseInt(params.get('departmentId'))))
+    //       .getById(Number.parseInt(params.get('departmentId'))))
     // );
     const id = Number.parseInt(this.route.snapshot.paramMap.get('departmentId'));
-    this.department$ = this.departmentService.getDepartment(id);
+    this.department$ = this.departmentService.getById(id);
   }
 }

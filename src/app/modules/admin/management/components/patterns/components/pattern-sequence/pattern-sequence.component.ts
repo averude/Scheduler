@@ -36,7 +36,7 @@ export class PatternSequenceComponent implements OnInit, OnDestroy {
       .pipe(mergeMap(patternId => {
         this.patternId = patternId;
         return this.patternUnitService
-          .getInPattern(this.departmentId, patternId);
+          .getByPatternId(this.departmentId, patternId);
       }))
       .subscribe(units => this.units = units);
     this.unitUpSub = this.unitControlService.getMoveUp()
