@@ -1,5 +1,5 @@
 export const OPTIONS = {
-  timeOut: 5000,
+  timeOut: 2000,
   showProgressBar: true,
   preventDuplicates: true
 };
