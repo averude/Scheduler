@@ -14,12 +14,12 @@ import java.util.Set;
 import static org.junit.Assert.*;
 
 @RunWith(JUnitParamsRunner.class)
-public class PatternTokenTest {
+public class PatternUnitTest {
 
     private static final Validator validator
             = Validation.buildDefaultValidatorFactory().getValidator();
 
-    private PatternToken patternToken;
+    private PatternUnit patternUnit;
 
     private static final Object[] getValidEntities(){
         return new Object[]{
@@ -48,7 +48,7 @@ public class PatternTokenTest {
 
     @Before
     public void setUp(){
-        patternToken = new PatternToken();
+        patternUnit = new PatternUnit();
     }
 
     @Test
@@ -61,12 +61,12 @@ public class PatternTokenTest {
                                                 Float value){
         initEntity(id, orderId, patternId, dayTypeId, label, value);
 
-        assertEquals(id, patternToken.getId());
-        assertEquals(orderId, patternToken.getOrderId());
-        assertEquals(patternId, patternToken.getPatternId());
-        assertEquals(dayTypeId, patternToken.getDayTypeId());
-        assertEquals(label, patternToken.getLabel());
-        assertEquals(value, patternToken.getValue());
+        assertEquals(id, patternUnit.getId());
+        assertEquals(orderId, patternUnit.getOrderId());
+        assertEquals(patternId, patternUnit.getPatternId());
+        assertEquals(dayTypeId, patternUnit.getDayTypeId());
+        assertEquals(label, patternUnit.getLabel());
+        assertEquals(value, patternUnit.getValue());
     }
 
     @Test
@@ -79,8 +79,8 @@ public class PatternTokenTest {
                                             Float value){
         initEntity(id, orderId, patternId, dayTypeId, label, value);
 
-        Set<ConstraintViolation<PatternToken>> constraintViolations
-                = validator.validate(patternToken);
+        Set<ConstraintViolation<PatternUnit>> constraintViolations
+                = validator.validate(patternUnit);
         assertTrue(constraintViolations.size() == 0);
     }
 
@@ -94,8 +94,8 @@ public class PatternTokenTest {
                                          Float value){
         initEntity(id, orderId, patternId, dayTypeId, label, value);
 
-        Set<ConstraintViolation<PatternToken>> constraintViolations
-                = validator.validate(patternToken);
+        Set<ConstraintViolation<PatternUnit>> constraintViolations
+                = validator.validate(patternUnit);
         assertFalse(constraintViolations.size() == 0);
     }
 
@@ -107,11 +107,11 @@ public class PatternTokenTest {
                             Long dayTypeId,
                             String label,
                             Float value){
-        patternToken.setId(id);
-        patternToken.setOrderId(orderId);
-        patternToken.setPatternId(patternId);
-        patternToken.setDayTypeId(dayTypeId);
-        patternToken.setLabel(label);
-        patternToken.setValue(value);
+        patternUnit.setId(id);
+        patternUnit.setOrderId(orderId);
+        patternUnit.setPatternId(patternId);
+        patternUnit.setDayTypeId(dayTypeId);
+        patternUnit.setLabel(label);
+        patternUnit.setValue(value);
     }
 }

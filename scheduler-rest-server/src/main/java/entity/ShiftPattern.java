@@ -44,7 +44,7 @@ public class ShiftPattern implements Serializable {
     @OneToMany( mappedBy = "patternId",
                 cascade = CascadeType.ALL,
                 orphanRemoval = true)
-    private List<PatternToken> sequence = new ArrayList<>();
+    private List<PatternUnit> sequence = new ArrayList<>();
 
     @JsonIgnore
     @OneToMany(mappedBy = "patternId")
@@ -81,11 +81,11 @@ public class ShiftPattern implements Serializable {
         this.name = name;
     }
 
-    public List<PatternToken> getSequence() {
+    public List<PatternUnit> getSequence() {
         return sequence;
     }
 
-    public void setSequence(List<PatternToken> sequence) {
+    public void setSequence(List<PatternUnit> sequence) {
         this.sequence = sequence;
     }
 
@@ -97,13 +97,13 @@ public class ShiftPattern implements Serializable {
         this.shifts = shifts;
     }
 
-    public void addPatternToken(PatternToken patternToken) {
-        patternToken.setId(this.getId());
-        sequence.add(patternToken);
+    public void addPatternUnit(PatternUnit patternUnit) {
+        patternUnit.setId(this.getId());
+        sequence.add(patternUnit);
     }
 
-    public void removePatternToken(PatternToken patternToken) {
-        patternToken.setId(null);
-        sequence.remove(patternToken);
+    public void removePatternUnit(PatternUnit patternUnit) {
+        patternUnit.setId(null);
+        sequence.remove(patternUnit);
     }
 }

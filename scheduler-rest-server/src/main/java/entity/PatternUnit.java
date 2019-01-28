@@ -14,7 +14,7 @@ import java.io.Serializable;
                 )
         }
 )
-public class PatternToken implements Serializable {
+public class PatternUnit implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

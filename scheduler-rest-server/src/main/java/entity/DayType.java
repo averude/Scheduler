@@ -46,7 +46,7 @@ public class DayType implements Serializable {
                 fetch = FetchType.LAZY,
                 orphanRemoval = true,
                 cascade = CascadeType.ALL)
-    private List<PatternToken> tokens = new ArrayList<>();
+    private List<PatternUnit> tokens = new ArrayList<>();
 
     @JsonIgnore
     @OneToMany( mappedBy = "dayTypeId",
@@ -82,11 +82,11 @@ public class DayType implements Serializable {
         this.label = name;
     }
 
-    public List<PatternToken> getTokens() {
+    public List<PatternUnit> getTokens() {
         return tokens;
     }
 
-    public void setTokens(List<PatternToken> tokens) {
+    public void setTokens(List<PatternUnit> tokens) {
         this.tokens = tokens;
     }
 
