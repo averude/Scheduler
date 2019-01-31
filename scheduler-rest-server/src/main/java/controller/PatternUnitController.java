@@ -9,7 +9,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import service.PatternUnitService;
 
 import java.net.URI;
-import java.util.Collection;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/departments/{departmentId}/patterns/{patternId}/units")
@@ -23,28 +23,34 @@ public class PatternUnitController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public Collection<PatternUnit> getAll(@PathVariable long departmentId,
-                                          @PathVariable long patternId) {
-        return this.patternUnitService.findAllInParent(patternId);
+    public Iterable<PatternUnit> getAll(@PathVariable long departmentId,
+                                        @PathVariable long patternId) {
+        return this.patternUnitService.findAllByPatternIdOrderByOrderId(patternId);
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<Long> create(@PathVariable long departmentId,
-                                       @PathVariable long patternId,
-                                       @RequestBody PatternUnit unit) {
-        this.patternUnitService.create(unit);
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest().path("/{id}")
-                .buildAndExpand(unit.getId()).toUri();
-        return ResponseEntity.created(location).body(unit.getId());
+    public ResponseEntity<?> create(@PathVariable long departmentId,
+                                    @PathVariable long patternId,
+                                    @RequestBody PatternUnit unit) {
+        if (patternId == unit.getPatternId()) {
+            this.patternUnitService.save(unit);
+            URI location = ServletUriComponentsBuilder
+                    .fromCurrentRequest().path("/{id}")
+                    .buildAndExpand(unit.getId()).toUri();
+            return ResponseEntity.created(location).body(unit.getId());
+        } else {
+            return ResponseEntity.unprocessableEntity()
+                    .body("URI's ID doesn't match to Entity's ID");
+        }
+
     }
 
     @RequestMapping(method = RequestMethod.GET,
                     value = "{unitId}")
-    public PatternUnit get(@PathVariable long departmentId,
-                           @PathVariable long patternId,
-                           @PathVariable long unitId) {
-        return this.patternUnitService.getById(unitId);
+    public Optional<PatternUnit> get(@PathVariable long departmentId,
+                                     @PathVariable long patternId,
+                                     @PathVariable long unitId) {
+        return this.patternUnitService.findById(unitId);
     }
 
     @RequestMapping(method = RequestMethod.PUT,
@@ -52,10 +58,15 @@ public class PatternUnitController {
     public ResponseEntity<?> update(@PathVariable long departmentId,
                                     @PathVariable long patternId,
                                     @PathVariable long unitId,
-                                    @RequestBody PatternUnit dayType) {
-        this.patternUnitService.updateById(unitId, dayType);
-        return ResponseEntity.ok("Unit with ID:" + unitId +
-                " was successfully updated");
+                                    @RequestBody PatternUnit unit) {
+        if (unitId == unit.getId() && patternId == unit.getPatternId()) {
+            this.patternUnitService.save(unit);
+            return ResponseEntity.ok("Unit with ID:" + unitId +
+                    " was successfully updated");
+        } else {
+            return ResponseEntity.unprocessableEntity()
+                    .body("URI's ID doesn't match to Entity's ID");
+        }
     }
 
     @RequestMapping(method = RequestMethod.DELETE,

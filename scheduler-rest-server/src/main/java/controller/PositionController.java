@@ -9,41 +9,44 @@ import service.PositionService;
 
 import javax.validation.Valid;
 import java.net.URI;
-import java.util.Collection;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/departments/{departmentId}/positions")
-public class PositionController extends AbstractController<Position>{
+public class PositionController {
 
     private final PositionService positionService;
 
     @Autowired
     public PositionController(PositionService positionService) {
-        super(positionService);
         this.positionService = positionService;
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public Collection<Position> getAll(@PathVariable long departmentId){
-        return positionService.findAllInParent(departmentId);
+    public Iterable<Position> getAll(@PathVariable long departmentId){
+        return positionService.findAllByDepartmentId(departmentId);
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<Long> create(@PathVariable long departmentId,
+    public ResponseEntity<?> create(@PathVariable long departmentId,
                                        @Valid @RequestBody Position position){
-        positionService.createInParent(departmentId, position);
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest().path("/{id}")
-                .buildAndExpand(position.getId()).toUri();
-        return ResponseEntity.created(location).body(position.getId());
+        if (departmentId == position.getDepartmentId()) {
+            positionService.save(position);
+            URI location = ServletUriComponentsBuilder
+                    .fromCurrentRequest().path("/{id}")
+                    .buildAndExpand(position.getId()).toUri();
+            return ResponseEntity.created(location).body(position.getId());
+        } else {
+            return ResponseEntity.unprocessableEntity()
+                    .body("URI's ID doesn't match to Entity's ID");
+        }
     }
 
     @RequestMapping(method = RequestMethod.GET,
                     value = "/{positionId}")
-    public Position get(@PathVariable long departmentId,
-                        @PathVariable long positionId){
-        this.validate(positionId);
-        return positionService.getById(positionId);
+    public Optional<Position> get(@PathVariable long departmentId,
+                                  @PathVariable long positionId){
+        return positionService.findById(positionId);
     }
 
     @RequestMapping(method = RequestMethod.PUT,
@@ -51,17 +54,20 @@ public class PositionController extends AbstractController<Position>{
     public ResponseEntity<?> update(@PathVariable long departmentId,
                                     @PathVariable long positionId,
                                     @Valid @RequestBody Position position){
-        this.validate(positionId);
-        positionService.updateById(positionId, position);
-        return ResponseEntity.ok("Position with ID:" + positionId +
-                " was successfully updated");
+        if (positionId == position.getId()) {
+            positionService.save(position);
+            return ResponseEntity.ok("Position with ID:" + positionId +
+                    " was successfully updated");
+        } else {
+            return ResponseEntity.unprocessableEntity()
+                    .body("URI's ID doesn't match to Entity's ID");
+        }
     }
 
     @RequestMapping(method = RequestMethod.DELETE,
                     value = "/{positionId}")
     public ResponseEntity<?> delete(@PathVariable long departmentId,
                                     @PathVariable long positionId){
-        this.validate(positionId);
         positionService.deleteById(positionId);
         return ResponseEntity.ok("Position with ID:" + positionId +
                 " was successfully deleted");

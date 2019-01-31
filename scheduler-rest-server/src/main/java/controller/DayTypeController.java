@@ -10,7 +10,7 @@ import service.DayTypeService;
 
 import javax.validation.Valid;
 import java.net.URI;
-import java.util.Collection;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/daytypes")
@@ -24,13 +24,13 @@ public class DayTypeController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public Collection<DayType> getAll() {
+    public Iterable<DayType> getAll() {
         return dayTypeService.findAll();
     }
 
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<Long> add(@Valid @RequestBody DayType dayType) {
-        dayTypeService.create(dayType);
+        dayTypeService.save(dayType);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/{id}")
                 .buildAndExpand(dayType.getId()).toUri();
@@ -39,17 +39,22 @@ public class DayTypeController {
 
     @RequestMapping(method = RequestMethod.GET,
                     value = "/{dayTypeId}")
-    public DayType get(@PathVariable long dayTypeId) {
-        return dayTypeService.getById(dayTypeId);
+    public Optional<DayType> get(@PathVariable long dayTypeId) {
+        return dayTypeService.findById(dayTypeId);
     }
 
     @RequestMapping(method = RequestMethod.PUT,
                     value = "/{dayTypeId}")
     public ResponseEntity<?> put(@PathVariable long dayTypeId,
                                  @RequestBody DayType dayType) {
-        dayTypeService.updateById(dayTypeId, dayType);
-        return ResponseEntity.ok("Day type with ID:" + dayTypeId +
-                " was successfully updated");
+        if (dayTypeId == dayType.getId()) {
+            dayTypeService.save(dayType);
+            return ResponseEntity.ok("Day type with ID:" + dayTypeId +
+                    " was successfully updated");
+        } else {
+            return ResponseEntity.unprocessableEntity()
+                    .body("URI's ID doesn't match to Entity's ID");
+        }
     }
 
     @RequestMapping(method = RequestMethod.DELETE,

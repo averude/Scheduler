@@ -1,6 +1,5 @@
 package controller;
 
-import entity.Employee;
 import entity.Shift;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -10,28 +9,27 @@ import service.ShiftService;
 
 import javax.validation.Valid;
 import java.net.URI;
-import java.util.Collection;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/departments/{departmentId}/shifts")
-public class ShiftController extends AbstractController<Shift> {
+public class ShiftController {
 
     private final ShiftService shiftService;
 
     @Autowired
     public ShiftController(ShiftService shiftService) {
-        super(shiftService);
         this.shiftService = shiftService;
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public Collection<Shift> getAll(@PathVariable long departmentId){
-        return shiftService.findAllInParent(departmentId);
+    public Iterable<Shift> getAll(@PathVariable long departmentId){
+        return shiftService.findAllByDepartmentId(departmentId);
     }
 
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<Long> create(@Valid @RequestBody Shift shift){
-        shiftService.create(shift);
+        shiftService.save(shift);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/{id}")
                 .buildAndExpand(shift.getId()).toUri();
@@ -40,14 +38,13 @@ public class ShiftController extends AbstractController<Shift> {
 
     @RequestMapping(method = RequestMethod.GET,
                     value = "/{shiftId}")
-    public Shift get(@PathVariable long shiftId){
-        return shiftService.getById(shiftId);
+    public Optional<Shift> get(@PathVariable long shiftId){
+        return shiftService.findById(shiftId);
     }
 
     @RequestMapping(method = RequestMethod.DELETE,
                     value = "/{shiftId}")
     public ResponseEntity<?> delete(@PathVariable long shiftId){
-        this.validate(shiftId);
         shiftService.deleteById(shiftId);
         return ResponseEntity.ok("Deleted " + shiftId);
     }
@@ -56,15 +53,13 @@ public class ShiftController extends AbstractController<Shift> {
                     value = "/{shiftId}")
     public ResponseEntity<?> update(@PathVariable long shiftId,
                                     @Valid @RequestBody Shift shift){
-        this.validate(shiftId);
-        shiftService.updateById(shiftId, shift);
-        return ResponseEntity.ok("Updated " + shiftId);
-    }
+        if (shiftId == shift.getId()) {
+            shiftService.save(shift);
+            return ResponseEntity.ok("Updated " + shiftId);
+        } else {
+            return ResponseEntity.unprocessableEntity()
+                    .body("URI's ID doesn't match to Entity's ID");
+        }
 
-    @RequestMapping(method = RequestMethod.GET,
-                    value = "/{shiftId}/employees")
-    public Collection<Employee> getEmployees(@PathVariable long shiftId){
-        this.validate(shiftId);
-        return shiftService.getById(shiftId).getEmployees();
     }
 }

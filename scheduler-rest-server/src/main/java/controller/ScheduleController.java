@@ -9,7 +9,6 @@ import service.ScheduleService;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
-import java.util.Collection;
 
 @RestController
 @RequestMapping("/api/v1/")
@@ -22,32 +21,26 @@ public class ScheduleController {
         this.scheduleService = scheduleService;
     }
 
-    @RequestMapping(method = RequestMethod.GET,
-                    value = "departments/{departmentId}/schedule/{employeeId}")
-    public Collection<WorkDay> getSchedule(@PathVariable long employeeId){
-        return scheduleService.getCurrentMonth(employeeId);
-    }
-
     @RequestMapping(method = RequestMethod.POST,
                     value = "departments/{departmentId}/schedule/{employeeId}")
-    public ResponseEntity<Collection<WorkDay>> create(
+    public ResponseEntity<Iterable<WorkDay>> create(
                                 @PathVariable long employeeId,
-                                @Valid @RequestBody Collection<WorkDay> schedule){
-        scheduleService.createInParent(employeeId, schedule);
+                                @Valid @RequestBody Iterable<WorkDay> schedule){
+        scheduleService.saveAll(schedule);
         return ResponseEntity.ok(schedule);
     }
 
     @RequestMapping(method = RequestMethod.PUT,
                     value = "departments/{departmentId}/schedule/{employeeId}")
     public ResponseEntity<?> update(@PathVariable long employeeId,
-                                    @Valid @RequestBody Collection<WorkDay> schedule) {
-        scheduleService.updateCollection(schedule);
+                                    @Valid @RequestBody Iterable<WorkDay> schedule) {
+        scheduleService.saveAll(schedule);
         return ResponseEntity.ok("WorkDay was successfully updated");
     }
 
     @RequestMapping(method = RequestMethod.GET,
                     value = "schedule/search")
-    public Collection<WorkDay> searchInEmployee(@RequestParam(value = "employeeId", required = true)
+    public Iterable<WorkDay> searchInEmployee(@RequestParam(value = "employeeId", required = true)
                                        Long employeeId,
                                                 @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
                                        @RequestParam(value = "from", required = true)
