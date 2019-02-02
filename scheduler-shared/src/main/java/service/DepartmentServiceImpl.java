@@ -6,8 +6,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import repository.DepartmentRepository;
 
-import java.util.Collection;
-
 @Service
 public class DepartmentServiceImpl
         extends AbstractService<Department, Long> implements DepartmentService {
