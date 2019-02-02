@@ -12,7 +12,7 @@ import java.net.URI;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/v1/departments/{departmentId}")
+@RequestMapping("/api/v1/")
 public class EmployeeController {
 
     private final EmployeeService employeeService;
@@ -24,20 +24,20 @@ public class EmployeeController {
 
     @RequestMapping(method = RequestMethod.GET,
                     value = "/employees")
-    public Iterable<Employee> getAllInDepartment(@PathVariable long departmentId) {
+    public Iterable<Employee> getAllInDepartment(@RequestHeader("Department-ID") long departmentId) {
         return employeeService.findAllByDepartmentId(departmentId);
     }
 
     @RequestMapping(method = RequestMethod.GET,
                     value = "/positions/{positionId}/employees")
-    public Iterable<Employee> getAllInPosition(@PathVariable long departmentId,
+    public Iterable<Employee> getAllInPosition(@RequestHeader("Department-ID") long departmentId,
                                                @PathVariable long positionId){
         return employeeService.findAllByPositionId(positionId);
     }
 
     @RequestMapping(method = RequestMethod.POST,
                     value = "/positions/{positionId}/employees")
-    public ResponseEntity<?> create(@PathVariable long departmentId,
+    public ResponseEntity<?> create(@RequestHeader("Department-ID") long departmentId,
                                     @PathVariable long positionId,
                                     @Valid @RequestBody Employee employee){
         if (positionId == employee.getPositionId()) {
@@ -55,7 +55,7 @@ public class EmployeeController {
 
     @RequestMapping(method = RequestMethod.GET,
                     value = "/positions/{positionId}/employees/{employeeId}")
-    public Optional<Employee> get(@PathVariable long departmentId,
+    public Optional<Employee> get(@RequestHeader("Department-ID") long departmentId,
                                   @PathVariable long positionId,
                                   @PathVariable long employeeId){
         return employeeService.findById(employeeId);
@@ -63,7 +63,7 @@ public class EmployeeController {
 
     @RequestMapping(method = RequestMethod.PUT,
                     value = "/positions/{positionId}/employees/{employeeId}")
-    public ResponseEntity<?> update(@PathVariable long departmentId,
+    public ResponseEntity<?> update(@RequestHeader("Department-ID") long departmentId,
                                     @PathVariable long positionId,
                                     @PathVariable long employeeId,
                                     @Valid @RequestBody Employee employee){
@@ -80,7 +80,7 @@ public class EmployeeController {
 
     @RequestMapping(method = RequestMethod.DELETE,
                     value = "/positions/{positionId}/employees/{employeeId}")
-    public ResponseEntity<?> delete(@PathVariable long departmentId,
+    public ResponseEntity<?> delete(@RequestHeader("Department-ID") long departmentId,
                                     @PathVariable long positionId,
                                     @PathVariable long employeeId){
         employeeService.deleteById(employeeId);

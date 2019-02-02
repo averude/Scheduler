@@ -13,7 +13,7 @@ import java.net.URI;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/v1/departments/{departmentId}/patterns")
+@RequestMapping("/api/v1/patterns")
 public class ShiftPatternController {
 
     private ShiftPatternService shiftPatternService;
@@ -24,12 +24,12 @@ public class ShiftPatternController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public Iterable<ShiftPattern> getAll(@PathVariable long departmentId) {
+    public Iterable<ShiftPattern> getAll(@RequestHeader("Department-ID") long departmentId) {
         return this.shiftPatternService.findAllByDepartmentId(departmentId);
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<?> create(@PathVariable long departmentId,
+    public ResponseEntity<?> create(@RequestHeader("Department-ID") long departmentId,
                                     @Valid @RequestBody ShiftPattern shiftPattern){
         if (departmentId == shiftPattern.getDepartmentId()) {
             this.shiftPatternService.save(shiftPattern);
@@ -45,14 +45,14 @@ public class ShiftPatternController {
 
     @RequestMapping(method = RequestMethod.GET,
                     value = "{patternId}")
-    public Optional<ShiftPattern> get(@PathVariable long departmentId,
+    public Optional<ShiftPattern> get(@RequestHeader("Department-ID") long departmentId,
                                       @PathVariable long patternId) {
         return this.shiftPatternService.findById(patternId);
     }
 
     @RequestMapping(method = RequestMethod.PUT,
                     value = "{patternId}")
-    public ResponseEntity<?> update(@PathVariable long departmentId,
+    public ResponseEntity<?> update(@RequestHeader("Department-ID") long departmentId,
                                     @PathVariable long patternId,
                                     @Valid @RequestBody ShiftPattern shiftPattern) {
         if (patternId == shiftPattern.getId() && departmentId == shiftPattern.getDepartmentId()) {
@@ -67,7 +67,7 @@ public class ShiftPatternController {
 
     @RequestMapping(method = RequestMethod.DELETE,
                     value = "{patternId}")
-    public ResponseEntity<?> delete(@PathVariable long departmentId,
+    public ResponseEntity<?> delete(@RequestHeader("Department-ID") long departmentId,
                                     @PathVariable long patternId) {
         this.shiftPatternService.deleteById(patternId);
         return new ResponseEntity<>("Shift pattern with ID:" + patternId +

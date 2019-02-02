@@ -12,7 +12,7 @@ import java.net.URI;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/v1/departments/{departmentId}/patterns/{patternId}/units")
+@RequestMapping("/api/v1/patterns/{patternId}/units")
 public class PatternUnitController {
 
     private PatternUnitService patternUnitService;
@@ -23,13 +23,13 @@ public class PatternUnitController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public Iterable<PatternUnit> getAll(@PathVariable long departmentId,
+    public Iterable<PatternUnit> getAll(@RequestHeader("Department-ID") long departmentId,
                                         @PathVariable long patternId) {
         return this.patternUnitService.findAllByPatternIdOrderByOrderId(patternId);
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<?> create(@PathVariable long departmentId,
+    public ResponseEntity<?> create(@RequestHeader("Department-ID") long departmentId,
                                     @PathVariable long patternId,
                                     @RequestBody PatternUnit unit) {
         if (patternId == unit.getPatternId()) {
@@ -47,7 +47,7 @@ public class PatternUnitController {
 
     @RequestMapping(method = RequestMethod.GET,
                     value = "{unitId}")
-    public Optional<PatternUnit> get(@PathVariable long departmentId,
+    public Optional<PatternUnit> get(@RequestHeader("Department-ID") long departmentId,
                                      @PathVariable long patternId,
                                      @PathVariable long unitId) {
         return this.patternUnitService.findById(unitId);
@@ -55,7 +55,7 @@ public class PatternUnitController {
 
     @RequestMapping(method = RequestMethod.PUT,
                     value = "{unitId}")
-    public ResponseEntity<?> update(@PathVariable long departmentId,
+    public ResponseEntity<?> update(@RequestHeader("Department-ID") long departmentId,
                                     @PathVariable long patternId,
                                     @PathVariable long unitId,
                                     @RequestBody PatternUnit unit) {
@@ -71,7 +71,7 @@ public class PatternUnitController {
 
     @RequestMapping(method = RequestMethod.DELETE,
                     value = "{unitId}")
-    public ResponseEntity<?> delete(@PathVariable long departmentId,
+    public ResponseEntity<?> delete(@RequestHeader("Department-ID") long departmentId,
                                     @PathVariable long patternId,
                                     @PathVariable long unitId) {
         this.patternUnitService.deleteById(unitId);

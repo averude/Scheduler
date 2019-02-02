@@ -12,7 +12,7 @@ import java.net.URI;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/v1/departments/{departmentId}/positions")
+@RequestMapping("/api/v1/positions")
 public class PositionController {
 
     private final PositionService positionService;
@@ -23,13 +23,13 @@ public class PositionController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public Iterable<Position> getAll(@PathVariable long departmentId){
+    public Iterable<Position> getAll(@RequestHeader("Department-ID") long departmentId){
         return positionService.findAllByDepartmentId(departmentId);
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<?> create(@PathVariable long departmentId,
-                                       @Valid @RequestBody Position position){
+    public ResponseEntity<?> create(@RequestHeader("Department-ID") long departmentId,
+                                    @Valid @RequestBody Position position){
         if (departmentId == position.getDepartmentId()) {
             positionService.save(position);
             URI location = ServletUriComponentsBuilder
@@ -44,14 +44,14 @@ public class PositionController {
 
     @RequestMapping(method = RequestMethod.GET,
                     value = "/{positionId}")
-    public Optional<Position> get(@PathVariable long departmentId,
+    public Optional<Position> get(@RequestHeader("Department-ID") long departmentId,
                                   @PathVariable long positionId){
         return positionService.findById(positionId);
     }
 
     @RequestMapping(method = RequestMethod.PUT,
                     value = "/{positionId}")
-    public ResponseEntity<?> update(@PathVariable long departmentId,
+    public ResponseEntity<?> update(@RequestHeader("Department-ID") long departmentId,
                                     @PathVariable long positionId,
                                     @Valid @RequestBody Position position){
         if (positionId == position.getId()) {
@@ -66,7 +66,7 @@ public class PositionController {
 
     @RequestMapping(method = RequestMethod.DELETE,
                     value = "/{positionId}")
-    public ResponseEntity<?> delete(@PathVariable long departmentId,
+    public ResponseEntity<?> delete(@RequestHeader("Department-ID") long departmentId,
                                     @PathVariable long positionId){
         positionService.deleteById(positionId);
         return ResponseEntity.ok("Position with ID:" + positionId +

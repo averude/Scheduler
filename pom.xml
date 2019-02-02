@@ -12,8 +12,9 @@
     <modules>
         <module>scheduler-core</module>
         <module>scheduler-shared</module>
-        <module>scheduler-rest-server</module>
         <module>scheduler-statistics-server</module>
+        <module>scheduler-api-admin-server</module>
+        <module>scheduler-api-client-server</module>
     </modules>
 
     <properties>

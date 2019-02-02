@@ -12,7 +12,7 @@ import java.net.URI;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/v1/departments/{departmentId}/shifts")
+@RequestMapping("/api/v1/shifts")
 public class ShiftController {
 
     private final ShiftService shiftService;
@@ -23,12 +23,13 @@ public class ShiftController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public Iterable<Shift> getAll(@PathVariable long departmentId){
+    public Iterable<Shift> getAll(@RequestHeader("Department-ID") long departmentId){
         return shiftService.findAllByDepartmentId(departmentId);
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<Long> create(@Valid @RequestBody Shift shift){
+    public ResponseEntity<Long> create(@RequestHeader("Department-ID") long departmentId,
+                                       @Valid @RequestBody Shift shift){
         shiftService.save(shift);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/{id}")
@@ -38,20 +39,23 @@ public class ShiftController {
 
     @RequestMapping(method = RequestMethod.GET,
                     value = "/{shiftId}")
-    public Optional<Shift> get(@PathVariable long shiftId){
+    public Optional<Shift> get(@RequestHeader("Department-ID") long departmentId,
+                               @PathVariable long shiftId){
         return shiftService.findById(shiftId);
     }
 
     @RequestMapping(method = RequestMethod.DELETE,
                     value = "/{shiftId}")
-    public ResponseEntity<?> delete(@PathVariable long shiftId){
+    public ResponseEntity<?> delete(@RequestHeader("Department-ID") long departmentId,
+                                    @PathVariable long shiftId){
         shiftService.deleteById(shiftId);
         return ResponseEntity.ok("Deleted " + shiftId);
     }
 
     @RequestMapping(method = RequestMethod.PUT,
                     value = "/{shiftId}")
-    public ResponseEntity<?> update(@PathVariable long shiftId,
+    public ResponseEntity<?> update(@RequestHeader("Department-ID") long departmentId,
+                                    @PathVariable long shiftId,
                                     @Valid @RequestBody Shift shift){
         if (shiftId == shift.getId()) {
             shiftService.save(shift);

@@ -22,8 +22,9 @@ public class ScheduleController {
     }
 
     @RequestMapping(method = RequestMethod.POST,
-                    value = "departments/{departmentId}/schedule/{employeeId}")
+                    value = "schedule/{employeeId}")
     public ResponseEntity<Iterable<WorkDay>> create(
+                                @RequestHeader("Department-ID") long departmentId,
                                 @PathVariable long employeeId,
                                 @Valid @RequestBody Iterable<WorkDay> schedule){
         scheduleService.saveAll(schedule);
@@ -31,8 +32,9 @@ public class ScheduleController {
     }
 
     @RequestMapping(method = RequestMethod.PUT,
-                    value = "departments/{departmentId}/schedule/{employeeId}")
-    public ResponseEntity<?> update(@PathVariable long employeeId,
+                    value = "schedule/{employeeId}")
+    public ResponseEntity<?> update(@RequestHeader("Department-ID") long departmentId,
+                                    @PathVariable long employeeId,
                                     @Valid @RequestBody Iterable<WorkDay> schedule) {
         scheduleService.saveAll(schedule);
         return ResponseEntity.ok("WorkDay was successfully updated");
