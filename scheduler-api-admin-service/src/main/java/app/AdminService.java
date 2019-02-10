@@ -3,6 +3,7 @@ package app;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.ResourceBundleMessageSource;
@@ -12,8 +13,9 @@ import org.springframework.validation.beanvalidation.MethodValidationPostProcess
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+@EnableDiscoveryClient
 @EntityScan("entity")
-@SpringBootApplication(scanBasePackages = {"service", "controller"})
+@SpringBootApplication(scanBasePackages = {"service", "controller", "errorhandlers"})
 @EnableJpaRepositories(basePackages = {"repository"})
 public class AdminService {
     public static void main(String[] args) {

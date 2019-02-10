@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import javax.validation.Valid;
 import java.util.Optional;
 
-@RequestMapping("/api/v1/departments")
+@RequestMapping("/departments")
 public interface DepartmentController {
     @RequestMapping(method = RequestMethod.GET)
     Iterable<Department> getAll();

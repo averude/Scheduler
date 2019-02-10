@@ -1,4 +1,4 @@
-package controller;
+package errorhandlers;
 
 import dto.ErrorDetails;
 import org.springframework.http.HttpHeaders;
@@ -16,7 +16,7 @@ import javax.validation.ConstraintViolationException;
 import java.time.LocalDateTime;
 
 @ControllerAdvice
-public class RestErrorHandler extends ResponseEntityExceptionHandler{
+public class RestErrorHandler extends ResponseEntityExceptionHandler {
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(

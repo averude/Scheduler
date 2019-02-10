@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.Optional;
 
-@RequestMapping("/api/v1/")
 public interface EmployeeController {
     @RequestMapping(method = RequestMethod.GET,
                     value = "/employees")

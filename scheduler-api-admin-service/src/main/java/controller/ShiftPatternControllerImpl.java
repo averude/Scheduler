@@ -14,7 +14,7 @@ import java.net.URI;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/v1/patterns")
+@RequestMapping("/patterns")
 public class ShiftPatternControllerImpl implements ShiftPatternController {
 
     private final ShiftPatternService shiftPatternService;

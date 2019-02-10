@@ -12,20 +12,22 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.1.2.RELEASE</version>
+        <version>2.1.0.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spring-cloud.version>Finchley.SR2</spring-cloud.version>
-        <spring.version>5.1.4.RELEASE</spring.version>
+        <spring-cloud.version>Greenwich.RELEASE</spring-cloud.version>
         <java.version>1.8</java.version>
     </properties>
 
     <modules>
         <module>scheduler-core</module>
         <module>scheduler-shared</module>
+        <module>scheduler-config-server</module>
+        <module>scheduler-registry-server</module>
+        <module>scheduler-gateway-server</module>
         <module>scheduler-api-statistics-service</module>
         <module>scheduler-api-admin-service</module>
         <module>scheduler-api-schedule-service</module>

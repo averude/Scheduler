@@ -1,0 +1,116 @@
+version: '3.7'
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    restart: always
+    ports:
+      - 15672:15672
+    #logging
+
+  scheduler-config-server:
+    build:
+      context: ./scheduler-config-server
+      dockerfile: Dockerfile
+    image: scheduler-config-server
+    restart: always
+    ports:
+      - $CONFIG_SERVER_PORT:8888
+    depends_on:
+      - rabbitmq
+
+  scheduler-database-server:
+    build:
+      context: ./scheduler-database-server
+      dockerfile: Dockerfile
+    image: scheduler-database-server
+    restart: always
+    volumes:
+      - ${DB_VOLUME_PATH}:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+
+  scheduler-registry-server:
+    environment:
+      CONFIG_SERVER_URL: $CONFIG_SERVER_URL
+      CONFIG_SERVER_PORT: $CONFIG_SERVER_PORT
+    build:
+      context: ./scheduler-registry-server
+      dockerfile: Dockerfile
+    image: scheduler-registry-server
+    restart: always
+    depends_on:
+      - scheduler-config-server
+    ports:
+      - 8761:8761
+
+  scheduler-gateway-server:
+    environment:
+      CONFIG_SERVER_URL: $CONFIG_SERVER_URL
+      CONFIG_SERVER_PORT: $CONFIG_SERVER_PORT
+    build:
+      context: ./scheduler-gateway-server
+      dockerfile: Dockerfile
+    image: scheduler-gateway-server
+    restart: always
+    depends_on:
+      - scheduler-config-server
+    ports:
+      - 80:4000
+
+  scheduler-api-admin-service:
+    environment:
+      CONFIG_SERVER_URL: $CONFIG_SERVER_URL
+      CONFIG_SERVER_PORT: $CONFIG_SERVER_PORT
+      DB_DRIVER_CLASS_NAME: $DB_DRIVER_CLASS_NAME
+      DB_URL: $DB_URL
+      DB_USERNAME: $DB_USERNAME
+      DB_PASSWD: $DB_PASSWD
+    build:
+      context: ./scheduler-api-admin-service
+      dockerfile: Dockerfile
+    image: scheduler-api-admin-service
+    restart: always
+    depends_on:
+      - scheduler-config-server
+      - scheduler-database-server
+    ports:
+      - 8081:8080
+
+  scheduler-api-schedule-service:
+    environment:
+      CONFIG_SERVER_URL: $CONFIG_SERVER_URL
+      CONFIG_SERVER_PORT: $CONFIG_SERVER_PORT
+      DB_DRIVER_CLASS_NAME: $DB_DRIVER_CLASS_NAME
+      DB_URL: $DB_URL
+      DB_USERNAME: $DB_USERNAME
+      DB_PASSWD: $DB_PASSWD
+    build:
+      context: ./scheduler-api-schedule-service
+      dockerfile: Dockerfile
+    image: scheduler-api-schedule-service
+    restart: always
+    depends_on:
+      - scheduler-config-server
+      - scheduler-database-server
+    ports:
+      - 8082:8080
+
+
+  scheduler-api-statistics-service:
+    environment:
+      CONFIG_SERVER_URL: $CONFIG_SERVER_URL
+      CONFIG_SERVER_PORT: $CONFIG_SERVER_PORT
+      DB_DRIVER_CLASS_NAME: $DB_DRIVER_CLASS_NAME
+      DB_URL: $DB_URL
+      DB_USERNAME: $DB_USERNAME
+      DB_PASSWD: $DB_PASSWD
+    build:
+      context: ./scheduler-api-statistics-service
+      dockerfile: Dockerfile
+    image: scheduler-api-statistics-service
+    restart: always
+    depends_on:
+      - scheduler-config-server
+      - scheduler-database-server
+    ports:
+      - 8083:8080

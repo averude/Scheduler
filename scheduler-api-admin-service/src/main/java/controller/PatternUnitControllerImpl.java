@@ -13,7 +13,7 @@ import java.net.URI;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/v1/patterns/{patternId}/units")
+@RequestMapping("/patterns/{patternId}/units")
 public class PatternUnitControllerImpl implements PatternUnitController {
 
     private final PatternUnitService patternUnitService;

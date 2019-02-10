@@ -1,0 +1,26 @@
+zuul:
+  ignoredServices: '*'
+  host:
+    connect-timeout-millis: 20000
+    socket-timeout-millis: 20000
+
+  routes:
+    admin-service:
+      path: /api/v1/admin/**
+      serviceId: scheduler-api-admin-service
+      stripPrefix: false
+      sensitiveHeaders:
+
+    schedule-service:
+      path: /api/v1/schedule/**
+      serviceId: scheduler-api-schedule-service
+      stripPrefix: false
+      sensitiveHeaders:
+
+    statistics-service:
+      path: /api/v1/statistics/**
+      serviceId: scheduler-api-statistics-service
+      stripPrefix: false
+      sensitiveHeaders:
+server:
+  port: 4000

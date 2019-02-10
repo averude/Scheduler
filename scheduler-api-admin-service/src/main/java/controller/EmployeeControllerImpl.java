@@ -13,7 +13,6 @@ import java.net.URI;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/v1/")
 public class EmployeeControllerImpl implements EmployeeController {
 
     private final EmployeeService employeeService;

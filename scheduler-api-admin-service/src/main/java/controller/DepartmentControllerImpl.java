@@ -14,7 +14,7 @@ import java.net.URI;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/v1/departments")
+@RequestMapping("/departments")
 public class DepartmentControllerImpl implements DepartmentController {
 
     private final DepartmentService departmentService;

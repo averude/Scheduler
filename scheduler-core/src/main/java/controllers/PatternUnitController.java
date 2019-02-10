@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
-@RequestMapping("/api/v1/patterns/{patternId}/units")
+@RequestMapping("/patterns/{patternId}/units")
 public interface PatternUnitController {
     @RequestMapping(method = RequestMethod.GET)
     Iterable<PatternUnit> getAll(@RequestHeader("Department-ID") long departmentId,

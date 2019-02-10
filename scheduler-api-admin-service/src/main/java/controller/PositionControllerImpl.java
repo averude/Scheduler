@@ -13,7 +13,7 @@ import java.net.URI;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/v1/positions")
+@RequestMapping("/positions")
 public class PositionControllerImpl implements PositionController {
 
     private final PositionService positionService;

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.Optional;
 
-@RequestMapping("/api/v1/patterns")
+@RequestMapping("/patterns")
 public interface ShiftPatternController {
     @RequestMapping(method = RequestMethod.GET)
     Iterable<ShiftPattern> getAll(@RequestHeader("Department-ID") long departmentId);

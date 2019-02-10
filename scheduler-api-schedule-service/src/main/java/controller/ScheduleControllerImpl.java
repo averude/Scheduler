@@ -12,7 +12,6 @@ import javax.validation.Valid;
 import java.time.LocalDate;
 
 @RestController
-@RequestMapping("/api/v1/")
 public class ScheduleControllerImpl implements ScheduleController {
 
     private final ScheduleService scheduleService;

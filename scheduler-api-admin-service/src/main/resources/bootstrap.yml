@@ -1,0 +1,9 @@
+spring:
+  applicaiton:
+    name: scheduler-api-admin-service
+  cloud:
+    config:
+      uri: http://${CONFIG_SERVER_URL}:${CONFIG_SERVER_PORT}
+      fail-fast: true
+      #password: ${CONFIG_SERVER_PASSWORD}
+      #username:

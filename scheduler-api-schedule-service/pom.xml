@@ -13,6 +13,7 @@
     <artifactId>scheduler-api-schedule-service</artifactId>
 
     <dependencies>
+        <!--Core dependencies-->
         <dependency>
             <groupId>com.averude.uksatse</groupId>
             <artifactId>scheduler-core</artifactId>
@@ -23,6 +24,8 @@
             <artifactId>scheduler-shared</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+
+        <!--Spring Boot-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -35,6 +38,17 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
+
+        <!--Spring Cloud-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-config</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
+
         <!--Prod DB-->
         <dependency>
             <groupId>org.postgresql</groupId>
@@ -60,6 +74,9 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <finalName>${project.name}</finalName>
+                </configuration>
             </plugin>
         </plugins>
     </build>

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.Optional;
 
-@RequestMapping("/api/v1/positions")
+@RequestMapping("/positions")
 public interface PositionController {
     @RequestMapping(method = RequestMethod.GET)
     Iterable<Position> getAll(@RequestHeader("Department-ID") long departmentId);

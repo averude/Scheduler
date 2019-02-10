@@ -14,7 +14,7 @@ import java.net.URI;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/v1/daytypes")
+@RequestMapping("/daytypes")
 public class DayTypeControllerImpl implements DayTypeController {
 
     private final DayTypeService dayTypeService;

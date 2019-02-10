@@ -13,7 +13,7 @@ import java.net.URI;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/v1/shifts")
+@RequestMapping("/shifts")
 public class ShiftControllerImpl implements ShiftController {
 
     private final ShiftService shiftService;

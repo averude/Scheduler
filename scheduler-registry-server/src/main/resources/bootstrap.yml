@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: scheduler-registry-server
+  cloud:
+    config:
+      uri: http://${CONFIG_SERVER_URL}:${CONFIG_SERVER_PORT}
+      fail-fast: true
+      #password: ${CONFIG-SERVICE-PASSWORD}
+      #username
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+  server:
+    waitTimeInMsWhenSyncEmpty: 0

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import javax.validation.Valid;
 import java.util.Optional;
 
-@RequestMapping("/api/v1/daytypes")
+@RequestMapping("/daytypes")
 public interface DayTypeController {
     @RequestMapping(method = RequestMethod.GET)
     Iterable<DayType> getAll();

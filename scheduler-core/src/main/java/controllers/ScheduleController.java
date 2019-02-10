@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.time.LocalDate;
 
-@RequestMapping("/api/v1/")
 public interface ScheduleController {
     @RequestMapping(method = RequestMethod.POST,
                     value = "schedule/{employeeId}")
