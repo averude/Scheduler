@@ -23,10 +23,10 @@ public class ScheduleControllerImpl implements ScheduleController {
 
     @Override
     @RequestMapping(method = RequestMethod.POST,
-                    value = "schedule/{employeeId}")
+                    value = "/{employeeId}")
     public ResponseEntity<Iterable<WorkDay>> create(
-            @RequestHeader("Department-ID") long departmentId,
-            @PathVariable long employeeId,
+            @RequestHeader("Department-ID") Long departmentId,
+            @PathVariable Long employeeId,
             @Valid @RequestBody Iterable<WorkDay> schedule){
         scheduleService.saveAll(schedule);
         return ResponseEntity.ok(schedule);
@@ -34,9 +34,9 @@ public class ScheduleControllerImpl implements ScheduleController {
 
     @Override
     @RequestMapping(method = RequestMethod.PUT,
-                    value = "schedule/{employeeId}")
-    public ResponseEntity<?> update(@RequestHeader("Department-ID") long departmentId,
-                                    @PathVariable long employeeId,
+                    value = "/{employeeId}")
+    public ResponseEntity<?> update(@RequestHeader("Department-ID") Long departmentId,
+                                    @PathVariable Long employeeId,
                                     @Valid @RequestBody Iterable<WorkDay> schedule) {
         scheduleService.saveAll(schedule);
         return ResponseEntity.ok("WorkDay was successfully updated");
@@ -44,7 +44,7 @@ public class ScheduleControllerImpl implements ScheduleController {
 
     @Override
     @RequestMapping(method = RequestMethod.GET,
-                    value = "schedule/search")
+                    value = "/search")
     public Iterable<WorkDay> searchInEmployee(@RequestParam(value = "employeeId", required = true)
                                                       Long employeeId,
                                               @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)

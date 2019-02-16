@@ -1,7 +1,9 @@
 FROM java:8-jre
 MAINTAINER Andrew Kolesnyk
 
+ADD ./startup.sh /app/
 ADD ./target/scheduler-registry-server.jar /app/
-CMD ["java", "-Xmx200m", "-jar", "/app/scheduler-registry-server.jar"]
+RUN chmod +x /app/startup.sh
+CMD ["/app/startup.sh", "/app/scheduler-registry-server.jar"]
 
 EXPOSE 8761

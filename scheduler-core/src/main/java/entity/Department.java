@@ -25,7 +25,7 @@ import java.util.Objects;
 public class Department implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Positive(message = "{entity.id.negative}")
     private Long id;
 

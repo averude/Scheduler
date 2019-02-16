@@ -1,7 +1,9 @@
 eureka:
+  instance:
+    prefer-ip-address: true
   client:
     serviceUrl:
-      defaultZone: http://${REGISTRY_SERVER_URL}:${REGISTRY_SERVER_PORT}/eureka/
+      defaultZone: ${REGISTRY_SERVER_URL:http://localhost:8761/eureka/}
 spring:
   rabbitmq:
     host: rabbitmq

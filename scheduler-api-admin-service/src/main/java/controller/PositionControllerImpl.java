@@ -25,41 +25,37 @@ public class PositionControllerImpl implements PositionController {
 
     @Override
     @RequestMapping(method = RequestMethod.GET)
-    public Iterable<Position> getAll(@RequestHeader("Department-ID") long departmentId){
+    public Iterable<Position> getAll(@RequestHeader("Department-ID") Long departmentId){
         return positionService.findAllByDepartmentId(departmentId);
     }
 
     @Override
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<?> create(@RequestHeader("Department-ID") long departmentId,
+    public ResponseEntity<?> create(@RequestHeader("Department-ID") Long departmentId,
                                     @Valid @RequestBody Position position){
-        if (departmentId == position.getDepartmentId()) {
-            positionService.save(position);
-            URI location = ServletUriComponentsBuilder
-                    .fromCurrentRequest().path("/{id}")
-                    .buildAndExpand(position.getId()).toUri();
-            return ResponseEntity.created(location).body(position.getId());
-        } else {
-            return ResponseEntity.unprocessableEntity()
-                    .body("URI's ID doesn't match to Entity's ID");
-        }
+        position.setDepartmentId(departmentId);
+        positionService.save(position);
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest().path("/{id}")
+                .buildAndExpand(position.getId()).toUri();
+        return ResponseEntity.created(location).body(position.getId());
     }
 
     @Override
     @RequestMapping(method = RequestMethod.GET,
                     value = "/{positionId}")
-    public Optional<Position> get(@RequestHeader("Department-ID") long departmentId,
-                                  @PathVariable long positionId){
+    public Optional<Position> get(@RequestHeader("Department-ID") Long departmentId,
+                                  @PathVariable Long positionId){
         return positionService.findById(positionId);
     }
 
     @Override
     @RequestMapping(method = RequestMethod.PUT,
                     value = "/{positionId}")
-    public ResponseEntity<?> update(@RequestHeader("Department-ID") long departmentId,
-                                    @PathVariable long positionId,
+    public ResponseEntity<?> update(@RequestHeader("Department-ID") Long departmentId,
+                                    @PathVariable Long positionId,
                                     @Valid @RequestBody Position position){
-        if (positionId == position.getId()) {
+        if (positionId.equals(position.getId())) {
             positionService.save(position);
             return ResponseEntity.ok("Position with ID:" + positionId +
                     " was successfully updated");
@@ -72,8 +68,8 @@ public class PositionControllerImpl implements PositionController {
     @Override
     @RequestMapping(method = RequestMethod.DELETE,
                     value = "/{positionId}")
-    public ResponseEntity<?> delete(@RequestHeader("Department-ID") long departmentId,
-                                    @PathVariable long positionId){
+    public ResponseEntity<?> delete(@RequestHeader("Department-ID") Long departmentId,
+                                    @PathVariable Long positionId){
         positionService.deleteById(positionId);
         return ResponseEntity.ok("Position with ID:" + positionId +
                 " was successfully deleted");

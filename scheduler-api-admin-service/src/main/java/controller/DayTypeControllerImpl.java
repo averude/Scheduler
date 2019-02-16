@@ -40,15 +40,15 @@ public class DayTypeControllerImpl implements DayTypeController {
 
     @RequestMapping(method = RequestMethod.GET,
                     value = "/{dayTypeId}")
-    public Optional<DayType> get(@PathVariable long dayTypeId) {
+    public Optional<DayType> get(@PathVariable Long dayTypeId) {
         return dayTypeService.findById(dayTypeId);
     }
 
     @RequestMapping(method = RequestMethod.PUT,
                     value = "/{dayTypeId}")
-    public ResponseEntity<?> put(@PathVariable long dayTypeId,
-                                 @RequestBody DayType dayType) {
-        if (dayTypeId == dayType.getId()) {
+    public ResponseEntity<?> put(@PathVariable Long dayTypeId,
+                                 @Valid @RequestBody DayType dayType) {
+        if (dayTypeId.equals(dayType.getId())) {
             dayTypeService.save(dayType);
             return ResponseEntity.ok("Day type with ID:" + dayTypeId +
                     " was successfully updated");
@@ -60,7 +60,7 @@ public class DayTypeControllerImpl implements DayTypeController {
 
     @RequestMapping(method = RequestMethod.DELETE,
                     value = "/{dayTypeId}")
-    public ResponseEntity<?> delete(@PathVariable long dayTypeId) {
+    public ResponseEntity<?> delete(@PathVariable Long dayTypeId) {
         dayTypeService.deleteById(dayTypeId);
         return new ResponseEntity<>("Day type with ID:" + dayTypeId +
                 " was successfully deleted", HttpStatus.NO_CONTENT);

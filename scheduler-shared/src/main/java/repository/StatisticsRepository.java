@@ -12,6 +12,6 @@ public interface StatisticsRepository extends Repository<Position, Long> {
             "Position p " +
             "on e.positionId = p.id " +
             "where p.departmentId = ?1 " +
-            "group by e.positionId")
+            "group by p.id")
     Iterable<CountDTO> countEmployeesByDepartmentId(long departmentId);
 }

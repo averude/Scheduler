@@ -20,14 +20,14 @@ public interface DepartmentController {
 
     @RequestMapping(method = RequestMethod.GET,
                     value = "/{departmentId}")
-    Optional<Department> get(@PathVariable long departmentId);
+    Optional<Department> get(@PathVariable Long departmentId);
 
     @RequestMapping(method = RequestMethod.PUT,
                     value = "/{departmentId}")
-    ResponseEntity<?> update(@PathVariable long departmentId,
+    ResponseEntity<?> update(@PathVariable Long departmentId,
                              @Valid @RequestBody Department department);
 
     @RequestMapping(method = RequestMethod.DELETE,
                     value = "/{departmentId}")
-    ResponseEntity<?> delete(@PathVariable long departmentId);
+    ResponseEntity<?> delete(@PathVariable Long departmentId);
 }

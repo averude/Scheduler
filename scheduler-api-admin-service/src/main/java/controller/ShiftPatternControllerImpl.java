@@ -26,41 +26,37 @@ public class ShiftPatternControllerImpl implements ShiftPatternController {
 
     @Override
     @RequestMapping(method = RequestMethod.GET)
-    public Iterable<ShiftPattern> getAll(@RequestHeader("Department-ID") long departmentId) {
+    public Iterable<ShiftPattern> getAll(@RequestHeader("Department-ID") Long departmentId) {
         return this.shiftPatternService.findAllByDepartmentId(departmentId);
     }
 
     @Override
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<?> create(@RequestHeader("Department-ID") long departmentId,
+    public ResponseEntity<?> create(@RequestHeader("Department-ID") Long departmentId,
                                     @Valid @RequestBody ShiftPattern shiftPattern){
-        if (departmentId == shiftPattern.getDepartmentId()) {
-            this.shiftPatternService.save(shiftPattern);
-            URI location = ServletUriComponentsBuilder
-                    .fromCurrentRequest().path("/{id}")
-                    .buildAndExpand(shiftPattern.getId()).toUri();
-            return ResponseEntity.created(location).body(shiftPattern.getId());
-        } else {
-            return ResponseEntity.unprocessableEntity()
-                    .body("URI's ID doesn't match to Entity's ID");
-        }
+        shiftPattern.setDepartmentId(departmentId);
+        this.shiftPatternService.save(shiftPattern);
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest().path("/{id}")
+                .buildAndExpand(shiftPattern.getId()).toUri();
+        return ResponseEntity.created(location).body(shiftPattern.getId());
     }
 
     @Override
     @RequestMapping(method = RequestMethod.GET,
                     value = "{patternId}")
-    public Optional<ShiftPattern> get(@RequestHeader("Department-ID") long departmentId,
-                                      @PathVariable long patternId) {
+    public Optional<ShiftPattern> get(@RequestHeader("Department-ID") Long departmentId,
+                                      @PathVariable Long patternId) {
         return this.shiftPatternService.findById(patternId);
     }
 
     @Override
     @RequestMapping(method = RequestMethod.PUT,
                     value = "{patternId}")
-    public ResponseEntity<?> update(@RequestHeader("Department-ID") long departmentId,
-                                    @PathVariable long patternId,
+    public ResponseEntity<?> update(@RequestHeader("Department-ID") Long departmentId,
+                                    @PathVariable Long patternId,
                                     @Valid @RequestBody ShiftPattern shiftPattern) {
-        if (patternId == shiftPattern.getId() && departmentId == shiftPattern.getDepartmentId()) {
+        if (patternId.equals(shiftPattern.getId()) && departmentId.equals(shiftPattern.getDepartmentId())) {
             this.shiftPatternService.save(shiftPattern);
             return ResponseEntity.ok("Shift pattern with ID:" + patternId +
                     " was successfully updated");
@@ -73,8 +69,8 @@ public class ShiftPatternControllerImpl implements ShiftPatternController {
     @Override
     @RequestMapping(method = RequestMethod.DELETE,
                     value = "{patternId}")
-    public ResponseEntity<?> delete(@RequestHeader("Department-ID") long departmentId,
-                                    @PathVariable long patternId) {
+    public ResponseEntity<?> delete(@RequestHeader("Department-ID") Long departmentId,
+                                    @PathVariable Long patternId) {
         this.shiftPatternService.deleteById(patternId);
         return new ResponseEntity<>("Shift pattern with ID:" + patternId +
                 " was successfully deleted", HttpStatus.NO_CONTENT);

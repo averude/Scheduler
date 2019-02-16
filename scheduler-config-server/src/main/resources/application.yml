@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: scheduler-config-server
   cloud:
     config:
       server:
@@ -6,12 +8,10 @@ spring:
           search-locations: classpath:/shared
   profiles:
     active: native
-#  security:
-#    user:
-#      password: ${CONFIG_SERVER_PASSWORD}
 server:
   port: 8888
+
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://${REGISTRY_SERVER_URL}:${REGISTRY_SERVER_PORT}/eureka/
+      defaultZone: ${REGISTRY_SERVER_URL:http://localhost:8761/eureka/}

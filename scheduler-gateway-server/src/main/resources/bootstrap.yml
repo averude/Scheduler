@@ -5,9 +5,4 @@ spring:
     config:
       uri: http://${CONFIG_SERVER_URL}:${CONFIG_SERVER_PORT}
       fail-fast: true
-      #password: ${CONFIG_SERVER_PASSWORD}
-      #user:
-#eureka:
-#  client:
-#    serviceUrl:
-#      defaultZone: http://localhost:8080/eureka/
+      profile: native

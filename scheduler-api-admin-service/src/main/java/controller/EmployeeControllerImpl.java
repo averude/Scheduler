@@ -25,25 +25,25 @@ public class EmployeeControllerImpl implements EmployeeController {
     @Override
     @RequestMapping(method = RequestMethod.GET,
                     value = "/employees")
-    public Iterable<Employee> getAllInDepartment(@RequestHeader("Department-ID") long departmentId) {
+    public Iterable<Employee> getAllInDepartment(@RequestHeader("Department-ID") Long departmentId) {
         return employeeService.findAllByDepartmentId(departmentId);
     }
 
     @Override
     @RequestMapping(method = RequestMethod.GET,
                     value = "/positions/{positionId}/employees")
-    public Iterable<Employee> getAllInPosition(@RequestHeader("Department-ID") long departmentId,
-                                               @PathVariable long positionId){
+    public Iterable<Employee> getAllInPosition(@RequestHeader("Department-ID") Long departmentId,
+                                               @PathVariable Long positionId){
         return employeeService.findAllByPositionId(positionId);
     }
 
     @Override
     @RequestMapping(method = RequestMethod.POST,
                     value = "/positions/{positionId}/employees")
-    public ResponseEntity<?> create(@RequestHeader("Department-ID") long departmentId,
-                                    @PathVariable long positionId,
+    public ResponseEntity<?> create(@RequestHeader("Department-ID") Long departmentId,
+                                    @PathVariable Long positionId,
                                     @Valid @RequestBody Employee employee){
-        if (positionId == employee.getPositionId()) {
+        if (positionId.equals(employee.getPositionId())) {
             employeeService.save(employee);
             URI location = ServletUriComponentsBuilder
                     .fromCurrentRequest().path("/{id}")
@@ -59,20 +59,20 @@ public class EmployeeControllerImpl implements EmployeeController {
     @Override
     @RequestMapping(method = RequestMethod.GET,
                     value = "/positions/{positionId}/employees/{employeeId}")
-    public Optional<Employee> get(@RequestHeader("Department-ID") long departmentId,
-                                  @PathVariable long positionId,
-                                  @PathVariable long employeeId){
+    public Optional<Employee> get(@RequestHeader("Department-ID") Long departmentId,
+                                  @PathVariable Long positionId,
+                                  @PathVariable Long employeeId){
         return employeeService.findById(employeeId);
     }
 
     @Override
     @RequestMapping(method = RequestMethod.PUT,
                     value = "/positions/{positionId}/employees/{employeeId}")
-    public ResponseEntity<?> update(@RequestHeader("Department-ID") long departmentId,
-                                    @PathVariable long positionId,
-                                    @PathVariable long employeeId,
+    public ResponseEntity<?> update(@RequestHeader("Department-ID") Long departmentId,
+                                    @PathVariable Long positionId,
+                                    @PathVariable Long employeeId,
                                     @Valid @RequestBody Employee employee){
-        if (positionId != employee.getPositionId() && employeeId == employee.getId()) {
+        if (positionId.equals(employee.getPositionId()) && employeeId.equals(employee.getId())) {
             employeeService.save(employee);
             return ResponseEntity.ok("Employee with ID:" + employeeId +
                     " was successfully updated");
@@ -86,9 +86,9 @@ public class EmployeeControllerImpl implements EmployeeController {
     @Override
     @RequestMapping(method = RequestMethod.DELETE,
                     value = "/positions/{positionId}/employees/{employeeId}")
-    public ResponseEntity<?> delete(@RequestHeader("Department-ID") long departmentId,
-                                    @PathVariable long positionId,
-                                    @PathVariable long employeeId){
+    public ResponseEntity<?> delete(@RequestHeader("Department-ID") Long departmentId,
+                                    @PathVariable Long positionId,
+                                    @PathVariable Long employeeId){
         employeeService.deleteById(employeeId);
         return ResponseEntity.ok("Employee with ID:" + employeeId +
                 " was successfully deleted");

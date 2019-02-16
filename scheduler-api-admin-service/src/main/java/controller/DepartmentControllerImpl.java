@@ -22,9 +22,6 @@ public class DepartmentControllerImpl implements DepartmentController {
     @Autowired
     DepartmentControllerImpl(DepartmentService departmentService) {
         this.departmentService = departmentService;
-        Department d = new Department();
-        d.setName("TEST");
-        departmentService.save(d);
     }
 
     @Override
@@ -46,16 +43,16 @@ public class DepartmentControllerImpl implements DepartmentController {
     @Override
     @RequestMapping(method = RequestMethod.GET,
                     value = "/{departmentId}")
-    public Optional<Department> get(@PathVariable long departmentId) {
+    public Optional<Department> get(@PathVariable Long departmentId) {
         return departmentService.findById(departmentId);
     }
 
     @Override
     @RequestMapping(method = RequestMethod.PUT,
                     value = "/{departmentId}")
-    public ResponseEntity<?> update(@PathVariable long departmentId,
+    public ResponseEntity<?> update(@PathVariable Long departmentId,
                                     @Valid @RequestBody Department department) {
-        if (departmentId == department.getId()) {
+        if (departmentId.equals(department.getId())) {
             departmentService.save(department);
             return ResponseEntity.ok("Department with ID:" + departmentId +
                     " was successfully updated");
@@ -68,7 +65,7 @@ public class DepartmentControllerImpl implements DepartmentController {
     @Override
     @RequestMapping(method = RequestMethod.DELETE,
                     value = "/{departmentId}")
-    public ResponseEntity<?> delete(@PathVariable long departmentId){
+    public ResponseEntity<?> delete(@PathVariable Long departmentId){
         departmentService.deleteById(departmentId);
         return new ResponseEntity<>("Department with ID:" + departmentId +
                 " was successfully deleted", HttpStatus.NO_CONTENT);

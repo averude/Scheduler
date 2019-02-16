@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import service.PatternUnitService;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.Optional;
 
@@ -25,17 +26,17 @@ public class PatternUnitControllerImpl implements PatternUnitController {
 
     @Override
     @RequestMapping(method = RequestMethod.GET)
-    public Iterable<PatternUnit> getAll(@RequestHeader("Department-ID") long departmentId,
-                                        @PathVariable long patternId) {
+    public Iterable<PatternUnit> getAll(@RequestHeader("Department-ID") Long departmentId,
+                                        @PathVariable Long patternId) {
         return this.patternUnitService.findAllByPatternIdOrderByOrderId(patternId);
     }
 
     @Override
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<?> create(@RequestHeader("Department-ID") long departmentId,
-                                    @PathVariable long patternId,
-                                    @RequestBody PatternUnit unit) {
-        if (patternId == unit.getPatternId()) {
+    public ResponseEntity<?> create(@RequestHeader("Department-ID") Long departmentId,
+                                    @PathVariable Long patternId,
+                                    @Valid @RequestBody PatternUnit unit) {
+        if (patternId.equals(unit.getPatternId())) {
             this.patternUnitService.save(unit);
             URI location = ServletUriComponentsBuilder
                     .fromCurrentRequest().path("/{id}")
@@ -51,20 +52,20 @@ public class PatternUnitControllerImpl implements PatternUnitController {
     @Override
     @RequestMapping(method = RequestMethod.GET,
                     value = "{unitId}")
-    public Optional<PatternUnit> get(@RequestHeader("Department-ID") long departmentId,
-                                     @PathVariable long patternId,
-                                     @PathVariable long unitId) {
+    public Optional<PatternUnit> get(@RequestHeader("Department-ID") Long departmentId,
+                                     @PathVariable Long patternId,
+                                     @PathVariable Long unitId) {
         return this.patternUnitService.findById(unitId);
     }
 
     @Override
     @RequestMapping(method = RequestMethod.PUT,
                     value = "{unitId}")
-    public ResponseEntity<?> update(@RequestHeader("Department-ID") long departmentId,
-                                    @PathVariable long patternId,
-                                    @PathVariable long unitId,
-                                    @RequestBody PatternUnit unit) {
-        if (unitId == unit.getId() && patternId == unit.getPatternId()) {
+    public ResponseEntity<?> update(@RequestHeader("Department-ID") Long departmentId,
+                                    @PathVariable Long patternId,
+                                    @PathVariable Long unitId,
+                                    @Valid @RequestBody PatternUnit unit) {
+        if (unitId.equals(unit.getId()) && patternId.equals(unit.getPatternId())) {
             this.patternUnitService.save(unit);
             return ResponseEntity.ok("Unit with ID:" + unitId +
                     " was successfully updated");
@@ -77,9 +78,9 @@ public class PatternUnitControllerImpl implements PatternUnitController {
     @Override
     @RequestMapping(method = RequestMethod.DELETE,
                     value = "{unitId}")
-    public ResponseEntity<?> delete(@RequestHeader("Department-ID") long departmentId,
-                                    @PathVariable long patternId,
-                                    @PathVariable long unitId) {
+    public ResponseEntity<?> delete(@RequestHeader("Department-ID") Long departmentId,
+                                    @PathVariable Long patternId,
+                                    @PathVariable Long unitId) {
         this.patternUnitService.deleteById(unitId);
         return new ResponseEntity<>("Unit with ID:" + unitId +
                 " was successfully deleted", HttpStatus.NO_CONTENT);

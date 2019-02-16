@@ -27,7 +27,8 @@ public class ScheduleService {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/api/**");
+                registry.addMapping("/**")
+                        .allowedMethods("GET", "PUT", "POST", "HEAD", "DELETE");
             }
         };
     }

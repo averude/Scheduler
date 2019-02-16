@@ -3,14 +3,10 @@ package controller;
 import controllers.StatisticsController;
 import dto.CountDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import repository.StatisticsRepository;
 
 @RestController
-@RequestMapping("/statistics")
 public class StatisticsControllerImpl implements StatisticsController {
 
     private final StatisticsRepository statisticsRepository;
@@ -21,8 +17,8 @@ public class StatisticsControllerImpl implements StatisticsController {
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.GET, value = "/positions/{departmentId}")
-    public Iterable<CountDTO> getEmployeesCountOnPositionsByDepartmentId(@PathVariable long departmentId) {
+    @RequestMapping(method = RequestMethod.GET, value = "/positions/employees")
+    public Iterable<CountDTO> getNumberOfEmployeesInPositionsByDepartmentId(@RequestHeader("Department-ID") Long departmentId) {
         return statisticsRepository.countEmployeesByDepartmentId(departmentId);
     }
 }

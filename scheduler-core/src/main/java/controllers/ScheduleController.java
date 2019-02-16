@@ -10,20 +10,20 @@ import java.time.LocalDate;
 
 public interface ScheduleController {
     @RequestMapping(method = RequestMethod.POST,
-                    value = "schedule/{employeeId}")
+                    value = "/{employeeId}")
     ResponseEntity<Iterable<WorkDay>> create(
-            @RequestHeader("Department-ID") long departmentId,
-            @PathVariable long employeeId,
+            @RequestHeader("Department-ID") Long departmentId,
+            @PathVariable Long employeeId,
             @Valid @RequestBody Iterable<WorkDay> schedule);
 
     @RequestMapping(method = RequestMethod.PUT,
-                    value = "schedule/{employeeId}")
-    ResponseEntity<?> update(@RequestHeader("Department-ID") long departmentId,
-                             @PathVariable long employeeId,
+                    value = "/{employeeId}")
+    ResponseEntity<?> update(@RequestHeader("Department-ID") Long departmentId,
+                             @PathVariable Long employeeId,
                              @Valid @RequestBody Iterable<WorkDay> schedule);
 
     @RequestMapping(method = RequestMethod.GET,
-                    value = "schedule/search")
+                    value = "/search")
     Iterable<WorkDay> searchInEmployee(@RequestParam(value = "employeeId", required = true)
                                                Long employeeId,
                                        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)

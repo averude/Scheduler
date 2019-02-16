@@ -5,9 +5,10 @@ services:
     restart: always
     ports:
       - 15672:15672
-    #logging
 
   scheduler-config-server:
+    environment:
+      REGISTRY_SERVER_URL: $REGISTRY_SERVER_URL
     build:
       context: ./scheduler-config-server
       dockerfile: Dockerfile
@@ -47,6 +48,7 @@ services:
     environment:
       CONFIG_SERVER_URL: $CONFIG_SERVER_URL
       CONFIG_SERVER_PORT: $CONFIG_SERVER_PORT
+      REGISTRY_SERVER_URL: $REGISTRY_SERVER_URL
     build:
       context: ./scheduler-gateway-server
       dockerfile: Dockerfile
@@ -55,12 +57,13 @@ services:
     depends_on:
       - scheduler-config-server
     ports:
-      - 80:4000
+      - 8080:4000
 
   scheduler-api-admin-service:
     environment:
       CONFIG_SERVER_URL: $CONFIG_SERVER_URL
       CONFIG_SERVER_PORT: $CONFIG_SERVER_PORT
+      REGISTRY_SERVER_URL: $REGISTRY_SERVER_URL
       DB_DRIVER_CLASS_NAME: $DB_DRIVER_CLASS_NAME
       DB_URL: $DB_URL
       DB_USERNAME: $DB_USERNAME
@@ -80,6 +83,7 @@ services:
     environment:
       CONFIG_SERVER_URL: $CONFIG_SERVER_URL
       CONFIG_SERVER_PORT: $CONFIG_SERVER_PORT
+      REGISTRY_SERVER_URL: $REGISTRY_SERVER_URL
       DB_DRIVER_CLASS_NAME: $DB_DRIVER_CLASS_NAME
       DB_URL: $DB_URL
       DB_USERNAME: $DB_USERNAME
@@ -100,6 +104,7 @@ services:
     environment:
       CONFIG_SERVER_URL: $CONFIG_SERVER_URL
       CONFIG_SERVER_PORT: $CONFIG_SERVER_PORT
+      REGISTRY_SERVER_URL: $REGISTRY_SERVER_URL
       DB_DRIVER_CLASS_NAME: $DB_DRIVER_CLASS_NAME
       DB_URL: $DB_URL
       DB_USERNAME: $DB_USERNAME
