@@ -1,0 +1,19 @@
+zuul:
+  prefix: /api/v1
+  ignoredServices: '*'
+  host:
+    connect-timeout-millis: 20000
+    socket-timeout-millis: 20000
+
+  routes:
+    scheduler-api-admin-service:
+      path: /admin/**
+      serviceId: scheduler-api-admin-service
+    scheduler-api-schedule-service:
+      path: /schedule/**
+      serviceId: scheduler-api-schedule-service
+    scheduler-api-statistics-service:
+      path: /statistics/**
+      serviceId: scheduler-api-statistics-service
+server:
+  port: 4000

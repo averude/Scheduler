@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: scheduler-gateway-server
+  cloud:
+    config:
+      uri: http://${CONFIG_SERVER_URL}:${CONFIG_SERVER_PORT}
+      fail-fast: true
+      profile: native
