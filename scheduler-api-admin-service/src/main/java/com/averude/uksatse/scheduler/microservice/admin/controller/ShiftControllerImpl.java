@@ -59,18 +59,10 @@ public class ShiftControllerImpl implements ShiftController {
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.PUT,
-                    value = "/{shiftId}")
+    @RequestMapping(method = RequestMethod.PUT)
     public ResponseEntity<?> update(@RequestHeader("Department-ID") Long departmentId,
-                                    @PathVariable Long shiftId,
                                     @Valid @RequestBody Shift shift){
-        if (shiftId.equals(shift.getId()) && departmentId.equals(shift.getDepartmentId())) {
-            shiftService.save(shift);
-            return ResponseEntity.ok("Updated " + shiftId);
-        } else {
-            return ResponseEntity.unprocessableEntity()
-                    .body("URI's ID doesn't match to Entity's ID");
-        }
-
+        shiftService.save(shift);
+        return ResponseEntity.ok("Updated " + shift.getId());
     }
 }

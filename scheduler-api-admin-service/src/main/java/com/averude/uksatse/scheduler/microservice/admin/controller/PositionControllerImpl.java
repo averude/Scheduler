@@ -50,19 +50,12 @@ public class PositionControllerImpl implements PositionController {
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.PUT,
-                    value = "/{positionId}")
+    @RequestMapping(method = RequestMethod.PUT)
     public ResponseEntity<?> update(@RequestHeader("Department-ID") Long departmentId,
-                                    @PathVariable Long positionId,
                                     @Valid @RequestBody Position position){
-        if (positionId.equals(position.getId())) {
-            positionService.save(position);
-            return ResponseEntity.ok("Position with ID:" + positionId +
-                    " was successfully updated");
-        } else {
-            return ResponseEntity.unprocessableEntity()
-                    .body("URI's ID doesn't match to Entity's ID");
-        }
+        positionService.save(position);
+        return ResponseEntity.ok("Position with ID:" + position.getId() +
+                " was successfully updated");
     }
 
     @Override

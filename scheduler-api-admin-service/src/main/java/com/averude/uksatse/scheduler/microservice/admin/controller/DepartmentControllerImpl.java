@@ -48,18 +48,11 @@ public class DepartmentControllerImpl implements DepartmentController {
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.PUT,
-                    value = "/{departmentId}")
-    public ResponseEntity<?> update(@PathVariable Long departmentId,
-                                    @Valid @RequestBody Department department) {
-        if (departmentId.equals(department.getId())) {
-            departmentService.save(department);
-            return ResponseEntity.ok("Department with ID:" + departmentId +
-                    " was successfully updated");
-        } else {
-            return ResponseEntity.unprocessableEntity()
-                    .body("URI's ID doesn't match to Entity's ID");
-        }
+    @RequestMapping(method = RequestMethod.PUT)
+    public ResponseEntity<?> update(@Valid @RequestBody Department department) {
+        departmentService.save(department);
+        return ResponseEntity.ok("Department with ID:" + department.getId() +
+                " was successfully updated");
     }
 
     @Override

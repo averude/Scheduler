@@ -53,18 +53,12 @@ public class PatternUnitControllerImpl implements PatternUnitController {
 
     @Override
     @RequestMapping(method = RequestMethod.PUT,
-                    value = "/units/{unitId}")
+                    value = "/units")
     public ResponseEntity<?> update(@RequestHeader("Department-ID") Long departmentId,
-                                    @PathVariable Long unitId,
                                     @Valid @RequestBody PatternUnit unit) {
-        if (unitId.equals(unit.getId())) {
-            this.patternUnitService.save(unit);
-            return ResponseEntity.ok("Unit with ID:" + unitId +
-                    " was successfully updated");
-        } else {
-            return ResponseEntity.unprocessableEntity()
-                    .body("URI's ID doesn't match to Entity's ID");
-        }
+        this.patternUnitService.save(unit);
+        return ResponseEntity.ok("Unit with ID:" + unit.getId() +
+                " was successfully updated");
     }
 
     @Override

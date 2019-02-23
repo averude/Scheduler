@@ -60,12 +60,11 @@ public class EmployeeControllerImpl implements EmployeeController {
 
     @Override
     @RequestMapping(method = RequestMethod.PUT,
-                    value = "/employees/{employeeId}")
+                    value = "/employees")
     public ResponseEntity<?> update(@RequestHeader("Department-ID") Long departmentId,
-                                    @PathVariable Long employeeId,
                                     @Valid @RequestBody Employee employee){
         employeeService.save(employee);
-        return ResponseEntity.ok("Employee with ID:" + employeeId +
+        return ResponseEntity.ok("Employee with ID:" + employee.getId() +
                 " was successfully updated");
     }
 
