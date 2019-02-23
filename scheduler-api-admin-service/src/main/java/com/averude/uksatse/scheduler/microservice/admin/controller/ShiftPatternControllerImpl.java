@@ -51,19 +51,12 @@ public class ShiftPatternControllerImpl implements ShiftPatternController {
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.PUT,
-                    value = "{patternId}")
+    @RequestMapping(method = RequestMethod.PUT)
     public ResponseEntity<?> update(@RequestHeader("Department-ID") Long departmentId,
-                                    @PathVariable Long patternId,
                                     @Valid @RequestBody ShiftPattern shiftPattern) {
-        if (patternId.equals(shiftPattern.getId()) && departmentId.equals(shiftPattern.getDepartmentId())) {
-            this.shiftPatternService.save(shiftPattern);
-            return ResponseEntity.ok("Shift pattern with ID:" + patternId +
-                    " was successfully updated");
-        } else {
-            return ResponseEntity.unprocessableEntity()
-                    .body("URI's ID doesn't match to Entity's ID");
-        }
+        this.shiftPatternService.save(shiftPattern);
+        return ResponseEntity.ok("Shift pattern with ID:" + shiftPattern.getId() +
+                " was successfully updated");
     }
 
     @Override

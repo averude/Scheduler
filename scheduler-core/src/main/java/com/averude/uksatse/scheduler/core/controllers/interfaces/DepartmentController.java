@@ -22,10 +22,8 @@ public interface DepartmentController {
                     value = "/{departmentId}")
     Optional<Department> get(@PathVariable Long departmentId);
 
-    @RequestMapping(method = RequestMethod.PUT,
-                    value = "/{departmentId}")
-    ResponseEntity<?> update(@PathVariable Long departmentId,
-                             @Valid @RequestBody Department department);
+    @RequestMapping(method = RequestMethod.PUT)
+    ResponseEntity<?> update(@Valid @RequestBody Department department);
 
     @RequestMapping(method = RequestMethod.DELETE,
                     value = "/{departmentId}")

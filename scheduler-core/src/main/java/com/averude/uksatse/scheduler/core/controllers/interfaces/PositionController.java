@@ -21,10 +21,8 @@ public interface PositionController {
     Optional<Position> get(@RequestHeader("Department-ID") Long departmentId,
                            @PathVariable Long positionId);
 
-    @RequestMapping(method = RequestMethod.PUT,
-                    value = "/{positionId}")
+    @RequestMapping(method = RequestMethod.PUT)
     ResponseEntity<?> update(@RequestHeader("Department-ID") Long departmentId,
-                             @PathVariable Long positionId,
                              @Valid @RequestBody Position position);
 
     @RequestMapping(method = RequestMethod.DELETE,

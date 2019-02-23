@@ -44,18 +44,11 @@ public class DayTypeControllerImpl implements DayTypeController {
         return dayTypeService.findById(dayTypeId);
     }
 
-    @RequestMapping(method = RequestMethod.PUT,
-                    value = "/{dayTypeId}")
-    public ResponseEntity<?> put(@PathVariable Long dayTypeId,
-                                 @Valid @RequestBody DayType dayType) {
-        if (dayTypeId.equals(dayType.getId())) {
-            dayTypeService.save(dayType);
-            return ResponseEntity.ok("Day type with ID:" + dayTypeId +
-                    " was successfully updated");
-        } else {
-            return ResponseEntity.unprocessableEntity()
-                    .body("URI's ID doesn't match to Entity's ID");
-        }
+    @RequestMapping(method = RequestMethod.PUT)
+    public ResponseEntity<?> put(@Valid @RequestBody DayType dayType) {
+        dayTypeService.save(dayType);
+        return ResponseEntity.ok("Day type with ID:" + dayType.getId() +
+                " was successfully updated");
     }
 
     @RequestMapping(method = RequestMethod.DELETE,

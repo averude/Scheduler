@@ -22,10 +22,8 @@ public interface DayTypeController {
                     value = "/{dayTypeId}")
     Optional<DayType> get(@PathVariable Long dayTypeId);
 
-    @RequestMapping(method = RequestMethod.PUT,
-                    value = "/{dayTypeId}")
-    ResponseEntity<?> put(@PathVariable Long dayTypeId,
-                          @Valid @RequestBody DayType dayType);
+    @RequestMapping(method = RequestMethod.PUT)
+    ResponseEntity<?> put(@Valid @RequestBody DayType dayType);
 
     @RequestMapping(method = RequestMethod.DELETE,
                     value = "/{dayTypeId}")

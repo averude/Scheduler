@@ -14,7 +14,6 @@ import java.net.URI;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/patterns/{patternId}/units")
 public class PatternUnitControllerImpl implements PatternUnitController {
 
     private final PatternUnitService patternUnitService;
@@ -25,61 +24,47 @@ public class PatternUnitControllerImpl implements PatternUnitController {
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET,
+                    value = "/patterns/{patternId}/units")
     public Iterable<PatternUnit> getAll(@RequestHeader("Department-ID") Long departmentId,
                                         @PathVariable Long patternId) {
         return this.patternUnitService.findAllByPatternIdOrderByOrderId(patternId);
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST,
+                    value = "/units")
     public ResponseEntity<?> create(@RequestHeader("Department-ID") Long departmentId,
-                                    @PathVariable Long patternId,
                                     @Valid @RequestBody PatternUnit unit) {
-        if (patternId.equals(unit.getPatternId())) {
-            this.patternUnitService.save(unit);
-            URI location = ServletUriComponentsBuilder
-                    .fromCurrentRequest().path("/{id}")
-                    .buildAndExpand(unit.getId()).toUri();
-            return ResponseEntity.created(location).body(unit.getId());
-        } else {
-            return ResponseEntity.unprocessableEntity()
-                    .body("URI's ID doesn't match to Entity's ID");
-        }
-
+        this.patternUnitService.save(unit);
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest().path("/{id}")
+                .buildAndExpand(unit.getId()).toUri();
+        return ResponseEntity.created(location).body(unit.getId());
     }
 
     @Override
     @RequestMapping(method = RequestMethod.GET,
-                    value = "{unitId}")
+                    value = "/units/{unitId}")
     public Optional<PatternUnit> get(@RequestHeader("Department-ID") Long departmentId,
-                                     @PathVariable Long patternId,
                                      @PathVariable Long unitId) {
         return this.patternUnitService.findById(unitId);
     }
 
     @Override
     @RequestMapping(method = RequestMethod.PUT,
-                    value = "{unitId}")
+                    value = "/units")
     public ResponseEntity<?> update(@RequestHeader("Department-ID") Long departmentId,
-                                    @PathVariable Long patternId,
-                                    @PathVariable Long unitId,
                                     @Valid @RequestBody PatternUnit unit) {
-        if (unitId.equals(unit.getId()) && patternId.equals(unit.getPatternId())) {
-            this.patternUnitService.save(unit);
-            return ResponseEntity.ok("Unit with ID:" + unitId +
-                    " was successfully updated");
-        } else {
-            return ResponseEntity.unprocessableEntity()
-                    .body("URI's ID doesn't match to Entity's ID");
-        }
+        this.patternUnitService.save(unit);
+        return ResponseEntity.ok("Unit with ID:" + unit.getId() +
+                " was successfully updated");
     }
 
     @Override
     @RequestMapping(method = RequestMethod.DELETE,
-                    value = "{unitId}")
+                    value = "/units/{unitId}")
     public ResponseEntity<?> delete(@RequestHeader("Department-ID") Long departmentId,
-                                    @PathVariable Long patternId,
                                     @PathVariable Long unitId) {
         this.patternUnitService.deleteById(unitId);
         return new ResponseEntity<>("Unit with ID:" + unitId +
