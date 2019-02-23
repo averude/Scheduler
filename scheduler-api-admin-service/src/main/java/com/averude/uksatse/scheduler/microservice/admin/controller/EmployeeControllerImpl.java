@@ -39,55 +39,40 @@ public class EmployeeControllerImpl implements EmployeeController {
 
     @Override
     @RequestMapping(method = RequestMethod.POST,
-                    value = "/positions/{positionId}/employees")
+                    value = "/employees")
     public ResponseEntity<?> create(@RequestHeader("Department-ID") Long departmentId,
-                                    @PathVariable Long positionId,
                                     @Valid @RequestBody Employee employee){
-        if (positionId.equals(employee.getPositionId())) {
-            employeeService.save(employee);
-            URI location = ServletUriComponentsBuilder
-                    .fromCurrentRequest().path("/{id}")
-                    .buildAndExpand(employee.getId()).toUri();
-            return ResponseEntity.created(location).body(employee.getId());
-        } else {
-            return ResponseEntity.unprocessableEntity()
-                    .body("URI's ID doesn't match to Entity's ID");
-        }
+        employeeService.save(employee);
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest().path("/{id}")
+                .buildAndExpand(employee.getId()).toUri();
+        return ResponseEntity.created(location).body(employee.getId());
 
     }
 
     @Override
     @RequestMapping(method = RequestMethod.GET,
-                    value = "/positions/{positionId}/employees/{employeeId}")
+                    value = "/employees/{employeeId}")
     public Optional<Employee> get(@RequestHeader("Department-ID") Long departmentId,
-                                  @PathVariable Long positionId,
                                   @PathVariable Long employeeId){
         return employeeService.findById(employeeId);
     }
 
     @Override
     @RequestMapping(method = RequestMethod.PUT,
-                    value = "/positions/{positionId}/employees/{employeeId}")
+                    value = "/employees/{employeeId}")
     public ResponseEntity<?> update(@RequestHeader("Department-ID") Long departmentId,
-                                    @PathVariable Long positionId,
                                     @PathVariable Long employeeId,
                                     @Valid @RequestBody Employee employee){
-        if (positionId.equals(employee.getPositionId()) && employeeId.equals(employee.getId())) {
-            employeeService.save(employee);
-            return ResponseEntity.ok("Employee with ID:" + employeeId +
-                    " was successfully updated");
-        } else {
-            return ResponseEntity.unprocessableEntity()
-                    .body("URI's ID doesn't match to Entity's ID");
-        }
-
+        employeeService.save(employee);
+        return ResponseEntity.ok("Employee with ID:" + employeeId +
+                " was successfully updated");
     }
 
     @Override
     @RequestMapping(method = RequestMethod.DELETE,
-                    value = "/positions/{positionId}/employees/{employeeId}")
+                    value = "/employees/{employeeId}")
     public ResponseEntity<?> delete(@RequestHeader("Department-ID") Long departmentId,
-                                    @PathVariable Long positionId,
                                     @PathVariable Long employeeId){
         employeeService.deleteById(employeeId);
         return ResponseEntity.ok("Employee with ID:" + employeeId +

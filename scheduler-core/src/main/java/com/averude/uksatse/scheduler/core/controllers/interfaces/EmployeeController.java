@@ -18,27 +18,23 @@ public interface EmployeeController {
                                         @PathVariable Long positionId);
 
     @RequestMapping(method = RequestMethod.POST,
-                    value = "/positions/{positionId}/employees")
+                    value = "/employees")
     ResponseEntity<?> create(@RequestHeader("Department-ID") Long departmentId,
-                             @PathVariable Long positionId,
                              @Valid @RequestBody Employee employee);
 
     @RequestMapping(method = RequestMethod.GET,
-                    value = "/positions/{positionId}/employees/{employeeId}")
+                    value = "/employees/{employeeId}")
     Optional<Employee> get(@RequestHeader("Department-ID") Long departmentId,
-                           @PathVariable Long positionId,
                            @PathVariable Long employeeId);
 
     @RequestMapping(method = RequestMethod.PUT,
-                    value = "/positions/{positionId}/employees/{employeeId}")
+                    value = "/employees/{employeeId}")
     ResponseEntity<?> update(@RequestHeader("Department-ID") Long departmentId,
-                             @PathVariable Long positionId,
                              @PathVariable Long employeeId,
                              @Valid @RequestBody Employee employee);
 
     @RequestMapping(method = RequestMethod.DELETE,
-                    value = "/positions/{positionId}/employees/{employeeId}")
+                    value = "/employees/{employeeId}")
     ResponseEntity<?> delete(@RequestHeader("Department-ID") Long departmentId,
-                             @PathVariable Long positionId,
                              @PathVariable Long employeeId);
 }
