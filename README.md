@@ -71,7 +71,7 @@ PUT     | /{employee_id}                      | Update work days for specified e
 
 Method  | Path                                              | Description
 --------|---------------------------------------------------|-------------------------------
-GET     | /positions/employees                              | Get a number of employees in the each position of the department 
+GET     | /positions/employees                              | Get a number of employees in each position of the department 
 ---------------------------------------------------------------------------------------------
 
 ##  Related Projects
