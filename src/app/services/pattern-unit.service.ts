@@ -27,7 +27,7 @@ export class PatternUnitService {
 
   update(patternUnit: PatternUnit): Observable<any> {
     return this.http.put(
-      `${this.config.baseUrl}/admin/patterns/units/${patternUnit.id}`,
+      `${this.config.baseUrl}/admin/units`,
       patternUnit,
       {responseType: 'text'}
     );
@@ -35,7 +35,7 @@ export class PatternUnitService {
 
   remove(patternUnitId: number): Observable<any> {
     return this.http.delete(
-      `${this.config.baseUrl}/admin/patterns/units/${patternUnitId}`,
+      `${this.config.baseUrl}/admin/units/${patternUnitId}`,
       {responseType: 'text'}
     );
   }

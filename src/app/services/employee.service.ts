@@ -39,7 +39,7 @@ export class EmployeeService {
 
   update(employee: Employee): Observable<any> {
     return this.http.put(
-      `${this.config.baseUrl}/admin/employees/${employee.id}`,
+      `${this.config.baseUrl}/admin/employees`,
       employee,
       {responseType: 'text'}
     );

@@ -33,7 +33,7 @@ export class DayTypeService {
 
   update(dayType: DayType): Observable<any> {
     return this.http.put(
-      `${this.config.baseUrl}/admin/daytypes/${dayType.id}`,
+      `${this.config.baseUrl}/admin/daytypes/`,
       dayType,
       {responseType: 'text'}
     );

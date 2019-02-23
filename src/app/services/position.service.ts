@@ -27,7 +27,7 @@ export class PositionService {
 
   update(position: Position): Observable<any> {
     return this.http.put(
-      `${this.config.baseUrl}/admin/positions/${position.id}`,
+      `${this.config.baseUrl}/admin/positions`,
       position,
       {responseType: 'text'}
     );

@@ -27,7 +27,7 @@ export class ShiftService {
 
   update(shift: Shift): Observable<any> {
     return this.http.put(
-      `${this.config.baseUrl}/admin/shifts/${shift.id}`,
+      `${this.config.baseUrl}/admin/shifts`,
       shift,
       {responseType: 'text'}
     );

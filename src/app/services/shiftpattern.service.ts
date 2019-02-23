@@ -27,7 +27,7 @@ export class ShiftPatternService {
 
   update(pattern: ShiftPattern): Observable<any> {
     return this.http.put(
-      `${this.config.baseUrl}/admin/patterns/${pattern.id}`,
+      `${this.config.baseUrl}/admin/patterns`,
       pattern,
       {responseType: 'text'}
     );
