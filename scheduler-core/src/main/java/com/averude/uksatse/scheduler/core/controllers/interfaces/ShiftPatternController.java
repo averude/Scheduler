@@ -21,10 +21,8 @@ public interface ShiftPatternController {
     Optional<ShiftPattern> get(@RequestHeader("Department-ID") Long departmentId,
                                @PathVariable Long patternId);
 
-    @RequestMapping(method = RequestMethod.PUT,
-                    value = "{patternId}")
+    @RequestMapping(method = RequestMethod.PUT)
     ResponseEntity<?> update(@RequestHeader("Department-ID") Long departmentId,
-                             @PathVariable Long patternId,
                              @Valid @RequestBody ShiftPattern shiftPattern);
 
     @RequestMapping(method = RequestMethod.DELETE,

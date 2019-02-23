@@ -28,9 +28,8 @@ public interface EmployeeController {
                            @PathVariable Long employeeId);
 
     @RequestMapping(method = RequestMethod.PUT,
-                    value = "/employees/{employeeId}")
+                    value = "/employees")
     ResponseEntity<?> update(@RequestHeader("Department-ID") Long departmentId,
-                             @PathVariable Long employeeId,
                              @Valid @RequestBody Employee employee);
 
     @RequestMapping(method = RequestMethod.DELETE,

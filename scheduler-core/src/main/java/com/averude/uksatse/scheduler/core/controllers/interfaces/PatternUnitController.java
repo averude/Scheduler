@@ -24,9 +24,8 @@ public interface PatternUnitController {
                               @PathVariable Long unitId);
 
     @RequestMapping(method = RequestMethod.PUT,
-                    value = "/units/{unitId}")
+                    value = "/units")
     ResponseEntity<?> update(@RequestHeader("Department-ID") Long departmentId,
-                             @PathVariable Long unitId,
                              @Valid @RequestBody PatternUnit unit);
 
     @RequestMapping(method = RequestMethod.DELETE,

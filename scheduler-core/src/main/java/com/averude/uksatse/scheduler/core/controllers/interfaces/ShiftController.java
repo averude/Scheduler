@@ -26,9 +26,7 @@ public interface ShiftController {
     ResponseEntity<?> delete(@RequestHeader("Department-ID") Long departmentId,
                              @PathVariable Long shiftId);
 
-    @RequestMapping(method = RequestMethod.PUT,
-                    value = "/{shiftId}")
+    @RequestMapping(method = RequestMethod.PUT)
     ResponseEntity<?> update(@RequestHeader("Department-ID") Long departmentId,
-                             @PathVariable Long shiftId,
                              @Valid @RequestBody Shift shift);
 }
