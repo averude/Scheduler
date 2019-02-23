@@ -3,27 +3,30 @@ package com.averude.uksatse.scheduler.core.dto;
 import java.io.Serializable;
 
 public class CountDTO implements Serializable {
-    private long id;
-    private long count;
+    private Long id;
+    private Long count;
 
-    public CountDTO(long id, long count) {
+    public CountDTO() {
+    }
+
+    public CountDTO(Long id, Long count) {
         this.id = id;
         this.count = count;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public long getCount() {
+    public Long getCount() {
         return count;
     }
 
-    public void setCount(long count) {
+    public void setCount(Long count) {
         this.count = count;
     }
 }

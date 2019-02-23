@@ -69,6 +69,28 @@ public class Employee implements Serializable {
                 orphanRemoval = true)
     private List<@NotNull @Valid WorkDay> scheduleList = new ArrayList<>();
 
+    public Employee() {
+    }
+
+    public Employee(@NotNull(message = "{employee.firstname.null}")
+                    @Size(max = 20,
+                          min = 3,
+                          message = "{employee.firstname.size}")
+                    String firstName,
+                    @Size(max = 20,
+                          min = 3,
+                          message = "{employee.patronymic.size}")
+                    String patronymic,
+                    @NotNull(message = "{employee.secondname.null}")
+                    @Size(max = 20,
+                          min = 3,
+                          message = "{employee.secondname.size}")
+                    String secondName) {
+        this.firstName = firstName;
+        this.patronymic = patronymic;
+        this.secondName = secondName;
+    }
+
     public Long getId() {
         return id;
     }

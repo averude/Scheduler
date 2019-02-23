@@ -74,7 +74,7 @@ CREATE TABLE work_schedule (
   employee_id   INTEGER       NOT NULL,
   day_type_id   INTEGER,
   holiday       BOOLEAN       NOT NULL  DEFAULT FALSE,
-  hours         FLOAT         NOT NULL  CHECK (hours > 0 AND hours < 24),
+  hours         FLOAT         NOT NULL  CHECK (hours >= 0 AND hours <= 24),
   label         VARCHAR (5),
   date          DATE          NOT NULL,
   UNIQUE (employee_id, date),

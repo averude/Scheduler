@@ -48,6 +48,17 @@ public class Position implements Serializable {
                 orphanRemoval = true)
     private Set<@NotNull @Valid Employee> employees = new HashSet<>();
 
+    public Position() {
+    }
+
+    public Position(@NotNull(message = "{position.name.null}")
+                    @Size(max = 64,
+                          min = 3,
+                          message = "{position.name.size}")
+                    String name) {
+        this.name = name;
+    }
+
     public Long getId() {
         return id;
     }

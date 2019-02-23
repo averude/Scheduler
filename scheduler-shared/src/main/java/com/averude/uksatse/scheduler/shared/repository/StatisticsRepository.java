@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 
 public interface StatisticsRepository extends Repository<Position, Long> {
-    @Query("select new dto.CountDTO(p.id, count(e))" +
+    @Query("select new com.averude.uksatse.scheduler.core.dto.CountDTO(p.id, count(e))" +
             "from Employee e " +
             "inner join " +
             "Position p " +

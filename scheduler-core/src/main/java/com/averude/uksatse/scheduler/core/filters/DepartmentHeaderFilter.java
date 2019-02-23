@@ -17,7 +17,7 @@ public class DepartmentHeaderFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
-        if (!hasValidDepartmentHeader(request)) {
+        if (!hasValidDepartmentHeader(request) && hasRestMethods(request)) {
             logger.warn(getWarnMessage(request));
             HttpServletResponse response = (HttpServletResponse) servletResponse;
             response.setContentType("application/json");
@@ -40,6 +40,14 @@ public class DepartmentHeaderFilter implements Filter {
     private boolean hasValidDepartmentHeader(HttpServletRequest request) {
         return request.getHeader("Department-ID") != null &&
                 Long.parseLong(request.getHeader("Department-ID")) > 0;
+    }
+
+    private boolean hasRestMethods(HttpServletRequest request) {
+        String method = request.getMethod();
+        return method.equals("GET") ||
+                method.equals("POST") ||
+                method.equals("PUT") ||
+                method.equals("DELETE");
     }
 
     private String getWarnMessage(HttpServletRequest request) {

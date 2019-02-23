@@ -23,12 +23,6 @@
             <groupId>com.averude.uksatse</groupId>
             <artifactId>scheduler-shared</artifactId>
             <version>0.0.1-SNAPSHOT</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework.data</groupId>
-                    <artifactId>spring-data-jpa</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <!--Spring Boot-->
@@ -69,8 +63,8 @@
         </dependency>
         <!--Test DB-->
         <dependency>
-            <groupId>org.apache.derby</groupId>
-            <artifactId>derby</artifactId>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>

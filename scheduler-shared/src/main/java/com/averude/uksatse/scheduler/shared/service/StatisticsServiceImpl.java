@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import com.averude.uksatse.scheduler.shared.repository.StatisticsRepository;
 
 @Service
-public class StatisticsServiceImpl implements StatisticsService {
+public class StatisticsServiceImpl implements com.averude.uksatse.scheduler.shared.service.StatisticsService {
     private final StatisticsRepository statisticsRepository;
 
     @Autowired

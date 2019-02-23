@@ -57,6 +57,17 @@ public class Department implements Serializable {
                 orphanRemoval = true)
     private List<@NotNull @Valid Shift> shifts = new ArrayList<>();
 
+    public Department() {
+    }
+
+    public Department(@NotNull(message = "{department.name.empty}")
+                      @Size(max = 64,
+                            min = 3,
+                            message = "{department.name.size}")
+                      String name) {
+        this.name = name;
+    }
+
     public Long getId() {
         return id;
     }
@@ -132,13 +143,11 @@ public class Department implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Department that = (Department) o;
-        return Objects.equals(id, that.id) &&
-                Objects.equals(name, that.name) &&
-                Objects.equals(positions, that.positions);
+        return name.equals(that.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name);
+        return Objects.hash(name);
     }
 }

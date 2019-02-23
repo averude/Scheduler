@@ -9,6 +9,7 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(
@@ -56,6 +57,18 @@ public class DayType implements Serializable {
     public DayType() {
     }
 
+    public DayType(@NotNull(message = "{daytype.name.null}")
+                   @Size(max = 64,
+                         min = 1,
+                         message = "{daytype.name.size}")
+                   String name,
+                   @Size(max = 5,
+                         message = "{daytype.label.size}")
+                   String label) {
+        this.name = name;
+        this.label = label;
+    }
+
     public Long getId() {
         return id;
     }
@@ -94,5 +107,19 @@ public class DayType implements Serializable {
 
     public void setWorkDays(List<WorkDay> workDays) {
         this.workDays = workDays;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DayType dayType = (DayType) o;
+        return name.equals(dayType.name) &&
+                label.equals(dayType.label);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, label);
     }
 }

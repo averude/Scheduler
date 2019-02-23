@@ -19,6 +19,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EntityScan("com.averude.uksatse.scheduler.core.entity")
 @SpringBootApplication(scanBasePackages = {
         "com.averude.uksatse.scheduler.shared.service",
+        "com.averude.uksatse.scheduler.microservice.admin",
         "com.averude.uksatse.scheduler.core.errorhandlers"
 })
 @EnableJpaRepositories(basePackages = {"com.averude.uksatse.scheduler.shared.repository"})
@@ -42,7 +43,6 @@ public class AdminServiceApplication {
     public FilterRegistrationBean departmentHeaderFilter() {
         FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
         filterRegistrationBean.setFilter(new DepartmentHeaderFilter());
-        filterRegistrationBean.setOrder(1);
         return filterRegistrationBean;
     }
 
