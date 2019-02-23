@@ -40,7 +40,7 @@ public class AdminServiceApplicationTest {
         });
 
         validDayType.setLabel("T1");
-        dayTypeController.put(validDayType.getId(), validDayType);
+        dayTypeController.put(validDayType);
         result = dayTypeController.get(validDayType.getId());
         assertTrue(result.isPresent());
         result.ifPresent(value -> {
@@ -82,7 +82,7 @@ public class AdminServiceApplicationTest {
         });
 
         validDepartment.setName("Another name");
-        departmentController.update(validDepartment.getId(), validDepartment);
+        departmentController.update(validDepartment);
         result = departmentController.get(validDepartment.getId());
         assertTrue(result.isPresent());
         result.ifPresent(value -> {
