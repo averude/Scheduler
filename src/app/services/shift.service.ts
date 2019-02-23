@@ -12,32 +12,31 @@ export class ShiftService {
   constructor(private http: HttpClient,
               private config: RestConfig) { }
 
-  getByDepartmentId(departmentId: number): Observable<Shift[]> {
+  getAll(): Observable<Shift[]> {
     return this.http.get<Shift[]>(
-      `${this.config.baseUrl}/departments/${departmentId}/shifts`
+      `${this.config.baseUrl}/admin/shifts`
     );
   }
 
-  create(departmentId: number,
-         shift: Shift): Observable<any> {
-    return this.http.post(
-      `${this.config.baseUrl}/departments/${departmentId}/shifts`,
-      shift
+  create(shift: Shift): Observable<any> {
+    return this.http.post<number>(
+      `${this.config.baseUrl}/admin/shifts`,
+      shift,
     );
   }
 
-  update(departmentId: number,
-         shift: Shift): Observable<any> {
+  update(shift: Shift): Observable<any> {
     return this.http.put(
-      `${this.config.baseUrl}/departments/${departmentId}/shifts/${shift.id}`,
-      shift
+      `${this.config.baseUrl}/admin/shifts/${shift.id}`,
+      shift,
+      {responseType: 'text'}
     );
   }
 
-  remove(departmentId: number,
-         shiftId: number): Observable<any> {
+  remove(shiftId: number): Observable<any> {
     return this.http.delete(
-      `${this.config.baseUrl}/departments/${departmentId}/shifts/${shiftId}`
+      `${this.config.baseUrl}/admin/shifts/${shiftId}`,
+      {responseType: 'text'}
     );
   }
 }

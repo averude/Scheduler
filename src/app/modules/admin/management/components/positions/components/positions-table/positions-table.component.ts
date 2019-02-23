@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Position } from '../../../../../../../model/position';
 import { PositionService } from '../../../../../../../services/position.service';
-import { EmployeeService } from '../../../../../../../services/employee.service';
-import { Employee } from '../../../../../../../model/employee';
 import { NotificationsService } from "angular2-notifications";
+import { CountDTO } from "../../../../../../../model/count-dto";
+import { StatisticsService } from "../../../../../../../services/statistics.service";
 
 @Component({
   selector: 'app-positions',
@@ -12,61 +12,59 @@ import { NotificationsService } from "angular2-notifications";
 })
 export class PositionsTableComponent implements OnInit {
 
-  departmentId = 1;
   positions: Position[];
-  employees: Employee[];
+  employeesCount: CountDTO[];
 
   constructor(private notificationService: NotificationsService,
               private positionService: PositionService,
-              private employeeService: EmployeeService) { }
+              private statisticsService: StatisticsService) { }
 
   ngOnInit() {
-    this.positionService.getByDepartmentId(this.departmentId)
+    this.positionService.getAll()
       .subscribe(positions => this.positions = positions);
-    this.employeeService.getByDepartmentId(this.departmentId)
-      .subscribe(employees => this.employees = employees);
+    this.statisticsService.getNumberOfEmployeesInPositions()
+      .subscribe(countDTOs => this.employeesCount = countDTOs);
   }
 
-  getQuantity(positionId: number): number {
-    if (this.employees) {
-      return this.employees
-        .filter(employee => employee.positionId === positionId)
-        .length;
+  getQuantity(positionId: number): number|string {
+    if (this.employeesCount) {
+      let dto = this.employeesCount
+        .find(countDTO => countDTO.id === positionId);
+      return dto ? dto.count : '-';
     } else {
-      return 0;
+      return '-';
     }
   }
 
   createPosition(position: Position) {
-    this.positionService.create(this.departmentId, position)
+    this.positionService.create(position)
       .subscribe(res => {
         position.id = res;
         this.positions.push(position);
         this.notificationService.success(
-          'CREATED',
-          `Position ${position.name} was succesfully created`
-        )
+          ' Created',
+          `Position "${position.name}" was successfully created`
+        );
       });
   }
 
   updatePosition(position: Position) {
-    this.positionService.update(this.departmentId, position)
+    this.positionService.update(position)
       .subscribe(res => this.notificationService.success(
-        'UPDATED',
-        `Position ${position.name} was succesfully updated`
+        'Updated',
+        `Position "${position.name}" was successfully updated`
       ));
   }
 
   removePosition(position: Position) {
-    this.positionService.remove(this.departmentId, position.id)
+    this.positionService.remove(position.id)
       .subscribe(res => {
-        console.log(res);
         this.positions = this.positions
           .filter(value => value !== position);
         this.notificationService.success(
-          'DELETED',
-          `Position ${position.name} was succesfully deleted`
-        )
+          'Deleted',
+          `Position "${position.name}" was successfully deleted`
+        );
       });
   }
 }

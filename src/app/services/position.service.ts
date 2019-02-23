@@ -12,32 +12,31 @@ export class PositionService {
   constructor(private http: HttpClient,
               private config: RestConfig) { }
 
-  getByDepartmentId(departmentId: number): Observable<Position[]> {
+  getAll(): Observable<Position[]> {
     return this.http.get<Position[]>(
-      `${this.config.baseUrl}/departments/${departmentId}/positions`
+      `${this.config.baseUrl}/admin/positions`
     );
   }
 
-  create(departmentId: number,
-         position: Position): Observable<any> {
+  create(position: Position): Observable<any> {
      return this.http.post<number>(
-       `${this.config.baseUrl}/departments/${departmentId}/positions`,
-       position
+       `${this.config.baseUrl}/admin/positions`,
+       position,
      );
   }
 
-  update(departmentId: number,
-         position: Position): Observable<any> {
+  update(position: Position): Observable<any> {
     return this.http.put(
-      `${this.config.baseUrl}/departments/${departmentId}/positions/${position.id}`,
-      position
+      `${this.config.baseUrl}/admin/positions/${position.id}`,
+      position,
+      {responseType: 'text'}
     );
   }
 
-  remove(departmentId: number,
-         positionId: number): Observable<any> {
+  remove(positionId: number): Observable<any> {
     return this.http.delete(
-      `${this.config.baseUrl}/departments/${departmentId}/positions/${positionId}`
+      `${this.config.baseUrl}/admin/positions/${positionId}`,
+      {responseType: 'text'}
     );
   }
 }

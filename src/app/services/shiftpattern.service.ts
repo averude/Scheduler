@@ -12,32 +12,31 @@ export class ShiftPatternService {
   constructor(private http: HttpClient,
               private config: RestConfig) { }
 
-  getByDepartmentId(departmentId: number): Observable<ShiftPattern[]> {
+  getAll(): Observable<ShiftPattern[]> {
     return this.http.get<ShiftPattern[]>(
-      `${this.config.baseUrl}/departments/${departmentId}/patterns`
+      `${this.config.baseUrl}/admin/patterns`
     );
   }
 
-  create(departmentId: number,
-         pattern: ShiftPattern): Observable<any> {
-    return this.http.post(
-      `${this.config.baseUrl}/departments/${departmentId}/patterns`,
+  create(pattern: ShiftPattern): Observable<any> {
+    return this.http.post<number>(
+      `${this.config.baseUrl}/admin/patterns`,
       pattern
     );
   }
 
-  update(departmentId: number,
-         pattern: ShiftPattern): Observable<any> {
+  update(pattern: ShiftPattern): Observable<any> {
     return this.http.put(
-      `${this.config.baseUrl}/departments/${departmentId}/patterns/${pattern.id}`,
-      pattern
+      `${this.config.baseUrl}/admin/patterns/${pattern.id}`,
+      pattern,
+      {responseType: 'text'}
     );
   }
 
-  remove(departmentId: number,
-         patternId: number): Observable<any> {
+  remove(patternId: number): Observable<any> {
     return this.http.delete(
-      `${this.config.baseUrl}/departments/${departmentId}/patterns/${patternId}`
+      `${this.config.baseUrl}/admin/patterns/${patternId}`,
+      {responseType: 'text'}
     );
   }
 }

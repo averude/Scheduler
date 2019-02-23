@@ -15,11 +15,10 @@ import { NotificationsService } from "angular2-notifications";
 })
 export class PatternSequenceComponent implements OnInit, OnDestroy {
 
-  @Input() departmentId: number;
   @Input() dayTypes: DayType[];
 
   units: PatternUnit[] = [];
-  private patternId:    number;
+  patternId: number;
   // Subscriptions
   private unitsSub:     Subscription;
   private unitUpSub:    Subscription;
@@ -34,9 +33,12 @@ export class PatternSequenceComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.unitsSub = this.switchService.patternId
       .pipe(mergeMap(patternId => {
-        this.patternId = patternId;
-        return this.patternUnitService
-          .getByPatternId(this.departmentId, patternId);
+        if (patternId) {
+          this.patternId = patternId;
+          return this.patternUnitService
+            .getByPatternId(patternId);
+        }
+
       }))
       .subscribe(units => this.units = units);
     this.unitUpSub = this.unitControlService.getMoveUp()
@@ -111,12 +113,15 @@ export class PatternSequenceComponent implements OnInit, OnDestroy {
   }
 
   private createOrUpdate(unit: PatternUnit) {
+    console.log(unit);
     if (unit.id) {
-      this.patternUnitService.update(this.departmentId, this.patternId, unit)
-        .subscribe();
+      this.patternUnitService.update(unit)
+        .subscribe(res => this.notificationService
+          .success("Unit was successfully updated"));
     } else {
-      this.patternUnitService.create(this.departmentId, this.patternId, unit)
-        .subscribe();
+      this.patternUnitService.create(unit)
+        .subscribe(res => this.notificationService
+          .success("Unit was successfully created"));
     }
   }
 }

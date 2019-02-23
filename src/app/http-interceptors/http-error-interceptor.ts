@@ -4,7 +4,11 @@ import { Injectable } from "@angular/core";
 import { NotificationsService } from "angular2-notifications";
 import { catchError } from "rxjs/operators";
 
-const TIMEOUT = {timeOut: 5000};
+const OPTIONS = {
+  timeOut: 5000,
+  showProgressBar: true,
+  preventDuplicates: true
+};
 
 @Injectable()
 export class HttpErrorInterceptor implements HttpInterceptor {
@@ -16,14 +20,14 @@ export class HttpErrorInterceptor implements HttpInterceptor {
       .pipe(catchError((err: HttpErrorResponse) => {
         if (err.error instanceof Error) {
           this.notificationsService
-            .error('An error occurred', err.error.message, TIMEOUT);
+            .error('An error occurred', err.error.message, OPTIONS);
         } else {
           if (err.status) {
             this.notificationsService
-              .error('Backend error', `Status code: ${err.status}`, TIMEOUT);
+              .error(`Backend error. Code: ${err.status} `, `${err.message}`, OPTIONS);
           } else {
             this.notificationsService
-              .error('Backend error', `Server is not responding`, TIMEOUT);
+              .error('Backend error', `Server is not responding`, OPTIONS);
           }
         }
         return throwError(err);

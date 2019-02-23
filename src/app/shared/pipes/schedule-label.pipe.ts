@@ -15,7 +15,7 @@ export class ScheduleLabelPipe implements PipeTransform {
         return value.hours;
       }
     } else {
-      return 0;
+      return '-';
     }
   }
 }

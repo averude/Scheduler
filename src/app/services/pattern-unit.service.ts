@@ -12,36 +12,31 @@ export class PatternUnitService {
   constructor(private http: HttpClient,
               private config: RestConfig) { }
 
-  getByPatternId(departmentId: number,
-                 patternId: number): Observable<PatternUnit[]> {
+  getByPatternId(patternId: number): Observable<PatternUnit[]> {
     return this.http.get<PatternUnit[]>(
-      `${this.config.baseUrl}/departments/${departmentId}/patterns/${patternId}/units`
+      `${this.config.baseUrl}/admin/patterns/${patternId}/units`
     );
   }
 
-  create(departmentId: number,
-         patternId: number,
-         patternUnit: PatternUnit): Observable<any> {
-    return this.http.post(
-      `${this.config.baseUrl}/departments/${departmentId}/patterns/${patternId}/units`,
+  create(patternUnit: PatternUnit): Observable<any> {
+    return this.http.post<number>(
+      `${this.config.baseUrl}/admin/units`,
       patternUnit
     );
   }
 
-  update(departmentId: number,
-         patternId: number,
-         patternUnit: PatternUnit): Observable<any> {
+  update(patternUnit: PatternUnit): Observable<any> {
     return this.http.put(
-      `${this.config.baseUrl}/departments/${departmentId}/patterns/${patternId}/units/${patternUnit.id}`,
-      patternUnit
+      `${this.config.baseUrl}/admin/patterns/units/${patternUnit.id}`,
+      patternUnit,
+      {responseType: 'text'}
     );
   }
 
-  remove(departmentId: number,
-         patternId: number,
-         patternUnitId: number): Observable<any> {
+  remove(patternUnitId: number): Observable<any> {
     return this.http.delete(
-      `${this.config.baseUrl}/departments/${departmentId}/patterns/${patternId}/units/${patternUnitId}`
+      `${this.config.baseUrl}/admin/patterns/units/${patternUnitId}`,
+      {responseType: 'text'}
     );
   }
 }

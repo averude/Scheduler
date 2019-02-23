@@ -135,7 +135,7 @@ export class TableRowComponent implements OnInit, OnDestroy {
 
   generateSchedule(dates: Date[],
                    patternId: number) {
-    this.patternUnitService.getByPatternId(this.departmentId, patternId)
+    this.patternUnitService.getByPatternId(patternId)
       .subscribe(patternUnits => this.scheduleGenerationService
         .generateScheduleByPatternId(
           this.employee.id,
@@ -150,25 +150,25 @@ export class TableRowComponent implements OnInit, OnDestroy {
     return (createdSchedule, updatedSchedule) => {
       if (createdSchedule.length > 0) {
         this.scheduleService.create(
-          this.departmentId,
           this.employee.id,
           createdSchedule
-        )
-          .subscribe(res => {
+        ).subscribe(res => {
               res.forEach(workDay => this.schedule.push(workDay));
               this.calculateSum();
-              this.notificationService.success('Sent', 'Schedule sent succesfully');
+              this.notificationService.success(
+                'Created',
+                'Schedule sent succesыfully');
             });
         }
       if (updatedSchedule.length > 0) {
         this.scheduleService.update(
-          this.departmentId,
           this.employee.id,
           updatedSchedule
-        )
-          .subscribe(res => {
+        ).subscribe(res => {
               this.calculateSum();
-              this.notificationService.success('Sent', 'Schedule sent succesfully');
+              this.notificationService.success(
+                'Updated',
+                'Schedule sent succesыfully');
             });
       }
     };

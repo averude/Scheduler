@@ -29,4 +29,11 @@ export class PatternUnitComponent implements OnInit {
   delete() {
     this.unitControlService.delete(this.unit);
   }
+
+  onChange(event) {
+    const dayTypeId = event.value;
+    this.unit.label = this.dayTypes
+      .find(dayType => dayType.id === dayTypeId)
+      .label;
+  }
 }

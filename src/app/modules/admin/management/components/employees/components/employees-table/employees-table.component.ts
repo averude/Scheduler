@@ -14,7 +14,6 @@ import { NotificationsService } from "angular2-notifications";
 })
 export class EmployeesTableComponent implements OnInit {
 
-  departmentId = 1;
   // Data
   employees:  Employee[];
   positions:  Position[];
@@ -26,38 +25,43 @@ export class EmployeesTableComponent implements OnInit {
               private shiftService: ShiftService) { }
 
   ngOnInit() {
-    this.employeeService.getByDepartmentId(this.departmentId)
+    this.employeeService.getAll()
       .subscribe(employees => this.employees = employees);
-    this.positionService.getByDepartmentId(this.departmentId)
+    this.positionService.getAll()
       .subscribe(positions => this.positions = positions);
-    this.shiftService.getByDepartmentId(this.departmentId)
+    this.shiftService.getAll()
       .subscribe(shifts => this.shifts = shifts);
   }
 
   addEmployee(employee: Employee) {
-    this.employeeService.create(this.departmentId, employee.positionId, employee)
+    this.employeeService.create(employee)
       .subscribe(res => {
         employee.id = res;
         this.employees.push(employee);
         this.notificationService.success(
           'Created',
-          `Employee ${employee.secondName} ${employee.firstName} was created`
-        )
+          `Employee "${employee.secondName} ${employee.firstName}" was successfully created`
+        );
       });
   }
 
   updateEmployee(employee: Employee) {
-    this.employeeService.update(this.departmentId, employee.positionId, employee)
+    this.employeeService.update(employee)
       .subscribe(res => this.notificationService.success(
           'Updated',
-        `Employee ${employee.secondName} ${employee.firstName} was updated`
+        `Employee "${employee.secondName} ${employee.firstName}" was successfully updated`
         ));
   }
 
   deleteEmployee(employee: Employee) {
-    this.employeeService.remove(this.departmentId, employee.positionId, employee.id)
-      .subscribe(res =>
+    this.employeeService.remove(employee.id)
+      .subscribe(res => {
         this.employees = this.employees
-          .filter(value => value !== employee));
+            .filter(value => value !== employee);
+        this.notificationService.success(
+          'Deleted',
+          `Employee "${employee.secondName} ${employee.firstName}" was successfully deleted`
+        );
+      });
   }
 }

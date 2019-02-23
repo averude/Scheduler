@@ -12,7 +12,6 @@ import { NotificationsService } from "angular2-notifications";
 export class PatternsListComponent implements OnInit {
 
   @Input() departmentId: number;
-
   patterns: ShiftPattern[] = [];
   selectedPattern: ShiftPattern;
 
@@ -22,7 +21,7 @@ export class PatternsListComponent implements OnInit {
 
   ngOnInit() {
     this.shiftPatternService
-      .getByDepartmentId(this.departmentId)
+      .getAll()
       .subscribe(patterns => this.patterns = patterns);
   }
 
@@ -53,13 +52,16 @@ export class PatternsListComponent implements OnInit {
 
   private createOrUpdate(pattern: ShiftPattern) {
     if (pattern.id) {
-      this.shiftPatternService.update(this.departmentId, pattern)
+      this.shiftPatternService.update(pattern)
         .subscribe(res => this.notificationService
           .success('Updated', 'Pattern was successfully updated'));
     } else {
-      this.shiftPatternService.create(this.departmentId, pattern)
-        .subscribe(res => this.notificationService
-          .success('Created', 'Pattern was successfully created'));
+      this.shiftPatternService.create(pattern)
+        .subscribe(res => {
+          pattern.id = res;
+          this.notificationService
+            .success('Created', 'Pattern was successfully created')
+        });
     }
   }
 }

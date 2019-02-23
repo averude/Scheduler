@@ -9,7 +9,6 @@ import { DayType } from "../../../../../../model/daytype";
 })
 export class PatternsComponent implements OnInit {
 
-  departmentId = 1;
   dayTypes: DayType[];
 
   constructor(private dayTypeService: DayTypeService) { }

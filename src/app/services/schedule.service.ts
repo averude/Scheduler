@@ -22,21 +22,20 @@ export class ScheduleService {
     );
   }
 
-  create(departmentId: number,
-         employeeId: number,
+  create(employeeId: number,
          schedule: WorkDay[]): Observable<any> {
     return this.http.post<WorkDay[]>(
-      `${this.config.baseUrl}/departments/${departmentId}/schedule/${employeeId}`,
+      `${this.config.baseUrl}/schedule/${employeeId}`,
       schedule
     );
   }
 
-  update(departmentId: number,
-         employeeId: number,
+  update(employeeId: number,
          schedule: WorkDay[]): Observable<any> {
     return this.http.put(
-      `${this.config.baseUrl}/departments/${departmentId}/schedule/${employeeId}`,
-      schedule
+      `${this.config.baseUrl}/schedule/${employeeId}`,
+      schedule,
+      {responseType: 'text'}
     );
   }
 }

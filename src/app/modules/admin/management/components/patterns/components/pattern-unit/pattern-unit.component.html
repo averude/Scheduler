@@ -13,6 +13,7 @@
     </mat-form-field>
     <mat-form-field>
       <mat-select placeholder="day type"
+                  (selectionChange)="onChange($event)"
                   [(ngModel)]="unit.dayTypeId">
         <mat-option *ngFor="let dayType of dayTypes"
                     [value]="dayType.id">

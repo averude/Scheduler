@@ -14,33 +14,35 @@ export class DayTypeService {
 
   getAll(): Observable<DayType[]> {
     return this.http.get<DayType[]>(
-      `${this.config.baseUrl}/daytypes`
+      `${this.config.baseUrl}/admin/daytypes`
     );
   }
 
   getById(dayTypeId: number): Observable<DayType> {
     return this.http.get<DayType>(
-      `${this.config.baseUrl}/daytypes/${dayTypeId}`
+      `${this.config.baseUrl}/admin/daytypes/${dayTypeId}`
     );
   }
 
   create(dayType: DayType): Observable<any> {
-    return this.http.post(
-      `${this.config.baseUrl}/daytypes`,
+    return this.http.post<number>(
+      `${this.config.baseUrl}/admin/daytypes`,
       dayType,
     );
   }
 
   update(dayType: DayType): Observable<any> {
     return this.http.put(
-      `${this.config.baseUrl}/daytypes/${dayType.id}`,
+      `${this.config.baseUrl}/admin/daytypes/${dayType.id}`,
       dayType,
+      {responseType: 'text'}
     );
   }
 
   delete(dayTypeId: number): Observable<any> {
     return this.http.delete(
-      `${this.config.baseUrl}/daytypes/${dayTypeId}`
+      `${this.config.baseUrl}/admin/daytypes/${dayTypeId}`,
+      {responseType: 'text'}
     );
   }
 }

@@ -3,7 +3,6 @@ import { Employee } from '../../../../../model/employee';
 import { EmployeeService } from '../../../../../services/employee.service';
 import { ShiftPatternService } from '../../../../../services/shiftpattern.service';
 import { ShiftPattern } from '../../../../../model/shiftpattern';
-import { EMPLOYEES } from '../../../../../datasource/mock-employees';
 
 @Component({
   selector: 'app-schedules-table',
@@ -12,7 +11,6 @@ import { EMPLOYEES } from '../../../../../datasource/mock-employees';
 })
 export class SchedulesTableComponent implements OnInit {
 
-  departmentId = 1;
   employees: Employee[];
   patterns: ShiftPattern[];
 
@@ -20,9 +18,10 @@ export class SchedulesTableComponent implements OnInit {
               private patternService: ShiftPatternService) { }
 
   ngOnInit() {
-    this.employeeService.getByDepartmentId(this.departmentId)
-      .subscribe(employees => this.employees = employees);
-    this.patternService.getByDepartmentId(this.departmentId)
+    this.employeeService.getAll()
+      .subscribe(employees => this.employees = employees
+        .sort((a, b) => a.shiftId - b.shiftId)); // temporary
+    this.patternService.getAll()
       .subscribe(patterns => this.patterns = patterns);
   }
 }

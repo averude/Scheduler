@@ -1,4 +1,4 @@
-<div class="sequence-box">
+<div class="sequence-box" *ngIf="patternId > 0">
   <app-pattern-unit *ngFor="let unit of units"
                     [dayTypes]="dayTypes"
                     [unit]="unit"></app-pattern-unit>

@@ -12,48 +12,43 @@ export class EmployeeService {
   constructor(private http: HttpClient,
               private config: RestConfig) { }
 
-  getByDepartmentId(departmentId: number): Observable<Employee[]> {
+  getAll(): Observable<Employee[]> {
     return this.http.get<Employee[]>(
-      `${this.config.baseUrl}/departments/${departmentId}/employees`
+      `${this.config.baseUrl}/admin/employees`
     );
   }
 
-  getByPositionId(departmentId: number,
-                  positionId: number): Observable<Employee[]> {
+  getByPositionId(positionId: number): Observable<Employee[]> {
     return this.http.get<Employee[]>(
-      `${this.config.baseUrl}/departments/${departmentId}/positions/${positionId}/employees`
+      `${this.config.baseUrl}/admin/positions/${positionId}/employees`
     );
   }
 
   getById(employeeId: number): Observable<Employee> {
     return this.http.get<Employee>(
-      `${this.config.baseUrl}/employees/${employeeId}`
+      `${this.config.baseUrl}/admin/employees/${employeeId}`
     );
   }
 
-  create(departmentId: number,
-         positionId: number,
-         employee: Employee): Observable<any> {
+  create(employee: Employee): Observable<any> {
     return this.http.post<number>(
-      `${this.config.baseUrl}/departments/${departmentId}/positions/${positionId}/employees`,
+      `${this.config.baseUrl}/admin/employees`,
       employee
     );
   }
 
-  update(departmentId: number,
-         positionId: number,
-         employee: Employee): Observable<any> {
+  update(employee: Employee): Observable<any> {
     return this.http.put(
-      `${this.config.baseUrl}/departments/${departmentId}/positions/${positionId}/employees/${employee.id}`,
-      employee
+      `${this.config.baseUrl}/admin/employees/${employee.id}`,
+      employee,
+      {responseType: 'text'}
     );
   }
 
-  remove(departmentId: number,
-         positionId: number,
-         employeeId: number): Observable<any> {
+  remove(employeeId: number): Observable<any> {
     return this.http.delete(
-      `${this.config.baseUrl}/departments/${departmentId}/positions/${positionId}/employees/${employeeId}`
+      `${this.config.baseUrl}/admin/employees/${employeeId}`,
+      {responseType: 'text'}
     );
   }
 }
