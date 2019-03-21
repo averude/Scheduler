@@ -1,8 +1,11 @@
 spring:
   application:
-    name: scheduler-api-schedule-service
+    name: scheduler-auth-server
   cloud:
     config:
       uri: ${CONFIG_SERVER_URL}
       fail-fast: true
       profile: native
+      enabled: false
+server:
+  port: 5000

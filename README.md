@@ -1,5 +1,5 @@
 #   Enterprise Scheduler
-This is the backend side of the simple enterprise scheduler service built with Spring Boot, Spring Cloud, Docker and PostgreSQL. 
+This is the backend side of a simple enterprise scheduler service built with Spring Boot, Spring Cloud, Docker and PostgreSQL. 
 
 ##  Getting Started
 ####    Running this project on the local machine:

@@ -6,6 +6,7 @@ services:
     ports:
       - 15672:15672
 
+
   scheduler-config-server:
     environment:
       REGISTRY_SERVER_URL: $REGISTRY_SERVER_URL
@@ -15,7 +16,7 @@ services:
     image: scheduler-config-server
     restart: always
     ports:
-      - $CONFIG_SERVER_PORT:8888
+      - 8888:8888
     depends_on:
       - rabbitmq
 
@@ -33,7 +34,6 @@ services:
   scheduler-registry-server:
     environment:
       CONFIG_SERVER_URL: $CONFIG_SERVER_URL
-      CONFIG_SERVER_PORT: $CONFIG_SERVER_PORT
     build:
       context: ./scheduler-registry-server
       dockerfile: Dockerfile
@@ -44,10 +44,29 @@ services:
     ports:
       - 8761:8761
 
+  scheduler-auth-server:
+    environment:
+      CONFIG_SERVER_URL: $CONFIG_SERVER_URL
+      REGISTRY_SERVER_URL: $REGISTRY_SERVER_URL
+      ADMIN_SERVICE_ID: $ADMIN_SERVICE_ID
+      ADMIN_SERVICE_PASSWORD: $ADMIN_SERVICE_PASSWORD
+      SCHEDULE_SERVICE_ID: $SCHEDULE_SERVICE_ID
+      SCHEDULE_SERVICE_PASSWORD: $SCHEDULE_SERVICE_PASSWORD
+      STATISTICS_SERVICE_ID: $STATISTICS_SERVICE_ID
+      STATISTICS_SERVICE_PASSWORD: $STATISTICS_SERVICE_PASSWORD
+    build:
+      context: ./scheduler-auth-server
+      dockerfile: Dockerfile
+    image: scheduler-auth-server
+    restart: always
+    depends_on:
+      - scheduler-config-server
+    ports:
+      - 5000:5000
+
   scheduler-gateway-server:
     environment:
       CONFIG_SERVER_URL: $CONFIG_SERVER_URL
-      CONFIG_SERVER_PORT: $CONFIG_SERVER_PORT
       REGISTRY_SERVER_URL: $REGISTRY_SERVER_URL
     build:
       context: ./scheduler-gateway-server
@@ -62,8 +81,11 @@ services:
   scheduler-api-admin-service:
     environment:
       CONFIG_SERVER_URL: $CONFIG_SERVER_URL
-      CONFIG_SERVER_PORT: $CONFIG_SERVER_PORT
       REGISTRY_SERVER_URL: $REGISTRY_SERVER_URL
+      USER_INFO_URI: $USER_INFO_URI
+      ACCESS_TOKEN_URI: $ACCESS_TOKEN_URI
+      ADMIN_SERVICE_ID: $ADMIN_SERVICE_ID
+      ADMIN_SERVICE_PASSWORD: $ADMIN_SERVICE_PASSWORD
       DB_DRIVER_CLASS_NAME: $DB_DRIVER_CLASS_NAME
       DB_URL: $DB_URL
       DB_USERNAME: $DB_USERNAME
@@ -82,8 +104,11 @@ services:
   scheduler-api-schedule-service:
     environment:
       CONFIG_SERVER_URL: $CONFIG_SERVER_URL
-      CONFIG_SERVER_PORT: $CONFIG_SERVER_PORT
       REGISTRY_SERVER_URL: $REGISTRY_SERVER_URL
+      USER_INFO_URI: $USER_INFO_URI
+      ACCESS_TOKEN_URI: $ACCESS_TOKEN_URI
+      SCHEDULE_SERVICE_ID: $SCHEDULE_SERVICE_ID
+      SCHEDULE_SERVICE_PASSWORD: $SCHEDULE_SERVICE_PASSWORD
       DB_DRIVER_CLASS_NAME: $DB_DRIVER_CLASS_NAME
       DB_URL: $DB_URL
       DB_USERNAME: $DB_USERNAME
@@ -103,8 +128,11 @@ services:
   scheduler-api-statistics-service:
     environment:
       CONFIG_SERVER_URL: $CONFIG_SERVER_URL
-      CONFIG_SERVER_PORT: $CONFIG_SERVER_PORT
       REGISTRY_SERVER_URL: $REGISTRY_SERVER_URL
+      USER_INFO_URI: $USER_INFO_URI
+      ACCESS_TOKEN_URI: $ACCESS_TOKEN_URI
+      STATISTICS_SERVICE_ID: $STATISTICS_SERVICE_ID
+      STATISTICS_SERVICE_PASSWORD: $STATISTICS_SERVICE_PASSWORD
       DB_DRIVER_CLASS_NAME: $DB_DRIVER_CLASS_NAME
       DB_URL: $DB_URL
       DB_USERNAME: $DB_USERNAME
