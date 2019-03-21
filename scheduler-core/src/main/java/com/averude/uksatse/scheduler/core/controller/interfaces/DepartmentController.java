@@ -1,7 +1,8 @@
-package com.averude.uksatse.scheduler.core.controllers.interfaces;
+package com.averude.uksatse.scheduler.core.controller.interfaces;
 
 import com.averude.uksatse.scheduler.core.entity.Department;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +22,10 @@ public interface DepartmentController {
     @RequestMapping(method = RequestMethod.GET,
                     value = "/{departmentId}")
     Optional<Department> get(@PathVariable Long departmentId);
+
+    @RequestMapping(method = RequestMethod.GET,
+            value = "/current")
+    Optional<Department> get(Authentication authentication);
 
     @RequestMapping(method = RequestMethod.PUT)
     ResponseEntity<?> update(@Valid @RequestBody Department department);

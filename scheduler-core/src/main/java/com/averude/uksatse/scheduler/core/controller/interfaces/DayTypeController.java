@@ -1,4 +1,4 @@
-package com.averude.uksatse.scheduler.core.controllers.interfaces;
+package com.averude.uksatse.scheduler.core.controller.interfaces;
 
 import com.averude.uksatse.scheduler.core.entity.DayType;
 import org.springframework.http.ResponseEntity;

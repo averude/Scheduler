@@ -1,13 +1,14 @@
 package com.averude.uksatse.scheduler.microservice.admin.controller;
 
-import com.averude.uksatse.scheduler.core.controllers.interfaces.ShiftPatternController;
+import com.averude.uksatse.scheduler.core.controller.interfaces.ShiftPatternController;
 import com.averude.uksatse.scheduler.core.entity.ShiftPattern;
+import com.averude.uksatse.scheduler.shared.service.ShiftPatternService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import com.averude.uksatse.scheduler.shared.service.ShiftPatternService;
 
 import javax.validation.Valid;
 import java.net.URI;
@@ -26,15 +27,13 @@ public class ShiftPatternControllerImpl implements ShiftPatternController {
 
     @Override
     @RequestMapping(method = RequestMethod.GET)
-    public Iterable<ShiftPattern> getAll(@RequestHeader("Department-ID") Long departmentId) {
-        return this.shiftPatternService.findAllByDepartmentId(departmentId);
+    public Iterable<ShiftPattern> getAll(Authentication authentication) {
+        return this.shiftPatternService.findAllByAuth(authentication);
     }
 
     @Override
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<?> create(@RequestHeader("Department-ID") Long departmentId,
-                                    @Valid @RequestBody ShiftPattern shiftPattern){
-        shiftPattern.setDepartmentId(departmentId);
+    public ResponseEntity<?> create(@Valid @RequestBody ShiftPattern shiftPattern){
         this.shiftPatternService.save(shiftPattern);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/{id}")
@@ -45,15 +44,13 @@ public class ShiftPatternControllerImpl implements ShiftPatternController {
     @Override
     @RequestMapping(method = RequestMethod.GET,
                     value = "{patternId}")
-    public Optional<ShiftPattern> get(@RequestHeader("Department-ID") Long departmentId,
-                                      @PathVariable Long patternId) {
+    public Optional<ShiftPattern> get(@PathVariable Long patternId) {
         return this.shiftPatternService.findById(patternId);
     }
 
     @Override
     @RequestMapping(method = RequestMethod.PUT)
-    public ResponseEntity<?> update(@RequestHeader("Department-ID") Long departmentId,
-                                    @Valid @RequestBody ShiftPattern shiftPattern) {
+    public ResponseEntity<?> update(@Valid @RequestBody ShiftPattern shiftPattern) {
         this.shiftPatternService.save(shiftPattern);
         return ResponseEntity.ok("Shift pattern with ID:" + shiftPattern.getId() +
                 " was successfully updated");
@@ -62,8 +59,7 @@ public class ShiftPatternControllerImpl implements ShiftPatternController {
     @Override
     @RequestMapping(method = RequestMethod.DELETE,
                     value = "{patternId}")
-    public ResponseEntity<?> delete(@RequestHeader("Department-ID") Long departmentId,
-                                    @PathVariable Long patternId) {
+    public ResponseEntity<?> delete(@PathVariable Long patternId) {
         this.shiftPatternService.deleteById(patternId);
         return new ResponseEntity<>("Shift pattern with ID:" + patternId +
                 " was successfully deleted", HttpStatus.NO_CONTENT);
