@@ -26,9 +26,8 @@ public class DepartmentServiceImpl
 
     @Override
     public Optional<Department> getCurrent(Authentication authentication) {
-        Long departmentId = (Long) detailsExtractor
-                .extract(authentication)
-                .get(TokenExtraDetailsExtractor.DEPARTMENT_ID);
+        Long departmentId = detailsExtractor
+                .extractId(authentication, TokenExtraDetailsExtractor.DEPARTMENT_ID);
         return departmentRepository.findById(departmentId);
     }
 }

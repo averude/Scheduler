@@ -32,9 +32,8 @@ public class PositionServiceImpl
     @Override
     @Transactional
     public Iterable<Position> findAllByAuth(Authentication authentication) {
-        Long departmentId = (Long) detailsExtractor
-                .extract(authentication)
-                .get(TokenExtraDetailsExtractor.DEPARTMENT_ID);
+        Long departmentId = detailsExtractor
+                .extractId(authentication, TokenExtraDetailsExtractor.DEPARTMENT_ID);
         return positionRepository.findAllByDepartmentId(departmentId);
     }
 }

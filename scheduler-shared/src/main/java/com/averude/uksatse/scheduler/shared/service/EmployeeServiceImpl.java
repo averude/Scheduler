@@ -34,9 +34,8 @@ public class EmployeeServiceImpl
     @Override
     @Transactional
     public Iterable<Employee> findAllByAuth(Authentication authentication) {
-        Long departmentId = (Long) detailsExtractor
-                .extract(authentication)
-                .get(TokenExtraDetailsExtractor.DEPARTMENT_ID);
+        Long departmentId = detailsExtractor
+                .extractId(authentication, TokenExtraDetailsExtractor.DEPARTMENT_ID);
         return employeeRepository.findAllByDepartmentId(departmentId);
     }
 
@@ -49,9 +48,8 @@ public class EmployeeServiceImpl
     @Override
     @Transactional
     public Optional<Employee> getCurrent(Authentication authentication) {
-        Long employeeId = (Long) detailsExtractor
-                .extract(authentication)
-                .get(TokenExtraDetailsExtractor.EMPLOYEE_ID);
+        Long employeeId = detailsExtractor
+                .extractId(authentication, TokenExtraDetailsExtractor.EMPLOYEE_ID);
         return employeeRepository.findById(employeeId);
     }
 }

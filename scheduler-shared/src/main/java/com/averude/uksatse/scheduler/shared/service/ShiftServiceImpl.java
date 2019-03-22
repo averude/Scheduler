@@ -32,9 +32,8 @@ public class ShiftServiceImpl
     @Override
     @Transactional
     public Iterable<Shift> findAllByAuth(Authentication authentication) {
-        Long departmentId = (Long) detailsExtractor
-                .extract(authentication)
-                .get(TokenExtraDetailsExtractor.DEPARTMENT_ID);
+        Long departmentId = detailsExtractor
+                .extractId(authentication, TokenExtraDetailsExtractor.DEPARTMENT_ID);
         return shiftRepository.findAllByDepartmentId(departmentId);
     }
 }

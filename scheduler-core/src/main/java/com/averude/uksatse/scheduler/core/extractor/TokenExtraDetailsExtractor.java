@@ -12,9 +12,11 @@ public class TokenExtraDetailsExtractor {
     public static final String DEPARTMENT_ID = "department_id";
     public static final String EMPLOYEE_ID = "employee_id";
 
-    public Map<String, Object> extract(Authentication authentication) {
+    public Long extractId(Authentication authentication, String key) {
         OAuth2AuthenticationDetails oauthDetails
                 = (OAuth2AuthenticationDetails) authentication.getDetails();
-        return (Map<String, Object>) oauthDetails.getDecodedDetails();
+        Map<String, Integer> decodedDetails
+                = (Map<String, Integer>) oauthDetails.getDecodedDetails();
+        return decodedDetails.get(key).longValue();
     }
 }

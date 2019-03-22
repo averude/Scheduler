@@ -13,10 +13,10 @@ import java.util.Arrays;
 public class SchedulerUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        if ("andrew".equals(s)) {
+        if ("admin".equals(s)) {
             SchedulerUserDetails userDetails = new SchedulerUserDetails();
-            userDetails.setUsername("andrew");
-            userDetails.setPassword("123");
+            userDetails.setUsername("admin");
+            userDetails.setPassword("admin");
             userDetails.setAuthorities(Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN")));
             userDetails.setDepartmentId(1L);
             userDetails.setEmployeeId(1L);
@@ -25,7 +25,8 @@ public class SchedulerUserDetailsService implements UserDetailsService {
             userDetails.setCredentialsNonExpired(true);
             userDetails.setEnabled(true);
             return userDetails;
+        } else {
+            throw new UsernameNotFoundException("User is not found");
         }
-        return null;
     }
 }

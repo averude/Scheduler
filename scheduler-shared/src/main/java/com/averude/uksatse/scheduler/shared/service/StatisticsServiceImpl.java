@@ -29,9 +29,8 @@ public class StatisticsServiceImpl implements com.averude.uksatse.scheduler.shar
     @Override
     @Transactional
     public Iterable<CountDTO> countEmployeesByAuth(Authentication authentication) {
-        Long departmentId = (Long) detailsExtractor
-                .extract(authentication)
-                .get(TokenExtraDetailsExtractor.DEPARTMENT_ID);
+        Long departmentId = detailsExtractor
+                .extractId(authentication, TokenExtraDetailsExtractor.DEPARTMENT_ID);
         return statisticsRepository.countEmployeesByDepartmentId(departmentId);
     }
 }

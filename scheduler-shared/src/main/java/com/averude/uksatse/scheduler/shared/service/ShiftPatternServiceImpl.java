@@ -32,9 +32,8 @@ public class ShiftPatternServiceImpl
     @Override
     @Transactional
     public Iterable<ShiftPattern> findAllByAuth(Authentication authentication) {
-        Long departmentId = (Long) detailsExtractor
-                .extract(authentication)
-                .get(TokenExtraDetailsExtractor.DEPARTMENT_ID);
+        Long departmentId = detailsExtractor
+                .extractId(authentication, TokenExtraDetailsExtractor.DEPARTMENT_ID);
         return shiftPatternRepository.findAllByDepartmentId(departmentId);
     }
 }

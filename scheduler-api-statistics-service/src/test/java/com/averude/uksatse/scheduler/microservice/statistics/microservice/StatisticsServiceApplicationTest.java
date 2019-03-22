@@ -69,7 +69,7 @@ public class StatisticsServiceApplicationTest {
 
     private Map<String, Object> getDecodedDetails(Department department) {
         Map<String, Object> decodedDetails = new HashMap<>();
-        decodedDetails.put("department_id", department.getId());
+        decodedDetails.put("department_id", department.getId().intValue());
         return decodedDetails;
     }
 }
