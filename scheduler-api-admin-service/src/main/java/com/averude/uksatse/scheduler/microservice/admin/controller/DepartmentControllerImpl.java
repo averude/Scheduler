@@ -1,13 +1,14 @@
 package com.averude.uksatse.scheduler.microservice.admin.controller;
 
-import com.averude.uksatse.scheduler.core.controllers.interfaces.DepartmentController;
+import com.averude.uksatse.scheduler.core.controller.interfaces.DepartmentController;
 import com.averude.uksatse.scheduler.core.entity.Department;
+import com.averude.uksatse.scheduler.shared.service.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import com.averude.uksatse.scheduler.shared.service.DepartmentService;
 
 import javax.validation.Valid;
 import java.net.URI;
@@ -20,7 +21,7 @@ public class DepartmentControllerImpl implements DepartmentController {
     private final DepartmentService departmentService;
 
     @Autowired
-    DepartmentControllerImpl(DepartmentService departmentService) {
+    public DepartmentControllerImpl(DepartmentService departmentService) {
         this.departmentService = departmentService;
     }
 
@@ -45,6 +46,13 @@ public class DepartmentControllerImpl implements DepartmentController {
                     value = "/{departmentId}")
     public Optional<Department> get(@PathVariable Long departmentId) {
         return departmentService.findById(departmentId);
+    }
+
+    @Override
+    @RequestMapping(method = RequestMethod.GET,
+            value = "/current")
+    public Optional<Department> get(Authentication authentication) {
+        return departmentService.getCurrent(authentication);
     }
 
     @Override

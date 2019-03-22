@@ -9,17 +9,20 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class StatisticsControllerTest {
     @Mock
     StatisticsService statisticsService;
+    @Mock
+    OAuth2Authentication authentication;
     @InjectMocks
     StatisticsControllerImpl sut;
 
@@ -27,9 +30,10 @@ public class StatisticsControllerTest {
     public void testGetNumberOfEmployeesInPositionsByDepartmentId() {
         CountDTO countDTO = new CountDTO(1L, 1L);
         List<CountDTO> countDTOS = ImmutableList.of(countDTO);
-        when(statisticsService.countEmployeesByDepartmentId(anyLong())).thenReturn(countDTOS);
-        Iterable<CountDTO> result = sut.getNumberOfEmployeesInPositionsByDepartmentId(1L);
-        verify(statisticsService).countEmployeesByDepartmentId(1L);
+        when(statisticsService.countEmployeesByAuth(authentication)).thenReturn(countDTOS);
+        Iterable<CountDTO> result = sut
+                .getNumberOfEmployeesInPositionsByDepartmentId(authentication);
+        verify(statisticsService).countEmployeesByAuth(authentication);
         assertEquals(result, countDTOS);
     }
 }

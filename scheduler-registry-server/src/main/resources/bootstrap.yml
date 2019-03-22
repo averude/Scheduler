@@ -3,7 +3,7 @@ spring:
     name: scheduler-registry-server
   cloud:
     config:
-      uri: http://${CONFIG_SERVER_URL}:${CONFIG_SERVER_PORT}
+      uri: ${CONFIG_SERVER_URL}
       fail-fast: true
       profile: native
 eureka:

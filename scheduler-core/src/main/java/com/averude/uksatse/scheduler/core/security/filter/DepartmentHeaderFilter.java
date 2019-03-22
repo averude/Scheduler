@@ -1,4 +1,4 @@
-package com.averude.uksatse.scheduler.core.filters;
+package com.averude.uksatse.scheduler.core.security.filter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +21,7 @@ public class DepartmentHeaderFilter implements Filter {
             logger.warn(getWarnMessage(request));
             HttpServletResponse response = (HttpServletResponse) servletResponse;
             response.setContentType("application/json");
-            response.sendError(SC_BAD_REQUEST, "Required header not specified in the request");
+            response.sendError(SC_BAD_REQUEST, "Required header is not specified in the request");
             return;
         }
         filterChain.doFilter(servletRequest, servletResponse);

@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: scheduler-auth-server
+  cloud:
+    config:
+      uri: ${CONFIG_SERVER_URL}
+      fail-fast: true
+      profile: native

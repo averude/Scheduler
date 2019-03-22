@@ -1,10 +1,13 @@
 package com.averude.uksatse.scheduler.microservice.statistics.controller;
 
-import com.averude.uksatse.scheduler.core.controllers.interfaces.StatisticsController;
+import com.averude.uksatse.scheduler.core.controller.interfaces.StatisticsController;
 import com.averude.uksatse.scheduler.core.dto.CountDTO;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
 import com.averude.uksatse.scheduler.shared.service.StatisticsService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class StatisticsControllerImpl implements StatisticsController {
@@ -18,7 +21,7 @@ public class StatisticsControllerImpl implements StatisticsController {
 
     @Override
     @RequestMapping(method = RequestMethod.GET, value = "/positions/employees")
-    public Iterable<CountDTO> getNumberOfEmployeesInPositionsByDepartmentId(@RequestHeader("Department-ID") Long departmentId) {
-        return statisticsService.countEmployeesByDepartmentId(departmentId);
+    public Iterable<CountDTO> getNumberOfEmployeesInPositionsByDepartmentId(Authentication authentication) {
+        return statisticsService.countEmployeesByAuth(authentication);
     }
 }

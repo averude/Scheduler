@@ -1,4 +1,4 @@
-package com.averude.uksatse.scheduler.core.errorhandlers;
+package com.averude.uksatse.scheduler.core.errorhandler;
 
 import com.averude.uksatse.scheduler.core.dto.ErrorDetails;
 import org.springframework.http.HttpHeaders;

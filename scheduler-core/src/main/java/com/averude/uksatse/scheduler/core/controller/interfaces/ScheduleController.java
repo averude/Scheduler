@@ -1,4 +1,4 @@
-package com.averude.uksatse.scheduler.core.controllers.interfaces;
+package com.averude.uksatse.scheduler.core.controller.interfaces;
 
 import com.averude.uksatse.scheduler.core.entity.WorkDay;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -12,14 +12,12 @@ public interface ScheduleController {
     @RequestMapping(method = RequestMethod.POST,
                     value = "/{employeeId}")
     ResponseEntity<Iterable<WorkDay>> create(
-            @RequestHeader("Department-ID") Long departmentId,
             @PathVariable Long employeeId,
             @Valid @RequestBody Iterable<WorkDay> schedule);
 
     @RequestMapping(method = RequestMethod.PUT,
                     value = "/{employeeId}")
-    ResponseEntity<?> update(@RequestHeader("Department-ID") Long departmentId,
-                             @PathVariable Long employeeId,
+    ResponseEntity<?> update(@PathVariable Long employeeId,
                              @Valid @RequestBody Iterable<WorkDay> schedule);
 
     @RequestMapping(method = RequestMethod.GET,

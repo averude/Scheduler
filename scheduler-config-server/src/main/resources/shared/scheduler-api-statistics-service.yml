@@ -1,3 +1,13 @@
+security:
+  oauth2:
+    client:
+      clientId: ${STATISTICS_SERVICE_ID}
+      clientSecret: ${STATISTICS_SERVICE_PASSWORD}
+      accessTokenUri: ${ACCESS_TOKEN_URI}
+      grant-type: client_credentials
+      scope: server
+    resource:
+      user-info-uri: ${USER_INFO_URI}
 spring:
   datasource:
     driver-class-name: ${DB_DRIVER_CLASS_NAME}
