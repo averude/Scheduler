@@ -6,5 +6,3 @@ spring:
       uri: ${CONFIG_SERVER_URL}
       fail-fast: true
       profile: native
-#  main:
-#    allow-bean-definition-overriding: true

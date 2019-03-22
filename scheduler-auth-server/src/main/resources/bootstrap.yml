@@ -6,6 +6,3 @@ spring:
       uri: ${CONFIG_SERVER_URL}
       fail-fast: true
       profile: native
-      enabled: false
-server:
-  port: 5000

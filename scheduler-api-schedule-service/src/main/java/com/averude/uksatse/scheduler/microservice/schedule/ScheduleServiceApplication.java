@@ -15,7 +15,8 @@ import org.springframework.web.filter.CorsFilter;
 
 
 @EnableDiscoveryClient
-@EnableOAuth2Client
+// https://github.com/spring-projects/spring-security-oauth2-boot/issues/51
+// @EnableOAuth2Client
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @EntityScan("com.averude.uksatse.scheduler.core.entity")
 @SpringBootApplication(scanBasePackages = {

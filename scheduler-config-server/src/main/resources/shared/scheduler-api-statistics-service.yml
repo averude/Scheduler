@@ -1,8 +1,8 @@
 security:
   oauth2:
     client:
-      clientId: ${SCHEDULE_SERVICE_ID}
-      clientSecret: ${SCHEDULE_SERVICE_PASSWORD}
+      clientId: ${STATISTICS_SERVICE_ID}
+      clientSecret: ${STATISTICS_SERVICE_PASSWORD}
       accessTokenUri: ${ACCESS_TOKEN_URI}
       grant-type: client_credentials
       scope: server
