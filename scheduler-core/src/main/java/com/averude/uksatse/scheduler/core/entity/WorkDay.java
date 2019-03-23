@@ -57,12 +57,16 @@ public class WorkDay implements Serializable {
     }
 
     public WorkDay(Long employeeId,
+                   Long dayTypeId,
                    Boolean holiday,
                    Float hours,
+                   String label,
                    LocalDate date) {
         this.employeeId = employeeId;
+        this.dayTypeId = dayTypeId;
         this.holiday = holiday;
         this.hours = hours;
+        this.label = label;
         this.date = date;
     }
 

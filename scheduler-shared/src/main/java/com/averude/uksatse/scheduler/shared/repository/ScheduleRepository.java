@@ -7,4 +7,5 @@ import java.time.LocalDate;
 
 public interface ScheduleRepository extends CrudRepository<WorkDay, Long> {
     Iterable<WorkDay> findAllByEmployeeIdAndDateBetween(long employeeId, LocalDate from, LocalDate to);
+    void deleteAllByEmployeeIdAndDateBetween(Long employeeId, LocalDate from, LocalDate to);
 }
