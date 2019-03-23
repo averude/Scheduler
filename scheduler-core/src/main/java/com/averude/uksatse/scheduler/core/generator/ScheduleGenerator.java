@@ -9,6 +9,7 @@ import java.util.List;
 public interface ScheduleGenerator {
     List<WorkDay> generate(List<PatternUnit> patternUnits,
                            List<LocalDate> dates,
+                           List<WorkDay> existingSchedule,
                            long employeeId,
                            int offset);
 }

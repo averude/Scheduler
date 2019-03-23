@@ -143,4 +143,17 @@ public class WorkDay implements Serializable {
     public int hashCode() {
         return Objects.hash(id, employeeId, holiday, hours, label, date);
     }
+
+    @Override
+    public String toString() {
+        return "["
+                + "ID: " + id + "; "
+                + "Employee ID: " + employeeId + "; "
+                + "Day Type ID:" + dayTypeId + "; "
+                + "Holiday: " + holiday + "; "
+                + "Hours: " + hours + "; "
+                + "Label: " + label + "; "
+                + "Date: " + date +
+                "]";
+    }
 }

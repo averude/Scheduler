@@ -58,19 +58,24 @@ public class ScheduleGenerationServiceImpl implements ScheduleGenerationService 
 
             for (Employee employee : employees) {
                 try {
-                    clearSchedule(employee.getId(), from, to);
+                    List<WorkDay> existingSchedule = getSchedule(employee.getId(), from, to);
                     List<WorkDay> workDays = scheduleGenerator
-                            .generate(patternUnits, datesList, employee.getId(), offset);
+                            .generate(patternUnits,
+                                    datesList,
+                                    existingSchedule,
+                                    employee.getId(),
+                                    offset);
                     scheduleRepository.saveAll(workDays);
                 } catch (Exception e) {
                     logger.error(e.getLocalizedMessage());
+                    throw e;
                 }
             }
         });
     }
 
-    private void clearSchedule(Long employeeId, LocalDate from, LocalDate to) {
-        scheduleRepository.deleteAllByEmployeeIdAndDateBetween(employeeId, from, to);
+    private List<WorkDay> getSchedule(Long employeeId, LocalDate from, LocalDate to) {
+        return toList(scheduleRepository.findAllByEmployeeIdAndDateBetween(employeeId, from, to));
     }
 
     private List<LocalDate> getDatesBetween(LocalDate from, LocalDate to) {

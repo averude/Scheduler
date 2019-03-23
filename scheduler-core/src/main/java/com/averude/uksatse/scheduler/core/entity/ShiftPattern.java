@@ -98,12 +98,22 @@ public class ShiftPattern implements Serializable {
     }
 
     public void addPatternUnit(PatternUnit patternUnit) {
-        patternUnit.setId(this.getId());
+        patternUnit.setPatternId(this.getId());
         sequence.add(patternUnit);
     }
 
     public void removePatternUnit(PatternUnit patternUnit) {
-        patternUnit.setId(null);
+        patternUnit.setPatternId(null);
         sequence.remove(patternUnit);
+    }
+
+    public void addShift(Shift shift) {
+        shift.setPatternId(this.getId());
+        shifts.add(shift);
+    }
+
+    public void removeShift(Shift shift) {
+        shift.setPatternId(null);
+        shifts.remove(shift);
     }
 }
