@@ -30,6 +30,12 @@ export class EmployeeService {
     );
   }
 
+  getCurrent(): Observable<Employee> {
+    return this.http.get<Employee>(
+      `${this.config.baseUrl}/admin/employees/current`
+    );
+  }
+
   create(employee: Employee): Observable<any> {
     return this.http.post<number>(
       `${this.config.baseUrl}/admin/employees`,

@@ -4,7 +4,7 @@ import { EmployeesTableComponent } from './management/components/employees/compo
 import { SchedulesTableComponent } from './schedules/components/schedules-table/schedules-table.component';
 import { PositionsTableComponent } from './management/components/positions/components/positions-table/positions-table.component';
 import { AdminComponent } from './admin/admin.component';
-import { AuthGuard } from '../../auth/auth.guard';
+import { RoleGuard } from '../../guards/role-guard.service';
 import { ManagementComponent } from './management/management/management.component';
 import { DayTypesTableComponent } from './management/components/daytypes/components/daytypes-table/daytypes-table.component';
 import { ShiftsTableComponent } from './management/components/shifts/components/shifts-table/shifts-table.component';
@@ -13,9 +13,10 @@ import { PatternsComponent } from './management/components/patterns/patterns/pat
 
 const routes: Routes = [
   {
-    path: 'admin/:departmentId',
+    path: 'admin',
     component: AdminComponent,
-    canActivate: [AuthGuard],
+    canActivate: [RoleGuard],
+    data: {roles: ['ROLE_ADMIN']},
     children: [
       {
         path: 'management',

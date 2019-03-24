@@ -4,7 +4,7 @@
   <span class="toolbar-divider"></span>
   <a class="navbar-brand" routerLink="schedule">Schedule</a>
   <a class="navbar-brand" routerLink="management">Management</a>
-  <a class="navbar-dark" routerLink="/">Logout</a>
+  <a class="navbar-dark" (click)="logout()">Logout</a>
 </mat-toolbar>
 <div style="height: 94%">
   <router-outlet></router-outlet>

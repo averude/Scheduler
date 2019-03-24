@@ -37,6 +37,9 @@ export class ScheduleGenerationService {
                    offset: number,
                    fn: (createdSchedule: WorkDay[],
                         updatedSchedule: WorkDay[]) => void) {
+    if (!schedule || !dates || !patternUnits) {
+      return;
+    }
     const createdSchedule: WorkDay[] = [];
     const updatedSchedule: WorkDay[] = [];
     const datesSize = dates.length;
@@ -53,6 +56,7 @@ export class ScheduleGenerationService {
         if (workDay) {
           workDay.hours = patternUnits[unit_index].value;
           workDay.label = patternUnits[unit_index].label;
+          workDay.dayTypeId = patternUnits[unit_index].dayTypeId;
           updatedSchedule.push(workDay);
         } else {
           const newWorkDay = this.createWorkDay(

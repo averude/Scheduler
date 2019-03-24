@@ -1,2 +1,16 @@
-<button routerLink="admin/1">Admin</button>
-<button routerLink="client/1">Client</button>
+<div class="root-panel">
+  <h1 style="text-align: center">Scheduler</h1>
+  <div class="inputs-panel">
+    <input class="login-panel-input"
+           type="text"
+           placeholder="username"
+           [(ngModel)]="username" />
+    <input class="login-panel-input"
+           type="password"
+           placeholder="password"
+           [(ngModel)]="password"/>
+  </div>
+  <button class="login-panel-button"
+          (click)="login()"
+          type="submit">Login</button>
+</div>

@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Department } from '../../../model/department';
 import { DepartmentService } from '../../../services/department.service';
+import { AuthService } from "../../../services/auth.service";
 
 @Component({
   selector: 'app-admin',
@@ -14,13 +14,15 @@ export class AdminComponent implements OnInit {
   department$: Observable<Department>;
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
+    private authService: AuthService,
     private departmentService: DepartmentService
   ) {}
 
   ngOnInit(): void {
-    const id = Number.parseInt(this.route.snapshot.paramMap.get('departmentId'));
-    this.department$ = this.departmentService.getById(id);
+    this.department$ = this.departmentService.getCurrent();
+  }
+
+  logout() {
+    this.authService.logout();
   }
 }

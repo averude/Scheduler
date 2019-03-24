@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ScheduleService } from '../../../../services/schedule.service';
 import { mergeMap } from 'rxjs/internal/operators';
 import { WorkDay } from '../../../../model/workday';
+import { AuthService } from "../../../../services/auth.service";
 
 @Component({
   selector: 'app-client-schedule-table',
@@ -23,12 +24,13 @@ export class ScheduleTableComponent implements OnInit, OnDestroy {
 
   private sub: Subscription;
 
-  constructor(private route: ActivatedRoute,
+  constructor(private authService: AuthService,
+              private route: ActivatedRoute,
               private scheduleService: ScheduleService,
               private paginatorService: PaginatorService) { }
 
   ngOnInit() {
-    const id = +this.route.snapshot.paramMap.get('clientId');
+    const id = this.authService.currentUserValue.employeeId;
     this.sub = this.paginatorService.calendarDates
       .pipe(mergeMap(dates => {
         this.prevDays = dates.prevDates;
@@ -53,5 +55,9 @@ export class ScheduleTableComponent implements OnInit, OnDestroy {
       return this.schedule
         .find(value => value.date === dateISO);
     }
+  }
+
+  logout() {
+    this.authService.logout();
   }
 }

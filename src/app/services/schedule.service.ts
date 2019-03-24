@@ -24,7 +24,7 @@ export class ScheduleService {
 
   create(employeeId: number,
          schedule: WorkDay[]): Observable<any> {
-    return this.http.post<WorkDay[]>(
+    return this.http.post<any>(
       `${this.config.baseUrl}/schedule/${employeeId}`,
       schedule
     );
@@ -36,6 +36,16 @@ export class ScheduleService {
       `${this.config.baseUrl}/schedule/${employeeId}`,
       schedule,
       {responseType: 'text'}
+    );
+  }
+
+  generate(shiftId: number,
+           from: Date,
+           to: Date,
+           offset: number): Observable<any> {
+    return this.http.post<any>(
+      `${this.config.baseUrl}/schedule/generate?shiftId=${shiftId}&from=${from}&to=${to}&offset=${offset}`,
+      null
     );
   }
 }
