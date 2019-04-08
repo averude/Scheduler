@@ -57,12 +57,16 @@ public class WorkDay implements Serializable {
     }
 
     public WorkDay(Long employeeId,
+                   Long dayTypeId,
                    Boolean holiday,
                    Float hours,
+                   String label,
                    LocalDate date) {
         this.employeeId = employeeId;
+        this.dayTypeId = dayTypeId;
         this.holiday = holiday;
         this.hours = hours;
+        this.label = label;
         this.date = date;
     }
 
@@ -138,5 +142,18 @@ public class WorkDay implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(id, employeeId, holiday, hours, label, date);
+    }
+
+    @Override
+    public String toString() {
+        return "["
+                + "ID: " + id + "; "
+                + "Employee ID: " + employeeId + "; "
+                + "Day Type ID:" + dayTypeId + "; "
+                + "Holiday: " + holiday + "; "
+                + "Hours: " + hours + "; "
+                + "Label: " + label + "; "
+                + "Date: " + date +
+                "]";
     }
 }
