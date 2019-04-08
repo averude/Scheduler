@@ -25,6 +25,18 @@ public class SchedulerUserDetailsService implements UserDetailsService {
             userDetails.setCredentialsNonExpired(true);
             userDetails.setEnabled(true);
             return userDetails;
+        } else if ("client".equals(s)) {
+            SchedulerUserDetails userDetails = new SchedulerUserDetails();
+            userDetails.setUsername("client");
+            userDetails.setPassword("client");
+            userDetails.setAuthorities(Arrays.asList(new SimpleGrantedAuthority("ROLE_CLIENT")));
+            userDetails.setDepartmentId(1L);
+            userDetails.setEmployeeId(86L);
+            userDetails.setAccountNonExpired(true);
+            userDetails.setAccountNonLocked(true);
+            userDetails.setCredentialsNonExpired(true);
+            userDetails.setEnabled(true);
+            return userDetails;
         } else {
             throw new UsernameNotFoundException("User is not found");
         }
