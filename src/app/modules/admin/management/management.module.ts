@@ -9,6 +9,7 @@ import { PositionsModule } from './components/positions/positions.module';
 import { DayTypesModule } from './components/daytypes/daytypes.module';
 import { ShiftsModule } from './components/shifts/shifts.module';
 import { PatternsModule } from './components/patterns/patterns.module';
+import { RemoveDialogModule } from "../../../shared/abstract-components/remove-dialog/remove-dialog.module";
 
 @NgModule({
   imports: [
@@ -20,7 +21,8 @@ import { PatternsModule } from './components/patterns/patterns.module';
     ShiftsModule,
     PatternsModule,
     MatSidenavModule,
-    ManagementRoutingModule
+    ManagementRoutingModule,
+    RemoveDialogModule
   ],
   declarations: [
     ManagementComponent

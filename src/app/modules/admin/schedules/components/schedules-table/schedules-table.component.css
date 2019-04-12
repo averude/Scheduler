@@ -1,4 +1,10 @@
 table {
   user-select: none;
-  font-size: 14px;
+  font-size: 12px;
+}
+
+.paginator {
+  display: block;
+  width: max-content;
+  margin: 10px auto;
 }

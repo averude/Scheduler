@@ -1,15 +1,19 @@
 .schedule-cell, .schedule-cell-disabled {
-  color: white;
+  color: black;
   padding: 20px;
   height: 100px;
 }
 
 .schedule-cell {
-  background-color: grey;
+  background-color: floralwhite;
 }
 
 .schedule-cell-disabled {
-  background-color: darkgrey;
+  background-color: lightblue;
+}
+
+.schedule-cell:hover {
+  background-color: darkgray;
 }
 
 

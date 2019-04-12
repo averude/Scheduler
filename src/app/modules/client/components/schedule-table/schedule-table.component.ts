@@ -1,11 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { PaginatorService } from '../../paginator.service';
-import { ActivatedRoute } from '@angular/router';
 import { ScheduleService } from '../../../../services/schedule.service';
-import { mergeMap } from 'rxjs/internal/operators';
+import { switchMap } from 'rxjs/internal/operators';
 import { WorkDay } from '../../../../model/workday';
 import { AuthService } from "../../../../services/auth.service";
+import { dateToISOString } from "../../../../shared/utils";
 
 @Component({
   selector: 'app-client-schedule-table',
@@ -25,35 +25,36 @@ export class ScheduleTableComponent implements OnInit, OnDestroy {
   private sub: Subscription;
 
   constructor(private authService: AuthService,
-              private route: ActivatedRoute,
               private scheduleService: ScheduleService,
               private paginatorService: PaginatorService) { }
 
   ngOnInit() {
     const id = this.authService.currentUserValue.employeeId;
     this.sub = this.paginatorService.calendarDates
-      .pipe(mergeMap(dates => {
-        this.prevDays = dates.prevDates;
-        this.currDays = dates.currDates;
-        this.nextDays = dates.nextDates;
-        return this.scheduleService.getByDate(
-          this.currDays[0],
-          this.currDays[this.currDays.length - 1],
-          id
-        );
+      .pipe(
+        switchMap(dates => {
+          console.log(dates);
+          this.prevDays = dates.prevDates;
+          this.currDays = dates.currDates;
+          this.nextDays = dates.nextDates;
+          return this.scheduleService.getByDate(
+            this.currDays[0],
+            this.currDays[this.currDays.length - 1],
+            id
+          );
       }))
       .subscribe(schedule => this.schedule = schedule);
   }
 
   ngOnDestroy(): void {
     this.sub.unsubscribe();
+    console.log(this.sub);
   }
 
   getWorkDay(day: Date): WorkDay | void {
     if (this.schedule) {
-      const dateISO = day.toISOString().split('T')[0];
       return this.schedule
-        .find(value => value.date === dateISO);
+        .find(value => value.date === dateToISOString(day));
     }
   }
 

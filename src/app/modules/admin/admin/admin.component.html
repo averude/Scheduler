@@ -1,6 +1,6 @@
 <mat-toolbar>
   <img class="uksatse-logo" src="assets/img/uksatse_logo.svg">
-  <a class="navbar-brand" >Department: {{(department$ | async)?.name || '-'}}</a>
+  <a class="navbar-brand" >{{(department$ | async)?.name || '-'}}</a>
   <span class="toolbar-divider"></span>
   <a class="navbar-brand" routerLink="schedule">Schedule</a>
   <a class="navbar-brand" routerLink="management">Management</a>

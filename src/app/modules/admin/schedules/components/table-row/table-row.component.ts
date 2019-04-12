@@ -16,9 +16,10 @@ import { WorkDay } from '../../../../../model/workday';
 import { ShiftPattern } from '../../../../../model/shiftpattern';
 import { PaginatorService } from '../../paginator.service';
 import { Subscription } from 'rxjs';
-import { mergeMap } from 'rxjs/internal/operators';
 import { PatternUnitService } from '../../../../../services/pattern-unit.service';
 import { NotificationsService } from "angular2-notifications";
+import { switchMap } from "rxjs/operators";
+import { dateToISOString } from "../../../../../shared/utils";
 
 @Component({
   selector: '[app-table-row]',
@@ -58,14 +59,16 @@ export class TableRowComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.paginatorSub = this.paginatorService.dates
-      .pipe(mergeMap(daysInMonth => {
+      .pipe(
+        switchMap(daysInMonth => {
           this.daysInMonth = daysInMonth;
           return this.scheduleService.getByDate(
             daysInMonth[0],
             daysInMonth[daysInMonth.length - 1],
             this.employee.id
           );
-        }))
+        })
+      )
       .subscribe(schedule => {
         this.schedule = schedule;
         this.calculateSum();
@@ -78,9 +81,8 @@ export class TableRowComponent implements OnInit, OnDestroy {
 
   getWorkDay(date: Date): WorkDay {
     if (this.schedule) {
-      const dateISO = date.toISOString().split('T')[0];
       return this.schedule
-        .find(workDay => workDay.date === dateISO);
+        .find(workDay => workDay.date === dateToISOString(date));
     } else {
       return null;
     }

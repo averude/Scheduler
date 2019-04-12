@@ -1,7 +1,6 @@
-import {Component, Input, OnInit} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { PatternUnit } from '../../../../../../../model/patternunit';
 import { DayType } from '../../../../../../../model/daytype';
-import { UnitControlService } from "../../services/unit-control.service";
 
 @Component({
   selector: 'app-pattern-unit',
@@ -13,21 +12,25 @@ export class PatternUnitComponent implements OnInit {
   @Input() unit: PatternUnit;
   @Input() dayTypes: DayType[];
 
-  constructor(private unitControlService: UnitControlService) { }
+  @Output() onDelete:   EventEmitter<PatternUnit> = new EventEmitter();
+  @Output() onMoveUp:   EventEmitter<PatternUnit> = new EventEmitter();
+  @Output() onMoveDown: EventEmitter<PatternUnit> = new EventEmitter();
+
+  constructor() { }
 
   ngOnInit() {
   }
 
   moveUp() {
-    this.unitControlService.moveUp(this.unit);
+    this.onMoveUp.emit(this.unit);
   }
 
   moveDown() {
-    this.unitControlService.moveDown(this.unit);
+    this.onMoveDown.emit(this.unit);
   }
 
   delete() {
-    this.unitControlService.delete(this.unit);
+    this.onDelete.emit(this.unit);
   }
 
   onChange(event) {

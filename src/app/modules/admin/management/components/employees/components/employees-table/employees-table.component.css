@@ -1,8 +1,11 @@
-.table {
-  user-select: none;
+.mat-column-firstName {
+  width: 15%;
 }
 
-.full-cell-size {
-  width: 100%;
-  display: block;
+.mat-column-secondName {
+  width: 15%;
+}
+
+.mat-column-patronymic {
+  width: 15%;
 }

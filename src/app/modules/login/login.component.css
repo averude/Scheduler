@@ -5,6 +5,11 @@
   transform: translate(-50%, -50%);
 }
 
+.scheduler-title {
+  font-size: 30px;
+  text-align: center;
+}
+
 .inputs-panel {
   width: 300px
 }
@@ -15,5 +20,6 @@
 }
 
 .login-panel-button {
+  font-size: 20px;
   width: 100%;
 }

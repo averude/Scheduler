@@ -9,7 +9,7 @@ import { Subscription } from 'rxjs';
 })
 export class TableHeaderComponent implements OnInit, OnDestroy {
 
-  daysInMonth: Date[];
+  daysInMonth: Date[] = [];
   private sub: Subscription;
 
   constructor(private paginatorService: PaginatorService) { }

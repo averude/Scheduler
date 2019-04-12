@@ -1,38 +1,65 @@
-<table class="table table-striped table-bordered table-sm">
-  <thead>
-    <tr>
-      <th class="text-center">Name</th>
-      <th class="text-center">Quantity</th>
-      <th style="width: 10%">Control</th>
-    </tr>
-    <tr app-add-position
-        (positionCreated)="createPosition($event)">
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let position of positions"
-        appEditableRow
-        #row="editableRow">
-      <td class="align-middle">
-        <input type="text"
-               [(ngModel)]="position.name"
-               [disabled]="!row.isEditable"
-               [ngClass]="{'form-control-plaintext': !row.isEditable,
-                           'form-control': row.isEditable}"/>
+<div class="management-table-container">
+  <mat-form-field class="management-table-filter">
+    <input matInput
+           (keyup)="applyFilter($event.target.value)"
+           placeholder="Filter">
+  </mat-form-field>
+
+  <table mat-table
+         matSort
+         class="management-table"
+         [dataSource]="dataSource">
+
+    <ng-container matColumnDef="select">
+      <th mat-header-cell *matHeaderCellDef>
+        <mat-checkbox (change)="$event ? masterToggle() : null"
+                      [checked]="selection.hasValue() && isAllSelected()"
+                      [indeterminate]="selection.hasValue() && !isAllSelected()"
+                      [aria-label]="checkboxLabel()">
+        </mat-checkbox>
+      </th>
+      <td mat-cell
+          *matCellDef="let row">
+        <mat-checkbox (click)="$event.stopPropagation()"
+                      (change)="$event ? selection.toggle(row) : null"
+                      [checked]="selection.isSelected(row)"
+                      [aria-label]="checkboxLabel(row)">
+        </mat-checkbox>
       </td>
-      <td selectable class="align-middle">
-        {{getQuantity(position.id)}}
-      </td>
-      <td>
-        <button *ngIf="!row.isEditable" class="btn btn-danger full-cell-size"
-                (click)="removePosition(position)">
-          X
+    </ng-container>
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+      <td mat-cell *matCellDef="let position">{{position.name}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="quantity">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Quantity</th>
+      <td mat-cell *matCellDef="let position">{{getQuantity(position.id)}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="control">
+      <th mat-header-cell *matHeaderCellDef>
+        <button *ngIf="selection.isEmpty()"
+                class="management-table-control-button"
+                (click)="openDialog()">
+          <img class="management-table-button-icon" src="assets/img/add.svg">
         </button>
-        <button *ngIf="row.isEditable" class="btn btn-primary full-cell-size"
-                (click)="updatePosition(position);row.isEditable=false">
-          Save
+        <button *ngIf="!selection.isEmpty()"
+                (click)="removeDialog()"
+                class="management-table-control-button">
+          <img class="management-table-button-icon" src="assets/img/garbage.svg">
+        </button>
+      </th>
+      <td mat-cell *matCellDef="let position">
+        <button class="management-table-control-button"
+                (click)="openDialog(position)">
+          <img class="management-table-button-icon" src="assets/img/edit.svg">
         </button>
       </td>
-    </tr>
-  </tbody>
-</table>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>

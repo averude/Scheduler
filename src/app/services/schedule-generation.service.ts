@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { PatternUnit } from '../model/patternunit';
 import { WorkDay } from '../model/workday';
+import { dateToISOString } from "../shared/utils";
 
 @Injectable({
   providedIn: 'root'
@@ -37,7 +38,7 @@ export class ScheduleGenerationService {
                    offset: number,
                    fn: (createdSchedule: WorkDay[],
                         updatedSchedule: WorkDay[]) => void) {
-    if (!schedule || !dates || !patternUnits) {
+    if (!schedule || !dates || !patternUnits || !(patternUnits.length > 0)) {
       return;
     }
     const createdSchedule: WorkDay[] = [];
@@ -63,7 +64,7 @@ export class ScheduleGenerationService {
             employeeId,
             false,
             patternUnits[unit_index].value,
-            this.getISODateString(dates[date_index]),
+            dateToISOString(dates[date_index]),
             patternUnits[unit_index].label);
           createdSchedule.push(newWorkDay);
         }
@@ -76,11 +77,7 @@ export class ScheduleGenerationService {
                           date: Date): any {
     return (item) =>
       item.employeeId === employeeId &&
-      item.date === this.getISODateString(date);
-  }
-
-  private getISODateString(date: Date): string {
-    return date.toISOString().split('T')[0];
+      item.date === dateToISOString(date);
   }
 
   private createWorkDay(employeeId: number,

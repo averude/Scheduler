@@ -3,11 +3,9 @@
 }
 
 .sidebar {
-  width: 250px;
-  background-color: lightgray;
-}
-
-.sidebar {
+  width: 15%;
+  min-width: 130px;
+  background-color: slategray;
   display: block;
 }
 
@@ -16,7 +14,7 @@
   width: 100%;
   height: 70px;
   font-size: 16px;
-  color: black;
+  color: white;
   text-align: left;
   border-style: none;
   background: transparent;
@@ -24,5 +22,5 @@
 }
 
 .sidebar-button:hover {
-  background: grey;
+  background: royalblue;
 }

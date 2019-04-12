@@ -1,0 +1,28 @@
+<h2 matDialogTitle>{{operation}}</h2>
+<mat-dialog-content [formGroup]="dialogForm">
+
+  <mat-form-field>
+    <input matInput
+           placeholder="Shift Name"
+           formControlName="name">
+    <mat-error *ngIf="isControlInvalid('name')">{{getErrorMessage()}}</mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-select placeholder="Shift Pattern"
+                [compareWith]="compare"
+                formControlName="patternId">
+      <mat-option *ngFor="let pattern of patterns"
+                  [value]="pattern.id">
+        {{pattern.name}}
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="isControlInvalid('patternId')">{{getErrorMessage()}}</mat-error>
+  </mat-form-field>
+
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button class="mat-raised-button" (click)="close()">Close</button>
+  <button class="mat-raised-button mat-primary" type="submit" (click)="submit()">Save</button>
+</mat-dialog-actions>

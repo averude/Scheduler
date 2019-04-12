@@ -3,6 +3,7 @@ import { WorkDay} from '../model/workday';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { RestConfig } from '../rest.config';
+import { dateToISOString } from "../shared/utils";
 
 @Injectable({
   providedIn: 'root'
@@ -15,8 +16,8 @@ export class ScheduleService {
   getByDate(start: Date,
             end: Date,
             employeeId: number): Observable<WorkDay[]> {
-    const from = start.toISOString().split('T')[0];
-    const to = end.toISOString().split('T')[0];
+    const from = dateToISOString(start);
+    const to = dateToISOString(end);
     return this.http.get<WorkDay[]>(
       `${this.config.baseUrl}/schedule/search?employeeId=${employeeId}&from=${from}&to=${to}`
     );

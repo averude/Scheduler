@@ -25,8 +25,10 @@ export class AuthService {
         map(token => {
           if (token && token.access_token) {
             const user = new User();
-            user.roles = decode(token.access_token).authorities;
-            user.departmentId = 1;
+            const token_claims = decode(token.access_token);
+            user.roles = token_claims.authorities;
+            user.employeeId = token_claims.employee_id;
+            user.departmentId = token_claims.department_id;
             user.access_token = token.access_token;
             sessionStorage.setItem('currentUser', JSON.stringify(user));
             return user;
@@ -37,7 +39,8 @@ export class AuthService {
   }
 
   public get currentUserValue(): User {
-    return JSON.parse(sessionStorage.getItem('currentUser'));
+    let user = sessionStorage.getItem('currentUser');
+    return JSON.parse(user);
   }
 
   public logout() {
