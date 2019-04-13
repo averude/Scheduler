@@ -1,11 +1,6 @@
 import {
-  Component,
-  ViewChildren,
-  Input,
-  OnInit,
-  QueryList,
-  HostListener,
-  ViewChild, OnDestroy
+  Component, ViewChildren, Input, OnInit, QueryList,
+  ViewChild, OnDestroy, AfterViewInit, ElementRef
 } from '@angular/core';
 import { TableCellComponent } from '../table-cell/table-cell.component';
 import { ContextMenuComponent, ContextMenuService } from 'ngx-contextmenu';
@@ -15,22 +10,24 @@ import { ScheduleGenerationService } from '../../../../../services/schedule-gene
 import { WorkDay } from '../../../../../model/workday';
 import { ShiftPattern } from '../../../../../model/shiftpattern';
 import { PaginatorService } from '../../paginator.service';
-import { Subscription } from 'rxjs';
+import { fromEvent, Observable, Subscription } from 'rxjs';
 import { PatternUnitService } from '../../../../../services/pattern-unit.service';
 import { NotificationsService } from "angular2-notifications";
-import { switchMap } from "rxjs/operators";
-import { dateToISOString } from "../../../../../shared/utils";
+import { filter, switchMap } from "rxjs/operators";
+import { dateToISOString, selectingLeft, selectingRight } from "../../../../../shared/utils";
 
 @Component({
   selector: '[app-table-row]',
   templateUrl: './table-row.component.html',
   styleUrls: ['./table-row.component.css']
 })
-export class TableRowComponent implements OnInit, OnDestroy {
+export class TableRowComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @Input() departmentId: number;
   @Input() employee: Employee;
   @Input() patterns: ShiftPattern[];
+
+  @Input() mouseMove$: Observable<number>;
 
   // Context menu variables
   @ViewChild(ContextMenuComponent)
@@ -41,6 +38,7 @@ export class TableRowComponent implements OnInit, OnDestroy {
   @ViewChildren(TableCellComponent)
   viewChildren: QueryList<TableCellComponent>;
   dragging = false;
+  startX: number;
 
   // Table variables
   daysInMonth: Date[];
@@ -49,8 +47,12 @@ export class TableRowComponent implements OnInit, OnDestroy {
 
   // Observable subscriptions
   private paginatorSub: Subscription;
+  private mouseMoveSub: Subscription;
+  private mouseDownSub: Subscription;
+  private mouseUpSub:   Subscription;
 
-  constructor(private scheduleService: ScheduleService,
+  constructor(private elementRef: ElementRef,
+              private scheduleService: ScheduleService,
               private scheduleGenerationService: ScheduleGenerationService,
               private patternUnitService: PatternUnitService,
               private paginatorService: PaginatorService,
@@ -59,24 +61,54 @@ export class TableRowComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.paginatorSub = this.paginatorService.dates
-      .pipe(
-        switchMap(daysInMonth => {
+      .pipe(switchMap(daysInMonth => {
           this.daysInMonth = daysInMonth;
           return this.scheduleService.getByDate(
             daysInMonth[0],
             daysInMonth[daysInMonth.length - 1],
             this.employee.id
           );
-        })
-      )
+        }))
       .subscribe(schedule => {
         this.schedule = schedule;
         this.calculateSum();
       });
   }
 
+  ngAfterViewInit(): void {
+    this.mouseDownSub = fromEvent<MouseEvent>(this.elementRef.nativeElement, 'mousedown')
+      .subscribe(event => {
+        this.dragging = true;
+        this.startX = event.clientX;
+
+        this.mouseMoveSub = this.mouseMove$
+          .pipe(filter(() => this.dragging))
+          .subscribe(clientX => {
+            console.log(clientX);
+            this.clearSelection();
+            if (this.startX > clientX) {
+              selectingLeft(this.startX, clientX, this.viewChildren);
+            } else {
+              selectingRight(this.startX, clientX, this.viewChildren);
+            }
+          });
+      });
+
+    this.mouseUpSub = fromEvent<MouseEvent>(document, 'mouseup')
+      .subscribe(event => {
+        if (this.dragging) {
+          this.onContextMenu(event, this.selectedDates);
+          this.dragging = false;
+          if (this.mouseMoveSub) this.mouseMoveSub.unsubscribe();
+        }
+      });
+  }
+
   ngOnDestroy(): void {
     this.paginatorSub.unsubscribe();
+    if (this.mouseMoveSub) this.mouseMoveSub.unsubscribe();
+    this.mouseDownSub.unsubscribe();
+    this.mouseUpSub.unsubscribe();
   }
 
   getWorkDay(date: Date): WorkDay {
@@ -98,17 +130,6 @@ export class TableRowComponent implements OnInit, OnDestroy {
 
   isWeekend(date: Date): boolean {
     return date.getDay() === 0 || date.getDay() === 6;
-  }
-
-  @HostListener('mousedown')
-  mouseDown() {
-    this.dragging = true;
-  }
-
-  @HostListener('mouseup', ['$event'])
-  mouseUp($event: MouseEvent) {
-    this.dragging = false;
-    this.onContextMenu($event, this.selectedDates);
   }
 
   onContextMenu($event: MouseEvent, dates: Date[]): void {

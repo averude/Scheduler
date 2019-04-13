@@ -1,7 +1,6 @@
 import {
   Component,
-  ElementRef,
-  HostListener,
+  ElementRef, HostListener,
   Input,
   OnInit
 } from '@angular/core';
@@ -16,26 +15,23 @@ export class TableCellComponent implements OnInit {
   @Input() value: any;
   @Input() day: Date;
 
-  className = 'selected';
-
-  @Input() dragging = false;
   selected = false;
 
-  constructor(private element: ElementRef) { }
+  className = "selected";
+
+  constructor(public elementRef: ElementRef) { }
 
   ngOnInit() {
   }
 
   @HostListener('mousedown')
-  onMouseDown() {
-    this.selected = !this.selected;
-    this.toggleClass();
+  mouseDown() {
+    this.select();
   }
 
-  @HostListener('mouseover')
-  onMouseOver() {
-    if (this.dragging) {
-      this.selected = !this.selected;
+  select() {
+    if (!this.selected) {
+      this.selected = true;
       this.toggleClass();
     }
   }
@@ -48,6 +44,6 @@ export class TableCellComponent implements OnInit {
   }
 
   private toggleClass() {
-    this.element.nativeElement.classList.toggle(this.className);
+    this.elementRef.nativeElement.classList.toggle(this.className);
   }
 }

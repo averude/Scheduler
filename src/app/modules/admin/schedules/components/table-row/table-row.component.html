@@ -12,7 +12,6 @@
 <td class="text-center align-middle"
     *ngFor="let day of daysInMonth"
     app-table-cell
-    [dragging]="dragging"
     [day]="day"
     [value]="getWorkDay(day) | scheduleLabel"
     [class.weekend]="isWeekend(day)">

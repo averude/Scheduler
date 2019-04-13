@@ -18,7 +18,8 @@ import { PaginatorService } from './paginator.service';
     ContextMenuModule.forRoot({
       autoFocus: true,
       useBootstrap4: true
-    })],
+    })
+  ],
   declarations: [
     SchedulesTableComponent,
     TablePaginatorComponent,

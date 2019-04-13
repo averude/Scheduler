@@ -6,7 +6,8 @@
     <tr *ngFor="let employee of employees"
         app-table-row
         [employee]="employee"
-        [patterns]="patterns">
+        [patterns]="patterns"
+        [mouseMove$]="mouseMove$">
     </tr>
   </tbody>
 </table>
