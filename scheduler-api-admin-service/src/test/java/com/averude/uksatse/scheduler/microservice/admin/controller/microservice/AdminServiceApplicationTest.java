@@ -2,8 +2,12 @@ package com.averude.uksatse.scheduler.microservice.admin.controller.microservice
 
 import com.averude.uksatse.scheduler.core.entity.DayType;
 import com.averude.uksatse.scheduler.core.entity.Department;
+import com.averude.uksatse.scheduler.core.entity.Employee;
+import com.averude.uksatse.scheduler.core.entity.Position;
 import com.averude.uksatse.scheduler.microservice.admin.controller.DayTypeControllerImpl;
 import com.averude.uksatse.scheduler.microservice.admin.controller.DepartmentControllerImpl;
+import com.averude.uksatse.scheduler.microservice.admin.controller.EmployeeControllerImpl;
+import com.averude.uksatse.scheduler.microservice.admin.controller.PositionControllerImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -100,5 +104,45 @@ public class AdminServiceApplicationTest {
     public void testDepartmentControllerNonValidRequest() {
         Department nonValidDepartment = new Department("");
         departmentController.add(nonValidDepartment);
+    }
+
+    @Autowired
+    PositionControllerImpl positionController;
+    @Autowired
+    EmployeeControllerImpl employeeController;
+
+    @Test
+    public void testUpdateChildEntity() {
+        Department validDepartment = new Department("Test department");
+
+        departmentController.add(validDepartment);
+
+        Position position = new Position();
+        position.setName("Position");
+        position.setDepartmentId(validDepartment.getId());
+        positionController.create(position);
+
+        Employee employee = new Employee("ETET", "ETETET", "etwetwt");
+        employee.setPositionId(position.getId());
+        employeeController.create(employee);
+
+        employeeController.get(employee.getId())
+                .ifPresent(emp -> System.out.println(emp.getFirstName()));
+
+        Position uPosition = new Position();
+        uPosition.setId(position.getId());
+        uPosition.setDepartmentId(validDepartment.getId());
+        uPosition.setName("Another");
+        positionController.update(uPosition);
+
+        employeeController.get(employee.getId())
+                .ifPresent(emp -> System.out.println(emp.getFirstName()));
+        positionController.get(position.getId())
+                .ifPresent(pos -> System.out.println(pos.getName()));
+
+        departmentController.delete(validDepartment.getId());
+
+        positionController.get(position.getId())
+                .ifPresent(pos -> System.out.println(pos.getName()));
     }
 }
