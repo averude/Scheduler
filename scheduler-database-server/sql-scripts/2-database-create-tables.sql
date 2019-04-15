@@ -1,7 +1,7 @@
 -- PostgreSQL
 CREATE TABLE departments (
   id            SERIAL,
-  name          VARCHAR (64)  NOT NULL,
+  name          VARCHAR (128) NOT NULL,
   UNIQUE (name),
   PRIMARY KEY (id)
 );
@@ -9,15 +9,15 @@ CREATE TABLE departments (
 CREATE TABLE positions (
   id            SERIAL,
   department_id INTEGER       NOT NULL,
-  name          VARCHAR (64)  NOT NULL,
+  name          VARCHAR (128) NOT NULL,
   UNIQUE (department_id, name),
   PRIMARY KEY (id),
-  FOREIGN KEY (department_id) REFERENCES departments(id) ON DELETE RESTRICT
+  FOREIGN KEY (department_id) REFERENCES departments(id) ON DELETE CASCADE
 );
 
 CREATE TABLE day_types (
   id            SERIAL,
-  name          VARCHAR (64)  NOT NULL,
+  name          VARCHAR (128) NOT NULL,
   label         VARCHAR (5),
   UNIQUE (name, label),
   PRIMARY KEY (id)
@@ -26,10 +26,10 @@ CREATE TABLE day_types (
 CREATE TABLE shift_patterns (
   id            SERIAL,
   department_id INTEGER       NOT NULL,
-  name          VARCHAR (64)  NOT NULL,
+  name          VARCHAR (128) NOT NULL,
   UNIQUE (department_id, name),
   PRIMARY KEY (id),
-  FOREIGN KEY (department_id) REFERENCES departments(id) ON DELETE RESTRICT
+  FOREIGN KEY (department_id) REFERENCES departments(id) ON DELETE CASCADE
 );
 
 CREATE TABLE pattern_units (
@@ -42,18 +42,18 @@ CREATE TABLE pattern_units (
   UNIQUE (pattern_id, order_id),
   PRIMARY KEY (id),
   FOREIGN KEY (pattern_id)    REFERENCES shift_patterns(id) ON DELETE CASCADE,
-  FOREIGN KEY (day_type_id)   REFERENCES day_types(id)      ON DELETE RESTRICT
+  FOREIGN KEY (day_type_id)   REFERENCES day_types(id)      ON DELETE CASCADE
 );
 
 CREATE TABLE shifts (
   id            SERIAL,
   department_id INTEGER       NOT NULL,
   pattern_id    INTEGER,
-  name          VARCHAR (64)  NOT NULL,
+  name          VARCHAR (128) NOT NULL,
   UNIQUE (department_id, name),
   PRIMARY KEY (id),
-  FOREIGN KEY (department_id) REFERENCES departments(id) ON DELETE RESTRICT,
-  FOREIGN KEY (pattern_id)    REFERENCES shift_patterns(id)
+  FOREIGN KEY (department_id) REFERENCES departments(id)    ON DELETE RESTRICT,
+  FOREIGN KEY (pattern_id)    REFERENCES shift_patterns(id) ON DELETE SET NULL
 );
 
 CREATE TABLE employees (
@@ -65,8 +65,8 @@ CREATE TABLE employees (
   patronymic    VARCHAR (64)  NOT NULL,
   UNIQUE (first_name, second_name, patronymic, position_id),
   PRIMARY KEY (id),
-  FOREIGN KEY (shift_id)      REFERENCES shifts(id)    ON DELETE RESTRICT,
-  FOREIGN KEY (position_id)   REFERENCES positions(id) ON DELETE RESTRICT
+  FOREIGN KEY (shift_id)      REFERENCES shifts(id)    ON DELETE SET NULL,
+  FOREIGN KEY (position_id)   REFERENCES positions(id) ON DELETE CASCADE
 );
 
 CREATE TABLE work_schedule (
@@ -80,5 +80,27 @@ CREATE TABLE work_schedule (
   UNIQUE (employee_id, date),
   PRIMARY KEY (id),
   FOREIGN KEY (employee_id)   REFERENCES employees(id) ON DELETE CASCADE,
-  FOREIGN KEY (day_type_id)   REFERENCES day_types(id)
+  FOREIGN KEY (day_type_id)   REFERENCES day_types(id) ON DELETE SET NULL
+);
+
+CREATE TABLE working_time (
+  id            SERIAL,
+  department_id INTEGER       NOT NULL,
+  shift_id      INTEGER       NOT NULL,
+  date          DATE          NOT NULL,
+  hours         FLOAT         NOT NULL  CHECK ( hours >= 0 ),
+  UNIQUE (shift_id, date),
+  PRIMARY KEY (id),
+  FOREIGN KEY (department_id) REFERENCES departments(id) ON DELETE CASCADE,
+  FOREIGN KEY (shift_id)      REFERENCES shifts(id)      ON DELETE CASCADE
+);
+
+CREATE TABLE holidays (
+  id            SERIAL,
+  department_id INTEGER       NOT NULL,
+  date          DATE          NOT NULL,
+  name          VARCHAR(255)  NOT NULL,
+  UNIQUE (department_id, date, name),
+  PRIMARY KEY (id),
+  FOREIGN KEY (department_id) REFERENCES departments(id) ON DELETE CASCADE
 );

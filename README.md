@@ -58,6 +58,16 @@ GET     | /units/{unit_id}                                  | Get a pattern unit
 POST    | /units                                            | Create a new pattern unit
 PUT     | /units                                           | Update a pattern unit
 DELETE  | /units/{unit_id}                                  | Delete a pattern unit by its ID
+GET     | /workingtime                                      | Get all working time in the department
+GET     | /workingtime/{workingtime_id}                     | Get working time by its ID
+POST    | /workingtime                                      | Create new working time
+PUT     | /workingtime                                      | Update working time
+DELETE  | /workingtime/{workingtime_id}                     | Delete the working time by its ID
+GET     | /holidays                                         | Get all holidays in the department
+GET     | /holidays/{holiday_id}                            | Get a holiday by its ID
+POST    | /holidays                                         | Create a new holiday
+PUT     | /holidays                                         | Update a holiday
+DELETE  | /holidays/{holiday_id}                            | Delete the holiday by its ID
 ---------------------------------------------------------------------------------------------
 
 ### Schedule Service API
