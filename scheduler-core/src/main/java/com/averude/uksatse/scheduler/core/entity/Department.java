@@ -63,7 +63,7 @@ public class Department implements Serializable {
     @JsonIgnore
     @OneToMany( mappedBy = "departmentId",
                 cascade = CascadeType.ALL,
-                fetch = FetchType.LAZYs)
+                fetch = FetchType.LAZY)
     private List<@NotNull @Valid WorkingTime> workingTimes = new ArrayList<>();
 
     public Department() {
