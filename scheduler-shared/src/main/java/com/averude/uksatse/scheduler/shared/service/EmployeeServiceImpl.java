@@ -36,7 +36,7 @@ public class EmployeeServiceImpl
     public Iterable<Employee> findAllByAuth(Authentication authentication) {
         Long departmentId = detailsExtractor
                 .extractId(authentication, TokenExtraDetailsExtractor.DEPARTMENT_ID);
-        return employeeRepository.findAllByDepartmentId(departmentId);
+        return findAllByDepartmentId(departmentId);
     }
 
     @Override

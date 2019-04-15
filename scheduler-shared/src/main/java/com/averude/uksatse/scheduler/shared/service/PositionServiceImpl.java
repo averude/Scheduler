@@ -34,6 +34,6 @@ public class PositionServiceImpl
     public Iterable<Position> findAllByAuth(Authentication authentication) {
         Long departmentId = detailsExtractor
                 .extractId(authentication, TokenExtraDetailsExtractor.DEPARTMENT_ID);
-        return positionRepository.findAllByDepartmentId(departmentId);
+        return findAllByDepartmentId(departmentId);
     }
 }

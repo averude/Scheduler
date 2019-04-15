@@ -34,6 +34,6 @@ public class ShiftServiceImpl
     public Iterable<Shift> findAllByAuth(Authentication authentication) {
         Long departmentId = detailsExtractor
                 .extractId(authentication, TokenExtraDetailsExtractor.DEPARTMENT_ID);
-        return shiftRepository.findAllByDepartmentId(departmentId);
+        return findAllByDepartmentId(departmentId);
     }
 }

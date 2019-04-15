@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class StatisticsServiceImpl implements com.averude.uksatse.scheduler.shared.service.StatisticsService {
+public class StatisticsServiceImpl implements StatisticsService {
     private final StatisticsRepository statisticsRepository;
     private final TokenExtraDetailsExtractor detailsExtractor;
 
