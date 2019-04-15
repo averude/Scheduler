@@ -30,7 +30,7 @@ public class Department implements Serializable {
     private Long id;
 
     @NotNull(message = "{department.name.empty}")
-    @Size(  max = 64,
+    @Size(  max = 128,
             min = 3,
             message = "{department.name.size}")
     @Column(nullable = false)
@@ -39,29 +39,38 @@ public class Department implements Serializable {
     @JsonIgnore
     @OneToMany( mappedBy = "departmentId",
                 cascade = CascadeType.ALL,
-                fetch = FetchType.LAZY,
-                orphanRemoval = true)
+                fetch = FetchType.LAZY)
     private List<@NotNull @Valid Position> positions = new LinkedList<>();
 
     @JsonIgnore
     @OneToMany( mappedBy = "departmentId",
                 cascade = CascadeType.ALL,
-                fetch = FetchType.LAZY,
-                orphanRemoval = true)
+                fetch = FetchType.LAZY)
     private List<@NotNull @Valid ShiftPattern> patterns = new ArrayList<>();
 
     @JsonIgnore
     @OneToMany( mappedBy = "departmentId",
                 cascade = CascadeType.ALL,
-                fetch = FetchType.LAZY,
-                orphanRemoval = true)
+                fetch = FetchType.LAZY)
     private List<@NotNull @Valid Shift> shifts = new ArrayList<>();
+
+    @JsonIgnore
+    @OneToMany( mappedBy = "departmentId",
+                cascade = CascadeType.ALL,
+                fetch = FetchType.LAZY)
+    private List<@NotNull @Valid Holiday> holidays = new ArrayList<>();
+
+    @JsonIgnore
+    @OneToMany( mappedBy = "departmentId",
+                cascade = CascadeType.ALL,
+                fetch = FetchType.LAZYs)
+    private List<@NotNull @Valid WorkingTime> workingTimes = new ArrayList<>();
 
     public Department() {
     }
 
     public Department(@NotNull(message = "{department.name.empty}")
-                      @Size(max = 64,
+                      @Size(max = 128,
                             min = 3,
                             message = "{department.name.size}")
                       String name) {
@@ -108,6 +117,22 @@ public class Department implements Serializable {
         this.shifts = shifts;
     }
 
+    public List<Holiday> getHolidays() {
+        return holidays;
+    }
+
+    public void setHolidays(List<Holiday> holidays) {
+        this.holidays = holidays;
+    }
+
+    public List<WorkingTime> getWorkingTimes() {
+        return workingTimes;
+    }
+
+    public void setWorkingTimes(List<WorkingTime> workingTimes) {
+        this.workingTimes = workingTimes;
+    }
+
     public void addPosition(Position position){
         position.setDepartmentId(this.getId());
         positions.add(position);
@@ -136,6 +161,26 @@ public class Department implements Serializable {
     public void removePattern(ShiftPattern pattern){
         pattern.setDepartmentId(null);
         patterns.remove(pattern);
+    }
+
+    public void addHoliday(Holiday holiday) {
+        holiday.setDepartmentId(this.getId());
+        holidays.add(holiday);
+    }
+
+    public void removeHoliday(Holiday holiday) {
+        holiday.setDepartmentId(null);
+        holidays.remove(holiday);
+    }
+
+    public void addWorkingTime(WorkingTime workingTime) {
+        workingTime.setDepartmentId(this.getId());
+        workingTimes.add(workingTime);
+    }
+
+    public void removeWorkingTime(WorkingTime workingTime) {
+        workingTime.setDepartmentId(null);
+        workingTimes.remove(workingTime);
     }
 
     @Override

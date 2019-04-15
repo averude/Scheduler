@@ -29,7 +29,7 @@ public class Position implements Serializable {
     private Long id;
 
     @NotNull(message = "{position.name.null}")
-    @Size(  max = 64,
+    @Size(  max = 128,
             min = 3,
             message = "{position.name.size}")
     @Column(nullable = false)
@@ -44,8 +44,7 @@ public class Position implements Serializable {
     @JsonIgnore
     @OneToMany( mappedBy = "positionId",
                 cascade = CascadeType.ALL,
-                fetch = FetchType.LAZY,
-                orphanRemoval = true)
+                fetch = FetchType.LAZY)
     private Set<@NotNull @Valid Employee> employees = new HashSet<>();
 
     public Position() {

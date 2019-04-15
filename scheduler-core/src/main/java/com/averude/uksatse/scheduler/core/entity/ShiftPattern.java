@@ -34,7 +34,7 @@ public class ShiftPattern implements Serializable {
     private Long departmentId;
 
     @NotNull(message = "{shiftpattern.name.null}")
-    @Size(  max = 64,
+    @Size(  max = 128,
             min = 3,
             message = "{shiftpattern.name.size}")
     @Column(nullable = false)

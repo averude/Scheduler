@@ -29,7 +29,7 @@ public class Shift implements Serializable{
     private Long id;
 
     @NotNull(message = "{shift.name.null}")
-    @Size(  max = 64,
+    @Size(  max = 128,
             min = 2,
             message = "{shift.name.size}")
     @Column(nullable = false)
@@ -48,8 +48,7 @@ public class Shift implements Serializable{
     @JsonIgnore
     @OneToMany( mappedBy = "shiftId",
                 cascade = CascadeType.ALL,
-                fetch = FetchType.LAZY,
-                orphanRemoval = true)
+                fetch = FetchType.LAZY)
     private List<@NotNull @Valid Employee> employees = new ArrayList<>();
 
     public Shift() {

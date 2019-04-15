@@ -65,8 +65,7 @@ public class Employee implements Serializable {
 
     @OneToMany( mappedBy = "employeeId",
                 cascade = CascadeType.ALL,
-                fetch = FetchType.LAZY,
-                orphanRemoval = true)
+                fetch = FetchType.LAZY)
     private List<@NotNull @Valid WorkDay> scheduleList = new ArrayList<>();
 
     public Employee() {

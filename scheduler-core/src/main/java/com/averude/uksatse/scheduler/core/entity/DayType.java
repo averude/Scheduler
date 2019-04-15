@@ -29,7 +29,7 @@ public class DayType implements Serializable {
     private Long id;
 
     @NotNull(message = "{daytype.name.null}")
-    @Size(  max = 64,
+    @Size(  max = 128,
             min = 1,
             message = "{daytype.name.size}")
     @Column(nullable = false)
@@ -43,7 +43,6 @@ public class DayType implements Serializable {
     @JsonIgnore
     @OneToMany( mappedBy = "dayTypeId",
                 fetch = FetchType.LAZY,
-                orphanRemoval = true,
                 cascade = CascadeType.ALL)
     private List<PatternUnit> units = new ArrayList<>();
 
@@ -58,7 +57,7 @@ public class DayType implements Serializable {
     }
 
     public DayType(@NotNull(message = "{daytype.name.null}")
-                   @Size(max = 64,
+                   @Size(max = 128,
                          min = 1,
                          message = "{daytype.name.size}")
                    String name,
