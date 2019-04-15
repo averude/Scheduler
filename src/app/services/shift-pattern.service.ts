@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ShiftPattern } from '../model/shiftpattern';
+import { ShiftPattern } from '../model/shift-pattern';
 import { HttpClient } from '@angular/common/http';
 import { RestConfig } from '../rest.config';
+import { CrudService } from "./interface/crud.service";
 
 @Injectable({
   providedIn: 'root'
 })
-export class ShiftPatternService {
+export class ShiftPatternService implements CrudService<ShiftPattern> {
 
   constructor(private http: HttpClient,
               private config: RestConfig) { }
@@ -33,7 +34,7 @@ export class ShiftPatternService {
     );
   }
 
-  remove(patternId: number): Observable<any> {
+  delete(patternId: number): Observable<any> {
     return this.http.delete(
       `${this.config.baseUrl}/admin/patterns/${patternId}`,
       {responseType: 'text'}

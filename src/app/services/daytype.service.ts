@@ -3,11 +3,12 @@ import { HttpClient } from '@angular/common/http';
 import { RestConfig } from '../rest.config';
 import { Observable } from 'rxjs';
 import { DayType } from '../model/daytype';
+import { CrudService } from "./interface/crud.service";
 
 @Injectable({
   providedIn: 'root'
 })
-export class DayTypeService {
+export class DayTypeService implements CrudService<DayType> {
 
   constructor(private http: HttpClient,
               private config: RestConfig) { }

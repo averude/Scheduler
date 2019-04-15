@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { PatternUnit } from '../model/patternunit';
+import { PatternUnit } from '../model/pattern-unit';
 import { WorkDay } from '../model/workday';
 import { dateToISOString } from "../shared/utils";
 

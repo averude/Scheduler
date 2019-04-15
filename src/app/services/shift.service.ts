@@ -3,11 +3,12 @@ import { Observable } from 'rxjs';
 import { Shift } from '../model/shift';
 import { HttpClient } from '@angular/common/http';
 import { RestConfig } from '../rest.config';
+import { CrudService } from "./interface/crud.service";
 
 @Injectable({
   providedIn: 'root'
 })
-export class ShiftService {
+export class ShiftService implements CrudService<Shift> {
 
   constructor(private http: HttpClient,
               private config: RestConfig) { }
@@ -33,7 +34,7 @@ export class ShiftService {
     );
   }
 
-  remove(shiftId: number): Observable<any> {
+  delete(shiftId: number): Observable<any> {
     return this.http.delete(
       `${this.config.baseUrl}/admin/shifts/${shiftId}`,
       {responseType: 'text'}
