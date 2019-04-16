@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { PaginatorService } from '../../paginator.service';
 import { Subscription } from 'rxjs';
+import { CalendarDay } from "../../../../../model/ui/calendar-day";
 
 @Component({
   selector: '[app-table-header]',
@@ -9,7 +10,7 @@ import { Subscription } from 'rxjs';
 })
 export class TableHeaderComponent implements OnInit, OnDestroy {
 
-  daysInMonth: Date[] = [];
+  daysInMonth: CalendarDay[] = [];
   private sub: Subscription;
 
   constructor(private paginatorService: PaginatorService) { }
@@ -21,9 +22,5 @@ export class TableHeaderComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.sub.unsubscribe();
-  }
-
-  isWeekend(day: Date): boolean {
-    return day.getDay() === 0 || day.getDay() === 6;
   }
 }

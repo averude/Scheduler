@@ -4,6 +4,7 @@ import {
   Input,
   OnInit
 } from '@angular/core';
+import { CalendarDay } from "../../../../../model/ui/calendar-day";
 
 @Component({
   selector: '[app-table-cell]',
@@ -13,7 +14,7 @@ import {
 export class TableCellComponent implements OnInit {
 
   @Input() value: any;
-  @Input() day: Date;
+  @Input() day: CalendarDay;
 
   selected = false;
 
