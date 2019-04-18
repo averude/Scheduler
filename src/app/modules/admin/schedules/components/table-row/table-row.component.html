@@ -1,4 +1,4 @@
-<td>
+<td class="align-middle">
   {{
     employee.secondName
     + ' '
@@ -9,15 +9,23 @@
     + '.'
   }}
 </td>
-<td class="text-center align-middle"
+<td class="text-center align-middle table-cell"
     *ngFor="let day of daysInMonth"
     app-table-cell
     [day]="day"
     [value]="getWorkDay(day) | scheduleLabel"
-    [class.weekend]="isWeekend(day)">
+    [class.weekend]="day.weekend"
+    [class.holiday]="day.holiday">
+</td>
+<td class="text-center align-middle sum"
+    [class.notEqual]="workingTimeSum !== workingTimeNorm">
+  {{workingTimeSum}}
 </td>
 <td class="text-center align-middle sum">
-  {{sum}}
+  {{workingTimeNorm}}
+</td>
+<td class="text-center align-middle sum">
+  {{workingHolidaysSum}}
 </td>
 
 <context-menu #patternMenu

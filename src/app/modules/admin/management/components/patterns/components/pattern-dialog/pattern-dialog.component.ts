@@ -1,8 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
 import { DayType } from "../../../../../../../model/daytype";
-import { PatternUnit } from "../../../../../../../model/patternunit";
-import { ShiftPattern } from "../../../../../../../model/shiftpattern";
+import { PatternUnit } from "../../../../../../../model/pattern-unit";
+import { ShiftPattern } from "../../../../../../../model/shift-pattern";
 import { AuthService } from "../../../../../../../services/auth.service";
 
 @Component({

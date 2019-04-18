@@ -1,20 +1,23 @@
 import { Component } from '@angular/core';
 import { TableBaseComponent } from "../../../../../../../shared/abstract-components/table-base/table-base.component";
-import { ShiftPattern } from "../../../../../../../model/shiftpattern";
-import { ShiftPatternService } from "../../../../../../../services/shiftpattern.service";
-import { MatDialog, MatDialogConfig } from "@angular/material";
+import { ShiftPattern } from "../../../../../../../model/shift-pattern";
+import { ShiftPatternService } from "../../../../../../../services/shift-pattern.service";
+import { MatDialog } from "@angular/material";
 import { NotificationsService } from "angular2-notifications";
 import { map } from "rxjs/operators";
 import { PatternUnitService } from "../../../../../../../services/pattern-unit.service";
 import { DayTypeService } from "../../../../../../../services/daytype.service";
 import { DayType } from "../../../../../../../model/daytype";
 import { PatternDialogComponent, ShiftPatternWrapper } from "../pattern-dialog/pattern-dialog.component";
-import { PatternUnit } from "../../../../../../../model/patternunit";
+import { PatternUnit } from "../../../../../../../model/pattern-unit";
 
 @Component({
   selector: 'app-patterns-table',
   templateUrl: './patterns-table.component.html',
-  styleUrls: ['../../../../../../../shared/common/table.common.css','./patterns-table.component.css']
+  styleUrls: [
+    '../../../../../../../shared/common/table.common.css',
+    './patterns-table.component.css'
+  ]
 })
 export class PatternsTableComponent extends TableBaseComponent<ShiftPattern> {
 
@@ -27,10 +30,17 @@ export class PatternsTableComponent extends TableBaseComponent<ShiftPattern> {
               private notificationsService: NotificationsService,
               private dayTypeService: DayTypeService,
               private shiftPatternService: ShiftPatternService,
-              private patternUnitService: PatternUnitService) { super(); }
+              private patternUnitService: PatternUnitService) {
+    super(dialog, shiftPatternService, notificationsService);
+  }
 
   ngOnInit() {
-    this.initDataSource();
+    super.ngOnInit();
+    this.dayTypeService.getAll()
+      .subscribe(dayTypes => this.dayTypes = dayTypes);
+  }
+
+  initDataSourceValues() {
     this.shiftPatternService.getAll()
       .pipe(map(patterns => {
         patterns.forEach(pattern =>
@@ -41,47 +51,28 @@ export class PatternsTableComponent extends TableBaseComponent<ShiftPattern> {
         return patterns;
       }))
       .subscribe(patterns => this.dataSource.data = patterns);
-    this.dayTypeService.getAll()
-      .subscribe(dayTypes => this.dayTypes = dayTypes);
   }
 
   openDialog(shiftPattern: ShiftPattern) {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = false;
-    dialogConfig.autoFocus = true;
-    dialogConfig.data = {
+    const data = {
       pattern: shiftPattern,
       units: shiftPattern ? this.patternUnits[shiftPattern.id] : undefined,
       dayTypes: this.dayTypes
     };
 
-    let dialogRef = this.dialog.open(PatternDialogComponent, dialogConfig);
-    dialogRef.afterClosed()
-      .subscribe((wrapper: ShiftPatternWrapper) => {
-        if (!wrapper) {
-          return;
-        }
-
-        if (wrapper.pattern) {
-          this.createOrUpdatePattern(wrapper.pattern, wrapper.units);
-        }
-      });
+    this.openAddOrEditDialog(shiftPattern, data, PatternDialogComponent);
   }
 
-  removeDialog() {
-    this.openRemoveDialog(this.dialog);
-  }
+  addOrEditDialogAfterCloseFunction(oldValue: ShiftPattern): (value: any) => void {
+    return (wrapper: ShiftPatternWrapper) => {
+      if (!wrapper) {
+        return;
+      }
 
-  removeSelected() {
-    this.selection.selected.forEach(pattern => {
-      this.shiftPatternService.remove(pattern.id)
-        .subscribe(res => {
-          this.removeRow(pattern);
-          this.notificationsService
-            .success('Success',
-              `Shift pattern "${pattern.name}" was successfully deleted`);
-        });
-    });
+      if (wrapper.pattern) {
+        this.createOrUpdatePattern(wrapper.pattern, wrapper.units);
+      }
+    };
   }
 
   private createOrUpdatePattern(pattern: ShiftPattern, units: PatternUnit[]) {

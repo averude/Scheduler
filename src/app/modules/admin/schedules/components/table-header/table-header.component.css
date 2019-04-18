@@ -9,3 +9,8 @@
 .holiday {
   background-color: lightpink;
 }
+
+.paginator-row {
+  height: 30px;
+  font-size: 14px;
+}

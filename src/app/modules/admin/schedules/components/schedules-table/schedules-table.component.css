@@ -3,8 +3,6 @@ table {
   font-size: 12px;
 }
 
-.paginator {
-  display: block;
-  width: max-content;
-  margin: 10px auto;
+tr {
+  height: 45px;
 }

@@ -2,6 +2,17 @@
   width: 100%;
 }
 
+.management-table-filter-container {
+  background-color: white;
+  display: flex;
+  flex-direction: row;
+}
+
+.management-table-year-paginator {
+  height: 100%;
+  margin: auto;
+}
+
 .management-table-filter {
   background-color: white;
   position: -webkit-sticky;

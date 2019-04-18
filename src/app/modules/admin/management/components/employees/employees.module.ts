@@ -4,8 +4,10 @@ import { CommonModule } from '@angular/common';
 import { SharedModule } from '../../../../../shared/shared.module';
 import { EmployeesTableComponent } from './components/employees-table/employees-table.component';
 import {
-  MatCheckboxModule, MatDialogModule,
-  MatFormFieldModule, MatInputModule,
+  MatCheckboxModule,
+  MatDialogModule,
+  MatFormFieldModule,
+  MatInputModule,
   MatSelectModule,
   MatSortModule,
   MatTableModule

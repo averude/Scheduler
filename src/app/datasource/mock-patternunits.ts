@@ -1,4 +1,4 @@
-import {PatternUnit} from '../model/patternunit';
+import { PatternUnit } from '../model/pattern-unit';
 
 export const UNITS: PatternUnit[] = [
   {id: 1, patternId: 1, orderId: 1, dayTypeId: null, value: 8.25, label: null},

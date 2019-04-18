@@ -11,6 +11,8 @@ import { AuthService } from "../../../services/auth.service";
 })
 export class AdminComponent implements OnInit {
 
+  roles: string[];
+
   department$: Observable<Department>;
 
   constructor(
@@ -20,6 +22,7 @@ export class AdminComponent implements OnInit {
 
   ngOnInit(): void {
     this.department$ = this.departmentService.getCurrent();
+    this.roles = this.authService.currentUserValue.roles;
   }
 
   logout() {

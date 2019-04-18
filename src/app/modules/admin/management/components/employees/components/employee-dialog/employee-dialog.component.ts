@@ -19,7 +19,7 @@ export class EmployeeDialogComponent extends DialogBaseComponent<Employee> {
   constructor(private fb: FormBuilder,
               private dialogRef: MatDialogRef<EmployeeDialogComponent>,
               @Inject(MAT_DIALOG_DATA) data) {
-    super(data.employee);
+    super(data.employee, dialogRef);
 
     this.positions  = data.positions;
     this.shifts     = data.shifts;
@@ -40,27 +40,19 @@ export class EmployeeDialogComponent extends DialogBaseComponent<Employee> {
         Validators.minLength(3),
         Validators.maxLength(32)]
       ],
-      positionId: [0, [Validators.required]],
-      shiftId:    [0, [Validators.required]]
+      positionId: [null, [Validators.required]],
+      shiftId:    [null]
     });
   }
 
   fillInTheForm(employee: Employee) {
     this.dialogForm.setValue({
-      id: employee.id,
-      firstName: employee.firstName,
+      id:         employee.id,
+      firstName:  employee.firstName,
       secondName: employee.secondName,
       patronymic: employee.patronymic,
       positionId: employee.positionId,
-      shiftId:  employee.shiftId
+      shiftId:    employee.shiftId
     });
-  }
-
-  submit() {
-    this.dialogRef.close(this.dialogForm.value);
-  }
-
-  close() {
-    this.dialogRef.close();
   }
 }

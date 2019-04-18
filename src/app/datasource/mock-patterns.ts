@@ -1,4 +1,4 @@
-import {ShiftPattern} from '../model/shiftpattern';
+import { ShiftPattern } from '../model/shift-pattern';
 
 export const PATTERNS: ShiftPattern[] = [
   {id: 1, departmentId: 1, name: 'Everyday'},

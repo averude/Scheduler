@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { PatternUnit } from '../model/pattern-unit';
 import { WorkDay } from '../model/workday';
-import { dateToISOString } from "../shared/utils";
+import { CalendarDay } from "../model/ui/calendar-day";
 
 @Injectable({
   providedIn: 'root'
@@ -12,38 +12,38 @@ export class ScheduleGenerationService {
 
   generateScheduleByPatternId(employeeId: number,
                               schedule: WorkDay[],
-                              dates: Date[],
+                              days: CalendarDay[],
                               patternUnits: PatternUnit[],
                               fn: (createdSchedule: WorkDay[],
                                    updatedSchedule: WorkDay[]) => void) {
-    this.generate(employeeId, schedule, dates, patternUnits, 0, fn);
+    this.generate(employeeId, schedule, days, patternUnits, 0, fn);
   }
 
   generateScheduleWithCustomHours(employeeId: number,
                                   schedule: WorkDay[],
-                                  dates: Date[],
+                                  days: CalendarDay[],
                                   hours: number,
                                   fn: (createdSchedule: WorkDay[],
                                        updatedSchedule: WorkDay[]) => void) {
     const patternUnit = new PatternUnit();
     patternUnit.value = hours;
     const customUnits: PatternUnit[] = [patternUnit];
-    this.generate(employeeId, schedule, dates, customUnits, 0, fn);
+    this.generate(employeeId, schedule, days, customUnits, 0, fn);
   }
 
   private generate(employeeId: number,
                    schedule: WorkDay[],
-                   dates: Date[],
+                   days: CalendarDay[],
                    patternUnits: PatternUnit[],
                    offset: number,
                    fn: (createdSchedule: WorkDay[],
                         updatedSchedule: WorkDay[]) => void) {
-    if (!schedule || !dates || !patternUnits || !(patternUnits.length > 0)) {
+    if (!schedule || !days || !patternUnits || !(patternUnits.length > 0)) {
       return;
     }
     const createdSchedule: WorkDay[] = [];
     const updatedSchedule: WorkDay[] = [];
-    const datesSize = dates.length;
+    const datesSize = days.length;
     const unitsSize = patternUnits.length;
     for (let i = 0; i < datesSize; i += unitsSize) {
       for (let j = 0; j < unitsSize; j++) {
@@ -53,18 +53,19 @@ export class ScheduleGenerationService {
         }
         const unit_index = (offset + j) % unitsSize;
         const workDay = schedule
-          .find(this.getFindFunction(employeeId, dates[date_index]));
+          .find(this.getFindFunction(employeeId, days[date_index]));
         if (workDay) {
           workDay.hours = patternUnits[unit_index].value;
           workDay.label = patternUnits[unit_index].label;
           workDay.dayTypeId = patternUnits[unit_index].dayTypeId;
+          workDay.holiday = days[date_index].holiday;
           updatedSchedule.push(workDay);
         } else {
           const newWorkDay = this.createWorkDay(
             employeeId,
-            false,
+            days[date_index].holiday,
             patternUnits[unit_index].value,
-            dateToISOString(dates[date_index]),
+            days[date_index].isoString,
             patternUnits[unit_index].label);
           createdSchedule.push(newWorkDay);
         }
@@ -74,10 +75,10 @@ export class ScheduleGenerationService {
   }
 
   private getFindFunction(employeeId: number,
-                          date: Date): any {
+                          day: CalendarDay): any {
     return (item) =>
       item.employeeId === employeeId &&
-      item.date === dateToISOString(date);
+      item.date === day.isoString;
   }
 
   private createWorkDay(employeeId: number,

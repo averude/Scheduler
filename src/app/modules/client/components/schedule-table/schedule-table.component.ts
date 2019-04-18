@@ -38,8 +38,8 @@ export class ScheduleTableComponent implements OnInit, OnDestroy {
           this.currDays = dates.currDates;
           this.nextDays = dates.nextDates;
           return this.scheduleService.getByDate(
-            this.currDays[0],
-            this.currDays[this.currDays.length - 1],
+            dateToISOString(this.currDays[0]),
+            dateToISOString(this.currDays[this.currDays.length - 1]),
             id
           );
       }))

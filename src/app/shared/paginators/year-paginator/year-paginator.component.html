@@ -1,0 +1,12 @@
+<div class="btn-group">
+  <img class="btn-month-select"
+       src="assets/img/left.svg"
+       (click)="prevYear()">
+  <div class="date-label">
+    {{(currentDate.format("YYYY"))}}
+  </div>
+  <img class="btn-month-select"
+       src="assets/img/right.svg"
+       (click)="nextYear()">
+</div>
+

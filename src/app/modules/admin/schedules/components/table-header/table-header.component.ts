@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { PaginatorService } from '../../paginator.service';
 import { Subscription } from 'rxjs';
 import { CalendarDay } from "../../../../../model/ui/calendar-day";
+import { PaginatorService } from "../../../../../shared/paginators/paginator.service";
 
 @Component({
   selector: '[app-table-header]',

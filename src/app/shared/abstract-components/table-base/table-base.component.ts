@@ -1,9 +1,13 @@
-import { OnInit, ViewChild } from '@angular/core';
+import { OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogConfig, MatSort, MatTableDataSource } from "@angular/material";
 import { SelectionModel } from "@angular/cdk/collections";
 import { RemoveDialogComponent } from "../remove-dialog/remove-dialog.component";
+import { CrudService } from "../../../services/interface/crud.service";
+import { NotificationsService } from "angular2-notifications";
+import { IdEntity } from "../../../model/interface/id-entity";
+import { ComponentType } from "@angular/cdk/portal";
 
-export abstract class TableBaseComponent<T> implements OnInit {
+export abstract class TableBaseComponent<T extends IdEntity> implements OnInit, OnDestroy {
 
   dataSource  = new MatTableDataSource<T>([]);
   selection   = new SelectionModel<T>(true, []);
@@ -11,13 +15,25 @@ export abstract class TableBaseComponent<T> implements OnInit {
   @ViewChild(MatSort)
   sort: MatSort;
 
-  protected constructor() { }
+  protected constructor(private matDialog: MatDialog,
+                        private crudService: CrudService<T>,
+                        private notification: NotificationsService) { }
 
   ngOnInit(): void {
+    this.initDataSourceSort();
+    this.initDataSourceValues();
   }
 
-  initDataSource() {
+  ngOnDestroy(): void {
+  }
+
+  initDataSourceSort() {
     this.dataSource.sort = this.sort;
+  }
+
+  initDataSourceValues() {
+    this.crudService.getAll()
+      .subscribe(values => this.dataSource.data = values);
   }
 
   addRow(object: T) {
@@ -40,7 +56,50 @@ export abstract class TableBaseComponent<T> implements OnInit {
     this.dataSource.data = data;
   }
 
-  openRemoveDialog(dialog: MatDialog) {
+  abstract openDialog(t: T);
+
+  openAddOrEditDialog(t: T,
+                      data: any,
+                      component: ComponentType<any> | TemplateRef<any>) {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = false;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = data;
+
+    let dialogRef = this.matDialog.open(component, dialogConfig);
+    dialogRef.afterClosed()
+      .subscribe(this.addOrEditDialogAfterCloseFunction(t));
+  }
+
+  addOrEditDialogAfterCloseFunction(oldValue: T): (value: any) => void {
+    return value => {
+      if (!value) {
+        return;
+      }
+      if (value.id) {
+        this.crudService.update(value)
+          .subscribe(res => {
+            this.updateRow(value, oldValue);
+            this.notification
+              .success(
+                'Updated',
+                `Entity was successfully updated`);
+          });
+      } else {
+        this.crudService.create(value)
+          .subscribe(res => {
+            value.id = res;
+            this.addRow(value);
+            this.notification
+              .success(
+                'Created',
+                `Entity was successfully created`)
+          });
+      }
+    };
+  }
+
+  removeDialog() {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = false;
     dialogConfig.autoFocus = true;
@@ -48,7 +107,7 @@ export abstract class TableBaseComponent<T> implements OnInit {
       numberOfSelected: this.selection.selected.length
     };
 
-    let dialogRef = dialog.open(RemoveDialogComponent, dialogConfig);
+    let dialogRef = this.matDialog.open(RemoveDialogComponent, dialogConfig);
     dialogRef.afterClosed()
       .subscribe(answer => {
         if (answer) {
@@ -58,11 +117,17 @@ export abstract class TableBaseComponent<T> implements OnInit {
       });
   }
 
-  abstract openDialog(t: T);
-
-  abstract removeDialog();
-
-  abstract removeSelected();
+  removeSelected() {
+    this.selection.selected.forEach(value =>
+      this.crudService.delete(value.id)
+        .subscribe(res => {
+          this.removeRow(value);
+          this.notification.success(
+            'Deleted',
+            'Selected values was successfully deleted'
+          );
+        }));
+  }
 
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {

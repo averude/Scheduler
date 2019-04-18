@@ -1,20 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { Employee } from '../../../../../model/employee';
 import { EmployeeService } from '../../../../../services/employee.service';
-import { ShiftPatternService } from '../../../../../services/shiftpattern.service';
-import { ShiftPattern } from '../../../../../model/shiftpattern';
-import { fromEvent, Observable } from "rxjs";
-import { distinctUntilChanged, filter, map, throttle, throttleTime } from "rxjs/operators";
+import { ShiftPatternService } from '../../../../../services/shift-pattern.service';
+import { ShiftPattern } from '../../../../../model/shift-pattern';
+import { fromEvent, Observable, Subscription } from "rxjs";
+import { distinctUntilChanged, filter, map, throttleTime } from "rxjs/operators";
+import { WorkingTime } from "../../../../../model/working-time";
+import { WorkingTimeService } from "../../../../../services/working-time.service";
+import { PaginatorService } from "../../../../../shared/paginators/paginator.service";
 
 @Component({
   selector: 'app-schedules-table',
   templateUrl: './schedules-table.component.html',
   styleUrls: ['./schedules-table.component.css']
 })
-export class SchedulesTableComponent implements OnInit {
+export class SchedulesTableComponent implements OnInit, OnDestroy, AfterViewInit {
 
   employees: Employee[];
   patterns: ShiftPattern[];
+  workingTime: WorkingTime[];
 
   mouseMove$: Observable<number> = fromEvent<MouseEvent>(document, 'mousemove')
     .pipe(
@@ -24,8 +28,12 @@ export class SchedulesTableComponent implements OnInit {
       map(event => event.clientX)
     );
 
-  constructor(private employeeService: EmployeeService,
-              private patternService: ShiftPatternService) { }
+  private sub: Subscription;
+
+  constructor(private paginatorService: PaginatorService,
+              private employeeService: EmployeeService,
+              private patternService: ShiftPatternService,
+              private workingTimeService: WorkingTimeService) { }
 
   ngOnInit() {
     this.employeeService.getAll()
@@ -33,5 +41,20 @@ export class SchedulesTableComponent implements OnInit {
         .sort((a, b) => a.shiftId - b.shiftId)); // temporary
     this.patternService.getAll()
       .subscribe(patterns => this.patterns = patterns);
+  }
+
+  ngAfterViewInit(): void {
+    this.sub = this.paginatorService.dates
+      .pipe(filter(value => value.length > 0))
+      .subscribe(daysInMonth => {
+        this.workingTimeService.getAllByDate(
+          daysInMonth[0].isoString,
+          daysInMonth[daysInMonth.length - 1].isoString
+        ).subscribe(workingTime => this.workingTime = workingTime);
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.sub.unsubscribe();
   }
 }

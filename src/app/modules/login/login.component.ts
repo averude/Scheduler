@@ -21,7 +21,7 @@ export class LoginComponent implements OnInit{
   login() {
     this.authService.login(this.username, this.password).subscribe(res => {
       if (res.roles.indexOf('ROLE_ADMIN') >= 0) {
-        this.router.navigate(['/admin']);
+        this.router.navigate(['/admin/schedule']);
       }
       if (res.roles.indexOf('ROLE_CLIENT') >= 0) {
         this.router.navigate(['/client']);

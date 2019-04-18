@@ -1,9 +1,4 @@
-import {
-  Component,
-  ElementRef, HostListener,
-  Input,
-  OnInit
-} from '@angular/core';
+import { Component, ElementRef, HostListener, Input, OnInit } from '@angular/core';
 import { CalendarDay } from "../../../../../model/ui/calendar-day";
 
 @Component({

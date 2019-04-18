@@ -4,7 +4,7 @@ import { Shift } from "../../../../../../../model/shift";
 import { AuthService } from "../../../../../../../services/auth.service";
 import { FormBuilder, Validators } from "@angular/forms";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
-import { ShiftPattern } from "../../../../../../../model/shiftpattern";
+import { ShiftPattern } from "../../../../../../../model/shift-pattern";
 
 @Component({
   selector: 'app-shift-dialog',
@@ -19,7 +19,7 @@ export class ShiftDialogComponent extends DialogBaseComponent<Shift> {
               private fb: FormBuilder,
               private dialogRef: MatDialogRef<ShiftDialogComponent>,
               @Inject(MAT_DIALOG_DATA) data) {
-    super(data.shift);
+    super(data.shift, dialogRef);
 
     this.patterns = data.patterns;
   }
@@ -27,33 +27,25 @@ export class ShiftDialogComponent extends DialogBaseComponent<Shift> {
   initTheForm() {
     this.dialogForm = this.fb.group({
       id: [],
-      name: ['', [Validators.required,
-                  Validators.minLength(3),
-                  Validators.maxLength(64)]],
-      departmentId: [this.tempMethod()],
-      patternId: [0, Validators.required]
+      name: ['',    [Validators.required,
+                      Validators.minLength(3),
+                      Validators.maxLength(64)]],
+      departmentId: this.tempMethod(),
+      patternId:    []
     })
   }
 
   fillInTheForm(shift: Shift) {
     this.dialogForm.setValue({
-      id: shift.id,
-      name: shift.name,
+      id:           shift.id,
+      name:         shift.name,
       departmentId: shift.departmentId,
-      patternId: shift.patternId
+      patternId:    shift.patternId
     })
   }
 
   tempMethod(): number {
     let user = this.authService.currentUserValue;
     return user ? user.departmentId : 1;
-  }
-
-  submit() {
-    this.dialogRef.close(this.dialogForm.value);
-  }
-
-  close() {
-    this.dialogRef.close();
   }
 }

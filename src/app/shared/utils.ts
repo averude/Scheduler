@@ -1,5 +1,13 @@
 import { ElementRef, QueryList } from "@angular/core";
 import { TableCellComponent } from "../modules/admin/schedules/components/table-cell/table-cell.component";
+import { OperatorFunction } from "rxjs";
+import { map } from "rxjs/operators";
+
+export const parseDateOfEntities: OperatorFunction<any, any> =
+  map((response: Array<any>) => response.map(value => {
+    value.date = new Date(value.date);
+    return value;
+  }));
 
 export function dateToISOString(date: Date): string {
   return date.toISOString().split('T')[0];

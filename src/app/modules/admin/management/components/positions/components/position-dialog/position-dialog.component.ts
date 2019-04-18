@@ -16,7 +16,7 @@ export class PositionDialogComponent extends DialogBaseComponent<Position>{
               private fb: FormBuilder,
               private dialogRef: MatDialogRef<PositionDialogComponent>,
               @Inject(MAT_DIALOG_DATA) data) {
-    super(data.position);
+    super(data.position, dialogRef);
   }
 
   initTheForm() {
@@ -40,13 +40,5 @@ export class PositionDialogComponent extends DialogBaseComponent<Position>{
   tempMethod(): number {
     let user = this.authService.currentUserValue;
     return user ? user.departmentId : 1;
-  }
-
-  submit() {
-    this.dialogRef.close(this.dialogForm.value);
-  }
-
-  close() {
-    this.dialogRef.close();
   }
 }

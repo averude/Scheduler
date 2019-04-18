@@ -1,6 +1,13 @@
 import {
-  Component, ViewChildren, Input, OnInit, QueryList,
-  ViewChild, OnDestroy, AfterViewInit, ElementRef
+  AfterViewInit,
+  Component,
+  ElementRef,
+  Input,
+  OnDestroy,
+  OnInit,
+  QueryList,
+  ViewChild,
+  ViewChildren
 } from '@angular/core';
 import { TableCellComponent } from '../table-cell/table-cell.component';
 import { ContextMenuComponent, ContextMenuService } from 'ngx-contextmenu';
@@ -8,13 +15,15 @@ import { Employee } from '../../../../../model/employee';
 import { ScheduleService } from '../../../../../services/schedule.service';
 import { ScheduleGenerationService } from '../../../../../services/schedule-generation.service';
 import { WorkDay } from '../../../../../model/workday';
-import { ShiftPattern } from '../../../../../model/shiftpattern';
-import { PaginatorService } from '../../paginator.service';
+import { ShiftPattern } from '../../../../../model/shift-pattern';
 import { fromEvent, Observable, Subscription } from 'rxjs';
 import { PatternUnitService } from '../../../../../services/pattern-unit.service';
 import { NotificationsService } from "angular2-notifications";
 import { filter, switchMap } from "rxjs/operators";
-import { dateToISOString, selectingLeft, selectingRight } from "../../../../../shared/utils";
+import { selectingLeft, selectingRight } from "../../../../../shared/utils";
+import { WorkingTime } from "../../../../../model/working-time";
+import { CalendarDay } from "../../../../../model/ui/calendar-day";
+import { PaginatorService } from "../../../../../shared/paginators/paginator.service";
 
 @Component({
   selector: '[app-table-row]',
@@ -23,9 +32,9 @@ import { dateToISOString, selectingLeft, selectingRight } from "../../../../../s
 })
 export class TableRowComponent implements OnInit, OnDestroy, AfterViewInit {
 
-  @Input() departmentId: number;
   @Input() employee: Employee;
   @Input() patterns: ShiftPattern[];
+  @Input() workingTime: WorkingTime[];
 
   @Input() mouseMove$: Observable<number>;
 
@@ -41,9 +50,11 @@ export class TableRowComponent implements OnInit, OnDestroy, AfterViewInit {
   startX: number;
 
   // Table variables
-  daysInMonth: Date[];
+  daysInMonth: CalendarDay[];
   schedule: WorkDay[];
-  sum = 0;
+  workingTimeSum = 0;
+  workingTimeNorm = 0;
+  workingHolidaysSum = 0;
 
   // Observable subscriptions
   private paginatorSub: Subscription;
@@ -60,18 +71,25 @@ export class TableRowComponent implements OnInit, OnDestroy, AfterViewInit {
               private notificationService: NotificationsService) { }
 
   ngOnInit() {
+    // Because sometimes this component subscribes after values were emitted
+    this.daysInMonth = this.paginatorService.getLastValue();
+
     this.paginatorSub = this.paginatorService.dates
-      .pipe(switchMap(daysInMonth => {
+      .pipe(
+        filter(daysInMonth => daysInMonth.length > 0),
+        switchMap(daysInMonth => {
           this.daysInMonth = daysInMonth;
           return this.scheduleService.getByDate(
-            daysInMonth[0],
-            daysInMonth[daysInMonth.length - 1],
+            daysInMonth[0].isoString,
+            daysInMonth[daysInMonth.length - 1].isoString,
             this.employee.id
           );
         }))
       .subscribe(schedule => {
-        this.schedule = schedule;
-        this.calculateSum();
+        if (schedule) {
+          this.schedule = schedule;
+          this.calculateSum();
+        }
       });
   }
 
@@ -84,7 +102,6 @@ export class TableRowComponent implements OnInit, OnDestroy, AfterViewInit {
         this.mouseMoveSub = this.mouseMove$
           .pipe(filter(() => this.dragging))
           .subscribe(clientX => {
-            console.log(clientX);
             this.clearSelection();
             if (this.startX > clientX) {
               selectingLeft(this.startX, clientX, this.viewChildren);
@@ -97,7 +114,7 @@ export class TableRowComponent implements OnInit, OnDestroy, AfterViewInit {
     this.mouseUpSub = fromEvent<MouseEvent>(document, 'mouseup')
       .subscribe(event => {
         if (this.dragging) {
-          this.onContextMenu(event, this.selectedDates);
+          this.onContextMenu(event, this.selectedDays);
           this.dragging = false;
           if (this.mouseMoveSub) this.mouseMoveSub.unsubscribe();
         }
@@ -106,39 +123,63 @@ export class TableRowComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnDestroy(): void {
     this.paginatorSub.unsubscribe();
+    console.log(this.paginatorSub);
     if (this.mouseMoveSub) this.mouseMoveSub.unsubscribe();
     this.mouseDownSub.unsubscribe();
     this.mouseUpSub.unsubscribe();
   }
 
-  getWorkDay(date: Date): WorkDay {
+  getWorkDay(date: CalendarDay): WorkDay {
     if (this.schedule) {
       return this.schedule
-        .find(workDay => workDay.date === dateToISOString(date));
+        .find(workDay => workDay.date === date.isoString);
     } else {
       return null;
     }
   }
 
+  getShiftNorm(shiftId: number): number {
+    if (shiftId && this.workingTime) {
+      const shiftWorkingTime = this.workingTime
+        .find(value => {
+          return (value.shiftId === shiftId)
+        });
+      return shiftWorkingTime ? shiftWorkingTime.hours : 0;
+    } else {
+      return 0;
+    }
+  }
+
   calculateSum(): void {
+    this.calculateWorkingTimeSum();
+    this.workingTimeNorm = this.getShiftNorm(this.employee.shiftId);
+    this.calculateWorkingHolidaysSum();
+  }
+
+  calculateWorkingTimeSum(): void {
     if (this.schedule) {
-      this.sum = this.schedule
+      this.workingTimeSum = this.schedule
         .map(workDay => workDay.hours)
         .reduce((prev, curr) => prev + curr, 0);
     }
   }
 
-  isWeekend(date: Date): boolean {
-    return date.getDay() === 0 || date.getDay() === 6;
+  calculateWorkingHolidaysSum(): void {
+    if (this.schedule) {
+      this.workingHolidaysSum = this.schedule
+        .filter(workDay => workDay.holiday)
+        .map(workDay => workDay.hours)
+        .reduce((prev, curr) => prev + curr, 0);
+    }
   }
 
-  onContextMenu($event: MouseEvent, dates: Date[]): void {
-    if (dates.length > 0) {
+  onContextMenu($event: MouseEvent, days: CalendarDay[]): void {
+    if (days.length > 0) {
       setTimeout(() => {
         this.contextMenuService.show.next({
           contextMenu: this.patternMenu,
           event: $event,
-          item: dates,
+          item: days,
         });
         $event.preventDefault();
         $event.stopPropagation();
@@ -151,12 +192,12 @@ export class TableRowComponent implements OnInit, OnDestroy, AfterViewInit {
       .generateScheduleWithCustomHours(
         this.employee.id,
         this.schedule,
-        this.selectedDates,
+        this.selectedDays,
         this.customHours,
         this.scheduleGeneratedHandler);
   }
 
-  generateSchedule(dates: Date[],
+  generateSchedule(days: CalendarDay[],
                    patternId: number) {
     this.patternUnitService.getByPatternId(patternId)
       .subscribe(patternUnits =>
@@ -164,7 +205,7 @@ export class TableRowComponent implements OnInit, OnDestroy, AfterViewInit {
           .generateScheduleByPatternId(
             this.employee.id,
             this.schedule,
-            dates,
+            days,
             patternUnits,
             this.scheduleGeneratedHandler)
       );
@@ -198,7 +239,7 @@ export class TableRowComponent implements OnInit, OnDestroy, AfterViewInit {
     };
   }
 
-  private get selectedDates(): Date[] {
+  private get selectedDays(): CalendarDay[] {
     return this.viewChildren
       .filter(item => item.selected)
       .map(value => value.day);

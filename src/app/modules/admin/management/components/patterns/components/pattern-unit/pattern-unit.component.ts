@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { PatternUnit } from '../../../../../../../model/patternunit';
+import { PatternUnit } from '../../../../../../../model/pattern-unit';
 import { DayType } from '../../../../../../../model/daytype';
 
 @Component({

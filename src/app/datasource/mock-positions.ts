@@ -1,4 +1,4 @@
-import {Position} from '../model/position';
+import { Position } from '../model/position';
 
 export const POSITIONS: Position[] = [
   {id: 1, name: 'Manager', departmentId: 1},

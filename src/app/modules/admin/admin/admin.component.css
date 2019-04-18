@@ -6,3 +6,25 @@
 .toolbar-divider {
   flex: 1 1 auto;
 }
+
+.toolbar-img {
+  cursor: pointer;
+  height: 35px;
+  width: 35px;
+  margin: 0 15px 0;
+}
+
+.toolbar-img:focus {
+  outline: 0;
+}
+
+.toolbar-img:hover {
+  filter: grayscale(50%);
+}
+
+.toolbar-img-disabled {
+  height: 35px;
+  width: 35px;
+  margin: 0 15px 0;
+  filter: opacity(30%);
+}

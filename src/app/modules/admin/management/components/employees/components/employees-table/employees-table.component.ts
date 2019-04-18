@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { MatDialog, MatDialogConfig } from "@angular/material";
+import { MatDialog } from "@angular/material";
 import { EmployeeService } from "../../../../../../../services/employee.service";
 import { Employee } from "../../../../../../../model/employee";
 import { Shift } from "../../../../../../../model/shift";
@@ -25,10 +25,12 @@ export class EmployeesTableComponent extends TableBaseComponent<Employee> {
               private notificationsService: NotificationsService,
               private employeeService: EmployeeService,
               private positionService: PositionService,
-              private shiftService: ShiftService) { super(); }
+              private shiftService: ShiftService) {
+    super(dialog, employeeService, notificationsService);
+  }
 
   ngOnInit() {
-    this.initDataSource();
+    super.ngOnInit();
     this.dataSource.filterPredicate = ((data, filter) => {
       return data.secondName.toLowerCase().includes(filter)
         || data.firstName.toLowerCase().includes(filter)
@@ -36,9 +38,6 @@ export class EmployeesTableComponent extends TableBaseComponent<Employee> {
         || this.getPositionName(data.positionId).toLowerCase().includes(filter)
         || this.getShiftName(data.shiftId).toLowerCase().includes(filter);
     });
-    this.employeeService.getAll()
-      .subscribe(employees => this.dataSource.data = employees
-        .sort(((a, b) => a.shiftId - b.shiftId))); // move to backend
     this.positionService.getAll()
       .subscribe(positions => this.positions = positions);
     this.shiftService.getAll()
@@ -46,59 +45,13 @@ export class EmployeesTableComponent extends TableBaseComponent<Employee> {
   }
 
   openDialog(employee: Employee) {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = false;
-    dialogConfig.autoFocus = true;
-    dialogConfig.data = {
+    const data = {
       employee: employee,
       positions: this.positions,
       shifts: this.shifts
     };
 
-    let dialogRef = this.dialog.open(EmployeeDialogComponent, dialogConfig);
-    dialogRef.afterClosed()
-      .subscribe(value => {
-        if (!value) {
-          return;
-        }
-        if (value.id) {
-          this.employeeService.update(value)
-            .subscribe(res => {
-              this.updateRow(value, employee);
-              this.notificationsService
-                .success(
-                  'Updated',
-                  `Employee "${value.secondName} ${value.firstName}" was successfully updated`);
-            });
-        } else {
-          this.employeeService.create(value)
-            .subscribe(res => {
-              value.id = res;
-              this.addRow(value);
-              this.notificationsService
-                .success(
-                  'Created',
-                  `Employee "${value.secondName} ${value.firstName}" was successfully created`)
-            });
-        }
-      })
-  }
-
-  removeDialog() {
-    this.openRemoveDialog(this.dialog);
-  }
-
-  removeSelected() {
-    this.selection.selected.forEach(employee => {
-      this.employeeService.remove(employee.id)
-        .subscribe(res => {
-          this.removeRow(employee);
-          this.notificationsService
-            .success(
-              'Deleted',
-              `Employee "${employee.secondName} ${employee.firstName}" was successfully deleted`);
-        });
-    });
+    this.openAddOrEditDialog(employee, data, EmployeeDialogComponent);
   }
 
   getPositionName(positionId: number): string {

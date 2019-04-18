@@ -7,8 +7,7 @@ import { TableRowComponent } from './components/table-row/table-row.component';
 import { SchedulesTableComponent } from './components/schedules-table/schedules-table.component';
 import { SharedModule } from '../../../shared/shared.module';
 import { CommonModule } from '@angular/common';
-import { TablePaginatorComponent } from './components/table-paginator/table-paginator.component';
-import { PaginatorService } from './paginator.service';
+import { MonthYearPaginatorComponent } from "../../../shared/paginators/month-year-paginator/month-year-paginator.component";
 
 @NgModule({
   imports: [
@@ -22,11 +21,11 @@ import { PaginatorService } from './paginator.service';
   ],
   declarations: [
     SchedulesTableComponent,
-    TablePaginatorComponent,
+    MonthYearPaginatorComponent,
     TableRowComponent,
     TableHeaderComponent,
     TableCellComponent
   ],
-  providers: [PaginatorService]
+  providers: []
 })
 export class SchedulesModule {}

@@ -3,12 +3,11 @@ import { HttpClient } from '@angular/common/http';
 import { RestConfig } from '../rest.config';
 import { Observable } from 'rxjs';
 import { PatternUnit } from '../model/pattern-unit';
-import { CrudService } from "./interface/crud.service";
 
 @Injectable({
   providedIn: 'root'
 })
-export class PatternUnitService implements CrudService<PatternUnit> {
+export class PatternUnitService {
 
   constructor(private http: HttpClient,
               private config: RestConfig) { }

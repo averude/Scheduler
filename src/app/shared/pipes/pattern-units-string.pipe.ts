@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from "@angular/core";
-import { PatternUnit } from "../../model/patternunit";
+import { PatternUnit } from "../../model/pattern-unit";
 
 @Pipe({
   name: 'patternUnitStringImpure',

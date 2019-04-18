@@ -24,3 +24,7 @@
 .sidebar-button:hover {
   background: royalblue;
 }
+
+.sidebar-button:focus {
+  outline: 0;
+}

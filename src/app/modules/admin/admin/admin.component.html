@@ -2,9 +2,25 @@
   <img class="uksatse-logo" src="assets/img/uksatse_logo.svg">
   <a class="navbar-brand" >{{(department$ | async)?.name || '-'}}</a>
   <span class="toolbar-divider"></span>
-  <a class="navbar-brand" routerLink="schedule">Schedule</a>
-  <a class="navbar-brand" routerLink="management">Management</a>
-  <a class="navbar-dark" (click)="logout()">Logout</a>
+
+  <img class="toolbar-img"
+       src="assets/img/calendar.svg"
+       routerLink="schedule">
+
+  <img class="toolbar-img-disabled"
+       src="assets/img/statistics.svg">
+
+  <img class="toolbar-img-disabled"
+       src="assets/img/report.svg">
+
+  <img *ngIf="roles.indexOf('ROLE_ADMIN') >= 0"
+       class="toolbar-img"
+       src="assets/img/management.svg"
+       routerLink="management">
+
+  <img class="toolbar-img"
+       src="assets/img/logout.svg"
+       (click)="logout()">
 </mat-toolbar>
 <div style="height: 94%">
   <router-outlet></router-outlet>

@@ -1,14 +1,14 @@
 import { OnInit } from "@angular/core";
 import { FormGroup, ValidationErrors } from "@angular/forms";
+import { MatDialogRef } from "@angular/material";
 
 export abstract class DialogBaseComponent<T> implements OnInit {
   operation: string;
-  entity: T;
 
   dialogForm: FormGroup;
 
-  protected constructor(entity: T) {
-    this.entity = entity;
+  protected constructor(private entity: T,
+                        private dialog: MatDialogRef<any>) {
     if (this.entity) {
       this.operation = 'Edit';
     } else {
@@ -42,5 +42,13 @@ export abstract class DialogBaseComponent<T> implements OnInit {
 
   getErrorMessage(): string {
     return 'Hey you';
+  }
+
+  submit() {
+    this.dialog.close(this.dialogForm.value);
+  }
+
+  close() {
+    this.dialog.close();
   }
 }

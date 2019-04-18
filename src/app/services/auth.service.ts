@@ -19,7 +19,7 @@ export class AuthService {
     return this.http.post<any>(
       `${this.config.baseUrl}/uaa/oauth/token`,
       `username=${username}&password=${password}&grant_type=password&client_id=browser`,
-      this.getOptions(username, password)
+      this.getOptions()
     ).pipe(
         shareReplay(),
         map(token => {
@@ -48,7 +48,7 @@ export class AuthService {
     this.router.navigate(['/login']);
   }
 
-  private getOptions(username: string, password: string) {
+  private getOptions() {
     const headers = new HttpHeaders()
       .append('Content-type','application/x-www-form-urlencoded; charset=utf-8')
       .append('Authorization', 'Basic '+btoa("browser:secret"));
