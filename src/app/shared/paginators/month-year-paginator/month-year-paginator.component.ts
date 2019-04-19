@@ -29,7 +29,6 @@ export class MonthYearPaginatorComponent implements OnInit {
               private extraWeekendService: ExtraWeekendService) {}
 
   ngOnInit() {
-    this.currentDate = moment.utc();
     this.initCurrentMonth();
   }
 
@@ -56,7 +55,7 @@ export class MonthYearPaginatorComponent implements OnInit {
   private changeDate() {
     this.initFirstAndLastDaysOfMonth();
     let firstDayOfMonthString = this.firstDayOfMonth.format("YYYY-MM-DD");
-    let lastDayOfMonthString = this.lastDayOfMonth.format("YYYY-MM-DD");
+    let lastDayOfMonthString  = this.lastDayOfMonth.format("YYYY-MM-DD");
 
     forkJoin(
       this.holidayService.getAllByDate(firstDayOfMonthString, lastDayOfMonthString),
@@ -70,7 +69,7 @@ export class MonthYearPaginatorComponent implements OnInit {
     });
   }
 
-  calculateDaysInMonth() {
+  private calculateDaysInMonth() {
     this.daysInMonth.length = 0;
     const daysNum = this.currentDate.daysInMonth();
     const day = this.currentDate.clone().startOf('month');

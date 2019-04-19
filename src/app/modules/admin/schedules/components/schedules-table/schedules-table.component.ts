@@ -1,24 +1,23 @@
-import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { Employee } from '../../../../../model/employee';
 import { EmployeeService } from '../../../../../services/employee.service';
 import { ShiftPatternService } from '../../../../../services/shift-pattern.service';
 import { ShiftPattern } from '../../../../../model/shift-pattern';
 import { fromEvent, Observable, Subscription } from "rxjs";
 import { distinctUntilChanged, filter, map, throttleTime } from "rxjs/operators";
-import { WorkingTime } from "../../../../../model/working-time";
 import { WorkingTimeService } from "../../../../../services/working-time.service";
 import { PaginatorService } from "../../../../../shared/paginators/paginator.service";
+import { TableRowComponent } from "../table-row/table-row.component";
 
 @Component({
   selector: 'app-schedules-table',
   templateUrl: './schedules-table.component.html',
   styleUrls: ['./schedules-table.component.css']
 })
-export class SchedulesTableComponent implements OnInit, OnDestroy, AfterViewInit {
+export class SchedulesTableComponent implements OnInit, OnDestroy {
 
-  employees: Employee[];
-  patterns: ShiftPattern[];
-  workingTime: WorkingTime[];
+  employees:    Employee[];
+  patterns:     ShiftPattern[];
 
   mouseMove$: Observable<number> = fromEvent<MouseEvent>(document, 'mousemove')
     .pipe(
@@ -28,7 +27,12 @@ export class SchedulesTableComponent implements OnInit, OnDestroy, AfterViewInit
       map(event => event.clientX)
     );
 
-  private sub: Subscription;
+  mouseUp$:   Observable<MouseEvent> = fromEvent<MouseEvent>(document, 'mouseup');
+
+  sub: Subscription;
+
+  @ViewChildren(TableRowComponent)
+  rows: QueryList<TableRowComponent>;
 
   constructor(private paginatorService: PaginatorService,
               private employeeService: EmployeeService,
@@ -39,22 +43,30 @@ export class SchedulesTableComponent implements OnInit, OnDestroy, AfterViewInit
     this.employeeService.getAll()
       .subscribe(employees => this.employees = employees
         .sort((a, b) => a.shiftId - b.shiftId)); // temporary
+
     this.patternService.getAll()
       .subscribe(patterns => this.patterns = patterns);
-  }
 
-  ngAfterViewInit(): void {
     this.sub = this.paginatorService.dates
-      .pipe(filter(value => value.length > 0))
-      .subscribe(daysInMonth => {
-        this.workingTimeService.getAllByDate(
-          daysInMonth[0].isoString,
-          daysInMonth[daysInMonth.length - 1].isoString
-        ).subscribe(workingTime => this.workingTime = workingTime);
-      });
+      .pipe(
+        filter(values => values.length > 0)
+      ).subscribe(this.getWorkingTime);
   }
 
   ngOnDestroy(): void {
     this.sub.unsubscribe();
+    this.paginatorService.clearStoredValue();
+  }
+
+  private getWorkingTime = (daysInMonth) => {
+    this.workingTimeService.getAllByDate(
+      daysInMonth[0].isoString,
+      daysInMonth[daysInMonth.length - 1].isoString)
+      .subscribe(workingTime =>
+        this.rows.forEach(row => {
+          let workingTimeNorm = workingTime
+            .find(val => val.shiftId === row.employee.shiftId);
+          row.workingTimeNorm = workingTimeNorm ? workingTimeNorm.hours : 0;
+        }));
   }
 }

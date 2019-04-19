@@ -1,14 +1,13 @@
 import { Injectable } from "@angular/core";
-import { Observable, Subject } from "rxjs";
+import { Observable } from "rxjs";
 import { filter } from "rxjs/operators";
+import { ClearableBehaviorSubject } from "./clearable-behavior-subject";
 
 @Injectable()
 export class PaginatorService {
-  private lastValue: any = null;
-  private subject: Subject<any> = new Subject();
+  private subject: ClearableBehaviorSubject<any> = new ClearableBehaviorSubject();
 
   changeDate(value: any) {
-    this.lastValue = value;
     this.subject.next(value);
   }
 
@@ -17,7 +16,7 @@ export class PaginatorService {
       .pipe(filter(value => !!value));
   }
 
-  getLastValue(): any {
-    return this.lastValue;
+  clearStoredValue() {
+    this.subject.clearValue();
   }
 }
