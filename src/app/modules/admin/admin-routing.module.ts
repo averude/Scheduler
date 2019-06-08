@@ -18,13 +18,13 @@ const routes: Routes = [
     path: 'admin',
     component: AdminComponent,
     canActivate: [RoleGuard],
-    data: {roles: ['ROLE_ADMIN', 'ROLE_SHIFT_ADMIN']},
+    data: {roles: ['DEPARTMENT_ADMIN', 'SHIFT_ADMIN']},
     children: [
       {
         path: 'management',
         component: ManagementComponent,
         canActivate: [RoleGuard],
-        data: {roles: ['ROLE_ADMIN']},
+        data: {roles: ['DEPARTMENT_ADMIN']},
         children: [
           {
             path: 'employees',

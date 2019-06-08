@@ -19,13 +19,16 @@ export class LoginComponent implements OnInit{
 
   // Should be reworked
   login() {
-    this.authService.login(this.username, this.password).subscribe(res => {
-      if (res.roles.indexOf('ROLE_ADMIN') >= 0) {
-        this.router.navigate(['/admin/schedule']);
-      }
-      if (res.roles.indexOf('ROLE_CLIENT') >= 0) {
-        this.router.navigate(['/client']);
-      }
-    });
+    this.authService.login(this.username, this.password)
+      .subscribe(res => this.navigate(res));
+  }
+
+  private navigate(user: any) {
+    if (user.roles.indexOf('DEPARTMENT_ADMIN') >= 0) {
+      this.router.navigate(['/admin/schedule']);
+    }
+    if (user.roles.indexOf('ROLE_CLIENT') >= 0) {
+      this.router.navigate(['/client']);
+    }
   }
 }

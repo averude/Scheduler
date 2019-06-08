@@ -1,0 +1,19 @@
+<tr>
+  <td class="shift-label"
+      [attr.colspan]="numberOfColumns" (click)="shown = !shown">
+    {{(shown ? "▼" : "▶") + ' ' + shift.name}}
+  </td>
+</tr>
+<ng-container *ngIf="shown">
+  <tr class="schedule-row"
+      *ngFor="let employee of employees"
+      app-table-row
+      [employee]="employee"
+      [workingTimeNorm]="workingTimeNorm"
+      [patterns]="patterns"
+      [dayTypes]="dayTypes"
+      [mouseMove$]="mouseMove$"
+      [mouseUp$]="mouseUp$">
+  </tr>
+</ng-container>
+

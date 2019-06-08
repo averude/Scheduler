@@ -43,6 +43,10 @@ export class AuthService {
     return JSON.parse(user);
   }
 
+  public isLogon(): boolean {
+    return !!(this.currentUserValue && this.currentUserValue.access_token);
+  }
+
   public logout() {
     sessionStorage.removeItem("currentUser");
     this.router.navigate(['/login']);

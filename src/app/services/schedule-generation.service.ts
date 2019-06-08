@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { PatternUnit } from '../model/pattern-unit';
 import { WorkDay } from '../model/workday';
 import { CalendarDay } from "../model/ui/calendar-day";
+import { DayType } from "../model/daytype";
 
 @Injectable({
   providedIn: 'root'
@@ -14,9 +15,10 @@ export class ScheduleGenerationService {
                               schedule: WorkDay[],
                               days: CalendarDay[],
                               patternUnits: PatternUnit[],
+                              offset: number,
                               fn: (createdSchedule: WorkDay[],
                                    updatedSchedule: WorkDay[]) => void) {
-    this.generate(employeeId, schedule, days, patternUnits, 0, fn);
+    this.generate(employeeId, schedule, days, patternUnits, offset, fn);
   }
 
   generateScheduleWithCustomHours(employeeId: number,
@@ -27,6 +29,21 @@ export class ScheduleGenerationService {
                                        updatedSchedule: WorkDay[]) => void) {
     const patternUnit = new PatternUnit();
     patternUnit.value = hours;
+    const customUnits: PatternUnit[] = [patternUnit];
+    this.generate(employeeId, schedule, days, customUnits, 0, fn);
+  }
+
+  generateScheduleBySingleDay(employeeId: number,
+                              schedule: WorkDay[],
+                              days: CalendarDay[],
+                              hours: number,
+                              dayType: DayType,
+                              fn: (createdSchedule: WorkDay[],
+                                   updatedSchedule: WorkDay[]) => void) {
+    const patternUnit = new PatternUnit();
+    patternUnit.value = hours;
+    patternUnit.dayTypeId = dayType.id;
+    patternUnit.label = dayType.label;
     const customUnits: PatternUnit[] = [patternUnit];
     this.generate(employeeId, schedule, days, customUnits, 0, fn);
   }

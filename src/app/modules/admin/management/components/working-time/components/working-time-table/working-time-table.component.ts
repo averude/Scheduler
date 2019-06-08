@@ -12,7 +12,9 @@ import { PageableTableBaseComponent } from "../../../../../../../shared/abstract
 @Component({
   selector: 'app-working-time-table',
   templateUrl: './working-time-table.component.html',
-  styleUrls: ['../../../../../../../shared/common/table.common.css','./working-time-table.component.css']
+  styleUrls: ['../../../../../../../shared/common/table.common.css',
+    './working-time-table.component.css'],
+  providers: [PaginatorService]
 })
 export class WorkingTimeTableComponent extends PageableTableBaseComponent<WorkingTime> {
   displayedColumns = ['select', 'year', 'month', 'shift', 'hours', 'control'];

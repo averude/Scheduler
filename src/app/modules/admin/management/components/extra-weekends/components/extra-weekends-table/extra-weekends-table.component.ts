@@ -13,7 +13,8 @@ import { PaginatorService } from "../../../../../../../shared/paginators/paginat
   styleUrls: [
     '../../../../../../../shared/common/table.common.css',
     './extra-weekends-table.component.css'
-  ]
+  ],
+  providers: [PaginatorService]
 })
 export class ExtraWeekendsTableComponent extends PageableTableBaseComponent<ExtraWeekend> {
 

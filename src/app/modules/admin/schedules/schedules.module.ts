@@ -8,12 +8,17 @@ import { SchedulesTableComponent } from './components/schedules-table/schedules-
 import { SharedModule } from '../../../shared/shared.module';
 import { CommonModule } from '@angular/common';
 import { MonthYearPaginatorComponent } from "../../../shared/paginators/month-year-paginator/month-year-paginator.component";
+import { TableShiftGroupComponent } from './components/table-shift-group/table-shift-group.component';
+import { PaginatorService } from "../../../shared/paginators/paginator.service";
+import { MatFormFieldModule, MatInputModule } from "@angular/material";
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     SharedModule,
+    MatFormFieldModule,
+    MatInputModule,
     ContextMenuModule.forRoot({
       autoFocus: true,
       useBootstrap4: true
@@ -24,8 +29,9 @@ import { MonthYearPaginatorComponent } from "../../../shared/paginators/month-ye
     MonthYearPaginatorComponent,
     TableRowComponent,
     TableHeaderComponent,
-    TableCellComponent
+    TableCellComponent,
+    TableShiftGroupComponent
   ],
-  providers: []
+  providers: [PaginatorService]
 })
 export class SchedulesModule {}

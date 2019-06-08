@@ -1,13 +1,14 @@
 <table class="table table-striped table-bordered table-sm">
   <thead app-table-header>
   </thead>
-  <tbody>
-    <tr *ngFor="let employee of employees"
-        app-table-row
-        [employee]="employee"
-        [patterns]="patterns"
-        [mouseMove$]="mouseMove$"
-        [mouseUp$]="mouseUp$">
-    </tr>
+  <tbody *ngFor="let shift of shifts"
+    app-table-shift-group
+    [shift]="shift"
+    [employees]="getShiftEmployees(shift.id)"
+    [workingTimeNorm]="getShiftWorkingTime(shift.id)?.hours"
+    [patterns]="patterns"
+    [dayTypes]="dayTypes"
+    [mouseMove$]="mouseMove$"
+    [mouseUp$]="mouseUp$">
   </tbody>
 </table>

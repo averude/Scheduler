@@ -8,7 +8,6 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { SimpleNotificationsModule } from "angular2-notifications";
 import { OPTIONS } from "./notification-options";
 import { MatToolbarModule } from "@angular/material";
-import { PaginatorService } from "../../shared/paginators/paginator.service";
 
 @NgModule({
   imports: [
@@ -22,6 +21,5 @@ import { PaginatorService } from "../../shared/paginators/paginator.service";
   ],
   declarations: [AdminComponent],
   exports: [],
-  providers: [PaginatorService]
 })
 export class AdminModule {}

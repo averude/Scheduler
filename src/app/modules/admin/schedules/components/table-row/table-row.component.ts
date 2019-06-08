@@ -23,6 +23,7 @@ import { filter, switchMap } from "rxjs/operators";
 import { selectingLeft, selectingRight } from "../../../../../shared/utils";
 import { CalendarDay } from "../../../../../model/ui/calendar-day";
 import { PaginatorService } from "../../../../../shared/paginators/paginator.service";
+import { DayType } from "../../../../../model/daytype";
 
 @Component({
   selector: '[app-table-row]',
@@ -33,14 +34,18 @@ export class TableRowComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @Input() employee:    Employee;
   @Input() patterns:    ShiftPattern[];
+  @Input() dayTypes:    DayType[];
 
   @Input() mouseMove$:  Observable<number>;
   @Input() mouseUp$:    Observable<MouseEvent>;
+
+  @Input() workingTimeNorm: number;
 
   // Context menu variables
   @ViewChild(ContextMenuComponent)
   public patternMenu: ContextMenuComponent;
   customHours: number;
+  offset = 0;
 
   // Selection variables
   @ViewChildren(TableCellComponent)
@@ -52,7 +57,6 @@ export class TableRowComponent implements OnInit, OnDestroy, AfterViewInit {
   daysInMonth:  CalendarDay[];
   schedule:     WorkDay[];
   workingTimeSum = 0;
-  workingTimeNorm = 0;
   workingHolidaysSum = 0;
 
   // Observable subscriptions
@@ -181,15 +185,28 @@ export class TableRowComponent implements OnInit, OnDestroy, AfterViewInit {
   generateSchedule(days: CalendarDay[],
                    patternId: number) {
     this.patternUnitService.getByPatternId(patternId)
-      .subscribe(patternUnits =>
+      .subscribe(patternUnits => {
+        console.log(patternUnits);
         this.scheduleGenerationService
           .generateScheduleByPatternId(
             this.employee.id,
             this.schedule,
             days,
             patternUnits,
+            this.offset,
             this.scheduleGeneratedHandler)
-      );
+      });
+  }
+
+  generateScheduleBySingleDay(dayType: DayType) {
+    this.scheduleGenerationService
+      .generateScheduleBySingleDay(
+        this.employee.id,
+        this.schedule,
+        this.selectedDays,
+        this.customHours,
+        dayType,
+        this.scheduleGeneratedHandler);
   }
 
   private get scheduleGeneratedHandler(): any {
