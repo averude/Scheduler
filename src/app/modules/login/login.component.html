@@ -1,25 +1,31 @@
-<div class="root-panel"
-     (keyup.enter)="login()">
-  <h1 class="mat-title scheduler-title">Scheduler</h1>
+<div class="full-bg">
+	<div class="login-form">
+		<div class="root-panel"
+			 (keyup.enter)="login()">
+			<h1 class="scheduler-title"></h1>
 
-  <div class="inputs-panel">
-    <mat-form-field class="login-panel-input">
-      <input matInput
-             type="text"
-             placeholder="username"
-             [(ngModel)]="username" />
-    </mat-form-field>
-    <mat-form-field class="login-panel-input">
-      <input matInput
-             type="password"
-             placeholder="password"
-             [(ngModel)]="password"/>
-    </mat-form-field>
+			<div class="inputs-panel">
+			<mat-form-field class="login-panel-input">
+			  <input matInput
+					 type="text"
+					 placeholder="Логин"
+					 [(ngModel)]="username" />
+			</mat-form-field>
+			<mat-form-field class="login-panel-input">
+			  <input matInput
+					 type="password"
+					 placeholder="Пароль"
+					 [(ngModel)]="password"/>
+			</mat-form-field>
 
-  </div>
-  <button mat-button
-          color="primary"
-          class="login-panel-button"
-          (click)="login()"
-          type="submit">Login</button>
+			</div>
+			<div class="button-container">
+			  <button mat-button
+					  color="primary"
+					  class="login-panel-button"
+					  (click)="login()"
+					  type="submit">Войти</button>
+			</div>
+		</div>
+	</div>
 </div>

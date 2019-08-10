@@ -1,21 +1,3 @@
-/*.toolbar-department-logo {*/
-  /*height: 80%;*/
-  /*padding-right: 16px;*/
-  /*!*margin-bottom: 5px;*!*/
-  /*!*margin-top: 5px;*!*/
-/*}*/
-
-.toolbar-divider {
-  flex: 1 1 auto;
-}
-
-.toolbar-img-disabled {
-  height: 35px;
-  width: 35px;
-  margin: 0 15px 0;
-  filter: opacity(30%);
-}
-
 .toolbar-department-logo {
   height: 100%;
   padding-right: 16px;
@@ -36,9 +18,8 @@
 }
 
 .toolbar-img {
-  display: block;
   cursor: pointer;
-  height: 100%;
+  height: 35px;
   width: 35px;
   margin: 0 15px 0;
 }
@@ -49,4 +30,11 @@
 
 .toolbar-img:hover {
   filter: grayscale(50%);
+}
+
+.toolbar-img-disabled {
+  height: 35px;
+  width: 35px;
+  margin: 0 15px 0;
+  filter: opacity(30%);
 }
