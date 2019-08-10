@@ -1,3 +1,9 @@
+.toolbar1 {
+  height: 79px;
+  background-color: #fff;
+  padding-left: 104px;
+}
+
 .uksatse-logo {
   height: 100%;
   padding-right: 16px;
@@ -27,4 +33,11 @@
   width: 35px;
   margin: 0 15px 0;
   filter: opacity(30%);
+}
+
+.content-container {
+  background-color: #fafafa;
+  padding: 75px 47px;
+  height: 100%;
+  border-top: 1px solid #eee;
 }

@@ -1,5 +1,5 @@
-<mat-toolbar>
-  <img class="uksatse-logo" src="assets/img/uksatse_logo.svg">
+<mat-toolbar class="toolbar1">
+  <img class="uksatse-logo" src="assets/img/logo_small.png">
   <a class="navbar-brand" >{{(department$ | async)?.name || '-'}}</a>
   <span class="toolbar-divider"></span>
 
@@ -23,6 +23,8 @@
        (click)="logout()">
 </mat-toolbar>
 <div style="height: 94%">
-  <router-outlet></router-outlet>
+    <div class="content-container">
+          <router-outlet></router-outlet>
+    </div>
 </div>
 <simple-notifications></simple-notifications>
