@@ -7,7 +7,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -21,7 +20,7 @@ import java.util.Set;
                         columnNames = {"name", "department_id"})
         }
 )
-public class Position implements Serializable {
+public class Position implements HasId {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

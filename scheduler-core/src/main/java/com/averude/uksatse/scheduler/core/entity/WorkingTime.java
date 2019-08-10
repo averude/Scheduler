@@ -2,7 +2,6 @@ package com.averude.uksatse.scheduler.core.entity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
 import java.time.LocalDate;
 
 @Entity
@@ -15,7 +14,7 @@ import java.time.LocalDate;
                 )
         }
 )
-public class WorkingTime implements Serializable {
+public class WorkingTime implements HasId {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

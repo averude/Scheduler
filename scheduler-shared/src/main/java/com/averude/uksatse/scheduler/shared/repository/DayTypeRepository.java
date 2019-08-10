@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface DayTypeRepository extends CrudRepository<DayType, Long> {
+    Iterable<DayType> findAllByDepartmentId(Long departmentId);
 }

@@ -38,27 +38,33 @@ public class ScheduleGeneratorImpl implements ScheduleGenerator {
                         .findAny();
 
                 // VERY Ugly decision, but ifNotPresent is available only in Java 9
-                // so it would stay here until project's JDK update
+                // so it would stay here until project's JDK put
                 if (optionalWorkDay.isPresent()) {
                     updateWorkDay(optionalWorkDay.get(), unit, false);
                 } else {
-                    schedule.add(new WorkDay(
-                            employeeId,
-                            unit.getDayTypeId(),
-                            false,
-                            unit.getValue(),
-                            unit.getLabel(),
-                            date));
+                    schedule.add(createWorkDay(employeeId, unit, date, false));
                 }
             }
         }
         return schedule;
     }
 
-    private void updateWorkDay(WorkDay workDay, PatternUnit unit, Boolean holiday) {
-        workDay.setLabel(unit.getLabel());
+    private void updateWorkDay(WorkDay workDay,
+                               PatternUnit unit,
+                               Boolean holiday) {
         workDay.setDayTypeId(unit.getDayTypeId());
         workDay.setHours(unit.getValue());
         workDay.setHoliday(holiday);
+    }
+
+    private WorkDay createWorkDay(Long employeeId,
+                                  PatternUnit unit,
+                                  LocalDate date,
+                                  Boolean holiday) {
+        return new WorkDay(employeeId,
+                unit.getDayTypeId(),
+                holiday,
+                unit.getValue(),
+                date);
     }
 }

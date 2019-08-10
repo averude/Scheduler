@@ -1,7 +1,0 @@
-spring:
-  application:
-    name: scheduler-api-statistics-service
-  cloud:
-    config:
-      uri: ${CONFIG_SERVER_URL}
-      fail-fast: true

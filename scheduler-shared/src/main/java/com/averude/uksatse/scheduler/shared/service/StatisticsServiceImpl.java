@@ -23,7 +23,7 @@ public class StatisticsServiceImpl implements StatisticsService {
     @Override
     @Transactional
     public Iterable<CountDTO> countEmployeesByDepartmentId(long departmentId) {
-        return statisticsRepository.countEmployeesByDepartmentId(departmentId);
+        return statisticsRepository.countEmployeesOnPositionsByDepartmentId(departmentId);
     }
 
     @Override
@@ -31,6 +31,6 @@ public class StatisticsServiceImpl implements StatisticsService {
     public Iterable<CountDTO> countEmployeesByAuth(Authentication authentication) {
         Long departmentId = detailsExtractor
                 .extractId(authentication, TokenExtraDetailsExtractor.DEPARTMENT_ID);
-        return statisticsRepository.countEmployeesByDepartmentId(departmentId);
+        return statisticsRepository.countEmployeesOnPositionsByDepartmentId(departmentId);
     }
 }

@@ -1,24 +1,5 @@
 version: '3.7'
 services:
-  rabbitmq:
-    image: rabbitmq:3-management
-    restart: always
-    ports:
-      - 15672:15672
-
-
-  scheduler-config-server:
-    environment:
-      REGISTRY_SERVER_URL: $REGISTRY_SERVER_URL
-    build:
-      context: ./scheduler-config-server
-      dockerfile: Dockerfile
-    image: scheduler-config-server
-    restart: always
-    ports:
-      - 8888:8888
-    depends_on:
-      - rabbitmq
 
   scheduler-database-server:
     build:
@@ -31,119 +12,49 @@ services:
     ports:
       - 5432:5432
 
-  scheduler-registry-server:
-    environment:
-      CONFIG_SERVER_URL: $CONFIG_SERVER_URL
-    build:
-      context: ./scheduler-registry-server
-      dockerfile: Dockerfile
-    image: scheduler-registry-server
-    restart: always
-    depends_on:
-      - scheduler-config-server
-    ports:
-      - 8761:8761
-
   scheduler-auth-server:
     environment:
-      CONFIG_SERVER_URL: $CONFIG_SERVER_URL
-      REGISTRY_SERVER_URL: $REGISTRY_SERVER_URL
-      ADMIN_SERVICE_ID: $ADMIN_SERVICE_ID
-      ADMIN_SERVICE_PASSWORD: $ADMIN_SERVICE_PASSWORD
-      SCHEDULE_SERVICE_ID: $SCHEDULE_SERVICE_ID
-      SCHEDULE_SERVICE_PASSWORD: $SCHEDULE_SERVICE_PASSWORD
-      STATISTICS_SERVICE_ID: $STATISTICS_SERVICE_ID
-      STATISTICS_SERVICE_PASSWORD: $STATISTICS_SERVICE_PASSWORD
+      BACKEND_SERVER_ID: $BACKEND_SERVER_ID
+      BACKEND_SERVER_PASSWORD: $BACKEND_SERVER_PASSWORD
+      DB_DRIVER_CLASS_NAME: $DB_DRIVER_CLASS_NAME
+      DB_URL: $DB_URL
+      DB_USERNAME: $DB_USERNAME
+      DB_PASSWD: $DB_PASSWD
     build:
       context: ./scheduler-auth-server
       dockerfile: Dockerfile
     image: scheduler-auth-server
     restart: always
-    depends_on:
-      - scheduler-config-server
     ports:
       - 5000:5000
 
   scheduler-gateway-server:
-    environment:
-      CONFIG_SERVER_URL: $CONFIG_SERVER_URL
-      REGISTRY_SERVER_URL: $REGISTRY_SERVER_URL
     build:
       context: ./scheduler-gateway-server
       dockerfile: Dockerfile
     image: scheduler-gateway-server
     restart: always
-    depends_on:
-      - scheduler-config-server
     ports:
-      - 8080:4000
+      - 80:4000
 
-  scheduler-api-admin-service:
+  scheduler-backend-server:
     environment:
-      CONFIG_SERVER_URL: $CONFIG_SERVER_URL
-      REGISTRY_SERVER_URL: $REGISTRY_SERVER_URL
       USER_INFO_URI: $USER_INFO_URI
       ACCESS_TOKEN_URI: $ACCESS_TOKEN_URI
-      ADMIN_SERVICE_ID: $ADMIN_SERVICE_ID
-      ADMIN_SERVICE_PASSWORD: $ADMIN_SERVICE_PASSWORD
+      BACKEND_SERVER_ID: $BACKEND_SERVER_ID
+      BACKEND_SERVER_PASSWORD: $BACKEND_SERVER_PASSWORD
       DB_DRIVER_CLASS_NAME: $DB_DRIVER_CLASS_NAME
       DB_URL: $DB_URL
       DB_USERNAME: $DB_USERNAME
       DB_PASSWD: $DB_PASSWD
     build:
-      context: ./scheduler-api-admin-service
+      context: ./scheduler-backend-server
       dockerfile: Dockerfile
-    image: scheduler-api-admin-service
+    image: scheduler-backend-server
     restart: always
+    volumes:
+      - ${DEP_ICON_VOLUME_PATH}:/app/department-icons
     depends_on:
-      - scheduler-config-server
-      - scheduler-database-server
+      - scheduler-auth-server
     ports:
-      - 8081:8080
-
-  scheduler-api-schedule-service:
-    environment:
-      CONFIG_SERVER_URL: $CONFIG_SERVER_URL
-      REGISTRY_SERVER_URL: $REGISTRY_SERVER_URL
-      USER_INFO_URI: $USER_INFO_URI
-      ACCESS_TOKEN_URI: $ACCESS_TOKEN_URI
-      SCHEDULE_SERVICE_ID: $SCHEDULE_SERVICE_ID
-      SCHEDULE_SERVICE_PASSWORD: $SCHEDULE_SERVICE_PASSWORD
-      DB_DRIVER_CLASS_NAME: $DB_DRIVER_CLASS_NAME
-      DB_URL: $DB_URL
-      DB_USERNAME: $DB_USERNAME
-      DB_PASSWD: $DB_PASSWD
-    build:
-      context: ./scheduler-api-schedule-service
-      dockerfile: Dockerfile
-    image: scheduler-api-schedule-service
-    restart: always
-    depends_on:
-      - scheduler-config-server
-      - scheduler-database-server
-    ports:
-      - 8082:8080
-
-
-  scheduler-api-statistics-service:
-    environment:
-      CONFIG_SERVER_URL: $CONFIG_SERVER_URL
-      REGISTRY_SERVER_URL: $REGISTRY_SERVER_URL
-      USER_INFO_URI: $USER_INFO_URI
-      ACCESS_TOKEN_URI: $ACCESS_TOKEN_URI
-      STATISTICS_SERVICE_ID: $STATISTICS_SERVICE_ID
-      STATISTICS_SERVICE_PASSWORD: $STATISTICS_SERVICE_PASSWORD
-      DB_DRIVER_CLASS_NAME: $DB_DRIVER_CLASS_NAME
-      DB_URL: $DB_URL
-      DB_USERNAME: $DB_USERNAME
-      DB_PASSWD: $DB_PASSWD
-    build:
-      context: ./scheduler-api-statistics-service
-      dockerfile: Dockerfile
-    image: scheduler-api-statistics-service
-    restart: always
-    depends_on:
-      - scheduler-config-server
-      - scheduler-database-server
-    ports:
-      - 8083:8080
+      - 8080:8080

@@ -1,0 +1,11 @@
+spring:
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        temp:
+          use_jdbc_metadata_defaults: false
+  jackson:
+    date-format: "yyyy-MM-dd"

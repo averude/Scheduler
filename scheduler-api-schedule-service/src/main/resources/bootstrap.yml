@@ -1,8 +1,0 @@
-spring:
-  application:
-    name: scheduler-api-schedule-service
-  cloud:
-    config:
-      uri: ${CONFIG_SERVER_URL}
-      fail-fast: true
-      profile: native

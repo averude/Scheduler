@@ -19,6 +19,7 @@ CREATE TABLE day_types (
   id            SERIAL,
   name          VARCHAR (128) NOT NULL,
   label         VARCHAR (5),
+  def_value     FLOAT,
   UNIQUE (name, label),
   PRIMARY KEY (id)
 );

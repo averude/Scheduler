@@ -1,12 +1,18 @@
 package com.averude.uksatse.scheduler.shared.service;
 
 import com.averude.uksatse.scheduler.core.entity.Shift;
+import com.averude.uksatse.scheduler.core.exception.DecodedDetailsMissingFieldException;
 import com.averude.uksatse.scheduler.core.extractor.TokenExtraDetailsExtractor;
 import com.averude.uksatse.scheduler.shared.repository.ShiftRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Map;
+
+import static com.averude.uksatse.scheduler.core.extractor.TokenExtraDetailsExtractor.*;
 
 @Service
 public class ShiftServiceImpl
@@ -32,8 +38,15 @@ public class ShiftServiceImpl
     @Override
     @Transactional
     public Iterable<Shift> findAllByAuth(Authentication authentication) {
-        Long departmentId = detailsExtractor
-                .extractId(authentication, TokenExtraDetailsExtractor.DEPARTMENT_ID);
-        return findAllByDepartmentId(departmentId);
+        Map<String, Integer> decodedDetails = detailsExtractor.extractDecodedDetails(authentication);
+        List<String> authoritiesList = detailsExtractor.getAuthoritiesList(authentication);
+
+        if (authoritiesList.contains(GLOBAL_ADMIN)) {
+            return findAll();
+        } else if (authoritiesList.contains(DEPARTMENT_ADMIN)) {
+            return findAllByDepartmentId(decodedDetails.get(DEPARTMENT_ID).longValue());
+        } else {
+            throw new DecodedDetailsMissingFieldException("No required authorities found");
+        }
     }
 }

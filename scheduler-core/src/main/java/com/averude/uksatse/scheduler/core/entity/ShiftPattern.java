@@ -6,7 +6,6 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +19,7 @@ import java.util.List;
                 )
         }
 )
-public class ShiftPattern implements Serializable {
+public class ShiftPattern implements HasId {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,6 +38,10 @@ public class ShiftPattern implements Serializable {
             message = "{shiftpattern.name.size}")
     @Column(nullable = false)
     private String name;
+
+    @NotNull
+    @Column(name = "override_existing_values", nullable = false)
+    private Boolean overrideExistingValues;
 
     @JsonIgnore
     @OneToMany( mappedBy = "patternId",
@@ -79,6 +82,14 @@ public class ShiftPattern implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Boolean getOverrideExistingValues() {
+        return overrideExistingValues;
+    }
+
+    public void setOverrideExistingValues(Boolean overrideExistingValues) {
+        this.overrideExistingValues = overrideExistingValues;
     }
 
     public List<PatternUnit> getSequence() {

@@ -7,9 +7,11 @@ import java.util.Optional;
 
 public interface EmployeeService extends GenericService<Employee, Long>{
 
+    Iterable<Employee> findAllByAuth(Authentication authentication);
+
     Iterable<Employee> findAllByDepartmentId(long departmentId);
 
-    Iterable<Employee> findAllByAuth(Authentication authentication);
+    Iterable<Employee> findAllByShiftId(long shiftId);
 
     Iterable<Employee> findAllByPositionId(long positionId);
 

@@ -7,7 +7,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -21,7 +20,7 @@ import java.util.Objects;
                         columnNames = {"department_id", "name"})
         }
 )
-public class Shift implements Serializable{
+public class Shift implements HasId {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

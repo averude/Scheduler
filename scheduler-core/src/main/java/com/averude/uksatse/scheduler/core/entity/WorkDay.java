@@ -2,7 +2,6 @@ package com.averude.uksatse.scheduler.core.entity;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
-import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -15,7 +14,7 @@ import java.util.Objects;
                         columnNames = {"employee_id", "date"})
         }
 )
-public class WorkDay implements Serializable {
+public class WorkDay implements HasId {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,12 +42,6 @@ public class WorkDay implements Serializable {
     @Column(nullable = false)
     private Float hours;
 
-    @Size(  min = 1,
-            max = 5,
-            message = "{workDay.label.size}")
-    @Column(nullable = true)
-    private String label;
-
     @NotNull(message = "{workDay.date.null}")
     @Column(nullable = false)
     private LocalDate date;
@@ -60,13 +53,11 @@ public class WorkDay implements Serializable {
                    Long dayTypeId,
                    Boolean holiday,
                    Float hours,
-                   String label,
                    LocalDate date) {
         this.employeeId = employeeId;
         this.dayTypeId = dayTypeId;
         this.holiday = holiday;
         this.hours = hours;
-        this.label = label;
         this.date = date;
     }
 
@@ -110,14 +101,6 @@ public class WorkDay implements Serializable {
         this.hours = hours;
     }
 
-    public String getLabel() {
-        return label;
-    }
-
-    public void setLabel(String label) {
-        this.label = label;
-    }
-
     public LocalDate getDate() {
         return date;
     }
@@ -135,13 +118,12 @@ public class WorkDay implements Serializable {
                 Objects.equals(employeeId, workDay.employeeId) &&
                 Objects.equals(holiday, workDay.holiday) &&
                 Objects.equals(hours, workDay.hours) &&
-                Objects.equals(label, workDay.label) &&
                 Objects.equals(date, workDay.date);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, employeeId, holiday, hours, label, date);
+        return Objects.hash(id, employeeId, holiday, hours, date);
     }
 
     @Override
@@ -152,7 +134,6 @@ public class WorkDay implements Serializable {
                 + "Day Type ID:" + dayTypeId + "; "
                 + "Holiday: " + holiday + "; "
                 + "Hours: " + hours + "; "
-                + "Label: " + label + "; "
                 + "Date: " + date +
                 "]";
     }

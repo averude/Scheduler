@@ -30,4 +30,18 @@ public class ScheduleServiceImpl
         }
         return scheduleRepository.findAllByEmployeeIdAndDateBetween(employeeId, from, to);
     }
+
+    @Override
+    @Transactional
+    public void setHoliday(Long departmentId, LocalDate date) {
+        scheduleRepository.findAllByDepartmentIdAndDate(departmentId, date)
+                .forEach(workDay -> workDay.setHoliday(true));
+    }
+
+    @Override
+    @Transactional
+    public void removeHoliday(Long departmentId, LocalDate date) {
+        scheduleRepository.findAllByDepartmentIdAndDate(departmentId, date)
+                .forEach(workDay -> workDay.setHoliday(false));
+    }
 }

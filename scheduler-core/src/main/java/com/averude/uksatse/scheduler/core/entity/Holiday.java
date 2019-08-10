@@ -3,7 +3,6 @@ package com.averude.uksatse.scheduler.core.entity;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.io.Serializable;
 import java.time.LocalDate;
 
 @Entity
@@ -16,7 +15,7 @@ import java.time.LocalDate;
                 )
         }
 )
-public class Holiday implements Serializable {
+public class Holiday implements HasId {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

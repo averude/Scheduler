@@ -7,7 +7,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -22,7 +21,7 @@ import java.util.Objects;
                         columnNames = {"name"})
         }
 )
-public class Department implements Serializable {
+public class Department implements HasId {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,11 +35,20 @@ public class Department implements Serializable {
     @Column(nullable = false)
     private String name;
 
+    @Column(name = "icon_id")
+    private Long iconId;
+
     @JsonIgnore
     @OneToMany( mappedBy = "departmentId",
                 cascade = CascadeType.ALL,
                 fetch = FetchType.LAZY)
     private List<@NotNull @Valid Position> positions = new LinkedList<>();
+
+    @JsonIgnore
+    @OneToMany( mappedBy = "departmentId",
+                cascade = CascadeType.ALL,
+                fetch = FetchType.LAZY)
+    private List<@NotNull @Valid DayType> dayTypes = new LinkedList<>();
 
     @JsonIgnore
     @OneToMany( mappedBy = "departmentId",
@@ -93,12 +101,28 @@ public class Department implements Serializable {
         this.name = name;
     }
 
+    public Long getIconId() {
+        return iconId;
+    }
+
+    public void setIconId(Long iconId) {
+        this.iconId = iconId;
+    }
+
     public List<@NotNull @Valid Position> getPositions() {
         return positions;
     }
 
     public void setPositions(List<@NotNull @Valid Position> positions) {
         this.positions = positions;
+    }
+
+    public List<DayType> getDayTypes() {
+        return dayTypes;
+    }
+
+    public void setDayTypes(List<DayType> dayTypes) {
+        this.dayTypes = dayTypes;
     }
 
     public List<@NotNull @Valid ShiftPattern> getPatterns() {
@@ -141,6 +165,16 @@ public class Department implements Serializable {
     public void removePosition(Position position){
         position.setDepartmentId(null);
         positions.remove(position);
+    }
+
+    public void addDayType(DayType dayType) {
+        dayType.setDepartmentId(this.getId());
+        dayTypes.add(dayType);
+    }
+
+    public void removeDayType(DayType dayType) {
+        dayType.setDepartmentId(null);
+        dayTypes.remove(dayType);
     }
 
     public void addShift(Shift shift){

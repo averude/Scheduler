@@ -3,10 +3,7 @@ package com.averude.uksatse.scheduler.core.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.Size;
-import java.io.Serializable;
+import javax.validation.constraints.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -17,16 +14,24 @@ import java.util.Objects;
         uniqueConstraints = {
                 @UniqueConstraint(
                         name = "day_types_unique_constraint",
-                        columnNames = {"label", "name"}
+                        columnNames = {"department_id", "name"}
                 )
         }
 )
-public class DayType implements Serializable {
+public class DayType implements HasId {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Positive(message = "{entity.id.negative}")
     private Long id;
+
+    @NotNull
+    @Column(name = "department_id", nullable = false)
+    private Long departmentId;
+
+    @NotNull
+    @Column(name = "group_id", nullable = false)
+    private Long dayTypeGroupId;
 
     @NotNull(message = "{daytype.name.null}")
     @Size(  max = 128,
@@ -40,6 +45,13 @@ public class DayType implements Serializable {
     @Column(nullable = true)
     private String label;
 
+    @NotNull(message = "{workDay.hours.null}")
+    @PositiveOrZero(message = "{workDay.hours.negative}")
+    @DecimalMax(value = "24",
+                message = "{workDay.hours.max}")
+    @Column(name = "def_value")
+    private Float defaultValue;
+
     @JsonIgnore
     @OneToMany( mappedBy = "dayTypeId",
                 fetch = FetchType.LAZY,
@@ -49,7 +61,6 @@ public class DayType implements Serializable {
     @JsonIgnore
     @OneToMany( mappedBy = "dayTypeId",
                 fetch = FetchType.LAZY,
-                orphanRemoval = true,
                 cascade = CascadeType.ALL)
     private List<WorkDay> workDays = new ArrayList<>();
 
@@ -76,6 +87,22 @@ public class DayType implements Serializable {
         this.id = id;
     }
 
+    public Long getDepartmentId() {
+        return departmentId;
+    }
+
+    public void setDepartmentId(Long departmentId) {
+        this.departmentId = departmentId;
+    }
+
+    public Long getDayTypeGroupId() {
+        return dayTypeGroupId;
+    }
+
+    public void setDayTypeGroupId(Long dayTypeGroupId) {
+        this.dayTypeGroupId = dayTypeGroupId;
+    }
+
     public String getName() {
         return name;
     }
@@ -90,6 +117,14 @@ public class DayType implements Serializable {
 
     public void setLabel(String name) {
         this.label = name;
+    }
+
+    public Float getDefaultValue() {
+        return defaultValue;
+    }
+
+    public void setDefaultValue(Float defaultValue) {
+        this.defaultValue = defaultValue;
     }
 
     public List<PatternUnit> getUnits() {
@@ -123,12 +158,15 @@ public class DayType implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         DayType dayType = (DayType) o;
-        return name.equals(dayType.name) &&
-                label.equals(dayType.label);
+        return departmentId.equals(dayType.departmentId) &&
+                dayTypeGroupId.equals(dayType.dayTypeGroupId) &&
+                name.equals(dayType.name) &&
+                Objects.equals(label, dayType.label) &&
+                Objects.equals(defaultValue, dayType.defaultValue);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, label);
+        return Objects.hash(departmentId, dayTypeGroupId, name, label, defaultValue);
     }
 }

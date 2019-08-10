@@ -8,6 +8,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+
 @Service
 public class WorkingTimeServiceImpl extends AbstractService<WorkingTime, Long>
         implements WorkingTimeService {
@@ -35,5 +37,19 @@ public class WorkingTimeServiceImpl extends AbstractService<WorkingTime, Long>
         Long departmentId = detailsExtractor
                 .extractId(authentication, TokenExtraDetailsExtractor.DEPARTMENT_ID);
         return findAllByDepartmentId(departmentId);
+    }
+
+    @Override
+    @Transactional
+    public Iterable<WorkingTime> findAllByDepartmentIdAndDateBetween(Long departmentId, LocalDate from, LocalDate to) {
+        return workingTimeRepository.findAllByDepartmentIdAndDateBetween(departmentId, from, to);
+    }
+
+    @Override
+    @Transactional
+    public Iterable<WorkingTime> findAllByAuthAndDateBetween(Authentication authentication, LocalDate from, LocalDate to) {
+        Long departmentId = detailsExtractor
+                .extractId(authentication, TokenExtraDetailsExtractor.DEPARTMENT_ID);
+        return findAllByDepartmentIdAndDateBetween(departmentId, from, to);
     }
 }

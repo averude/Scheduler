@@ -12,11 +12,10 @@ public abstract class AbstractService<T extends Serializable, ID>
 
     private CrudRepository<T, ID> repository;
 
-    AbstractService() {
-
+    public AbstractService() {
     }
 
-    AbstractService(CrudRepository<T, ID> repository) {
+    protected AbstractService(CrudRepository<T, ID> repository) {
         this.repository = repository;
     }
 

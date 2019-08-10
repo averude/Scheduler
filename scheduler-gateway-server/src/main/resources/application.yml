@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: scheduler-gateway-server
+server:
+  port: 4000
+zuul:
+  prefix: /api/v1
+  ignoredServices: '*'
+
+  host:
+    connect-timeout-millis: 20000
+    socket-timeout-millis: 20000
+
+  routes:
+    scheduler-auth-server:
+      path: /uaa/**
+      sensitiveHeaders:
+      url: http://scheduler-auth-server:5000
+
+    scheduler-backend-server:
+      path: /**
+      sensitiveHeaders:
+      url: http://scheduler-backend-server:8080

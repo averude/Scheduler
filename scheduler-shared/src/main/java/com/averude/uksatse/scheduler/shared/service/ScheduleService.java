@@ -15,4 +15,8 @@ public interface ScheduleService extends GenericService<WorkDay, Long> {
             @NotNull(message = "{workDay.date.null}")
                     LocalDate from,
             LocalDate to);
+
+    void setHoliday(Long departmentId, LocalDate date);
+
+    void removeHoliday(Long departmentId, LocalDate date);
 }

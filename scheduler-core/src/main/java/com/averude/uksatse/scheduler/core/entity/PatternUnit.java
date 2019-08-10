@@ -2,7 +2,6 @@ package com.averude.uksatse.scheduler.core.entity;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
-import java.io.Serializable;
 
 @Entity
 @Table(
@@ -14,7 +13,7 @@ import java.io.Serializable;
                 )
         }
 )
-public class PatternUnit implements Serializable {
+public class PatternUnit implements HasId {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,11 +37,6 @@ public class PatternUnit implements Serializable {
     @Column(name = "day_type_id",
             nullable = false)
     private Long dayTypeId;
-
-    @Size(  max = 5,
-            message = "{unit.label.size}")
-    @Column(nullable = true)
-    private String label;
 
     @NotNull(message = "{unit.hours.null}")
     @PositiveOrZero(message = "{unit.hours.negative}")
@@ -81,14 +75,6 @@ public class PatternUnit implements Serializable {
 
     public void setDayTypeId(Long dayTypeId) {
         this.dayTypeId = dayTypeId;
-    }
-
-    public String getLabel() {
-        return label;
-    }
-
-    public void setLabel(String label) {
-        this.label = label;
     }
 
     public Float getValue() {
