@@ -7,7 +7,6 @@ import { ManagementModule } from './management/management.module';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { SimpleNotificationsModule } from "angular2-notifications";
 import { OPTIONS } from "./notification-options";
-import { MatToolbarModule } from "@angular/material";
 
 @NgModule({
   imports: [
@@ -15,7 +14,6 @@ import { MatToolbarModule } from "@angular/material";
     ManagementModule,
     SchedulesModule,
     AdminRoutingModule,
-    MatToolbarModule,
     BrowserAnimationsModule,
     SimpleNotificationsModule.forRoot(OPTIONS)
   ],

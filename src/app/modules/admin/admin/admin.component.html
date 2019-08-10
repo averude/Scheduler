@@ -1,27 +1,43 @@
-<mat-toolbar>
-  <img class="toolbar-department-logo" [src]="departmentIcon || 'assets/img/uksatse_logo.svg'">
-  <a class="navbar-brand" >{{department?.name || '-'}}</a>
-  <span class="toolbar-divider"></span>
+<ul class="toolbar">
 
-  <img class="toolbar-img"
-       src="assets/img/calendar.svg"
-       routerLink="schedule">
+  <li class="toolbar-li">
+    <img class="toolbar-department-logo" [src]="departmentIcon || 'assets/img/uksatse_logo.svg'">
+  </li>
 
-  <img class="toolbar-img-disabled"
-       src="assets/img/statistics.svg">
+  <li class="toolbar-li">
+    <a class="navbar-brand" >{{department?.name || '-'}}</a>
+  </li>
 
-  <img class="toolbar-img-disabled"
-       src="assets/img/report.svg">
+  <li class="toolbar-li">
+    <img class="toolbar-img"
+         src="assets/img/calendar.svg"
+         routerLink="schedule">
+  </li>
 
-  <img *ngIf="roles.indexOf('DEPARTMENT_ADMIN') >= 0"
-       class="toolbar-img"
-       src="assets/img/management.svg"
-       routerLink="management">
+  <li class="toolbar-li">
+    <img class="toolbar-img-disabled"
+         src="assets/img/statistics.svg">
+  </li>
 
-  <img class="toolbar-img"
-       src="assets/img/logout.svg"
-       (click)="logout()">
-</mat-toolbar>
+  <li class="toolbar-li">
+    <img class="toolbar-img-disabled"
+         src="assets/img/report.svg">
+  </li>
+
+  <li class="toolbar-li">
+    <img *ngIf="roles.indexOf('DEPARTMENT_ADMIN') >= 0"
+         class="toolbar-img"
+         src="assets/img/management.svg"
+         routerLink="management">
+  </li>
+
+  <li class="toolbar-li">
+    <img class="toolbar-img"
+         src="assets/img/logout.svg"
+         (click)="logout()">
+  </li>
+</ul>
+
 <div style="height: 94%; overflow: auto">
   <router-outlet></router-outlet>
 </div>
