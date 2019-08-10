@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
-import { DayType } from "../../../../../../../model/daytype";
-import { DayTypeService } from "../../../../../../../services/daytype.service";
+import { DayType } from "../../../../../../../model/day-type";
+import { DayTypeService } from "../../../../../../../services/day-type.service";
 import { NotificationsService } from "angular2-notifications";
 import { MatDialog } from "@angular/material";
 import { TableBaseComponent } from "../../../../../../../shared/abstract-components/table-base/table-base.component";
 import { DayTypeDialogComponent } from "../daytype-dialog/daytype-dialog.component";
+import { DayTypeGroupService } from "../../../../../../../services/day-type-group.service";
+import { DayTypeGroup } from "../../../../../../../model/day-type-group";
 
 @Component({
   selector: 'app-mat-daytypes-table',
@@ -12,11 +14,14 @@ import { DayTypeDialogComponent } from "../daytype-dialog/daytype-dialog.compone
   styleUrls: ['../../../../../../../shared/common/table.common.css','./daytypes-table.component.css']
 })
 export class DayTypesTableComponent extends TableBaseComponent<DayType> {
-  displayedColumns = ['select', 'name', 'label', 'control'];
+  dayTypeGroups: DayTypeGroup[] = [];
+
+  displayedColumns = ['select', 'name', 'label', 'group', 'default_value','control'];
 
   constructor(dialog: MatDialog,
               dayTypeService: DayTypeService,
-              notificationsService: NotificationsService) {
+              notificationsService: NotificationsService,
+              private dayTypeGroupService: DayTypeGroupService) {
     super(dialog, dayTypeService, notificationsService);
   }
 
@@ -25,13 +30,20 @@ export class DayTypesTableComponent extends TableBaseComponent<DayType> {
     this.dataSource.filterPredicate = ((data, filter) => {
       return data.name.toLowerCase().includes(filter)
     });
+    this.dayTypeGroupService.getAll()
+      .subscribe(dayTypeGroups => this.dayTypeGroups = dayTypeGroups);
   }
 
   openDialog(dayType: DayType) {
     const data = {
       dayType: dayType,
+      dayTypeGroups: this.dayTypeGroups
     };
 
     this.openAddOrEditDialog(dayType, data, DayTypeDialogComponent);
+  }
+
+  getGroupById(id: number): DayTypeGroup {
+    return this.dayTypeGroups.find(value => value.id === id);
   }
 }

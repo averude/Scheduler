@@ -20,10 +20,10 @@ import { fromEvent, Observable, Subscription } from 'rxjs';
 import { PatternUnitService } from '../../../../../services/pattern-unit.service';
 import { NotificationsService } from "angular2-notifications";
 import { filter, switchMap } from "rxjs/operators";
-import { selectingLeft, selectingRight } from "../../../../../shared/utils";
 import { CalendarDay } from "../../../../../model/ui/calendar-day";
 import { PaginatorService } from "../../../../../shared/paginators/paginator.service";
-import { DayType } from "../../../../../model/daytype";
+import { DayType } from "../../../../../model/day-type";
+import { selectingLeft, selectingRight } from "../../../../../shared/utils/table-selection-utils";
 
 @Component({
   selector: '[app-table-row]',
@@ -179,22 +179,24 @@ export class TableRowComponent implements OnInit, OnDestroy, AfterViewInit {
         this.schedule,
         this.selectedDays,
         this.customHours,
-        this.scheduleGeneratedHandler);
+        this.scheduleGeneratedHandler,
+        this.errorHandler);
   }
 
   generateSchedule(days: CalendarDay[],
-                   patternId: number) {
-    this.patternUnitService.getByPatternId(patternId)
+                   pattern: ShiftPattern) {
+    this.patternUnitService.getByPatternId(pattern.id)
       .subscribe(patternUnits => {
-        console.log(patternUnits);
         this.scheduleGenerationService
-          .generateScheduleByPatternId(
+          .generateScheduleWithPattern(
             this.employee.id,
             this.schedule,
             days,
             patternUnits,
             this.offset,
-            this.scheduleGeneratedHandler)
+            pattern.overrideExistingValues,
+            this.scheduleGeneratedHandler,
+            this.errorHandler)
       });
   }
 
@@ -206,11 +208,11 @@ export class TableRowComponent implements OnInit, OnDestroy, AfterViewInit {
         this.selectedDays,
         this.customHours,
         dayType,
-        this.scheduleGeneratedHandler);
+        this.scheduleGeneratedHandler,
+        this.errorHandler);
   }
 
-  private get scheduleGeneratedHandler(): any {
-    return (createdSchedule, updatedSchedule) => {
+  private scheduleGeneratedHandler = (createdSchedule, updatedSchedule) => {
       if (createdSchedule.length > 0) {
         this.scheduleService.create(
           this.employee.id,
@@ -235,7 +237,8 @@ export class TableRowComponent implements OnInit, OnDestroy, AfterViewInit {
             });
       }
     };
-  }
+
+  private errorHandler = message => this.notificationService.error('Error', message);
 
   private get selectedDays(): CalendarDay[] {
     return this.cells

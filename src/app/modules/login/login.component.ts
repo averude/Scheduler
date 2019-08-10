@@ -11,7 +11,8 @@ export class LoginComponent implements OnInit{
   username: string;
   password: string;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService,
+              private router: Router) {}
 
   ngOnInit(): void {
     this.authService.logout();
@@ -24,7 +25,13 @@ export class LoginComponent implements OnInit{
   }
 
   private navigate(user: any) {
+    if (user.roles.indexOf('GLOBAL_ADMIN') >= 0) {
+      this.router.navigate(['/global_admin']);
+    }
     if (user.roles.indexOf('DEPARTMENT_ADMIN') >= 0) {
+      this.router.navigate(['/admin/schedule']);
+    }
+    if (user.roles.indexOf('SHIFT_ADMIN') >= 0 ) {
       this.router.navigate(['/admin/schedule']);
     }
     if (user.roles.indexOf('ROLE_CLIENT') >= 0) {

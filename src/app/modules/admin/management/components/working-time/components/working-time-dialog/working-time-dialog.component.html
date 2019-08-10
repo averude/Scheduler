@@ -19,7 +19,9 @@
            placeholder="Choose a date"
            formControlName="date">
     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-    <mat-datepicker #picker startView="multi-year"></mat-datepicker>
+    <mat-datepicker #picker
+                    startView="multi-year"
+                    (monthSelected)="onMonthSelected($event, picker)"></mat-datepicker>
     <mat-error *ngIf="isControlInvalid('date')">{{getErrorMessage()}}</mat-error>
   </mat-form-field>
 

@@ -3,7 +3,7 @@ import { RestConfig } from "../rest.config";
 import { Observable } from "rxjs";
 import { WorkingTime } from "../model/working-time";
 import { HttpClient } from "@angular/common/http";
-import { parseDateOfEntities } from "../shared/utils";
+import { parseDateOfEntities } from "../shared/utils/utils";
 import { PageableByDateCrudService } from "./interface/pageable-by-date-crud.service";
 
 @Injectable({

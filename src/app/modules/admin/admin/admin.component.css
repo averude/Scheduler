@@ -1,6 +1,8 @@
-.uksatse-logo {
-  height: 100%;
+.toolbar-department-logo {
+  height: 80%;
   padding-right: 16px;
+  /*margin-bottom: 5px;*/
+  /*margin-top: 5px;*/
 }
 
 .toolbar-divider {

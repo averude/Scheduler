@@ -4,7 +4,7 @@ import { Employee } from "../../../../../model/employee";
 import { Observable } from "rxjs";
 import { ShiftPattern } from "../../../../../model/shift-pattern";
 import { PaginatorService } from "../../../../../shared/paginators/paginator.service";
-import { DayType } from "../../../../../model/daytype";
+import { DayType } from "../../../../../model/day-type";
 
 @Component({
   selector: '[app-table-shift-group]',

@@ -15,6 +15,25 @@
     <mat-error *ngIf="isControlInvalid('label')">{{getErrorMessage()}}</mat-error>
   </mat-form-field>
 
+  <mat-form-field>
+    <input matInput
+           placeholder="Default Value"
+           formControlName="defaultValue">
+    <mat-error *ngIf="isControlInvalid('defaultValue')">{{getErrorMessage()}}</mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-select placeholder="Group"
+                [compareWith]="compare"
+                formControlName="dayTypeGroupId">
+      <mat-option *ngFor="let group of dayTypeGroups"
+                  [value]="group.id">
+        {{group.name}}
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="isControlInvalid('dayTypeGroupId')">{{getErrorMessage()}}</mat-error>
+  </mat-form-field>
+
 </mat-dialog-content>
 
 <mat-dialog-actions>

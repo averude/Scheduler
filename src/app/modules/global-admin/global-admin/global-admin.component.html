@@ -1,0 +1,28 @@
+<!--TOP NAVBAR-->
+<ul class="toolbar">
+  <li class="toolbar-li">
+    <img class="toolbar-department-logo" src="assets/img/uksatse_logo.svg">
+  </li>
+  <li class="toolbar-li" style="float: right">
+    <img class="toolbar-img"
+         src="assets/img/logout.svg"
+         (click)="logout()">
+  </li>
+</ul>
+
+<!--SIDEBAR-->
+<ul class="sidebar">
+  <li class="sidebar-list-element">
+    <button class="sidebar-button" routerLink="departments">Departments</button>
+  </li>
+  <li class="sidebar-list-element">
+    <button class="sidebar-button" routerLink="icons">Icons</button>
+  </li>
+  <li class="sidebar-list-element">
+    <button class="sidebar-button" routerLink="accounts">Accounts</button>
+  </li>
+</ul>
+<div class="sidebar-content-box">
+  <router-outlet></router-outlet>
+</div>
+<simple-notifications></simple-notifications>

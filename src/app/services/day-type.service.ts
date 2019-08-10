@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { RestConfig } from '../rest.config';
 import { Observable } from 'rxjs';
-import { DayType } from '../model/daytype';
+import { DayType } from '../model/day-type';
 import { CrudService } from "./interface/crud.service";
 
 @Injectable({

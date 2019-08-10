@@ -37,6 +37,16 @@
       <td mat-cell *matCellDef="let dayType">{{dayType.label}}</td>
     </ng-container>
 
+    <ng-container matColumnDef="group">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Group</th>
+      <td mat-cell *matCellDef="let dayType">{{getGroupById(dayType.dayTypeGroupId)?.name}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="default_value">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Default Value</th>
+      <td mat-cell *matCellDef="let dayType">{{dayType.defaultValue}}</td>
+    </ng-container>
+
     <ng-container matColumnDef="control">
       <th mat-header-cell *matHeaderCellDef>
         <button *ngIf="selection.isEmpty()"

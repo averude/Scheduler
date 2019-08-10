@@ -11,8 +11,8 @@ import { Shift } from "../../../../../model/shift";
 import { WorkingTime } from "../../../../../model/working-time";
 import { ShiftService } from "../../../../../services/shift.service";
 import { TableShiftGroupComponent } from "../table-shift-group/table-shift-group.component";
-import { DayType } from "../../../../../model/daytype";
-import { DayTypeService } from "../../../../../services/daytype.service";
+import { DayType } from "../../../../../model/day-type";
+import { DayTypeService } from "../../../../../services/day-type.service";
 
 @Component({
   selector: 'app-schedules-table',

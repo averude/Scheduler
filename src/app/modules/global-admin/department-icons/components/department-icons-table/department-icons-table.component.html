@@ -1,0 +1,6 @@
+<div *ngFor="let icon of icons">
+  {{icon.fileName}}
+  <button (click)="remove(icon)">Delete</button>
+</div>
+<input type="file" (change)="selectFile($event)">
+<button (click)="upload()">Upload</button>

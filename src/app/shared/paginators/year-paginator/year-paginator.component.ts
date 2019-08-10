@@ -30,7 +30,7 @@ export class YearPaginatorComponent implements OnInit {
     this.changeDate();
   }
 
-  nextYear(){
+  nextYear() {
     this.currentDate = this.currentDate.add(1, 'year');
     this.changeDate();
   }

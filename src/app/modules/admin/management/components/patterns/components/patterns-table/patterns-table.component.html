@@ -32,6 +32,11 @@
       <td mat-cell *matCellDef="let pattern">{{pattern.name}}</td>
     </ng-container>
 
+    <ng-container matColumnDef="override">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Override</th>
+      <td mat-cell *matCellDef="let pattern">{{pattern.overrideExistingValues}}</td>
+    </ng-container>
+
     <ng-container matColumnDef="pattern">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Pattern</th>
       <td mat-cell *matCellDef="let pattern">

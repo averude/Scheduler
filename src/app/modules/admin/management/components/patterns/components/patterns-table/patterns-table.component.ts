@@ -6,8 +6,8 @@ import { MatDialog } from "@angular/material";
 import { NotificationsService } from "angular2-notifications";
 import { map } from "rxjs/operators";
 import { PatternUnitService } from "../../../../../../../services/pattern-unit.service";
-import { DayTypeService } from "../../../../../../../services/daytype.service";
-import { DayType } from "../../../../../../../model/daytype";
+import { DayTypeService } from "../../../../../../../services/day-type.service";
+import { DayType } from "../../../../../../../model/day-type";
 import { PatternDialogComponent, ShiftPatternWrapper } from "../pattern-dialog/pattern-dialog.component";
 import { PatternUnit } from "../../../../../../../model/pattern-unit";
 
@@ -21,7 +21,7 @@ import { PatternUnit } from "../../../../../../../model/pattern-unit";
 })
 export class PatternsTableComponent extends TableBaseComponent<ShiftPattern> {
 
-  displayedColumns = ['select', 'name', 'pattern', 'control'];
+  displayedColumns = ['select', 'name', 'override', 'pattern', 'control'];
 
   patternUnits: any = [];
   dayTypes: DayType[];

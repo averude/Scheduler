@@ -15,3 +15,12 @@
   background-color: deepskyblue;
   color: white;
 }
+
+.pattern-units-panel {
+  overflow: auto;
+}
+
+.dialog-checkbox {
+  display: block;
+  padding: 5px 0;
+}

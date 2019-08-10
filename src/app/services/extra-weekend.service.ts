@@ -3,7 +3,7 @@ import { ExtraWeekend } from "../model/extra-weekend";
 import { Observable } from "rxjs";
 import { HttpClient } from "@angular/common/http";
 import { RestConfig } from "../rest.config";
-import { parseDateOfEntities } from "../shared/utils";
+import { parseDateOfEntities } from "../shared/utils/utils";
 import { PageableByDateCrudService } from "./interface/pageable-by-date-crud.service";
 
 @Injectable({

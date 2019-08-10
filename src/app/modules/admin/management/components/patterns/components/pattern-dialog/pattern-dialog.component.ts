@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
-import { DayType } from "../../../../../../../model/daytype";
+import { DayType } from "../../../../../../../model/day-type";
 import { PatternUnit } from "../../../../../../../model/pattern-unit";
 import { ShiftPattern } from "../../../../../../../model/shift-pattern";
 import { AuthService } from "../../../../../../../services/auth.service";
@@ -34,6 +34,7 @@ export class PatternDialogComponent implements OnInit {
     const newUnit = new PatternUnit();
     newUnit.patternId = this.pattern.id;
     newUnit.orderId = this.lastOrderId + 1;
+    newUnit.value = 0;
     this.units.push(newUnit);
   }
 
@@ -82,6 +83,7 @@ export class PatternDialogComponent implements OnInit {
     const pattern = new ShiftPattern();
     pattern.departmentId = this.authService.currentUserValue.departmentId;
     pattern.name = '';
+    pattern.overrideExistingValues = true;
     return pattern;
   }
 

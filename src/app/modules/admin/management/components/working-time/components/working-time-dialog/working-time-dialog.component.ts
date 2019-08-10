@@ -1,10 +1,11 @@
 import { Component, Inject } from '@angular/core';
 import { DialogBaseComponent } from "../../../../../../../shared/abstract-components/dialog-base/dialog-base.component";
 import { WorkingTime } from "../../../../../../../model/working-time";
-import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
+import { MAT_DIALOG_DATA, MatDatepicker, MatDialogRef } from "@angular/material";
 import { AuthService } from "../../../../../../../services/auth.service";
 import { FormBuilder, Validators } from "@angular/forms";
 import { Shift } from "../../../../../../../model/shift";
+import { Moment } from "moment";
 
 @Component({
   selector: 'app-working-time-dialog',
@@ -33,7 +34,7 @@ export class WorkingTimeDialogComponent extends DialogBaseComponent<WorkingTime>
       shiftId:      [null, [Validators.required]],
       date:         [null, [Validators.required]],
       hours:        [null, [Validators.required]]
-    })
+    });
   }
 
   fillInTheForm(workingTime: WorkingTime) {
@@ -44,5 +45,10 @@ export class WorkingTimeDialogComponent extends DialogBaseComponent<WorkingTime>
       date:         workingTime.date,
       hours:        workingTime.hours
     });
+  }
+
+  onMonthSelected(value: Moment, datepicker: MatDatepicker<Moment>) {
+    this.dialogForm.patchValue({date: value.toDate()});
+    datepicker.close();
   }
 }

@@ -5,7 +5,7 @@ import { ScheduleService } from '../../../../services/schedule.service';
 import { switchMap } from 'rxjs/internal/operators';
 import { WorkDay } from '../../../../model/workday';
 import { AuthService } from "../../../../services/auth.service";
-import { dateToISOString } from "../../../../shared/utils";
+import { dateToISOString } from "../../../../shared/utils/utils";
 
 @Component({
   selector: 'app-client-schedule-table',

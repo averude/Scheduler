@@ -4,6 +4,7 @@ import { CommonModule } from "@angular/common";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { SharedModule } from "../../../../../shared/shared.module";
 import {
+  MAT_DATE_FORMATS,
   MatCheckboxModule,
   MatDatepickerModule,
   MatDialogModule,
@@ -16,6 +17,18 @@ import {
 import { WorkingTimeDialogComponent } from './components/working-time-dialog/working-time-dialog.component';
 import { RemoveDialogComponent } from "../../../../../shared/abstract-components/remove-dialog/remove-dialog.component";
 import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MatMomentDateModule } from "@angular/material-moment-adapter";
+
+export const MONTH_FORMAT = {
+  parse: {
+    dateInput: 'MM/YYYY',
+  },
+  display: {
+    dateInput: 'MM/YYYY',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY',
+  },
+};
 
 @NgModule({
   imports: [
@@ -45,6 +58,10 @@ import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MatMomentDateModule } from "@angular/m
     {
       provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS,
       useValue: { useUtc: true }
+    },
+    {
+      provide: MAT_DATE_FORMATS,
+      useValue: MONTH_FORMAT
     }
   ]
 })

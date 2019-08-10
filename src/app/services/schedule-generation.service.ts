@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { PatternUnit } from '../model/pattern-unit';
 import { WorkDay } from '../model/workday';
 import { CalendarDay } from "../model/ui/calendar-day";
-import { DayType } from "../model/daytype";
+import { DayType } from "../model/day-type";
+import { createOrUpdateWorkDay, findWorkingDay } from "../shared/utils/schedule-generation-utils";
 
 @Injectable({
   providedIn: 'root'
@@ -11,26 +12,30 @@ export class ScheduleGenerationService {
 
   constructor() { }
 
-  generateScheduleByPatternId(employeeId: number,
+  generateScheduleWithPattern(employeeId: number,
                               schedule: WorkDay[],
                               days: CalendarDay[],
                               patternUnits: PatternUnit[],
                               offset: number,
-                              fn: (createdSchedule: WorkDay[],
-                                   updatedSchedule: WorkDay[]) => void) {
-    this.generate(employeeId, schedule, days, patternUnits, offset, fn);
+                              overrideExistingValues: boolean,
+                              onSave: (createdSchedule: WorkDay[],
+                                        updatedSchedule: WorkDay[]) => void,
+                              onError: (message: string) => void) {
+    this.generate(employeeId, schedule, days, patternUnits, offset, overrideExistingValues, onSave, onError);
   }
 
   generateScheduleWithCustomHours(employeeId: number,
                                   schedule: WorkDay[],
                                   days: CalendarDay[],
                                   hours: number,
-                                  fn: (createdSchedule: WorkDay[],
-                                       updatedSchedule: WorkDay[]) => void) {
+                                  onSave: (createdSchedule: WorkDay[],
+                                           updatedSchedule: WorkDay[]) => void,
+                                  onError: (message: string) => void) {
     const patternUnit = new PatternUnit();
     patternUnit.value = hours;
     const customUnits: PatternUnit[] = [patternUnit];
-    this.generate(employeeId, schedule, days, customUnits, 0, fn);
+
+    this.generate(employeeId, schedule, days, customUnits, 0, true,  onSave, onError);
   }
 
   generateScheduleBySingleDay(employeeId: number,
@@ -38,14 +43,15 @@ export class ScheduleGenerationService {
                               days: CalendarDay[],
                               hours: number,
                               dayType: DayType,
-                              fn: (createdSchedule: WorkDay[],
-                                   updatedSchedule: WorkDay[]) => void) {
+                              onSave: (createdSchedule: WorkDay[],
+                                       updatedSchedule: WorkDay[]) => void,
+                              onError: (message: string) => void) {
     const patternUnit = new PatternUnit();
     patternUnit.value = hours;
     patternUnit.dayTypeId = dayType.id;
-    patternUnit.label = dayType.label;
     const customUnits: PatternUnit[] = [patternUnit];
-    this.generate(employeeId, schedule, days, customUnits, 0, fn);
+
+    this.generate(employeeId, schedule, days, customUnits, 0, true, onSave, onError);
   }
 
   private generate(employeeId: number,
@@ -53,62 +59,53 @@ export class ScheduleGenerationService {
                    days: CalendarDay[],
                    patternUnits: PatternUnit[],
                    offset: number,
-                   fn: (createdSchedule: WorkDay[],
-                        updatedSchedule: WorkDay[]) => void) {
+                   overrideExistingValues: boolean,
+                   onSave: (createdSchedule: WorkDay[],
+                            updatedSchedule: WorkDay[]) => void,
+                   onError: (message: string) => void) {
     if (!schedule || !days || !patternUnits || !(patternUnits.length > 0)) {
+      onError('Illegal arguments');
       return;
     }
+
+    schedule = schedule
+      .filter(workDay => days.map(day => day.isoString)
+        .includes(workDay.date));
+
+    if (!overrideExistingValues) {
+      if (schedule.length !== days.length) {
+        onError('Selected dates doesn\'t have schedule');
+        return;
+      }
+    }
+
     const createdSchedule: WorkDay[] = [];
     const updatedSchedule: WorkDay[] = [];
     const datesSize = days.length;
     const unitsSize = patternUnits.length;
+
     for (let i = 0; i < datesSize; i += unitsSize) {
       for (let j = 0; j < unitsSize; j++) {
         const date_index = i + j;
+
         if (date_index >= datesSize) {
           break;
         }
+
         const unit_index = (offset + j) % unitsSize;
-        const workDay = schedule
-          .find(this.getFindFunction(employeeId, days[date_index]));
-        if (workDay) {
-          workDay.hours = patternUnits[unit_index].value;
-          workDay.label = patternUnits[unit_index].label;
-          workDay.dayTypeId = patternUnits[unit_index].dayTypeId;
-          workDay.holiday = days[date_index].holiday;
-          updatedSchedule.push(workDay);
-        } else {
-          const newWorkDay = this.createWorkDay(
-            employeeId,
-            days[date_index].holiday,
-            patternUnits[unit_index].value,
-            days[date_index].isoString,
-            patternUnits[unit_index].label);
-          createdSchedule.push(newWorkDay);
-        }
+        const workDay = findWorkingDay(schedule, employeeId, days[date_index]);
+
+        createOrUpdateWorkDay(
+          overrideExistingValues,
+          employeeId,
+          workDay,
+          patternUnits[unit_index],
+          days[date_index],
+          createdSchedule,
+          updatedSchedule
+        );
       }
     }
-    fn(createdSchedule, updatedSchedule);
-  }
-
-  private getFindFunction(employeeId: number,
-                          day: CalendarDay): any {
-    return (item) =>
-      item.employeeId === employeeId &&
-      item.date === day.isoString;
-  }
-
-  private createWorkDay(employeeId: number,
-                        holiday: boolean,
-                        hours: number,
-                        date: string,
-                        label: string): WorkDay {
-    const workDay = new WorkDay();
-    workDay.employeeId = employeeId;
-    workDay.holiday = holiday;
-    workDay.hours = hours;
-    workDay.date = date;
-    workDay.label = label;
-    return workDay;
+    onSave(createdSchedule, updatedSchedule);
   }
 }

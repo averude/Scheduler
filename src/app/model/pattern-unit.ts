@@ -5,6 +5,5 @@ export class PatternUnit implements IdEntity {
   patternId: number;
   orderId: number;
   dayTypeId: number;
-  label: string;
   value: number;
 }

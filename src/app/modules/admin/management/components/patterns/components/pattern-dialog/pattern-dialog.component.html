@@ -5,10 +5,15 @@
          placeholder="Shift pattern name"
          [(ngModel)]="pattern.name">
 </mat-form-field>
-<div>
+<mat-checkbox class="dialog-checkbox"
+              [(ngModel)]="pattern.overrideExistingValues">
+  Override existing values
+</mat-checkbox>
+<div class="pattern-units-panel">
   <app-pattern-unit *ngFor="let unit of units"
                     [dayTypes]="dayTypes"
                     [unit]="unit"
+                    [overrideExistingValues]="pattern.overrideExistingValues"
                     (onMoveUp)="moveUp($event)"
                     (onMoveDown)="moveDown($event)"
                     (onDelete)="delete($event)"></app-pattern-unit>

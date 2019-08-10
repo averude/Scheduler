@@ -13,7 +13,7 @@
     *ngFor="let day of daysInMonth"
     app-table-cell
     [day]="day"
-    [value]="getWorkDay(day) | scheduleLabel"
+    [value]="getWorkDay(day) | scheduleLabel: dayTypes"
     [class.weekend]="day.weekend"
     [class.holiday]="day.holiday">
 </td>
@@ -96,7 +96,7 @@
       </ng-template>
       <ng-template contextMenuItem
                    [enabled]="offset >= 0"
-                   (execute)="generateSchedule($event.item, pattern.id)">
+                   (execute)="generateSchedule($event.item, pattern)">
         Create schedule
       </ng-template>
     </context-menu>

@@ -3,6 +3,7 @@ import { Observable, throwError } from "rxjs";
 import { Injectable } from "@angular/core";
 import { NotificationsService } from "angular2-notifications";
 import { catchError } from "rxjs/operators";
+import { ErrorDetails } from "../model/dto/error-details";
 
 const OPTIONS = {
   timeOut: 5000,
@@ -18,9 +19,9 @@ export class HttpErrorInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(req)
       .pipe(catchError((err: HttpErrorResponse) => {
-        if (err.error instanceof Error) {
-          this.notificationsService
-            .error('An error occurred', err.error.message, OPTIONS);
+        if (err.error instanceof ErrorDetails) {
+          err.error.errors.forEach(error => this.notificationsService
+            .error(error.message, error.details, OPTIONS));
         } else {
           if (err.status) {
             this.notificationsService
