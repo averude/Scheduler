@@ -1,19 +1,30 @@
-<mat-drawer-container class="sidebar-container"
-                       hasBackdrop="false">
-  <mat-drawer class="sidebar"
-              opened
-              mode="side"
-              role="navigation">
+<!--SIDEBAR-->
+<ul class="sidebar">
+  <li class="sidebar-list-element">
     <button class="sidebar-button" routerLink="employees">Employees</button>
+  </li>
+  <li class="sidebar-list-element">
     <button class="sidebar-button" routerLink="positions">Positions</button>
+  </li>
+  <li class="sidebar-list-element">
     <button class="sidebar-button" routerLink="shifts">Shifts</button>
+  </li>
+  <li class="sidebar-list-element">
     <button class="sidebar-button" routerLink="daytypes">Day types</button>
+  </li>
+  <li class="sidebar-list-element">
     <button class="sidebar-button" routerLink="patterns">Patterns</button>
+  </li>
+  <li class="sidebar-list-element">
     <button class="sidebar-button" routerLink="workingtime">Working time</button>
+  </li>
+  <li class="sidebar-list-element">
     <button class="sidebar-button" routerLink="holidays">Holidays</button>
+  </li>
+  <li class="sidebar-list-element">
     <button class="sidebar-button" routerLink="extraweekends">Extra weekends</button>
-  </mat-drawer>
-  <mat-drawer-content role="main">
-    <router-outlet></router-outlet>
-  </mat-drawer-content>
-</mat-drawer-container>
+  </li>
+</ul>
+<div class="sidebar-content-box">
+  <router-outlet></router-outlet>
+</div>
