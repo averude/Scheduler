@@ -5,8 +5,7 @@
     width: 100%;
     height: 100%;
     z-index: 1;
-    background: url('../../../assets/img/bg.jpg') no-repeat top right;
-	background-color: #92b9da;
+    background: #92b9da url('../../../assets/img/bg.jpg') no-repeat top right;
 }
 
 .login-form {
@@ -46,7 +45,7 @@
   margin: 0 auto;
   width: 280px;
   height: 83px;
-    background: url('../../../assets/img/logo_scheduler.png') no-repeat center;
+  background: url('../../../assets/img/logo_scheduler.png') no-repeat center;
 }
 
 .inputs-panel {
@@ -59,43 +58,64 @@
   display: block;
   width: 100%;
 }
-.button-container {
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 23px;
-    margin-top: 38px;
-    width: 240px;
 
+.button-container {
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 23px;
+  margin-top: 38px;
+  width: 240px;
 }
+
 .login-panel-button {
 	width: 240px;
-    margin: 0 auto;
-    display: inline-block;
-    height: 50px;
-    font-family: MuseoSansCyrl,sans-serif;
-    font-size: 11px;
-    font-weight: 700;
-    line-height: 50px;
-    text-align: center;
-    vertical-align: middle;
-    white-space: nowrap;
-    text-decoration: none;
-    letter-spacing: .12em;
-    text-transform: uppercase;
-    cursor: pointer;
-    color: #fff;
-    background-color: #000;
-    background-image: none;
-    border: 1px solid #000;
-    -webkit-border-radius: 50px;
-    -moz-border-radius: 50px;
-    border-radius: 50px;
-    -webkit-box-shadow: 0 0 0 0 transparent;
-    -moz-box-shadow: 0 0 0 0 transparent;
-    box-shadow: 0 0 0 0 transparent;
-    -webkit-transition: .2s;
-    -moz-transition: .2s;
-    -o-transition: .2s;
-    transition: .2s;
-    will-change: box-shadow;
+  margin: 0 auto;
+  display: inline-block;
+  height: 50px;
+  font-family: MuseoSansCyrl,sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 50px;
+  text-align: center;
+  vertical-align: middle;
+  white-space: nowrap;
+  text-decoration: none;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  color: #fff;
+  background-color: #000;
+  background-image: none;
+  border: 1px solid #000;
+  -webkit-border-radius: 50px;
+  -moz-border-radius: 50px;
+  border-radius: 50px;
+  -webkit-box-shadow: 0 0 0 0 transparent;
+  -moz-box-shadow: 0 0 0 0 transparent;
+  box-shadow: 0 0 0 0 transparent;
+  -webkit-transition: .2s;
+  -moz-transition: .2s;
+  -o-transition: .2s;
+  transition: .2s;
+  will-change: box-shadow;
+}
+
+.login-panel-button:disabled {
+
+}
+
+.login-panel-bad-credentials {
+  margin: 0 auto;
+  width: 300px;
+  color: white;
+  background-color: #ff8d9e;
+  text-align: center;
+}
+
+.login-panel-button-preloader-image {
+  width: 240px;
+  margin: 0 auto;
+  display: inline-block;
+  height: 44px;
+  background: url('../../../assets/img/flight_preloader.svg') no-repeat center;
 }
