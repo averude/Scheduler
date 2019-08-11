@@ -1,9 +1,19 @@
 -- PostgreSQL
+CREATE TABLE icons (
+  id            SERIAL,
+  file_name     VARCHAR (255),
+  UNIQUE (file_name),
+  PRIMARY KEY (id)
+);
+
 CREATE TABLE departments (
   id            SERIAL,
   name          VARCHAR (128) NOT NULL,
+  icon_id       INTEGER,
   UNIQUE (name),
-  PRIMARY KEY (id)
+  UNIQUE (name, icon_id),
+  PRIMARY KEY (id),
+  FOREIGN KEY (icon_id) REFERENCES icons(id) ON DELETE SET NULL
 );
 
 CREATE TABLE positions (
@@ -15,19 +25,30 @@ CREATE TABLE positions (
   FOREIGN KEY (department_id) REFERENCES departments(id) ON DELETE CASCADE
 );
 
+CREATE TABLE day_type_groups (
+  id            SERIAL,
+  name          VARCHAR(128)  NOT NULL,
+  UNIQUE (name),
+  PRIMARY KEY (id)
+);
+
 CREATE TABLE day_types (
   id            SERIAL,
+  department_id INTEGER       NOT NULL,
+  day_type_group_id INTEGER   NOT NULL,
   name          VARCHAR (128) NOT NULL,
   label         VARCHAR (5),
-  def_value     FLOAT,
-  UNIQUE (name, label),
-  PRIMARY KEY (id)
+  UNIQUE (department_id, name),
+  PRIMARY KEY (id),
+  FOREIGN KEY (department_id) REFERENCES departments(id) ON DELETE CASCADE,
+  FOREIGN KEY (day_type_group_id) REFERENCES day_type_groups ON DELETE CASCADE
 );
 
 CREATE TABLE shift_patterns (
   id            SERIAL,
   department_id INTEGER       NOT NULL,
   name          VARCHAR (128) NOT NULL,
+  override_existing_values BOOLEAN NOT NULL DEFAULT TRUE,
   UNIQUE (department_id, name),
   PRIMARY KEY (id),
   FOREIGN KEY (department_id) REFERENCES departments(id) ON DELETE CASCADE
@@ -38,7 +59,6 @@ CREATE TABLE pattern_units (
   pattern_id    INTEGER       NOT NULL,
   order_id      INTEGER       NOT NULL,
   day_type_id   INTEGER       NOT NULL,
-  label         VARCHAR (5),
   value         FLOAT         NOT NULL,
   UNIQUE (pattern_id, order_id),
   PRIMARY KEY (id),
@@ -53,7 +73,7 @@ CREATE TABLE shifts (
   name          VARCHAR (128) NOT NULL,
   UNIQUE (department_id, name),
   PRIMARY KEY (id),
-  FOREIGN KEY (department_id) REFERENCES departments(id)    ON DELETE RESTRICT,
+  FOREIGN KEY (department_id) REFERENCES departments(id)    ON DELETE CASCADE,
   FOREIGN KEY (pattern_id)    REFERENCES shift_patterns(id) ON DELETE SET NULL
 );
 
@@ -76,7 +96,6 @@ CREATE TABLE work_schedule (
   day_type_id   INTEGER,
   holiday       BOOLEAN       NOT NULL  DEFAULT FALSE,
   hours         FLOAT         NOT NULL  CHECK (hours >= 0 AND hours <= 24),
-  label         VARCHAR (5),
   date          DATE          NOT NULL,
   UNIQUE (employee_id, date),
   PRIMARY KEY (id),
@@ -100,8 +119,49 @@ CREATE TABLE holidays (
   id            SERIAL,
   department_id INTEGER       NOT NULL,
   date          DATE          NOT NULL,
-  name          VARCHAR(255)  NOT NULL,
+  name          VARCHAR (255) NOT NULL,
   UNIQUE (department_id, date, name),
   PRIMARY KEY (id),
   FOREIGN KEY (department_id) REFERENCES departments(id) ON DELETE CASCADE
+);
+
+CREATE TABLE extra_weekends (
+  id            SERIAL,
+  department_id INTEGER       NOT NULL,
+  holiday_id    INTEGER,
+  date          DATE          NOT NULL,
+  UNIQUE (holiday_id),
+  PRIMARY KEY (id),
+  FOREIGN KEY (department_id) REFERENCES departments(id)  ON DELETE CASCADE,
+  FOREIGN KEY (holiday_id)    REFERENCES holidays(id)     ON DELETE CASCADE
+);
+
+-- Security
+
+CREATE TABLE authorities (
+  id            SERIAL,
+  name          VARCHAR (255) NOT NULL,
+  UNIQUE (name),
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE users (
+  id            SERIAL,
+  username      VARCHAR (64)  NOT NULL,
+  password      VARCHAR (64)  NOT NULL,
+  department_id INTEGER,
+  shift_id      INTEGER,
+  employee_id   INTEGER,
+  locked        BOOLEAN       NOT NULL  DEFAULT FALSE,
+  enabled       BOOLEAN       NOT NULL  DEFAULT TRUE,
+  UNIQUE (username),
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE users_authorities (
+  authority_id  INTEGER       NOT NULL,
+  user_id       INTEGER       NOT NULL,
+  PRIMARY KEY (authority_id, user_id),
+  FOREIGN KEY (authority_id)  REFERENCES authorities(id)  ON UPDATE CASCADE ON DELETE CASCADE,
+  FOREIGN KEY (user_id)       REFERENCES users(id)        ON UPDATE CASCADE
 );
