@@ -1,5 +1,10 @@
-<td class="align-middle">
-  {{
+<ng-container appSelectableRow
+              [mouseMove$]="mouseMove$"
+              [mouseUp$]="mouseUp$"
+              [element]="elementRef"
+              (onContextMenu)="onContextMenu($event.event, $event.selectedDays)">
+  <td class="align-middle">
+    {{
     employee.secondName
     + ' '
     + employee.firstName.charAt(0)
@@ -7,29 +12,30 @@
     + ' '
     + employee.patronymic.charAt(0)
     + '.'
-  }}
-</td>
-<td class="text-center align-middle table-cell"
-    *ngFor="let day of daysInMonth"
-    app-table-cell
-    [day]="day"
-    [value]="getWorkDay(day) | scheduleLabel: dayTypes"
-    [class.weekend]="day.weekend"
-    [class.holiday]="day.holiday">
-</td>
-<td class="text-center align-middle sum"
-    [class.notEqual]="workingTimeSum !== workingTimeNorm">
-  {{workingTimeSum}}
-</td>
-<td class="text-center align-middle sum">
-  {{workingTimeNorm}}
-</td>
-<td class="text-center align-middle sum">
-  {{workingHolidaysSum}}
-</td>
+    }}
+  </td>
+  <td class="text-center align-middle table-cell"
+      *ngFor="let day of daysInMonth"
+      app-table-cell
+      [day]="day"
+      [value]="getWorkDay(day) | scheduleLabel: dayTypes"
+      [class.weekend]="day.weekend"
+      [class.holiday]="day.holiday">
+  </td>
+  <td class="text-center align-middle sum"
+      [class.notEqual]="workingTimeSum !== workingTimeNorm">
+    {{workingTimeSum}}
+  </td>
+  <td class="text-center align-middle sum">
+    {{workingTimeNorm}}
+  </td>
+  <td class="text-center align-middle sum">
+    {{workingHolidaysSum}}
+  </td>
+</ng-container>
 
-<context-menu #patternMenu
-              (close)="clearSelection()">
+
+<context-menu (close)="clearSelection()">
   <ng-template contextMenuItem
                [subMenu]="customHoursSubMenu">
     Custom hours

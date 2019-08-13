@@ -11,6 +11,7 @@ import { MonthYearPaginatorComponent } from "../../../shared/paginators/month-ye
 import { TableShiftGroupComponent } from './components/table-shift-group/table-shift-group.component';
 import { PaginatorService } from "../../../shared/paginators/paginator.service";
 import { MatFormFieldModule, MatInputModule } from "@angular/material";
+import { SelectableRowDirective } from "../../../shared/directives/selectable-row.directive";
 
 @NgModule({
   imports: [
@@ -30,7 +31,8 @@ import { MatFormFieldModule, MatInputModule } from "@angular/material";
     TableRowComponent,
     TableHeaderComponent,
     TableCellComponent,
-    TableShiftGroupComponent
+    TableShiftGroupComponent,
+    SelectableRowDirective
   ],
   providers: [PaginatorService]
 })

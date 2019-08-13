@@ -1,36 +1,32 @@
 import {
-  AfterViewInit,
   Component,
   ElementRef,
   Input,
   OnDestroy,
   OnInit,
-  QueryList,
   ViewChild,
-  ViewChildren
 } from '@angular/core';
-import { TableCellComponent } from '../table-cell/table-cell.component';
 import { ContextMenuComponent, ContextMenuService } from 'ngx-contextmenu';
 import { Employee } from '../../../../../model/employee';
 import { ScheduleService } from '../../../../../services/schedule.service';
 import { ScheduleGenerationService } from '../../../../../services/schedule-generation.service';
 import { WorkDay } from '../../../../../model/workday';
 import { ShiftPattern } from '../../../../../model/shift-pattern';
-import { fromEvent, Observable, Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { PatternUnitService } from '../../../../../services/pattern-unit.service';
 import { NotificationsService } from "angular2-notifications";
 import { filter, switchMap } from "rxjs/operators";
 import { CalendarDay } from "../../../../../model/ui/calendar-day";
 import { PaginatorService } from "../../../../../shared/paginators/paginator.service";
 import { DayType } from "../../../../../model/day-type";
-import { selectingLeft, selectingRight } from "../../../../../shared/utils/table-selection-utils";
+import { SelectableRowDirective } from "../../../../../shared/directives/selectable-row.directive";
 
 @Component({
   selector: '[app-table-row]',
   templateUrl: './table-row.component.html',
   styleUrls: ['./table-row.component.css']
 })
-export class TableRowComponent implements OnInit, OnDestroy, AfterViewInit {
+export class TableRowComponent implements OnInit, OnDestroy {
 
   @Input() employee:    Employee;
   @Input() patterns:    ShiftPattern[];
@@ -47,11 +43,8 @@ export class TableRowComponent implements OnInit, OnDestroy, AfterViewInit {
   customHours: number;
   offset = 0;
 
-  // Selection variables
-  @ViewChildren(TableCellComponent)
-  cells: QueryList<TableCellComponent>;
-  dragging = false;
-  startX: number;
+  @ViewChild(SelectableRowDirective)
+  selectableRowDirective: SelectableRowDirective;
 
   // Table variables
   daysInMonth:  CalendarDay[];
@@ -61,11 +54,8 @@ export class TableRowComponent implements OnInit, OnDestroy, AfterViewInit {
 
   // Observable subscriptions
   private paginatorSub: Subscription;
-  private mouseMoveSub: Subscription;
-  private mouseDownSub: Subscription;
-  private mouseUpSub:   Subscription;
 
-  constructor(private elementRef: ElementRef,
+  constructor(public elementRef: ElementRef,
               private scheduleService: ScheduleService,
               private scheduleGenerationService: ScheduleGenerationService,
               private patternUnitService: PatternUnitService,
@@ -92,39 +82,8 @@ export class TableRowComponent implements OnInit, OnDestroy, AfterViewInit {
       });
   }
 
-  ngAfterViewInit(): void {
-    this.mouseDownSub = fromEvent<MouseEvent>(this.elementRef.nativeElement, 'mousedown')
-      .subscribe(event => {
-        this.dragging = true;
-        this.startX = event.clientX;
-
-        this.mouseMoveSub = this.mouseMove$
-          .pipe(filter(() => this.dragging))
-          .subscribe(clientX => {
-            this.clearSelection();
-            if (this.startX > clientX) {
-              selectingLeft(this.startX, clientX, this.cells);
-            } else {
-              selectingRight(this.startX, clientX, this.cells);
-            }
-          });
-      });
-
-    this.mouseUpSub = this.mouseUp$
-      .subscribe(event => {
-        if (this.dragging) {
-          this.onContextMenu(event, this.selectedDays);
-          this.dragging = false;
-          if (this.mouseMoveSub) this.mouseMoveSub.unsubscribe();
-        }
-      });
-  }
-
   ngOnDestroy(): void {
     this.paginatorSub.unsubscribe();
-    if (this.mouseMoveSub) this.mouseMoveSub.unsubscribe();
-    this.mouseDownSub.unsubscribe();
-    this.mouseUpSub.unsubscribe();
   }
 
   getWorkDay(date: CalendarDay): WorkDay {
@@ -177,7 +136,7 @@ export class TableRowComponent implements OnInit, OnDestroy, AfterViewInit {
       .generateScheduleWithCustomHours(
         this.employee.id,
         this.schedule,
-        this.selectedDays,
+        this.selectableRowDirective.selectedDays,
         this.customHours,
         this.scheduleGeneratedHandler,
         this.errorHandler);
@@ -205,7 +164,7 @@ export class TableRowComponent implements OnInit, OnDestroy, AfterViewInit {
       .generateScheduleBySingleDay(
         this.employee.id,
         this.schedule,
-        this.selectedDays,
+        this.selectableRowDirective.selectedDays,
         this.customHours,
         dayType,
         this.scheduleGeneratedHandler,
@@ -240,15 +199,7 @@ export class TableRowComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private errorHandler = message => this.notificationService.error('Error', message);
 
-  private get selectedDays(): CalendarDay[] {
-    return this.cells
-      .filter(item => item.selected)
-      .map(value => value.day);
-  }
-
   clearSelection() {
-    this.cells
-      .filter(item => item.selected)
-      .forEach(selectedItem => selectedItem.deselect());
+    this.selectableRowDirective.clearSelection();
   }
 }
