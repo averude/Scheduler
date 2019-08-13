@@ -2,7 +2,7 @@
               [mouseMove$]="mouseMove$"
               [mouseUp$]="mouseUp$"
               [element]="elementRef"
-              (onContextMenu)="onContextMenu($event.event, $event.selectedDays)">
+              (onSelectionEnds)="onContextMenu($event.event, $event.selectedDays)">
   <td class="align-middle">
     {{
     employee.secondName

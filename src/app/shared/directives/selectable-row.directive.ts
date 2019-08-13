@@ -23,7 +23,7 @@ export class SelectableRowDirective implements OnInit, OnDestroy, AfterViewInit 
   @Input() mouseUp$:    Observable<MouseEvent>;
   @Input() element:     ElementRef;
 
-  @Output() onContextMenu: EventEmitter<any> = new EventEmitter();
+  @Output() onSelectionEnds: EventEmitter<any> = new EventEmitter();
 
   private mouseMoveSub: Subscription;
   private mouseDownSub: Subscription;
@@ -67,7 +67,7 @@ export class SelectableRowDirective implements OnInit, OnDestroy, AfterViewInit 
     this.mouseUpSub = this.mouseUp$
       .subscribe(event => {
         if (this.dragging) {
-          this.onContextMenu.emit({event: event, selectedDays: this.selectedDays});
+          this.onSelectionEnds.emit({event: event, selectedDays: this.selectedDays});
           this.dragging = false;
           if (this.mouseMoveSub) this.mouseMoveSub.unsubscribe();
         }
