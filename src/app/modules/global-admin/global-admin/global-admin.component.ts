@@ -5,7 +5,8 @@ import { AuthService } from "../../../services/auth.service";
   selector: 'app-global-admin',
   templateUrl: './global-admin.component.html',
   styleUrls: ['./global-admin.component.css',
-    '../../../shared/common/sidebar.common.css']
+    '../../../shared/common/sidebar.common.css',
+    '../../../shared/common/toolbar.common.css']
 })
 export class GlobalAdminComponent implements OnInit {
 

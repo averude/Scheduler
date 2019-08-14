@@ -8,7 +8,8 @@ import { DomSanitizer } from "@angular/platform-browser";
 @Component({
   selector: 'app-admin',
   templateUrl: './admin.component.html',
-  styleUrls: ['./admin.component.css']
+  styleUrls: ['./admin.component.css',
+    '../../../shared/common/toolbar.common.css']
 })
 export class AdminComponent implements OnInit {
 
