@@ -13,6 +13,7 @@ export class BgParallaxDirective implements OnInit, OnDestroy {
   mouseMoveSub: Subscription;
 
   constructor(private el: ElementRef) {
+    console.log(el);
     this.mouseMove$ = fromEvent(el.nativeElement, 'mousemove')
       .pipe(throttleTime(5));
   }
@@ -20,8 +21,8 @@ export class BgParallaxDirective implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.mouseMoveSub = this.mouseMove$
       .subscribe(event => {
-        this.el.nativeElement.style.backgroundPositionX = -event.offsetX * this.ratio + 'px';
-        this.el.nativeElement.style.backgroundPositionY = -event.offsetY * this.ratio + 'px';
+        this.el.nativeElement.style.backgroundPositionX = -event.screenX * this.ratio + 'px';
+        this.el.nativeElement.style.backgroundPositionY = -event.screenY * this.ratio + 'px';
       });
   }
 
