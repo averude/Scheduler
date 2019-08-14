@@ -20,6 +20,7 @@ import { CalendarDay } from "../../../../../model/ui/calendar-day";
 import { PaginatorService } from "../../../../../shared/paginators/paginator.service";
 import { DayType } from "../../../../../model/day-type";
 import { SelectableRowDirective } from "../../../../../shared/directives/selectable-row.directive";
+import { roundToTwo } from "../../../../../shared/utils/utils";
 
 @Component({
   selector: '[app-table-row]',
@@ -102,18 +103,18 @@ export class TableRowComponent implements OnInit, OnDestroy {
 
   private calculateWorkingTimeSum(): void {
     if (this.schedule) {
-      this.workingTimeSum = this.schedule
+      this.workingTimeSum = roundToTwo(this.schedule
         .map(workDay => workDay.hours)
-        .reduce((prev, curr) => prev + curr, 0);
+        .reduce((prev, curr) => prev + curr, 0));
     }
   }
 
   private calculateWorkingHolidaysSum(): void {
     if (this.schedule) {
-      this.workingHolidaysSum = this.schedule
+      this.workingHolidaysSum = roundToTwo(this.schedule
         .filter(workDay => workDay.holiday)
         .map(workDay => workDay.hours)
-        .reduce((prev, curr) => prev + curr, 0);
+        .reduce((prev, curr) => prev + curr, 0));
     }
   }
 
