@@ -11,7 +11,6 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 export class LoginComponent implements OnInit{
   loginForm: FormGroup;
 
-  submitted = false;
   loading = false;
   bad_credentials=false;
 
@@ -61,6 +60,7 @@ export class LoginComponent implements OnInit{
       }, err => {
         this.loading = false;
         this.bad_credentials = true;
+        this.loginForm.reset();
       });
   }
 
