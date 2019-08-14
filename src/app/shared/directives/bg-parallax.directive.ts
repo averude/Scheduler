@@ -13,7 +13,6 @@ export class BgParallaxDirective implements OnInit, OnDestroy {
   mouseMoveSub: Subscription;
 
   constructor(private el: ElementRef) {
-    console.log(el);
     this.mouseMove$ = fromEvent(el.nativeElement, 'mousemove')
       .pipe(throttleTime(5));
   }
