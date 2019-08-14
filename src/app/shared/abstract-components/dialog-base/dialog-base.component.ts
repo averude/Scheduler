@@ -45,6 +45,10 @@ export abstract class DialogBaseComponent<T> implements OnInit {
   }
 
   submit() {
+    if (this.dialogForm.invalid) {
+      return;
+    }
+
     this.dialog.close(this.dialogForm.value);
   }
 
