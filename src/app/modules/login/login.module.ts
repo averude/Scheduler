@@ -4,6 +4,7 @@ import { LoginRoutingModule } from './login-routing.module';
 import { CommonModule } from "@angular/common";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatButtonModule, MatFormFieldModule, MatInputModule } from "@angular/material";
+import { BgParallaxDirective } from "../../shared/directives/bg-parallax.directive";
 
 @NgModule({
   imports: [
@@ -15,7 +16,7 @@ import { MatButtonModule, MatFormFieldModule, MatInputModule } from "@angular/ma
     MatButtonModule,
     LoginRoutingModule
   ],
-  declarations: [LoginComponent],
+  declarations: [LoginComponent, BgParallaxDirective],
   exports: []
 })
 export class LoginModule {}

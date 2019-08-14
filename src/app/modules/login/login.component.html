@@ -17,7 +17,7 @@
                    type="text"
                    placeholder="Логин"
                    formControlName="username"/>
-            <mat-error *ngIf="isControlInvalid('username')">{{getErrorMessage('username')}}</mat-error>
+            <mat-error *ngIf="isControlInvalid('username')">Логин не может быть пустым</mat-error>
           </mat-form-field>
 
           <mat-form-field class="login-panel-input">
@@ -30,7 +30,8 @@
 			</div>
 
 			<div class="button-container">
-			  <button *ngIf="!loading" mat-button
+			  <button *ngIf="!loading"
+                mat-button
                 color="primary"
                 class="login-panel-button"
                 [disabled]="loginForm.invalid"
