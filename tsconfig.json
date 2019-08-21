@@ -16,6 +16,11 @@
     "lib": [
       "es2017",
       "dom"
-    ]
+    ],
+    "paths": {
+      "moment": [
+        "../node_modules/moment/min/moment.min.js"
+      ]
+    }
   }
 }

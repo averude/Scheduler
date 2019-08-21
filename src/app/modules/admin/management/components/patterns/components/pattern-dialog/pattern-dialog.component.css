@@ -1,0 +1,26 @@
+.add-button {
+  background-color: lightblue;
+  width: 494.3px;
+  height: 36px;
+  border: 1px solid transparent;
+  margin: 10px 0 10px 0;
+  /*padding: 10px 20px 10px 20px;*/
+}
+
+.input-pattern-name {
+  width: 494.3px;
+}
+
+.add-button:hover {
+  background-color: deepskyblue;
+  color: white;
+}
+
+.pattern-units-panel {
+  overflow: auto;
+}
+
+.dialog-checkbox {
+  display: block;
+  padding: 5px 0;
+}

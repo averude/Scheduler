@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpHeaders } from '@angular/common/http';
 
 @Injectable()
 export class RestConfig {
-  public baseUrl = 'http://178.212.193.249/api/v1';
+  public baseUrl = 'http://134.249.143.161:50680/api/v1';
 }

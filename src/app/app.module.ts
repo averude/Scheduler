@@ -10,6 +10,7 @@ import { LoginModule } from './modules/login/login.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RestConfig } from './rest.config';
 import { httpInterceptorProviders } from "./http-interceptors/interceptor-providers";
+import { GlobalAdminModule } from "./modules/global-admin/global-admin.module";
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { httpInterceptorProviders } from "./http-interceptors/interceptor-provid
     LoginModule,
     ClientModule,
     AdminModule,
+    GlobalAdminModule,
     BrowserAnimationsModule,
     AppRoutingModule
   ],

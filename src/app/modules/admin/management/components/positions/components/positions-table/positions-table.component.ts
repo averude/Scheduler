@@ -1,29 +1,48 @@
-import { Component, OnInit } from '@angular/core';
-import { Position } from '../../../../../../../model/position';
-import { PositionService } from '../../../../../../../services/position.service';
+import { Component } from '@angular/core';
+import { MatDialog } from "@angular/material";
+import { Position } from "../../../../../../../model/position";
 import { NotificationsService } from "angular2-notifications";
-import { CountDTO } from "../../../../../../../model/count-dto";
+import { PositionService } from "../../../../../../../services/position.service";
+import { PositionDialogComponent } from "../position-dialog/position-dialog.component";
 import { StatisticsService } from "../../../../../../../services/statistics.service";
+import { CountDTO } from "../../../../../../../model/dto/count-dto";
+import { TableBaseComponent } from "../../../../../../../shared/abstract-components/table-base/table-base.component";
 
 @Component({
-  selector: 'app-positions',
+  selector: 'app-mat-positions-table',
   templateUrl: './positions-table.component.html',
-  styleUrls: ['./positions-table.component.css']
+  styleUrls: [
+    '../../../../../../../shared/common/table.common.css',
+    './positions-table.component.css'
+  ]
 })
-export class PositionsTableComponent implements OnInit {
+export class PositionsTableComponent extends TableBaseComponent<Position> {
+  displayedColumns = ['select', 'name', 'quantity', 'control'];
 
-  positions: Position[];
   employeesCount: CountDTO[];
 
-  constructor(private notificationService: NotificationsService,
+  constructor(private dialog: MatDialog,
+              private notificationsService: NotificationsService,
               private positionService: PositionService,
-              private statisticsService: StatisticsService) { }
+              private statisticsService: StatisticsService) {
+    super(dialog, positionService, notificationsService);
+  }
 
   ngOnInit() {
-    this.positionService.getAll()
-      .subscribe(positions => this.positions = positions);
+    super.ngOnInit();
+    this.dataSource.filterPredicate = ((data, filter) => {
+      return data.name.toLowerCase().includes(filter);
+    });
     this.statisticsService.getNumberOfEmployeesInPositions()
-      .subscribe(countDTOs => this.employeesCount = countDTOs);
+      .subscribe(counts => this.employeesCount = counts);
+  }
+
+  openDialog(position: Position) {
+    const data = {
+      position: position
+    };
+
+    this.openAddOrEditDialog(position, data, PositionDialogComponent);
   }
 
   getQuantity(positionId: number): number|string {
@@ -34,37 +53,5 @@ export class PositionsTableComponent implements OnInit {
     } else {
       return '-';
     }
-  }
-
-  createPosition(position: Position) {
-    this.positionService.create(position)
-      .subscribe(res => {
-        position.id = res;
-        this.positions.push(position);
-        this.notificationService.success(
-          ' Created',
-          `Position "${position.name}" was successfully created`
-        );
-      });
-  }
-
-  updatePosition(position: Position) {
-    this.positionService.update(position)
-      .subscribe(res => this.notificationService.success(
-        'Updated',
-        `Position "${position.name}" was successfully updated`
-      ));
-  }
-
-  removePosition(position: Position) {
-    this.positionService.remove(position.id)
-      .subscribe(res => {
-        this.positions = this.positions
-          .filter(value => value !== position);
-        this.notificationService.success(
-          'Deleted',
-          `Position "${position.name}" was successfully deleted`
-        );
-      });
   }
 }

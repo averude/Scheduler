@@ -19,14 +19,16 @@ export class AuthService {
     return this.http.post<any>(
       `${this.config.baseUrl}/uaa/oauth/token`,
       `username=${username}&password=${password}&grant_type=password&client_id=browser`,
-      this.getOptions(username, password)
+      this.getOptions()
     ).pipe(
         shareReplay(),
         map(token => {
           if (token && token.access_token) {
             const user = new User();
-            user.roles = decode(token.access_token).authorities;
-            user.departmentId = 1;
+            const token_claims = decode(token.access_token);
+            user.roles = token_claims.authorities;
+            user.employeeId = token_claims.employee_id;
+            user.departmentId = token_claims.department_id;
             user.access_token = token.access_token;
             sessionStorage.setItem('currentUser', JSON.stringify(user));
             return user;
@@ -37,7 +39,12 @@ export class AuthService {
   }
 
   public get currentUserValue(): User {
-    return JSON.parse(sessionStorage.getItem('currentUser'));
+    let user = sessionStorage.getItem('currentUser');
+    return JSON.parse(user);
+  }
+
+  public isLogon(): boolean {
+    return !!(this.currentUserValue && this.currentUserValue.access_token);
   }
 
   public logout() {
@@ -45,7 +52,7 @@ export class AuthService {
     this.router.navigate(['/login']);
   }
 
-  private getOptions(username: string, password: string) {
+  private getOptions() {
     const headers = new HttpHeaders()
       .append('Content-type','application/x-www-form-urlencoded; charset=utf-8')
       .append('Authorization', 'Basic '+btoa("browser:secret"));

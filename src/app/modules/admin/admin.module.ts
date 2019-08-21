@@ -4,23 +4,22 @@ import { CommonModule } from '@angular/common';
 import { AdminComponent } from './admin/admin.component';
 import { AdminRoutingModule } from './admin-routing.module';
 import { ManagementModule } from './management/management.module';
-import { MatToolbarModule } from "@angular/material";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { SimpleNotificationsModule } from "angular2-notifications";
 import { OPTIONS } from "./notification-options";
+import { StatisticsModule } from "./statistics/statistics.module";
 
 @NgModule({
   imports: [
     CommonModule,
     ManagementModule,
     SchedulesModule,
+    StatisticsModule,
     AdminRoutingModule,
-    MatToolbarModule,
     BrowserAnimationsModule,
     SimpleNotificationsModule.forRoot(OPTIONS)
   ],
   declarations: [AdminComponent],
   exports: [],
-  providers: []
 })
 export class AdminModule {}

@@ -1,0 +1,20 @@
+<h2 matDialogTitle>{{operation}}</h2>
+<mat-dialog-content [formGroup]="dialogForm">
+
+  <mat-form-field>
+    <input matInput
+           placeholder="Position's name"
+           formControlName="name">
+    <mat-error *ngIf="isControlInvalid('name')">{{getErrorMessage()}}</mat-error>
+  </mat-form-field>
+
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button class="mat-raised-button"
+          (click)="close()">Close</button>
+  <button class="mat-raised-button mat-primary"
+          type="submit"
+          [disabled]="dialogForm.invalid"
+          (click)="submit()">Save</button>
+</mat-dialog-actions>

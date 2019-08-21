@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { RestConfig } from '../rest.config';
 import { Observable } from 'rxjs';
-import { PatternUnit } from '../model/patternunit';
+import { PatternUnit } from '../model/pattern-unit';
 
 @Injectable({
   providedIn: 'root'
@@ -33,7 +33,7 @@ export class PatternUnitService {
     );
   }
 
-  remove(patternUnitId: number): Observable<any> {
+  delete(patternUnitId: number): Observable<any> {
     return this.http.delete(
       `${this.config.baseUrl}/admin/units/${patternUnitId}`,
       {responseType: 'text'}

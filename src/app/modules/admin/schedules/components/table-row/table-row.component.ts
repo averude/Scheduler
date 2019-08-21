@@ -1,55 +1,73 @@
 import {
+  AfterViewInit,
   Component,
-  ViewChildren,
+  ElementRef,
   Input,
-  OnInit,
-  QueryList,
-  HostListener,
-  ViewChild, OnDestroy
+  OnDestroy,
+  OnInit, QueryList,
+  ViewChild, ViewChildren,
 } from '@angular/core';
-import { TableCellComponent } from '../table-cell/table-cell.component';
 import { ContextMenuComponent, ContextMenuService } from 'ngx-contextmenu';
 import { Employee } from '../../../../../model/employee';
+import { Position } from '../../../../../model/position';
 import { ScheduleService } from '../../../../../services/schedule.service';
 import { ScheduleGenerationService } from '../../../../../services/schedule-generation.service';
 import { WorkDay } from '../../../../../model/workday';
-import { ShiftPattern } from '../../../../../model/shiftpattern';
-import { PaginatorService } from '../../paginator.service';
-import { Subscription } from 'rxjs';
-import { mergeMap } from 'rxjs/internal/operators';
+import { ShiftPattern } from '../../../../../model/shift-pattern';
+import { Observable, Subscription } from 'rxjs';
 import { PatternUnitService } from '../../../../../services/pattern-unit.service';
 import { NotificationsService } from "angular2-notifications";
+import { filter, switchMap } from "rxjs/operators";
+import { CalendarDay } from "../../../../../model/ui/calendar-day";
+import { PaginatorService } from "../../../../../shared/paginators/paginator.service";
+import { DayType } from "../../../../../model/day-type";
+import { SelectableRowDirective } from "../../../../../shared/directives/selectable-row.directive";
+import { fillInTheCells, roundToTwo } from "../../../../../shared/utils/utils";
+import { DayTypeGroup } from "../../../../../model/day-type-group";
+import { TableCellComponent } from "../table-cell/table-cell.component";
 
 @Component({
   selector: '[app-table-row]',
   templateUrl: './table-row.component.html',
   styleUrls: ['./table-row.component.css']
 })
-export class TableRowComponent implements OnInit, OnDestroy {
+export class TableRowComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  @Input() departmentId: number;
-  @Input() employee: Employee;
-  @Input() patterns: ShiftPattern[];
+  @Input() employee:      Employee;
+  @Input() position:      Position;
+  @Input() patterns:      ShiftPattern[];
+  @Input() dayTypes:      DayType[];
+  @Input() dayTypeGroups: DayTypeGroup[];
+
+  @Input() mouseMove$:    Observable<number>;
+  @Input() mouseUp$:      Observable<MouseEvent>;
+
+  @Input() workingTimeNorm: number;
 
   // Context menu variables
   @ViewChild(ContextMenuComponent)
   public patternMenu: ContextMenuComponent;
   customHours: number;
+  offset = 0;
+
+  @ViewChild(SelectableRowDirective)
+  selectableRowDirective: SelectableRowDirective;
 
   // Selection variables
   @ViewChildren(TableCellComponent)
-  viewChildren: QueryList<TableCellComponent>;
-  dragging = false;
+  cells: QueryList<TableCellComponent>;
 
   // Table variables
-  daysInMonth: Date[];
-  schedule: WorkDay[];
-  sum = 0;
+  daysInMonth:  CalendarDay[];
+  schedule:     WorkDay[];
+  workingTimeSum = 0;
+  workingHolidaysSum = 0;
 
   // Observable subscriptions
   private paginatorSub: Subscription;
 
-  constructor(private scheduleService: ScheduleService,
+  constructor(public  elementRef: ElementRef,
+              private scheduleService: ScheduleService,
               private scheduleGenerationService: ScheduleGenerationService,
               private patternUnitService: PatternUnitService,
               private paginatorService: PaginatorService,
@@ -57,17 +75,24 @@ export class TableRowComponent implements OnInit, OnDestroy {
               private notificationService: NotificationsService) { }
 
   ngOnInit() {
+  }
+
+  ngAfterViewInit(): void {
     this.paginatorSub = this.paginatorService.dates
-      .pipe(mergeMap(daysInMonth => {
+      .pipe(
+        filter(daysInMonth => daysInMonth.length > 0),
+        switchMap(daysInMonth => {
           this.daysInMonth = daysInMonth;
           return this.scheduleService.getByDate(
-            daysInMonth[0],
-            daysInMonth[daysInMonth.length - 1],
+            daysInMonth[0].isoString,
+            daysInMonth[daysInMonth.length - 1].isoString,
             this.employee.id
           );
-        }))
+        }),
+        filter(schedule => !!schedule))
       .subscribe(schedule => {
         this.schedule = schedule;
+        fillInTheCells(schedule, this.cells, this.dayTypes, this.dayTypeGroups);
         this.calculateSum();
       });
   }
@@ -76,46 +101,35 @@ export class TableRowComponent implements OnInit, OnDestroy {
     this.paginatorSub.unsubscribe();
   }
 
-  getWorkDay(date: Date): WorkDay {
-    if (this.schedule) {
-      const dateISO = date.toISOString().split('T')[0];
-      return this.schedule
-        .find(workDay => workDay.date === dateISO);
-    } else {
-      return null;
-    }
-  }
-
   calculateSum(): void {
+    this.calculateWorkingTimeSum();
+    this.calculateWorkingHolidaysSum();
+  }
+
+  private calculateWorkingTimeSum(): void {
     if (this.schedule) {
-      this.sum = this.schedule
+      this.workingTimeSum = roundToTwo(this.schedule
         .map(workDay => workDay.hours)
-        .reduce((prev, curr) => prev + curr, 0);
+        .reduce((prev, curr) => prev + curr, 0));
     }
   }
 
-  isWeekend(date: Date): boolean {
-    return date.getDay() === 0 || date.getDay() === 6;
+  private calculateWorkingHolidaysSum(): void {
+    if (this.schedule) {
+      this.workingHolidaysSum = roundToTwo(this.schedule
+        .filter(workDay => workDay.holiday)
+        .map(workDay => workDay.hours)
+        .reduce((prev, curr) => prev + curr, 0));
+    }
   }
 
-  @HostListener('mousedown')
-  mouseDown() {
-    this.dragging = true;
-  }
-
-  @HostListener('mouseup', ['$event'])
-  mouseUp($event: MouseEvent) {
-    this.dragging = false;
-    this.onContextMenu($event, this.selectedDates);
-  }
-
-  onContextMenu($event: MouseEvent, dates: Date[]): void {
-    if (dates.length > 0) {
+  onContextMenu($event: MouseEvent, days: CalendarDay[]): void {
+    if (days.length > 0) {
       setTimeout(() => {
         this.contextMenuService.show.next({
           contextMenu: this.patternMenu,
           event: $event,
-          item: dates,
+          item: days,
         });
         $event.preventDefault();
         $event.stopPropagation();
@@ -128,62 +142,72 @@ export class TableRowComponent implements OnInit, OnDestroy {
       .generateScheduleWithCustomHours(
         this.employee.id,
         this.schedule,
-        this.selectedDates,
+        this.selectableRowDirective.selectedDays,
         this.customHours,
-        this.scheduleGeneratedHandler);
+        this.scheduleGeneratedHandler,
+        this.errorHandler);
   }
 
-  generateSchedule(dates: Date[],
-                   patternId: number) {
-    this.patternUnitService.getByPatternId(patternId)
-      .subscribe(patternUnits =>
+  generateSchedule(days: CalendarDay[],
+                   pattern: ShiftPattern) {
+    this.patternUnitService.getByPatternId(pattern.id)
+      .subscribe(patternUnits => {
         this.scheduleGenerationService
-          .generateScheduleByPatternId(
+          .generateScheduleWithPattern(
             this.employee.id,
             this.schedule,
-            dates,
+            days,
             patternUnits,
-            this.scheduleGeneratedHandler)
-      );
+            this.offset,
+            pattern.overrideExistingValues,
+            this.scheduleGeneratedHandler,
+            this.errorHandler)
+      });
   }
 
-  private get scheduleGeneratedHandler(): any {
-    return (createdSchedule, updatedSchedule) => {
+  generateScheduleBySingleDay(dayType: DayType) {
+    this.scheduleGenerationService
+      .generateScheduleBySingleDay(
+        this.employee.id,
+        this.schedule,
+        this.selectableRowDirective.selectedDays,
+        this.customHours,
+        dayType,
+        this.scheduleGeneratedHandler,
+        this.errorHandler);
+  }
+
+  private scheduleGeneratedHandler = (createdSchedule, updatedSchedule) => {
       if (createdSchedule.length > 0) {
         this.scheduleService.create(
           this.employee.id,
           createdSchedule
         ).subscribe(res => {
               res.forEach(workDay => this.schedule.push(workDay));
+              fillInTheCells(this.schedule, this.cells, this.dayTypes, this.dayTypeGroups);
               this.calculateSum();
               this.notificationService.success(
                 'Created',
                 'Schedule sent successfully');
             });
-        }
+      }
       if (updatedSchedule.length > 0) {
         this.scheduleService.update(
           this.employee.id,
           updatedSchedule
         ).subscribe(res => {
+              fillInTheCells(this.schedule, this.cells, this.dayTypes, this.dayTypeGroups);
               this.calculateSum();
               this.notificationService.success(
                 'Updated',
                 'Schedule sent successfully');
             });
       }
-    };
-  }
+  };
 
-  private get selectedDates(): Date[] {
-    return this.viewChildren
-      .filter(item => item.selected)
-      .map(value => value.day);
-  }
+  private errorHandler = message => this.notificationService.error('Error', message);
 
   clearSelection() {
-    this.viewChildren
-      .filter(item => item.selected)
-      .forEach(selectedItem => selectedItem.deselect());
+    this.selectableRowDirective.clearSelection();
   }
 }

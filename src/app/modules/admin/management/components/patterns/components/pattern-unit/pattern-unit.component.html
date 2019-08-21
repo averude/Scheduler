@@ -6,7 +6,7 @@
             (click)="moveDown()">▼</button>
   </div>
   <div class="form-box">
-    <mat-form-field>
+    <mat-form-field *ngIf="overrideExistingValues">
       <input matInput
              placeholder="hours"
              [(ngModel)]="unit.value">

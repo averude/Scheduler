@@ -1,67 +1,74 @@
-import { Component, OnInit } from '@angular/core';
-import { Employee } from '../../../../../../../model/employee';
-import { EmployeeService } from '../../../../../../../services/employee.service';
-import { Position } from '../../../../../../../model/position';
-import { PositionService } from '../../../../../../../services/position.service';
-import { Shift } from '../../../../../../../model/shift';
-import { ShiftService } from '../../../../../../../services/shift.service';
+import { Component } from '@angular/core';
+import { MatDialog } from "@angular/material";
+import { EmployeeService } from "../../../../../../../services/employee.service";
+import { Employee } from "../../../../../../../model/employee";
+import { Shift } from "../../../../../../../model/shift";
+import { Position } from "../../../../../../../model/position";
+import { PositionService } from "../../../../../../../services/position.service";
+import { ShiftService } from "../../../../../../../services/shift.service";
+import { EmployeeDialogComponent } from "../employee-dialog/employee-dialog.component";
 import { NotificationsService } from "angular2-notifications";
+import { TableBaseComponent } from "../../../../../../../shared/abstract-components/table-base/table-base.component";
 
 @Component({
-  selector: 'app-employees',
+  selector: 'app-mat-employees-table',
   templateUrl: './employees-table.component.html',
-  styleUrls: ['./employees-table.component.css']
+  styleUrls: ['../../../../../../../shared/common/table.common.css','./employees-table.component.css']
 })
-export class EmployeesTableComponent implements OnInit {
+export class EmployeesTableComponent extends TableBaseComponent<Employee> {
+  displayedColumns = ['select', 'secondName', 'firstName', 'patronymic', 'positionId', 'shiftId', 'control'];
 
-  // Data
-  employees:  Employee[];
-  positions:  Position[];
-  shifts:     Shift[];
+  positions: Position[] = [];
+  shifts: Shift[] = [];
 
-  constructor(private notificationService: NotificationsService,
+  constructor(private dialog: MatDialog,
+              private notificationsService: NotificationsService,
               private employeeService: EmployeeService,
               private positionService: PositionService,
-              private shiftService: ShiftService) { }
+              private shiftService: ShiftService) {
+    super(dialog, employeeService, notificationsService);
+  }
 
   ngOnInit() {
-    this.employeeService.getAll()
-      .subscribe(employees => this.employees = employees);
+    super.ngOnInit();
+    this.dataSource.filterPredicate = ((data, filter) => {
+      return data.secondName.toLowerCase().includes(filter)
+        || data.firstName.toLowerCase().includes(filter)
+        || data.patronymic.toLowerCase().includes(filter)
+        || this.getPositionName(data.positionId).toLowerCase().includes(filter)
+        || this.getShiftName(data.shiftId).toLowerCase().includes(filter);
+    });
     this.positionService.getAll()
       .subscribe(positions => this.positions = positions);
     this.shiftService.getAll()
       .subscribe(shifts => this.shifts = shifts);
   }
 
-  addEmployee(employee: Employee) {
-    this.employeeService.create(employee)
-      .subscribe(res => {
-        employee.id = res;
-        this.employees.push(employee);
-        this.notificationService.success(
-          'Created',
-          `Employee "${employee.secondName} ${employee.firstName}" was successfully created`
-        );
-      });
+  openDialog(employee: Employee) {
+    const data = {
+      employee: employee,
+      positions: this.positions,
+      shifts: this.shifts
+    };
+
+    this.openAddOrEditDialog(employee, data, EmployeeDialogComponent);
   }
 
-  updateEmployee(employee: Employee) {
-    this.employeeService.update(employee)
-      .subscribe(res => this.notificationService.success(
-          'Updated',
-        `Employee "${employee.secondName} ${employee.firstName}" was successfully updated`
-        ));
+  getPositionName(positionId: number): string {
+    let position = this.positions.find(value => value.id === positionId);
+    if (position) {
+      return position.name;
+    } else {
+      return '-';
+    }
   }
 
-  deleteEmployee(employee: Employee) {
-    this.employeeService.remove(employee.id)
-      .subscribe(res => {
-        this.employees = this.employees
-            .filter(value => value !== employee);
-        this.notificationService.success(
-          'Deleted',
-          `Employee "${employee.secondName} ${employee.firstName}" was successfully deleted`
-        );
-      });
+  getShiftName(shiftId: number): string {
+    let shift = this.shifts.find(value => value.id === shiftId);
+    if (shift) {
+      return shift.name;
+    } else {
+      return '-';
+    }
   }
 }

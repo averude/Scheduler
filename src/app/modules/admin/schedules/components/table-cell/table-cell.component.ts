@@ -1,10 +1,5 @@
-import {
-  Component,
-  ElementRef,
-  HostListener,
-  Input,
-  OnInit
-} from '@angular/core';
+import { Component, ElementRef, HostListener, Input, OnInit } from '@angular/core';
+import { CalendarDay } from "../../../../../model/ui/calendar-day";
 
 @Component({
   selector: '[app-table-cell]',
@@ -14,28 +9,25 @@ import {
 export class TableCellComponent implements OnInit {
 
   @Input() value: any;
-  @Input() day: Date;
+  @Input() day: CalendarDay;
+  @Input() labelColor = "transparent";
 
-  className = 'selected';
-
-  @Input() dragging = false;
   selected = false;
+  className = "selected";
 
-  constructor(private element: ElementRef) { }
+  constructor(public elementRef: ElementRef) { }
 
   ngOnInit() {
   }
 
   @HostListener('mousedown')
-  onMouseDown() {
-    this.selected = !this.selected;
-    this.toggleClass();
+  mouseDown() {
+    this.select();
   }
 
-  @HostListener('mouseover')
-  onMouseOver() {
-    if (this.dragging) {
-      this.selected = !this.selected;
+  select() {
+    if (!this.selected) {
+      this.selected = true;
       this.toggleClass();
     }
   }
@@ -48,6 +40,6 @@ export class TableCellComponent implements OnInit {
   }
 
   private toggleClass() {
-    this.element.nativeElement.classList.toggle(this.className);
+    this.elementRef.nativeElement.classList.toggle(this.className);
   }
 }

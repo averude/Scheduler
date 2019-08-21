@@ -1,5 +1,5 @@
 .list-box {
-  background-color: darkgray;
+  background-color: lightblue;
   width: max-content;
   border: 1px solid transparent;
   margin: 10px 0 10px 0;
@@ -7,7 +7,8 @@
 }
 
 .list-box:hover {
-  background-color: grey;
+  background-color: deepskyblue;
+  color: white;
 }
 
 .control-button-box {

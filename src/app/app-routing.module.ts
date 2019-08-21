@@ -13,7 +13,7 @@ const routes: Routes = [
   {
     path: 'client',
     canActivate: [RoleGuard],
-    data: {roles: ['ROLE_CLIENT']},
+    data: {roles: ['CLIENT']},
     component: ScheduleTableComponent
   },
   {

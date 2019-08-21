@@ -1,13 +1,18 @@
 <tr class="text-center align-middle">
-  <th rowspan="2">Name</th>
-  <th [attr.colspan]="daysInMonth.length">Schedule</th>
-  <th rowspan="2">Sum</th>
+  <th class="align-middle" style="width: 10%" rowspan="2">Name</th>
+  <th class="paginator-row"
+      [attr.colspan]="daysInMonth.length">
+    <app-month-year-paginator class="paginator"></app-month-year-paginator>
+  </th>
+  <th class="align-middle" rowspan="2">Sum</th>
+  <th class="align-middle" rowspan="2">Norm</th>
+  <th class="align-middle" rowspan="2">Hol</th>
 </tr>
 <tr>
   <th class="text-center align-middle month-header"
       *ngFor="let day of daysInMonth"
-      [class.weekend]="isWeekend(day)">
-    {{day.getDate()}}
+      [class.weekend]="day.weekend"
+      [class.holiday]="day.holiday">
+    {{day.dayOfMonth}}
   </th>
 </tr>
-

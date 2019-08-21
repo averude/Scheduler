@@ -3,11 +3,12 @@ import { Position } from '../model/position';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { RestConfig } from '../rest.config';
+import { CrudService } from "./interface/crud.service";
 
 @Injectable({
   providedIn: 'root'
 })
-export class PositionService {
+export class PositionService implements CrudService<Position> {
 
   constructor(private http: HttpClient,
               private config: RestConfig) { }
@@ -33,7 +34,7 @@ export class PositionService {
     );
   }
 
-  remove(positionId: number): Observable<any> {
+  delete(positionId: number): Observable<any> {
     return this.http.delete(
       `${this.config.baseUrl}/admin/positions/${positionId}`,
       {responseType: 'text'}

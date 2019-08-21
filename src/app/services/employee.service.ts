@@ -3,11 +3,12 @@ import { Employee } from '../model/employee';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { RestConfig } from '../rest.config';
+import { CrudService } from "./interface/crud.service";
 
 @Injectable({
   providedIn: 'root'
 })
-export class EmployeeService {
+export class EmployeeService implements CrudService<Employee> {
 
   constructor(private http: HttpClient,
               private config: RestConfig) { }
@@ -51,7 +52,7 @@ export class EmployeeService {
     );
   }
 
-  remove(employeeId: number): Observable<any> {
+  delete(employeeId: number): Observable<any> {
     return this.http.delete(
       `${this.config.baseUrl}/admin/employees/${employeeId}`,
       {responseType: 'text'}

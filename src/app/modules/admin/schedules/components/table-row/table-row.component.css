@@ -2,11 +2,28 @@
   background-color: lavender;
 }
 
+.holiday {
+  background-color: lightpink;
+}
+
 .selected {
   background-color: indigo;
   color: white;
 }
 
 .sum {
-  width: 50px;
+  width: 30px;
+}
+
+.notEqual {
+  background-color: lightgoldenrodyellow;
+}
+
+.table-cell {
+  cursor: cell;
+  padding: 0px;
+}
+
+.position-label {
+  color: lightgrey;
 }

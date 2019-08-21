@@ -1,0 +1,16 @@
+.shift-label {
+  background-color: ghostwhite;
+  text-align: left;
+  font-size: 14px;
+  cursor: pointer;
+  color: darkblue;
+}
+
+.schedule-row {
+  height: 45px;
+}
+
+.hide-button {
+  border: none;
+  background-color: transparent;
+}

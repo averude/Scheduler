@@ -1,60 +1,55 @@
 import { Component, OnInit } from '@angular/core';
-import { ShiftService } from '../../../../../../../services/shift.service';
-import { Shift } from '../../../../../../../model/shift';
-import { ShiftPattern } from '../../../../../../../model/shiftpattern';
-import { ShiftPatternService } from '../../../../../../../services/shiftpattern.service';
+import { TableBaseComponent } from "../../../../../../../shared/abstract-components/table-base/table-base.component";
+import { Shift } from "../../../../../../../model/shift";
+import { MatDialog } from "@angular/material";
 import { NotificationsService } from "angular2-notifications";
+import { ShiftService } from "../../../../../../../services/shift.service";
+import { ShiftPattern } from "../../../../../../../model/shift-pattern";
+import { ShiftPatternService } from "../../../../../../../services/shift-pattern.service";
+import { ShiftDialogComponent } from "../shift-dialog/shift-dialog.component";
 
 @Component({
-  selector: 'app-shifts-table',
+  selector: 'app-mat-shifts-table',
   templateUrl: './shifts-table.component.html',
-  styleUrls: ['./shifts-table.component.css']
+  styleUrls: ['../../../../../../../shared/common/table.common.css','./shifts-table.component.css']
 })
-export class ShiftsTableComponent implements OnInit {
+export class ShiftsTableComponent extends TableBaseComponent<Shift> implements OnInit {
+  displayedColumns = ['select', 'name', 'pattern', 'control'];
 
-  shifts: Shift[];
-  patterns: ShiftPattern[];
+  patterns: ShiftPattern[] = [];
 
-  constructor(private shiftService: ShiftService,
-              private notificationService: NotificationsService,
-              private patternService: ShiftPatternService) { }
+  constructor(private dialog: MatDialog,
+              private shiftService: ShiftService,
+              private shiftPatternService: ShiftPatternService,
+              private notificationsService: NotificationsService) {
+    super(dialog, shiftService, notificationsService);
+  }
 
   ngOnInit() {
-    this.shiftService.getAll()
-      .subscribe(shifts => this.shifts = shifts);
-    this.patternService.getAll()
+    super.ngOnInit();
+    this.dataSource.filterPredicate = ((data, filter) => {
+      return data.name.toLowerCase().includes(filter) ||
+        this.getPatternName(data.patternId).toLowerCase().includes(filter)
+    });
+    this.shiftPatternService.getAll()
       .subscribe(patterns => this.patterns = patterns);
   }
 
-  addShift(shift: Shift) {
-    this.shiftService.create(shift)
-      .subscribe(res => {
-        shift.id = res;
-        this.shifts.push(shift);
-        this.notificationService.success(
-          'Created',
-          `Shift "${shift.name}" was successfully created`
-        );
-      });
+  openDialog(shift: Shift) {
+    const data = {
+      shift: shift,
+      patterns: this.patterns
+    };
+
+    this.openAddOrEditDialog(shift, data, ShiftDialogComponent);
   }
 
-  updateShift(shift: Shift) {
-    this.shiftService.update(shift)
-      .subscribe(res => this.notificationService.success(
-        'Updated',
-        `Shift "${shift.name}" was successfully updated`
-      ));
-  }
-
-  deleteShift(shift: Shift) {
-    this.shiftService.remove(shift.id)
-      .subscribe(res => {
-        this.shifts = this.shifts
-          .filter(value => value !== shift);
-        this.notificationService.success(
-          'Deleted',
-          `Shift "${shift.name}" was successfully deleted`
-        );
-      });
+  getPatternName(patternId: number): string {
+    let pattern = this.patterns.find(value => value.id === patternId);
+    if (pattern) {
+      return pattern.name;
+    } else {
+      return '-';
+    }
   }
 }

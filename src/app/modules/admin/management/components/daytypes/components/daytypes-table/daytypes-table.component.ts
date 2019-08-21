@@ -1,54 +1,49 @@
-import { Component, OnInit } from '@angular/core';
-import { DayType } from '../../../../../../../model/daytype';
-import { DayTypeService } from '../../../../../../../services/daytype.service';
+import { Component } from '@angular/core';
+import { DayType } from "../../../../../../../model/day-type";
+import { DayTypeService } from "../../../../../../../services/day-type.service";
 import { NotificationsService } from "angular2-notifications";
+import { MatDialog } from "@angular/material";
+import { TableBaseComponent } from "../../../../../../../shared/abstract-components/table-base/table-base.component";
+import { DayTypeDialogComponent } from "../daytype-dialog/daytype-dialog.component";
+import { DayTypeGroupService } from "../../../../../../../services/day-type-group.service";
+import { DayTypeGroup } from "../../../../../../../model/day-type-group";
 
 @Component({
-  selector: 'app-daytypes-table',
+  selector: 'app-mat-daytypes-table',
   templateUrl: './daytypes-table.component.html',
-  styleUrls: ['./daytypes-table.component.css']
+  styleUrls: ['../../../../../../../shared/common/table.common.css','./daytypes-table.component.css']
 })
-export class DayTypesTableComponent implements OnInit {
+export class DayTypesTableComponent extends TableBaseComponent<DayType> {
+  dayTypeGroups: DayTypeGroup[] = [];
 
-  dayTypes: DayType[];
+  displayedColumns = ['select', 'name', 'label', 'group', 'default_value','control'];
 
-  constructor(private dayTypeService: DayTypeService,
-              private notificationService: NotificationsService) { }
+  constructor(dialog: MatDialog,
+              dayTypeService: DayTypeService,
+              notificationsService: NotificationsService,
+              private dayTypeGroupService: DayTypeGroupService) {
+    super(dialog, dayTypeService, notificationsService);
+  }
 
   ngOnInit() {
-    this.dayTypeService.getAll()
-      .subscribe(dayTypes => this.dayTypes = dayTypes);
+    super.ngOnInit();
+    this.dataSource.filterPredicate = ((data, filter) => {
+      return data.name.toLowerCase().includes(filter)
+    });
+    this.dayTypeGroupService.getAll()
+      .subscribe(dayTypeGroups => this.dayTypeGroups = dayTypeGroups);
   }
 
-  addDayType(dayType: DayType) {
-    this.dayTypeService.create(dayType)
-      .subscribe(res => {
-        dayType.id = res;
-        this.dayTypes.push(dayType);
-        this.notificationService.success(
-          'Created',
-          `Day type "${dayType.name}" was successfully created`
-        );
-      });
+  openDialog(dayType: DayType) {
+    const data = {
+      dayType: dayType,
+      dayTypeGroups: this.dayTypeGroups
+    };
+
+    this.openAddOrEditDialog(dayType, data, DayTypeDialogComponent);
   }
 
-  updateDayType(dayType: DayType) {
-    this.dayTypeService.update(dayType)
-      .subscribe(res => this.notificationService.success(
-        'Updated',
-        `Day type "${dayType.name}" was successfully updated`
-      ));
-  }
-
-  deleteDayType(dayType: DayType) {
-    this.dayTypeService.delete(dayType.id)
-      .subscribe(res => {
-        this.dayTypes = this.dayTypes
-          .filter(type => type !== dayType);
-        this.notificationService.success(
-          'Deleted',
-          `Day type "${dayType.name}" was successfully deleted`
-        );
-      });
+  getGroupById(id: number): DayTypeGroup {
+    return this.dayTypeGroups.find(value => value.id === id);
   }
 }

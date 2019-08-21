@@ -1,16 +1,46 @@
-<div class="root-panel">
-  <h1 style="text-align: center">Scheduler</h1>
-  <div class="inputs-panel">
-    <input class="login-panel-input"
-           type="text"
-           placeholder="username"
-           [(ngModel)]="username" />
-    <input class="login-panel-input"
-           type="password"
-           placeholder="password"
-           [(ngModel)]="password"/>
-  </div>
-  <button class="login-panel-button"
-          (click)="login()"
-          type="submit">Login</button>
+<div class="full-bg"
+     appBgParallax>
+	<div class="login-form">
+		<div class="root-panel"
+         (keyup.enter)="submit()">
+
+			<h1 class="scheduler-title"></h1>
+
+      <div *ngIf="bad_credentials"
+           class="login-panel-bad-credentials">
+        НЕПРАВИЛЬНО СУЧАРА
+      </div>
+
+			<div class="inputs-panel"
+           [formGroup]="loginForm">
+          <mat-form-field class="login-panel-input">
+            <input matInput
+                   type="text"
+                   placeholder="Логин"
+                   formControlName="username"/>
+            <mat-error *ngIf="isControlInvalid('username')">Логин не может быть пустым</mat-error>
+          </mat-form-field>
+
+          <mat-form-field class="login-panel-input">
+            <input matInput
+                   type="password"
+                   placeholder="Пароль"
+                   formControlName="password"/>
+            <mat-error *ngIf="isControlInvalid('password')">Пароль не может быть пустым</mat-error>
+          </mat-form-field>
+			</div>
+
+			<div class="button-container">
+			  <button *ngIf="!loading"
+                mat-button
+                color="primary"
+                class="login-panel-button"
+                [disabled]="loginForm.invalid"
+                type="submit"
+                (click)="submit()">Войти</button>
+        <div *ngIf="loading"
+             class="login-panel-button-preloader-image"></div>
+			</div>
+		</div>
+	</div>
 </div>

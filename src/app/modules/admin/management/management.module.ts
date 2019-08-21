@@ -9,6 +9,10 @@ import { PositionsModule } from './components/positions/positions.module';
 import { DayTypesModule } from './components/daytypes/daytypes.module';
 import { ShiftsModule } from './components/shifts/shifts.module';
 import { PatternsModule } from './components/patterns/patterns.module';
+import { RemoveDialogModule } from "../../../shared/abstract-components/remove-dialog/remove-dialog.module";
+import { HolidaysModule } from "./components/holidays/holidays.module";
+import { WorkingTimeModule } from "./components/working-time/working-time.module";
+import { ExtraWeekendsModule } from "./components/extra-weekends/extra-weekends.module";
 
 @NgModule({
   imports: [
@@ -19,8 +23,12 @@ import { PatternsModule } from './components/patterns/patterns.module';
     DayTypesModule,
     ShiftsModule,
     PatternsModule,
+    HolidaysModule,
+    WorkingTimeModule,
+    ExtraWeekendsModule,
     MatSidenavModule,
-    ManagementRoutingModule
+    ManagementRoutingModule,
+    RemoveDialogModule
   ],
   declarations: [
     ManagementComponent

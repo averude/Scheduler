@@ -1,3 +1,7 @@
-.selected {
-  background-color: darkgray;
+.cell-color-label {
+  height: 10px;
+}
+
+.cell-value {
+
 }

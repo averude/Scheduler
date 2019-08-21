@@ -1,10 +1,15 @@
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable()
 export class PaginatorService {
 
-  private subject: Subject<CalendarDates> = new Subject<CalendarDates>();
+  private emptyDates: CalendarDates = {
+    prevDates: [],
+    currDates: [],
+    nextDates: []
+  };
+  private subject: BehaviorSubject<CalendarDates> = new BehaviorSubject<CalendarDates>(this.emptyDates);
 
   constructor() {}
 
