@@ -4,7 +4,6 @@ import { RoleGuard } from "../../guards/role-guard.service";
 import { GlobalAdminComponent } from "./global-admin/global-admin.component";
 import { DepartmentsTableComponent } from "./departments/components/departments-table/departments-table.component";
 import { UserAccountsTableComponent } from "./accounts/components/user-accounts-table/user-accounts-table.component";
-import { DepartmentIconsTableComponent } from "./department-icons/components/department-icons-table/department-icons-table.component";
 
 const routes = [
   {
@@ -16,10 +15,6 @@ const routes = [
       {
         path: 'departments',
         component: DepartmentsTableComponent
-      },
-      {
-        path: 'icons',
-        component: DepartmentIconsTableComponent
       },
       {
         path: 'accounts',

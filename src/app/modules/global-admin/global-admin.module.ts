@@ -6,7 +6,6 @@ import { GlobalAdminRoutingModule } from "./global-admin-routing.module";
 import { SimpleNotificationsModule } from "angular2-notifications";
 import { OPTIONS } from "../admin/notification-options";
 import { AccountsModule } from "./accounts/accounts.module";
-import { DepartmentIconsModule } from "./department-icons/department-icons.module";
 
 @NgModule({
  imports: [
@@ -14,7 +13,6 @@ import { DepartmentIconsModule } from "./department-icons/department-icons.modul
    GlobalAdminRoutingModule,
    AccountsModule,
    DepartmentsModule,
-   DepartmentIconsModule,
    SimpleNotificationsModule.forRoot(OPTIONS)
  ],
  declarations: [GlobalAdminComponent]

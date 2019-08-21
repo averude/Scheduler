@@ -8,21 +8,6 @@
     <mat-error *ngIf="isControlInvalid('name')">{{getErrorMessage()}}</mat-error>
   </mat-form-field>
 
-  <mat-form-field>
-    <mat-select placeholder="Department icon"
-                [compareWith]="compare"
-                formControlName="iconId">
-      <mat-option [value]="null">
-        No icon
-      </mat-option>
-      <mat-option *ngFor="let icon of icons"
-                  [value]="icon.id">
-        {{icon.fileName}}
-      </mat-option>
-    </mat-select>
-    <mat-error *ngIf="isControlInvalid('iconId')">{{getErrorMessage()}}</mat-error>
-  </mat-form-field>
-
 </mat-dialog-content>
 
 <mat-dialog-actions>

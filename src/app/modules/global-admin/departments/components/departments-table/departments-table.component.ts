@@ -5,8 +5,6 @@ import { MatDialog } from "@angular/material";
 import { DepartmentService } from "../../../../../services/department.service";
 import { NotificationsService } from "angular2-notifications";
 import { DepartmentDialogComponent } from "../department-dialog/department-dialog.component";
-import { DepartmentIconService } from "../../../../../services/department-icon.service";
-import { DepartmentIcon } from "../../../../../model/department-icon";
 
 @Component({
   selector: 'app-departments-table',
@@ -14,33 +12,23 @@ import { DepartmentIcon } from "../../../../../model/department-icon";
   styleUrls: ['../../../../../shared/common/table.common.css', './departments-table.component.css']
 })
 export class DepartmentsTableComponent extends TableBaseComponent<Department> {
-  displayedColumns = ['select', 'name', 'icon', 'control'];
-
-  departmentIcons: DepartmentIcon[] = [];
+  displayedColumns = ['select', 'name', 'control'];
 
   constructor(dialog: MatDialog,
               departmentService: DepartmentService,
-              notificationsService: NotificationsService,
-              private departmentIconService: DepartmentIconService) {
+              notificationsService: NotificationsService) {
     super(dialog, departmentService, notificationsService);
   }
 
   ngOnInit() {
     super.ngOnInit();
-    this.departmentIconService.getAll()
-      .subscribe(icons => this.departmentIcons = icons)
   }
 
   openDialog(department: Department) {
     const data = {
-      department: department,
-      icons: this.departmentIcons
+      department: department
     };
 
     this.openAddOrEditDialog(department, data, DepartmentDialogComponent);
-  }
-
-  getDepartmentIconById(id: number): DepartmentIcon {
-    return this.departmentIcons.find(value => value.id === id);
   }
 }
