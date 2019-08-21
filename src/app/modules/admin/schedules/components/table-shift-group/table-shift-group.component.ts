@@ -16,15 +16,14 @@ import { DayTypeGroup } from "../../../../../model/day-type-group";
 export class TableShiftGroupComponent implements OnInit {
   numberOfColumns: number;
 
-  @Input() mouseMove$: Observable<number>;
-  @Input() mouseUp$:   Observable<MouseEvent>;
+  @Input() mouseMove$:    Observable<number>;
+  @Input() mouseUp$:      Observable<MouseEvent>;
 
-  @Input() patterns:     ShiftPattern[];
-  @Input() shift:        Shift;
-  @Input() positions:    Position[];
-  @Input() employees:    Employee[];
-  @Input() dayTypes:     DayType[];
-
+  @Input() patterns:      ShiftPattern[];
+  @Input() shift:         Shift;
+  @Input() positions:     Position[];
+  @Input() employees:     Employee[];
+  @Input() dayTypes:      DayType[];
   @Input() dayTypeGroups: DayTypeGroup[];
 
   @Input() workingTimeNorm: number;

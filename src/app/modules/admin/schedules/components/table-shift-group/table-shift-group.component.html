@@ -1,7 +1,8 @@
 <ng-container *ngIf="employees.length > 0">
   <tr>
     <td class="shift-label"
-        [attr.colspan]="numberOfColumns" (click)="isHidden = !isHidden">
+        [attr.colspan]="numberOfColumns"
+        (click)="isHidden = !isHidden">
       {{(isHidden ? "▼" : "▶") + ' ' + shift.name}}
     </td>
   </tr>

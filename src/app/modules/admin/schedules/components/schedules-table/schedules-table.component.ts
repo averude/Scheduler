@@ -25,11 +25,11 @@ import { DayTypeGroup } from "../../../../../model/day-type-group";
 })
 export class SchedulesTableComponent implements OnInit, OnDestroy {
 
-  shifts:       Shift[] = [];
-  positions:    Position[] = [];
-  employees:    Employee[] = [];
-  patterns:     ShiftPattern[];
-  dayTypes:     DayType[];
+  shifts:       Shift[]         = [];
+  positions:    Position[]      = [];
+  employees:    Employee[]      = [];
+  patterns:     ShiftPattern[]  = [];
+  dayTypes:     DayType[]       = [];
 
   dayTypeGroups: DayTypeGroup[] = [];
 
@@ -82,6 +82,15 @@ export class SchedulesTableComponent implements OnInit, OnDestroy {
         dayTypeGroups.forEach(value => {
           if (value.id === 1) {
             value.color = "lightgrey"
+          }
+          if (value.id === 2) {
+            value.color = "darkblue";
+          }
+          if (value.id === 3) {
+            value.color = "navajowhite";
+          }
+          if (value.id === 4) {
+            value.color = "grey";
           }
         });
       });

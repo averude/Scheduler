@@ -33,15 +33,14 @@ import { TableCellComponent } from "../table-cell/table-cell.component";
 })
 export class TableRowComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  @Input() employee:    Employee;
-  @Input() position:    Position;
-  @Input() patterns:    ShiftPattern[];
-  @Input() dayTypes:    DayType[];
-
+  @Input() employee:      Employee;
+  @Input() position:      Position;
+  @Input() patterns:      ShiftPattern[];
+  @Input() dayTypes:      DayType[];
   @Input() dayTypeGroups: DayTypeGroup[];
 
-  @Input() mouseMove$:  Observable<number>;
-  @Input() mouseUp$:    Observable<MouseEvent>;
+  @Input() mouseMove$:    Observable<number>;
+  @Input() mouseUp$:      Observable<MouseEvent>;
 
   @Input() workingTimeNorm: number;
 
