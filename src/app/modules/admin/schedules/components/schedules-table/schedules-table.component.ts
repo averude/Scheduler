@@ -8,11 +8,15 @@ import { distinctUntilChanged, filter, map, throttleTime } from "rxjs/operators"
 import { WorkingTimeService } from "../../../../../services/working-time.service";
 import { PaginatorService } from "../../../../../shared/paginators/paginator.service";
 import { Shift } from "../../../../../model/shift";
+import { Position } from "../../../../../model/position";
 import { WorkingTime } from "../../../../../model/working-time";
 import { ShiftService } from "../../../../../services/shift.service";
 import { TableShiftGroupComponent } from "../table-shift-group/table-shift-group.component";
 import { DayType } from "../../../../../model/day-type";
 import { DayTypeService } from "../../../../../services/day-type.service";
+import { PositionService } from "../../../../../services/position.service";
+import { DayTypeGroupService } from "../../../../../services/day-type-group.service";
+import { DayTypeGroup } from "../../../../../model/day-type-group";
 
 @Component({
   selector: 'app-schedules-table',
@@ -22,9 +26,12 @@ import { DayTypeService } from "../../../../../services/day-type.service";
 export class SchedulesTableComponent implements OnInit, OnDestroy {
 
   shifts:       Shift[] = [];
+  positions:    Position[] = [];
   employees:    Employee[] = [];
   patterns:     ShiftPattern[];
   dayTypes:     DayType[];
+
+  dayTypeGroups: DayTypeGroup[] = [];
 
   shiftsWorkingTime:  WorkingTime[] = [];
 
@@ -46,14 +53,19 @@ export class SchedulesTableComponent implements OnInit, OnDestroy {
   constructor(private paginatorService: PaginatorService,
               private shiftService: ShiftService,
               private employeeService: EmployeeService,
+              private positionService: PositionService,
               private patternService: ShiftPatternService,
               private dayTypesService: DayTypeService,
+              private dayTypeGroupService: DayTypeGroupService,
               private workingTimeService: WorkingTimeService) { }
 
   ngOnInit() {
     this.employeeService.getAll()
       .subscribe(employees => this.employees = employees
         .sort((a, b) => a.shiftId - b.shiftId)); // temporary
+
+    this.positionService.getAll()
+      .subscribe(positions => this.positions = positions);
 
     this.shiftService.getAll()
       .subscribe(shifts => this.shifts = shifts);
@@ -63,6 +75,16 @@ export class SchedulesTableComponent implements OnInit, OnDestroy {
 
     this.dayTypesService.getAll()
       .subscribe(dayTypes => this.dayTypes = dayTypes);
+
+    this.dayTypeGroupService.getAll()
+      .subscribe(dayTypeGroups => {
+        this.dayTypeGroups = dayTypeGroups;
+        dayTypeGroups.forEach(value => {
+          if (value.id === 1) {
+            value.color = "lightgrey"
+          }
+        });
+      });
 
     this.sub = this.paginatorService.dates
       .pipe(

@@ -12,6 +12,7 @@ import { PatternsTableComponent } from "./management/components/patterns/compone
 import { HolidaysTableComponent } from "./management/components/holidays/components/holidays-table/holidays-table.component";
 import { WorkingTimeTableComponent } from "./management/components/working-time/components/working-time-table/working-time-table.component";
 import { ExtraWeekendsTableComponent } from "./management/components/extra-weekends/components/extra-weekends-table/extra-weekends-table.component";
+import { StatisticsTableComponent } from "./statistics/components/statistics-table/statistics-table.component";
 
 const routes: Routes = [
   {
@@ -63,6 +64,10 @@ const routes: Routes = [
       {
         path: 'schedule',
         component: SchedulesTableComponent
+      },
+      {
+        path: 'statistics',
+        component: StatisticsTableComponent
       }
     ]
   }

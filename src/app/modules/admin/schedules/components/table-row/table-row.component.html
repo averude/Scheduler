@@ -4,21 +4,25 @@
               [element]="elementRef"
               (onSelectionEnds)="onContextMenu($event.event, $event.selectedDays)">
   <td class="align-middle">
-    {{
-    employee.secondName
-    + ' '
-    + employee.firstName.charAt(0)
-    + '.'
-    + ' '
-    + employee.patronymic.charAt(0)
-    + '.'
-    }}
+    <div>
+      {{
+      employee.secondName
+      + ' '
+      + employee.firstName.charAt(0)
+      + '.'
+      + ' '
+      + employee.patronymic.charAt(0)
+      + '.'
+      }}
+    </div>
+    <div class="position-label">
+      {{position?.name}}
+    </div>
   </td>
-  <td class="text-center align-middle table-cell"
+  <td class="text-center table-cell"
       *ngFor="let day of daysInMonth"
       app-table-cell
       [day]="day"
-      [value]="getWorkDay(day) | scheduleLabel: dayTypes"
       [class.weekend]="day.weekend"
       [class.holiday]="day.holiday">
   </td>

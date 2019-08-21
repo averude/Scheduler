@@ -21,4 +21,9 @@
 
 .table-cell {
   cursor: cell;
+  padding: 0px;
+}
+
+.position-label {
+  color: lightgrey;
 }

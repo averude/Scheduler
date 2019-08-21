@@ -1,10 +1,12 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Shift } from "../../../../../model/shift";
+import { Position } from "../../../../../model/position";
 import { Employee } from "../../../../../model/employee";
 import { Observable } from "rxjs";
 import { ShiftPattern } from "../../../../../model/shift-pattern";
 import { PaginatorService } from "../../../../../shared/paginators/paginator.service";
 import { DayType } from "../../../../../model/day-type";
+import { DayTypeGroup } from "../../../../../model/day-type-group";
 
 @Component({
   selector: '[app-table-shift-group]',
@@ -19,18 +21,25 @@ export class TableShiftGroupComponent implements OnInit {
 
   @Input() patterns:     ShiftPattern[];
   @Input() shift:        Shift;
+  @Input() positions:    Position[];
   @Input() employees:    Employee[];
   @Input() dayTypes:     DayType[];
 
+  @Input() dayTypeGroups: DayTypeGroup[];
+
   @Input() workingTimeNorm: number;
 
-  shown: boolean = true;
+  isHidden: boolean = false;
 
   constructor(private paginatorService: PaginatorService) { }
 
   ngOnInit() {
     this.paginatorService.dates
       .subscribe(daysInMonth => this.numberOfColumns = daysInMonth.length + 4);
+  }
+
+  getPosition(employee: Employee): Position {
+    return this.positions.find(position => position.id === employee.positionId);
   }
 
 }

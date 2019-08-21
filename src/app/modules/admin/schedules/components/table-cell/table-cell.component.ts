@@ -10,9 +10,9 @@ export class TableCellComponent implements OnInit {
 
   @Input() value: any;
   @Input() day: CalendarDay;
+  @Input() labelColor = "transparent";
 
   selected = false;
-
   className = "selected";
 
   constructor(public elementRef: ElementRef) { }

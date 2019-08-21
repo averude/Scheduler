@@ -15,8 +15,9 @@
   </li>
 
   <li class="toolbar-li">
-    <img class="toolbar-img-disabled"
-         src="assets/img/statistics.svg">
+    <img class="toolbar-img"
+         src="assets/img/statistics.svg"
+         routerLink="statistics">
   </li>
 
   <li class="toolbar-li">
@@ -38,7 +39,7 @@
   </li>
 </ul>
 
-<div style="height: 94%; overflow: auto">
+<div>
   <router-outlet></router-outlet>
 </div>
 <simple-notifications></simple-notifications>
