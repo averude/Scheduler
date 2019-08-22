@@ -101,7 +101,7 @@
 }
 
 .login-panel-button:disabled {
-
+color: #ffffff;
 }
 
 .login-panel-bad-credentials {
