@@ -1,33 +1,47 @@
-<ul class="toolbar">
+<div class="topbar">
+    <div class="boxrow">
+        <div class="logo-container">
+            <img class="uksatse-logo" src="assets/img/logo_scheduler1.png">
+        </div>
+        <div class="toolbar-container">
+            <div class="deparment">
+                <div id="depname" >
+                    <a>{{department?.name || '-'}}</a>
+                </div>
+                <div id="depposition" >
+                        <a>Администратор</a>
+                </div>
+            </div>
 
-  <li class="toolbar-li left">
-    <img class="toolbar-department-logo" src="assets/img/uksatse_logo.svg">
-  </li>
+            <div class="toolbar-set">
+              <ul class="toolbar">
 
-  <li class="toolbar-li right">
-    <img class="toolbar-img"
-         src="assets/img/logout.svg"
-         (click)="logout()">
-  </li>
+                <li class="toolbar-li menu-icon">
+                  <img
+                       src="assets/img/menu-bar.png"
+                       routerLink="management">
+                </li>
 
-  <li class="toolbar-li right">
-    <img *ngIf="roles.indexOf('DEPARTMENT_ADMIN') >= 0"
-         class="toolbar-img"
-         src="assets/img/management.svg"
-         routerLink="management">
-  </li>
+                                  <li class="toolbar-li divider">
+                                  </li>
 
-  <li class="toolbar-li right">
-    <img class="toolbar-img"
-         src="assets/img/calendar.svg"
-         routerLink="schedule/calendar">
-  </li>
+                <li class="toolbar-li calendar-icon">
+                  <img *ngIf="roles.indexOf('DEPARTMENT_ADMIN') >= 0"
 
-  <li class="toolbar-li right">
-    <a class="navbar-brand" >{{department?.name || '-'}}</a>
-  </li>
-</ul>
+                       src="assets/img/cal-icon.png"
+                       routerLink="schedule">
+                </li>
 
+
+                <li class="toolbar-li exit-icon">
+                  <img src="assets/img/exit.png"
+                       (click)="logout()">
+                </li>
+                </ul>
+            </div>
+          </div>
+    </div>
+</div>
 <div>
   <router-outlet></router-outlet>
 </div>

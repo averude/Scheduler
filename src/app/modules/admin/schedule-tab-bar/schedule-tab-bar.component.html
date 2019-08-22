@@ -1,21 +1,29 @@
-<ul class="toolbar">
-  <li class="toolbar-li left">
-    <img class="toolbar-img"
-         src="assets/img/calendar.svg"
-         routerLink="calendar">
+<nav class="main-nav clearfix">
+    <ul class="clearfix">
+        <li><a routerLink="calendar" class="active"><span class="icon-nav-site"></span>
+                                                    <span class="link-name active">Календарь</span></a></li>
+        <li><a routerLink="statistics" ><span class="icon-nav-stat"></span><span class="link-name">Статистика</span></a></li>
+      <!--  <li><a ><span class="icon-nav-link"></span><span class="link-name">Ссылка</span></a></li>-->
+    </ul>
+</nav>
+<!--
+
+<ul class="schedule-tab">
+  <li class="schedule-tab-li left">
+    <img class="toolbar-img" src="assets/img/calendar.svg" routerLink="calendar">
   </li>
 
-  <li class="toolbar-li left">
+  <li class="schedule-tab-li left">
     <img class="toolbar-img"
          src="assets/img/statistics.svg"
          routerLink="statistics">
   </li>
 
-  <li class="toolbar-li left">
+  <li class="schedule-tab-li left">
     <img class="toolbar-img-disabled"
          src="assets/img/report.svg">
   </li>
-</ul>
+</ul>  -->
 <div style="margin: 200px">
   <router-outlet></router-outlet>
 </div>
