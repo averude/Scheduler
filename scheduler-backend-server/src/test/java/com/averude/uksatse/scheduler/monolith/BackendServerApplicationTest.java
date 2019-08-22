@@ -12,8 +12,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.junit.Assert.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -34,8 +33,8 @@ public class BackendServerApplicationTest {
     @Test
     public void testPostAndGetDepartment() throws Exception {
         String department = "{\"name\": \"Test department\"}";
-        String dayTypeGroup = "{\"name\": \"Test dayTypeGroup\"}";
-        String dayType = "{\"departmentId\": \"1\", \"dayTypeGroupId\": \"1\", \"name\":\"Test daytype\", \"label\": \"T\"}";
+        String dayTypeGroup = "{\"name\": \"Test dayTypeGroup\", \"color\": \"#000000\"}";
+        String dayType = "{\"departmentId\": \"1\", \"dayTypeGroupId\": \"1\", \"name\":\"Test daytype\", \"label\": \"T\", \"defaultValue\": \"10\"}";
 
         mockMvc.perform(post("/admin/departments")
                 .content(department)
@@ -63,5 +62,12 @@ public class BackendServerApplicationTest {
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(mvcResult -> System.out.println(mvcResult.getResponse().getContentAsString()));
+
+        mockMvc.perform(delete("/admin/daytypes/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent())
+                .andDo(mvcResult -> System.out.println(mvcResult.getResponse().getContentAsString()));
+
     }
 }

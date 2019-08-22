@@ -67,6 +67,8 @@ public class AuthServerApplicationTest {
         User user = new User();
         user.setUsername("admin");
         user.setPassword("admin");
+        user.setFirstName("admin");
+        user.setSecondName("admin");
         user.setDepartmentId(1L);
         user.addAuthority(depAdmin);
         authorityRepository.save(globAdmin);
@@ -99,7 +101,9 @@ public class AuthServerApplicationTest {
 
     @Test
     public void testCreateUser() throws Exception {
-        String newUser = "{\"username\": \"andrew\", \"password\": \"123\", \"authorities\": [{\"id\": 2, \"name\":\"GLOBAL_ADMIN\"}]}";
+        String newUser = "{\"username\": \"andrew\", \"password\": \"123\", " +
+                "\"firstName\": \"Test\", \"secondName\": \"Test\", " +
+                "\"authorities\": [{\"id\": 2, \"name\":\"GLOBAL_ADMIN\"}]}";
 
         ResultActions result = mockMvc.perform(post("/users")
                 .header("Authorization", "Bearer " + obtainAccessToken("admin", "admin"))

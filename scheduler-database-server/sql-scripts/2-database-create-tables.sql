@@ -1,19 +1,10 @@
 -- PostgreSQL
-CREATE TABLE icons (
-  id            SERIAL,
-  file_name     VARCHAR (255),
-  UNIQUE (file_name),
-  PRIMARY KEY (id)
-);
 
 CREATE TABLE departments (
   id            SERIAL,
   name          VARCHAR (128) NOT NULL,
-  icon_id       INTEGER,
   UNIQUE (name),
-  UNIQUE (name, icon_id),
-  PRIMARY KEY (id),
-  FOREIGN KEY (icon_id) REFERENCES icons(id) ON DELETE SET NULL
+  PRIMARY KEY (id)
 );
 
 CREATE TABLE positions (
@@ -28,6 +19,7 @@ CREATE TABLE positions (
 CREATE TABLE day_type_groups (
   id            SERIAL,
   name          VARCHAR(128)  NOT NULL,
+  color         VARCHAR(7)    NOT NULL,
   UNIQUE (name),
   PRIMARY KEY (id)
 );
@@ -35,13 +27,14 @@ CREATE TABLE day_type_groups (
 CREATE TABLE day_types (
   id            SERIAL,
   department_id INTEGER       NOT NULL,
-  day_type_group_id INTEGER   NOT NULL,
+  group_id      INTEGER   NOT NULL,
   name          VARCHAR (128) NOT NULL,
   label         VARCHAR (5),
+  default_value FLOAT         NOT NULL CHECK ( default_value >= 0 AND default_value <= 24 ),
   UNIQUE (department_id, name),
   PRIMARY KEY (id),
   FOREIGN KEY (department_id) REFERENCES departments(id) ON DELETE CASCADE,
-  FOREIGN KEY (day_type_group_id) REFERENCES day_type_groups ON DELETE CASCADE
+  FOREIGN KEY (group_id) REFERENCES day_type_groups ON DELETE CASCADE
 );
 
 CREATE TABLE shift_patterns (
@@ -59,7 +52,7 @@ CREATE TABLE pattern_units (
   pattern_id    INTEGER       NOT NULL,
   order_id      INTEGER       NOT NULL,
   day_type_id   INTEGER       NOT NULL,
-  value         FLOAT         NOT NULL,
+  value         FLOAT         NOT NULL CHECK ( value >= 0 AND value <= 24 ),
   UNIQUE (pattern_id, order_id),
   PRIMARY KEY (id),
   FOREIGN KEY (pattern_id)    REFERENCES shift_patterns(id) ON DELETE CASCADE,
@@ -95,7 +88,7 @@ CREATE TABLE work_schedule (
   employee_id   INTEGER       NOT NULL,
   day_type_id   INTEGER,
   holiday       BOOLEAN       NOT NULL  DEFAULT FALSE,
-  hours         FLOAT         NOT NULL  CHECK (hours >= 0 AND hours <= 24),
+  hours         FLOAT         NOT NULL  CHECK ( hours >= 0 AND hours <= 24 ),
   date          DATE          NOT NULL,
   UNIQUE (employee_id, date),
   PRIMARY KEY (id),
@@ -149,6 +142,8 @@ CREATE TABLE users (
   id            SERIAL,
   username      VARCHAR (64)  NOT NULL,
   password      VARCHAR (64)  NOT NULL,
+  first_name    VARCHAR (64)  NOT NULL,
+  second_name   VARCHAR (64)  NOT NULL,
   department_id INTEGER,
   shift_id      INTEGER,
   employee_id   INTEGER,

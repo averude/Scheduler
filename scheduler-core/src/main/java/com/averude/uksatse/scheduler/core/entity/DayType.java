@@ -49,7 +49,7 @@ public class DayType implements HasId {
     @PositiveOrZero(message = "{workDay.hours.negative}")
     @DecimalMax(value = "24",
                 message = "{workDay.hours.max}")
-    @Column(name = "def_value")
+    @Column(name = "default_value")
     private Float defaultValue;
 
     @JsonIgnore

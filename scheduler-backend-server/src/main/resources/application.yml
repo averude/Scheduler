@@ -17,7 +17,6 @@ spring:
     username: ${DB_USERNAME}
     password: ${DB_PASSWD}
   jpa:
-    show-sql: true
     hibernate:
       ddl-auto: none
     properties:
@@ -26,7 +25,3 @@ spring:
           use_jdbc_metadata_defaults: false
   jackson:
     date-format: "yyyy-MM-dd"
-  servlet:
-    multipart:
-      max-file-size: 500KB
-      max-request-size: 500KB

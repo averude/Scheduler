@@ -28,6 +28,10 @@ public class DayTypeGroup implements HasId {
     @Column(nullable = false)
     private String name;
 
+    @NotNull
+    @Column(nullable = false)
+    private String color;
+
     @JsonIgnore
     @OneToMany( mappedBy = "dayTypeGroupId",
                 fetch = FetchType.LAZY,
@@ -48,6 +52,14 @@ public class DayTypeGroup implements HasId {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 
     public List<DayType> getDayTypes() {

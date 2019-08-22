@@ -1,6 +1,7 @@
 package com.averude.uksatse.scheduler.core.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -19,10 +20,19 @@ public class User implements HasId {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     private String username;
 
 //    @JsonIgnore
     private String password;
+
+    @NotNull
+    @Column(name = "first_name")
+    private String firstName;
+
+    @NotNull
+    @Column(name = "second_name")
+    private String secondName;
 
     @Column(name = "department_id")
     private Long departmentId;
@@ -68,6 +78,22 @@ public class User implements HasId {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getSecondName() {
+        return secondName;
+    }
+
+    public void setSecondName(String secondName) {
+        this.secondName = secondName;
     }
 
     public Long getDepartmentId() {

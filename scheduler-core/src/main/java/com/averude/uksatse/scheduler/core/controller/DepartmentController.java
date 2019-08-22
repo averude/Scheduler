@@ -1,7 +1,6 @@
 package com.averude.uksatse.scheduler.core.controller;
 
 import com.averude.uksatse.scheduler.core.entity.Department;
-import com.averude.uksatse.scheduler.core.entity.DepartmentIcon;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PathVariable;

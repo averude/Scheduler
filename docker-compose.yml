@@ -52,8 +52,6 @@ services:
       dockerfile: Dockerfile
     image: scheduler-backend-server
     restart: always
-    volumes:
-      - ${DEP_ICON_VOLUME_PATH}:/app/department-icons
     depends_on:
       - scheduler-auth-server
     ports:

@@ -35,9 +35,6 @@ public class Department implements HasId {
     @Column(nullable = false)
     private String name;
 
-    @Column(name = "icon_id")
-    private Long iconId;
-
     @JsonIgnore
     @OneToMany( mappedBy = "departmentId",
                 cascade = CascadeType.ALL,
@@ -99,14 +96,6 @@ public class Department implements HasId {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Long getIconId() {
-        return iconId;
-    }
-
-    public void setIconId(Long iconId) {
-        this.iconId = iconId;
     }
 
     public List<@NotNull @Valid Position> getPositions() {
