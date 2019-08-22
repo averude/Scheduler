@@ -69,10 +69,10 @@ export class LoginComponent implements OnInit{
       this.router.navigate(['/global_admin']);
     }
     if (user.roles.indexOf('DEPARTMENT_ADMIN') >= 0) {
-      this.router.navigate(['/admin/schedule']);
+      this.router.navigate(['/admin/schedule/calendar']);
     }
     if (user.roles.indexOf('SHIFT_ADMIN') >= 0 ) {
-      this.router.navigate(['/admin/schedule']);
+      this.router.navigate(['/admin/schedule/calendar']);
     }
     if (user.roles.indexOf('ROLE_CLIENT') >= 0) {
       this.router.navigate(['/client']);

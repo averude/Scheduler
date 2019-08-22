@@ -1,5 +1,5 @@
 import { ElementRef, QueryList } from "@angular/core";
-import { TableCellComponent } from "../../modules/admin/schedules/components/table-cell/table-cell.component";
+import { TableCellComponent } from "../../modules/admin/calendar/components/table-cell/table-cell.component";
 
 export function selectingLeft(startX: number,
                               endX: number,
@@ -20,13 +20,13 @@ export function selectingRight(startX: number,
 }
 
 function isAfterPosition(element: ElementRef, pos: number): boolean {
-  let offsetLeft = element.nativeElement.offsetLeft;
-  let offsetRight = offsetLeft + element.nativeElement.offsetWidth;
+  let offsetLeft = element.nativeElement.getBoundingClientRect().left;
+  let offsetRight = offsetLeft + element.nativeElement.clientWidth;
   return offsetLeft >= pos || offsetRight >= pos;
 }
 
 function isBeforePosition(element: ElementRef, pos: number) {
-  let offsetLeft = element.nativeElement.offsetLeft;
-  let offsetRight = offsetLeft + element.nativeElement.offsetWidth;
+  let offsetLeft = element.nativeElement.getBoundingClientRect().left;
+  let offsetRight = offsetLeft + element.nativeElement.clientWidth;
   return offsetLeft < pos;
 }

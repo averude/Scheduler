@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { SchedulesTableComponent } from './schedules/components/schedules-table/schedules-table.component';
+import { SchedulesTableComponent } from './calendar/components/schedules-table/schedules-table.component';
 import { AdminComponent } from './admin/admin.component';
 import { RoleGuard } from '../../guards/role-guard.service';
 import { ManagementComponent } from './management/management/management.component';
@@ -13,6 +13,7 @@ import { HolidaysTableComponent } from "./management/components/holidays/compone
 import { WorkingTimeTableComponent } from "./management/components/working-time/components/working-time-table/working-time-table.component";
 import { ExtraWeekendsTableComponent } from "./management/components/extra-weekends/components/extra-weekends-table/extra-weekends-table.component";
 import { StatisticsTableComponent } from "./statistics/components/statistics-table/statistics-table.component";
+import { ScheduleTabBarComponent } from "./schedule-tab-bar/schedule-tab-bar.component";
 
 const routes: Routes = [
   {
@@ -63,11 +64,17 @@ const routes: Routes = [
       },
       {
         path: 'schedule',
-        component: SchedulesTableComponent
-      },
-      {
-        path: 'statistics',
-        component: StatisticsTableComponent
+        component: ScheduleTabBarComponent,
+        children: [
+          {
+            path: 'calendar',
+            component: SchedulesTableComponent
+          },
+          {
+            path: 'statistics',
+            component: StatisticsTableComponent
+          }
+        ]
       }
     ]
   }

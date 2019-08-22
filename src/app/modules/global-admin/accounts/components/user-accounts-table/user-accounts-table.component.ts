@@ -21,7 +21,8 @@ import { Employee } from "../../../../../model/employee";
 })
 export class UserAccountsTableComponent extends TableBaseComponent<UserAccount> {
 
-  displayedColumns = ['select', 'username', 'department', 'shift', 'employee',
+  displayedColumns = ['select', 'username', 'firstName', 'secondName',
+    'department', 'shift', 'employee',
     'locked', 'enabled', 'authorities', 'control'];
 
   departments:  Department[]  = [];

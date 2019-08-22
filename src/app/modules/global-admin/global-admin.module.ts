@@ -6,6 +6,7 @@ import { GlobalAdminRoutingModule } from "./global-admin-routing.module";
 import { SimpleNotificationsModule } from "angular2-notifications";
 import { OPTIONS } from "../admin/notification-options";
 import { AccountsModule } from "./accounts/accounts.module";
+import { DayTypeGroupsModule } from "./day-type-groups/day-type-groups.module";
 
 @NgModule({
  imports: [
@@ -13,6 +14,7 @@ import { AccountsModule } from "./accounts/accounts.module";
    GlobalAdminRoutingModule,
    AccountsModule,
    DepartmentsModule,
+   DayTypeGroupsModule,
    SimpleNotificationsModule.forRoot(OPTIONS)
  ],
  declarations: [GlobalAdminComponent]

@@ -4,6 +4,7 @@ import { RoleGuard } from "../../guards/role-guard.service";
 import { GlobalAdminComponent } from "./global-admin/global-admin.component";
 import { DepartmentsTableComponent } from "./departments/components/departments-table/departments-table.component";
 import { UserAccountsTableComponent } from "./accounts/components/user-accounts-table/user-accounts-table.component";
+import { DayTypeGroupsTableComponent } from "./day-type-groups/components/day-type-groups-table/day-type-groups-table.component";
 
 const routes = [
   {
@@ -19,6 +20,10 @@ const routes = [
       {
         path: 'accounts',
         component: UserAccountsTableComponent
+      },
+      {
+        path: 'groups',
+        component: DayTypeGroupsTableComponent
       }
     ]
   }

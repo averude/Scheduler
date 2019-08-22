@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { SchedulesModule } from './schedules/schedules.module';
+import { SchedulesModule } from './calendar/schedules.module';
 import { CommonModule } from '@angular/common';
 import { AdminComponent } from './admin/admin.component';
 import { AdminRoutingModule } from './admin-routing.module';
@@ -8,6 +8,7 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { SimpleNotificationsModule } from "angular2-notifications";
 import { OPTIONS } from "./notification-options";
 import { StatisticsModule } from "./statistics/statistics.module";
+import { ScheduleTabBarComponent } from './schedule-tab-bar/schedule-tab-bar.component';
 
 @NgModule({
   imports: [
@@ -19,7 +20,7 @@ import { StatisticsModule } from "./statistics/statistics.module";
     BrowserAnimationsModule,
     SimpleNotificationsModule.forRoot(OPTIONS)
   ],
-  declarations: [AdminComponent],
+  declarations: [AdminComponent, ScheduleTabBarComponent],
   exports: [],
 })
 export class AdminModule {}

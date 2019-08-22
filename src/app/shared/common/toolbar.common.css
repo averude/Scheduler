@@ -13,8 +13,15 @@
 }
 
 .toolbar-li {
-  float: left;
   height: 100%;
+}
+
+.left {
+  float: left;
+}
+
+.right {
+  float: right;
 }
 
 .toolbar-img {

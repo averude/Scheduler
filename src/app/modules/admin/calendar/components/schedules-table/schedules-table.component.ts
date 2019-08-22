@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { Employee } from '../../../../../model/employee';
 import { EmployeeService } from '../../../../../services/employee.service';
 import { ShiftPatternService } from '../../../../../services/shift-pattern.service';
@@ -45,12 +45,12 @@ export class SchedulesTableComponent implements OnInit, OnDestroy {
       distinctUntilChanged((a, b) => a === b, event => event.clientX),
       map(event => event.clientX)
     );
-
   mouseUp$:   Observable<MouseEvent> = fromEvent<MouseEvent>(document, 'mouseup');
 
   sub: Subscription;
 
-  constructor(private paginatorService: PaginatorService,
+  constructor(private elementRef: ElementRef,
+              private paginatorService: PaginatorService,
               private shiftService: ShiftService,
               private employeeService: EmployeeService,
               private positionService: PositionService,
@@ -77,23 +77,7 @@ export class SchedulesTableComponent implements OnInit, OnDestroy {
       .subscribe(dayTypes => this.dayTypes = dayTypes);
 
     this.dayTypeGroupService.getAll()
-      .subscribe(dayTypeGroups => {
-        this.dayTypeGroups = dayTypeGroups;
-        dayTypeGroups.forEach(value => {
-          if (value.id === 1) {
-            value.color = "lightgrey"
-          }
-          if (value.id === 2) {
-            value.color = "darkblue";
-          }
-          if (value.id === 3) {
-            value.color = "navajowhite";
-          }
-          if (value.id === 4) {
-            value.color = "grey";
-          }
-        });
-      });
+      .subscribe(dayTypeGroups => this.dayTypeGroups = dayTypeGroups);
 
     this.sub = this.paginatorService.dates
       .pipe(

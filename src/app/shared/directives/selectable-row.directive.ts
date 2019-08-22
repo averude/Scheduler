@@ -11,7 +11,7 @@ import {
 import { fromEvent, Observable, Subscription } from "rxjs";
 import { filter } from "rxjs/operators";
 import { selectingLeft, selectingRight } from "../utils/table-selection-utils";
-import { TableCellComponent } from "../../modules/admin/schedules/components/table-cell/table-cell.component";
+import { TableCellComponent } from "../../modules/admin/calendar/components/table-cell/table-cell.component";
 import { CalendarDay } from "../../model/ui/calendar-day";
 
 @Directive({

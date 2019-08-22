@@ -17,6 +17,20 @@
   </mat-form-field>
 
   <mat-form-field>
+    <input matInput
+           placeholder="First name"
+           formControlName="firstName">
+    <mat-error *ngIf="isControlInvalid('firstName')">{{getErrorMessage()}}</mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput
+           placeholder="Second name"
+           formControlName="secondName">
+    <mat-error *ngIf="isControlInvalid('secondName')">{{getErrorMessage()}}</mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
     <mat-select placeholder="Department"
                 [compareWith]="compare"
                 formControlName="departmentId">

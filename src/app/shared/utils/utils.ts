@@ -2,7 +2,7 @@ import { OperatorFunction } from "rxjs";
 import { map } from "rxjs/operators";
 import { WorkDay } from "../../model/workday";
 import { DayType } from "../../model/day-type";
-import { TableCellComponent } from "../../modules/admin/schedules/components/table-cell/table-cell.component";
+import { TableCellComponent } from "../../modules/admin/calendar/components/table-cell/table-cell.component";
 import { QueryList } from "@angular/core";
 import { DayTypeGroup } from "../../model/day-type-group";
 
