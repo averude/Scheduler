@@ -21,8 +21,7 @@ import { SelectableRowDirective } from "../../../shared/directives/selectable-ro
     MatFormFieldModule,
     MatInputModule,
     ContextMenuModule.forRoot({
-      autoFocus: true,
-      useBootstrap4: true
+      autoFocus: true
     })
   ],
   declarations: [

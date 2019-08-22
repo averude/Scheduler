@@ -4,12 +4,12 @@
             <img class="uksatse-logo" src="assets/img/logo_scheduler1.png">
         </div>
         <div class="toolbar-container">
-            <div class="deparment">
-                <div id="depname" >
+            <div class="department">
+                <div id="department-name" >
                     <a>{{department?.name || '-'}}</a>
                 </div>
-                <div id="depposition" >
-                        <a>Администратор</a>
+                <div id="department-position" >
+                    <a>Администратор</a>
                 </div>
             </div>
 
@@ -17,27 +17,24 @@
               <ul class="toolbar">
 
                 <li class="toolbar-li menu-icon">
-                  <img
-                       src="assets/img/menu-bar.png"
-                       routerLink="management">
+                    <img *ngIf="roles.indexOf('DEPARTMENT_ADMIN') >= 0"
+                         src="assets/img/menu-bar.png"
+                         routerLink="management">
                 </li>
 
-                                  <li class="toolbar-li divider">
-                                  </li>
+                <li class="toolbar-li divider">
+                </li>
 
                 <li class="toolbar-li calendar-icon">
-                  <img *ngIf="roles.indexOf('DEPARTMENT_ADMIN') >= 0"
-
-                       src="assets/img/cal-icon.png"
-                       routerLink="schedule">
+                  <img src="assets/img/cal-icon.png"
+                       routerLink="schedule/calendar">
                 </li>
-
 
                 <li class="toolbar-li exit-icon">
                   <img src="assets/img/exit.png"
                        (click)="logout()">
                 </li>
-                </ul>
+              </ul>
             </div>
           </div>
     </div>

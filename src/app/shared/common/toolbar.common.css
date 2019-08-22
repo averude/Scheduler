@@ -72,24 +72,24 @@
   display:inline-block;
   float: right;
 }
-.deparment {
+.department {
   position: relative;
   display:inline-block;
   vertical-align: top;
   padding-top: 13px;
 }
-    #depname {
+    #department-name {
       float: right;
       line-height: 1.0;
       padding: 0;
       margin: 0;
     }
-    #depname a {
+    #department-name a {
       font-family: 'MuseoSansBlack';
       font-size: 26px;
       color: #fff;
     }
-    #depposition {
+    #department-position {
     padding: 0;
     margin: 0;
     line-height: 1.0;
@@ -98,7 +98,7 @@
       clear: right;
 
     }
-    #depposition a {
+    #department-position a {
       font-family: 'MuseoSansLight';
       font-size: 14px;
       color: #8d8d8d;

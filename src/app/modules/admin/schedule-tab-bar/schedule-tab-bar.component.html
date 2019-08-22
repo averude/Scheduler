@@ -1,8 +1,19 @@
 <nav class="main-nav clearfix">
     <ul class="clearfix">
-        <li><a routerLink="calendar" class="active"><span class="icon-nav-site"></span>
-                                                    <span class="link-name active">Календарь</span></a></li>
-        <li><a routerLink="statistics" ><span class="icon-nav-stat"></span><span class="link-name">Статистика</span></a></li>
+        <li>
+          <a routerLink="calendar"
+             routerLinkActive="active">
+            <span class="icon-nav-site"></span>
+            <span class="link-name">Календарь</span>
+          </a>
+        </li>
+        <li>
+          <a routerLink="statistics"
+             routerLinkActive="active">
+            <span class="icon-nav-stat"></span>
+            <span class="link-name">Статистика</span>
+          </a>
+        </li>
       <!--  <li><a ><span class="icon-nav-link"></span><span class="link-name">Ссылка</span></a></li>-->
     </ul>
 </nav>
@@ -24,6 +35,6 @@
          src="assets/img/report.svg">
   </li>
 </ul>  -->
-<div style="margin: 200px">
+<div>
   <router-outlet></router-outlet>
 </div>
