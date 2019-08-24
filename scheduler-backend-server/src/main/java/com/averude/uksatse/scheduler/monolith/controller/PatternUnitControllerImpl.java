@@ -24,8 +24,8 @@ public class PatternUnitControllerImpl
     }
 
     @Override
-    public Iterable<PatternUnit> getAll(Long patternId) {
-        return this.patternUnitService.findAllByPatternIdOrderByOrderId(patternId);
+    public Iterable<PatternUnit> getAll(Long id) {
+        return this.patternUnitService.findAllByPatternIdOrderByOrderId(id);
     }
 
     @Override

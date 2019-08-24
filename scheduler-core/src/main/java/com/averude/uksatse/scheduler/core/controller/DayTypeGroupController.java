@@ -20,11 +20,11 @@ public interface DayTypeGroupController extends BasicCrudController<DayTypeGroup
     Optional<DayTypeGroup> get(@PathVariable Long id);
 
     @RequestMapping(method = RequestMethod.POST)
-    ResponseEntity<Long> post(@Valid @RequestBody DayTypeGroup dayTypeGroup);
+    ResponseEntity<Long> post(@Valid @RequestBody DayTypeGroup entity);
 
     @RequestMapping(method = RequestMethod.PUT)
-    ResponseEntity<?> put(@Valid @RequestBody DayTypeGroup dayTypeGroup);
+    ResponseEntity<?> put(@Valid @RequestBody DayTypeGroup entity);
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
-    ResponseEntity<?> delete(Long id);
+    ResponseEntity<?> delete(@PathVariable Long id);
 }

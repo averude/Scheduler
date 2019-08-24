@@ -12,22 +12,22 @@ import java.util.Optional;
 
 public interface PatternUnitController extends BasicCrudController<PatternUnit> {
     @RequestMapping(method = RequestMethod.GET,
-                    value = "/admin/patterns/{patternId}/units")
-    Iterable<PatternUnit> getAll(@PathVariable Long patternId);
+                    value = "/admin/patterns/{id}/units")
+    Iterable<PatternUnit> getAll(@PathVariable Long id);
 
     @RequestMapping(method = RequestMethod.POST,
                     value = "/admin/units")
     ResponseEntity<Long> post(@Valid @RequestBody PatternUnit unit);
 
     @RequestMapping(method = RequestMethod.GET,
-                    value = "/admin/units/{unitId}")
-    Optional<PatternUnit> get(@PathVariable Long unitId);
+                    value = "/admin/units/{id}")
+    Optional<PatternUnit> get(@PathVariable Long id);
 
     @RequestMapping(method = RequestMethod.PUT,
                     value = "/admin/units")
     ResponseEntity<?> put(@Valid @RequestBody PatternUnit unit);
 
     @RequestMapping(method = RequestMethod.DELETE,
-                    value = "/admin/units/{unitId}")
-    ResponseEntity<?> delete(@PathVariable Long unitId);
+                    value = "/admin/units/{id}")
+    ResponseEntity<?> delete(@PathVariable Long id);
 }

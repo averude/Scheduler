@@ -29,14 +29,14 @@ public interface EmployeeController extends BasicCrudController<Employee> {
     ResponseEntity<Long> post(@Valid @RequestBody Employee employee);
 
     @RequestMapping(method = RequestMethod.GET,
-                    value = "/admin/employees/{employeeId}")
-    Optional<Employee> get(@PathVariable Long employeeId);
+                    value = "/admin/employees/{id}")
+    Optional<Employee> get(@PathVariable Long id);
 
     @RequestMapping(method = RequestMethod.PUT,
                     value = "/admin/employees")
     ResponseEntity<?> put(@Valid @RequestBody Employee employee);
 
     @RequestMapping(method = RequestMethod.DELETE,
-                    value = "/admin/employees/{employeeId}")
-    ResponseEntity<?> delete(@PathVariable Long employeeId);
+                    value = "/admin/employees/{id}")
+    ResponseEntity<?> delete(@PathVariable Long id);
 }
