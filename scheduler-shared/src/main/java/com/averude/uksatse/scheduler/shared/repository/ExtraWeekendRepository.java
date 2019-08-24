@@ -10,5 +10,5 @@ public interface ExtraWeekendRepository extends CrudRepository<ExtraWeekend, Lon
     Iterable<ExtraWeekend> findAllByDepartmentId(Long departmentId);
     Iterable<ExtraWeekend> findAllByDepartmentIdAndDateBetween(Long departmentId, LocalDate from, LocalDate to);
     Optional<ExtraWeekend> findByHolidayId(Long holidayId);
-    Optional<ExtraWeekend> findByDate(LocalDate date);
+    Optional<ExtraWeekend> findByDateAndDepartmentId(LocalDate date, Long departmentId);
 }

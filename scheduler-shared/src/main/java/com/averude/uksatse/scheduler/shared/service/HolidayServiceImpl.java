@@ -81,7 +81,7 @@ public class HolidayServiceImpl extends AbstractService<Holiday, Long>
             extraWeekend.setDepartmentId(holiday.getDepartmentId());
             extraWeekend.setHolidayId(holiday.getId());
 
-            Optional<ExtraWeekend> existentWeekendOptional = extraWeekendRepository.findByDate(nextWeekFirstDay);
+            Optional<ExtraWeekend> existentWeekendOptional = extraWeekendRepository.findByDateAndDepartmentId(nextWeekFirstDay, holiday.getDepartmentId());
 
             if (existentWeekendOptional.isPresent()) {
                 ExtraWeekend existentWeekend = existentWeekendOptional.get();
