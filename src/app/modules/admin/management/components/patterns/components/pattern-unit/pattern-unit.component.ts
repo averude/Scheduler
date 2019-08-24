@@ -37,5 +37,6 @@ export class PatternUnitComponent implements OnInit {
 
   onChange(event) {
     const dayTypeId = event.value;
+    this.unit.value = this.dayTypes.find(dayType => dayType.id === dayTypeId).defaultValue;
   }
 }

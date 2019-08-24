@@ -46,7 +46,7 @@ function transform(cell: TableCellComponent,
         if (dayTypeGroups) {
           setCellLabelColor(cell, dayType.dayTypeGroupId, dayTypeGroups);
         }
-        if (dayType.label.length > 0){
+        if (dayType.label && dayType.label.length > 0){
           cell.value = dayType.label;
         } else {
           cell.value = value.hours;
