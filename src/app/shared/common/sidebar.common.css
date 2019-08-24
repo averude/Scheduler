@@ -5,7 +5,7 @@
   padding: 0;
   width: 20%;
   min-width: 130px;
-  background-color: slategray;
+  background-color: #eef2f5;
   position: fixed;
   height: 100%;
   overflow: auto;
@@ -26,7 +26,7 @@
   padding: 20px;
   height: 70px;
   font-size: 16px;
-  color: white;
+  color: black;
   text-align: left;
   border-style: none;
   background: transparent;
@@ -34,8 +34,13 @@
   text-decoration: none;
 }
 
+.active {
+  background-color: grey;
+  color: white;
+}
+
 .sidebar-button:hover {
-  background: royalblue;
+  background: lightgrey;
 }
 
 .sidebar-button:focus {
