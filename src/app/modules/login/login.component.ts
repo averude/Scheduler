@@ -52,7 +52,6 @@ export class LoginComponent implements OnInit{
     }
 
     this.loading = true;
-
     this.authService.login(this.form.username.value, this.form.password.value)
       .subscribe(res => {
         this.loading = false;

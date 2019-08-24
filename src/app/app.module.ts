@@ -3,14 +3,14 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
-import { AdminModule } from './modules/admin/admin.module';
 import { ClientModule } from './modules/client/client.module';
 import { PageNotFoundComponent } from './modules/page-not-found/page-not-found.component';
 import { LoginModule } from './modules/login/login.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RestConfig } from './rest.config';
 import { httpInterceptorProviders } from "./http-interceptors/interceptor-providers";
-import { GlobalAdminModule } from "./modules/global-admin/global-admin.module";
+import { SimpleNotificationsModule } from "angular2-notifications";
+import { OPTIONS } from "./modules/admin/notification-options";
 
 @NgModule({
   declarations: [
@@ -19,13 +19,12 @@ import { GlobalAdminModule } from "./modules/global-admin/global-admin.module";
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     HttpClientModule,
     LoginModule,
     ClientModule,
-    AdminModule,
-    GlobalAdminModule,
-    BrowserAnimationsModule,
-    AppRoutingModule
+    AppRoutingModule,
+    SimpleNotificationsModule.forRoot(OPTIONS)
   ],
   providers: [
     RestConfig,

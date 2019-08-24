@@ -4,7 +4,6 @@ import { CommonModule } from "@angular/common";
 import { DepartmentsModule } from "./departments/departments.module";
 import { GlobalAdminRoutingModule } from "./global-admin-routing.module";
 import { SimpleNotificationsModule } from "angular2-notifications";
-import { OPTIONS } from "../admin/notification-options";
 import { AccountsModule } from "./accounts/accounts.module";
 import { DayTypeGroupsModule } from "./day-type-groups/day-type-groups.module";
 
@@ -15,7 +14,7 @@ import { DayTypeGroupsModule } from "./day-type-groups/day-type-groups.module";
    AccountsModule,
    DepartmentsModule,
    DayTypeGroupsModule,
-   SimpleNotificationsModule.forRoot(OPTIONS)
+   SimpleNotificationsModule
  ],
  declarations: [GlobalAdminComponent]
 })

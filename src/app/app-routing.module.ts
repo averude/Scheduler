@@ -11,6 +11,20 @@ const routes: Routes = [
     component: LoginComponent
   },
   {
+    path: 'global_admin',
+    canActivate: [RoleGuard],
+    data: {roles: ['GLOBAL_ADMIN']},
+    loadChildren: () => import('./modules/global-admin/global-admin.module')
+      .then(mod => mod.GlobalAdminModule)
+  },
+  {
+    path: 'admin',
+    canActivate: [RoleGuard],
+    data: {roles: ['DEPARTMENT_ADMIN', 'SHIFT_ADMIN']},
+    loadChildren: () => import('./modules/admin/admin.module')
+      .then(mod => mod.AdminModule)
+  },
+  {
     path: 'client',
     canActivate: [RoleGuard],
     data: {roles: ['CLIENT']},
