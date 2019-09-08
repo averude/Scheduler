@@ -3,7 +3,7 @@
               [mouseUp$]="mouseUp$"
               [element]="elementRef"
               (onSelectionEnds)="onContextMenu($event.event, $event.selectedDays)">
-  <td class="align-middle">
+  <td>
     <div>
       {{
       employee.secondName
@@ -19,22 +19,19 @@
       {{position?.name}}
     </div>
   </td>
-  <td class="text-center table-cell"
+  <td class="table-cell"
       *ngFor="let day of daysInMonth"
       app-table-cell
       [day]="day"
       [class.weekend]="day.weekend"
       [class.holiday]="day.holiday">
   </td>
-  <td class="text-center align-middle sum"
+  <td class="sum"
       [class.notEqual]="workingTimeSum !== workingTimeNorm">
     {{workingTimeSum}}
   </td>
-  <td class="text-center align-middle sum">
+  <td class="sum">
     {{workingTimeNorm}}
-  </td>
-  <td class="text-center align-middle sum">
-    {{workingHolidaysSum}}
   </td>
 </ng-container>
 

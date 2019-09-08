@@ -1,5 +1,6 @@
 .month-header {
   width: 2.8%;
+  height: 20px;
 }
 
 .weekend {
@@ -10,7 +11,7 @@
   background-color: lightpink;
 }
 
-.paginator-row {
-  height: 30px;
-  font-size: 14px;
+.table-sticky-header {
+  position: sticky;
+  top: 0;
 }

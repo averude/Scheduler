@@ -1,18 +1,41 @@
-<table class="table table-striped table-bordered table-sm">
+<table class="table table-bordered table-sm">
   <thead>
     <tr>
-      <th>Name</th>
-      <th *ngFor="let dayTypeGroup of dayTypeGroups">
-        {{dayTypeGroup.name + 's'}}
-      </th>
+      <th rowspan="2">Name</th>
+      <th rowspan="2">Groups</th>
+      <th *ngFor="let month of months"
+          colspan="3">{{month}}</th>
+    </tr>
+    <tr>
+      <ng-container *ngFor="let month of months">
+        <th>Days</th>
+        <th>Hours</th>
+        <th>Norm</th>
+      </ng-container>
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let employee of employees">
-      <td>{{employee.secondName}}</td>
-      <td *ngFor="let dayTypeGroup of dayTypeGroups">
-        {{calcDayTypeGroupSum(employee, dayTypeGroup.id)}}
-      </td>
-    </tr>
+    <ng-container *ngFor="let shift of shifts">
+      <tr *ngIf="getEmployeesOfShift(shift.id).length > 0">
+        <td colspan="12">{{shift.name}}</td>
+      </tr>
+      <ng-container *ngFor="let employee of getEmployeesOfShift(shift.id)">
+        <tr>
+          <td [rowSpan]="dayTypeGroups?.length + 1">
+            {{employee.secondName + ' ' + employee.firstName}}
+          </td>
+        </tr>
+        <ng-container *ngFor="let dayTypeGroup of dayTypeGroups">
+          <tr>
+            <td>{{dayTypeGroup.name}}</td>
+            <ng-container *ngFor="let month of months">
+              <td>10</td>
+              <td>160</td>
+              <td>160</td>
+            </ng-container>
+          </tr>
+        </ng-container>
+      </ng-container>
+    </ng-container>
   </tbody>
 </table>
