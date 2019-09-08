@@ -3,6 +3,7 @@ import { WorkDay } from '../model/workday';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { RestConfig } from '../rest.config';
+import { ScheduleDto } from "../model/dto/schedule-dto";
 
 @Injectable({
   providedIn: 'root'
@@ -12,26 +13,23 @@ export class ScheduleService {
   constructor(private http: HttpClient,
               private config: RestConfig) { }
 
-  getByDate(start: string,
-            end: string,
-            employeeId: number): Observable<WorkDay[]> {
-    return this.http.get<WorkDay[]>(
-      `${this.config.baseUrl}/schedule/search?employeeId=${employeeId}&from=${start}&to=${end}`
-    );
+  getAllByDate(start: string,
+               end: string): Observable<ScheduleDto[]> {
+    return this.http.get<ScheduleDto[]>(
+      `${this.config.baseUrl}/schedule/dates?from=${start}&to=${end}`
+    )
   }
 
-  create(employeeId: number,
-         schedule: WorkDay[]): Observable<any> {
+  create(schedule: WorkDay[]): Observable<any> {
     return this.http.post<any>(
-      `${this.config.baseUrl}/schedule/${employeeId}`,
+      `${this.config.baseUrl}/schedule`,
       schedule
     );
   }
 
-  update(employeeId: number,
-         schedule: WorkDay[]): Observable<any> {
+  update(schedule: WorkDay[]): Observable<any> {
     return this.http.put(
-      `${this.config.baseUrl}/schedule/${employeeId}`,
+      `${this.config.baseUrl}/schedule`,
       schedule,
       {responseType: 'text'}
     );

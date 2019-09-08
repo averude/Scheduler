@@ -74,7 +74,7 @@ export class ScheduleGenerationService {
 
     if (!overrideExistingValues) {
       if (schedule.length !== days.length) {
-        onError('Selected dates doesn\'t have schedule');
+        onError('Selected dates doesn\'t have _schedule');
         return;
       }
     }

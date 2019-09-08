@@ -1,4 +1,13 @@
-import { Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  QueryList,
+  SimpleChanges,
+  ViewChildren
+} from '@angular/core';
 import { Employee } from '../../../../../model/employee';
 import { EmployeeService } from '../../../../../services/employee.service';
 import { ShiftPatternService } from '../../../../../services/shift-pattern.service';
@@ -17,15 +26,18 @@ import { DayTypeService } from "../../../../../services/day-type.service";
 import { PositionService } from "../../../../../services/position.service";
 import { DayTypeGroupService } from "../../../../../services/day-type-group.service";
 import { DayTypeGroup } from "../../../../../model/day-type-group";
+import { ScheduleService } from "../../../../../services/schedule.service";
+import { ScheduleDto } from "../../../../../model/dto/schedule-dto";
 
 @Component({
   selector: 'app-schedules-table',
   templateUrl: './schedules-table.component.html',
   styleUrls: ['./schedules-table.component.css']
 })
-export class SchedulesTableComponent implements OnInit, OnDestroy {
+export class SchedulesTableComponent implements OnInit, OnChanges, OnDestroy {
 
   shifts:       Shift[]         = [];
+  schedule:     ScheduleDto[]   = [];
   positions:    Position[]      = [];
   employees:    Employee[]      = [];
   patterns:     ShiftPattern[]  = [];
@@ -53,6 +65,7 @@ export class SchedulesTableComponent implements OnInit, OnDestroy {
               private paginatorService: PaginatorService,
               private shiftService: ShiftService,
               private employeeService: EmployeeService,
+              private scheduleService: ScheduleService,
               private positionService: PositionService,
               private patternService: ShiftPatternService,
               private dayTypesService: DayTypeService,
@@ -82,7 +95,11 @@ export class SchedulesTableComponent implements OnInit, OnDestroy {
     this.sub = this.paginatorService.dates
       .pipe(
         filter(values => values.length > 0)
-      ).subscribe(this.getWorkingTime);
+      ).subscribe(this.getTableData);
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log(changes);
   }
 
   ngOnDestroy(): void {
@@ -98,10 +115,15 @@ export class SchedulesTableComponent implements OnInit, OnDestroy {
     return this.shiftsWorkingTime.find(workingTime => workingTime.shiftId === shiftId);
   }
 
-  private getWorkingTime = (daysInMonth) => {
+  private getTableData = (daysInMonth) => {
     this.workingTimeService.getAllByDate(
       daysInMonth[0].isoString,
       daysInMonth[daysInMonth.length - 1].isoString)
       .subscribe(workingTime => this.shiftsWorkingTime = workingTime);
+
+    this.scheduleService.getAllByDate(
+      daysInMonth[0].isoString,
+      daysInMonth[daysInMonth.length - 1].isoString)
+      .subscribe(schedule => this.schedule = schedule);
   }
 }

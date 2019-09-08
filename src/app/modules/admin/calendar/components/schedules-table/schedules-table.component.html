@@ -2,15 +2,16 @@
   <thead app-table-header>
   </thead>
   <tbody *ngFor="let shift of shifts"
-    app-table-shift-group
-    [shift]="shift"
-    [employees]="getShiftEmployees(shift.id)"
-    [workingTimeNorm]="getShiftWorkingTime(shift.id)?.hours"
-    [patterns]="patterns"
-    [positions]="positions"
-    [dayTypes]="dayTypes"
-    [dayTypeGroups]="dayTypeGroups"
-    [mouseMove$]="mouseMove$"
-    [mouseUp$]="mouseUp$">
+         app-table-shift-group
+         [shift]="shift"
+         [employees]="getShiftEmployees(shift.id)"
+         [workingTimeNorm]="getShiftWorkingTime(shift.id)?.hours"
+         [schedule]="schedule"
+         [patterns]="patterns"
+         [positions]="positions"
+         [dayTypes]="dayTypes"
+         [dayTypeGroups]="dayTypeGroups"
+         [mouseMove$]="mouseMove$"
+         [mouseUp$]="mouseUp$">
   </tbody>
 </table>

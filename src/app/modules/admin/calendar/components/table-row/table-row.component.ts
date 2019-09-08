@@ -1,11 +1,14 @@
 import {
-  AfterViewInit,
   Component,
   ElementRef,
   Input,
+  OnChanges,
   OnDestroy,
-  OnInit, QueryList,
-  ViewChild, ViewChildren,
+  OnInit,
+  QueryList,
+  SimpleChanges,
+  ViewChild,
+  ViewChildren,
 } from '@angular/core';
 import { ContextMenuComponent, ContextMenuService } from 'ngx-contextmenu';
 import { Employee } from '../../../../../model/employee';
@@ -17,7 +20,6 @@ import { ShiftPattern } from '../../../../../model/shift-pattern';
 import { Observable, Subscription } from 'rxjs';
 import { PatternUnitService } from '../../../../../services/pattern-unit.service';
 import { NotificationsService } from "angular2-notifications";
-import { filter, switchMap } from "rxjs/operators";
 import { CalendarDay } from "../../../../../model/ui/calendar-day";
 import { PaginatorService } from "../../../../../shared/paginators/paginator.service";
 import { DayType } from "../../../../../model/day-type";
@@ -31,13 +33,15 @@ import { TableCellComponent } from "../table-cell/table-cell.component";
   templateUrl: './table-row.component.html',
   styleUrls: ['./table-row.component.css']
 })
-export class TableRowComponent implements OnInit, AfterViewInit, OnDestroy {
+export class TableRowComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() employee:      Employee;
   @Input() position:      Position;
   @Input() patterns:      ShiftPattern[];
   @Input() dayTypes:      DayType[];
   @Input() dayTypeGroups: DayTypeGroup[];
+
+  @Input() schedule:      WorkDay[];
 
   @Input() mouseMove$:    Observable<number>;
   @Input() mouseUp$:      Observable<MouseEvent>;
@@ -59,7 +63,6 @@ export class TableRowComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // Table variables
   daysInMonth:  CalendarDay[];
-  schedule:     WorkDay[];
   workingTimeSum = 0;
   workingHolidaysSum = 0;
 
@@ -75,26 +78,17 @@ export class TableRowComponent implements OnInit, AfterViewInit, OnDestroy {
               private notificationService: NotificationsService) { }
 
   ngOnInit() {
+    this.paginatorSub = this.paginatorService.dates
+      .subscribe(daysInMonth => this.daysInMonth = daysInMonth);
   }
 
-  ngAfterViewInit(): void {
-    this.paginatorSub = this.paginatorService.dates
-      .pipe(
-        filter(daysInMonth => daysInMonth.length > 0),
-        switchMap(daysInMonth => {
-          this.daysInMonth = daysInMonth;
-          return this.scheduleService.getByDate(
-            daysInMonth[0].isoString,
-            daysInMonth[daysInMonth.length - 1].isoString,
-            this.employee.id
-          );
-        }),
-        filter(schedule => !!schedule))
-      .subscribe(schedule => {
-        this.schedule = schedule;
-        fillInTheCells(schedule, this.cells, this.dayTypes, this.dayTypeGroups);
-        this.calculateSum();
-      });
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['schedule']) {
+      if (this.cells) {
+        fillInTheCells(this.schedule, this.cells, this.dayTypes, this.dayTypeGroups);
+      }
+      this.calculateSum();
+    }
   }
 
   ngOnDestroy(): void {
@@ -180,7 +174,6 @@ export class TableRowComponent implements OnInit, AfterViewInit, OnDestroy {
   private scheduleGeneratedHandler = (createdSchedule, updatedSchedule) => {
       if (createdSchedule.length > 0) {
         this.scheduleService.create(
-          this.employee.id,
           createdSchedule
         ).subscribe(res => {
               res.forEach(workDay => this.schedule.push(workDay));
@@ -193,7 +186,6 @@ export class TableRowComponent implements OnInit, AfterViewInit, OnDestroy {
       }
       if (updatedSchedule.length > 0) {
         this.scheduleService.update(
-          this.employee.id,
           updatedSchedule
         ).subscribe(res => {
               fillInTheCells(this.schedule, this.cells, this.dayTypes, this.dayTypeGroups);
