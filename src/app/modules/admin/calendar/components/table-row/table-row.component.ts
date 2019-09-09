@@ -84,10 +84,12 @@ export class TableRowComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['schedule']) {
-      if (this.cells) {
-        fillInTheCells(this.schedule, this.cells, this.dayTypes, this.dayTypeGroups);
-      }
-      this.calculateSum();
+      setTimeout(() => {
+        if (this.cells) {
+          fillInTheCells(this.schedule, this.cells, this.dayTypes, this.dayTypeGroups);
+        }
+        this.calculateSum();
+      }, 1);
     }
   }
 

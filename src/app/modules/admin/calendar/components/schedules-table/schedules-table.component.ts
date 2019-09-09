@@ -1,11 +1,9 @@
 import {
   Component,
   ElementRef,
-  OnChanges,
   OnDestroy,
   OnInit,
   QueryList,
-  SimpleChanges,
   ViewChildren
 } from '@angular/core';
 import { Employee } from '../../../../../model/employee';
@@ -34,7 +32,7 @@ import { ScheduleDto } from "../../../../../model/dto/schedule-dto";
   templateUrl: './schedules-table.component.html',
   styleUrls: ['./schedules-table.component.css']
 })
-export class SchedulesTableComponent implements OnInit, OnChanges, OnDestroy {
+export class SchedulesTableComponent implements OnInit, OnDestroy {
 
   shifts:       Shift[]         = [];
   schedule:     ScheduleDto[]   = [];
@@ -98,10 +96,6 @@ export class SchedulesTableComponent implements OnInit, OnChanges, OnDestroy {
       ).subscribe(this.getTableData);
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes);
-  }
-
   ngOnDestroy(): void {
     this.sub.unsubscribe();
     this.paginatorService.clearStoredValue();
@@ -124,6 +118,8 @@ export class SchedulesTableComponent implements OnInit, OnChanges, OnDestroy {
     this.scheduleService.getAllByDate(
       daysInMonth[0].isoString,
       daysInMonth[daysInMonth.length - 1].isoString)
-      .subscribe(schedule => this.schedule = schedule);
+      .subscribe(schedule => {
+        this.schedule = schedule;
+      });
   }
 }
