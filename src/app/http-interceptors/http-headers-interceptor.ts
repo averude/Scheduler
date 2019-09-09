@@ -12,12 +12,6 @@ export class HttpHeadersInterceptor implements HttpInterceptor {
           .set('Content-Type','application/json;charset=UTF-8')
       });
     }
-    if (req.url.includes('/file')) {
-      req = req.clone({
-        headers: req.headers
-          .set('Accept','image/jpg')
-      });
-    }
     return next.handle(req);
   }
 }

@@ -3,7 +3,6 @@ import { Observable, throwError } from "rxjs";
 import { Injectable } from "@angular/core";
 import { NotificationsService } from "angular2-notifications";
 import { catchError } from "rxjs/operators";
-import { ErrorDetails } from "../model/dto/error-details";
 
 const OPTIONS = {
   timeOut: 5000,

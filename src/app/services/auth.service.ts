@@ -6,12 +6,14 @@ import { Observable } from "rxjs";
 import { User } from "../model/user";
 import decode from "jwt-decode";
 import { RestConfig } from "../rest.config";
+import { CacheMapService } from "./cache-map.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  constructor(private router: Router,
+  constructor(private cache: CacheMapService,
+              private router: Router,
               private config: RestConfig,
               private http: HttpClient) {}
 
@@ -48,6 +50,7 @@ export class AuthService {
   }
 
   public logout() {
+    this.cache.clear();
     sessionStorage.removeItem("currentUser");
     this.router.navigate(['/login']);
   }

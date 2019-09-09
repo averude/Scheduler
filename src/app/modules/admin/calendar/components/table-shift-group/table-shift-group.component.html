@@ -11,6 +11,7 @@
       *ngFor="let employee of employees"
       app-table-row
       [employee]="employee"
+      [schedule]="getSchedule(employee.id)?.workDays"
       [workingTimeNorm]="workingTimeNorm"
       [position]="getPosition(employee)"
       [patterns]="patterns"
