@@ -1,5 +1,6 @@
 package com.averude.uksatse.scheduler.core.generator;
 
+import com.averude.uksatse.scheduler.core.entity.Holiday;
 import com.averude.uksatse.scheduler.core.entity.PatternUnit;
 import com.averude.uksatse.scheduler.core.entity.WorkDay;
 
@@ -9,6 +10,7 @@ import java.util.List;
 public interface ScheduleGenerator {
     List<WorkDay> generate(List<PatternUnit> patternUnits,
                            List<LocalDate> dates,
+                           List<Holiday> holidays,
                            List<WorkDay> existingSchedule,
                            long employeeId,
                            int offset);
