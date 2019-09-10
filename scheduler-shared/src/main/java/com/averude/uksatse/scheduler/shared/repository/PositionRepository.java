@@ -1,8 +1,10 @@
 package com.averude.uksatse.scheduler.shared.repository;
 
 import com.averude.uksatse.scheduler.core.entity.Position;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface PositionRepository extends CrudRepository<Position, Long> {
-    Iterable<Position> findAllByDepartmentId(Long departmentId);
+import java.util.List;
+
+public interface PositionRepository extends JpaRepository<Position, Long> {
+    List<Position> findAllByDepartmentId(Long departmentId);
 }

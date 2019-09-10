@@ -1,21 +1,23 @@
 package com.averude.uksatse.scheduler.shared.service;
 
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public abstract class AbstractService<T extends Serializable, ID>
         implements GenericService<T, ID> {
 
-    private CrudRepository<T, ID> repository;
+    private JpaRepository<T, ID> repository;
 
     public AbstractService() {
     }
 
-    protected AbstractService(CrudRepository<T, ID> repository) {
+    protected AbstractService(JpaRepository<T, ID> repository) {
         this.repository = repository;
     }
 
@@ -29,7 +31,7 @@ public abstract class AbstractService<T extends Serializable, ID>
     }
 
     @Override
-    public <S extends T> Iterable<S> saveAll(Iterable<S> iterable) {
+    public <S extends T> List<S> saveAll(Iterable<S> iterable) {
         return repository.saveAll(iterable);
     }
 
@@ -44,12 +46,12 @@ public abstract class AbstractService<T extends Serializable, ID>
     }
 
     @Override
-    public Iterable<T> findAll() {
+    public List<T> findAll() {
         return repository.findAll();
     }
 
     @Override
-    public Iterable<T> findAllById(Iterable<ID> iterable) {
+    public List<T> findAllById(Iterable<ID> iterable) {
         return repository.findAllById(iterable);
     }
 

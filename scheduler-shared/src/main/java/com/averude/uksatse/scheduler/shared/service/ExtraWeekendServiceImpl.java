@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 public class ExtraWeekendServiceImpl extends AbstractService<ExtraWeekend, Long>
@@ -27,13 +28,13 @@ public class ExtraWeekendServiceImpl extends AbstractService<ExtraWeekend, Long>
 
     @Override
     @Transactional
-    public Iterable<ExtraWeekend> findAllByDepartmentId(Long departmentId) {
+    public List<ExtraWeekend> findAllByDepartmentId(Long departmentId) {
         return extraWeekendRepository.findAllByDepartmentId(departmentId);
     }
 
     @Override
     @Transactional
-    public Iterable<ExtraWeekend> findAllByAuth(Authentication authentication) {
+    public List<ExtraWeekend> findAllByAuth(Authentication authentication) {
         Long departmentId = detailsExtractor
                 .extractId(authentication, TokenExtraDetailsExtractor.DEPARTMENT_ID);
         return findAllByDepartmentId(departmentId);
@@ -41,17 +42,17 @@ public class ExtraWeekendServiceImpl extends AbstractService<ExtraWeekend, Long>
 
     @Override
     @Transactional
-    public Iterable<ExtraWeekend> findAllByDepartmentIdAndDateBetween(Long departmentId,
-                                                                      LocalDate from,
-                                                                      LocalDate to) {
+    public List<ExtraWeekend> findAllByDepartmentIdAndDateBetween(Long departmentId,
+                                                                  LocalDate from,
+                                                                  LocalDate to) {
         return extraWeekendRepository.findAllByDepartmentIdAndDateBetween(departmentId, from, to);
     }
 
     @Override
     @Transactional
-    public Iterable<ExtraWeekend> findAllByAuthAndDateBetween(Authentication authentication,
-                                                              LocalDate from,
-                                                              LocalDate to) {
+    public List<ExtraWeekend> findAllByAuthAndDateBetween(Authentication authentication,
+                                                          LocalDate from,
+                                                          LocalDate to) {
         Long departmentId = detailsExtractor
                 .extractId(authentication, TokenExtraDetailsExtractor.DEPARTMENT_ID);
         return findAllByDepartmentIdAndDateBetween(departmentId, from, to);

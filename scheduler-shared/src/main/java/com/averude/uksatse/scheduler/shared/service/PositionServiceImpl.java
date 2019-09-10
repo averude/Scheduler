@@ -8,6 +8,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class PositionServiceImpl
         extends AbstractService<Position, Long> implements PositionService {
@@ -25,13 +27,13 @@ public class PositionServiceImpl
 
     @Override
     @Transactional
-    public Iterable<Position> findAllByDepartmentId(Long departmentId) {
+    public List<Position> findAllByDepartmentId(Long departmentId) {
         return positionRepository.findAllByDepartmentId(departmentId);
     }
 
     @Override
     @Transactional
-    public Iterable<Position> findAllByAuth(Authentication authentication) {
+    public List<Position> findAllByAuth(Authentication authentication) {
         Long departmentId = detailsExtractor
                 .extractId(authentication, TokenExtraDetailsExtractor.DEPARTMENT_ID);
         return findAllByDepartmentId(departmentId);

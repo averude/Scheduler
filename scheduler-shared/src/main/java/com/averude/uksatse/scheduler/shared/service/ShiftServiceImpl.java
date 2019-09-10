@@ -31,13 +31,13 @@ public class ShiftServiceImpl
 
     @Override
     @Transactional
-    public Iterable<Shift> findAllByDepartmentId(long departmentId) {
+    public List<Shift> findAllByDepartmentId(long departmentId) {
         return shiftRepository.findAllByDepartmentId(departmentId);
     }
 
     @Override
     @Transactional
-    public Iterable<Shift> findAllByAuth(Authentication authentication) {
+    public List<Shift> findAllByAuth(Authentication authentication) {
         Map<String, Integer> decodedDetails = detailsExtractor.extractDecodedDetails(authentication);
         List<String> authoritiesList = detailsExtractor.getAuthoritiesList(authentication);
 

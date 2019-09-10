@@ -1,8 +1,10 @@
 package com.averude.uksatse.scheduler.shared.repository;
 
 import com.averude.uksatse.scheduler.core.entity.Shift;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ShiftRepository extends CrudRepository<Shift, Long> {
-    Iterable<Shift> findAllByDepartmentId(long departmentId);
+import java.util.List;
+
+public interface ShiftRepository extends JpaRepository<Shift, Long> {
+    List<Shift> findAllByDepartmentId(long departmentId);
 }

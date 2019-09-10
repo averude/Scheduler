@@ -5,6 +5,8 @@ import com.averude.uksatse.scheduler.core.entity.Position;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 
+import java.util.List;
+
 public interface StatisticsRepository extends Repository<Position, Long> {
     @Query("select new com.averude.uksatse.scheduler.core.dto.CountDTO(p.id, count(e))" +
             "from Employee e " +
@@ -13,5 +15,5 @@ public interface StatisticsRepository extends Repository<Position, Long> {
             "on e.positionId = p.id " +
             "where p.departmentId = ?1 " +
             "group by p.id")
-    Iterable<CountDTO> countEmployeesOnPositionsByDepartmentId(long departmentId);
+    List<CountDTO> countEmployeesOnPositionsByDepartmentId(long departmentId);
 }

@@ -3,21 +3,22 @@ package com.averude.uksatse.scheduler.shared.service;
 import org.springframework.validation.annotation.Validated;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Optional;
 
 @Validated
 public interface GenericService<T extends Serializable, ID> {
     <S extends T> S save(S var1);
 
-    <S extends T> Iterable<S> saveAll(Iterable<S> var1);
+    <S extends T> List<S> saveAll(Iterable<S> var1);
 
     Optional<T> findById(ID var1);
 
     boolean existsById(ID var1);
 
-    Iterable<T> findAll();
+    List<T> findAll();
 
-    Iterable<T> findAllById(Iterable<ID> var1);
+    List<T> findAllById(Iterable<ID> var1);
 
     long count();
 

@@ -1,12 +1,14 @@
 package com.averude.uksatse.scheduler.monolith.controller;
 
 import com.averude.uksatse.scheduler.core.controller.ScheduleController;
+import com.averude.uksatse.scheduler.core.dto.ScheduleDTO;
 import com.averude.uksatse.scheduler.core.entity.WorkDay;
 import com.averude.uksatse.scheduler.monolith.service.ScheduleGenerationService;
 import com.averude.uksatse.scheduler.shared.service.ScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -27,36 +29,29 @@ public class ScheduleControllerImpl implements ScheduleController {
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.POST,
-                    value = "/{employeeId}")
-    public ResponseEntity<Iterable<WorkDay>> create(
-            @PathVariable Long employeeId,
-            @Valid @RequestBody Iterable<WorkDay> schedule){
+    @RequestMapping(method = RequestMethod.POST)
+    public ResponseEntity<Iterable<WorkDay>> create(@Valid @RequestBody Iterable<WorkDay> schedule){
         scheduleService.saveAll(schedule);
         return ResponseEntity.ok(schedule);
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.PUT,
-                    value = "/{employeeId}")
-    public ResponseEntity<?> update(@PathVariable Long employeeId,
-                                    @Valid @RequestBody Iterable<WorkDay> schedule) {
+    @RequestMapping(method = RequestMethod.PUT)
+    public ResponseEntity<?> update(@Valid @RequestBody Iterable<WorkDay> schedule) {
         scheduleService.saveAll(schedule);
         return ResponseEntity.ok("WorkDay was successfully updated");
     }
 
-    @Override
     @RequestMapping(method = RequestMethod.GET,
-                    value = "/search")
-    public Iterable<WorkDay> searchInEmployee(@RequestParam(value = "employeeId", required = true)
-                                                      Long employeeId,
-                                              @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-                                              @RequestParam(value = "from", required = true)
-                                                      LocalDate from,
-                                              @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-                                              @RequestParam(value = "to", required = false)
-                                                      LocalDate to){
-        return scheduleService.getForEmployeeByDate(employeeId, from, to);
+            value = "/dates")
+    public Iterable<ScheduleDTO> searchByAuthAndDate(Authentication authentication,
+                                                     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                                     @RequestParam(value = "from")
+                                                             LocalDate from,
+                                                     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                                     @RequestParam(value = "to")
+                                                             LocalDate to){
+        return scheduleService.findAllByAuthAndDate(authentication, from, to);
     }
 
     @RequestMapping(method = RequestMethod.POST,

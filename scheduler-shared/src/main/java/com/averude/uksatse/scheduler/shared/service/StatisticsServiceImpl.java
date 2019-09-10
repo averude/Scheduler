@@ -8,6 +8,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class StatisticsServiceImpl implements StatisticsService {
     private final StatisticsRepository statisticsRepository;
@@ -22,13 +24,13 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     @Override
     @Transactional
-    public Iterable<CountDTO> countEmployeesByDepartmentId(long departmentId) {
+    public List<CountDTO> countEmployeesByDepartmentId(long departmentId) {
         return statisticsRepository.countEmployeesOnPositionsByDepartmentId(departmentId);
     }
 
     @Override
     @Transactional
-    public Iterable<CountDTO> countEmployeesByAuth(Authentication authentication) {
+    public List<CountDTO> countEmployeesByAuth(Authentication authentication) {
         Long departmentId = detailsExtractor
                 .extractId(authentication, TokenExtraDetailsExtractor.DEPARTMENT_ID);
         return statisticsRepository.countEmployeesOnPositionsByDepartmentId(departmentId);

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 
 @Service
 public class PatternUnitServiceImpl extends AbstractService<PatternUnit, Long>
@@ -21,7 +22,7 @@ public class PatternUnitServiceImpl extends AbstractService<PatternUnit, Long>
 
     @Override
     @Transactional
-    public Iterable<PatternUnit> findAllByPatternIdOrderByOrderId(long patternId) {
+    public List<PatternUnit> findAllByPatternIdOrderByOrderId(long patternId) {
         return patternUnitRepository.findAllByPatternIdOrderByOrderId(patternId);
     }
 }

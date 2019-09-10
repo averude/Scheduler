@@ -8,6 +8,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class DayTypeServiceImpl
         extends AbstractService<DayType, Long> implements DayTypeService {
@@ -25,13 +27,13 @@ public class DayTypeServiceImpl
 
     @Override
     @Transactional
-    public Iterable<DayType> findAllByDepartmentId(Long departmentId) {
+    public List<DayType> findAllByDepartmentId(Long departmentId) {
         return dayTypeRepository.findAllByDepartmentId(departmentId);
     }
 
     @Override
     @Transactional
-    public Iterable<DayType> findAllByAuth(Authentication authentication) {
+    public List<DayType> findAllByAuth(Authentication authentication) {
         Long departmentId = detailsExtractor.extractId(authentication, TokenExtraDetailsExtractor.DEPARTMENT_ID);
         return findAllByDepartmentId(departmentId);
     }

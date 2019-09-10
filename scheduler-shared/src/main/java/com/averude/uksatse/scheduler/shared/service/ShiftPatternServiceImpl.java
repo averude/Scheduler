@@ -8,6 +8,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class ShiftPatternServiceImpl
         extends AbstractService<ShiftPattern, Long> implements ShiftPatternService {
@@ -25,13 +27,13 @@ public class ShiftPatternServiceImpl
 
     @Override
     @Transactional
-    public Iterable<ShiftPattern> findAllByDepartmentId(long departmentId) {
+    public List<ShiftPattern> findAllByDepartmentId(long departmentId) {
         return shiftPatternRepository.findAllByDepartmentId(departmentId);
     }
 
     @Override
     @Transactional
-    public Iterable<ShiftPattern> findAllByAuth(Authentication authentication) {
+    public List<ShiftPattern> findAllByAuth(Authentication authentication) {
         Long departmentId = detailsExtractor
                 .extractId(authentication, TokenExtraDetailsExtractor.DEPARTMENT_ID);
         return findAllByDepartmentId(departmentId);

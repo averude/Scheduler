@@ -32,7 +32,7 @@ public class EmployeeServiceImpl
 
     @Override
     @Transactional
-    public Iterable<Employee> findAllByAuth(Authentication authentication) {
+    public List<Employee> findAllByAuth(Authentication authentication) {
         Map<String, Integer> decodedDetails = detailsExtractor.extractDecodedDetails(authentication);
         List<String> authoritiesList = detailsExtractor.getAuthoritiesList(authentication);
 
@@ -49,20 +49,20 @@ public class EmployeeServiceImpl
 
     @Override
     @Transactional
-    public Iterable<Employee> findAllByDepartmentId(long departmentId) {
+    public List<Employee> findAllByDepartmentId(long departmentId) {
         return this.employeeRepository.findAllByDepartmentId(departmentId);
     }
 
     @Override
     @Transactional
-    public Iterable<Employee> findAllByShiftId(long shiftId) {
+    public List<Employee> findAllByShiftId(long shiftId) {
         return employeeRepository
                 .findAllByShiftIdOrderByShiftIdAscSecondNameAscFirstNameAscPatronymicAsc(shiftId);
     }
 
     @Override
     @Transactional
-    public Iterable<Employee> findAllByPositionId(long positionId) {
+    public List<Employee> findAllByPositionId(long positionId) {
         return this.employeeRepository.findAllByPositionIdOrderByShiftIdAscSecondNameAscFirstNameAscPatronymicAsc(positionId);
     }
 

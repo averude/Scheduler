@@ -3,8 +3,10 @@ package com.averude.uksatse.scheduler.shared.service;
 import com.averude.uksatse.scheduler.core.dto.CountDTO;
 import org.springframework.security.core.Authentication;
 
-public interface StatisticsService {
-    Iterable<CountDTO> countEmployeesByDepartmentId(long departmentId);
+import java.util.List;
 
-    Iterable<CountDTO> countEmployeesByAuth(Authentication authentication);
+public interface StatisticsService {
+    List<CountDTO> countEmployeesByDepartmentId(long departmentId);
+
+    List<CountDTO> countEmployeesByAuth(Authentication authentication);
 }

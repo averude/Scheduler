@@ -3,8 +3,10 @@ package com.averude.uksatse.scheduler.shared.service;
 import com.averude.uksatse.scheduler.core.entity.ShiftPattern;
 import org.springframework.security.core.Authentication;
 
-public interface ShiftPatternService extends GenericService<ShiftPattern, Long> {
-    Iterable<ShiftPattern> findAllByDepartmentId(long departmentId);
+import java.util.List;
 
-    Iterable<ShiftPattern> findAllByAuth(Authentication authentication);
+public interface ShiftPatternService extends GenericService<ShiftPattern, Long> {
+    List<ShiftPattern> findAllByDepartmentId(long departmentId);
+
+    List<ShiftPattern> findAllByAuth(Authentication authentication);
 }

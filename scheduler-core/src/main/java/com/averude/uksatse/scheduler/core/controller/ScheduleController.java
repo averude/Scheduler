@@ -9,25 +9,9 @@ import javax.validation.Valid;
 import java.time.LocalDate;
 
 public interface ScheduleController {
-    @RequestMapping(method = RequestMethod.POST,
-                    value = "/{employeeId}")
-    ResponseEntity<Iterable<WorkDay>> create(
-            @PathVariable Long employeeId,
-            @Valid @RequestBody Iterable<WorkDay> schedule);
+    @RequestMapping(method = RequestMethod.POST)
+    ResponseEntity<Iterable<WorkDay>> create(@Valid @RequestBody Iterable<WorkDay> schedule);
 
-    @RequestMapping(method = RequestMethod.PUT,
-                    value = "/{employeeId}")
-    ResponseEntity<?> update(@PathVariable Long employeeId,
-                             @Valid @RequestBody Iterable<WorkDay> schedule);
-
-    @RequestMapping(method = RequestMethod.GET,
-                    value = "/search")
-    Iterable<WorkDay> searchInEmployee(@RequestParam(value = "employeeId", required = true)
-                                               Long employeeId,
-                                       @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-                                       @RequestParam(value = "from", required = true)
-                                               LocalDate from,
-                                       @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-                                       @RequestParam(value = "to", required = false)
-                                               LocalDate to);
+    @RequestMapping(method = RequestMethod.PUT)
+    ResponseEntity<?> update(@Valid @RequestBody Iterable<WorkDay> schedule);
 }

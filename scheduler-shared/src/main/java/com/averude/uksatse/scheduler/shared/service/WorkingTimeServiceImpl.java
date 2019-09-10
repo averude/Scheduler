@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 public class WorkingTimeServiceImpl extends AbstractService<WorkingTime, Long>
@@ -27,13 +28,13 @@ public class WorkingTimeServiceImpl extends AbstractService<WorkingTime, Long>
 
     @Override
     @Transactional
-    public Iterable<WorkingTime> findAllByDepartmentId(Long departmentId) {
+    public List<WorkingTime> findAllByDepartmentId(Long departmentId) {
         return workingTimeRepository.findAllByDepartmentId(departmentId);
     }
 
     @Override
     @Transactional
-    public Iterable<WorkingTime> findAllByAuth(Authentication authentication) {
+    public List<WorkingTime> findAllByAuth(Authentication authentication) {
         Long departmentId = detailsExtractor
                 .extractId(authentication, TokenExtraDetailsExtractor.DEPARTMENT_ID);
         return findAllByDepartmentId(departmentId);
@@ -41,13 +42,13 @@ public class WorkingTimeServiceImpl extends AbstractService<WorkingTime, Long>
 
     @Override
     @Transactional
-    public Iterable<WorkingTime> findAllByDepartmentIdAndDateBetween(Long departmentId, LocalDate from, LocalDate to) {
+    public List<WorkingTime> findAllByDepartmentIdAndDateBetween(Long departmentId, LocalDate from, LocalDate to) {
         return workingTimeRepository.findAllByDepartmentIdAndDateBetween(departmentId, from, to);
     }
 
     @Override
     @Transactional
-    public Iterable<WorkingTime> findAllByAuthAndDateBetween(Authentication authentication, LocalDate from, LocalDate to) {
+    public List<WorkingTime> findAllByAuthAndDateBetween(Authentication authentication, LocalDate from, LocalDate to) {
         Long departmentId = detailsExtractor
                 .extractId(authentication, TokenExtraDetailsExtractor.DEPARTMENT_ID);
         return findAllByDepartmentIdAndDateBetween(departmentId, from, to);
