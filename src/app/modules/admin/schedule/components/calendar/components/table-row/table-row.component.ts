@@ -198,7 +198,7 @@ export class TableRowComponent implements OnInit, OnChanges, OnDestroy {
             this.notificationService.success(
               'Created',
               'Schedule sent successfully');
-          });
+          }, err => cells.forEach(cell => cell.revertChanges()));
       }
       if (updatedSchedule.length > 0) {
         this.scheduleService.update(updatedSchedule)
@@ -212,7 +212,7 @@ export class TableRowComponent implements OnInit, OnChanges, OnDestroy {
             this.notificationService.success(
                 'Updated',
                 'Schedule sent successfully');
-          });
+          }, err => cells.forEach(cell => cell.revertChanges()));
       }
   };
 

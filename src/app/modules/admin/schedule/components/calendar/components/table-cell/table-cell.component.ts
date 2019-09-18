@@ -24,7 +24,18 @@ import { setLabel, toggleClass } from "./table-cell.utils";
 })
 export class TableCellComponent implements OnInit, OnChanges {
 
-  @Input() workDay: WorkDay;
+  private currValue: WorkDay;
+  private prevValue: WorkDay;
+
+  @Input() set workDay(workDay: WorkDay) {
+    this.prevValue = this.currValue;
+    this.currValue = workDay;
+  }
+
+  get workDay() {
+    return this.currValue;
+  }
+
   @Input() day: CalendarDay;
   @Input() dayTypes: DayType[];
   @Input() dayTypeGroups: DayTypeGroup[];
@@ -58,6 +69,11 @@ export class TableCellComponent implements OnInit, OnChanges {
     if (changes['workDay']) {
       this.setLabel();
     }
+  }
+
+  revertChanges() {
+    this.currValue = this.prevValue;
+    this.cd.markForCheck();
   }
 
   setLabel() {
