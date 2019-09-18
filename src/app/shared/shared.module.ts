@@ -18,7 +18,7 @@ import { YearPaginatorComponent } from "./paginators/year-paginator/year-paginat
     EditableRowDirective,
     MonthNameImpurePipe,
     PatternUnitsStringPipe,
-    YearPaginatorComponent
+    YearPaginatorComponent,
   ],
   providers: []
 })

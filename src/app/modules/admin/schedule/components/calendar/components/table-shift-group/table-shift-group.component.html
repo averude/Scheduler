@@ -1,0 +1,23 @@
+<ng-container *ngIf="employees">
+  <tr>
+    <td class="shift-label"
+        [attr.colspan]="numberOfColumns"
+        (click)="isHidden = !isHidden">
+      {{(isHidden ? "▼" : "▶") + ' ' + shift.name}}
+    </td>
+  </tr>
+  <tr [hidden]="isHidden"
+      class="schedule-row"
+      *ngFor="let employee of employees"
+      app-table-row
+      [employee]="employee"
+      [schedule]="getSchedule(employee.id)?.workDays"
+      [workingTimeNorm]="workingTimeNorm"
+      [position]="getPosition(employee)"
+      [patterns]="patterns"
+      [dayTypes]="dayTypes"
+      [dayTypeGroups]="dayTypeGroups"
+      [mouseMove$]="mouseMove$"
+      [mouseUp$]="mouseUp$">
+  </tr>
+</ng-container>

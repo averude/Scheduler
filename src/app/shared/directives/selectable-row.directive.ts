@@ -1,5 +1,7 @@
 import {
-  AfterViewInit, ContentChildren, Directive,
+  AfterViewInit,
+  ContentChildren,
+  Directive,
   ElementRef,
   EventEmitter,
   Input,
@@ -11,7 +13,7 @@ import {
 import { fromEvent, Observable, Subscription } from "rxjs";
 import { filter } from "rxjs/operators";
 import { selectingLeft, selectingRight } from "../utils/table-selection-utils";
-import { TableCellComponent } from "../../modules/admin/calendar/components/table-cell/table-cell.component";
+import { TableCellComponent } from "../../modules/admin/schedule/components/calendar/components/table-cell/table-cell.component";
 import { CalendarDay } from "../../model/ui/calendar-day";
 
 @Directive({
@@ -47,37 +49,44 @@ export class SelectableRowDirective implements OnInit, OnDestroy, AfterViewInit 
   }
 
   ngAfterViewInit(): void {
-    this.mouseDownSub = fromEvent<MouseEvent>(this.element.nativeElement, 'mousedown')
-      .subscribe(event => {
-        this.dragging = true;
-        this.startX = event.clientX;
+    if (this.element) {
+      this.mouseDownSub = fromEvent<MouseEvent>(this.element.nativeElement, 'mousedown')
+        .subscribe(event => {
+          this.dragging = true;
+          this.startX = event.clientX;
 
-        this.mouseMoveSub = this.mouseMove$
-          .pipe(filter(() => this.dragging))
-          .subscribe(clientX => {
-            this.clearSelection();
-            if (this.startX > clientX) {
-              selectingLeft(this.startX, clientX, this.cells);
-            } else {
-              selectingRight(this.startX, clientX, this.cells);
-            }
-          });
-      });
+          this.mouseMoveSub = this.mouseMove$
+            .pipe(filter(() => this.dragging))
+            .subscribe(clientX => {
+              this.clearSelection();
+              if (this.startX > clientX) {
+                selectingLeft(this.startX, clientX, this.cells);
+              } else {
+                selectingRight(this.startX, clientX, this.cells);
+              }
+            });
+        });
 
-    this.mouseUpSub = this.mouseUp$
-      .subscribe(event => {
-        if (this.dragging) {
-          this.onSelectionEnds.emit({event: event, selectedDays: this.selectedDays});
-          this.dragging = false;
-          if (this.mouseMoveSub) this.mouseMoveSub.unsubscribe();
-        }
-      });
+      this.mouseUpSub = this.mouseUp$
+        .subscribe(event => {
+          if (this.dragging) {
+            this.onSelectionEnds.emit({event: event, selectedDays: this.selectedDays});
+            this.dragging = false;
+            if (this.mouseMoveSub) this.mouseMoveSub.unsubscribe();
+          }
+        });
+    }
   }
 
   get selectedDays(): CalendarDay[] {
     return this.cells
       .filter(item => item.selected)
       .map(value => value.day);
+  }
+
+  get selectedCells(): TableCellComponent[] {
+    return this.cells
+      .filter(item => item.selected);
   }
 
   clearSelection() {

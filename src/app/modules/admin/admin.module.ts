@@ -1,17 +1,19 @@
 import { NgModule } from '@angular/core';
-import { SchedulesModule } from './calendar/schedules.module';
+import { SchedulesModule } from './schedule/components/calendar/schedules.module';
 import { CommonModule } from '@angular/common';
 import { AdminComponent } from './admin/admin.component';
 import { AdminRoutingModule } from './admin-routing.module';
 import { SimpleNotificationsModule } from "angular2-notifications";
-import { StatisticsModule } from "./statistics/statistics.module";
-import { ScheduleTabBarComponent } from './schedule-tab-bar/schedule-tab-bar.component';
+import { StatisticsModule } from "./schedule/components/statistics/statistics.module";
+import { ScheduleTabBarComponent } from './schedule/components/schedule-tab-bar/schedule-tab-bar.component';
+import { ScheduleGenerationModule } from "./schedule/components/schedule-generation/schedule-generation.module";
 
 @NgModule({
   imports: [
     CommonModule,
     SchedulesModule,
     StatisticsModule,
+    ScheduleGenerationModule,
     AdminRoutingModule,
     SimpleNotificationsModule
   ],

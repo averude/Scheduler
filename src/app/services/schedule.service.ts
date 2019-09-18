@@ -36,8 +36,8 @@ export class ScheduleService {
   }
 
   generate(shiftId: number,
-           from: Date,
-           to: Date,
+           from: string,
+           to: string,
            offset: number): Observable<any> {
     return this.http.post<any>(
       `${this.config.baseUrl}/schedule/generate?shiftId=${shiftId}&from=${from}&to=${to}&offset=${offset}`,
