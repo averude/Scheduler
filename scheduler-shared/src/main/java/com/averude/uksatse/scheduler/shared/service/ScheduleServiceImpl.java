@@ -2,8 +2,7 @@ package com.averude.uksatse.scheduler.shared.service;
 
 import com.averude.uksatse.scheduler.core.dto.ScheduleDTO;
 import com.averude.uksatse.scheduler.core.entity.WorkDay;
-import com.averude.uksatse.scheduler.core.exception.DecodedDetailsMissingFieldException;
-import com.averude.uksatse.scheduler.core.extractor.TokenExtraDetailsExtractor;
+import com.averude.uksatse.scheduler.core.extractor.DataByAuthorityExtractor;
 import com.averude.uksatse.scheduler.shared.repository.EmployeeRepository;
 import com.averude.uksatse.scheduler.shared.repository.ScheduleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-
-import static com.averude.uksatse.scheduler.core.extractor.TokenExtraDetailsExtractor.*;
 
 @Service
 public class ScheduleServiceImpl
@@ -24,16 +20,16 @@ public class ScheduleServiceImpl
 
     private final ScheduleRepository scheduleRepository;
     private final EmployeeRepository employeeRepository;
-    private final TokenExtraDetailsExtractor detailsExtractor;
+    private final DataByAuthorityExtractor extractor;
 
     @Autowired
     public ScheduleServiceImpl(ScheduleRepository scheduleRepository,
                                EmployeeRepository employeeRepository,
-                               TokenExtraDetailsExtractor detailsExtractor) {
+                               DataByAuthorityExtractor extractor) {
         super(scheduleRepository);
         this.scheduleRepository = scheduleRepository;
         this.employeeRepository = employeeRepository;
-        this.detailsExtractor = detailsExtractor;
+        this.extractor = extractor;
     }
 
     @Override
@@ -78,16 +74,9 @@ public class ScheduleServiceImpl
     public List<ScheduleDTO> findAllByAuthAndDate(Authentication authentication,
                                                   LocalDate from,
                                                   LocalDate to) {
-        Map<String, Integer> decodedDetails = detailsExtractor.extractDecodedDetails(authentication);
-        List<String> authoritiesList = detailsExtractor.getAuthoritiesList(authentication);
-
-        if (authoritiesList.contains(DEPARTMENT_ADMIN)) {
-            return findScheduleByDepartmentIdAndDate(decodedDetails.get(DEPARTMENT_ID).longValue(), from, to);
-        } else if (authoritiesList.contains(SHIFT_ADMIN)) {
-            return findScheduleByShiftIdAndDate(decodedDetails.get(SHIFT_ID).longValue(), from, to);
-        } else {
-            throw new DecodedDetailsMissingFieldException("No required authorities found");
-        }
+        return extractor.getData(authentication,
+                (departmentId, shiftId) -> findScheduleByDepartmentIdAndDate(departmentId, from, to),
+                (departmentId, shiftId) -> findScheduleByShiftIdAndDate(shiftId, from, to));
     }
 
     @Override

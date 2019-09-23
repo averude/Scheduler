@@ -2,7 +2,7 @@ package com.averude.uksatse.scheduler.shared.service;
 
 import com.averude.uksatse.scheduler.core.entity.ExtraWeekend;
 import com.averude.uksatse.scheduler.core.entity.Holiday;
-import com.averude.uksatse.scheduler.core.extractor.TokenExtraDetailsExtractor;
+import com.averude.uksatse.scheduler.core.extractor.DataByAuthorityExtractor;
 import com.averude.uksatse.scheduler.shared.repository.ExtraWeekendRepository;
 import com.averude.uksatse.scheduler.shared.repository.HolidayRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,32 +22,24 @@ public class HolidayServiceImpl extends AbstractService<Holiday, Long>
     private final HolidayRepository holidayRepository;
     private final ExtraWeekendRepository extraWeekendRepository;
     private final ScheduleService scheduleService;
-    private final TokenExtraDetailsExtractor detailsExtractor;
+    private final DataByAuthorityExtractor extractor;
 
     @Autowired
     public HolidayServiceImpl(HolidayRepository holidayRepository,
                               ExtraWeekendRepository extraWeekendRepository,
                               ScheduleService scheduleService,
-                              TokenExtraDetailsExtractor detailsExtractor) {
+                              DataByAuthorityExtractor extractor) {
         super(holidayRepository);
         this.holidayRepository = holidayRepository;
         this.extraWeekendRepository = extraWeekendRepository;
         this.scheduleService = scheduleService;
-        this.detailsExtractor = detailsExtractor;
+        this.extractor = extractor;
     }
 
     @Override
     @Transactional
     public List<Holiday> findAllByDepartmentId(Long departmentId) {
         return holidayRepository.findAllByDepartmentId(departmentId);
-    }
-
-    @Override
-    @Transactional
-    public List<Holiday> findAllByAuth(Authentication authentication) {
-        Long departmentId = detailsExtractor
-                .extractId(authentication, TokenExtraDetailsExtractor.DEPARTMENT_ID);
-        return findAllByDepartmentId(departmentId);
     }
 
     @Override
@@ -60,12 +52,21 @@ public class HolidayServiceImpl extends AbstractService<Holiday, Long>
 
     @Override
     @Transactional
+    public List<Holiday> findAllByAuth(Authentication authentication) {
+        return extractor.getData(authentication,
+                (departmentId, shiftId) -> findAll(),
+                (departmentId, shiftId) -> findAllByDepartmentId(departmentId),
+                (departmentId, shiftId) -> findAllByDepartmentId(departmentId));
+    }
+
+    @Override
+    @Transactional
     public List<Holiday> findAllByAuthAndDateBetween(Authentication authentication,
                                                      LocalDate from,
                                                      LocalDate to) {
-        Long departmentId = detailsExtractor
-                .extractId(authentication, TokenExtraDetailsExtractor.DEPARTMENT_ID);
-        return findAllByDepartmentIdAndDateBetween(departmentId, from, to);
+        return extractor.getData(authentication,
+                (departmentId, shiftId) -> findAllByDepartmentIdAndDateBetween(departmentId, from, to),
+                (departmentId, shiftId) -> findAllByDepartmentIdAndDateBetween(departmentId, from, to));
     }
 
     @Override

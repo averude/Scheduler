@@ -45,7 +45,6 @@ public class DayType implements HasId {
     @Column(nullable = true)
     private String label;
 
-    @NotNull(message = "{workDay.hours.null}")
     @PositiveOrZero(message = "{workDay.hours.negative}")
     @DecimalMax(value = "24",
                 message = "{workDay.hours.max}")

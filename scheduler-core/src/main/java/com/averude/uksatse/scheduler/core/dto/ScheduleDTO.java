@@ -2,7 +2,9 @@ package com.averude.uksatse.scheduler.core.dto;
 
 import com.averude.uksatse.scheduler.core.entity.WorkDay;
 
-public class ScheduleDTO {
+import java.io.Serializable;
+
+public class ScheduleDTO implements Serializable {
 
     private Long employeeId;
     private Iterable<WorkDay> workDays;

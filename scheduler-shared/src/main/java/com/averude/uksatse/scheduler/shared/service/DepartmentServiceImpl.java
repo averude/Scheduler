@@ -1,7 +1,7 @@
 package com.averude.uksatse.scheduler.shared.service;
 
 import com.averude.uksatse.scheduler.core.entity.Department;
-import com.averude.uksatse.scheduler.core.extractor.TokenExtraDetailsExtractor;
+import com.averude.uksatse.scheduler.core.extractor.DataByAuthorityExtractor;
 import com.averude.uksatse.scheduler.shared.repository.DepartmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -13,21 +13,19 @@ import java.util.Optional;
 public class DepartmentServiceImpl
         extends AbstractService<Department, Long> implements DepartmentService {
 
-    private final DepartmentRepository departmentRepository;
-    private final TokenExtraDetailsExtractor detailsExtractor;
+    private final DataByAuthorityExtractor extractor;
 
     @Autowired
     DepartmentServiceImpl(DepartmentRepository departmentRepository,
-                          TokenExtraDetailsExtractor detailsExtractor){
+                          DataByAuthorityExtractor extractor){
         super(departmentRepository);
-        this.departmentRepository = departmentRepository;
-        this.detailsExtractor = detailsExtractor;
+        this.extractor = extractor;
     }
 
     @Override
     public Optional<Department> getCurrent(Authentication authentication) {
-        Long departmentId = detailsExtractor
-                .extractId(authentication, TokenExtraDetailsExtractor.DEPARTMENT_ID);
-        return departmentRepository.findById(departmentId);
+        return extractor.getData(authentication,
+                (departmentId, shiftId) -> findById(departmentId),
+                (departmentId, shiftId) -> findById(departmentId));
     }
 }

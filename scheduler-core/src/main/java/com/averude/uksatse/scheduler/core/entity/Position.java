@@ -34,6 +34,12 @@ public class Position implements HasId {
     @Column(nullable = false)
     private String name;
 
+    @Size(  max = 20,
+            min = 1,
+            message = "{position.name.size}")
+    @Column(name = "short_name")
+    private String shortName;
+
     @NotNull(message = "{position.department.null}")
     @Positive(message = "{position.department.negative}")
     @Column(name = "department_id",
@@ -71,6 +77,14 @@ public class Position implements HasId {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getShortName() {
+        return shortName;
+    }
+
+    public void setShortName(String shortName) {
+        this.shortName = shortName;
     }
 
     public Long getDepartmentId() {

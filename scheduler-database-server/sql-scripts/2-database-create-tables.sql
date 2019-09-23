@@ -11,6 +11,7 @@ CREATE TABLE positions (
   id            SERIAL,
   department_id INTEGER       NOT NULL,
   name          VARCHAR (128) NOT NULL,
+  short_name    VARCHAR (20),
   UNIQUE (department_id, name),
   PRIMARY KEY (id),
   FOREIGN KEY (department_id) REFERENCES departments(id) ON DELETE CASCADE
@@ -27,10 +28,10 @@ CREATE TABLE day_type_groups (
 CREATE TABLE day_types (
   id            SERIAL,
   department_id INTEGER       NOT NULL,
-  group_id      INTEGER   NOT NULL,
+  group_id      INTEGER       NOT NULL,
   name          VARCHAR (128) NOT NULL,
   label         VARCHAR (5),
-  default_value FLOAT         NOT NULL CHECK ( default_value >= 0 AND default_value <= 24 ),
+  default_value FLOAT         CHECK ( default_value >= 0 AND default_value <= 24 ),
   UNIQUE (department_id, name),
   PRIMARY KEY (id),
   FOREIGN KEY (department_id) REFERENCES departments(id) ON DELETE CASCADE,

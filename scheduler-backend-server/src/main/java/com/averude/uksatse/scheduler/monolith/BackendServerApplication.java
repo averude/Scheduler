@@ -19,7 +19,8 @@ import org.springframework.web.filter.CorsFilter;
         "com.averude.uksatse.scheduler.core.configuration",
         "com.averude.uksatse.scheduler.core.generator",
         "com.averude.uksatse.scheduler.core.errorhandler",
-        "com.averude.uksatse.scheduler.shared.service"
+        "com.averude.uksatse.scheduler.shared.extractor",
+        "com.averude.uksatse.scheduler.shared.service",
 })
 @EnableJpaRepositories("com.averude.uksatse.scheduler.shared.repository")
 public class BackendServerApplication {

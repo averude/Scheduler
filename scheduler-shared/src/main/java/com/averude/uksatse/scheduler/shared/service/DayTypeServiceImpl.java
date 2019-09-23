@@ -1,7 +1,7 @@
 package com.averude.uksatse.scheduler.shared.service;
 
 import com.averude.uksatse.scheduler.core.entity.DayType;
-import com.averude.uksatse.scheduler.core.extractor.TokenExtraDetailsExtractor;
+import com.averude.uksatse.scheduler.core.extractor.DataByAuthorityExtractor;
 import com.averude.uksatse.scheduler.shared.repository.DayTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -15,14 +15,14 @@ public class DayTypeServiceImpl
         extends AbstractService<DayType, Long> implements DayTypeService {
 
     private final DayTypeRepository dayTypeRepository;
-    private final TokenExtraDetailsExtractor detailsExtractor;
+    private final DataByAuthorityExtractor extractor;
 
     @Autowired
     public DayTypeServiceImpl(DayTypeRepository dayTypeRepository,
-                              TokenExtraDetailsExtractor detailsExtractor) {
+                              DataByAuthorityExtractor extractor) {
         super(dayTypeRepository);
         this.dayTypeRepository = dayTypeRepository;
-        this.detailsExtractor = detailsExtractor;
+        this.extractor = extractor;
     }
 
     @Override
@@ -34,7 +34,9 @@ public class DayTypeServiceImpl
     @Override
     @Transactional
     public List<DayType> findAllByAuth(Authentication authentication) {
-        Long departmentId = detailsExtractor.extractId(authentication, TokenExtraDetailsExtractor.DEPARTMENT_ID);
-        return findAllByDepartmentId(departmentId);
+        return extractor.getData(authentication,
+                (departmentId, shiftId) -> findAll(),
+                (departmentId, shiftId) -> findAllByDepartmentId(departmentId),
+                (departmentId, shiftId) -> findAllByDepartmentId(departmentId));
     }
 }
