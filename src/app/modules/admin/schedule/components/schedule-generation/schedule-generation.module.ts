@@ -5,18 +5,18 @@ import {
   MatDatepickerModule,
   MatDialogModule,
   MatInputModule,
-  MatNativeDateModule,
+  MatProgressBarModule,
   MatSelectModule,
   MatTableModule
 } from "@angular/material";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { ScheduleGenerationTableComponent } from './components/schedule-generation-table/schedule-generation-table.component';
 import { ScheduleGenerationDialogComponent } from './components/schedule-generation-dialog/schedule-generation-dialog.component';
 import { ScheduleGenerationComponent } from './components/schedule-generation/schedule-generation.component';
+import { MatMomentDateModule } from "@angular/material-moment-adapter";
+import { ScheduleGeneratedService } from "./components/schedule-generated.service";
 
 @NgModule({
   declarations: [
-    ScheduleGenerationTableComponent,
     ScheduleGenerationDialogComponent,
     ScheduleGenerationComponent
   ],
@@ -30,14 +30,16 @@ import { ScheduleGenerationComponent } from './components/schedule-generation/sc
     MatCheckboxModule,
     MatTableModule,
     MatDialogModule,
-    MatNativeDateModule
+    MatMomentDateModule,
+    MatProgressBarModule
   ],
   exports: [
     ScheduleGenerationComponent,
     ScheduleGenerationDialogComponent
   ],
   providers: [
-    MatNativeDateModule
+    MatMomentDateModule,
+    ScheduleGeneratedService
   ]
 })
 export class ScheduleGenerationModule { }

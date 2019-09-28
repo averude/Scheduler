@@ -5,7 +5,6 @@ import { AdminComponent } from './admin/admin.component';
 import { RoleGuard } from '../../guards/role-guard.service';
 import { StatisticsTableComponent } from "./schedule/components/statistics/components/statistics-table/statistics-table.component";
 import { ScheduleTabBarComponent } from "./schedule/components/schedule-tab-bar/schedule-tab-bar.component";
-import { ScheduleGenerationTableComponent } from "./schedule/components/schedule-generation/components/schedule-generation-table/schedule-generation-table.component";
 
 const routes: Routes = [
   {
@@ -30,10 +29,6 @@ const routes: Routes = [
           {
             path: 'statistics',
             component: StatisticsTableComponent
-          },
-          {
-            path: 'generation',
-            component: ScheduleGenerationTableComponent
           }
         ]
       }
