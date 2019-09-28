@@ -8,6 +8,7 @@ import { HolidayService } from "../../../services/holiday.service";
 import { ExtraWeekendService } from "../../../services/extra-weekend.service";
 import { forkJoin } from "rxjs";
 import { PaginatorService } from "../paginator.service";
+import { MatDatepicker } from "@angular/material";
 
 @Component({
   selector: 'app-month-year-paginator',
@@ -44,6 +45,12 @@ export class MonthYearPaginatorComponent implements OnInit {
 
   prevMonth() {
     this.currentDate = this.currentDate.subtract(1, 'month');
+    this.changeDate();
+  }
+
+  onMonthSelected(selectedDate: Moment, datepicker: MatDatepicker<Moment>) {
+    this.currentDate = selectedDate;
+    datepicker.close();
     this.changeDate();
   }
 
