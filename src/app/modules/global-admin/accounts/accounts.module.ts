@@ -13,6 +13,7 @@ import {
   MatSortModule,
   MatTableModule
 } from "@angular/material";
+import { RemoveDialogComponent } from "../../../shared/abstract-components/remove-dialog/remove-dialog.component";
 
 @NgModule({
   imports: [
@@ -30,8 +31,9 @@ import {
   ],
   declarations: [
     UserAccountsTableComponent,
-    UserAccountsDialogComponent
+    UserAccountsDialogComponent,
+    RemoveDialogComponent
   ],
-  entryComponents: [UserAccountsDialogComponent]
+  entryComponents: [UserAccountsDialogComponent, RemoveDialogComponent]
 })
 export class AccountsModule {}

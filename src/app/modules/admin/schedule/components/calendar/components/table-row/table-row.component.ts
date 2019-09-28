@@ -1,6 +1,4 @@
 import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   ElementRef,
   Input,
@@ -34,8 +32,7 @@ import { ShowHoursService } from "../show-hours-control/show-hours.service";
 @Component({
   selector: '[app-table-row]',
   templateUrl: './table-row.component.html',
-  styleUrls: ['./table-row.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./table-row.component.css']
 })
 export class TableRowComponent implements OnInit, OnChanges, OnDestroy {
 
@@ -73,7 +70,6 @@ export class TableRowComponent implements OnInit, OnChanges, OnDestroy {
   private paginatorSub: Subscription;
 
   constructor(public elementRef: ElementRef,
-              private cd: ChangeDetectorRef,
               private scheduleService: ScheduleService,
               private scheduleGenerationService: ScheduleGenerationService,
               private patternUnitService: PatternUnitService,
@@ -86,14 +82,12 @@ export class TableRowComponent implements OnInit, OnChanges, OnDestroy {
     this.paginatorSub = this.paginatorService.dates
       .subscribe(daysInMonth => {
         this.daysInMonth = daysInMonth;
-        this.cd.markForCheck();
       });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['schedule']) {
       this.calculateSum();
-      this.cd.markForCheck();
     }
   }
 
@@ -141,12 +135,13 @@ export class TableRowComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  generateScheduleWithCustomHours() {
+  generateScheduleByCustomDay(dayType: DayType) {
     this.scheduleGenerationService
-      .generateScheduleWithCustomHours(
+      .generateScheduleBySingleDay(
         this.employee.id,
         this.selectableRowDirective.selectedCells,
         this.customHours,
+        dayType,
         this.scheduleGeneratedHandler,
         this.errorHandler);
   }
@@ -173,7 +168,7 @@ export class TableRowComponent implements OnInit, OnChanges, OnDestroy {
       .generateScheduleBySingleDay(
         this.employee.id,
         this.selectableRowDirective.selectedCells,
-        this.customHours,
+        dayType.defaultValue,
         dayType,
         this.scheduleGeneratedHandler,
         this.errorHandler);
@@ -194,21 +189,18 @@ export class TableRowComponent implements OnInit, OnChanges, OnDestroy {
           .subscribe(res => {
             res.forEach(workDay => this.schedule.push(workDay));
             this.calculateSum();
-            this.cd.markForCheck();
             this.notificationService.success(
               'Created',
               'Schedule sent successfully');
           }, err => cells.forEach(cell => cell.revertChanges()));
-      }
-      if (updatedSchedule.length > 0) {
-        this.scheduleService.update(updatedSchedule)
-          .subscribe(res => {
+    }
+    if (updatedSchedule.length > 0) {
+      this.scheduleService.update(updatedSchedule)
+        .subscribe(res => {
             updatedCells.forEach(cell => {
-              cell.setLabel();
-              cell.cd.markForCheck();
+              cell.refreshLabel();
             });
             this.calculateSum();
-            this.cd.markForCheck();
             this.notificationService.success(
                 'Updated',
                 'Schedule sent successfully');
@@ -217,6 +209,10 @@ export class TableRowComponent implements OnInit, OnChanges, OnDestroy {
   };
 
   private errorHandler = message => this.notificationService.error('Error', message);
+
+  getDayTypesWithDefaultHours(): DayType[] {
+    return this.dayTypes.filter(dayType => dayType.defaultValue !== null);
+  }
 
   clearSelection() {
     this.selectableRowDirective.clearSelection();

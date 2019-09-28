@@ -1,10 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ShiftService } from "../../../../../../../services/shift.service";
 import { ScheduleService } from "../../../../../../../services/schedule.service";
-import { ShiftGenerationUnit } from "../../../../../../../model/ui/shift-generation-unit";
-import { dateToISOString } from "../../../../../../../shared/utils/utils";
+import { ShiftGenerationUnit, toScheduleGenerationDto } from "../../../../../../../model/ui/shift-generation-unit";
 import { MatDialog, MatDialogConfig } from "@angular/material";
 import { ScheduleGenerationDialogComponent } from "../schedule-generation-dialog/schedule-generation-dialog.component";
+import * as moment from "moment";
+import { ScheduleGeneratedService } from "../schedule-generated.service";
+import { NotificationsService } from "angular2-notifications";
+import { from } from "rxjs";
+import { concatMap } from "rxjs/operators";
 
 @Component({
   selector: 'app-schedule-generation',
@@ -17,18 +21,20 @@ export class ScheduleGenerationComponent implements OnInit {
 
   constructor(private dialog: MatDialog,
               private shiftService: ShiftService,
-              private scheduleService: ScheduleService) { }
+              private scheduleService: ScheduleService,
+              private notificationsService: NotificationsService,
+              private scheduleGeneratedService: ScheduleGeneratedService) {
+  }
 
   ngOnInit() {
     this.shiftService.getAll()
       .subscribe(shifts => {
         const data: ShiftGenerationUnit[] = [];
         shifts.forEach(shift => data.push({
-          shiftId: shift.id,
-          shiftName: shift.name,
+          shift: shift,
           offset: 0,
-          from: new Date(new Date().getUTCFullYear(), 0, 1),
-          to: new Date(new Date().getUTCFullYear(), 11, 31)
+          from: moment.utc().startOf("year"),
+          to: moment.utc().endOf("year")
         }));
         this.units = data;
       });
@@ -42,13 +48,19 @@ export class ScheduleGenerationComponent implements OnInit {
 
     this.dialog.open(ScheduleGenerationDialogComponent, dialogConfig)
       .afterClosed()
-      .subscribe(selected => {
-        if (selected && selected.lenght > 0) {
-          selected.forEach(unit => this.scheduleService
-            .generate(unit.shiftId, dateToISOString(unit.from), dateToISOString(unit.to), unit.offset)
-            .subscribe(res => console.log(res)));
-        }
-      });
+      .subscribe(this.onDialogClosed);
   }
 
+  get onDialogClosed(): (selected: ShiftGenerationUnit[]) => void {
+    return (selected: ShiftGenerationUnit[]) => {
+      if (selected && selected.length > 0) {
+
+        let dtos = selected.map(unit => toScheduleGenerationDto(unit));
+
+        from(dtos).pipe(
+          concatMap(generationDto => this.scheduleService.generate(generationDto))
+        ).subscribe(res => this.notificationsService.success('Generated', res));
+      }
+    }
+  }
 }

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Shift } from "../../../../../../../model/shift";
 import { Position } from "../../../../../../../model/position";
 import { Employee } from "../../../../../../../model/employee";
@@ -12,8 +12,7 @@ import { ScheduleDto } from "../../../../../../../model/dto/schedule-dto";
 @Component({
   selector: '[app-table-shift-group]',
   templateUrl: './table-shift-group.component.html',
-  styleUrls: ['./table-shift-group.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./table-shift-group.component.css']
 })
 export class TableShiftGroupComponent implements OnInit {
   numberOfColumns: number;

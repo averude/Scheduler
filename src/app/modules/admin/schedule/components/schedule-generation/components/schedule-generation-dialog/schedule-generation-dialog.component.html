@@ -19,20 +19,20 @@
 
   <ng-container matColumnDef="shift">
     <th mat-header-cell *matHeaderCellDef>Shift</th>
-    <td mat-cell *matCellDef="let shift">{{shift.shiftName}}</td>
+    <td mat-cell *matCellDef="let shiftGenUnit">{{shiftGenUnit.shift.name}}</td>
   </ng-container>
 
   <ng-container matColumnDef="offset">
     <th mat-header-cell *matHeaderCellDef>Offset</th>
-    <td mat-cell *matCellDef="let shift">
-      <input matInput [(ngModel)]="shift.offset">
+    <td mat-cell *matCellDef="let shiftGenUnit">
+      <input matInput [(ngModel)]="shiftGenUnit.offset">
     </td>
   </ng-container>
 
   <ng-container matColumnDef="dateFrom">
     <th mat-header-cell *matHeaderCellDef>Date from</th>
-    <td mat-cell *matCellDef="let shift">
-      <input matInput [matDatepicker]="picker" [(ngModel)]="shift.from" placeholder="Choose a date">
+    <td mat-cell *matCellDef="let shiftGenUnit">
+      <input matInput [matDatepicker]="picker" [(ngModel)]="shiftGenUnit.from" placeholder="Choose a date">
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>
     </td>

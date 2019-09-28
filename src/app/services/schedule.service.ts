@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { RestConfig } from '../rest.config';
 import { ScheduleDto } from "../model/dto/schedule-dto";
+import { ScheduleGenerationDto } from "../model/dto/schedule-generation-dto";
 
 @Injectable({
   providedIn: 'root'
@@ -35,13 +36,11 @@ export class ScheduleService {
     );
   }
 
-  generate(shiftId: number,
-           from: string,
-           to: string,
-           offset: number): Observable<any> {
-    return this.http.post<any>(
-      `${this.config.baseUrl}/schedule/generate?shiftId=${shiftId}&from=${from}&to=${to}&offset=${offset}`,
-      null
+  generate(scheduleGenerationDTO: ScheduleGenerationDto): Observable<any> {
+    return this.http.post(
+      `${this.config.baseUrl}/schedule/generate`,
+      scheduleGenerationDTO,
+      {responseType: 'text'}
     );
   }
 }

@@ -48,7 +48,7 @@ export class TableCellComponent implements OnInit, OnChanges {
   className = "selected";
 
   constructor(public elementRef: ElementRef,
-              public cd: ChangeDetectorRef,
+              private cd: ChangeDetectorRef,
               private showHoursService: ShowHoursService) { }
 
   ngOnInit() {
@@ -59,25 +59,25 @@ export class TableCellComponent implements OnInit, OnChanges {
     this.showHoursService.isShown.subscribe(isShown => {
       this.showHours = isShown;
       if (this.workDay) {
-        this.setLabel();
-        this.cd.markForCheck();
+        this.refreshLabel();
       }
     });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['workDay']) {
-      this.setLabel();
+      setLabel(this);
     }
   }
 
   revertChanges() {
     this.currValue = this.prevValue;
-    this.cd.markForCheck();
+    this.refreshLabel();
   }
 
-  setLabel() {
+  refreshLabel() {
     setLabel(this);
+    this.cd.markForCheck();
   }
 
   @HostListener('mousedown')
