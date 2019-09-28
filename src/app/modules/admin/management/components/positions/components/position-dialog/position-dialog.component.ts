@@ -25,6 +25,8 @@ export class PositionDialogComponent extends DialogBaseComponent<Position>{
       name: ['', [Validators.required,
                   Validators.minLength(3),
                   Validators.maxLength(64)]],
+      shortName: [null,[Validators.minLength(1),
+                        Validators.maxLength(20)]],
       departmentId: [this.tempMethod(), [Validators.required]]
     });
   }
@@ -33,6 +35,7 @@ export class PositionDialogComponent extends DialogBaseComponent<Position>{
     this.dialogForm.setValue({
       id: position.id,
       name: position.name,
+      shortName: position.shortName,
       departmentId: position.departmentId
     })
   }

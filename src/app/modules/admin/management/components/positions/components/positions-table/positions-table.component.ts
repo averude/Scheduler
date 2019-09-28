@@ -17,7 +17,7 @@ import { TableBaseComponent } from "../../../../../../../shared/abstract-compone
   ]
 })
 export class PositionsTableComponent extends TableBaseComponent<Position> {
-  displayedColumns = ['select', 'name', 'quantity', 'control'];
+  displayedColumns = ['select', 'name', 'shortName', 'quantity', 'control'];
 
   employeesCount: CountDTO[];
 

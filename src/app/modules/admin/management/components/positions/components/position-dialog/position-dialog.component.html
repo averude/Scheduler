@@ -8,6 +8,13 @@
     <mat-error *ngIf="isControlInvalid('name')">{{getErrorMessage()}}</mat-error>
   </mat-form-field>
 
+  <mat-form-field>
+    <input matInput
+           placeholder="Position's short name"
+           formControlName="shortName">
+    <mat-error *ngIf="isControlInvalid('shortName')">{{getErrorMessage()}}</mat-error>
+  </mat-form-field>
+
 </mat-dialog-content>
 
 <mat-dialog-actions>
