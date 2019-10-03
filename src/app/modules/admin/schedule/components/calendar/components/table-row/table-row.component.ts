@@ -11,22 +11,23 @@ import {
   ViewChildren,
 } from '@angular/core';
 import { ContextMenuComponent, ContextMenuService } from 'ngx-contextmenu';
-import { Employee } from '../../../../../model/employee';
-import { Position } from '../../../../../model/position';
-import { ScheduleService } from '../../../../../services/schedule.service';
-import { ScheduleGenerationService } from '../../../../../services/schedule-generation.service';
-import { WorkDay } from '../../../../../model/workday';
-import { ShiftPattern } from '../../../../../model/shift-pattern';
+import { Employee } from '../../../../../../../model/employee';
+import { Position } from '../../../../../../../model/position';
+import { ScheduleService } from '../../../../../../../services/schedule.service';
+import { ScheduleGenerationService } from '../../../../../../../services/schedule-generation.service';
+import { WorkDay } from '../../../../../../../model/workday';
+import { ShiftPattern } from '../../../../../../../model/shift-pattern';
 import { Observable, Subscription } from 'rxjs';
-import { PatternUnitService } from '../../../../../services/pattern-unit.service';
+import { PatternUnitService } from '../../../../../../../services/pattern-unit.service';
 import { NotificationsService } from "angular2-notifications";
-import { CalendarDay } from "../../../../../model/ui/calendar-day";
-import { PaginatorService } from "../../../../../shared/paginators/paginator.service";
-import { DayType } from "../../../../../model/day-type";
-import { SelectableRowDirective } from "../../../../../shared/directives/selectable-row.directive";
-import { fillInTheCells, roundToTwo } from "../../../../../shared/utils/utils";
-import { DayTypeGroup } from "../../../../../model/day-type-group";
+import { CalendarDay } from "../../../../../../../model/ui/calendar-day";
+import { PaginatorService } from "../../../../../../../shared/paginators/paginator.service";
+import { DayType } from "../../../../../../../model/day-type";
+import { SelectableRowDirective } from "../../../../../../../shared/directives/selectable-row.directive";
+import { roundToTwo } from "../../../../../../../shared/utils/utils";
+import { DayTypeGroup } from "../../../../../../../model/day-type-group";
 import { TableCellComponent } from "../table-cell/table-cell.component";
+import { ShowHoursService } from "../show-hours-control/show-hours.service";
 
 @Component({
   selector: '[app-table-row]',
@@ -40,7 +41,6 @@ export class TableRowComponent implements OnInit, OnChanges, OnDestroy {
   @Input() patterns:      ShiftPattern[];
   @Input() dayTypes:      DayType[];
   @Input() dayTypeGroups: DayTypeGroup[];
-
   @Input() schedule:      WorkDay[];
 
   @Input() mouseMove$:    Observable<number>;
@@ -69,27 +69,25 @@ export class TableRowComponent implements OnInit, OnChanges, OnDestroy {
   // Observable subscriptions
   private paginatorSub: Subscription;
 
-  constructor(public  elementRef: ElementRef,
+  constructor(public elementRef: ElementRef,
               private scheduleService: ScheduleService,
               private scheduleGenerationService: ScheduleGenerationService,
               private patternUnitService: PatternUnitService,
               private paginatorService: PaginatorService,
+              private showHoursService: ShowHoursService,
               private contextMenuService: ContextMenuService,
               private notificationService: NotificationsService) { }
 
   ngOnInit() {
     this.paginatorSub = this.paginatorService.dates
-      .subscribe(daysInMonth => this.daysInMonth = daysInMonth);
+      .subscribe(daysInMonth => {
+        this.daysInMonth = daysInMonth;
+      });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['schedule']) {
-      setTimeout(() => {
-        if (this.cells) {
-          fillInTheCells(this.schedule, this.cells, this.dayTypes, this.dayTypeGroups);
-        }
-        this.calculateSum();
-      }, 1);
+      this.calculateSum();
     }
   }
 
@@ -100,6 +98,10 @@ export class TableRowComponent implements OnInit, OnChanges, OnDestroy {
   calculateSum(): void {
     this.calculateWorkingTimeSum();
     this.calculateWorkingHolidaysSum();
+  }
+
+  getWorkingDay(date: string): WorkDay {
+    return this.schedule ? this.schedule.find(value => value.date === date) : null;
   }
 
   private calculateWorkingTimeSum(): void {
@@ -133,26 +135,26 @@ export class TableRowComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  generateScheduleWithCustomHours() {
+  generateScheduleByCustomDay(dayType: DayType) {
     this.scheduleGenerationService
-      .generateScheduleWithCustomHours(
+      .generateScheduleBySingleDay(
         this.employee.id,
-        this.schedule,
-        this.selectableRowDirective.selectedDays,
+        this.selectableRowDirective.selectedCells,
         this.customHours,
+        dayType,
         this.scheduleGeneratedHandler,
         this.errorHandler);
   }
 
-  generateSchedule(days: CalendarDay[],
-                   pattern: ShiftPattern) {
+  generateSchedule(pattern: ShiftPattern) {
+    const selectedCells = this.selectableRowDirective.selectedCells;
+
     this.patternUnitService.getByPatternId(pattern.id)
       .subscribe(patternUnits => {
         this.scheduleGenerationService
           .generateScheduleWithPattern(
             this.employee.id,
-            this.schedule,
-            days,
+            selectedCells,
             patternUnits,
             this.offset,
             pattern.overrideExistingValues,
@@ -165,41 +167,52 @@ export class TableRowComponent implements OnInit, OnChanges, OnDestroy {
     this.scheduleGenerationService
       .generateScheduleBySingleDay(
         this.employee.id,
-        this.schedule,
-        this.selectableRowDirective.selectedDays,
-        this.customHours,
+        this.selectableRowDirective.selectedCells,
+        dayType.defaultValue,
         dayType,
         this.scheduleGeneratedHandler,
         this.errorHandler);
   }
 
-  private scheduleGeneratedHandler = (createdSchedule, updatedSchedule) => {
-      if (createdSchedule.length > 0) {
-        this.scheduleService.create(
-          createdSchedule
-        ).subscribe(res => {
-              res.forEach(workDay => this.schedule.push(workDay));
-              fillInTheCells(this.schedule, this.cells, this.dayTypes, this.dayTypeGroups);
-              this.calculateSum();
-              this.notificationService.success(
-                'Created',
-                'Schedule sent successfully');
+  private scheduleGeneratedHandler = (cells) => {
+    const createdSchedule = cells
+      .filter(cell => !cell.workDay.id)
+      .map(cell => cell.workDay);
+
+    let updatedCells = cells
+      .filter(cell => cell.workDay.id);
+    const updatedSchedule = updatedCells
+      .map(cell => cell.workDay);
+
+    if (createdSchedule.length > 0) {
+        this.scheduleService.create(createdSchedule)
+          .subscribe(res => {
+            res.forEach(workDay => this.schedule.push(workDay));
+            this.calculateSum();
+            this.notificationService.success(
+              'Created',
+              'Schedule sent successfully');
+          }, err => cells.forEach(cell => cell.revertChanges()));
+    }
+    if (updatedSchedule.length > 0) {
+      this.scheduleService.update(updatedSchedule)
+        .subscribe(res => {
+            updatedCells.forEach(cell => {
+              cell.refreshLabel();
             });
-      }
-      if (updatedSchedule.length > 0) {
-        this.scheduleService.update(
-          updatedSchedule
-        ).subscribe(res => {
-              fillInTheCells(this.schedule, this.cells, this.dayTypes, this.dayTypeGroups);
-              this.calculateSum();
-              this.notificationService.success(
+            this.calculateSum();
+            this.notificationService.success(
                 'Updated',
                 'Schedule sent successfully');
-            });
+          }, err => cells.forEach(cell => cell.revertChanges()));
       }
   };
 
   private errorHandler = message => this.notificationService.error('Error', message);
+
+  getDayTypesWithDefaultHours(): DayType[] {
+    return this.dayTypes.filter(dayType => dayType.defaultValue !== null);
+  }
 
   clearSelection() {
     this.selectableRowDirective.clearSelection();

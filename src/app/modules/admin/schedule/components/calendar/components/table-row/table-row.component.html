@@ -16,13 +16,16 @@
       }}
     </div>
     <div class="position-label">
-      {{position?.name}}
+      {{position?.shortName}}
     </div>
   </td>
   <td class="table-cell"
       *ngFor="let day of daysInMonth"
       app-table-cell
       [day]="day"
+      [workDay]="getWorkingDay(day.isoString)"
+      [dayTypes]="dayTypes"
+      [dayTypeGroups]="dayTypeGroups"
       [class.weekend]="day.weekend"
       [class.holiday]="day.holiday">
   </td>
@@ -37,31 +40,7 @@
 
 
 <context-menu (close)="clearSelection()">
-  <ng-template contextMenuItem
-               [subMenu]="customHoursSubMenu">
-    Custom hours
-  </ng-template>
-  <context-menu #customHoursSubMenu>
-    <ng-template contextMenuItem
-                 passive="true">
-      <mat-form-field appearance="legacy">
-        <mat-label>Hours</mat-label>
-        <input matInput
-               type="number"
-               step="0.05"
-               [(ngModel)]="customHours"
-               required/>
-        <mat-hint>Between 0 and 24</mat-hint>
-      </mat-form-field>
-    </ng-template>
-    <ng-template contextMenuItem
-                 [enabled]="customHours >= 0 && customHours <= 24"
-                 (execute)="generateScheduleWithCustomHours()">
-      Create custom schedule
-    </ng-template>
-  </context-menu>
-
-  <context-menu #singleDaySubMenu>
+  <context-menu #customDaySubMenu>
     <ng-template contextMenuItem
                  passive="true">
       <mat-form-field appearance="legacy">
@@ -77,6 +56,17 @@
     <ng-template *ngFor="let dayType of dayTypes"
                  contextMenuItem
                  [enabled]="customHours >= 0 && customHours <= 24"
+                 (execute)="generateScheduleByCustomDay(dayType)">
+      {{dayType.name}}
+    </ng-template>
+  </context-menu>
+  <ng-template contextMenuItem [subMenu]="customDaySubMenu">
+    Custom day
+  </ng-template>
+
+  <context-menu #singleDaySubMenu>
+    <ng-template *ngFor="let dayType of getDayTypesWithDefaultHours()"
+                 contextMenuItem
                  (execute)="generateScheduleBySingleDay(dayType)">
       {{dayType.name}}
     </ng-template>
@@ -103,7 +93,7 @@
       </ng-template>
       <ng-template contextMenuItem
                    [enabled]="offset >= 0"
-                   (execute)="generateSchedule($event.item, pattern)">
+                   (execute)="generateSchedule(pattern)">
         Create schedule
       </ng-template>
     </context-menu>

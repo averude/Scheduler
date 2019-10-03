@@ -33,6 +33,11 @@
       <td mat-cell *matCellDef="let position">{{position.name}}</td>
     </ng-container>
 
+    <ng-container matColumnDef="shortName">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Short name</th>
+      <td mat-cell *matCellDef="let position">{{position.shortName}}</td>
+    </ng-container>
+
     <ng-container matColumnDef="quantity">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Quantity</th>
       <td mat-cell *matCellDef="let position">{{getQuantity(position.id)}}</td>

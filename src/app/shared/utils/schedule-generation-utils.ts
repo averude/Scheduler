@@ -1,53 +1,35 @@
-import { CalendarDay } from "../../model/ui/calendar-day";
 import { PatternUnit } from "../../model/pattern-unit";
 import { WorkDay } from "../../model/workday";
+import { TableCellComponent } from "../../modules/admin/schedule/components/calendar/components/table-cell/table-cell.component";
 
-export function createWorkDay(employeeId: number,
-                              day: CalendarDay,
-                              unit: PatternUnit): WorkDay {
-  const workDay = new WorkDay();
-
-  workDay.employeeId  = employeeId;
-  workDay.holiday     = day.holiday;
-  workDay.hours       = unit.value;
-  workDay.date        = day.isoString;
-  workDay.dayTypeId   = unit.dayTypeId;
-
-  return workDay;
-}
-
-export function updateWorkDay(overrideExistingValues: boolean,
-                              workDay: WorkDay,
-                              day: CalendarDay,
-                              unit: PatternUnit): WorkDay {
-  if (overrideExistingValues) {
-    workDay.hours   = unit.value;
-  }
-  workDay.dayTypeId = unit.dayTypeId;
-  workDay.holiday   = day.holiday;
-
-  return workDay;
-}
-
-export function createOrUpdateWorkDay(overrideExistingValues: boolean,
-                               employeeId: number,
-                               workDay: WorkDay,
-                               unit: PatternUnit,
-                               day: CalendarDay,
-                               created: WorkDay[],
-                               updated: WorkDay[]) {
-  if (workDay) {
-    updated.push(updateWorkDay(overrideExistingValues, workDay, day, unit));
+export function createOrUpdateCell(overrideExistingValues: boolean,
+                                   employeeId: number,
+                                   unit: PatternUnit,
+                                   cell: TableCellComponent) {
+  if (cell.workDay) {
+    updateWorkDayInCell(overrideExistingValues, cell, unit);
   } else {
-    created.push(createWorkDay(employeeId, day, unit));
+    createWorkDayInCell(employeeId, cell, unit);
   }
 }
 
-export function findWorkingDay(schedule: WorkDay[],
-                               employeeId: number,
-                               day: CalendarDay): WorkDay {
-  return schedule
-    .find(value =>
-      value.employeeId === employeeId
-      && value.date === day.isoString);
+function createWorkDayInCell(employeeId: number,
+                             cell: TableCellComponent,
+                             unit: PatternUnit) {
+  cell.workDay            = new WorkDay();
+  cell.workDay.employeeId = employeeId;
+  cell.workDay.holiday    = cell.day.holiday;
+  cell.workDay.hours      = unit.value;
+  cell.workDay.date       = cell.day.isoString;
+  cell.workDay.dayTypeId  = unit.dayTypeId;
+}
+
+function updateWorkDayInCell(overrideExistingValues: boolean,
+                             cell: TableCellComponent,
+                             unit: PatternUnit) {
+  if (overrideExistingValues) {
+    cell.workDay.hours   = unit.value;
+  }
+  cell.workDay.dayTypeId = unit.dayTypeId;
+  cell.workDay.holiday   = cell.day.holiday;
 }

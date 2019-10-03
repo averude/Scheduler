@@ -1,0 +1,14 @@
+<!--Year and month-->
+<mat-form-field>
+  <input matInput
+         [(ngModel)]="date"
+         [matDatepicker]="picker"
+         placeholder="Choose a date">
+  <mat-datepicker-toggle matSuffix
+                         [for]="picker"></mat-datepicker-toggle>
+  <mat-datepicker #picker
+                  startView="year"
+                  (monthSelected)="chosenMonthHandler($event, picker)"></mat-datepicker>
+</mat-form-field>
+
+<button (click)="generateAndSaveReport()">Generate and save report</button>

@@ -1,27 +1,20 @@
-import {
-  ChangeDetectorRef,
-  Component,
-  Input,
-  OnChanges,
-  OnInit,
-  SimpleChanges
-} from '@angular/core';
-import { Shift } from "../../../../../model/shift";
-import { Position } from "../../../../../model/position";
-import { Employee } from "../../../../../model/employee";
+import { Component, Input, OnInit } from '@angular/core';
+import { Shift } from "../../../../../../../model/shift";
+import { Position } from "../../../../../../../model/position";
+import { Employee } from "../../../../../../../model/employee";
 import { Observable } from "rxjs";
-import { ShiftPattern } from "../../../../../model/shift-pattern";
-import { PaginatorService } from "../../../../../shared/paginators/paginator.service";
-import { DayType } from "../../../../../model/day-type";
-import { DayTypeGroup } from "../../../../../model/day-type-group";
-import { ScheduleDto } from "../../../../../model/dto/schedule-dto";
+import { ShiftPattern } from "../../../../../../../model/shift-pattern";
+import { PaginatorService } from "../../../../../../../shared/paginators/paginator.service";
+import { DayType } from "../../../../../../../model/day-type";
+import { DayTypeGroup } from "../../../../../../../model/day-type-group";
+import { ScheduleDto } from "../../../../../../../model/dto/schedule-dto";
 
 @Component({
   selector: '[app-table-shift-group]',
   templateUrl: './table-shift-group.component.html',
   styleUrls: ['./table-shift-group.component.css']
 })
-export class TableShiftGroupComponent implements OnInit, OnChanges {
+export class TableShiftGroupComponent implements OnInit {
   numberOfColumns: number;
 
   @Input() mouseMove$:    Observable<number>;
@@ -39,18 +32,11 @@ export class TableShiftGroupComponent implements OnInit, OnChanges {
 
   isHidden: boolean = false;
 
-  constructor(private cd: ChangeDetectorRef,
-              private paginatorService: PaginatorService) {
-
-  }
+  constructor(private paginatorService: PaginatorService) {}
 
   ngOnInit() {
     this.paginatorService.dates
       .subscribe(daysInMonth => this.numberOfColumns = daysInMonth.length + 4);
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-
   }
 
   getPosition(employee: Employee): Position {

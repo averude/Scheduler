@@ -1,10 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { SchedulesTableComponent } from './calendar/components/schedules-table/schedules-table.component';
+import { SchedulesTableComponent } from './schedule/components/calendar/components/schedules-table/schedules-table.component';
 import { AdminComponent } from './admin/admin.component';
 import { RoleGuard } from '../../guards/role-guard.service';
-import { StatisticsTableComponent } from "./statistics/components/statistics-table/statistics-table.component";
-import { ScheduleTabBarComponent } from "./schedule-tab-bar/schedule-tab-bar.component";
+import { StatisticsTableComponent } from "./schedule/components/statistics/components/statistics-table/statistics-table.component";
+import { ScheduleTabBarComponent } from "./schedule/components/schedule-tab-bar/schedule-tab-bar.component";
+import { ReportFormComponent } from "./reports/components/report-form/report-form.component";
 
 const routes: Routes = [
   {
@@ -29,6 +30,10 @@ const routes: Routes = [
           {
             path: 'statistics',
             component: StatisticsTableComponent
+          },
+          {
+            path: 'reports',
+            component: ReportFormComponent
           }
         ]
       }

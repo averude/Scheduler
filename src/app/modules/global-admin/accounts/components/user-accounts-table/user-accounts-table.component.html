@@ -33,7 +33,7 @@
     </ng-container>
 
     <ng-container matColumnDef="firstName">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Username</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>First name</th>
       <td mat-cell *matCellDef="let userAccount">{{userAccount.firstName}}</td>
     </ng-container>
 
@@ -43,7 +43,7 @@
     </ng-container>
 
     <ng-container matColumnDef="department">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>First name</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Department</th>
       <td mat-cell *matCellDef="let userAccount">{{getDepartmentById(userAccount.departmentId)?.name}}</td>
     </ng-container>
 

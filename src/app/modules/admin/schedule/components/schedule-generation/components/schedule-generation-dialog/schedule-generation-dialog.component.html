@@ -1,0 +1,55 @@
+<table mat-table [dataSource]="dataSource" style="width: 100%">
+
+  <ng-container matColumnDef="select">
+    <th mat-header-cell *matHeaderCellDef>
+      <mat-checkbox (change)="$event ? masterToggle() : null"
+                    [checked]="selection.hasValue() && isAllSelected()"
+                    [indeterminate]="selection.hasValue() && !isAllSelected()"
+                    [aria-label]="checkboxLabel()">
+      </mat-checkbox>
+    </th>
+    <td mat-cell *matCellDef="let row">
+      <mat-checkbox (click)="$event.stopPropagation()"
+                    (change)="$event ? selection.toggle(row) : null"
+                    [checked]="selection.isSelected(row)"
+                    [aria-label]="checkboxLabel(row)">
+      </mat-checkbox>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="shift">
+    <th mat-header-cell *matHeaderCellDef>Shift</th>
+    <td mat-cell *matCellDef="let shiftGenUnit">{{shiftGenUnit.shift.name}}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="offset">
+    <th mat-header-cell *matHeaderCellDef>Offset</th>
+    <td mat-cell *matCellDef="let shiftGenUnit">
+      <input matInput [(ngModel)]="shiftGenUnit.offset">
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="dateFrom">
+    <th mat-header-cell *matHeaderCellDef>Date from</th>
+    <td mat-cell *matCellDef="let shiftGenUnit">
+      <input matInput [matDatepicker]="picker" [(ngModel)]="shiftGenUnit.from" placeholder="Choose a date">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="dateTo">
+    <th mat-header-cell *matHeaderCellDef>Date to</th>
+    <td mat-cell *matCellDef="let shift">
+      <input matInput [matDatepicker]="picker" [(ngModel)]="shift.to" placeholder="Choose a date">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+<button (click)="generate()"
+        [disabled]="selection.selected.length <= 0">Generate</button>
+<button (click)="close()">Close</button>

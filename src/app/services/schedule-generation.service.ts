@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { PatternUnit } from '../model/pattern-unit';
-import { WorkDay } from '../model/workday';
-import { CalendarDay } from "../model/ui/calendar-day";
 import { DayType } from "../model/day-type";
-import { createOrUpdateWorkDay, findWorkingDay } from "../shared/utils/schedule-generation-utils";
+import { createOrUpdateCell } from "../shared/utils/schedule-generation-utils";
+import { TableCellComponent } from "../modules/admin/schedule/components/calendar/components/table-cell/table-cell.component";
 
 @Injectable({
   providedIn: 'root'
@@ -13,99 +12,84 @@ export class ScheduleGenerationService {
   constructor() { }
 
   generateScheduleWithPattern(employeeId: number,
-                              schedule: WorkDay[],
-                              days: CalendarDay[],
+                              cells: TableCellComponent[],
                               patternUnits: PatternUnit[],
                               offset: number,
                               overrideExistingValues: boolean,
-                              onSave: (createdSchedule: WorkDay[],
-                                        updatedSchedule: WorkDay[]) => void,
+                              onSave: (cells: TableCellComponent[]) => void,
                               onError: (message: string) => void) {
-    this.generate(employeeId, schedule, days, patternUnits, offset, overrideExistingValues, onSave, onError);
+    this.generate(employeeId, cells, patternUnits, offset, overrideExistingValues, onSave, onError);
   }
 
   generateScheduleWithCustomHours(employeeId: number,
-                                  schedule: WorkDay[],
-                                  days: CalendarDay[],
+                                  cells: TableCellComponent[],
                                   hours: number,
-                                  onSave: (createdSchedule: WorkDay[],
-                                           updatedSchedule: WorkDay[]) => void,
+                                  onSave: (cells: TableCellComponent[]) => void,
                                   onError: (message: string) => void) {
     const patternUnit = new PatternUnit();
     patternUnit.value = hours;
     const customUnits: PatternUnit[] = [patternUnit];
 
-    this.generate(employeeId, schedule, days, customUnits, 0, true,  onSave, onError);
+    this.generate(employeeId, cells, customUnits, 0, true,  onSave, onError);
   }
 
   generateScheduleBySingleDay(employeeId: number,
-                              schedule: WorkDay[],
-                              days: CalendarDay[],
+                              cells: TableCellComponent[],
                               hours: number,
                               dayType: DayType,
-                              onSave: (createdSchedule: WorkDay[],
-                                       updatedSchedule: WorkDay[]) => void,
+                              onSave: (cells: TableCellComponent[]) => void,
                               onError: (message: string) => void) {
     const patternUnit = new PatternUnit();
     patternUnit.value = hours;
     patternUnit.dayTypeId = dayType.id;
     const customUnits: PatternUnit[] = [patternUnit];
 
-    this.generate(employeeId, schedule, days, customUnits, 0, true, onSave, onError);
+    this.generate(employeeId, cells, customUnits, 0, true, onSave, onError);
   }
 
   private generate(employeeId: number,
-                   schedule: WorkDay[],
-                   days: CalendarDay[],
+                   cells: TableCellComponent[],
                    patternUnits: PatternUnit[],
                    offset: number,
                    overrideExistingValues: boolean,
-                   onSave: (createdSchedule: WorkDay[],
-                            updatedSchedule: WorkDay[]) => void,
+                   onSave: (cells: TableCellComponent[]) => void,
                    onError: (message: string) => void) {
-    if (!schedule || !days || !patternUnits || !(patternUnits.length > 0)) {
+    if (!cells || !patternUnits || !(patternUnits.length > 0)) {
       onError('Illegal arguments');
       return;
     }
 
-    schedule = schedule
-      .filter(workDay => days.map(day => day.isoString)
-        .includes(workDay.date));
+    const schedule = cells
+      .filter(cell => cell.workDay)
+      .map(cell => cell.workDay);
 
     if (!overrideExistingValues) {
-      if (schedule.length !== days.length) {
-        onError('Selected dates doesn\'t have _schedule');
+      if (schedule.length !== cells.length) {
+        onError('Selected dates doesn\'t have schedule');
         return;
       }
     }
 
-    const createdSchedule: WorkDay[] = [];
-    const updatedSchedule: WorkDay[] = [];
-    const datesSize = days.length;
+    const cellsNum = cells.length;
     const unitsSize = patternUnits.length;
 
-    for (let i = 0; i < datesSize; i += unitsSize) {
+    for (let i = 0; i < cellsNum; i += unitsSize) {
       for (let j = 0; j < unitsSize; j++) {
-        const date_index = i + j;
+        const cell_index = i + j;
 
-        if (date_index >= datesSize) {
+        if (cell_index >= cellsNum) {
           break;
         }
 
         const unit_index = (offset + j) % unitsSize;
-        const workDay = findWorkingDay(schedule, employeeId, days[date_index]);
 
-        createOrUpdateWorkDay(
+        createOrUpdateCell(
           overrideExistingValues,
           employeeId,
-          workDay,
           patternUnits[unit_index],
-          days[date_index],
-          createdSchedule,
-          updatedSchedule
-        );
+          cells[cell_index]);
       }
     }
-    onSave(createdSchedule, updatedSchedule);
+    onSave(cells);
   }
 }

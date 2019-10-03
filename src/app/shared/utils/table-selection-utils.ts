@@ -1,5 +1,5 @@
 import { ElementRef, QueryList } from "@angular/core";
-import { TableCellComponent } from "../../modules/admin/calendar/components/table-cell/table-cell.component";
+import { TableCellComponent } from "../../modules/admin/schedule/components/calendar/components/table-cell/table-cell.component";
 
 export function selectingLeft(startX: number,
                               endX: number,
