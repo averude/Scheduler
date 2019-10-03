@@ -1,7 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Shift } from "../../../../../model/shift";
-import { Employee } from "../../../../../model/employee";
-import { DayTypeGroup } from "../../../../../model/day-type-group";
+import { Shift } from "../../../../../../../model/shift";
+import { Employee } from "../../../../../../../model/employee";
+import { DayTypeGroup } from "../../../../../../../model/day-type-group";
+
 
 @Component({
   selector: '[app-statistics-shift-group]',

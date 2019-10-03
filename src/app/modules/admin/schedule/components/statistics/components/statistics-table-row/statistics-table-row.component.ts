@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Employee } from "../../../../../model/employee";
-import { DayTypeGroup } from "../../../../../model/day-type-group";
+import { Employee } from "../../../../../../../model/employee";
+import { DayTypeGroup } from "../../../../../../../model/day-type-group";
 
 @Component({
   selector: '[app-statistics-table-row]',

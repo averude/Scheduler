@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { Employee } from "../../../../../model/employee";
-import { EmployeeService } from "../../../../../services/employee.service";
-import { DayTypeGroup } from "../../../../../model/day-type-group";
-import { DayTypeGroupService } from "../../../../../services/day-type-group.service";
-import { Shift } from "../../../../../model/shift";
-import { ShiftService } from "../../../../../services/shift.service";
 import * as moment from "moment";
+import { Employee } from "../../../../../../../model/employee";
+import { DayTypeGroup } from "../../../../../../../model/day-type-group";
+import { Shift } from "../../../../../../../model/shift";
+import { EmployeeService } from "../../../../../../../services/employee.service";
+import { ShiftService } from "../../../../../../../services/shift.service";
+import { DayTypeGroupService } from "../../../../../../../services/day-type-group.service";
 
 @Component({
   selector: 'app-statistics-table',
