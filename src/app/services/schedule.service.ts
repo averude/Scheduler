@@ -14,10 +14,10 @@ export class ScheduleService {
   constructor(private http: HttpClient,
               private config: RestConfig) { }
 
-  getAllByDate(start: string,
-               end: string): Observable<ScheduleDto[]> {
+  getAllByDate(from: string,
+               to: string): Observable<ScheduleDto[]> {
     return this.http.get<ScheduleDto[]>(
-      `${this.config.baseUrl}/schedule/dates?from=${start}&to=${end}`
+      `${this.config.baseUrl}/schedule/dates?from=${from}&to=${to}`
     )
   }
 

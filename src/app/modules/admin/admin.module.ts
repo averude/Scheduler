@@ -7,6 +7,7 @@ import { SimpleNotificationsModule } from "angular2-notifications";
 import { StatisticsModule } from "./schedule/components/statistics/statistics.module";
 import { ScheduleTabBarComponent } from './schedule/components/schedule-tab-bar/schedule-tab-bar.component';
 import { ScheduleGenerationModule } from "./schedule/components/schedule-generation/schedule-generation.module";
+import { ReportsModule } from "./reports/reports.module";
 
 @NgModule({
   imports: [
@@ -14,6 +15,7 @@ import { ScheduleGenerationModule } from "./schedule/components/schedule-generat
     SchedulesModule,
     StatisticsModule,
     ScheduleGenerationModule,
+    ReportsModule,
     AdminRoutingModule,
     SimpleNotificationsModule
   ],

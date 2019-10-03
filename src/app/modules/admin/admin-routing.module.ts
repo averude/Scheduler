@@ -5,6 +5,7 @@ import { AdminComponent } from './admin/admin.component';
 import { RoleGuard } from '../../guards/role-guard.service';
 import { StatisticsTableComponent } from "./schedule/components/statistics/components/statistics-table/statistics-table.component";
 import { ScheduleTabBarComponent } from "./schedule/components/schedule-tab-bar/schedule-tab-bar.component";
+import { ReportFormComponent } from "./reports/components/report-form/report-form.component";
 
 const routes: Routes = [
   {
@@ -29,6 +30,10 @@ const routes: Routes = [
           {
             path: 'statistics',
             component: StatisticsTableComponent
+          },
+          {
+            path: 'reports',
+            component: ReportFormComponent
           }
         ]
       }
