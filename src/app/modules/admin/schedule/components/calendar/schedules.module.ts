@@ -26,7 +26,8 @@ import { ScheduleGenerationDialogComponent } from "../schedule-generation/compon
     MatFormFieldModule,
     MatInputModule,
     ContextMenuModule.forRoot({
-      autoFocus: true
+      autoFocus: true,
+      useBootstrap4: false
     })
   ],
   declarations: [
