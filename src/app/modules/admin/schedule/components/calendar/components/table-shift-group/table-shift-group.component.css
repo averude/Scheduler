@@ -1,13 +1,21 @@
+.employee {
+  height: 32px;
+}
+
 .shift-label {
-  background-color: ghostwhite;
+  font-family: 'MuseoSansMedium';
+  letter-spacing: .02em;
+  background-color: #f8fafc;
   text-align: left;
-  font-size: 14px;
+  font-size: 13px;
+  padding-left: 23px;
   cursor: pointer;
-  color: darkblue;
+  color: #637286;
+  border:  1px solid #e5e9f0;
 }
 
 .schedule-row {
-  height: 45px;
+  height: 54px;
 }
 
 .hide-button {

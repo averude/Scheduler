@@ -1,11 +1,11 @@
 <tr>
-  <th class="table-sticky-header"></th>
+  <th class="table-sticky-header th-null"></th>
   <th class="table-sticky-header month-header"
       *ngFor="let day of daysInMonth"
       [class.weekend]="day.weekend"
       [class.holiday]="day.holiday">
     {{day.dayOfMonth}}
   </th>
-  <th class="table-sticky-header">Sum</th>
-  <th class="table-sticky-header">Norm</th>
+  <th class="table-sticky-header th-sum">Sum</th>
+  <th class="table-sticky-header th-norm">Norm</th>
 </tr>

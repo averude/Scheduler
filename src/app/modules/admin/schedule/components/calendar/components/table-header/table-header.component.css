@@ -1,17 +1,34 @@
+.table-sticky-header {
+  font-family: 'MuseoSansRegular';
+  font-size: 13px;
+  color: #637286;
+  position: sticky;
+  top: 0;
+  background-color: #f8fafc;
+}
+
+.th-null {
+}
+.th-sum {
+  width: 2.4%;
+  border: 1px solid #e5e9f0;
+}
+.th-norm {
+  width: 2.4%;
+  border: 1px solid #e5e9f0;
+}
+
 .month-header {
-  width: 2.8%;
-  height: 20px;
+  width: 2.4%;
+  height: 39px;
+  background-color: #f8fafc;
+  border:  1px solid #e5e9f0;
 }
 
 .weekend {
-  background-color: lavender;
+  background-color: #f0f6fb;
 }
 
 .holiday {
-  background-color: lightpink;
-}
-
-.table-sticky-header {
-  position: sticky;
-  top: 0;
+  background-color: #fdecf6;
 }

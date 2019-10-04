@@ -1,18 +1,21 @@
+
+
+
 <ng-container appSelectableRow
               [mouseMove$]="mouseMove$"
               [mouseUp$]="mouseUp$"
               [element]="elementRef"
               (onSelectionEnds)="onContextMenu($event.event, $event.selectedDays)">
-  <td>
-    <div>
+  <td class="td-employee">
+    <div class="employee-name">
       {{
-      employee.secondName
-      + ' '
-      + employee.firstName.charAt(0)
-      + '.'
-      + ' '
-      + employee.patronymic.charAt(0)
-      + '.'
+        employee.secondName
+        + ' '
+        + employee.firstName.charAt(0)
+        + '.'
+        + ' '
+        + employee.patronymic.charAt(0)
+        + '.'
       }}
     </div>
     <div class="position-label">
@@ -31,13 +34,12 @@
   </td>
   <td class="sum"
       [class.notEqual]="workingTimeSum !== workingTimeNorm">
-    {{workingTimeSum}}
+    <p align="center">{{workingTimeSum}}</p>
   </td>
   <td class="sum">
     {{workingTimeNorm}}
   </td>
 </ng-container>
-
 
 <context-menu (close)="clearSelection()">
   <context-menu #customDaySubMenu>
