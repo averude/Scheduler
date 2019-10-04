@@ -41,7 +41,7 @@
   </td>
 </ng-container>
 
-<context-menu (close)="clearSelection()">
+<context-menu (close)="clearSelection()" hidden>
   <context-menu #customDaySubMenu>
     <ng-template contextMenuItem
                  passive="true">

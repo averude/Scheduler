@@ -36,7 +36,7 @@ export class TableShiftGroupComponent implements OnInit {
 
   ngOnInit() {
     this.paginatorService.dates
-      .subscribe(daysInMonth => this.numberOfColumns = daysInMonth.length + 4);
+      .subscribe(daysInMonth => this.numberOfColumns = daysInMonth.length + 3);
   }
 
   getPosition(employee: Employee): Position {
