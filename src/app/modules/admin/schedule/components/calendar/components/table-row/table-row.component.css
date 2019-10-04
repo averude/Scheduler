@@ -23,20 +23,15 @@
   vertical-align: top;
 }
 
-.selected {
-  background-color: indigo;
-  color: white;
-}
-
 .sum {
   padding-top: 8px;
   border: 1px solid #e5e9f0;
 }
+
 .sum p {
   font-family: 'MuseoSansMedium';
   font-size: 12px;
 }
-
 .notEqual {
   background-color: lightgoldenrodyellow;
 }
@@ -47,4 +42,8 @@
 
 .holiday {
   background-color: #fdecf6;
+}
+
+.selected {
+  background-color: lightgrey;
 }
