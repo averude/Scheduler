@@ -8,8 +8,10 @@
   <img class="btn-month-select"
        src="assets/img/left.svg"
        (click)="prevMonth()">
-  <div class="date-label" (click)="picker.open()">
+  <div class="month-container">
+    <div class="date-label" (click)="picker.open()">
     {{(currentDate.format("MMMM YYYY"))}}
+      </div>
   </div>
   <img class="btn-month-select"
        src="assets/img/right.svg"

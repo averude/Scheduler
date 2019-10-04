@@ -3,6 +3,7 @@
   display: -ms-inline-flexbox;
   display: inline-flex;
   vertical-align: middle;
+  margin-top: 30px;
 }
 
 .btn-month-select {
@@ -16,7 +17,13 @@
   cursor: pointer;
 }
 
-.date-label {
+.month-container {
   width: 160px;
-  font-size: 16px;
+}
+
+.date-label {
+  color: #2b3944;
+  font-family: 'MuseoSansMedium', 'Roboto', sans-serif;
+  font-size: 20px;
+  text-align: center;
 }
