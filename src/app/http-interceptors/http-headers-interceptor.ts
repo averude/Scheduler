@@ -6,7 +6,7 @@ import { Observable } from "rxjs";
 export class HttpHeadersInterceptor implements HttpInterceptor {
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if (!req.headers.has('Content-type') && !req.url.includes('/admin/icons/upload')) {
+    if (!req.headers.has('Content-type')) {
       req = req.clone({
         headers: req.headers
           .set('Content-Type','application/json;charset=UTF-8')

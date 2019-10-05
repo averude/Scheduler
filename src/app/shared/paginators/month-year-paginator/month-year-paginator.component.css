@@ -28,3 +28,8 @@
   text-align: center;
   cursor: pointer;
 }
+
+.date-label:hover {
+  font-weight: bold;
+  color: darkblue;
+}
