@@ -214,6 +214,14 @@ export class TableRowComponent implements OnInit, OnChanges, OnDestroy {
     return this.dayTypes.filter(dayType => dayType.defaultValue !== null);
   }
 
+  getPatternsWithOverrideExistingValues(): ShiftPattern[] {
+    return this.patterns.filter(pattern => pattern.overrideExistingValues);
+  }
+
+  getPatternsWithoutOverrideExistingValues(): ShiftPattern[] {
+    return this.patterns.filter(pattern => !pattern.overrideExistingValues);
+  }
+
   clearSelection() {
     this.selectableRowDirective.clearSelection();
   }
