@@ -1,0 +1,39 @@
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { PaginatorService } from "../../../../../../../shared/paginators/paginator.service";
+import { Subscription } from "rxjs";
+import { CalendarDay } from "../../../../../../../model/ui/calendar-day";
+import { ReportService } from "../../../../../../../services/report.service";
+import * as fileSaver from 'file-saver';
+
+@Component({
+  selector: 'app-schedule-export-excel',
+  templateUrl: './schedule-export-excel.component.html',
+  styleUrls: ['./schedule-export-excel.component.css']
+})
+export class ScheduleExportExcelComponent implements OnInit, OnDestroy {
+
+  private paginatorSub: Subscription;
+  private daysInMonth: CalendarDay[] = [];
+
+  constructor(private paginatorService: PaginatorService,
+              private reportService: ReportService) { }
+
+  ngOnInit() {
+    this.paginatorSub = this.paginatorService.dates
+      .subscribe(daysInMonth => this.daysInMonth = daysInMonth);
+  }
+
+  ngOnDestroy(): void {
+    this.paginatorSub.unsubscribe();
+  }
+
+  export() {
+    if (this.daysInMonth && this.daysInMonth.length > 0){
+      let from = this.daysInMonth[0].isoString;
+      let to = this.daysInMonth[this.daysInMonth.length - 1].isoString;
+      this.reportService.getReport(from, to)
+        .subscribe(response => fileSaver.saveAs(response.body, `schedule_${from}_${to}.xls`));
+    }
+  }
+
+}
