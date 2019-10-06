@@ -23,14 +23,11 @@ table {
   width: 300px;
 }
 
-.show-hours {
-  display: inline;
-  margin-left: 95px;
-
-}
-
-.schedule-gen {
+.table-top-buttons {
   display: inline;
   margin-left: 20px;
+}
 
+.table-top-buttons:first-child {
+  margin-left: 95px;
 }

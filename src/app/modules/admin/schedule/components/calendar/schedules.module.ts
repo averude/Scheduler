@@ -16,6 +16,7 @@ import { ShowHoursControlComponent } from './components/show-hours-control/show-
 import { ShowHoursService } from "./components/show-hours-control/show-hours.service";
 import { ScheduleGenerationModule } from "../schedule-generation/schedule-generation.module";
 import { ScheduleGenerationDialogComponent } from "../schedule-generation/components/schedule-generation-dialog/schedule-generation-dialog.component";
+import { ScheduleExportExcelComponent } from './components/schedule-export-excel/schedule-export-excel.component';
 
 @NgModule({
   imports: [
@@ -38,7 +39,8 @@ import { ScheduleGenerationDialogComponent } from "../schedule-generation/compon
     TableCellComponent,
     TableShiftGroupComponent,
     SelectableRowDirective,
-    ShowHoursControlComponent
+    ShowHoursControlComponent,
+    ScheduleExportExcelComponent
   ],
   entryComponents: [ScheduleGenerationDialogComponent],
   providers: [PaginatorService, ShowHoursService]
