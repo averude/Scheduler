@@ -1,24 +1,10 @@
-import {
-  Component,
-  ElementRef,
-  Input,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  QueryList,
-  SimpleChanges,
-  ViewChild,
-  ViewChildren,
-} from '@angular/core';
+import { Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, } from '@angular/core';
 import { ContextMenuComponent, ContextMenuService } from 'ngx-contextmenu';
 import { Employee } from '../../../../../../../model/employee';
 import { Position } from '../../../../../../../model/position';
 import { ScheduleService } from '../../../../../../../services/schedule.service';
-import { ScheduleGenerationService } from '../../../../../../../services/schedule-generation.service';
 import { WorkDay } from '../../../../../../../model/workday';
-import { ShiftPattern } from '../../../../../../../model/shift-pattern';
 import { Observable, Subscription } from 'rxjs';
-import { PatternUnitService } from '../../../../../../../services/pattern-unit.service';
 import { NotificationsService } from "angular2-notifications";
 import { CalendarDay } from "../../../../../../../model/ui/calendar-day";
 import { PaginatorService } from "../../../../../../../shared/paginators/paginator.service";
@@ -28,6 +14,7 @@ import { roundToTwo } from "../../../../../../../shared/utils/utils";
 import { DayTypeGroup } from "../../../../../../../model/day-type-group";
 import { TableCellComponent } from "../table-cell/table-cell.component";
 import { ShowHoursService } from "../show-hours-control/show-hours.service";
+import { ContextMenuData } from "../../../../../../../model/ui/context-menu-data";
 
 @Component({
   selector: '[app-table-row]',
@@ -38,28 +25,17 @@ export class TableRowComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() employee:      Employee;
   @Input() position:      Position;
-  @Input() patterns:      ShiftPattern[];
   @Input() dayTypes:      DayType[];
   @Input() dayTypeGroups: DayTypeGroup[];
   @Input() schedule:      WorkDay[];
-
   @Input() mouseMove$:    Observable<number>;
   @Input() mouseUp$:      Observable<MouseEvent>;
+  @Input() patternMenu:   ContextMenuComponent;
 
   @Input() workingTimeNorm: number;
 
-  // Context menu variables
-  @ViewChild(ContextMenuComponent)
-  public patternMenu: ContextMenuComponent;
-  customHours: number;
-  offset = 0;
-
   @ViewChild(SelectableRowDirective)
   selectableRowDirective: SelectableRowDirective;
-
-  // Selection variables
-  @ViewChildren(TableCellComponent)
-  cells: QueryList<TableCellComponent>;
 
   // Table variables
   daysInMonth:  CalendarDay[];
@@ -71,8 +47,6 @@ export class TableRowComponent implements OnInit, OnChanges, OnDestroy {
 
   constructor(public elementRef: ElementRef,
               private scheduleService: ScheduleService,
-              private scheduleGenerationService: ScheduleGenerationService,
-              private patternUnitService: PatternUnitService,
               private paginatorService: PaginatorService,
               private showHoursService: ShowHoursService,
               private contextMenuService: ContextMenuService,
@@ -121,57 +95,26 @@ export class TableRowComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  onContextMenu($event: MouseEvent, days: CalendarDay[]): void {
-    if (days.length > 0) {
+  onContextMenu($event: MouseEvent,
+                selectedCells: TableCellComponent[]): void {
+    if (selectedCells && selectedCells.length > 0) {
+      const data: ContextMenuData = {
+        employeeId: this.employee.id,
+        selectedCells: selectedCells,
+        generatedHandler: this.scheduleGeneratedHandler,
+        errorHandler: this.errorHandler
+      };
+
       setTimeout(() => {
         this.contextMenuService.show.next({
           contextMenu: this.patternMenu,
           event: $event,
-          item: days,
+          item: data,
         });
         $event.preventDefault();
         $event.stopPropagation();
       });
     }
-  }
-
-  generateScheduleByCustomDay(dayType: DayType) {
-    this.scheduleGenerationService
-      .generateScheduleBySingleDay(
-        this.employee.id,
-        this.selectableRowDirective.selectedCells,
-        this.customHours,
-        dayType,
-        this.scheduleGeneratedHandler,
-        this.errorHandler);
-  }
-
-  generateSchedule(pattern: ShiftPattern) {
-    const selectedCells = this.selectableRowDirective.selectedCells;
-
-    this.patternUnitService.getByPatternId(pattern.id)
-      .subscribe(patternUnits => {
-        this.scheduleGenerationService
-          .generateScheduleWithPattern(
-            this.employee.id,
-            selectedCells,
-            patternUnits,
-            this.offset,
-            pattern.overrideExistingValues,
-            this.scheduleGeneratedHandler,
-            this.errorHandler)
-      });
-  }
-
-  generateScheduleBySingleDay(dayType: DayType) {
-    this.scheduleGenerationService
-      .generateScheduleBySingleDay(
-        this.employee.id,
-        this.selectableRowDirective.selectedCells,
-        dayType.defaultValue,
-        dayType,
-        this.scheduleGeneratedHandler,
-        this.errorHandler);
   }
 
   private scheduleGeneratedHandler = (cells) => {
@@ -208,19 +151,7 @@ export class TableRowComponent implements OnInit, OnChanges, OnDestroy {
       }
   };
 
-  private errorHandler = message => this.notificationService.error('Error', message);
-
-  getDayTypesWithDefaultHours(): DayType[] {
-    return this.dayTypes.filter(dayType => dayType.defaultValue !== null);
-  }
-
-  getPatternsWithOverrideExistingValues(): ShiftPattern[] {
-    return this.patterns.filter(pattern => pattern.overrideExistingValues);
-  }
-
-  getPatternsWithoutOverrideExistingValues(): ShiftPattern[] {
-    return this.patterns.filter(pattern => !pattern.overrideExistingValues);
-  }
+  private errorHandler = (message) => this.notificationService.error('Error', message);
 
   clearSelection() {
     this.selectableRowDirective.clearSelection();

@@ -70,7 +70,7 @@ export class SelectableRowDirective implements OnInit, OnDestroy, AfterViewInit 
       this.mouseUpSub = this.mouseUp$
         .subscribe(event => {
           if (this.dragging) {
-            this.onSelectionEnds.emit({event: event, selectedDays: this.selectedDays});
+            this.onSelectionEnds.emit({event: event, selectedCells: this.selectedCells});
             this.dragging = false;
             if (this.mouseMoveSub) this.mouseMoveSub.unsubscribe();
           }

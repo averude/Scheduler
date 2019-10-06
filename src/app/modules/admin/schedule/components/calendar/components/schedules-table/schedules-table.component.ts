@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { Employee } from '../../../../../../../model/employee';
 import { EmployeeService } from '../../../../../../../services/employee.service';
 import { ShiftPatternService } from '../../../../../../../services/shift-pattern.service';
@@ -18,6 +18,11 @@ import { DayTypeGroupService } from "../../../../../../../services/day-type-grou
 import { DayTypeGroup } from "../../../../../../../model/day-type-group";
 import { ScheduleService } from "../../../../../../../services/schedule.service";
 import { ScheduleDto } from "../../../../../../../model/dto/schedule-dto";
+import { ScheduleGenerationService } from "../../../../../../../services/schedule-generation.service";
+import { PatternUnitService } from "../../../../../../../services/pattern-unit.service";
+import { ContextMenuData } from "../../../../../../../model/ui/context-menu-data";
+import { ContextMenuComponent } from "ngx-contextmenu";
+import { TableShiftGroupComponent } from "../table-shift-group/table-shift-group.component";
 
 @Component({
   selector: 'app-schedules-table',
@@ -25,6 +30,14 @@ import { ScheduleDto } from "../../../../../../../model/dto/schedule-dto";
   styleUrls: ['./schedules-table.component.css']
 })
 export class SchedulesTableComponent implements OnInit, OnDestroy {
+
+  @ViewChild(ContextMenuComponent)
+  patternMenu:  ContextMenuComponent;
+  customHours:  number;
+  offset:       number;
+
+  @ViewChildren(TableShiftGroupComponent)
+  shiftGroups: QueryList<TableShiftGroupComponent>;
 
   shifts:             Shift[]         = [];
   schedule:           ScheduleDto[]   = [];
@@ -53,9 +66,11 @@ export class SchedulesTableComponent implements OnInit, OnDestroy {
               private scheduleService: ScheduleService,
               private positionService: PositionService,
               private patternService: ShiftPatternService,
+              private patternUnitService: PatternUnitService,
               private dayTypesService: DayTypeService,
               private dayTypeGroupService: DayTypeGroupService,
-              private workingTimeService: WorkingTimeService) { }
+              private workingTimeService: WorkingTimeService,
+              private scheduleGenerationService: ScheduleGenerationService) { }
 
   ngOnInit() {
     this.getData();
@@ -72,6 +87,18 @@ export class SchedulesTableComponent implements OnInit, OnDestroy {
 
   getShiftWorkingTime(shiftId: number): WorkingTime {
     return this.shiftsWorkingTime.find(workingTime => workingTime.shiftId === shiftId);
+  }
+
+  getDayTypesWithDefaultHours(): DayType[] {
+    return this.dayTypes.filter(dayType => dayType.defaultValue !== null);
+  }
+
+  getPatternsWithOverrideExistingValues(): ShiftPattern[] {
+    return this.patterns.filter(pattern => pattern.overrideExistingValues);
+  }
+
+  getPatternsWithoutOverrideExistingValues(): ShiftPattern[] {
+    return this.patterns.filter(pattern => !pattern.overrideExistingValues);
   }
 
   private getData() {
@@ -111,5 +138,51 @@ export class SchedulesTableComponent implements OnInit, OnDestroy {
           daysInMonth[daysInMonth.length - 1].isoString)
           .subscribe(schedule => this.schedule = schedule);
       });
+  }
+
+  generateScheduleByCustomDay(dayType: DayType,
+                              data: ContextMenuData) {
+    this.scheduleGenerationService
+      .generateScheduleBySingleDay(
+        data.employeeId,
+        data.selectedCells,
+        this.customHours,
+        dayType,
+        data.generatedHandler,
+        data.errorHandler);
+  }
+
+  generateSchedule(pattern: ShiftPattern,
+                   data: ContextMenuData) {
+    this.patternUnitService.getByPatternId(pattern.id)
+      .subscribe(patternUnits => {
+        this.scheduleGenerationService
+          .generateScheduleWithPattern(
+            data.employeeId,
+            data.selectedCells,
+            patternUnits,
+            this.offset,
+            pattern.overrideExistingValues,
+            data.generatedHandler,
+            data.errorHandler)
+      });
+  }
+
+  generateScheduleBySingleDay(dayType: DayType,
+                              data: ContextMenuData) {
+    this.scheduleGenerationService
+      .generateScheduleBySingleDay(
+        data.employeeId,
+        data.selectedCells,
+        dayType.defaultValue,
+        dayType,
+        data.generatedHandler,
+        data.errorHandler);
+  }
+
+  clearSelection() {
+    this.shiftGroups
+      .forEach(group => group.rows
+        .forEach(row => row.clearSelection()));
   }
 }

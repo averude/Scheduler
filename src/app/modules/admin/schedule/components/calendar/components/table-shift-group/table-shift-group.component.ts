@@ -1,13 +1,14 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { Shift } from "../../../../../../../model/shift";
 import { Position } from "../../../../../../../model/position";
 import { Employee } from "../../../../../../../model/employee";
 import { Observable } from "rxjs";
-import { ShiftPattern } from "../../../../../../../model/shift-pattern";
 import { PaginatorService } from "../../../../../../../shared/paginators/paginator.service";
 import { DayType } from "../../../../../../../model/day-type";
 import { DayTypeGroup } from "../../../../../../../model/day-type-group";
 import { ScheduleDto } from "../../../../../../../model/dto/schedule-dto";
+import { ContextMenuComponent } from "ngx-contextmenu";
+import { TableRowComponent } from "../table-row/table-row.component";
 
 @Component({
   selector: '[app-table-shift-group]',
@@ -20,17 +21,20 @@ export class TableShiftGroupComponent implements OnInit {
   @Input() mouseMove$:    Observable<number>;
   @Input() mouseUp$:      Observable<MouseEvent>;
 
-  @Input() patterns:      ShiftPattern[];
   @Input() shift:         Shift;
   @Input() positions:     Position[];
   @Input() employees:     Employee[];
   @Input() schedule:      ScheduleDto[];
   @Input() dayTypes:      DayType[];
   @Input() dayTypeGroups: DayTypeGroup[];
+  @Input() patternMenu:   ContextMenuComponent;
 
   @Input() workingTimeNorm: number;
 
   isHidden: boolean = false;
+
+  @ViewChildren(TableRowComponent)
+  rows: QueryList<TableRowComponent>;
 
   constructor(private paginatorService: PaginatorService) {}
 
