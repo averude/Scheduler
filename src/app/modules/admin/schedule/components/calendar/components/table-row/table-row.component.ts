@@ -36,6 +36,7 @@ export class TableRowComponent implements OnInit, OnChanges, OnDestroy {
 
   @ViewChild(SelectableRowDirective)
   selectableRowDirective: SelectableRowDirective;
+  private contextMenuIsOpened = false;
 
   // Table variables
   daysInMonth:  CalendarDay[];
@@ -97,7 +98,7 @@ export class TableRowComponent implements OnInit, OnChanges, OnDestroy {
 
   onContextMenu($event: MouseEvent,
                 selectedCells: TableCellComponent[]): void {
-    if (selectedCells && selectedCells.length > 0) {
+    if (selectedCells && this.selectableRowDirective.selectedCells.length > 0) {
       const data: ContextMenuData = {
         employeeId: this.employee.id,
         selectedCells: selectedCells,
@@ -106,13 +107,16 @@ export class TableRowComponent implements OnInit, OnChanges, OnDestroy {
       };
 
       setTimeout(() => {
-        this.contextMenuService.show.next({
-          contextMenu: this.patternMenu,
-          event: $event,
-          item: data,
-        });
-        $event.preventDefault();
-        $event.stopPropagation();
+        if (!this.contextMenuIsOpened) {
+          this.contextMenuService.show.next({
+            contextMenu: this.patternMenu,
+            event: $event,
+            item: data,
+          });
+          this.contextMenuIsOpened = true;
+          $event.preventDefault();
+          $event.stopPropagation();
+        }
       });
     }
   }
@@ -154,6 +158,9 @@ export class TableRowComponent implements OnInit, OnChanges, OnDestroy {
   private errorHandler = (message) => this.notificationService.error('Error', message);
 
   clearSelection() {
-    this.selectableRowDirective.clearSelection();
+    if (this.contextMenuIsOpened) {
+      this.selectableRowDirective.clearSelection();
+      this.contextMenuIsOpened = false;
+    }
   }
 }
