@@ -4,12 +4,14 @@
   display: inline-flex;
   vertical-align: middle;
   margin-top: 30px;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
 .btn-month-select {
   width: 16px;
   height: 16px;
-  margin: 4px 15px;
+  margin: 10px 15px;
   vertical-align: center;
 }
 
@@ -18,7 +20,13 @@
 }
 
 .month-container {
-  width: 160px;
+  width: 180px;
+  padding-top: 7px;
+  height: 32px;
+}
+.month-container:hover {
+  background-color: #f0f6fb;
+  border-radius: 20px;
 }
 
 .date-label {
@@ -27,9 +35,4 @@
   font-size: 20px;
   text-align: center;
   cursor: pointer;
-}
-
-.date-label:hover {
-  font-weight: bold;
-  /*color: #000000;*/
 }
