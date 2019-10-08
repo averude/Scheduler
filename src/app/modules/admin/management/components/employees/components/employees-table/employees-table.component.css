@@ -9,3 +9,9 @@
 .mat-column-patronymic {
   width: 15%;
 }
+
+.management-td-style {
+  font-family: 'MuseoSansRegular', 'Roboto', sans-serif;
+  color: #4e4e50;
+  border-bottom-color: #f1f2f6;
+}

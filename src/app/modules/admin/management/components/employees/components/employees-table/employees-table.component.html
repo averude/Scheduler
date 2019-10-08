@@ -5,12 +5,12 @@
            placeholder="Filter">
   </mat-form-field>
 
-  <table mat-table
+  <table  mat-table
          matSort
          class="management-table"
          [dataSource]="dataSource">
     <ng-container matColumnDef="select">
-      <th mat-header-cell *matHeaderCellDef>
+      <th  mat-header-cell *matHeaderCellDef>
         <mat-checkbox (change)="$event ? masterToggle() : null"
                       [checked]="selection.hasValue() && isAllSelected()"
                       [indeterminate]="selection.hasValue() && !isAllSelected()"

@@ -1,25 +1,31 @@
 .ngx-contextmenu .dropdown-menu {
-  border: solid 1px chartreuse;
-  background-color: darkgreen;
+  border-radius: 10px;
+  background-color: #ffffff;
   padding: 0;
   width: 300px;
-  height: 400px;
+  box-shadow: 0 5px 10px rgba(154,160,185,.35), 0 15px 40px rgba(166,173,201,.5);
 }
 .ngx-contextmenu li {
   display: block;
-  border-top: solid 1px chartreuse;
-  text-transform: uppercase;
-  text-align: center;
+  padding: 20px 0;
+  border-bottom: 1px solid #dbe6f0;
+}
+.ngx-contextmenu li:hover {
+  background-color: #f0f6fb;
 }
 .ngx-contextmenu li:first-child {
   border-top:none;
 }
 .ngx-contextmenu a {
-  color:chartreuse;
+  font-family: 'MuseoSansRegular', 'Roboto', sans-serif;
+  letter-spacing: .03em;
+  font-size: 18px;
+  color: #74819c;
   display: block;
-  padding: 0.5em 1em;
+  padding-left: 20px;
+  text-decoration: none;
 }
 .ngx-contextmenu a:hover {
-  color:darkgreen;
-  background-color:chartreuse;
+  color: #2b3944;
+  text-decoration: none;
 }

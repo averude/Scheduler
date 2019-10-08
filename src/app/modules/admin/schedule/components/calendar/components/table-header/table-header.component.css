@@ -1,7 +1,7 @@
 .table-sticky-header {
-  font-family: 'MuseoSansRegular';
+  font-family: 'MuseoSansRegular', 'Roboto', sans-serif;
   font-size: 13px;
-  color: #637286;
+  color: #000;
   position: sticky;
   top: 0;
   background-color: #d9ebfd;
