@@ -14,7 +14,8 @@
     </div>
   </div>
 </div>
-<table>
+<div class="table-wrap">
+<table class="table-schedule">
   <thead app-table-header>
   </thead>
   <tbody *ngFor="let shift of shifts"
@@ -31,7 +32,7 @@
          [mouseUp$]="mouseUp$">
   </tbody>
 </table>
-
+</div>
 <context-menu (close)="clearSelection()">
   <context-menu #customDaySubMenu>
     <ng-template contextMenuItem

@@ -1,12 +1,15 @@
-table {
+.table-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+}
+
+.table-schedule {
   font-family: 'MuseoSansRegular';
   user-select: none;
   border: 1px solid #e5e9f0;
   font-size: 12px;
-  margin-top: 5px;
-  margin-left: 50px;
-  margin-right: 50px;
-  margin-bottom: 30px;
+  margin: 10px auto 20px;
   border-radius: 3px;
   width: 95%;
   border-spacing: 0;

@@ -5,7 +5,7 @@
   padding: 0;
   width: 20%;
   min-width: 130px;
-  background-color: #eef2f5;
+  background-color: #444d58;
   position: fixed;
   height: 100%;
   overflow: auto;
@@ -21,12 +21,13 @@
 }
 
 .sidebar-button {
+  font-family: 'MuseoSansRegular', 'Roboto', sans-serif;
   display: block;
   width: 100%;
-  padding: 20px;
-  height: 70px;
-  font-size: 16px;
-  color: black;
+  padding-left: 30px;
+  height: 60px;
+  font-size: 15px;
+  color: #ffffff;
   text-align: left;
   border-style: none;
   background: transparent;
@@ -35,12 +36,12 @@
 }
 
 .active {
-  background-color: grey;
-  color: white;
+  background-color: #4f5a66;
+  color: #ffffff;
 }
 
 .sidebar-button:hover {
-  background: lightgrey;
+  background: #4f5a66;
 }
 
 .sidebar-button:focus {

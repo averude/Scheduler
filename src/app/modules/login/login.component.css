@@ -9,8 +9,6 @@
 }
 
 .login-form {
-    margin-top: -105px;
-    padding-top: 250px;
     display: -webkit-box;
     display: -webkit-flex;
     display: -moz-box;
@@ -54,10 +52,12 @@
   width: 300px
 }
 
+
 .login-panel-input {
   display: block;
   width: 100%;
 }
+
 
 .button-container {
   margin-left: auto;
@@ -72,7 +72,7 @@
   margin: 0 auto;
   display: inline-block;
   height: 50px;
-  font-family: MuseoSansCyrl,sans-serif;
+  font-family: MuseoSansRegular,sans-serif;
   font-size: 11px;
   font-weight: 700;
   line-height: 50px;
@@ -106,9 +106,16 @@ color: #fff;
 
 .login-panel-bad-credentials {
   margin: 0 auto;
+  padding: 12px 2px;
+
+  font-family: 'MuseoSansRegular', 'Roboto', sans-serif;
+  font-size: 14px;
   width: 300px;
-  color: white;
-  background-color: #ff8d9e;
+  height: 32px;
+  color: #e95857;
+  background-color: #fef4f2;
+  border: 1px solid #f8d0ce;
+  border-radius: 3px;
   text-align: center;
 }
 

@@ -16,18 +16,18 @@
             <div class="toolbar-set">
               <ul class="toolbar">
 
+                <li class="toolbar-li calendar-icon">
+                  <img src="assets/img/cal_icon.png"
+                       routerLink="schedule/calendar">
+                </li>
+
                 <li class="toolbar-li menu-icon">
-                    <img *ngIf="roles.indexOf('DEPARTMENT_ADMIN') >= 0"
-                         src="assets/img/menu-bar.png"
-                         routerLink="management">
+                  <img *ngIf="roles.indexOf('DEPARTMENT_ADMIN') >= 0"
+                       src="assets/img/set_icon.png"
+                       routerLink="management">
                 </li>
 
                 <li class="toolbar-li divider">
-                </li>
-
-                <li class="toolbar-li calendar-icon">
-                  <img src="assets/img/cal-icon.png"
-                       routerLink="schedule/calendar">
                 </li>
 
                 <li class="toolbar-li exit-icon">
