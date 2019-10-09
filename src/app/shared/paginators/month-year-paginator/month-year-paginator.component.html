@@ -11,8 +11,8 @@
        src="assets/img/left.svg"
        (click)="prevMonth()">
 
-  <div class="month-container">
-    <div class="date-label" (click)="picker.open()">
+  <div class="month-container" (click)="picker.open()">
+    <div class="date-label">
       {{(currentDate.format("MMMM YYYY"))}}
     </div>
   </div>

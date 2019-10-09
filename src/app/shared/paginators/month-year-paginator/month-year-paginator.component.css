@@ -27,6 +27,7 @@
 .month-container:hover {
   background-color: #f0f6fb;
   border-radius: 20px;
+  cursor: pointer;
 }
 
 .date-label {
@@ -34,5 +35,4 @@
   font-family: 'MuseoSansMedium', 'Roboto', sans-serif;
   font-size: 20px;
   text-align: center;
-  cursor: pointer;
 }
