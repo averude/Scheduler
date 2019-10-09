@@ -21,9 +21,9 @@
                        routerLink="schedule/calendar">
                 </li>
 
-                <li class="toolbar-li menu-icon">
-                  <img *ngIf="roles.indexOf('DEPARTMENT_ADMIN') >= 0"
-                       src="assets/img/set_icon.png"
+                <li class="toolbar-li menu-icon"
+                    *ngIf="roles.indexOf('DEPARTMENT_ADMIN') >= 0">
+                  <img src="assets/img/set_icon.png"
                        routerLink="management">
                 </li>
 
