@@ -29,3 +29,21 @@
   color: #2b3944;
   text-decoration: none;
 }
+
+.context-menu-item {
+  display: block;
+}
+
+.menu-daytype-label-box {
+  width: 30px;
+  height: 30px;
+  background-color: #92b9da;
+}
+
+.menu-daytype-name {
+
+}
+
+.menu-daytype-value {
+
+}
