@@ -16,8 +16,7 @@ import { ShowHoursService } from "./components/show-hours-control/show-hours.ser
 import { ScheduleGenerationModule } from "../schedule-generation/schedule-generation.module";
 import { ScheduleGenerationDialogComponent } from "../schedule-generation/components/schedule-generation-dialog/schedule-generation-dialog.component";
 import { ScheduleExportExcelComponent } from './components/schedule-export-excel/schedule-export-excel.component';
-import { ScheduleTableContextMenuComponent } from './components/schedule-table-context-menu/schedule-table-context-menu.component';
-import { ContextMenuModule } from "../../../../../lib/ngx-contextmenu/ngx-contextmenu";
+import { ScheduleTableContextMenuModule } from "./components/schedule-table-context-menu/schedule-table-context-menu.module";
 
 @NgModule({
   imports: [
@@ -25,12 +24,9 @@ import { ContextMenuModule } from "../../../../../lib/ngx-contextmenu/ngx-contex
     FormsModule,
     SharedModule,
     ScheduleGenerationModule,
+    ScheduleTableContextMenuModule,
     MatFormFieldModule,
-    MatInputModule,
-    ContextMenuModule.forRoot({
-      autoFocus: true,
-      useBootstrap4: false
-    })
+    MatInputModule
   ],
   declarations: [
     SchedulesTableComponent,
@@ -41,8 +37,7 @@ import { ContextMenuModule } from "../../../../../lib/ngx-contextmenu/ngx-contex
     TableShiftGroupComponent,
     SelectableRowDirective,
     ShowHoursControlComponent,
-    ScheduleExportExcelComponent,
-    ScheduleTableContextMenuComponent
+    ScheduleExportExcelComponent
   ],
   entryComponents: [ScheduleGenerationDialogComponent],
   providers: [PaginatorService, ShowHoursService]

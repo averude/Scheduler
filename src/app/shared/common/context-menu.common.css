@@ -2,7 +2,9 @@
   border-radius: 10px;
   background-color: #ffffff;
   padding: 0;
+  overflow-y: scroll;
   width: 300px;
+  max-height: 600px;
   box-shadow: 0 5px 10px rgba(154,160,185,.35), 0 15px 40px rgba(166,173,201,.5);
 }
 .ngx-contextmenu li {
@@ -30,20 +32,20 @@
   text-decoration: none;
 }
 
-.context-menu-item {
-  display: block;
-}
+/*.context-menu-item {*/
+  /*display: block;*/
+/*}*/
 
-.menu-daytype-label-box {
-  width: 30px;
-  height: 30px;
-  background-color: #92b9da;
-}
+/*.menu-daytype-label-box {*/
+  /*width: 30px;*/
+  /*height: 30px;*/
+  /*background-color: #92b9da;*/
+/*}*/
 
-.menu-daytype-name {
+/*.menu-daytype-name {*/
 
-}
+/*}*/
 
-.menu-daytype-value {
+/*.menu-daytype-value {*/
 
-}
+/*}*/

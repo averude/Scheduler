@@ -5,6 +5,7 @@ import { ShiftPattern } from "../../../../../../../model/shift-pattern";
 import { ScheduleGenerationService } from "../../../../../../../services/schedule-generation.service";
 import { PatternUnitService } from "../../../../../../../services/pattern-unit.service";
 import { ContextMenuComponent } from "../../../../../../../lib/ngx-contextmenu/contextMenu.component";
+import { DayTypeGroup } from "../../../../../../../model/day-type-group";
 
 @Component({
   selector: 'app-schedule-table-context-menu',
@@ -20,8 +21,9 @@ export class ScheduleTableContextMenuComponent implements OnInit {
 
   @Output() onContextMenuClose: EventEmitter<void> = new EventEmitter();
 
-  @Input() dayTypes: DayType[]       = [];
-  @Input() patterns: ShiftPattern[]  = [];
+  @Input() dayTypes: DayType[]            = [];
+  @Input() dayTypeGroups: DayTypeGroup[]  = [];
+  @Input() patterns: ShiftPattern[]       = [];
 
   constructor(private patternUnitService: PatternUnitService,
               private scheduleGenerationService: ScheduleGenerationService) { }

@@ -16,11 +16,9 @@
                  contextMenuItem
                  [enabled]="customHours >= 0 && customHours <= 24"
                  (execute)="generateScheduleByCustomDay(dayType, $event.item)">
-
-      <div class="context-menu-item">
-        <div class="menu-daytype-label-box">{{dayType.label}}</div>
-        <div class="menu-daytype-name">{{dayType.name}}</div>
-      </div>
+      <app-context-menu-daytype-item [dayType]="dayType"
+                                     [dayTypeGroups]="dayTypeGroups">
+      </app-context-menu-daytype-item>
     </ng-template>
   </context-menu>
   <ng-template contextMenuItem [subMenu]="customDaySubMenu">
@@ -31,11 +29,9 @@
     <ng-template *ngFor="let dayType of getDayTypesWithDefaultHours()"
                  contextMenuItem
                  (execute)="generateScheduleBySingleDay(dayType, $event.item)">
-      <div class="context-menu-item">
-        <div class="menu-daytype-label-box">{{dayType.label}}</div>
-        <div class="menu-daytype-name">{{dayType.name}}</div>
-        <div class="menu-daytype-value">{{dayType.defaultValue}}</div>
-      </div>
+      <app-context-menu-daytype-item [dayType]="dayType"
+                                     [dayTypeGroups]="dayTypeGroups">
+      </app-context-menu-daytype-item>
     </ng-template>
   </context-menu>
   <ng-template contextMenuItem [subMenu]="singleDaySubMenu">
