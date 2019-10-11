@@ -1,11 +1,10 @@
-import { Component, Input, OnInit, QueryList, ViewChild } from '@angular/core';
-import { ContextMenuComponent } from "ngx-contextmenu";
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { DayType } from "../../../../../../../model/day-type";
 import { ContextMenuData } from "../../../../../../../model/ui/context-menu-data";
 import { ShiftPattern } from "../../../../../../../model/shift-pattern";
 import { ScheduleGenerationService } from "../../../../../../../services/schedule-generation.service";
 import { PatternUnitService } from "../../../../../../../services/pattern-unit.service";
-import { TableShiftGroupComponent } from "../table-shift-group/table-shift-group.component";
+import { ContextMenuComponent } from "../../../../../../../lib/ngx-contextmenu/contextMenu.component";
 
 @Component({
   selector: 'app-schedule-table-context-menu',
@@ -19,7 +18,7 @@ export class ScheduleTableContextMenuComponent implements OnInit {
   customHours:  number;
   offset:       number = 0;
 
-  @Input() shiftGroups: QueryList<TableShiftGroupComponent>;
+  @Output() onContextMenuClose: EventEmitter<void> = new EventEmitter();
 
   @Input() dayTypes: DayType[]       = [];
   @Input() patterns: ShiftPattern[]  = [];
@@ -83,8 +82,6 @@ export class ScheduleTableContextMenuComponent implements OnInit {
   }
 
   clearSelection() {
-    this.shiftGroups
-      .forEach(group => group.rows
-        .forEach(row => row.clearSelection()));
+    this.onContextMenuClose.emit();
   }
 }

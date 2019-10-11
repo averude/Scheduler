@@ -1,5 +1,4 @@
 import { Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, } from '@angular/core';
-import { ContextMenuComponent, ContextMenuService } from 'ngx-contextmenu';
 import { Employee } from '../../../../../../../model/employee';
 import { Position } from '../../../../../../../model/position';
 import { ScheduleService } from '../../../../../../../services/schedule.service';
@@ -15,6 +14,8 @@ import { DayTypeGroup } from "../../../../../../../model/day-type-group";
 import { TableCellComponent } from "../table-cell/table-cell.component";
 import { ShowHoursService } from "../show-hours-control/show-hours.service";
 import { ContextMenuData } from "../../../../../../../model/ui/context-menu-data";
+import { ContextMenuService } from "../../../../../../../lib/ngx-contextmenu/contextMenu.service";
+import { ContextMenuComponent } from "../../../../../../../lib/ngx-contextmenu/contextMenu.component";
 
 @Component({
   selector: '[app-table-row]',

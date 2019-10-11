@@ -18,7 +18,6 @@ import { DayTypeGroupService } from "../../../../../../../services/day-type-grou
 import { DayTypeGroup } from "../../../../../../../model/day-type-group";
 import { ScheduleService } from "../../../../../../../services/schedule.service";
 import { ScheduleDto } from "../../../../../../../model/dto/schedule-dto";
-import { ScheduleGenerationService } from "../../../../../../../services/schedule-generation.service";
 import { PatternUnitService } from "../../../../../../../services/pattern-unit.service";
 import { TableShiftGroupComponent } from "../table-shift-group/table-shift-group.component";
 import { ScheduleTableContextMenuComponent } from "../schedule-table-context-menu/schedule-table-context-menu.component";
@@ -66,8 +65,7 @@ export class SchedulesTableComponent implements OnInit, OnDestroy {
               private patternUnitService: PatternUnitService,
               private dayTypesService: DayTypeService,
               private dayTypeGroupService: DayTypeGroupService,
-              private workingTimeService: WorkingTimeService,
-              private scheduleGenerationService: ScheduleGenerationService) {
+              private workingTimeService: WorkingTimeService) {
   }
 
   ngOnInit() {
@@ -124,5 +122,11 @@ export class SchedulesTableComponent implements OnInit, OnDestroy {
           daysInMonth[daysInMonth.length - 1].isoString)
           .subscribe(schedule => this.schedule = schedule);
       });
+  }
+
+  clearSelection() {
+    this.shiftGroups
+      .forEach(group => group.rows
+        .forEach(row => row.clearSelection()));
   }
 }

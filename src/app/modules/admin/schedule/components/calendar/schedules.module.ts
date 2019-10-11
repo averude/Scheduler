@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ContextMenuModule } from 'ngx-contextmenu';
 import { TableHeaderComponent } from './components/table-header/table-header.component';
 import { TableCellComponent } from './components/table-cell/table-cell.component';
 import { TableRowComponent } from './components/table-row/table-row.component';
@@ -18,6 +17,7 @@ import { ScheduleGenerationModule } from "../schedule-generation/schedule-genera
 import { ScheduleGenerationDialogComponent } from "../schedule-generation/components/schedule-generation-dialog/schedule-generation-dialog.component";
 import { ScheduleExportExcelComponent } from './components/schedule-export-excel/schedule-export-excel.component';
 import { ScheduleTableContextMenuComponent } from './components/schedule-table-context-menu/schedule-table-context-menu.component';
+import { ContextMenuModule } from "../../../../../lib/ngx-contextmenu/ngx-contextmenu";
 
 @NgModule({
   imports: [

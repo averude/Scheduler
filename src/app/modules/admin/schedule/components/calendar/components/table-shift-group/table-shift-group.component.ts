@@ -7,8 +7,8 @@ import { PaginatorService } from "../../../../../../../shared/paginators/paginat
 import { DayType } from "../../../../../../../model/day-type";
 import { DayTypeGroup } from "../../../../../../../model/day-type-group";
 import { ScheduleDto } from "../../../../../../../model/dto/schedule-dto";
-import { ContextMenuComponent } from "ngx-contextmenu";
 import { TableRowComponent } from "../table-row/table-row.component";
+import { ContextMenuComponent } from "../../../../../../../lib/ngx-contextmenu/contextMenu.component";
 
 @Component({
   selector: '[app-table-shift-group]',

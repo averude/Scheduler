@@ -36,5 +36,5 @@
 
 <app-schedule-table-context-menu [dayTypes]="dayTypes"
                                  [patterns]="patterns"
-                                 [shiftGroups]="shiftGroups">
+                                 (onContextMenuClose)="clearSelection()">
 </app-schedule-table-context-menu>
