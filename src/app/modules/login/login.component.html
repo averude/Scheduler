@@ -1,5 +1,6 @@
 <div class="full-bg">
-	<div class="login-form">
+	<div @formAppearanceTrigger
+       class="login-form">
 		<div class="root-panel"
          (keyup.enter)="submit()">
 
@@ -43,47 +44,3 @@
 		</div>
 	</div>
 </div>
-
-<!--<div class="full-screen-page login js-login">-->
-<!--  <div class="full-bg-img js-full-bg-img" data-src="/images/login/login_bg.jpg"></div>-->
-<!--  <div class="full-screen-page__form-wrap login__form-wrap">-->
-<!--    <form name="login" method="POST" data-validate="data-validate" data-invalid-class="field__input_state_error" action=""-->
-<!--          class="login-form">-->
-<!--      <div class="login-form__greeting">Вход в личный кабинет</div>-->
-<!--      <div class="login-form__inputs">-->
-<!--        <div class="login-form__input-wrap">-->
-<!--          <div class="field field_type_email">-->
-<!--            <label for="email" class="field__label">Ваш E-MAIL</label>-->
-<!--            <input type="email" name="email" id="email" required="required" data-invalid-message="Введите e-mail" placeholder="you@email.ru" class="field__input js-field-input"/>-->
-<!--            <div class="field__wrap-input field__wrap-input-error login-form__errors"></div>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--        <div class="login-form__input-wrap">-->
-<!--          <div class="field field_type_password">-->
-<!--            <label for="input-password" class="field__label">Ваш пароль</label>-->
-<!--            <div class="field__input-pass">-->
-<!--              <input type="password" name="input-password" id="input-password" required="required" data-invalid-message="Введите пароль" minlength="4" placeholder="••••••••"-->
-<!--                     class="field__input js-field-input js-input-pass" />-->
-<!--              <div class="field__eye js-show-password">-->
-<!--                <svg class="field__icon"><use xlink:href="images/icon.svg#icon_eye"></use></svg>-->
-<!--                <svg class="field__icon"><use xlink:href="images/icon.svg#icon_eye-closed"></use></svg>-->
-<!--              </div>-->
-<!--              <div class="field__wrap-input field__wrap-input-error login-form__errors"></div>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--        <div class="login-form&#45;&#45;fail ">Данные для входа неверны. Пожалуйста, попробуйте еще раз.</div>-->
-<!--        <a href="https://vigbo.com/reset-password" class="login-form__reminder">Забыли пароль?</a>-->
-<!--        <div class="login-form__button-wrap">-->
-<!--          <button type="submit" class="button button_type_submit">-->
-<!--            <span>войти</span>-->
-<!--          </button>-->
-<!--        </div>-->
-<!--        <div class="login-form__add-account">-->
-<!--          <a href="https://vigbo.com/pricing" class="login-form__create-acc">Зарегистрироваться</a>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--      <input type="hidden" name="_csrf" value="p8IlPIeGqic0QcwICskkUhXCAJ3NRa8MfOH5r5qY57XElnBu47_ZcXYp4TBivW8DefJs055050tMoIznyu_U5Q==" />-->
-<!--    </form>-->
-<!--  </div>-->
-<!--</div>-->
