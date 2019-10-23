@@ -9,7 +9,7 @@
 }
 .ngx-contextmenu li {
   display: block;
-  padding: 20px 0;
+  padding: 10px 0;
   border-bottom: 1px solid #dbe6f0;
 }
 .ngx-contextmenu li:hover {
@@ -24,28 +24,10 @@
   font-size: 18px;
   color: #74819c;
   display: block;
-  padding-left: 20px;
+  padding-left: 10px;
   text-decoration: none;
 }
 .ngx-contextmenu a:hover {
   color: #2b3944;
   text-decoration: none;
 }
-
-/*.context-menu-item {*/
-  /*display: block;*/
-/*}*/
-
-/*.menu-daytype-label-box {*/
-  /*width: 30px;*/
-  /*height: 30px;*/
-  /*background-color: #92b9da;*/
-/*}*/
-
-/*.menu-daytype-name {*/
-
-/*}*/
-
-/*.menu-daytype-value {*/
-
-/*}*/
