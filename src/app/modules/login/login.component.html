@@ -1,46 +1,46 @@
-<div class="full-bg">
-	<div @formAppearanceTrigger
-       class="login-form">
-		<div class="root-panel"
-         (keyup.enter)="submit()">
+<div class="full-bg fullscreen">
+  <div class="bg-blur fullscreen"></div>
+</div>
+<div>
+  <div class="root-panel"
+       (keyup.enter)="submit()">
 
-			<h1 class="scheduler-title"></h1>
+    <h1 class="scheduler-title"></h1>
 
-      <div *ngIf="bad_credentials"
-           class="login-panel-bad-credentials">
-        Логин или пароль не совпадают.<br />Попробуйте еще раз
-      </div>
+    <div *ngIf="bad_credentials"
+         class="login-panel-bad-credentials">
+      Логин или пароль не совпадают.<br />Попробуйте еще раз
+    </div>
 
-			<div class="inputs-panel"
-           [formGroup]="loginForm">
-          <mat-form-field class="login-panel-input">
-            <input matInput
-                   type="text"
-                   placeholder="Логин"
-                   formControlName="username"/>
-            <mat-error *ngIf="isControlInvalid('username')">Логин не может быть пустым</mat-error>
-          </mat-form-field>
+    <div class="inputs-panel"
+         [formGroup]="loginForm">
+      <mat-form-field class="login-panel-input">
+        <input matInput
+               type="text"
+               placeholder="Логин"
+               formControlName="username"/>
+        <mat-error *ngIf="isControlInvalid('username')">Логин не может быть пустым</mat-error>
+      </mat-form-field>
 
-          <mat-form-field class="login-panel-input">
-            <input matInput
-                   type="password"
-                   placeholder="Пароль"
-                   formControlName="password"/>
-            <mat-error *ngIf="isControlInvalid('password')">Пароль не может быть пустым</mat-error>
-          </mat-form-field>
-			</div>
+      <mat-form-field class="login-panel-input">
+        <input matInput
+               type="password"
+               placeholder="Пароль"
+               formControlName="password"/>
+        <mat-error *ngIf="isControlInvalid('password')">Пароль не может быть пустым</mat-error>
+      </mat-form-field>
+    </div>
 
-			<div class="button-container">
-			  <button *ngIf="!loading"
-                mat-button
-                color="primary"
-                class="login-panel-button"
-                [disabled]="loginForm.invalid"
-                type="submit"
-                (click)="submit()">Войти</button>
-        <div *ngIf="loading"
-             class="login-panel-button-preloader-image"></div>
-			</div>
-		</div>
-	</div>
+    <div class="button-container">
+      <button *ngIf="!loading"
+              mat-button
+              color="primary"
+              class="login-panel-button"
+              [disabled]="loginForm.invalid"
+              type="submit"
+              (click)="submit()">Войти</button>
+      <div *ngIf="loading"
+           class="login-panel-button-preloader-image"></div>
+    </div>
+  </div>
 </div>
