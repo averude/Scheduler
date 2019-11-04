@@ -1,10 +1,20 @@
-import { Component, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  QueryList,
+  SimpleChanges,
+  ViewChild,
+  ViewChildren
+} from '@angular/core';
 import { Employee } from '../../../../../../../model/employee';
 import { EmployeeService } from '../../../../../../../services/employee.service';
 import { ShiftPatternService } from '../../../../../../../services/shift-pattern.service';
 import { ShiftPattern } from '../../../../../../../model/shift-pattern';
-import { fromEvent, Observable, Subscription } from "rxjs";
-import { distinctUntilChanged, filter, map, throttleTime } from "rxjs/operators";
+import { forkJoin, of, Subscription } from "rxjs";
 import { WorkingTimeService } from "../../../../../../../services/working-time.service";
 import { PaginatorService } from "../../../../../../../shared/paginators/paginator.service";
 import { Shift } from "../../../../../../../model/shift";
@@ -21,13 +31,16 @@ import { ScheduleDto } from "../../../../../../../model/dto/schedule-dto";
 import { PatternUnitService } from "../../../../../../../services/pattern-unit.service";
 import { TableShiftGroupComponent } from "../table-shift-group/table-shift-group.component";
 import { ScheduleTableContextMenuComponent } from "../schedule-table-context-menu/schedule-table-context-menu.component";
+import { getShiftScheduleByDates, ShiftSchedule } from "../../../../../../../model/shift-schedule";
+import { filter, mergeMap } from "rxjs/operators";
 
 @Component({
   selector: 'app-schedules-table',
   templateUrl: './schedules-table.component.html',
-  styleUrls: ['./schedules-table.component.css']
+  styleUrls: ['./schedules-table.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SchedulesTableComponent implements OnInit, OnDestroy {
+export class SchedulesTableComponent implements OnInit, OnChanges, OnDestroy {
 
   @ViewChild(ScheduleTableContextMenuComponent)
   contextMenuComponent: ScheduleTableContextMenuComponent;
@@ -36,6 +49,8 @@ export class SchedulesTableComponent implements OnInit, OnDestroy {
   shiftGroups: QueryList<TableShiftGroupComponent>;
 
   shifts:             Shift[]         = [];
+  shiftSchedule:      ShiftSchedule[] = [];
+  employees:          Employee[]      = [];
   schedule:           ScheduleDto[]   = [];
   positions:          Position[]      = [];
   patterns:           ShiftPattern[]  = [];
@@ -43,20 +58,10 @@ export class SchedulesTableComponent implements OnInit, OnDestroy {
   dayTypeGroups:      DayTypeGroup[]  = [];
   shiftsWorkingTime:  WorkingTime[]   = [];
 
-  employeesMap: Map<number, Employee[]> = new Map<number, Employee[]>();
+  paginatorSub: Subscription;
 
-  mouseMove$: Observable<number> = fromEvent<MouseEvent>(document, 'mousemove')
-    .pipe(
-      throttleTime(5),
-      filter(event => event.buttons === 1),
-      distinctUntilChanged((a, b) => a === b, event => event.clientX),
-      map(event => event.clientX)
-    );
-  mouseUp$: Observable<MouseEvent> = fromEvent<MouseEvent>(document, 'mouseup');
-
-  sub: Subscription;
-
-  constructor(private paginatorService: PaginatorService,
+  constructor(private cd: ChangeDetectorRef,
+              private paginatorService: PaginatorService,
               private shiftService: ShiftService,
               private employeeService: EmployeeService,
               private scheduleService: ScheduleService,
@@ -72,13 +77,21 @@ export class SchedulesTableComponent implements OnInit, OnDestroy {
     this.getData();
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log(changes);
+  }
+
   ngOnDestroy(): void {
-    this.sub.unsubscribe();
+    this.paginatorSub.unsubscribe();
     this.paginatorService.clearStoredValue();
   }
 
-  getShiftEmployees(shiftId: number): Employee[] {
-    return this.employeesMap.get(shiftId);
+  getNewShiftEmployees(shiftId: number): Employee[] {
+    let employeeIds = this.shiftSchedule
+      .filter(value => value.shiftId === shiftId)
+      .map(value => value.employeeId);
+    return this.employees
+      .filter(value => employeeIds.findIndex(id => value.id === id) >= 0);
   }
 
   getShiftWorkingTime(shiftId: number): WorkingTime {
@@ -87,11 +100,7 @@ export class SchedulesTableComponent implements OnInit, OnDestroy {
 
   private getData() {
     this.employeeService.getAll()
-      .subscribe(employees => {
-        employees.map(employee => employee.shiftId)
-          .forEach(shiftId =>
-            this.employeesMap.set(shiftId, employees.filter(value => value.shiftId === shiftId)))
-      });
+      .subscribe(employees => this.employees = employees);
 
     this.positionService.getAll()
       .subscribe(positions => this.positions = positions);
@@ -108,19 +117,28 @@ export class SchedulesTableComponent implements OnInit, OnDestroy {
     this.dayTypeGroupService.getAll()
       .subscribe(dayTypeGroups => this.dayTypeGroups = dayTypeGroups);
 
-    this.sub = this.paginatorService.dates
+    this.paginatorSub = this.paginatorService.dates
       .pipe(
-        filter(values => values.length > 0)
-      ).subscribe((daysInMonth) => {
-        this.workingTimeService.getAllByDate(
-          daysInMonth[0].isoString,
-          daysInMonth[daysInMonth.length - 1].isoString)
-          .subscribe(workingTime => this.shiftsWorkingTime = workingTime);
-
-        this.scheduleService.getAllByDate(
-          daysInMonth[0].isoString,
-          daysInMonth[daysInMonth.length - 1].isoString)
-          .subscribe(schedule => this.schedule = schedule);
+        filter(values => values.length > 0),
+        mergeMap(daysInMonth =>
+          forkJoin(
+            this.workingTimeService.getAllByDate(
+              daysInMonth[0].isoString,
+              daysInMonth[daysInMonth.length - 1].isoString),
+            this.scheduleService.getAllByDate(
+              daysInMonth[0].isoString,
+              daysInMonth[daysInMonth.length - 1].isoString),
+            of(this.shiftSchedule = getShiftScheduleByDates(
+              daysInMonth[0].isoString,
+              daysInMonth[daysInMonth.length - 1].isoString
+            ))
+          )
+        ),
+      ).subscribe((values) => {
+        this.shiftsWorkingTime  = values[0];
+        this.schedule           = values[1];
+        this.shiftSchedule      = values[2];
+        this.cd.markForCheck();
       });
   }
 

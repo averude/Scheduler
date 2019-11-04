@@ -11,13 +11,12 @@
       *ngFor="let employee of employees"
       app-table-row
       [employee]="employee"
-      [schedule]="getSchedule(employee.id)?.workDays"
+      [schedule]="getSomeShitInTheHouse(employee.id, shift.id)"
+      [workingTimeSum]="utils.calculateWorkingTimeSum(getSomeShitInTheHouse(employee.id, shift.id))"
       [workingTimeNorm]="workingTimeNorm"
       [position]="getPosition(employee)"
       [dayTypes]="dayTypes"
       [dayTypeGroups]="dayTypeGroups"
-      [patternMenu]="patternMenu"
-      [mouseMove$]="mouseMove$"
-      [mouseUp$]="mouseUp$">
+      [patternMenu]="patternMenu">
   </tr>
 </ng-container>

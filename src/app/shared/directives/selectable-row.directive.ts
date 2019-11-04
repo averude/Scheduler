@@ -11,7 +11,7 @@ import {
   QueryList
 } from "@angular/core";
 import { fromEvent, Observable, Subscription } from "rxjs";
-import { filter } from "rxjs/operators";
+import { distinctUntilChanged, filter, map, throttleTime } from "rxjs/operators";
 import { selectingLeft, selectingRight } from "../utils/table-selection-utils";
 import { TableCellComponent } from "../../modules/admin/schedule/components/calendar/components/table-cell/table-cell.component";
 import { CalendarDay } from "../../model/ui/calendar-day";
@@ -40,6 +40,8 @@ export class SelectableRowDirective implements OnInit, OnDestroy, AfterViewInit 
   constructor() {}
 
   ngOnInit(): void {
+    this.mouseMove$ = getMouseMove();
+    this.mouseUp$   = getMouseUp();
   }
 
   ngOnDestroy(): void {
@@ -94,4 +96,20 @@ export class SelectableRowDirective implements OnInit, OnDestroy, AfterViewInit 
       .filter(item => item.selected)
       .forEach(selectedItem => selectedItem.deselect());
   }
+}
+
+export const compFunction = (a, b) => a - b <= 3 && b - a <= 3;
+
+export function getMouseMove() {
+  return fromEvent<MouseEvent>(document, 'mousemove')
+    .pipe(
+      throttleTime(5),
+      filter(event => event.buttons === 1),
+      map(event => event.clientX),
+      distinctUntilChanged(compFunction)
+    );
+}
+
+export function getMouseUp() {
+  return fromEvent<MouseEvent>(document, 'mouseup');
 }

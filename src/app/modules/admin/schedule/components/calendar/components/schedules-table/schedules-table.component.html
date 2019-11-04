@@ -21,15 +21,14 @@
   <tbody *ngFor="let shift of shifts"
          app-table-shift-group
          [shift]="shift"
-         [employees]="getShiftEmployees(shift.id)"
+         [shiftSchedule]="shiftSchedule"
+         [employees]="getNewShiftEmployees(shift.id)"
          [workingTimeNorm]="getShiftWorkingTime(shift.id)?.hours"
          [schedule]="schedule"
          [positions]="positions"
          [dayTypes]="dayTypes"
          [dayTypeGroups]="dayTypeGroups"
-         [patternMenu]="contextMenuComponent.patternMenu"
-         [mouseMove$]="mouseMove$"
-         [mouseUp$]="mouseUp$">
+         [patternMenu]="contextMenuComponent.patternMenu">
   </tbody>
 </table>
 </div>

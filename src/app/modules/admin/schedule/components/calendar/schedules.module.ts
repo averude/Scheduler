@@ -17,6 +17,8 @@ import { ScheduleGenerationModule } from "../schedule-generation/schedule-genera
 import { ScheduleGenerationDialogComponent } from "../schedule-generation/components/schedule-generation-dialog/schedule-generation-dialog.component";
 import { ScheduleExportExcelComponent } from './components/schedule-export-excel/schedule-export-excel.component';
 import { ScheduleTableContextMenuModule } from "./components/schedule-table-context-menu/schedule-table-context-menu.module";
+import { ScheduleTableUtils } from "./utils/schedule-table-utils";
+import { ScheduleTableStatUtils } from "./utils/schedule-table-stat-utils";
 
 @NgModule({
   imports: [
@@ -40,6 +42,11 @@ import { ScheduleTableContextMenuModule } from "./components/schedule-table-cont
     ScheduleExportExcelComponent
   ],
   entryComponents: [ScheduleGenerationDialogComponent],
-  providers: [PaginatorService, ShowHoursService]
+  providers: [
+    PaginatorService,
+    ShowHoursService,
+    ScheduleTableUtils,
+    ScheduleTableStatUtils
+  ]
 })
 export class SchedulesModule {}

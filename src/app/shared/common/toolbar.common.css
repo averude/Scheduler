@@ -181,6 +181,12 @@
   height: 100%;
 }
 
+.content-box {
+  position: relative;
+  overflow: scroll;
+  height: 100%;
+}
+
 .main-nav {
   background-color: #4c4c4c;
 }

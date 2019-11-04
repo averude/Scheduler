@@ -1,19 +1,9 @@
 <ng-container appSelectableRow
-              [mouseMove$]="mouseMove$"
-              [mouseUp$]="mouseUp$"
               [element]="elementRef"
               (onSelectionEnds)="onContextMenu($event.event, $event.selectedCells)">
   <td class="td-employee">
     <div class="employee-name">
-      {{
-        employee.secondName
-        + ' '
-        + employee.firstName.charAt(0)
-        + '.'
-        + ' '
-        + employee.patronymic.charAt(0)
-        + '.'
-      }}
+      {{utils.getEmployeeShortName(employee)}}
     </div>
     <div class="position-label">
       {{position?.shortName}}
@@ -23,7 +13,7 @@
       *ngFor="let day of daysInMonth"
       app-table-cell
       [day]="day"
-      [workDay]="getWorkingDay(day.isoString)"
+      [workDay]="utils.getWorkingDay(day.isoString, schedule)"
       [dayTypes]="dayTypes"
       [dayTypeGroups]="dayTypeGroups"
       [class.weekend]="day.weekend"
