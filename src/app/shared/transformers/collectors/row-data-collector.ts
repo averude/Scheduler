@@ -22,7 +22,7 @@ export class RowDataCollector {
              dayTypeGroups: DayTypeGroup[],
              daysInMonth: CalendarDay[],
              workingTimeNorm: number): RowData[] {
-    let rowData = this.getNewShiftEmployees(shiftId, shiftSchedule, employees)
+    return this.getEmployeesInShift(shiftId, shiftSchedule, employees)
       .map(employee => {
         let row = new RowData();
         row.employee = employee;
@@ -32,12 +32,11 @@ export class RowDataCollector {
         row.workingTimeNorm = workingTimeNorm;
         return row;
       });
-    return rowData;
   }
 
-  getNewShiftEmployees(shiftId: number,
-                       shiftSchedule: ShiftSchedule[],
-                       employees: Employee[]): Employee[] {
+  getEmployeesInShift(shiftId: number,
+                      shiftSchedule: ShiftSchedule[],
+                      employees: Employee[]): Employee[] {
     let employeeIds = shiftSchedule
       .filter(value => value.shiftId === shiftId)
       .map(value => value.employeeId);
