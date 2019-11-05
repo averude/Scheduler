@@ -84,18 +84,20 @@ export class TableCellComponent implements OnInit, OnChanges {
 
   @HostListener('mousedown')
   mouseDown() {
-    this.select();
+    if (this.enabled) {
+      this.select();
+    }
   }
 
   select() {
-    if (!this.selected) {
+    if (this.enabled && !this.selected) {
       this.selected = true;
       toggleClass(this.elementRef, this.className);
     }
   }
 
   deselect() {
-    if (this.selected) {
+    if (this.enabled && this.selected) {
       this.selected = false;
       toggleClass(this.elementRef, this.className);
     }
