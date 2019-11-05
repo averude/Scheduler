@@ -1,13 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  ElementRef,
-  Input,
-  OnChanges,
-  OnInit,
-  SimpleChanges,
-  ViewChild,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, Input, OnInit, ViewChild, } from '@angular/core';
 import { Employee } from '../../../../../../../model/employee';
 import { Position } from '../../../../../../../model/position';
 import { SelectableRowDirective } from "../../../../../../../shared/directives/selectable-row.directive";
@@ -24,11 +15,11 @@ import { CellData } from "../../../../../../../model/ui/cell-data";
   styleUrls: ['./table-row.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TableRowComponent implements OnInit, OnChanges {
+export class TableRowComponent implements OnInit {
 
   @Input() employee:      Employee;
   @Input() position:      Position;
-  @Input() cellData:      CellData[] = [];
+  @Input() cellData:      CellData[];
   @Input() patternMenu:   ContextMenuComponent;
 
   @Input() workingTimeSum:  number = 0;
@@ -46,11 +37,6 @@ export class TableRowComponent implements OnInit, OnChanges {
 
   ngOnInit() {
   }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes);
-  }
-
 
   onContextMenu($event: MouseEvent,
                 selectedCells: TableCellComponent[]): void {

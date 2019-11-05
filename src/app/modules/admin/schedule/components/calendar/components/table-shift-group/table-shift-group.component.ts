@@ -1,13 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Input,
-  OnChanges,
-  OnInit,
-  QueryList,
-  SimpleChanges,
-  ViewChildren
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { Shift } from "../../../../../../../model/shift";
 import { PaginatorService } from "../../../../../../../shared/paginators/paginator.service";
 import { TableRowComponent } from "../table-row/table-row.component";
@@ -21,11 +12,11 @@ import { RowData } from "../../../../../../../model/ui/row-data";
   styleUrls: ['./table-shift-group.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TableShiftGroupComponent implements OnInit, OnChanges {
+export class TableShiftGroupComponent implements OnInit {
   numberOfColumns: number;
 
   @Input() shift:         Shift;
-  @Input() rowData:       RowData[] = [];
+  @Input() rowData:       RowData[];
   @Input() workingTimeNorm: number;
 
   @Input() patternMenu:   ContextMenuComponent;
@@ -45,7 +36,4 @@ export class TableShiftGroupComponent implements OnInit, OnChanges {
       });
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    // console.log(changes);
-  }
 }

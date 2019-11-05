@@ -40,7 +40,6 @@ export class SelectableRowDirective implements OnInit, OnDestroy, AfterViewInit 
   constructor() {}
 
   ngOnInit(): void {
-    console.log('HEY');
   }
 
   ngOnDestroy(): void {

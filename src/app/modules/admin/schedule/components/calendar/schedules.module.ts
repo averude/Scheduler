@@ -19,6 +19,7 @@ import { ScheduleExportExcelComponent } from './components/schedule-export-excel
 import { ScheduleTableContextMenuModule } from "./components/schedule-table-context-menu/schedule-table-context-menu.module";
 import { ScheduleTableUtils } from "./utils/schedule-table-utils";
 import { ScheduleTableStatUtils } from "./utils/schedule-table-stat-utils";
+import { DataTransformer } from "./utils/data-transformer";
 
 @NgModule({
   imports: [
@@ -46,7 +47,8 @@ import { ScheduleTableStatUtils } from "./utils/schedule-table-stat-utils";
     PaginatorService,
     ShowHoursService,
     ScheduleTableUtils,
-    ScheduleTableStatUtils
+    ScheduleTableStatUtils,
+    DataTransformer
   ]
 })
 export class SchedulesModule {}
