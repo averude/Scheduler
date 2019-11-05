@@ -47,3 +47,7 @@
 .selected {
   background-color: #fffeb8;
 }
+
+.disabled {
+  background-color: grey;
+}

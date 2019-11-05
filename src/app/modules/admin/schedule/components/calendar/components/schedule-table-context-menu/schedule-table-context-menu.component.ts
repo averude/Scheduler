@@ -9,7 +9,6 @@ import { DayTypeGroup } from "../../../../../../../model/day-type-group";
 import { ScheduleTableUtils } from "../../utils/schedule-table-utils";
 import { ScheduleService } from "../../../../../../../services/schedule.service";
 import { NotificationsService } from "angular2-notifications";
-import { WorkDay } from "../../../../../../../model/workday";
 
 @Component({
   selector: 'app-schedule-table-context-menu',
@@ -59,7 +58,7 @@ export class ScheduleTableContextMenuComponent implements OnInit {
         data.selectedCells,
         this.customHours,
         dayType,
-        this.getScheduleGeneratedHandler(data.schedule),
+        this.scheduleGeneratedHandler,
         this.errorHandler);
   }
 
@@ -74,7 +73,7 @@ export class ScheduleTableContextMenuComponent implements OnInit {
             patternUnits,
             this.offset,
             pattern.overrideExistingValues,
-            this.getScheduleGeneratedHandler(data.schedule),
+            this.scheduleGeneratedHandler,
             this.errorHandler)
       });
   }
@@ -87,7 +86,7 @@ export class ScheduleTableContextMenuComponent implements OnInit {
         data.selectedCells,
         dayType.defaultValue,
         dayType,
-        this.getScheduleGeneratedHandler(data.schedule),
+        this.scheduleGeneratedHandler,
         this.errorHandler);
   }
 
@@ -95,13 +94,14 @@ export class ScheduleTableContextMenuComponent implements OnInit {
     this.onContextMenuClose.emit();
   }
 
-  private getScheduleGeneratedHandler(schedule: WorkDay[]): (cells) => void {
+  private get scheduleGeneratedHandler(): (cells) => void {
     return cells => {
-      const createdSchedule = cells
-        .filter(cell => !cell.workDay.id)
+      const createdCells = cells
+        .filter(cell => !cell.workDay.id);
+      const createdSchedule = createdCells
         .map(cell => cell.workDay);
 
-      let updatedCells = cells
+      const updatedCells = cells
         .filter(cell => cell.workDay.id);
       const updatedSchedule = updatedCells
         .map(cell => cell.workDay);
@@ -109,8 +109,7 @@ export class ScheduleTableContextMenuComponent implements OnInit {
       if (createdSchedule.length > 0) {
         this.scheduleService.create(createdSchedule)
           .subscribe(res => {
-            res.forEach(workDay => schedule.push(workDay));
-            // and then schedule should be sorted
+            createdCells.forEach(cell => cell.refreshLabel());
             this.notificationService.success(
               'Created',
               'Schedule sent successfully');
@@ -119,9 +118,7 @@ export class ScheduleTableContextMenuComponent implements OnInit {
       if (updatedSchedule.length > 0) {
         this.scheduleService.update(updatedSchedule)
           .subscribe(res => {
-            updatedCells.forEach(cell => {
-              cell.refreshLabel();
-            });
+            updatedCells.forEach(cell => cell.refreshLabel());
             this.notificationService.success(
               'Updated',
               'Schedule sent successfully');

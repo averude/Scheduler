@@ -6,6 +6,7 @@ import { DayType } from "../day-type";
 export interface CellData {
   day: CalendarDay;
   workDay: WorkDay;
+  enabled: boolean;
   dayTypeGroups: DayTypeGroup[];
   dayTypes: DayType[];
 }

@@ -14,10 +14,12 @@
       app-table-cell
       [day]="cell.day"
       [workDay]="cell.workDay"
+      [enabled]="cell.enabled"
       [dayTypes]="cell.dayTypes"
       [dayTypeGroups]="cell.dayTypeGroups"
       [class.weekend]="cell.day.weekend"
-      [class.holiday]="cell.day.holiday">
+      [class.holiday]="cell.day.holiday"
+      [class.disabled]="!cell.enabled">
   </td>
   <td class="sum"
       [class.notEqual]="workingTimeSum !== workingTimeNorm">

@@ -41,6 +41,8 @@ export class TableCellComponent implements OnInit, OnChanges {
   @Input() dayTypeGroups: DayTypeGroup[];
   @Input() labelColor = "transparent";
 
+  @Input() enabled: boolean = true;
+
   showHours: boolean;
   label: string | number = '-';
 

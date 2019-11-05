@@ -33,7 +33,7 @@ import { ShiftSchedule } from "../../../../../../../model/shift-schedule";
 import { ShiftScheduleService } from "../../../../../../../services/shift-schedule.service";
 import { CalendarDay } from "../../../../../../../model/ui/calendar-day";
 import { RowGroupData } from "../../../../../../../model/ui/row-group-data";
-import { DataTransformer } from "../../utils/data-transformer";
+import { DataTransformer } from "../../../../../../../shared/transformers/data-transformer";
 
 @Component({
   selector: 'app-schedules-table',

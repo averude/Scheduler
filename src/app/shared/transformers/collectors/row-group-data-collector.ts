@@ -1,0 +1,42 @@
+import { Shift } from "../../../model/shift";
+import { ShiftSchedule } from "../../../model/shift-schedule";
+import { ScheduleDto } from "../../../model/dto/schedule-dto";
+import { Employee } from "../../../model/employee";
+import { Position } from "../../../model/position";
+import { DayType } from "../../../model/day-type";
+import { DayTypeGroup } from "../../../model/day-type-group";
+import { CalendarDay } from "../../../model/ui/calendar-day";
+import { WorkingTime } from "../../../model/working-time";
+import { RowGroupData } from "../../../model/ui/row-group-data";
+import { RowDataCollector } from "./row-data-collector";
+
+export class RowGroupDataCollector {
+
+  constructor(private rowDataCollector: RowDataCollector) {
+  }
+
+  getRowGroupData(shifts: Shift[],
+                  shiftSchedule: ShiftSchedule[],
+                  schedule: ScheduleDto[],
+                  employees: Employee[],
+                  positions: Position[],
+                  dayTypes: DayType[],
+                  dayTypeGroups: DayTypeGroup[],
+                  daysInMonth: CalendarDay[],
+                  shiftsWorkingTime: WorkingTime[]): RowGroupData[] {
+    return shifts.map(shift => {
+      let rowGroup = new RowGroupData();
+      let shiftWorkingTime = this.getShiftWorkingTime(shift.id, shiftsWorkingTime) ? this.getShiftWorkingTime(shift.id, shiftsWorkingTime).hours : 0;
+      rowGroup.shift = shift;
+      rowGroup.workingTimeNorm = shiftWorkingTime;
+      rowGroup.rows = this.rowDataCollector
+        .getRowData(shift.id, shiftSchedule, schedule, employees, positions,
+          dayTypes, dayTypeGroups, daysInMonth, shiftWorkingTime);
+      return rowGroup;
+    })
+  }
+
+  getShiftWorkingTime(shiftId: number, shiftsWorkingTime: WorkingTime[]): WorkingTime {
+    return shiftsWorkingTime.find(workingTime => workingTime.shiftId === shiftId);
+  }
+}

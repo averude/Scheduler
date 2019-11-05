@@ -21,6 +21,9 @@
     "paths": {
       "moment": [
         "../node_modules/moment/min/moment.min.js"
+      ],
+      "sorted-array-set": [
+        "../node_modules/collections/sorted-array-set.js"
       ]
     }
   }

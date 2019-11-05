@@ -1,4 +1,4 @@
-<ng-container *ngIf="rowData">
+<ng-container *ngIf="rowData && rowData.length > 0">
   <tr class="employee">
     <td class="shift-label"
         [attr.colspan]="numberOfColumns"
