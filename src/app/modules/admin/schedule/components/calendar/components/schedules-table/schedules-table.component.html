@@ -18,16 +18,11 @@
 <table class="table-schedule">
   <thead app-table-header>
   </thead>
-  <tbody *ngFor="let shift of shifts"
+  <tbody *ngFor="let group of rowGroups"
          app-table-shift-group
-         [shift]="shift"
-         [shiftSchedule]="shiftSchedule"
-         [employees]="getNewShiftEmployees(shift.id)"
-         [workingTimeNorm]="getShiftWorkingTime(shift.id)?.hours"
-         [schedule]="schedule"
-         [positions]="positions"
-         [dayTypes]="dayTypes"
-         [dayTypeGroups]="dayTypeGroups"
+         [rowData]="group.rows"
+         [shift]="group.shift"
+         [workingTimeNorm]="group.workingTimeNorm"
          [patternMenu]="contextMenuComponent.patternMenu">
   </tbody>
 </table>

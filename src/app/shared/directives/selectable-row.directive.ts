@@ -21,8 +21,8 @@ import { CalendarDay } from "../../model/ui/calendar-day";
 })
 export class SelectableRowDirective implements OnInit, OnDestroy, AfterViewInit {
 
-  @Input() mouseMove$:  Observable<number>;
-  @Input() mouseUp$:    Observable<MouseEvent>;
+  static mouseMove$:  Observable<number>      = getMouseMove();
+  static mouseUp$:    Observable<MouseEvent>  = getMouseUp();
   @Input() element:     ElementRef;
 
   @Output() onSelectionEnds: EventEmitter<any> = new EventEmitter();
@@ -40,8 +40,7 @@ export class SelectableRowDirective implements OnInit, OnDestroy, AfterViewInit 
   constructor() {}
 
   ngOnInit(): void {
-    this.mouseMove$ = getMouseMove();
-    this.mouseUp$   = getMouseUp();
+    console.log('HEY');
   }
 
   ngOnDestroy(): void {
@@ -57,7 +56,7 @@ export class SelectableRowDirective implements OnInit, OnDestroy, AfterViewInit 
           this.dragging = true;
           this.startX = event.clientX;
 
-          this.mouseMoveSub = this.mouseMove$
+          this.mouseMoveSub = SelectableRowDirective.mouseMove$
             .pipe(filter(() => this.dragging))
             .subscribe(clientX => {
               this.clearSelection();
@@ -69,7 +68,7 @@ export class SelectableRowDirective implements OnInit, OnDestroy, AfterViewInit 
             });
         });
 
-      this.mouseUpSub = this.mouseUp$
+      this.mouseUpSub = SelectableRowDirective.mouseUp$
         .subscribe(event => {
           if (this.dragging) {
             this.onSelectionEnds.emit({event: event, selectedCells: this.selectedCells});

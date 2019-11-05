@@ -3,21 +3,21 @@
               (onSelectionEnds)="onContextMenu($event.event, $event.selectedCells)">
   <td class="td-employee">
     <div class="employee-name">
-      {{utils.getEmployeeShortName(employee)}}
+      {{getEmployeeShortName(employee)}}
     </div>
     <div class="position-label">
       {{position?.shortName}}
     </div>
   </td>
   <td class="table-cell"
-      *ngFor="let day of daysInMonth"
+      *ngFor="let cell of cellData"
       app-table-cell
-      [day]="day"
-      [workDay]="utils.getWorkingDay(day.isoString, schedule)"
-      [dayTypes]="dayTypes"
-      [dayTypeGroups]="dayTypeGroups"
-      [class.weekend]="day.weekend"
-      [class.holiday]="day.holiday">
+      [day]="cell.day"
+      [workDay]="cell.workDay"
+      [dayTypes]="cell.dayTypes"
+      [dayTypeGroups]="cell.dayTypeGroups"
+      [class.weekend]="cell.day.weekend"
+      [class.holiday]="cell.day.holiday">
   </td>
   <td class="sum"
       [class.notEqual]="workingTimeSum !== workingTimeNorm">

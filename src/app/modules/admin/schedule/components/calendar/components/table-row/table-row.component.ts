@@ -1,31 +1,22 @@
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   ElementRef,
   Input,
   OnChanges,
-  OnDestroy,
   OnInit,
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
 import { Employee } from '../../../../../../../model/employee';
 import { Position } from '../../../../../../../model/position';
-import { WorkDay } from '../../../../../../../model/workday';
-import { Subscription } from 'rxjs';
-import { CalendarDay } from "../../../../../../../model/ui/calendar-day";
-import { PaginatorService } from "../../../../../../../shared/paginators/paginator.service";
-import { DayType } from "../../../../../../../model/day-type";
 import { SelectableRowDirective } from "../../../../../../../shared/directives/selectable-row.directive";
-import { DayTypeGroup } from "../../../../../../../model/day-type-group";
 import { TableCellComponent } from "../table-cell/table-cell.component";
 import { ShowHoursService } from "../show-hours-control/show-hours.service";
 import { ContextMenuData } from "../../../../../../../model/ui/context-menu-data";
 import { ContextMenuService } from "../../../../../../../lib/ngx-contextmenu/contextMenu.service";
 import { ContextMenuComponent } from "../../../../../../../lib/ngx-contextmenu/contextMenu.component";
-import { ShiftSchedule } from "../../../../../../../model/shift-schedule";
-import { ScheduleTableUtils } from "../../utils/schedule-table-utils";
+import { CellData } from "../../../../../../../model/ui/cell-data";
 
 @Component({
   selector: '[app-table-row]',
@@ -33,14 +24,11 @@ import { ScheduleTableUtils } from "../../utils/schedule-table-utils";
   styleUrls: ['./table-row.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TableRowComponent implements OnInit, OnChanges, OnDestroy {
+export class TableRowComponent implements OnInit, OnChanges {
 
   @Input() employee:      Employee;
   @Input() position:      Position;
-  @Input() dayTypes:      DayType[];
-  @Input() dayTypeGroups: DayTypeGroup[];
-  @Input() shiftSchedule: ShiftSchedule[];
-  @Input() schedule:      WorkDay[];
+  @Input() cellData:      CellData[] = [];
   @Input() patternMenu:   ContextMenuComponent;
 
   @Input() workingTimeSum:  number = 0;
@@ -49,35 +37,20 @@ export class TableRowComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild(SelectableRowDirective)
   selectableRowDirective: SelectableRowDirective;
 
-  // Table variables
-  daysInMonth:  CalendarDay[];
-  cellData;
+
   private contextMenuIsOpened = false;
 
-  // Observable subscriptions
-  private paginatorSub: Subscription;
-
   constructor(public elementRef: ElementRef,
-              private cd: ChangeDetectorRef,
-              private utils: ScheduleTableUtils,
-              private paginatorService: PaginatorService,
               private showHoursService: ShowHoursService,
               private contextMenuService: ContextMenuService) { }
 
   ngOnInit() {
-    this.paginatorSub = this.paginatorService.dates
-      .subscribe((daysInMonth: CalendarDay[]) => {
-        this.daysInMonth = daysInMonth;
-      });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-
+    console.log(changes);
   }
 
-  ngOnDestroy(): void {
-    this.paginatorSub.unsubscribe();
-  }
 
   onContextMenu($event: MouseEvent,
                 selectedCells: TableCellComponent[]): void {
@@ -85,7 +58,7 @@ export class TableRowComponent implements OnInit, OnChanges, OnDestroy {
       const data: ContextMenuData = {
         employeeId: this.employee.id,
         selectedCells: selectedCells,
-        schedule: this.schedule
+        schedule: this.cellData.map(value => value.workDay)
       };
 
       setTimeout(() => {
@@ -101,6 +74,12 @@ export class TableRowComponent implements OnInit, OnChanges, OnDestroy {
         }
       });
     }
+  }
+
+  getEmployeeShortName(employee: Employee): string {
+    return employee.secondName + ' '
+      + employee.firstName.charAt(0) + '.' + ' '
+      + employee.patronymic.charAt(0) + '.';
   }
 
   clearSelection() {

@@ -1,4 +1,4 @@
-<ng-container *ngIf="employees">
+<ng-container *ngIf="rowData">
   <tr class="employee">
     <td class="shift-label"
         [attr.colspan]="numberOfColumns"
@@ -8,15 +8,13 @@
   </tr>
   <tr [hidden]="isHidden"
       class="schedule-row"
-      *ngFor="let employee of employees"
+      *ngFor="let row of rowData"
       app-table-row
-      [employee]="employee"
-      [schedule]="getSomeShitInTheHouse(employee.id, shift.id)"
-      [workingTimeSum]="utils.calculateWorkingTimeSum(getSomeShitInTheHouse(employee.id, shift.id))"
-      [workingTimeNorm]="workingTimeNorm"
-      [position]="getPosition(employee)"
-      [dayTypes]="dayTypes"
-      [dayTypeGroups]="dayTypeGroups"
+      [employee]="row.employee"
+      [cellData]="row.cells"
+      [workingTimeSum]="utils.calculateWorkingTimeSum(row.cells)"
+      [workingTimeNorm]="row.workingTimeNorm"
+      [position]="row.position"
       [patternMenu]="patternMenu">
   </tr>
 </ng-container>

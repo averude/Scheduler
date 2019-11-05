@@ -110,6 +110,7 @@ export class ScheduleTableContextMenuComponent implements OnInit {
         this.scheduleService.create(createdSchedule)
           .subscribe(res => {
             res.forEach(workDay => schedule.push(workDay));
+            // and then schedule should be sorted
             this.notificationService.success(
               'Created',
               'Schedule sent successfully');
