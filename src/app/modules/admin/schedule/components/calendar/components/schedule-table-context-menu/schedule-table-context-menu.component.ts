@@ -108,8 +108,16 @@ export class ScheduleTableContextMenuComponent implements OnInit {
 
       if (createdSchedule.length > 0) {
         this.scheduleService.create(createdSchedule)
-          .subscribe(res => {
-            createdCells.forEach(cell => cell.refreshLabel());
+          .subscribe(response => {
+            createdCells.forEach(cell => {
+              let workDayIndex = 0;
+              let workDay = response[workDayIndex];
+              if (cell.day.isoString == workDay.date) {
+                workDayIndex++;
+                cell.workDay = workDay;
+                cell.refreshLabel();
+              }
+            });
             this.notificationService.success(
               'Created',
               'Schedule sent successfully');
