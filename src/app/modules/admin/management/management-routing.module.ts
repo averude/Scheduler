@@ -9,6 +9,7 @@ import { HolidaysTableComponent } from "./components/holidays/components/holiday
 import { WorkingTimeTableComponent } from "./components/working-time/components/working-time-table/working-time-table.component";
 import { ExtraWeekendsTableComponent } from "./components/extra-weekends/components/extra-weekends-table/extra-weekends-table.component";
 import { ManagementComponent } from "./management/management.component";
+import { ShiftCompositionTableComponent } from "./components/shift-composition/components/shift-composition-table/shift-composition-table.component";
 
 const routes: Routes = [
   {
@@ -34,6 +35,10 @@ const routes: Routes = [
       {
         path: 'shifts',
         component: ShiftsTableComponent
+      },
+      {
+        path: 'shiftcomposition',
+        component: ShiftCompositionTableComponent
       },
       {
         path: 'holidays',

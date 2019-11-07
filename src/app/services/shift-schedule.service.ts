@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { getShiftScheduleByDates, ShiftSchedule } from "../model/shift-schedule";
+import { getShiftScheduleByDates, ShiftSchedule, SS } from "../model/shift-schedule";
 import { Observable, of } from "rxjs";
 import { RestConfig } from "../rest.config";
 import { HttpClient } from "@angular/common/http";
@@ -24,10 +24,13 @@ export class ShiftScheduleService implements PageableByDateCrudService<ShiftSche
   }
 
   create(shiftSchedule: ShiftSchedule): Observable<any> {
-    return this.http.post<number>(
-      `${this.config.baseUrl}/admin/shifts/schedule`,
-      shiftSchedule,
-    );
+    // return this.http.post<number>(
+    //   `${this.config.baseUrl}/admin/shifts/schedule`,
+    //   shiftSchedule,
+    // );
+    console.log(shiftSchedule);
+    SS.push(shiftSchedule);
+    return of(null);
   }
 
   update(shiftSchedule: ShiftSchedule): Observable<any> {

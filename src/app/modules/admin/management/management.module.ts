@@ -13,6 +13,7 @@ import { RemoveDialogModule } from "../../../shared/abstract-components/remove-d
 import { HolidaysModule } from "./components/holidays/holidays.module";
 import { WorkingTimeModule } from "./components/working-time/working-time.module";
 import { ExtraWeekendsModule } from "./components/extra-weekends/extra-weekends.module";
+import { ShiftCompositionModule } from "./components/shift-composition/shift-composition.module";
 
 @NgModule({
   imports: [
@@ -22,6 +23,7 @@ import { ExtraWeekendsModule } from "./components/extra-weekends/extra-weekends.
     PositionsModule,
     DayTypesModule,
     ShiftsModule,
+    ShiftCompositionModule,
     PatternsModule,
     HolidaysModule,
     WorkingTimeModule,
