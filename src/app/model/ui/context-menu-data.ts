@@ -1,8 +1,7 @@
 import { TableCellComponent } from "../../modules/admin/schedule/components/calendar/components/table-cell/table-cell.component";
-import { WorkDay } from "../workday";
+import { TableRowComponent } from "../../modules/admin/schedule/components/calendar/components/table-row/table-row.component";
 
 export interface ContextMenuData {
-  employeeId: number,
   selectedCells: TableCellComponent[],
-  schedule: WorkDay[]
+  row: TableRowComponent
 }

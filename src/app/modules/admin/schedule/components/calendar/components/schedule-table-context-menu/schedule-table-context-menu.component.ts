@@ -25,9 +25,9 @@ export class ScheduleTableContextMenuComponent implements OnInit {
 
   @Output() onContextMenuClose: EventEmitter<void> = new EventEmitter();
 
-  @Input() dayTypes: DayType[]            = [];
+  @Input() dayTypes:      DayType[]       = [];
   @Input() dayTypeGroups: DayTypeGroup[]  = [];
-  @Input() patterns: ShiftPattern[]       = [];
+  @Input() patterns:      ShiftPattern[]  = [];
 
   constructor(private patternUnitService: PatternUnitService,
               private utils: ScheduleTableUtils,
@@ -54,7 +54,7 @@ export class ScheduleTableContextMenuComponent implements OnInit {
                               data: ContextMenuData) {
     this.scheduleGenerationService
       .generateScheduleBySingleDay(
-        data.employeeId,
+        data.row,
         data.selectedCells,
         this.customHours,
         dayType,
@@ -68,7 +68,7 @@ export class ScheduleTableContextMenuComponent implements OnInit {
       .subscribe(patternUnits => {
         this.scheduleGenerationService
           .generateScheduleWithPattern(
-            data.employeeId,
+            data.row,
             data.selectedCells,
             patternUnits,
             this.offset,
@@ -82,7 +82,7 @@ export class ScheduleTableContextMenuComponent implements OnInit {
                               data: ContextMenuData) {
     this.scheduleGenerationService
       .generateScheduleBySingleDay(
-        data.employeeId,
+        data.row,
         data.selectedCells,
         dayType.defaultValue,
         dayType,
@@ -94,14 +94,14 @@ export class ScheduleTableContextMenuComponent implements OnInit {
     this.onContextMenuClose.emit();
   }
 
-  private get scheduleGeneratedHandler(): (cells) => void {
-    return cells => {
-      const createdCells = cells
+  private get scheduleGeneratedHandler(): (row, selectedCells) => void {
+    return (row, selectedCells) => {
+      const createdCells = selectedCells
         .filter(cell => !cell.workDay.id);
       const createdSchedule = createdCells
         .map(cell => cell.workDay);
 
-      const updatedCells = cells
+      const updatedCells = selectedCells
         .filter(cell => cell.workDay.id);
       const updatedSchedule = updatedCells
         .map(cell => cell.workDay);
@@ -118,10 +118,11 @@ export class ScheduleTableContextMenuComponent implements OnInit {
                 cell.refreshLabel();
               }
             });
+            row.recalc();
             this.notificationService.success(
               'Created',
               'Schedule sent successfully');
-          }, err => cells.forEach(cell => cell.revertChanges()));
+          }, err => selectedCells.forEach(cell => cell.revertChanges()));
       }
       if (updatedSchedule.length > 0) {
         this.scheduleService.update(updatedSchedule)
@@ -130,7 +131,7 @@ export class ScheduleTableContextMenuComponent implements OnInit {
             this.notificationService.success(
               'Updated',
               'Schedule sent successfully');
-          }, err => cells.forEach(cell => cell.revertChanges()));
+          }, err => selectedCells.forEach(cell => cell.revertChanges()));
       }
     };
   };

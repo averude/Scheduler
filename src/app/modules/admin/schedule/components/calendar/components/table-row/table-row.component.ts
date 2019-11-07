@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, Component, ElementRef, Input, OnInit, ViewChild, } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  Input,
+  OnInit,
+  QueryList,
+  ViewChild,
+  ViewChildren,
+} from '@angular/core';
 import { Employee } from '../../../../../../../model/employee';
 import { Position } from '../../../../../../../model/position';
 import { SelectableRowDirective } from "../../../../../../../shared/directives/selectable-row.directive";
@@ -28,6 +37,8 @@ export class TableRowComponent implements OnInit {
   @ViewChild(SelectableRowDirective)
   selectableRowDirective: SelectableRowDirective;
 
+  @ViewChildren(TableCellComponent)
+  cells: QueryList<TableCellComponent>;
 
   private contextMenuIsOpened = false;
 
@@ -42,9 +53,8 @@ export class TableRowComponent implements OnInit {
                 selectedCells: TableCellComponent[]): void {
     if (selectedCells && this.selectableRowDirective.selectedCells.length > 0) {
       const data: ContextMenuData = {
-        employeeId: this.employee.id,
         selectedCells: selectedCells,
-        schedule: this.cellData.map(value => value.workDay)
+        row: this
       };
 
       setTimeout(() => {
@@ -73,5 +83,12 @@ export class TableRowComponent implements OnInit {
       this.selectableRowDirective.clearSelection();
       this.contextMenuIsOpened = false;
     }
+  }
+
+  recalc() {
+    this.workingTimeSum = this.cells
+      .filter(cell => cell.workDay != null || cell.workDay != undefined)
+      .map(cell => cell.workDay.hours)
+      .reduce((prev, curr) => prev + curr, 0);
   }
 }

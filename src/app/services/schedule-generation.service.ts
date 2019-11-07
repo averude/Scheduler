@@ -3,6 +3,7 @@ import { PatternUnit } from '../model/pattern-unit';
 import { DayType } from "../model/day-type";
 import { createOrUpdateCell } from "../shared/utils/schedule-generation-utils";
 import { TableCellComponent } from "../modules/admin/schedule/components/calendar/components/table-cell/table-cell.component";
+import { TableRowComponent } from "../modules/admin/schedule/components/calendar/components/table-row/table-row.component";
 
 @Injectable({
   providedIn: 'root'
@@ -11,48 +12,48 @@ export class ScheduleGenerationService {
 
   constructor() { }
 
-  generateScheduleWithPattern(employeeId: number,
+  generateScheduleWithPattern(row: TableRowComponent,
                               cells: TableCellComponent[],
                               patternUnits: PatternUnit[],
                               offset: number,
                               overrideExistingValues: boolean,
-                              onSave: (cells: TableCellComponent[]) => void,
+                              onSave: (row: TableRowComponent, selectedCells: TableCellComponent[]) => void,
                               onError: (message: string) => void) {
-    this.generate(employeeId, cells, patternUnits, offset, overrideExistingValues, onSave, onError);
+    this.generate(row, cells, patternUnits, offset, overrideExistingValues, onSave, onError);
   }
 
-  generateScheduleWithCustomHours(employeeId: number,
+  generateScheduleWithCustomHours(row: TableRowComponent,
                                   cells: TableCellComponent[],
                                   hours: number,
-                                  onSave: (cells: TableCellComponent[]) => void,
+                                  onSave: (row: TableRowComponent, selectedCells: TableCellComponent[]) => void,
                                   onError: (message: string) => void) {
     const patternUnit = new PatternUnit();
     patternUnit.value = hours;
     const customUnits: PatternUnit[] = [patternUnit];
 
-    this.generate(employeeId, cells, customUnits, 0, true,  onSave, onError);
+    this.generate(row, cells, customUnits, 0, true,  onSave, onError);
   }
 
-  generateScheduleBySingleDay(employeeId: number,
+  generateScheduleBySingleDay(row: TableRowComponent,
                               cells: TableCellComponent[],
                               hours: number,
                               dayType: DayType,
-                              onSave: (cells: TableCellComponent[]) => void,
+                              onSave: (row: TableRowComponent, selectedCells: TableCellComponent[]) => void,
                               onError: (message: string) => void) {
     const patternUnit = new PatternUnit();
     patternUnit.value = hours;
     patternUnit.dayTypeId = dayType.id;
     const customUnits: PatternUnit[] = [patternUnit];
 
-    this.generate(employeeId, cells, customUnits, 0, true, onSave, onError);
+    this.generate(row, cells, customUnits, 0, true, onSave, onError);
   }
 
-  private generate(employeeId: number,
+  private generate(row: TableRowComponent,
                    cells: TableCellComponent[],
                    patternUnits: PatternUnit[],
                    offset: number,
                    overrideExistingValues: boolean,
-                   onSave: (cells: TableCellComponent[]) => void,
+                   onSave: (row: TableRowComponent, selectedCells: TableCellComponent[]) => void,
                    onError: (message: string) => void) {
     if (!cells || !patternUnits || !(patternUnits.length > 0)) {
       onError('Illegal arguments');
@@ -85,11 +86,11 @@ export class ScheduleGenerationService {
 
         createOrUpdateCell(
           overrideExistingValues,
-          employeeId,
+          row.employee.id,
           patternUnits[unit_index],
           cells[cell_index]);
       }
     }
-    onSave(cells);
+    onSave(row, cells);
   }
 }
