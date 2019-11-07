@@ -22,22 +22,26 @@ export function setLabel(cell: TableCellComponent) {
 
 function setHoursWithColor(cell: TableCellComponent) {
   cell.label = cell.workDay.hours;
-  let dayType = cell.dayTypes.find(item => item.id === cell.workDay.dayTypeId);
-  if (dayType) {
-    setLabelColor(cell, dayType);
+  if (cell.dayTypes) {
+    let dayType = cell.dayTypes.find(item => item.id === cell.workDay.dayTypeId);
+    if (dayType) {
+      setLabelColor(cell, dayType);
+    }
   }
 }
 
 function setLabelWithColor(cell: TableCellComponent) {
-  let dayType = cell.dayTypes.find(item => item.id === cell.workDay.dayTypeId);
-  if (dayType) {
+  if (cell.dayTypes) {
+    let dayType = cell.dayTypes.find(item => item.id === cell.workDay.dayTypeId);
+    if (dayType) {
 
-    setLabelColor(cell, dayType);
+      setLabelColor(cell, dayType);
 
-    if (dayType.label && dayType.label.length > 0) {
-      cell.label = dayType.label;
-    } else {
-      cell.label = cell.workDay.hours;
+      if (dayType.label && dayType.label.length > 0) {
+        cell.label = dayType.label;
+      } else {
+        cell.label = cell.workDay.hours;
+      }
     }
   }
 }

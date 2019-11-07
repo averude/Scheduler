@@ -109,8 +109,8 @@ export class ScheduleTableContextMenuComponent implements OnInit {
       if (createdSchedule.length > 0) {
         this.scheduleService.create(createdSchedule)
           .subscribe(response => {
+            let workDayIndex = 0;
             createdCells.forEach(cell => {
-              let workDayIndex = 0;
               let workDay = response[workDayIndex];
               if (cell.day.isoString == workDay.date) {
                 workDayIndex++;
