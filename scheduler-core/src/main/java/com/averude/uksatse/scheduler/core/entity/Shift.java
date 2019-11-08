@@ -48,7 +48,7 @@ public class Shift implements HasId {
     @OneToMany( mappedBy = "shiftId",
                 cascade = CascadeType.ALL,
                 fetch = FetchType.LAZY)
-    private List<@NotNull @Valid Employee> employees = new ArrayList<>();
+    private List<@NotNull @Valid ShiftComposition> employees = new ArrayList<>();
 
     public Shift() {
     }
@@ -85,22 +85,26 @@ public class Shift implements HasId {
         this.patternId = patternId;
     }
 
-    public List<Employee> getEmployees() {
+    public List<ShiftComposition> getEmployees() {
         return employees;
     }
 
-    public void setEmployees(List<Employee> employees) {
+    public void setEmployees(List<ShiftComposition> employees) {
         this.employees = employees;
     }
 
     public void addEmployee(Employee employee){
-        employee.setShiftId(this.getId());
-        employees.add(employee);
+        ShiftComposition shiftComposition = new ShiftComposition(this, employee);
+        employees.add(shiftComposition);
+        employee.getShiftsList().add(shiftComposition);
     }
 
     public void removeEmployee(Employee employee){
-        employee.setShiftId(null);
-        employees.remove(employee);
+        ShiftComposition shiftComposition = new ShiftComposition(this, employee);
+        employee.getShiftsList().remove(shiftComposition);
+        employees.remove(shiftComposition);
+        shiftComposition.setShiftId(null);
+        shiftComposition.setEmployeeId(null);
     }
 
     @Override

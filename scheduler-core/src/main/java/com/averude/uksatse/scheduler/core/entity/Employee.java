@@ -58,19 +58,25 @@ public class Employee implements HasId {
             nullable = false)
     private Long positionId;
 
-    @Positive(message = "{employee.shift.negative}")
-    @Column(name = "shift_id")
-    private Long shiftId;
+    @JsonIgnore
+    @OneToMany( mappedBy = "employeeId",
+                cascade = CascadeType.ALL)
+    private List<@NotNull @Valid ShiftComposition> shiftsList = new ArrayList<>();
 
     @OneToMany( mappedBy = "employeeId",
                 cascade = CascadeType.ALL,
                 fetch = FetchType.LAZY)
-    private List<@NotNull @Valid WorkDay> scheduleList = new ArrayList<>();
+    private List<@NotNull @Valid WorkDay> schedule = new ArrayList<>();
 
     public Employee() {
     }
 
-    public Employee(@NotNull(message = "{employee.firstname.null}")
+    public Employee(@NotNull(message = "{employee.secondname.null}")
+                    @Size(max = 20,
+                            min = 3,
+                            message = "{employee.secondname.size}")
+                            String secondName,
+                    @NotNull(message = "{employee.firstname.null}")
                     @Size(max = 20,
                           min = 3,
                           message = "{employee.firstname.size}")
@@ -78,12 +84,8 @@ public class Employee implements HasId {
                     @Size(max = 20,
                           min = 3,
                           message = "{employee.patronymic.size}")
-                    String patronymic,
-                    @NotNull(message = "{employee.secondname.null}")
-                    @Size(max = 20,
-                          min = 3,
-                          message = "{employee.secondname.size}")
-                    String secondName) {
+                    String patronymic
+                    ) {
         this.firstName = firstName;
         this.patronymic = patronymic;
         this.secondName = secondName;
@@ -129,31 +131,31 @@ public class Employee implements HasId {
         this.positionId = positionId;
     }
 
-    public Long getShiftId() {
-        return shiftId;
+    public List<ShiftComposition> getShiftsList() {
+        return shiftsList;
     }
 
-    public void setShiftId(Long shiftId) {
-        this.shiftId = shiftId;
+    public void setShiftsList(List<ShiftComposition> shiftsList) {
+        this.shiftsList = shiftsList;
     }
 
     @JsonIgnore // Don't know why, but in this case field annotation doesn't work.
     public List<WorkDay> getSchedule() {
-        return scheduleList;
+        return schedule;
     }
 
     public void setSchedule(List<WorkDay> scheduleList) {
-        this.scheduleList = scheduleList;
+        this.schedule = scheduleList;
     }
 
     public void addWorkDay(WorkDay workDay){
         workDay.setEmployeeId(this.getId());
-        scheduleList.add(workDay);
+        schedule.add(workDay);
     }
 
     public void removeWorkDay(WorkDay workDay){
         workDay.setEmployeeId(null);
-        scheduleList.remove(workDay);
+        schedule.remove(workDay);
     }
 
     @Override
@@ -165,12 +167,11 @@ public class Employee implements HasId {
                 Objects.equals(firstName, employee.firstName) &&
                 Objects.equals(patronymic, employee.patronymic) &&
                 Objects.equals(secondName, employee.secondName) &&
-                Objects.equals(positionId, employee.positionId) &&
-                Objects.equals(shiftId, employee.shiftId);
+                Objects.equals(positionId, employee.positionId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstName, patronymic, secondName, positionId, shiftId);
+        return Objects.hash(id, firstName, patronymic, secondName, positionId);
     }
 }
