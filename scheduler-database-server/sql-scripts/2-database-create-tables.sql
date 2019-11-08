@@ -1,4 +1,5 @@
 -- PostgreSQL
+CREATE EXTENSION btree_gist;
 
 CREATE TABLE departments (
   id            SERIAL,
@@ -73,15 +74,34 @@ CREATE TABLE shifts (
 
 CREATE TABLE employees (
   id            SERIAL,
-  shift_id      INTEGER,
   position_id   INTEGER       NOT NULL,
   first_name    VARCHAR (64)  NOT NULL,
   second_name   VARCHAR (64)  NOT NULL,
   patronymic    VARCHAR (64)  NOT NULL,
   UNIQUE (first_name, second_name, patronymic, position_id),
   PRIMARY KEY (id),
-  FOREIGN KEY (shift_id)      REFERENCES shifts(id)    ON DELETE SET NULL,
   FOREIGN KEY (position_id)   REFERENCES positions(id) ON DELETE CASCADE
+);
+
+CREATE TABLE shift_composition (
+  id            SERIAL,
+  shift_id      INTEGER       NOT NULL,
+  employee_id   INTEGER       NOT NULL,
+  substitution  BOOLEAN       NOT NULL  DEFAULT TRUE,
+  from_date     DATE          NOT NULL,
+  to_date       DATE          NOT NULL,
+
+  CHECK ( from_date <= to_date ),
+
+  EXCLUDE USING GIST (
+    shift_id WITH =,
+    employee_id WITH =,
+    daterange(from_date, to_date, '[]') WITH &&
+  ) WHERE ( substitution = false ),
+
+  PRIMARY KEY (id),
+  FOREIGN KEY (shift_id)      REFERENCES shifts(id)     ON UPDATE CASCADE ON DELETE CASCADE,
+  FOREIGN KEY (employee_id)   REFERENCES employees(id)  ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE work_schedule (
