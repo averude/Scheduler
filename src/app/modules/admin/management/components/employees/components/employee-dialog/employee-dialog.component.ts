@@ -2,7 +2,6 @@ import { Component, Inject } from '@angular/core';
 import { Employee } from "../../../../../../../model/employee";
 import { Position } from "../../../../../../../model/position";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
-import { Shift } from "../../../../../../../model/shift";
 import { FormBuilder, Validators } from "@angular/forms";
 import { DialogBaseComponent } from "../../../../../../../shared/abstract-components/dialog-base/dialog-base.component";
 
@@ -14,7 +13,6 @@ import { DialogBaseComponent } from "../../../../../../../shared/abstract-compon
 export class EmployeeDialogComponent extends DialogBaseComponent<Employee> {
 
   positions:  Position[];
-  shifts:     Shift[];
 
   constructor(private fb: FormBuilder,
               private dialogRef: MatDialogRef<EmployeeDialogComponent>,
@@ -22,7 +20,6 @@ export class EmployeeDialogComponent extends DialogBaseComponent<Employee> {
     super(data.employee, dialogRef);
 
     this.positions  = data.positions;
-    this.shifts     = data.shifts;
   }
 
   initTheForm() {
@@ -40,8 +37,7 @@ export class EmployeeDialogComponent extends DialogBaseComponent<Employee> {
         Validators.minLength(3),
         Validators.maxLength(32)]
       ],
-      positionId: [null, [Validators.required]],
-      shiftId:    [null]
+      positionId: [null, [Validators.required]]
     });
   }
 
@@ -51,8 +47,7 @@ export class EmployeeDialogComponent extends DialogBaseComponent<Employee> {
       firstName:  employee.firstName,
       secondName: employee.secondName,
       patronymic: employee.patronymic,
-      positionId: employee.positionId,
-      shiftId:    employee.shiftId
+      positionId: employee.positionId
     });
   }
 }

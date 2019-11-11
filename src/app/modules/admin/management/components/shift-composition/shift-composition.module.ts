@@ -20,10 +20,10 @@ import { ShiftCompositionDialogComponent } from './components/shift-composition-
 
 export const MONTH_FORMAT = {
   parse: {
-    dateInput: 'MM/YYYY',
+    dateInput: 'DD/MM/YYYY',
   },
   display: {
-    dateInput: 'MM/YYYY',
+    dateInput: 'DD/MM/YYYY',
     monthYearLabel: 'MMM YYYY',
     dateA11yLabel: 'LL',
     monthYearA11yLabel: 'MMMM YYYY',

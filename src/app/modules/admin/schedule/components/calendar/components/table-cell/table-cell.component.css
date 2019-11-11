@@ -12,3 +12,7 @@
   font-family: 'MuseoSansMedium';
   font-size: 12px;
 }
+
+.cell-disabled p {
+  color: #d3d3d3;
+}

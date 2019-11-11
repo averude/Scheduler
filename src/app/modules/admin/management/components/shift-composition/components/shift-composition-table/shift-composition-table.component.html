@@ -33,12 +33,12 @@
 
     <ng-container matColumnDef="shift">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Shift</th>
-      <td mat-cell *matCellDef="let shiftSchedule">{{shiftSchedule.shiftId}}</td>
+      <td mat-cell *matCellDef="let shiftSchedule">{{getShiftName(shiftSchedule.shiftId)}}</td>
     </ng-container>
 
     <ng-container matColumnDef="employee">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Employee</th>
-      <td mat-cell *matCellDef="let shiftSchedule">{{shiftSchedule.employeeId}}</td>
+      <td mat-cell *matCellDef="let shiftSchedule">{{getEmployeeShortName(shiftSchedule.employeeId)}}</td>
     </ng-container>
 
     <ng-container matColumnDef="from">

@@ -10,6 +10,10 @@
   font-size: 14px;
 }
 
+.substitution {
+  color: rosybrown;
+}
+
 .position-label {
   padding-top: 4px;
   font-size: 11px;
@@ -23,17 +27,22 @@
   vertical-align: top;
 }
 
+.disabled {
+  background-color: whitesmoke;
+  cursor: not-allowed;
+}
+
 .sum {
   padding-top: 8px;
   border: 1px solid #e5e9f0;
 }
-
 .sum p {
   font-family: 'MuseoSansMedium';
   font-size: 12px;
 }
+
 .notEqual {
-  background-color: lightgoldenrodyellow;
+  background-color: cornsilk;
 }
 
 .weekend {
@@ -46,9 +55,4 @@
 
 .selected {
   background-color: #fffeb8;
-}
-
-.disabled {
-  background-color: #e5e9f0;
-  cursor: not-allowed;
 }

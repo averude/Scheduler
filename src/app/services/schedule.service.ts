@@ -21,7 +21,7 @@ export class ScheduleService {
                to: string): Observable<ScheduleDto[]> {
     return this.http.get<ScheduleDto[]>(
       `${this.config.baseUrl}/schedule/dates?from=${from}&to=${to}`
-    ).pipe(this.sort());
+    );
   }
 
   // Temporary! Move to the backend

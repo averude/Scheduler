@@ -7,7 +7,7 @@
                 formControlName="employeeId">
       <mat-option *ngFor="let employee of employees"
                   [value]="employee?.id">
-        {{employee?.secondName}}
+        {{getEmployeeShortName(employee)}}
       </mat-option>
     </mat-select>
     <mat-error *ngIf="isControlInvalid('employeeId')">{{getErrorMessage()}}</mat-error>

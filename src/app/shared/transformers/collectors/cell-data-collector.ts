@@ -1,5 +1,4 @@
-import { ShiftSchedule } from "../../../model/shift-schedule";
-import { ScheduleDto } from "../../../model/dto/schedule-dto";
+import { ShiftComposition } from "../../../model/shift-composition";
 import { DayType } from "../../../model/day-type";
 import { DayTypeGroup } from "../../../model/day-type-group";
 import { CalendarDay } from "../../../model/ui/calendar-day";
@@ -11,61 +10,63 @@ export class CellDataCollector {
 
   getCells(employeeId: number,
            shiftId: number,
-           shiftSchedule: ShiftSchedule[],
-           schedule: ScheduleDto[],
+           isSubstitution: boolean,
+           shiftComposition: ShiftComposition[],
+           schedule: WorkDay[],
            dayTypes: DayType[],
            dayTypeGroups: DayTypeGroup[],
            daysInMonth: CalendarDay[]): CellData[] {
-    return this.getCellData(daysInMonth, dayTypes, dayTypeGroups, employeeId, shiftId, shiftSchedule, schedule)
+    return this.getCellData(daysInMonth, dayTypes, dayTypeGroups, employeeId, shiftId, isSubstitution, shiftComposition, schedule);
   }
 
-  getCellData(calendarDays: CalendarDay[],
+  private getCellData(calendarDays: CalendarDay[],
               dayTypes: DayType[],
               dayTypeGroups: DayTypeGroup[],
               employeeId: number,
               shiftId: number,
-              shiftSchedule: ShiftSchedule[],
-              schedule: ScheduleDto[]): CellData[] {
-    let mainShiftSchedule = shiftSchedule.find(value => !value.substitution && value.shiftId === shiftId);
-    if (mainShiftSchedule && !mainShiftSchedule.substitution) {
-      return this.getCellDataForMainShift(calendarDays, dayTypes, dayTypeGroups, employeeId, shiftId, shiftSchedule, schedule);
+              isSubstitution: boolean,
+              shiftComposition: ShiftComposition[],
+              schedule: WorkDay[]): CellData[] {
+    let shiftSchedules;
+    let fn;
+    if (isSubstitution) {
+      shiftSchedules = this.getSubstitutionShiftComposition(employeeId, shiftId, shiftComposition);
+      fn = this.forSubstitution;
     } else {
-      return this.getCellDataForSubstitutionShift(calendarDays, dayTypes, dayTypeGroups, employeeId, shiftId, shiftSchedule, schedule);
+      shiftSchedules = this.getEmployeeNotInShiftComposition(employeeId, shiftId, shiftComposition);
+      fn = this.forMain;
     }
+    return this.getCellDataForShift(calendarDays, dayTypes, dayTypeGroups, employeeId, shiftId, isSubstitution, shiftSchedules, schedule, fn);
   }
 
-  getCellDataForSubstitutionShift(calendarDays: CalendarDay[],
-                                  dayTypes: DayType[],
-                                  dayTypeGroups: DayTypeGroup[],
-                                  employeeId: number,
-                                  shiftId: number,
-                                  shiftSchedule: ShiftSchedule[],
-                                  schedule: ScheduleDto[]): CellData[] {
-
-    let shiftSchedules  = this.getSubstitutionShiftSchedules(employeeId, shiftId, shiftSchedule);
-    let workDays        = this.getScheduleByEmployeeId(employeeId, schedule);
+  private getCellDataForShift(calendarDays: CalendarDay[],
+                      dayTypes: DayType[],
+                      dayTypeGroups: DayTypeGroup[],
+                      employeeId: number,
+                      shiftId: number,
+                      isSubstitution: boolean,
+                      shiftComposition: ShiftComposition[],
+                      schedule: WorkDay[],
+                      onCellSet: (shiftComposition: ShiftComposition[],
+                                  cell: CellData,
+                                  workDay: WorkDay) => void): CellData[] {
     let cells: CellData[];
-    if (workDays) {
+    if (schedule) {
       let workDayIndex = 0;
       cells = calendarDays.map(day => {
-        let workDay = workDays[workDayIndex];
+
         let cell = {
           day: day,
           workDay: null,
-          enabled: false,
+          enabled: !isSubstitution,
           dayTypeGroups: dayTypeGroups,
           dayTypes: dayTypes
         };
 
+        let workDay = schedule[workDayIndex];
         if (workDay && day.isoString === workDay.date) {
           workDayIndex++;
-          for (let i = 0; i < shiftSchedules.length; i++) {
-            let ss = shiftSchedules[i];
-            if (!cell.enabled && isBetween(cell.day.isoString, ss.from, ss.to)) {
-              cell.workDay = workDay;
-              cell.enabled = true;
-            }
-          }
+          onCellSet(shiftComposition, cell, workDay);
         }
         return cell;
       });
@@ -73,64 +74,41 @@ export class CellDataCollector {
     }
   }
 
-  getCellDataForMainShift(calendarDays: CalendarDay[],
-                          dayTypes: DayType[],
-                          dayTypeGroups: DayTypeGroup[],
-                          employeeId: number,
-                          shiftId: number,
-                          shiftSchedule: ShiftSchedule[],
-                          schedule: ScheduleDto[]): CellData[] {
-    let shiftSchedules  = this.getEmployeeNotInShiftSchedule(employeeId, shiftId, shiftSchedule);
-    let workDays        = this.getScheduleByEmployeeId(employeeId, schedule);
-    let cells: CellData[];
-    if (workDays) {
-      let workDayIndex = 0;
-      cells = calendarDays.map(day => {
-        let workDay = workDays[workDayIndex];
-        let cell = {
-          day: day,
-          workDay: null,
-          enabled: true,
-          dayTypeGroups: dayTypeGroups,
-          dayTypes: dayTypes
-        };
-
-        if (workDay && day.isoString === workDay.date) {
-          workDayIndex++;
-          cell.workDay = workDay;
-
-          shiftSchedules.forEach(value => {
-            if (isBetween(day.isoString, value.from, value.to)) {
-              cell.enabled = false;
-              cell.workDay = null;
-            }
-          })
-        }
-        return cell;
-      });
-    }
-    return cells;
-  }
-
-  private getScheduleByEmployeeId(employeeId: number, scheduleDto: ScheduleDto[]): WorkDay[] {
-    let dto = scheduleDto.find(schedule => schedule.employeeId === employeeId);
-    if (dto) {
-      return dto.workDays;
-    }
-  }
-
-  private getSubstitutionShiftSchedules(employeeId: number,
-                                        shiftId: number,
-                                        shiftSchedule: ShiftSchedule[]): ShiftSchedule[] {
-    return shiftSchedule
+  private getSubstitutionShiftComposition(employeeId: number,
+                                          shiftId: number,
+                                          shiftComposition: ShiftComposition[]): ShiftComposition[] {
+    return shiftComposition
       .filter(value =>
         value.employeeId === employeeId && value.substitution && value.shiftId === shiftId);
   }
 
-  private getEmployeeNotInShiftSchedule(employeeId: number,
-                                        shiftId: number,
-                                        shiftSchedule: ShiftSchedule[]) {
-    return shiftSchedule
+  private getEmployeeNotInShiftComposition(employeeId: number,
+                                           shiftId: number,
+                                           shiftComposition: ShiftComposition[]) {
+    return shiftComposition
       .filter(value => value.employeeId === employeeId && value.shiftId !== shiftId);
   }
+
+  private forSubstitution = (shiftComposition: ShiftComposition[],
+                             cell: CellData,
+                             workDay: WorkDay) => {
+    shiftComposition.forEach(value => {
+      if (isBetween(cell.day.isoString, value.from, value.to)) {
+        cell.workDay = workDay;
+        cell.enabled = true;
+      }
+    })
+  };
+
+  private forMain = (shiftComposition: ShiftComposition[],
+                     cell: CellData,
+                     workDay: WorkDay) => {
+    cell.workDay = workDay;
+    shiftComposition.forEach(value => {
+      if (isBetween(cell.day.isoString, value.from, value.to)) {
+        cell.enabled = false;
+        cell.workDay = null;
+      }
+    });
+  };
 }

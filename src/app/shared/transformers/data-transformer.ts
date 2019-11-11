@@ -1,5 +1,5 @@
 import { Shift } from "../../model/shift";
-import { ShiftSchedule } from "../../model/shift-schedule";
+import { ShiftComposition } from "../../model/shift-composition";
 import { Employee } from "../../model/employee";
 import { ScheduleDto } from "../../model/dto/schedule-dto";
 import { Position } from "../../model/position";
@@ -25,7 +25,7 @@ export class DataTransformer {
   }
 
   getData(shifts: Shift[],
-          shiftSchedule: ShiftSchedule[],
+          shiftSchedule: ShiftComposition[],
           employees: Employee[],
           schedule: ScheduleDto[],
           positions: Position[],

@@ -17,6 +17,7 @@ import { ContextMenuData } from "../../../../../../../model/ui/context-menu-data
 import { ContextMenuService } from "../../../../../../../lib/ngx-contextmenu/contextMenu.service";
 import { ContextMenuComponent } from "../../../../../../../lib/ngx-contextmenu/contextMenu.component";
 import { CellData } from "../../../../../../../model/ui/cell-data";
+import { ScheduleTableStatUtils } from "../../utils/schedule-table-stat-utils";
 
 @Component({
   selector: '[app-table-row]',
@@ -34,6 +35,8 @@ export class TableRowComponent implements OnInit {
   @Input() workingTimeSum:  number = 0;
   @Input() workingTimeNorm: number;
 
+  @Input() isSubstitution: boolean;
+
   @ViewChild(SelectableRowDirective)
   selectableRowDirective: SelectableRowDirective;
 
@@ -43,6 +46,7 @@ export class TableRowComponent implements OnInit {
   private contextMenuIsOpened = false;
 
   constructor(public elementRef: ElementRef,
+              private statUtils: ScheduleTableStatUtils,
               private showHoursService: ShowHoursService,
               private contextMenuService: ContextMenuService) { }
 
@@ -86,9 +90,6 @@ export class TableRowComponent implements OnInit {
   }
 
   recalc() {
-    this.workingTimeSum = this.cells
-      .filter(cell => cell.workDay != null || cell.workDay != undefined)
-      .map(cell => cell.workDay.hours)
-      .reduce((prev, curr) => prev + curr, 0);
+    this.workingTimeSum = this.statUtils.calculateCellsWorkingTimeSum(this.cells);
   }
 }

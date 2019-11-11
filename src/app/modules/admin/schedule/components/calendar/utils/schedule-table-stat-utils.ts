@@ -1,5 +1,8 @@
-import { Injectable } from "@angular/core";
+import { Injectable, QueryList } from "@angular/core";
 import { CellData } from "../../../../../../model/ui/cell-data";
+import { WorkDay } from "../../../../../../model/workday";
+import { TableCellComponent } from "../components/table-cell/table-cell.component";
+import { roundToTwo } from "../../../../../../shared/utils/utils";
 
 @Injectable()
 export class ScheduleTableStatUtils {
@@ -8,6 +11,23 @@ export class ScheduleTableStatUtils {
     if (cellData) {
       return this.roundToTwo(cellData
         .filter(cell => cell.workDay)
+        .map(cell => cell.workDay.hours)
+        .reduce((prev, curr) => prev + curr, 0));
+    }
+  }
+
+  calculateOverallWorkingTimeSum(workDays: WorkDay[]): number {
+    if (workDays) {
+      return this.roundToTwo(workDays
+        .map(workDay => workDay.hours)
+        .reduce((prev, curr) => prev + curr, 0));
+    }
+  }
+
+  calculateCellsWorkingTimeSum(cells: QueryList<TableCellComponent>): number {
+    if (cells) {
+      return roundToTwo(cells
+        .filter(cell => cell.workDay != null || cell.workDay != undefined)
         .map(cell => cell.workDay.hours)
         .reduce((prev, curr) => prev + curr, 0));
     }

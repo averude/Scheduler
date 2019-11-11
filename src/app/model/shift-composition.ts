@@ -1,6 +1,6 @@
 import * as moment from "moment";
 
-export class ShiftSchedule {
+export class ShiftComposition {
   id: number;
   employeeId: number;
   shiftId: number;
@@ -9,7 +9,7 @@ export class ShiftSchedule {
   to: string;
 }
 
-export const SS: ShiftSchedule[] = [
+export const SS: ShiftComposition[] = [
   {id: 3, employeeId: 1, shiftId: 1, substitution: false, from: '2018-01-01', to: '2019-12-31'},
   {id: 1, employeeId: 1, shiftId: 14, substitution: true, from: '2019-11-01', to: '2019-11-05'},
   {id: 2, employeeId: 1, shiftId: 14, substitution: true, from: '2019-11-15', to: '2019-11-24'},

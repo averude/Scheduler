@@ -1,5 +1,5 @@
 import { Shift } from "../../../model/shift";
-import { ShiftSchedule } from "../../../model/shift-schedule";
+import { ShiftComposition } from "../../../model/shift-composition";
 import { ScheduleDto } from "../../../model/dto/schedule-dto";
 import { Employee } from "../../../model/employee";
 import { Position } from "../../../model/position";
@@ -16,7 +16,7 @@ export class RowGroupDataCollector {
   }
 
   getRowGroupData(shifts: Shift[],
-                  shiftSchedule: ShiftSchedule[],
+                  shiftComposition: ShiftComposition[],
                   schedule: ScheduleDto[],
                   employees: Employee[],
                   positions: Position[],
@@ -26,17 +26,19 @@ export class RowGroupDataCollector {
                   shiftsWorkingTime: WorkingTime[]): RowGroupData[] {
     return shifts.map(shift => {
       let rowGroup = new RowGroupData();
-      let shiftWorkingTime = this.getShiftWorkingTime(shift.id, shiftsWorkingTime) ? this.getShiftWorkingTime(shift.id, shiftsWorkingTime).hours : 0;
+      let shiftWorkingTime = this.getShiftWorkingTime(shift.id, shiftsWorkingTime);
       rowGroup.shift = shift;
       rowGroup.workingTimeNorm = shiftWorkingTime;
       rowGroup.rows = this.rowDataCollector
-        .getRowData(shift.id, shiftSchedule, schedule, employees, positions,
+        .getRowData(shift.id, shiftComposition, schedule, employees, positions,
           dayTypes, dayTypeGroups, daysInMonth, shiftWorkingTime);
       return rowGroup;
     })
   }
 
-  getShiftWorkingTime(shiftId: number, shiftsWorkingTime: WorkingTime[]): WorkingTime {
-    return shiftsWorkingTime.find(workingTime => workingTime.shiftId === shiftId);
+  getShiftWorkingTime(shiftId: number,
+                      shiftsWorkingTime: WorkingTime[]): number {
+    let workingTime = shiftsWorkingTime.find(workingTime => workingTime.shiftId === shiftId);
+    return workingTime ? workingTime.hours : 0;
   }
 }

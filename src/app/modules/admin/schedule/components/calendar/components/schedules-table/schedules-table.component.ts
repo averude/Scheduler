@@ -29,8 +29,8 @@ import { ScheduleDto } from "../../../../../../../model/dto/schedule-dto";
 import { PatternUnitService } from "../../../../../../../services/pattern-unit.service";
 import { TableShiftGroupComponent } from "../table-shift-group/table-shift-group.component";
 import { ScheduleTableContextMenuComponent } from "../schedule-table-context-menu/schedule-table-context-menu.component";
-import { ShiftSchedule } from "../../../../../../../model/shift-schedule";
-import { ShiftScheduleService } from "../../../../../../../services/shift-schedule.service";
+import { ShiftComposition } from "../../../../../../../model/shift-composition";
+import { ShiftCompositionService } from "../../../../../../../services/shift-composition.service";
 import { CalendarDay } from "../../../../../../../model/ui/calendar-day";
 import { RowGroupData } from "../../../../../../../model/ui/row-group-data";
 import { DataTransformer } from "../../../../../../../shared/transformers/data-transformer";
@@ -49,15 +49,15 @@ export class SchedulesTableComponent implements OnInit, OnDestroy {
   @ViewChildren(TableShiftGroupComponent)
   shiftGroups: QueryList<TableShiftGroupComponent>;
 
-  shifts:             Shift[]         = [];
-  shiftSchedule:      ShiftSchedule[] = [];
-  employees:          Employee[]      = [];
-  schedule:           ScheduleDto[]   = [];
-  positions:          Position[]      = [];
-  patterns:           ShiftPattern[]  = [];
-  dayTypes:           DayType[]       = [];
-  dayTypeGroups:      DayTypeGroup[]  = [];
-  shiftsWorkingTime:  WorkingTime[]   = [];
+  shifts:             Shift[]             = [];
+  shiftSchedule:      ShiftComposition[]  = [];
+  employees:          Employee[]          = [];
+  schedule:           ScheduleDto[]       = [];
+  positions:          Position[]          = [];
+  patterns:           ShiftPattern[]      = [];
+  dayTypes:           DayType[]           = [];
+  dayTypeGroups:      DayTypeGroup[]      = [];
+  shiftsWorkingTime:  WorkingTime[]       = [];
 
   daysInMonth: CalendarDay[] = [];
 
@@ -69,7 +69,7 @@ export class SchedulesTableComponent implements OnInit, OnDestroy {
               private paginatorService: PaginatorService,
               private dataTransformer: DataTransformer,
               private shiftService: ShiftService,
-              private shiftScheduleService: ShiftScheduleService,
+              private shiftScheduleService: ShiftCompositionService,
               private employeeService: EmployeeService,
               private scheduleService: ScheduleService,
               private positionService: PositionService,

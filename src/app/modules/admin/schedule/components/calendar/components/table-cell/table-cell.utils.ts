@@ -8,6 +8,10 @@ export function toggleClass(elementRef: ElementRef, className: string) {
 
 export function setLabel(cell: TableCellComponent) {
   if (cell) {
+    if (!cell.enabled) {
+      cell.label = 'X';
+      return;
+    }
     if (cell.workDay) {
       if (cell.showHours || !cell.workDay.dayTypeId || !cell.dayTypes) {
         setHoursWithColor(cell);

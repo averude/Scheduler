@@ -2,10 +2,8 @@ import { Component } from '@angular/core';
 import { MatDialog } from "@angular/material";
 import { EmployeeService } from "../../../../../../../services/employee.service";
 import { Employee } from "../../../../../../../model/employee";
-import { Shift } from "../../../../../../../model/shift";
 import { Position } from "../../../../../../../model/position";
 import { PositionService } from "../../../../../../../services/position.service";
-import { ShiftService } from "../../../../../../../services/shift.service";
 import { EmployeeDialogComponent } from "../employee-dialog/employee-dialog.component";
 import { NotificationsService } from "angular2-notifications";
 import { TableBaseComponent } from "../../../../../../../shared/abstract-components/table-base/table-base.component";
@@ -16,16 +14,14 @@ import { TableBaseComponent } from "../../../../../../../shared/abstract-compone
   styleUrls: ['../../../../../../../shared/common/table.common.css','./employees-table.component.css']
 })
 export class EmployeesTableComponent extends TableBaseComponent<Employee> {
-  displayedColumns = ['select', 'secondName', 'firstName', 'patronymic', 'positionId', 'shiftId', 'control'];
+  displayedColumns = ['select', 'secondName', 'firstName', 'patronymic', 'positionId', 'control'];
 
   positions: Position[] = [];
-  shifts: Shift[] = [];
 
   constructor(private dialog: MatDialog,
               private notificationsService: NotificationsService,
               private employeeService: EmployeeService,
-              private positionService: PositionService,
-              private shiftService: ShiftService) {
+              private positionService: PositionService) {
     super(dialog, employeeService, notificationsService);
   }
 
@@ -35,20 +31,16 @@ export class EmployeesTableComponent extends TableBaseComponent<Employee> {
       return data.secondName.toLowerCase().includes(filter)
         || data.firstName.toLowerCase().includes(filter)
         || data.patronymic.toLowerCase().includes(filter)
-        || this.getPositionName(data.positionId).toLowerCase().includes(filter)
-        || this.getShiftName(data.shiftId).toLowerCase().includes(filter);
+        || this.getPositionName(data.positionId).toLowerCase().includes(filter);
     });
     this.positionService.getAll()
       .subscribe(positions => this.positions = positions);
-    this.shiftService.getAll()
-      .subscribe(shifts => this.shifts = shifts);
   }
 
   openDialog(employee: Employee) {
     const data = {
       employee: employee,
-      positions: this.positions,
-      shifts: this.shifts
+      positions: this.positions
     };
 
     this.openAddOrEditDialog(employee, data, EmployeeDialogComponent);
@@ -58,15 +50,6 @@ export class EmployeesTableComponent extends TableBaseComponent<Employee> {
     let position = this.positions.find(value => value.id === positionId);
     if (position) {
       return position.name;
-    } else {
-      return '-';
-    }
-  }
-
-  getShiftName(shiftId: number): string {
-    let shift = this.shifts.find(value => value.id === shiftId);
-    if (shift) {
-      return shift.name;
     } else {
       return '-';
     }

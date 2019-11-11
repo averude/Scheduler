@@ -1,5 +1,6 @@
 import { OperatorFunction } from "rxjs";
 import { map } from "rxjs/operators";
+import { Employee } from "../../model/employee";
 
 export const parseDateOfEntities: OperatorFunction<any, any> =
   map((response: Array<any>) => response.map(value => {
@@ -20,4 +21,10 @@ export function isWeekend(date: Date): boolean {
 /* Note that it doesn't work on IE because the Number.EPSILON is undefined there*/
 export function roundToTwo(num): number {
   return Math.round(num * 100 + Number.EPSILON)/100;
+}
+
+export function getEmployeeShortName(employee: Employee): string {
+  return employee.secondName + ' '
+    + employee.firstName.charAt(0) + '.' + ' '
+    + employee.patronymic.charAt(0) + '.';
 }

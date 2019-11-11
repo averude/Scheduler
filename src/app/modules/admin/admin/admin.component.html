@@ -9,7 +9,8 @@
                     <a>{{department?.name || '-'}}</a>
                 </div>
                 <div id="department-position" >
-                    <a>Administrator</a>
+                    <a *ngIf="roles.includes('DEPARTMENT_ADMIN')">Department administrator</a>
+                    <a *ngIf="roles.includes('SHIFT_ADMIN')">Shift administrator</a>
                 </div>
             </div>
 

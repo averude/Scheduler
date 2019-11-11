@@ -2,7 +2,8 @@
               [element]="elementRef"
               (onSelectionEnds)="onContextMenu($event.event, $event.selectedCells)">
   <td class="td-employee">
-    <div class="employee-name">
+    <div class="employee-name"
+         [class.substitution]="isSubstitution">
       {{getEmployeeShortName(employee)}}
     </div>
     <div class="position-label">

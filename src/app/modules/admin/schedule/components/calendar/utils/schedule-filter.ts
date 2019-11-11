@@ -1,16 +1,16 @@
 import { isBetween } from "./schedule-table-utils";
 import { WorkDay } from "../../../../../../model/workday";
-import { ShiftSchedule } from "../../../../../../model/shift-schedule";
+import { ShiftComposition } from "../../../../../../model/shift-composition";
 
 export interface ScheduleFilter {
-  filter(shiftId: number, employeeId: number, schedule: WorkDay[], shiftSchedule: ShiftSchedule[]);
+  filter(shiftId: number, employeeId: number, schedule: WorkDay[], shiftSchedule: ShiftComposition[]);
 }
 
 export class SubstitutionScheduleFilter implements ScheduleFilter{
   filter(shiftId: number,
          employeeId: number,
          schedule: WorkDay[],
-         shiftSchedule: ShiftSchedule[]) {
+         shiftSchedule: ShiftComposition[]) {
     let shiftSchedules = shiftSchedule
       .filter(value => value.employeeId === employeeId && value.substitution && value.shiftId === shiftId);
     return schedule.filter(workDay => {
@@ -26,13 +26,13 @@ export class SubstitutionScheduleFilter implements ScheduleFilter{
 
 export class RecursiveScheduleFilter implements ScheduleFilter {
 
-  filter(shiftId: number, employeeId: number, schedule: WorkDay[], shiftSchedule: ShiftSchedule[]) {
+  filter(shiftId: number, employeeId: number, schedule: WorkDay[], shiftSchedule: ShiftComposition[]) {
     let shiftSchedules = shiftSchedule
       .filter(value => value.employeeId === employeeId && value.shiftId !== shiftId);
     return this.recursivelyDo(schedule, shiftSchedules, shiftSchedules.length);
   }
 
-  private recursivelyDo(array: WorkDay[], limits: ShiftSchedule[], i: number): any  {
+  private recursivelyDo(array: WorkDay[], limits: ShiftComposition[], i: number): any  {
     if (i == 0) {
       return array;
     } else {

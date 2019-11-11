@@ -1,11 +1,11 @@
 import { Injectable } from "@angular/core";
-import { ShiftSchedule } from "../../../../../../model/shift-schedule";
+import { ShiftComposition } from "../../../../../../model/shift-composition";
 import { CalendarDay } from "../../../../../../model/ui/calendar-day";
 import * as moment from "moment";
 
 @Injectable()
 export class ScheduleTableUtils {
-  isCellWritable(shiftSchedule: ShiftSchedule, day: CalendarDay): boolean {
+  isCellWritable(shiftSchedule: ShiftComposition, day: CalendarDay): boolean {
     return moment(day.isoString)
       .isBetween(moment(shiftSchedule.from),moment(shiftSchedule.to), 'day', '[]');
   }
