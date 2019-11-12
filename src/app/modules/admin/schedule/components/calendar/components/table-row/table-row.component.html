@@ -22,11 +22,14 @@
       [class.holiday]="cell.day.holiday"
       [class.disabled]="!cell.enabled">
   </td>
-  <td class="sum"
-      [class.notEqual]="workingTimeSum !== workingTimeNorm">
+  <td class="sum">
     <p align="center">{{workingTimeSum}}</p>
   </td>
   <td class="sum">
     <p align="center">{{workingTimeNorm}}</p>
+  </td>
+  <td class="sum"
+      [class.notEqual]="workingTimeDiff !== 0">
+    <p align="center">{{workingTimeDiff}}</p>
   </td>
 </ng-container>

@@ -31,7 +31,7 @@ export class RowGroupDataCollector {
       rowGroup.workingTimeNorm = shiftWorkingTime;
       rowGroup.rows = this.rowDataCollector
         .getRowData(shift.id, shiftComposition, schedule, employees, positions,
-          dayTypes, dayTypeGroups, daysInMonth, shiftWorkingTime);
+          dayTypes, dayTypeGroups, daysInMonth, shiftWorkingTime, shiftsWorkingTime);
       return rowGroup;
     })
   }

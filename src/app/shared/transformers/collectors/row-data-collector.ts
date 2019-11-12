@@ -6,13 +6,10 @@ import { DayType } from "../../../model/day-type";
 import { DayTypeGroup } from "../../../model/day-type-group";
 import { CalendarDay } from "../../../model/ui/calendar-day";
 import { RowData } from "../../../model/ui/row-data";
-import { CellDataCollector } from "./cell-data-collector";
 import { WorkDay } from "../../../model/workday";
+import { WorkingTime } from "../../../model/working-time";
 
 export class RowDataCollector {
-
-  constructor(private cellDataCollector: CellDataCollector) {
-  }
 
   getRowData(shiftId: number,
              shiftComposition: ShiftComposition[],
@@ -22,7 +19,8 @@ export class RowDataCollector {
              dayTypes: DayType[],
              dayTypeGroups: DayTypeGroup[],
              daysInMonth: CalendarDay[],
-             workingTimeNorm: number): RowData[] {
+             workingTimeNorm: number,
+             shiftsWorkingTime: WorkingTime[]): RowData[] {
     return this.getEmployeesInShift(shiftId, shiftComposition, employees)
       .map(employee => {
         let composition = this.getEmployeeShiftComposition(employee.id, shiftComposition);
@@ -31,21 +29,19 @@ export class RowDataCollector {
         let isSubstitution = !composition.find(value => !value.substitution && value.shiftId === shiftId);
 
         let row = new RowData();
-        row.workDays = workDays;
+        row.daysInMonth = daysInMonth;
         row.employee = employee;
         row.position = this.getPosition(employee, positions);
-        row.cells = this.cellDataCollector
-          .getCells(employee.id,
-            shiftId,
-            isSubstitution,
-            composition,
-            workDays,
-            dayTypes,
-            dayTypeGroups,
-            daysInMonth
-          );
-        row.workingTimeNorm = workingTimeNorm;
         row.isSubstitution = isSubstitution;
+        row.workDays = workDays;
+        if (isSubstitution) {
+          row.workingTimeNorm = this.getEmployeeMainShiftWorkingTime(employee.id, composition, shiftsWorkingTime);
+        } else {
+          row.workingTimeNorm = workingTimeNorm;
+        }
+        row.composition = composition;
+        row.dayTypes = dayTypes;
+        row.dayTypeGroups = dayTypeGroups;
         return row;
       });
   }
@@ -67,6 +63,19 @@ export class RowDataCollector {
   getEmployeeShiftComposition(employeeId: number,
                               shiftComposition: ShiftComposition[]): ShiftComposition[] {
     return shiftComposition.filter(value => value.employeeId === employeeId);
+  }
+
+  getEmployeeMainShiftWorkingTime(employeeId: number,
+                                  compositions: ShiftComposition[],
+                                  shiftsWorkingTime: WorkingTime[]): number {
+    let shiftComposition = compositions.find(value => !value.substitution && value.employeeId === employeeId);
+    return shiftComposition ? this.getShiftWorkingTime(shiftComposition.shiftId, shiftsWorkingTime) : 0;
+  }
+
+  getShiftWorkingTime(shiftId: number,
+                      shiftsWorkingTime: WorkingTime[]): number {
+    let workingTime = shiftsWorkingTime.find(workingTime => workingTime.shiftId === shiftId);
+    return workingTime ? workingTime.hours : 0;
   }
 
   private getScheduleByEmployeeId(employeeId: number, scheduleDto: ScheduleDto[]): WorkDay[] {

@@ -9,6 +9,9 @@ import { DayTypeGroup } from "../../../../../../../model/day-type-group";
 import { ScheduleTableUtils } from "../../utils/schedule-table-utils";
 import { ScheduleService } from "../../../../../../../services/schedule.service";
 import { NotificationsService } from "angular2-notifications";
+import * as moment from "moment";
+import { RowChangeDetection } from "../table-service/row-change-detection";
+import { WorkDay } from "../../../../../../../model/workday";
 
 @Component({
   selector: 'app-schedule-table-context-menu',
@@ -29,7 +32,8 @@ export class ScheduleTableContextMenuComponent implements OnInit {
   @Input() dayTypeGroups: DayTypeGroup[]  = [];
   @Input() patterns:      ShiftPattern[]  = [];
 
-  constructor(private patternUnitService: PatternUnitService,
+  constructor(private rowCd: RowChangeDetection,
+              private patternUnitService: PatternUnitService,
               private utils: ScheduleTableUtils,
               private scheduleService: ScheduleService,
               private notificationService: NotificationsService,
@@ -96,29 +100,20 @@ export class ScheduleTableContextMenuComponent implements OnInit {
 
   private get scheduleGeneratedHandler(): (row, selectedCells) => void {
     return (row, selectedCells) => {
-      const createdCells = selectedCells
-        .filter(cell => !cell.workDay.id);
-      const createdSchedule = createdCells
+
+      const createdSchedule = selectedCells
+        .filter(cell => !cell.workDay.id)
         .map(cell => cell.workDay);
 
-      const updatedCells = selectedCells
-        .filter(cell => cell.workDay.id);
-      const updatedSchedule = updatedCells
+      const updatedSchedule = selectedCells
+        .filter(cell => cell.workDay.id)
         .map(cell => cell.workDay);
 
       if (createdSchedule.length > 0) {
         this.scheduleService.create(createdSchedule)
           .subscribe(response => {
-            let workDayIndex = 0;
-            createdCells.forEach(cell => {
-              let workDay = response[workDayIndex];
-              if (cell.day.isoString == workDay.date) {
-                workDayIndex++;
-                cell.workDay = workDay;
-                cell.refreshLabel();
-              }
-            });
-            row.recalc();
+            this.createSchedule(row.schedule, response);
+            this.rowCd.markForChange(row.employee.id);
             this.notificationService.success(
               'Created',
               'Schedule sent successfully');
@@ -127,7 +122,8 @@ export class ScheduleTableContextMenuComponent implements OnInit {
       if (updatedSchedule.length > 0) {
         this.scheduleService.update(updatedSchedule)
           .subscribe(res => {
-            updatedCells.forEach(cell => cell.refreshLabel());
+            this.updateSchedule(row.schedule, updatedSchedule);
+            this.rowCd.markForChange(row.employee.id);
             this.notificationService.success(
               'Updated',
               'Schedule sent successfully');
@@ -138,5 +134,26 @@ export class ScheduleTableContextMenuComponent implements OnInit {
 
   private get errorHandler(): (message) => void {
     return (message) => this.notificationService.error('Error', message);
+  }
+
+  private createSchedule(schedule: WorkDay[], createdSchedule: WorkDay[]) {
+    createdSchedule.forEach(workDay => schedule.push(workDay));
+    schedule.sort(((a, b) => moment(a.date).diff(moment(b.date))));
+  }
+
+  private updateSchedule(schedule: WorkDay[], updatedSchedule: WorkDay[]) {
+    for (let scheduleIdx = 0, updatedScheduleIdx = 0; scheduleIdx < schedule.length; scheduleIdx++) {
+      if (updatedScheduleIdx >= updatedSchedule.length) {
+        break;
+      }
+
+      let oldValue = schedule[scheduleIdx];
+      let newValue = updatedSchedule[updatedScheduleIdx];
+
+      if (oldValue.date === newValue.date) {
+        updatedScheduleIdx++;
+        schedule[scheduleIdx] = newValue;
+      }
+    }
   }
 }

@@ -17,7 +17,6 @@ import { WorkingTimeService } from "../../../../../../../services/working-time.s
 import { PaginatorService } from "../../../../../../../shared/paginators/paginator.service";
 import { Shift } from "../../../../../../../model/shift";
 import { Position } from "../../../../../../../model/position";
-import { WorkingTime } from "../../../../../../../model/working-time";
 import { ShiftService } from "../../../../../../../services/shift.service";
 import { DayType } from "../../../../../../../model/day-type";
 import { DayTypeService } from "../../../../../../../services/day-type.service";
@@ -57,7 +56,6 @@ export class SchedulesTableComponent implements OnInit, OnDestroy {
   patterns:           ShiftPattern[]      = [];
   dayTypes:           DayType[]           = [];
   dayTypeGroups:      DayTypeGroup[]      = [];
-  shiftsWorkingTime:  WorkingTime[]       = [];
 
   daysInMonth: CalendarDay[] = [];
 

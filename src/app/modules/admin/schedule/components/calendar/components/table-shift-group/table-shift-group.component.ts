@@ -3,8 +3,10 @@ import { Shift } from "../../../../../../../model/shift";
 import { PaginatorService } from "../../../../../../../shared/paginators/paginator.service";
 import { TableRowComponent } from "../table-row/table-row.component";
 import { ContextMenuComponent } from "../../../../../../../lib/ngx-contextmenu/contextMenu.component";
-import { ScheduleTableStatUtils } from "../../utils/schedule-table-stat-utils";
 import { RowData } from "../../../../../../../model/ui/row-data";
+import { DayType } from "../../../../../../../model/day-type";
+import { DayTypeGroup } from "../../../../../../../model/day-type-group";
+import { CalendarDay } from "../../../../../../../model/ui/calendar-day";
 
 @Component({
   selector: '[app-table-shift-group]',
@@ -19,6 +21,10 @@ export class TableShiftGroupComponent implements OnInit {
   @Input() rowData:       RowData[];
   @Input() workingTimeNorm: number;
 
+  @Input() dayTypes: DayType[];
+  @Input() dayTypeGroups: DayTypeGroup[];
+  @Input() daysInMonth: CalendarDay[];
+
   @Input() patternMenu:   ContextMenuComponent;
 
   isHidden: boolean = false;
@@ -26,14 +32,12 @@ export class TableShiftGroupComponent implements OnInit {
   @ViewChildren(TableRowComponent)
   rows: QueryList<TableRowComponent>;
 
-  constructor(private paginatorService: PaginatorService,
-              private utils: ScheduleTableStatUtils) {}
+  constructor(private paginatorService: PaginatorService) {}
 
   ngOnInit() {
     this.paginatorService.dates
       .subscribe(daysInMonth => {
-        this.numberOfColumns = daysInMonth.length + 3;
+        this.numberOfColumns = daysInMonth.length + 4;
       });
   }
-
 }

@@ -5,7 +5,9 @@ import { CalendarDay } from "../../../model/ui/calendar-day";
 import { CellData } from "../../../model/ui/cell-data";
 import { WorkDay } from "../../../model/workday";
 import { isBetween } from "../../../modules/admin/schedule/components/calendar/utils/schedule-table-utils";
+import { Injectable } from "@angular/core";
 
+@Injectable()
 export class CellDataCollector {
 
   getCells(employeeId: number,

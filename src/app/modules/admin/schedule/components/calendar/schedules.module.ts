@@ -20,6 +20,8 @@ import { ScheduleTableContextMenuModule } from "./components/schedule-table-cont
 import { ScheduleTableUtils } from "./utils/schedule-table-utils";
 import { ScheduleTableStatUtils } from "./utils/schedule-table-stat-utils";
 import { DataTransformer } from "../../../../../shared/transformers/data-transformer";
+import { RowChangeDetection } from "./components/table-service/row-change-detection";
+import { CellDataCollector } from "../../../../../shared/transformers/collectors/cell-data-collector";
 
 @NgModule({
   imports: [
@@ -45,6 +47,8 @@ import { DataTransformer } from "../../../../../shared/transformers/data-transfo
   entryComponents: [ScheduleGenerationDialogComponent],
   providers: [
     PaginatorService,
+    RowChangeDetection,
+    CellDataCollector,
     ShowHoursService,
     ScheduleTableUtils,
     ScheduleTableStatUtils,

@@ -10,12 +10,16 @@
       class="schedule-row"
       *ngFor="let row of rowData"
       app-table-row
+      [shiftId]="shift.id"
       [employee]="row.employee"
-      [cellData]="row.cells"
-      [workingTimeSum]="utils.calculateWorkingTimeSum(row.cells)"
-      [workingTimeNorm]="row.workingTimeNorm"
       [position]="row.position"
+      [schedule]="row.workDays"
+      [daysInMonth]="daysInMonth"
+      [shiftComposition]="row.composition"
+      [workingTimeNorm]="row.workingTimeNorm"
       [isSubstitution]="row.isSubstitution"
+      [dayTypes]="row.dayTypes"
+      [dayTypeGroups]="row.dayTypeGroups"
       [patternMenu]="patternMenu">
   </tr>
 </ng-container>

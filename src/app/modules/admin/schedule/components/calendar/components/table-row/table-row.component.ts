@@ -1,12 +1,14 @@
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   Input,
+  OnChanges,
+  OnDestroy,
   OnInit,
-  QueryList,
+  SimpleChanges,
   ViewChild,
-  ViewChildren,
 } from '@angular/core';
 import { Employee } from '../../../../../../../model/employee';
 import { Position } from '../../../../../../../model/position';
@@ -18,6 +20,16 @@ import { ContextMenuService } from "../../../../../../../lib/ngx-contextmenu/con
 import { ContextMenuComponent } from "../../../../../../../lib/ngx-contextmenu/contextMenu.component";
 import { CellData } from "../../../../../../../model/ui/cell-data";
 import { ScheduleTableStatUtils } from "../../utils/schedule-table-stat-utils";
+import { CellDataCollector } from "../../../../../../../shared/transformers/collectors/cell-data-collector";
+import { ShiftComposition } from "../../../../../../../model/shift-composition";
+import { WorkDay } from "../../../../../../../model/workday";
+import { DayType } from "../../../../../../../model/day-type";
+import { DayTypeGroup } from "../../../../../../../model/day-type-group";
+import { CalendarDay } from "../../../../../../../model/ui/calendar-day";
+import { RowChangeDetection } from "../table-service/row-change-detection";
+import { Subscription } from "rxjs";
+import { filter } from "rxjs/operators";
+import { getEmployeeShortName } from "../../../../../../../shared/utils/utils";
 
 @Component({
   selector: '[app-table-row]',
@@ -25,32 +37,57 @@ import { ScheduleTableStatUtils } from "../../utils/schedule-table-stat-utils";
   styleUrls: ['./table-row.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TableRowComponent implements OnInit {
+export class TableRowComponent implements OnInit, OnChanges, OnDestroy {
 
-  @Input() employee:      Employee;
-  @Input() position:      Position;
-  @Input() cellData:      CellData[];
-  @Input() patternMenu:   ContextMenuComponent;
+  @Input() shiftId:           number;
+  @Input() employee:          Employee;
+  @Input() position:          Position;
+  @Input() isSubstitution:    boolean;
+  @Input() schedule:          WorkDay[];
+  @Input() shiftComposition:  ShiftComposition[];
+  @Input() dayTypes:          DayType[];
+  @Input() dayTypeGroups:     DayTypeGroup[];
+  @Input() daysInMonth:       CalendarDay[];
 
-  @Input() workingTimeSum:  number = 0;
-  @Input() workingTimeNorm: number;
+  @Input() workingTimeSum:    number = 0;
+  @Input() workingTimeNorm:   number;
+  workingTimeDiff: number;
 
-  @Input() isSubstitution: boolean;
+  @Input() patternMenu:       ContextMenuComponent;
+
+  cellData: CellData[];
 
   @ViewChild(SelectableRowDirective)
   selectableRowDirective: SelectableRowDirective;
 
-  @ViewChildren(TableCellComponent)
-  cells: QueryList<TableCellComponent>;
-
   private contextMenuIsOpened = false;
+  private rowCdSubscription: Subscription;
 
   constructor(public elementRef: ElementRef,
+              private cd: ChangeDetectorRef,
+              private rowCd: RowChangeDetection,
+              private collector: CellDataCollector,
               private statUtils: ScheduleTableStatUtils,
               private showHoursService: ShowHoursService,
               private contextMenuService: ContextMenuService) { }
 
   ngOnInit() {
+    this.rowCdSubscription = this.rowCd.onChange
+      .pipe(filter(employeeId => this.employee.id === employeeId))
+      .subscribe(employeeId => {
+        console.debug('Row with employee id: ' + employeeId + ' marked for check');
+        this.getCells();
+      });
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['schedule'] && changes['schedule'].isFirstChange()) {
+      this.getCells();
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.rowCdSubscription.unsubscribe();
   }
 
   onContextMenu($event: MouseEvent,
@@ -77,9 +114,7 @@ export class TableRowComponent implements OnInit {
   }
 
   getEmployeeShortName(employee: Employee): string {
-    return employee.secondName + ' '
-      + employee.firstName.charAt(0) + '.' + ' '
-      + employee.patronymic.charAt(0) + '.';
+    return getEmployeeShortName(employee);
   }
 
   clearSelection() {
@@ -89,7 +124,27 @@ export class TableRowComponent implements OnInit {
     }
   }
 
+  calcWorkingTimeDiff() {
+    this.workingTimeDiff = this.workingTimeNorm - this.workingTimeSum;
+  }
+
   recalc() {
-    this.workingTimeSum = this.statUtils.calculateCellsWorkingTimeSum(this.cells);
+    this.workingTimeSum = this.statUtils.calculateOverallWorkingTimeSum(this.schedule);
+  }
+
+  getCells() {
+    this.cellData = this.collector.getCells(
+      this.employee.id,
+      this.shiftId,
+      this.isSubstitution,
+      this.shiftComposition,
+      this.schedule,
+      this.dayTypes,
+      this.dayTypeGroups,
+      this.daysInMonth
+    );
+    this.recalc();
+    this.calcWorkingTimeDiff();
+    this.cd.markForCheck();
   }
 }
