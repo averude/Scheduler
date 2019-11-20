@@ -7,10 +7,10 @@ import com.averude.uksatse.scheduler.shared.service.ExtraWeekendService;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -26,15 +26,17 @@ public class ExtraWeekendControllerImpl
     }
 
     @Override
-    public Iterable<ExtraWeekend> getAll(Authentication authentication) {
-        return extraWeekendService.findAllByAuth(authentication);
+    public List<ExtraWeekend> getAllByDepartmentIdAndDateBetween(Long departmentId,
+                                                                 LocalDate from,
+                                                                 LocalDate to) {
+        return extraWeekendService.findAllByDepartmentIdAndDateBetween(departmentId, from, to);
     }
 
     @Override
-    public Iterable<ExtraWeekend> getAllByYear(Authentication authentication,
-                                               LocalDate from,
-                                               LocalDate to) {
-        return extraWeekendService.findAllByAuthAndDateBetween(authentication, from, to);
+    public List<ExtraWeekend> getAllByShiftIdAndDateBetween(Long shiftId,
+                                                            LocalDate from,
+                                                            LocalDate to) {
+        return extraWeekendService.findAllByShiftIdAndDateBetween(shiftId, from, to);
     }
 
     @Override

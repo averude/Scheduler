@@ -1,6 +1,8 @@
 package com.averude.uksatse.scheduler.core.extractor;
 
 import com.averude.uksatse.scheduler.core.exception.DecodedDetailsMissingFieldException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
@@ -14,6 +16,7 @@ import java.util.stream.Collectors;
 
 @Component
 public class DataByAuthorityExtractor {
+    private Logger logger = LoggerFactory.getLogger(DataByAuthorityExtractor.class);
 
     private static final String GLOBAL_ADMIN     = "GLOBAL_ADMIN";
     private static final String DEPARTMENT_ADMIN = "DEPARTMENT_ADMIN";
@@ -38,6 +41,10 @@ public class DataByAuthorityExtractor {
                                                  OnAuthorityFound<T, R> onShiftAdminAuthority) {
         Map<String, Integer> decodedDetails = extractDecodedDetails(authentication);
         List<String> authoritiesList = getAuthoritiesList(authentication);
+
+        logger.debug("Token data:\n " +
+                "List of authorities: {}\n " +
+                "List of details: {}", authoritiesList.toString(), decodedDetails.toString());
 
         if (authoritiesList.contains(GLOBAL_ADMIN)) {
             if (onGlobalAdminAuthority != null) {

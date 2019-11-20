@@ -9,4 +9,8 @@ public interface ShiftCompositionService extends GenericService<ShiftComposition
     List<ShiftComposition> findAllByShiftIdAndDate(Long shiftId,
                                                    LocalDate from,
                                                    LocalDate to);
+
+    List<ShiftComposition> findAllByDepartmentIdAndDate(Long departmentId,
+                                                        LocalDate from,
+                                                        LocalDate to);
 }

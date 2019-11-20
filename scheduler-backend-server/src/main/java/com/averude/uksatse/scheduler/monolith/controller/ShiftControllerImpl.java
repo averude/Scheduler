@@ -7,9 +7,9 @@ import com.averude.uksatse.scheduler.shared.service.ShiftService;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -25,8 +25,8 @@ public class ShiftControllerImpl
     }
 
     @Override
-    public Iterable<Shift> getAll(Authentication authentication){
-        return shiftService.findAllByAuth(authentication);
+    public List<Shift> getAllByDepartmentId(Long departmentId) {
+        return shiftService.findAllByDepartmentId(departmentId);
     }
 
     @Override

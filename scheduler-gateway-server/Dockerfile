@@ -1,4 +1,4 @@
-FROM java:8-jre
+FROM openjdk:11
 MAINTAINER Andrew Kolesnyk
 
 ADD ./target/scheduler-gateway-server.jar /app/

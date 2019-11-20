@@ -7,9 +7,10 @@ import com.averude.uksatse.scheduler.shared.service.EmployeeService;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -25,18 +26,18 @@ public class EmployeeControllerImpl
     }
 
     @Override
-    public Iterable<Employee> getAllInDepartment(Authentication authentication) {
-        return employeeService.findAllByAuth(authentication);
-    }
-
-    @Override
     public Iterable<Employee> getAllInPosition(Long positionId){
         return employeeService.findAllByPositionId(positionId);
     }
 
     @Override
-    public Optional<Employee> get(Authentication authentication){
-        return employeeService.getCurrent(authentication);
+    public List<Employee> getAllByDepartmentId(Long departmentId) {
+        return employeeService.findAllByDepartmentId(departmentId);
+    }
+
+    @Override
+    public List<Employee> getAllByShiftIdAndDateBetween(Long shiftId, LocalDate from, LocalDate to) {
+        return employeeService.findAllByShiftIdAndDate(shiftId, from, to);
     }
 
     @Override

@@ -104,4 +104,16 @@ public class ShiftComposition implements HasId {
     public int hashCode() {
         return Objects.hash(shiftId, employeeId, substitution, from, to);
     }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "id=" + id +
+                ", shiftId=" + shiftId +
+                ", employeeId=" + employeeId +
+                ", substitution=" + substitution +
+                ", from=" + from +
+                ", to=" + to +
+                '}';
+    }
 }

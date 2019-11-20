@@ -35,7 +35,7 @@ services:
     image: scheduler-gateway-server
     restart: always
     ports:
-      - 80:4000
+      - 4000:4000
 
   scheduler-backend-server:
     environment:
@@ -52,7 +52,17 @@ services:
       dockerfile: Dockerfile
     image: scheduler-backend-server
     restart: always
+    volumes:
+      - ${LOG_VOLUME_PATH}:/logs
     depends_on:
       - scheduler-auth-server
     ports:
       - 8080:8080
+
+#  scheduler-frontend-server:
+#    build:
+#      dockerfile: Dockerfile
+#    image: scheduler-frontend-server
+#    restart: always
+#    ports:
+#      - 80:80 #50400

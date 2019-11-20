@@ -1,6 +1,8 @@
 package com.averude.uksatse.scheduler.core.errorhandler;
 
 import com.averude.uksatse.scheduler.core.dto.ErrorDetails;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,7 @@ import java.time.LocalDateTime;
 
 @ControllerAdvice
 public class RestErrorHandler extends ResponseEntityExceptionHandler {
+    private Logger logger = LoggerFactory.getLogger(RestErrorHandler.class);
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
@@ -27,12 +30,18 @@ public class RestErrorHandler extends ResponseEntityExceptionHandler {
         ErrorDetails details = new ErrorDetails(LocalDateTime.now());
         ex.getBindingResult()
                 .getFieldErrors()
-                .forEach(error -> details.addError("Field error",
-                        error.getField() + ": " + error.getDefaultMessage()));
+                .forEach(error -> {
+                    logger.error("Field error. Field: {}, Message: {}", error.getField(), error.getDefaultMessage());
+                    details.addError("Field error",
+                            error.getField() + ": " + error.getDefaultMessage());
+                });
         ex.getBindingResult()
                 .getGlobalErrors()
-                .forEach(error -> details.addError("Global error",
-                        error.getObjectName() + ": " + error.getDefaultMessage()));
+                .forEach(error -> {
+                    logger.error("Global error. Object: {}, Message: {}", error.getObjectName(), error.getDefaultMessage());
+                    details.addError("Global error",
+                            error.getObjectName() + ": " + error.getDefaultMessage());
+                });
         return new ResponseEntity<>(details, HttpStatus.BAD_REQUEST);
     }
 
@@ -42,6 +51,7 @@ public class RestErrorHandler extends ResponseEntityExceptionHandler {
             HttpHeaders headers,
             HttpStatus status,
             WebRequest request) {
+        logger.error("Parameter {} is missing. {}", ex.getParameterName(), ex.getMessage());
         ErrorDetails details = new ErrorDetails(LocalDateTime.now());
         details.addError("Request error",
                 ex.getParameterName() + " parameter is missing");
@@ -53,14 +63,18 @@ public class RestErrorHandler extends ResponseEntityExceptionHandler {
                                                             WebRequest request){
         ErrorDetails details = new ErrorDetails(LocalDateTime.now());
         ex.getConstraintViolations()
-                .forEach(constraintViolation -> details.addError("Constraint violation",
-                        constraintViolation.getMessage()));
+                .forEach(constraintViolation -> {
+                    logger.error("Constraint violation: {}", constraintViolation.getMessage());
+                    details.addError("Constraint violation",
+                            constraintViolation.getMessage());
+                });
         return new ResponseEntity<>(details, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler({PersistenceException.class})
     public ResponseEntity<Object> handlePersistenceException(PersistenceException ex,
                                                              WebRequest request){
+        logger.error("Persistence error: {}", ex.getCause().getLocalizedMessage());
         ErrorDetails details = new ErrorDetails(LocalDateTime.now());
         details.addError("Persistence error", ex.getCause().getLocalizedMessage());
         return new ResponseEntity<>(details, HttpStatus.BAD_REQUEST);

@@ -5,29 +5,33 @@ import com.averude.uksatse.scheduler.core.entity.WorkDay;
 import com.averude.uksatse.scheduler.core.extractor.DataByAuthorityExtractor;
 import com.averude.uksatse.scheduler.shared.repository.EmployeeRepository;
 import com.averude.uksatse.scheduler.shared.repository.ScheduleRepository;
+import com.averude.uksatse.scheduler.shared.repository.ShiftCompositionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ScheduleServiceImpl
         extends AbstractService<WorkDay, Long> implements ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
+    private final ShiftCompositionRepository shiftCompositionRepository;
     private final EmployeeRepository employeeRepository;
     private final DataByAuthorityExtractor extractor;
 
     @Autowired
     public ScheduleServiceImpl(ScheduleRepository scheduleRepository,
+                               ShiftCompositionRepository shiftCompositionRepository,
                                EmployeeRepository employeeRepository,
                                DataByAuthorityExtractor extractor) {
         super(scheduleRepository);
         this.scheduleRepository = scheduleRepository;
+        this.shiftCompositionRepository = shiftCompositionRepository;
         this.employeeRepository = employeeRepository;
         this.extractor = extractor;
     }
@@ -37,7 +41,7 @@ public class ScheduleServiceImpl
     public ScheduleDTO findScheduleByEmployeeIdAndDate(Long employeeId,
                                                        LocalDate from,
                                                        LocalDate to) {
-        return new ScheduleDTO(employeeId, scheduleRepository.findAllByEmployeeIdAndDateBetween(employeeId, from, to));
+        return new ScheduleDTO(employeeId, scheduleRepository.findAllByEmployeeIdAndDateBetweenOrderByDateAsc(employeeId, from, to));
     }
 
     @Override
@@ -45,13 +49,11 @@ public class ScheduleServiceImpl
     public List<ScheduleDTO> findScheduleByShiftIdAndDate(Long shiftId,
                                                           LocalDate from,
                                                           LocalDate to) {
-        List<ScheduleDTO> shiftSchedule = new LinkedList<>();
-        employeeRepository.findAllByShiftIdOrderByShiftIdAscSecondNameAscFirstNameAscPatronymicAsc(shiftId)
-                .forEach(employee -> {
-                    shiftSchedule.add(new ScheduleDTO(employee.getId(),
-                            scheduleRepository.findAllByEmployeeIdAndDateBetween(employee.getId(), from, to)));
-                });
-        return shiftSchedule;
+        return shiftCompositionRepository.findAllByShiftIdAndToGreaterThanEqualAndFromLessThanEqual(shiftId, from, to)
+                .stream()
+                .map(shiftSchedule -> new ScheduleDTO(shiftSchedule.getEmployeeId(),
+                        scheduleRepository.findAllByEmployeeIdAndDateBetweenOrderByDateAsc(shiftSchedule.getEmployeeId(), from, to)))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -59,14 +61,11 @@ public class ScheduleServiceImpl
     public List<ScheduleDTO> findScheduleByDepartmentIdAndDate(Long departmentId,
                                                                LocalDate from,
                                                                LocalDate to) {
-
-        List<ScheduleDTO> departmentSchedule = new LinkedList<>();
-        employeeRepository.findAllByDepartmentId(departmentId)
-                .forEach(employee -> {
-                    departmentSchedule.add(new ScheduleDTO(employee.getId(),
-                            scheduleRepository.findAllByEmployeeIdAndDateBetween(employee.getId(), from, to)));
-                });
-        return departmentSchedule;
+        return employeeRepository.findAllByDepartmentId(departmentId)
+                .stream()
+                .map(employee -> new ScheduleDTO(employee.getId(),
+                        scheduleRepository.findAllByEmployeeIdAndDateBetweenOrderByDateAsc(employee.getId(), from, to)))
+                .collect(Collectors.toList());
     }
 
     @Override

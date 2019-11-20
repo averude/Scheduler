@@ -26,4 +26,10 @@ public class ShiftCompositionServiceImpl
     public List<ShiftComposition> findAllByShiftIdAndDate(Long shiftId, LocalDate from, LocalDate to) {
         return shiftCompositionRepository.findAllByShiftIdAndToGreaterThanEqualAndFromLessThanEqual(shiftId, from, to);
     }
+
+    @Override
+    @Transactional
+    public List<ShiftComposition> findAllByDepartmentIdAndDate(Long departmentId, LocalDate from, LocalDate to) {
+        return shiftCompositionRepository.findAllByDepartmentIdAndDatesBetween(departmentId, from, to);
+    }
 }

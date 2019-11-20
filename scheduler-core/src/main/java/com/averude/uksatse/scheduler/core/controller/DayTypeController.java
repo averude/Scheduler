@@ -9,12 +9,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 
-@RequestMapping("/admin/daytypes")
+@RequestMapping("/admin/day_types")
 public interface DayTypeController extends BasicCrudController<DayType> {
-    @RequestMapping(method = RequestMethod.GET)
-    Iterable<DayType> getAll(Authentication authentication);
+
+    @RequestMapping(method = RequestMethod.GET,
+                    value = "/departments/{departmentId}")
+    List<DayType> getAllByDepartmentId(@PathVariable Long departmentId);
+
+    @RequestMapping(method = RequestMethod.GET,
+                    value = "/shifts/{shiftId}")
+    List<DayType> getAllByShiftId(@PathVariable Long shiftId);
 
     @RequestMapping(method = RequestMethod.GET, value = "/{id}")
     Optional<DayType> get(@PathVariable Long id);

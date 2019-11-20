@@ -7,7 +7,6 @@ import com.averude.uksatse.scheduler.shared.service.HolidayService;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
@@ -26,15 +25,13 @@ public class HolidayControllerImpl
     }
 
     @Override
-    public Iterable<Holiday> getAll(Authentication authentication) {
-        return holidayService.findAllByAuth(authentication);
+    public Iterable<Holiday> getAllByDepartmentIdAndDateBetween(Long departmentId, LocalDate from, LocalDate to) {
+        return holidayService.findAllByDepartmentIdAndDateBetween(departmentId, from, to);
     }
 
     @Override
-    public Iterable<Holiday> getAllByYear(Authentication authentication,
-                                          LocalDate from,
-                                          LocalDate to) {
-        return holidayService.findAllByAuthAndDateBetween(authentication, from, to);
+    public Iterable<Holiday> getAllByShiftIdAndDateBetween(Long shiftId, LocalDate from, LocalDate to) {
+        return holidayService.findAllByShiftIdAndDateBetween(shiftId, from, to);
     }
 
     @Override

@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.core.Ordered;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.web.filter.CommonsRequestLoggingFilter;
 import org.springframework.web.filter.CorsFilter;
 
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -17,9 +18,8 @@ import org.springframework.web.filter.CorsFilter;
         "com.averude.uksatse.scheduler.monolith",
         "com.averude.uksatse.scheduler.core.extractor",
         "com.averude.uksatse.scheduler.core.configuration",
-        "com.averude.uksatse.scheduler.core.generator",
+        "com.averude.uksatse.scheduler.generator",
         "com.averude.uksatse.scheduler.core.errorhandler",
-        "com.averude.uksatse.scheduler.shared.extractor",
         "com.averude.uksatse.scheduler.shared.service",
 })
 @EnableJpaRepositories("com.averude.uksatse.scheduler.shared.repository")
@@ -33,5 +33,17 @@ public class BackendServerApplication {
         FilterRegistrationBean bean = new FilterRegistrationBean<CorsFilter>(new CustomCorsFilter());
         bean.setOrder(Ordered.HIGHEST_PRECEDENCE);
         return bean;
+    }
+
+    @Bean
+    public CommonsRequestLoggingFilter logFilter() {
+        CommonsRequestLoggingFilter filter
+                = new CommonsRequestLoggingFilter();
+        filter.setIncludeQueryString(true);
+        filter.setIncludePayload(true);
+        filter.setMaxPayloadLength(10000);
+        filter.setIncludeHeaders(true);
+        filter.setAfterMessagePrefix("REQUEST DATA : ");
+        return filter;
     }
 }

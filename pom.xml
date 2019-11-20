@@ -7,7 +7,7 @@
     <groupId>com.averude.uksatse</groupId>
     <artifactId>scheduler</artifactId>
     <packaging>pom</packaging>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.1.0-SNAPSHOT</version>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -21,12 +21,13 @@
         <!--Should be the same as parent version-->
         <spring-boot.version>2.1.6.RELEASE</spring-boot.version>
         <spring-cloud.version>Greenwich.RELEASE</spring-cloud.version>
-        <java.version>1.8</java.version>
+        <java.version>11</java.version>
     </properties>
 
     <modules>
         <module>scheduler-core</module>
         <module>scheduler-shared</module>
+        <module>scheduler-generators</module>
         <module>scheduler-gateway-server</module>
         <module>scheduler-auth-server</module>
         <module>scheduler-backend-server</module>

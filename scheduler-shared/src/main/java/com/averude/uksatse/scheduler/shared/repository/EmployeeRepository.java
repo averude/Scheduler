@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
-    List<Employee> findAllByPositionIdOrderByShiftIdAscSecondNameAscFirstNameAscPatronymicAsc(long positionId);
+    List<Employee> findAllByPositionIdOrderBySecondNameAscFirstNameAscPatronymicAsc(long positionId);
 
     @Query("select e " +
             "from Position p " +
@@ -15,9 +15,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
             "Employee e " +
             "on e.positionId = p.id " +
             "where p.departmentId = ?1 " +
-            "order by e.shiftId, e.secondName, e.firstName, e.patronymic")
+            "order by e.secondName, e.firstName, e.patronymic")
     List<Employee> findAllByDepartmentId(long departmentId);
-
-    List<Employee> findAllByShiftIdOrderByShiftIdAscSecondNameAscFirstNameAscPatronymicAsc(long shiftId);
-
 }

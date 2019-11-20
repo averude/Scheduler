@@ -49,6 +49,13 @@ public class WorkDay implements HasId {
     public WorkDay() {
     }
 
+    public WorkDay(Long employeeId, LocalDate date) {
+        this.employeeId = employeeId;
+        this.holiday = false;
+        this.hours = 0F;
+        this.date = date;
+    }
+
     public WorkDay(Long employeeId,
                    Long dayTypeId,
                    Boolean holiday,
@@ -128,13 +135,13 @@ public class WorkDay implements HasId {
 
     @Override
     public String toString() {
-        return "["
-                + "ID: " + id + "; "
-                + "Employee ID: " + employeeId + "; "
-                + "Day Type ID:" + dayTypeId + "; "
-                + "Holiday: " + holiday + "; "
-                + "Hours: " + hours + "; "
-                + "Date: " + date +
-                "]";
+        return "{" +
+                "id=" + id +
+                ", employeeId=" + employeeId +
+                ", dayTypeId=" + dayTypeId +
+                ", holiday=" + holiday +
+                ", hours=" + hours +
+                ", date=" + date +
+                "}\r\n";
     }
 }

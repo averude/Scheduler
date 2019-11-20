@@ -94,10 +94,14 @@ CREATE TABLE shift_composition (
   CHECK ( from_date <= to_date ),
 
   EXCLUDE USING GIST (
-    shift_id WITH =,
     employee_id WITH =,
     daterange(from_date, to_date, '[]') WITH &&
   ) WHERE ( substitution = false ),
+
+  EXCLUDE USING GIST (
+    employee_id WITH =,
+    daterange(from_date, to_date, '[]') WITH &&
+  ) WHERE ( substitution = true ),
 
   PRIMARY KEY (id),
   FOREIGN KEY (shift_id)      REFERENCES shifts(id)     ON UPDATE CASCADE ON DELETE CASCADE,

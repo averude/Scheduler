@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import javax.validation.Valid;
 import java.util.Optional;
 
-@RequestMapping("/admin/daytypegroups")
+@RequestMapping("/admin/day_type_groups")
 public interface DayTypeGroupController extends BasicCrudController<DayTypeGroup> {
 
     @RequestMapping(method = RequestMethod.GET)

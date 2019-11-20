@@ -7,9 +7,9 @@ import com.averude.uksatse.scheduler.shared.service.DayTypeService;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -25,8 +25,13 @@ public class DayTypeControllerImpl
     }
 
     @Override
-    public Iterable<DayType> getAll(Authentication authentication) {
-        return dayTypeService.findAllByAuth(authentication);
+    public List<DayType> getAllByDepartmentId(Long departmentId) {
+        return dayTypeService.findAllByDepartmentId(departmentId);
+    }
+
+    @Override
+    public List<DayType> getAllByShiftId(Long shiftId) {
+        return dayTypeService.findAllByShiftId(shiftId);
     }
 
     @Override

@@ -45,6 +45,16 @@ public class PatternUnit implements HasId {
     @Column(nullable = false)
     private Float value;
 
+    public PatternUnit() {
+    }
+
+    public PatternUnit(Long patternId, Long orderId, Long dayTypeId, Float value) {
+        this.patternId = patternId;
+        this.orderId = orderId;
+        this.dayTypeId = dayTypeId;
+        this.value = value;
+    }
+
     public Long getId() {
         return id;
     }

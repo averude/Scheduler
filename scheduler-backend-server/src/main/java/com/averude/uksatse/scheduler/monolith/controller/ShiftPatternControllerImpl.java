@@ -7,14 +7,15 @@ import com.averude.uksatse.scheduler.shared.service.ShiftPatternService;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
 public class ShiftPatternControllerImpl
         extends AbstractCrudController<ShiftPattern> implements ShiftPatternController {
+
 
     private final ShiftPatternService shiftPatternService;
 
@@ -25,8 +26,13 @@ public class ShiftPatternControllerImpl
     }
 
     @Override
-    public Iterable<ShiftPattern> getAll(Authentication authentication) {
-        return this.shiftPatternService.findAllByAuth(authentication);
+    public List<ShiftPattern> getAllByDepartmentId(Long departmentId) {
+        return this.shiftPatternService.findAllByDepartmentId(departmentId);
+    }
+
+    @Override
+    public List<ShiftPattern> getAllByShiftId(Long shiftId) {
+        return this.shiftPatternService.findAllByShiftId(shiftId);
     }
 
     @Override

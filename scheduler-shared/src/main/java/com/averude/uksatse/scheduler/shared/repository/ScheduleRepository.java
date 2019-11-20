@@ -8,7 +8,10 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface ScheduleRepository extends JpaRepository<WorkDay, Long> {
-    List<WorkDay> findAllByEmployeeIdAndDateBetween(long employeeId, LocalDate from, LocalDate to);
+    List<WorkDay> findAllByEmployeeIdAndDateBetweenOrderByDateAsc(long employeeId, LocalDate from, LocalDate to);
+
+    List<WorkDay> findAllByEmployeeIdInAndDateBetweenOrderByDateAsc(List<Long> employeeIds, LocalDate from, LocalDate to);
+
     void deleteAllByEmployeeIdAndDateBetween(Long employeeId, LocalDate from, LocalDate to);
 
     @Query("select sched " +

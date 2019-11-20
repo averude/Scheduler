@@ -7,10 +7,10 @@ import com.averude.uksatse.scheduler.shared.service.WorkingTimeService;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -26,15 +26,13 @@ public class WorkingTimeControllerImpl
     }
 
     @Override
-    public Iterable<WorkingTime> getAll(Authentication authentication) {
-        return workingTimeService.findAllByAuth(authentication);
+    public List<WorkingTime> getAllByDepartmentIdAndDateBetween(Long departmentId, LocalDate from, LocalDate to) {
+        return workingTimeService.findAllByDepartmentIdAndDateBetween(departmentId, from, to);
     }
 
     @Override
-    public Iterable<WorkingTime> getAllByYear(Authentication authentication,
-                                              LocalDate from,
-                                              LocalDate to) {
-        return workingTimeService.findAllByAuthAndDateBetween(authentication, from, to);
+    public List<WorkingTime> getAllByShiftIdAndDateBetween(Long shiftId, LocalDate from, LocalDate to) {
+        return workingTimeService.findAllByShiftIdAndDateBetween(shiftId, from, to);
     }
 
     @Override

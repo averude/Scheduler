@@ -1,10 +1,9 @@
 package com.averude.uksatse.scheduler.monolith.service;
 
-import com.averude.uksatse.scheduler.core.entity.Employee;
-import com.averude.uksatse.scheduler.core.entity.Holiday;
-import com.averude.uksatse.scheduler.core.entity.PatternUnit;
-import com.averude.uksatse.scheduler.core.entity.WorkDay;
-import com.averude.uksatse.scheduler.core.generator.ScheduleGenerator;
+import com.averude.uksatse.scheduler.core.entity.*;
+import com.averude.uksatse.scheduler.generator.model.ScheduleGenerationInterval;
+import com.averude.uksatse.scheduler.generator.schedule.ScheduleGenerator;
+import com.averude.uksatse.scheduler.generator.utils.ScheduleGenerationIntervalCreator;
 import com.averude.uksatse.scheduler.shared.repository.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,37 +12,42 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class ScheduleGenerationServiceImpl implements ScheduleGenerationService {
 
     private Logger logger = LoggerFactory.getLogger(ScheduleGenerationService.class);
 
-    private final ShiftRepository shiftRepository;
-    private final ScheduleRepository scheduleRepository;
-    private final PatternUnitRepository patternUnitRepository;
-    private final EmployeeRepository employeeRepository;
-    private final HolidayRepository holidayRepository;
-    private final ScheduleGenerator scheduleGenerator;
+    private final ShiftRepository                   shiftRepository;
+    private final ShiftCompositionRepository        shiftCompositionRepository;
+    private final ScheduleRepository                scheduleRepository;
+    private final PatternUnitRepository             patternUnitRepository;
+    private final HolidayRepository                 holidayRepository;
+    private final ExtraWeekendRepository            extraWeekendRepository;
+    private final ScheduleGenerator                 scheduleGenerator;
+    private final ScheduleGenerationIntervalCreator intervalCreator;
 
     @Autowired
     public ScheduleGenerationServiceImpl(ShiftRepository shiftRepository,
+                                         ShiftCompositionRepository shiftCompositionRepository,
                                          ScheduleRepository scheduleRepository,
                                          PatternUnitRepository patternUnitRepository,
-                                         EmployeeRepository employeeRepository,
                                          HolidayRepository holidayRepository,
-                                         ScheduleGenerator scheduleGenerator) {
+                                         ExtraWeekendRepository extraWeekendRepository,
+                                         ScheduleGenerator scheduleGenerator,
+                                         ScheduleGenerationIntervalCreator intervalCreator) {
         this.shiftRepository = shiftRepository;
+        this.shiftCompositionRepository = shiftCompositionRepository;
         this.scheduleRepository = scheduleRepository;
         this.patternUnitRepository = patternUnitRepository;
-        this.employeeRepository = employeeRepository;
         this.holidayRepository = holidayRepository;
+        this.extraWeekendRepository = extraWeekendRepository;
         this.scheduleGenerator = scheduleGenerator;
+        this.intervalCreator = intervalCreator;
     }
+
 
     @Override
     @Transactional
@@ -51,38 +55,66 @@ public class ScheduleGenerationServiceImpl implements ScheduleGenerationService 
                          LocalDate from,
                          LocalDate to,
                          int offset) {
-        shiftRepository.findById(shiftId).ifPresent(shift -> {
-            List<LocalDate>     datesList       = getDatesBetween(from, to);
-            List<PatternUnit>   patternUnits    = patternUnitRepository
-                    .findAllByPatternIdOrderByOrderId(shift.getPatternId());
-            List<Employee> employees       = employeeRepository
-                    .findAllByShiftIdOrderByShiftIdAscSecondNameAscFirstNameAscPatronymicAsc(shift.getId());
-            List<Holiday> holidays = holidayRepository
-                    .findAllByDepartmentIdAndDateBetween(shift.getDepartmentId(), from, to);
+        logger.debug("Starting schedule generation for shift id: " + shiftId +
+                " from=" + from + " to=" + to + " with offset=" + offset);
 
-            for (Employee employee : employees) {
-                try {
-                    List<WorkDay> existingSchedule = scheduleRepository
-                            .findAllByEmployeeIdAndDateBetween(employee.getId(), from, to);
-                    List<WorkDay> workDays = scheduleGenerator
-                            .generate(patternUnits,
-                                    datesList,
-                                    holidays,
-                                    existingSchedule,
-                                    employee.getId(),
-                                    offset);
-                    scheduleRepository.saveAll(workDays);
-                } catch (Exception e) {
-                    logger.error(e.getLocalizedMessage());
-                    throw e;
-                }
-            }
-        });
+        var shift = shiftRepository.findById(shiftId).orElseThrow();
+        var units = patternUnitRepository.findAllByPatternIdOrderByOrderId(shift.getPatternId());
+        var holidays        = holidayRepository
+                .findAllByDepartmentIdAndDateBetween(shift.getDepartmentId(), from, to);
+        var compositions = shiftCompositionRepository
+                .findAllByShiftIdAndToGreaterThanEqualAndFromLessThanEqual(shiftId, from, to);
+        var extraWeekends = extraWeekendRepository
+                .findAllByDepartmentIdAndDateBetween(shift.getDepartmentId(), from, to);
+
+        var workDays = generateSchedule(from, to, offset, units, holidays, compositions, extraWeekends);
+
+        logger.debug("Saving generated schedule to database...");
+        scheduleRepository.saveAll(workDays);
     }
 
-    private List<LocalDate> getDatesBetween(LocalDate from, LocalDate to) {
-        return Stream.iterate(from, date -> date.plusDays(1L))
-                .limit(ChronoUnit.DAYS.between(from, to) + 1)
-                .collect(Collectors.toList());
+    private List<WorkDay> generateSchedule(LocalDate from,
+                                           LocalDate to,
+                                           int offset,
+                                           List<PatternUnit> units,
+                                           List<Holiday> holidays,
+                                           List<ShiftComposition> compositions,
+                                           List<ExtraWeekend> extraWeekends) {
+        var result = new ArrayList<WorkDay>();
+
+        for (var composition : compositions) {
+
+            logger.debug("Generating schedule for composition: " + composition);
+
+            var employeeCompositions = shiftCompositionRepository
+                    .findAllByEmployeeIdAndSubstitutionAndToGreaterThanEqualAndFromLessThanEqual(
+                            composition.getEmployeeId(),
+                            !composition.getSubstitution(),
+                            from, to);
+
+            var unitsSize = units.size();
+            var intervals = intervalCreator.getIntervalsForComposition(composition, employeeCompositions, from, to, offset, unitsSize);
+
+            for(var interval : intervals) {
+                var workDays = generateWorkDaysForInterval(interval, units, holidays, extraWeekends);
+                logger.debug("Generated for interval: "
+                        + interval
+                        + " schedule: "
+                        + workDays);
+                result.addAll(workDays);
+            }
+        }
+
+        return result;
+    }
+
+    private List<WorkDay> generateWorkDaysForInterval(ScheduleGenerationInterval interval,
+                                                      List<PatternUnit> units,
+                                                      List<Holiday> holidays,
+                                                      List<ExtraWeekend> extraWeekends) {
+        var intervalSchedule = scheduleRepository
+                .findAllByEmployeeIdAndDateBetweenOrderByDateAsc(interval.getEmployeeId(), interval.getFrom(), interval.getTo());
+        logger.debug("Existing schedule: " + intervalSchedule);
+        return scheduleGenerator.generate(interval, units, intervalSchedule, holidays, extraWeekends);
     }
 }

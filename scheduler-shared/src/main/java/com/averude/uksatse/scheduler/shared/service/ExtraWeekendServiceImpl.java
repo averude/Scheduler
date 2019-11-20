@@ -1,10 +1,9 @@
 package com.averude.uksatse.scheduler.shared.service;
 
 import com.averude.uksatse.scheduler.core.entity.ExtraWeekend;
-import com.averude.uksatse.scheduler.core.extractor.DataByAuthorityExtractor;
 import com.averude.uksatse.scheduler.shared.repository.ExtraWeekendRepository;
+import com.averude.uksatse.scheduler.shared.repository.ShiftRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,15 +14,15 @@ import java.util.List;
 public class ExtraWeekendServiceImpl extends AbstractService<ExtraWeekend, Long>
         implements ExtraWeekendService {
 
+    private final ShiftRepository shiftRepository;
     private final ExtraWeekendRepository extraWeekendRepository;
-    private final DataByAuthorityExtractor extractor;
 
     @Autowired
-    public ExtraWeekendServiceImpl(ExtraWeekendRepository extraWeekendRepository,
-                                   DataByAuthorityExtractor extractor) {
+    public ExtraWeekendServiceImpl(ShiftRepository shiftRepository,
+                                   ExtraWeekendRepository extraWeekendRepository) {
         super(extraWeekendRepository);
+        this.shiftRepository = shiftRepository;
         this.extraWeekendRepository = extraWeekendRepository;
-        this.extractor = extractor;
     }
 
     @Override
@@ -42,20 +41,9 @@ public class ExtraWeekendServiceImpl extends AbstractService<ExtraWeekend, Long>
 
     @Override
     @Transactional
-    public List<ExtraWeekend> findAllByAuth(Authentication authentication) {
-        return extractor.getData(authentication,
-                (departmentId, shiftId) -> findAll(),
-                (departmentId, shiftId) -> findAllByDepartmentId(departmentId),
-                (departmentId, shiftId) -> findAllByDepartmentId(departmentId));
-    }
-
-    @Override
-    @Transactional
-    public List<ExtraWeekend> findAllByAuthAndDateBetween(Authentication authentication,
-                                                          LocalDate from,
-                                                          LocalDate to) {
-        return extractor.getData(authentication,
-                (departmentId, shiftId) -> findAllByDepartmentIdAndDateBetween(departmentId, from, to),
-                (departmentId, shiftId) -> findAllByDepartmentIdAndDateBetween(departmentId, from, to));
+    public List<ExtraWeekend> findAllByShiftIdAndDateBetween(Long shiftId, LocalDate from, LocalDate to) {
+        return shiftRepository.findById(shiftId)
+                .map(shift -> findAllByDepartmentIdAndDateBetween(shift.getDepartmentId(), from, to))
+                .orElse(null);
     }
 }

@@ -2,11 +2,10 @@ package com.averude.uksatse.scheduler.shared.service;
 
 import com.averude.uksatse.scheduler.core.entity.ExtraWeekend;
 import com.averude.uksatse.scheduler.core.entity.Holiday;
-import com.averude.uksatse.scheduler.core.extractor.DataByAuthorityExtractor;
 import com.averude.uksatse.scheduler.shared.repository.ExtraWeekendRepository;
 import com.averude.uksatse.scheduler.shared.repository.HolidayRepository;
+import com.averude.uksatse.scheduler.shared.repository.ShiftRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,21 +18,21 @@ import java.util.Optional;
 public class HolidayServiceImpl extends AbstractService<Holiday, Long>
         implements HolidayService {
 
+    private final ShiftRepository shiftRepository;
     private final HolidayRepository holidayRepository;
     private final ExtraWeekendRepository extraWeekendRepository;
     private final ScheduleService scheduleService;
-    private final DataByAuthorityExtractor extractor;
 
     @Autowired
-    public HolidayServiceImpl(HolidayRepository holidayRepository,
+    public HolidayServiceImpl(ShiftRepository shiftRepository,
+                              HolidayRepository holidayRepository,
                               ExtraWeekendRepository extraWeekendRepository,
-                              ScheduleService scheduleService,
-                              DataByAuthorityExtractor extractor) {
+                              ScheduleService scheduleService) {
         super(holidayRepository);
+        this.shiftRepository = shiftRepository;
         this.holidayRepository = holidayRepository;
         this.extraWeekendRepository = extraWeekendRepository;
         this.scheduleService = scheduleService;
-        this.extractor = extractor;
     }
 
     @Override
@@ -52,22 +51,14 @@ public class HolidayServiceImpl extends AbstractService<Holiday, Long>
 
     @Override
     @Transactional
-    public List<Holiday> findAllByAuth(Authentication authentication) {
-        return extractor.getData(authentication,
-                (departmentId, shiftId) -> findAll(),
-                (departmentId, shiftId) -> findAllByDepartmentId(departmentId),
-                (departmentId, shiftId) -> findAllByDepartmentId(departmentId));
+    public List<Holiday> findAllByShiftIdAndDateBetween(Long shiftId,
+                                                        LocalDate from,
+                                                        LocalDate to) {
+        return shiftRepository.findById(shiftId)
+                .map(shift -> holidayRepository.findAllByDepartmentIdAndDateBetween(shift.getDepartmentId(), from, to))
+                .orElse(null);
     }
 
-    @Override
-    @Transactional
-    public List<Holiday> findAllByAuthAndDateBetween(Authentication authentication,
-                                                     LocalDate from,
-                                                     LocalDate to) {
-        return extractor.getData(authentication,
-                (departmentId, shiftId) -> findAllByDepartmentIdAndDateBetween(departmentId, from, to),
-                (departmentId, shiftId) -> findAllByDepartmentIdAndDateBetween(departmentId, from, to));
-    }
 
     @Override
     @Transactional

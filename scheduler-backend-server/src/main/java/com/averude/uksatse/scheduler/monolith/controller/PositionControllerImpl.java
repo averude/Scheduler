@@ -7,7 +7,6 @@ import com.averude.uksatse.scheduler.shared.service.PositionService;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Optional;
@@ -25,8 +24,13 @@ public class PositionControllerImpl
     }
 
     @Override
-    public Iterable<Position> getAll(Authentication authentication) {
-        return positionService.findAllByAuth(authentication);
+    public Iterable<Position> getAllByDepartmentId(Long departmentId) {
+        return positionService.findAllByDepartmentId(departmentId);
+    }
+
+    @Override
+    public Iterable<Position> getAllByShiftId(Long shiftId) {
+        return positionService.findAllByShiftId(shiftId);
     }
 
     @Override

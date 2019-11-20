@@ -1,10 +1,9 @@
 package com.averude.uksatse.scheduler.shared.service;
 
 import com.averude.uksatse.scheduler.core.entity.WorkingTime;
-import com.averude.uksatse.scheduler.core.extractor.DataByAuthorityExtractor;
+import com.averude.uksatse.scheduler.shared.repository.ShiftRepository;
 import com.averude.uksatse.scheduler.shared.repository.WorkingTimeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,15 +14,15 @@ import java.util.List;
 public class WorkingTimeServiceImpl extends AbstractService<WorkingTime, Long>
         implements WorkingTimeService {
 
+    private final ShiftRepository shiftRepository;
     private final WorkingTimeRepository workingTimeRepository;
-    private final DataByAuthorityExtractor extractor;
 
     @Autowired
-    public WorkingTimeServiceImpl(WorkingTimeRepository workingTimeRepository,
-                                  DataByAuthorityExtractor extractor) {
+    public WorkingTimeServiceImpl(ShiftRepository shiftRepository,
+                                  WorkingTimeRepository workingTimeRepository) {
         super(workingTimeRepository);
+        this.shiftRepository = shiftRepository;
         this.workingTimeRepository = workingTimeRepository;
-        this.extractor = extractor;
     }
 
     @Override
@@ -42,19 +41,11 @@ public class WorkingTimeServiceImpl extends AbstractService<WorkingTime, Long>
 
     @Override
     @Transactional
-    public List<WorkingTime> findAllByAuth(Authentication authentication) {
-        return extractor.getData(authentication,
-                (departmentId, shiftId) -> findAllByDepartmentId(departmentId),
-                (departmentId, shiftId) -> findAllByDepartmentId(departmentId));
-    }
-
-    @Override
-    @Transactional
-    public List<WorkingTime> findAllByAuthAndDateBetween(Authentication authentication,
-                                                         LocalDate from,
-                                                         LocalDate to) {
-        return extractor.getData(authentication,
-                (departmentId, shiftId) -> findAllByDepartmentIdAndDateBetween(departmentId, from, to),
-                (departmentId, shiftId) -> findAllByDepartmentIdAndDateBetween(departmentId, from, to));
+    public List<WorkingTime> findAllByShiftIdAndDateBetween(Long shiftId,
+                                                            LocalDate from,
+                                                            LocalDate to) {
+        return shiftRepository.findById(shiftId)
+                .map(shift -> findAllByDepartmentIdAndDateBetween(shift.getDepartmentId(), from, to))
+                .orElse(null);
     }
 }

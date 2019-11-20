@@ -59,27 +59,27 @@ public class BackendServerApplicationTest {
                 .andExpect(status().isCreated())
                 .andDo(mvcResult -> System.out.println(mvcResult.getResponse().getContentAsString()));
 
-        mockMvc.perform(post("/admin/daytypegroups")
+        mockMvc.perform(post("/admin/day_type_groups")
                 .content(dayTypeGroup)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
                 .andDo(mvcResult -> System.out.println(mvcResult.getResponse().getContentAsString()));
 
-        mockMvc.perform(post("/admin/daytypes")
+        mockMvc.perform(post("/admin/day_types")
                 .content(dayType)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
                 .andDo(mvcResult -> System.out.println(mvcResult.getResponse().getContentAsString()));
 
-        mockMvc.perform(get("/admin/daytypes/1")
+        mockMvc.perform(get("/admin/day_types/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(mvcResult -> System.out.println(mvcResult.getResponse().getContentAsString()));
 
-        mockMvc.perform(delete("/admin/daytypes/1")
+        mockMvc.perform(delete("/admin/day_types/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent())

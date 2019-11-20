@@ -1,10 +1,9 @@
 package com.averude.uksatse.scheduler.shared.service;
 
 import com.averude.uksatse.scheduler.core.entity.DayType;
-import com.averude.uksatse.scheduler.core.extractor.DataByAuthorityExtractor;
 import com.averude.uksatse.scheduler.shared.repository.DayTypeRepository;
+import com.averude.uksatse.scheduler.shared.repository.ShiftRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,15 +13,15 @@ import java.util.List;
 public class DayTypeServiceImpl
         extends AbstractService<DayType, Long> implements DayTypeService {
 
+    private final ShiftRepository shiftRepository;
     private final DayTypeRepository dayTypeRepository;
-    private final DataByAuthorityExtractor extractor;
 
     @Autowired
-    public DayTypeServiceImpl(DayTypeRepository dayTypeRepository,
-                              DataByAuthorityExtractor extractor) {
+    public DayTypeServiceImpl(ShiftRepository shiftRepository,
+                              DayTypeRepository dayTypeRepository) {
         super(dayTypeRepository);
+        this.shiftRepository = shiftRepository;
         this.dayTypeRepository = dayTypeRepository;
-        this.extractor = extractor;
     }
 
     @Override
@@ -33,10 +32,9 @@ public class DayTypeServiceImpl
 
     @Override
     @Transactional
-    public List<DayType> findAllByAuth(Authentication authentication) {
-        return extractor.getData(authentication,
-                (departmentId, shiftId) -> findAll(),
-                (departmentId, shiftId) -> findAllByDepartmentId(departmentId),
-                (departmentId, shiftId) -> findAllByDepartmentId(departmentId));
+    public List<DayType> findAllByShiftId(Long shiftId) {
+        return shiftRepository.findById(shiftId)
+                .map(shift -> findAllByDepartmentId(shift.getDepartmentId()))
+                .orElse(null);
     }
 }
