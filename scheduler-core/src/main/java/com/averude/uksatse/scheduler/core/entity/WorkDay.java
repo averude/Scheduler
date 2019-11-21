@@ -4,6 +4,7 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.time.LocalDate;
 import java.util.Objects;
+import java.util.StringJoiner;
 
 @Entity
 @Table(
@@ -135,13 +136,13 @@ public class WorkDay implements HasId {
 
     @Override
     public String toString() {
-        return "{" +
-                "id=" + id +
-                ", employeeId=" + employeeId +
-                ", dayTypeId=" + dayTypeId +
-                ", holiday=" + holiday +
-                ", hours=" + hours +
-                ", date=" + date +
-                "}\r\n";
+        return new StringJoiner(", ", "\r\n{", "}")
+                .add("id=" + id)
+                .add("employeeId=" + employeeId)
+                .add("dayTypeId=" + dayTypeId)
+                .add("holiday=" + holiday)
+                .add("hours=" + hours)
+                .add("date=" + date)
+                .toString();
     }
 }

@@ -5,6 +5,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.time.LocalDate;
 import java.util.Objects;
+import java.util.StringJoiner;
 
 @Entity()
 @Table(name = "shift_composition")
@@ -107,13 +108,13 @@ public class ShiftComposition implements HasId {
 
     @Override
     public String toString() {
-        return "{" +
-                "id=" + id +
-                ", shiftId=" + shiftId +
-                ", employeeId=" + employeeId +
-                ", substitution=" + substitution +
-                ", from=" + from +
-                ", to=" + to +
-                '}';
+        return new StringJoiner(", ", "\r\n{", "}")
+                .add("id=" + id)
+                .add("shiftId=" + shiftId)
+                .add("employeeId=" + employeeId)
+                .add("substitution=" + substitution)
+                .add("from=" + from)
+                .add("to=" + to)
+                .toString();
     }
 }
