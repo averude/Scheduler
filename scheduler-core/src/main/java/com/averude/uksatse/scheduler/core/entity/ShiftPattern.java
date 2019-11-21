@@ -8,6 +8,8 @@ import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.StringJoiner;
 
 @Entity
 @Table(
@@ -42,6 +44,20 @@ public class ShiftPattern implements HasId {
     @NotNull
     @Column(name = "override_existing_values", nullable = false)
     private Boolean overrideExistingValues;
+
+    @Column(name = "holiday_day_type_id")
+    private Long holidayDayTypeId;
+
+    @Column(name = "extra_weekend_day_type_id")
+    private Long extraWeekendDayTypeId;
+
+    @JsonIgnore
+    @Transient
+    private DayType holidayDayType;
+
+    @JsonIgnore
+    @Transient
+    private DayType extraWeekendDayType;
 
     @JsonIgnore
     @OneToMany( mappedBy = "patternId",
@@ -92,6 +108,38 @@ public class ShiftPattern implements HasId {
         this.overrideExistingValues = overrideExistingValues;
     }
 
+    public Long getHolidayDayTypeId() {
+        return holidayDayTypeId;
+    }
+
+    public void setHolidayDayTypeId(Long holidayDayTypeId) {
+        this.holidayDayTypeId = holidayDayTypeId;
+    }
+
+    public Long getExtraWeekendDayTypeId() {
+        return extraWeekendDayTypeId;
+    }
+
+    public void setExtraWeekendDayTypeId(Long extraWeekendDayTypeId) {
+        this.extraWeekendDayTypeId = extraWeekendDayTypeId;
+    }
+
+    public DayType getHolidayDayType() {
+        return holidayDayType;
+    }
+
+    public void setHolidayDayType(DayType holidayDayType) {
+        this.holidayDayType = holidayDayType;
+    }
+
+    public DayType getExtraWeekendDayType() {
+        return extraWeekendDayType;
+    }
+
+    public void setExtraWeekendDayType(DayType extraWeekendDayType) {
+        this.extraWeekendDayType = extraWeekendDayType;
+    }
+
     public List<PatternUnit> getSequence() {
         return sequence;
     }
@@ -126,5 +174,34 @@ public class ShiftPattern implements HasId {
     public void removeShift(Shift shift) {
         shift.setPatternId(null);
         shifts.remove(shift);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ShiftPattern that = (ShiftPattern) o;
+        return departmentId.equals(that.departmentId) &&
+                name.equals(that.name) &&
+                overrideExistingValues.equals(that.overrideExistingValues) &&
+                Objects.equals(holidayDayTypeId, that.holidayDayTypeId) &&
+                Objects.equals(extraWeekendDayTypeId, that.extraWeekendDayTypeId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(departmentId, name, overrideExistingValues, holidayDayTypeId, extraWeekendDayTypeId);
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", "\r\n{", "}")
+                .add("id=" + id)
+                .add("departmentId=" + departmentId)
+                .add("name='" + name + "'")
+                .add("overrideExistingValues=" + overrideExistingValues)
+                .add("holidayDayTypeId=" + holidayDayTypeId)
+                .add("extraWeekendDayTypeId=" + extraWeekendDayTypeId)
+                .toString();
     }
 }

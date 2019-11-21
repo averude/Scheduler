@@ -43,10 +43,16 @@ CREATE TABLE shift_patterns (
   id            SERIAL,
   department_id INTEGER       NOT NULL,
   name          VARCHAR (128) NOT NULL,
-  override_existing_values BOOLEAN NOT NULL DEFAULT TRUE,
+
+  override_existing_values  BOOLEAN   NOT NULL  DEFAULT TRUE,
+  holiday_day_type_id       INTEGER             DEFAULT NULL,
+  extra_weekend_day_type_id INTEGER             DEFAULT NULL,
+
   UNIQUE (department_id, name),
   PRIMARY KEY (id),
-  FOREIGN KEY (department_id) REFERENCES departments(id) ON DELETE CASCADE
+  FOREIGN KEY (department_id) REFERENCES departments(id) ON DELETE CASCADE,
+  FOREIGN KEY (holiday_day_type_id) REFERENCES day_types(id) ON DELETE SET NULL,
+  FOREIGN KEY (extra_weekend_day_type_id) REFERENCES day_types(id) ON DELETE SET NULL
 );
 
 CREATE TABLE pattern_units (

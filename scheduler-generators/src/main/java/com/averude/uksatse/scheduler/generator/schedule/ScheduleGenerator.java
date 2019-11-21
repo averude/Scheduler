@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ScheduleGenerator {
     List<WorkDay> generate(ScheduleGenerationInterval interval,
-                           List<PatternUnit> patternUnits,
+                           ShiftPattern pattern,
                            List<WorkDay> existingSchedule,
                            List<Holiday> holidays,
                            List<ExtraWeekend> extraWeekends);
