@@ -43,14 +43,13 @@ public class ScheduleGeneratorImpl implements ScheduleGenerator {
                 var unitIndex = ((int) interval.getOffset() + j) % unitsSize;
 
                 var date = dates.get(dateIndex);
-                var unit = pattern.getSequence().get(unitIndex);
-
-                var workDay = getExistingWorkDay(schedule, scheduleIndex);
 
                 var isHoliday = isHoliday(holidays, date);
                 var isWeekend = isExtraWeekend(extraWeekends, date);
 
-                setPatternUnit(unit, holidayUnit, weekendUnit, isHoliday, isWeekend);
+                var unit = getPatternUnit(pattern, unitIndex, holidayUnit, weekendUnit, isHoliday, isWeekend);;
+
+                var workDay = getExistingWorkDay(schedule, scheduleIndex);
 
                 if (workDay != null && date.equals(workDay.getDate())) {
                     scheduleIndex++;
@@ -60,7 +59,6 @@ public class ScheduleGeneratorImpl implements ScheduleGenerator {
                 }
             }
         }
-        logger.trace("Schedule generated. Returning result...");
         return schedule;
     }
 
@@ -87,20 +85,24 @@ public class ScheduleGeneratorImpl implements ScheduleGenerator {
         return workDay;
     }
 
-    private void setPatternUnit(PatternUnit currentUnit,
-                                PatternUnit holidayUnit,
-                                PatternUnit weekendUnit,
-                                boolean isHoliday,
-                                boolean isWeekend) {
+    private PatternUnit getPatternUnit(ShiftPattern pattern,
+                                       int unitIndex,
+                                       PatternUnit holidayUnit,
+                                       PatternUnit weekendUnit,
+                                       boolean isHoliday,
+                                       boolean isWeekend) {
+
         if (holidayUnit != null && isHoliday) {
             logger.trace("Holiday found. Setting pattern unit to holiday's");
-            currentUnit = holidayUnit;
+            return holidayUnit;
         }
 
         if (weekendUnit != null && isWeekend) {
             logger.trace("Extra weekend found. Setting pattern unit to extra weekend's");
-            currentUnit = weekendUnit;
+            return weekendUnit;
         }
+
+        return pattern.getSequence().get(unitIndex);
     }
 
     private WorkDay getExistingWorkDay(ArrayList<WorkDay> schedule, int scheduleIndex) {
