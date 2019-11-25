@@ -86,10 +86,10 @@ public class ScheduleGenerationIntervalCreator {
             }
 
             if (to.isAfter(composition.getFrom())) {
-                setValuesToInterval(interval, from, intervalStart, composition.getFrom(), employeeId, unitsSize, offset);
+                setValuesToInterval(interval, from, intervalStart, composition.getFrom().minusDays(1), employeeId, unitsSize, offset);
                 result.add(interval);
 
-                intervalStart = composition.getTo();
+                intervalStart = composition.getTo().plusDays(1);
             } else {
                 setValuesToInterval(interval, from, intervalStart, to, employeeId, unitsSize, offset);
                 result.add(interval);

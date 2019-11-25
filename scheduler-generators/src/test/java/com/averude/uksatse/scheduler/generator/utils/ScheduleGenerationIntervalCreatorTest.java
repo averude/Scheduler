@@ -70,8 +70,8 @@ public class ScheduleGenerationIntervalCreatorTest {
         System.out.println(intervals);
 
         assertEquals(2, intervals.size());
-        assertEquals(subFrom, intervals.get(0).getTo());
-        assertEquals(subTo, intervals.get(1).getFrom());
+        assertEquals(subFrom.minusDays(1), intervals.get(0).getTo());
+        assertEquals(subTo.plusDays(1), intervals.get(1).getFrom());
         assertFalse(intervals.isEmpty());
     }
 }
