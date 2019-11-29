@@ -2,6 +2,8 @@ package com.averude.uksatse.scheduler.core.entity;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.Objects;
+import java.util.StringJoiner;
 
 @Entity
 @Table(name = "extra_weekends")
@@ -49,5 +51,30 @@ public class ExtraWeekend implements HasId {
 
     public void setDate(LocalDate date) {
         this.date = date;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ExtraWeekend that = (ExtraWeekend) o;
+        return departmentId.equals(that.departmentId) &&
+                Objects.equals(holidayId, that.holidayId) &&
+                date.equals(that.date);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(departmentId, holidayId, date);
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", "{", "}")
+                .add("id=" + id)
+                .add("departmentId=" + departmentId)
+                .add("holidayId=" + holidayId)
+                .add("date=" + date)
+                .toString();
     }
 }

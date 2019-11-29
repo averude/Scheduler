@@ -33,6 +33,9 @@ CREATE TABLE day_types (
   name          VARCHAR (128) NOT NULL,
   label         VARCHAR (5),
   default_value FLOAT         CHECK ( default_value >= 0 AND default_value <= 24 ),
+
+  use_previous_value  BOOLEAN   NOT NULL  DEFAULT FALSE,
+
   UNIQUE (department_id, name),
   PRIMARY KEY (id),
   FOREIGN KEY (department_id) REFERENCES departments(id) ON DELETE CASCADE,
@@ -44,15 +47,16 @@ CREATE TABLE shift_patterns (
   department_id INTEGER       NOT NULL,
   name          VARCHAR (128) NOT NULL,
 
-  override_existing_values  BOOLEAN   NOT NULL  DEFAULT TRUE,
-  holiday_day_type_id       INTEGER             DEFAULT NULL,
-  extra_weekend_day_type_id INTEGER             DEFAULT NULL,
+--   override_existing_values  BOOLEAN   NOT NULL  DEFAULT TRUE,
+  holiday_day_type_id         INTEGER             DEFAULT NULL,
+  extra_weekend_day_type_id   INTEGER             DEFAULT NULL,
+  extra_work_day_day_type_id  INTEGER             DEFAULT NULL,
 
   UNIQUE (department_id, name),
   PRIMARY KEY (id),
-  FOREIGN KEY (department_id) REFERENCES departments(id) ON DELETE CASCADE,
-  FOREIGN KEY (holiday_day_type_id) REFERENCES day_types(id) ON DELETE SET NULL,
-  FOREIGN KEY (extra_weekend_day_type_id) REFERENCES day_types(id) ON DELETE SET NULL
+  FOREIGN KEY (department_id)             REFERENCES departments(id)  ON DELETE CASCADE,
+  FOREIGN KEY (holiday_day_type_id)       REFERENCES day_types(id)    ON DELETE SET NULL,
+  FOREIGN KEY (extra_weekend_day_type_id) REFERENCES day_types(id)    ON DELETE SET NULL
 );
 
 CREATE TABLE pattern_units (
@@ -155,9 +159,22 @@ CREATE TABLE extra_weekends (
   holiday_id    INTEGER,
   date          DATE          NOT NULL,
   UNIQUE (holiday_id),
+  UNIQUE (department_id, date),
   PRIMARY KEY (id),
   FOREIGN KEY (department_id) REFERENCES departments(id)  ON DELETE CASCADE,
   FOREIGN KEY (holiday_id)    REFERENCES holidays(id)     ON DELETE CASCADE
+);
+
+CREATE TABLE extra_work_days (
+  id                SERIAL,
+  department_id     INTEGER   NOT NULL,
+  extra_weekend_id  INTEGER,
+  date              DATE      NOT NULL,
+  UNIQUE (extra_weekend_id),
+  UNIQUE (department_id, date),
+  PRIMARY KEY (id),
+  FOREIGN KEY (department_id)     REFERENCES departments(id)    ON DELETE CASCADE,
+  FOREIGN KEY (extra_weekend_id)  REFERENCES extra_weekends(id) ON DELETE CASCADE
 );
 
 -- Security

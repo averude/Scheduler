@@ -2,6 +2,7 @@ package com.averude.uksatse.scheduler.monolith.controller;
 
 import com.averude.uksatse.scheduler.core.controller.ExtraWeekendController;
 import com.averude.uksatse.scheduler.core.entity.ExtraWeekend;
+import com.averude.uksatse.scheduler.core.entity.ExtraWorkDay;
 import com.averude.uksatse.scheduler.shared.controller.AbstractCrudController;
 import com.averude.uksatse.scheduler.shared.service.ExtraWeekendService;
 import org.slf4j.LoggerFactory;
@@ -37,6 +38,11 @@ public class ExtraWeekendControllerImpl
                                                             LocalDate from,
                                                             LocalDate to) {
         return extraWeekendService.findAllByShiftIdAndDateBetween(shiftId, from, to);
+    }
+
+    @Override
+    public ExtraWorkDay transfer(LocalDate date, ExtraWeekend entity) {
+        return extraWeekendService.transferWorkDay(entity, date);
     }
 
     @Override

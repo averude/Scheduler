@@ -51,6 +51,10 @@ public class DayType implements HasId {
     @Column(name = "default_value")
     private Float defaultValue;
 
+    @NotNull
+    @Column(name = "use_previous_value")
+    private Boolean usePreviousValue;
+
     @JsonIgnore
     @OneToMany( mappedBy = "dayTypeId",
                 fetch = FetchType.LAZY,
@@ -124,6 +128,14 @@ public class DayType implements HasId {
 
     public void setDefaultValue(Float defaultValue) {
         this.defaultValue = defaultValue;
+    }
+
+    public Boolean getUsePreviousValue() {
+        return usePreviousValue;
+    }
+
+    public void setUsePreviousValue(Boolean usePreviousValue) {
+        this.usePreviousValue = usePreviousValue;
     }
 
     public List<PatternUnit> getUnits() {

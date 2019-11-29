@@ -1,11 +1,7 @@
 package com.averude.uksatse.scheduler.monolith;
 
-import com.averude.uksatse.scheduler.core.entity.Department;
-import com.averude.uksatse.scheduler.core.entity.Employee;
-import com.averude.uksatse.scheduler.core.entity.Position;
-import com.averude.uksatse.scheduler.shared.repository.DepartmentRepository;
-import com.averude.uksatse.scheduler.shared.repository.EmployeeRepository;
-import com.averude.uksatse.scheduler.shared.repository.PositionRepository;
+import com.averude.uksatse.scheduler.core.entity.*;
+import com.averude.uksatse.scheduler.shared.repository.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,7 +13,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import static org.junit.Assert.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -36,7 +31,6 @@ public class BackendServerApplicationTest {
     @Autowired
     private EmployeeRepository employeeRepository;
 
-
     private MockMvc mockMvc;
 
     @Before
@@ -50,7 +44,13 @@ public class BackendServerApplicationTest {
     public void testPostGetDeleteDepartment() throws Exception {
         String department = "{\"name\": \"Test department\"}";
         String dayTypeGroup = "{\"name\": \"Test dayTypeGroup\", \"color\": \"#000000\"}";
-        String dayType = "{\"departmentId\": \"1\", \"dayTypeGroupId\": \"1\", \"name\":\"Test daytype\", \"label\": \"T\", \"defaultValue\": \"10\"}";
+        String dayType = "{\"departmentId\": \"1\", " +
+                "\"dayTypeGroupId\": \"1\", " +
+                "\"name\":\"Test daytype\", " +
+                "\"label\": \"T\", " +
+                "\"defaultValue\": \"10\", " +
+                "\"usePreviousValue\": \"false\"" +
+                "}";
 
         mockMvc.perform(post("/admin/departments")
                 .content(department)

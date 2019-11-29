@@ -27,6 +27,7 @@ public class ScheduleGenerationServiceImpl implements ScheduleGenerationService 
     private final DayTypeRepository                 dayTypeRepository;
     private final HolidayRepository                 holidayRepository;
     private final ExtraWeekendRepository            extraWeekendRepository;
+    private final ExtraWorkDayRepository            extraWorkDayRepository;
     private final ScheduleGenerator                 scheduleGenerator;
     private final ScheduleGenerationIntervalCreator intervalCreator;
 
@@ -38,6 +39,7 @@ public class ScheduleGenerationServiceImpl implements ScheduleGenerationService 
                                          DayTypeRepository dayTypeRepository,
                                          HolidayRepository holidayRepository,
                                          ExtraWeekendRepository extraWeekendRepository,
+                                         ExtraWorkDayRepository extraWorkDayRepository,
                                          ScheduleGenerator scheduleGenerator,
                                          ScheduleGenerationIntervalCreator intervalCreator) {
         this.shiftRepository = shiftRepository;
@@ -47,6 +49,7 @@ public class ScheduleGenerationServiceImpl implements ScheduleGenerationService 
         this.dayTypeRepository = dayTypeRepository;
         this.holidayRepository = holidayRepository;
         this.extraWeekendRepository = extraWeekendRepository;
+        this.extraWorkDayRepository = extraWorkDayRepository;
         this.scheduleGenerator = scheduleGenerator;
         this.intervalCreator = intervalCreator;
     }
@@ -58,8 +61,7 @@ public class ScheduleGenerationServiceImpl implements ScheduleGenerationService 
                          LocalDate from,
                          LocalDate to,
                          int offset) {
-        logger.debug("Starting schedule generation for shift id: " + shiftId +
-                " from=" + from + " to=" + to + " with offset=" + offset);
+        logger.debug("Starting schedule generation for shift id={} from={} to={} with offset={}", shiftId, from, to, offset);
 
         var shift = shiftRepository.findById(shiftId).orElseThrow();
         var pattern = getShiftPattern(shift.getPatternId());
@@ -69,8 +71,10 @@ public class ScheduleGenerationServiceImpl implements ScheduleGenerationService 
                 .findAllByShiftIdAndToGreaterThanEqualAndFromLessThanEqual(shiftId, from, to);
         var extraWeekends = extraWeekendRepository
                 .findAllByDepartmentIdAndDateBetween(shift.getDepartmentId(), from, to);
+        var extraWorkDays = extraWorkDayRepository
+                .findAllByDepartmentIdAndDateBetween(shift.getDepartmentId(), from, to);
 
-        var workDays = generateSchedule(from, to, offset, pattern, holidays, compositions, extraWeekends);
+        var workDays = generateSchedule(from, to, offset, pattern, holidays, compositions, extraWeekends, extraWorkDays);
 
         logger.debug("Saving generated schedule to database...");
         scheduleRepository.saveAll(workDays);
@@ -82,12 +86,13 @@ public class ScheduleGenerationServiceImpl implements ScheduleGenerationService 
                                            ShiftPattern pattern,
                                            List<Holiday> holidays,
                                            List<ShiftComposition> compositions,
-                                           List<ExtraWeekend> extraWeekends) {
+                                           List<ExtraWeekend> extraWeekends,
+                                           List<ExtraWorkDay> extraWorkDays) {
         var result = new ArrayList<WorkDay>();
 
         for (var composition : compositions) {
 
-            logger.debug("Generating schedule for composition: " + composition);
+            logger.debug("Generating schedule for composition {}. ", composition);
 
             var employeeCompositions = shiftCompositionRepository
                     .findAllByEmployeeIdAndSubstitutionAndToGreaterThanEqualAndFromLessThanEqual(
@@ -99,11 +104,8 @@ public class ScheduleGenerationServiceImpl implements ScheduleGenerationService 
             var intervals = intervalCreator.getIntervalsForComposition(composition, employeeCompositions, from, to, offset, unitsSize);
 
             for(var interval : intervals) {
-                var workDays = generateWorkDaysForInterval(interval, pattern, holidays, extraWeekends);
-                logger.debug("Generated for interval: "
-                        + interval
-                        + " schedule: "
-                        + workDays);
+                var workDays = generateWorkDaysForInterval(interval, pattern, holidays, extraWeekends, extraWorkDays);
+                logger.debug("Generated for interval {} schedule {} ", interval, workDays);
                 result.addAll(workDays);
             }
         }
@@ -114,11 +116,12 @@ public class ScheduleGenerationServiceImpl implements ScheduleGenerationService 
     private List<WorkDay> generateWorkDaysForInterval(ScheduleGenerationInterval interval,
                                                       ShiftPattern pattern,
                                                       List<Holiday> holidays,
-                                                      List<ExtraWeekend> extraWeekends) {
+                                                      List<ExtraWeekend> extraWeekends,
+                                                      List<ExtraWorkDay> extraWorkDays) {
         var intervalSchedule = scheduleRepository
                 .findAllByEmployeeIdAndDateBetweenOrderByDateAsc(interval.getEmployeeId(), interval.getFrom(), interval.getTo());
-        logger.debug("Existing schedule: " + intervalSchedule);
-        return scheduleGenerator.generate(interval, pattern, intervalSchedule, holidays, extraWeekends);
+        logger.debug("Existing schedule {}", intervalSchedule);
+        return scheduleGenerator.generate(interval, pattern, intervalSchedule, holidays, extraWeekends, extraWorkDays);
     }
 
     private ShiftPattern getShiftPattern(Long id) {

@@ -10,5 +10,6 @@ public interface ScheduleGenerator {
                            ShiftPattern pattern,
                            List<WorkDay> existingSchedule,
                            List<Holiday> holidays,
-                           List<ExtraWeekend> extraWeekends);
+                           List<ExtraWeekend> extraWeekends,
+                           List<ExtraWorkDay> extraWorkDays);
 }

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.StringJoiner;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(
@@ -41,15 +42,14 @@ public class ShiftPattern implements HasId {
     @Column(nullable = false)
     private String name;
 
-    @NotNull
-    @Column(name = "override_existing_values", nullable = false)
-    private Boolean overrideExistingValues;
-
     @Column(name = "holiday_day_type_id")
     private Long holidayDayTypeId;
 
     @Column(name = "extra_weekend_day_type_id")
     private Long extraWeekendDayTypeId;
+
+    @Column(name = "extra_work_day_day_type_id")
+    private Long extraWorkDayDayTypeId;
 
     @JsonIgnore
     @Transient
@@ -60,9 +60,14 @@ public class ShiftPattern implements HasId {
     private DayType extraWeekendDayType;
 
     @JsonIgnore
+    @Transient
+    private DayType extraWorkDayDayType;
+
+    @JsonIgnore
     @OneToMany( mappedBy = "patternId",
-                cascade = CascadeType.ALL,
-                orphanRemoval = true)
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    @OrderBy("orderId ASC")
     private List<PatternUnit> sequence = new ArrayList<>();
 
     @JsonIgnore
@@ -100,14 +105,6 @@ public class ShiftPattern implements HasId {
         this.name = name;
     }
 
-    public Boolean getOverrideExistingValues() {
-        return overrideExistingValues;
-    }
-
-    public void setOverrideExistingValues(Boolean overrideExistingValues) {
-        this.overrideExistingValues = overrideExistingValues;
-    }
-
     public Long getHolidayDayTypeId() {
         return holidayDayTypeId;
     }
@@ -138,6 +135,22 @@ public class ShiftPattern implements HasId {
 
     public void setExtraWeekendDayType(DayType extraWeekendDayType) {
         this.extraWeekendDayType = extraWeekendDayType;
+    }
+
+    public Long getExtraWorkDayDayTypeId() {
+        return extraWorkDayDayTypeId;
+    }
+
+    public void setExtraWorkDayDayTypeId(Long extraWorkDayDayTypeId) {
+        this.extraWorkDayDayTypeId = extraWorkDayDayTypeId;
+    }
+
+    public DayType getExtraWorkDayDayType() {
+        return extraWorkDayDayType;
+    }
+
+    public void setExtraWorkDayDayType(DayType extraWorkDayDayType) {
+        this.extraWorkDayDayType = extraWorkDayDayType;
     }
 
     public List<PatternUnit> getSequence() {
@@ -183,14 +196,16 @@ public class ShiftPattern implements HasId {
         ShiftPattern that = (ShiftPattern) o;
         return departmentId.equals(that.departmentId) &&
                 name.equals(that.name) &&
-                overrideExistingValues.equals(that.overrideExistingValues) &&
+//                overrideExistingValues.equals(that.overrideExistingValues) &&
                 Objects.equals(holidayDayTypeId, that.holidayDayTypeId) &&
                 Objects.equals(extraWeekendDayTypeId, that.extraWeekendDayTypeId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(departmentId, name, overrideExistingValues, holidayDayTypeId, extraWeekendDayTypeId);
+        return Objects.hash(departmentId, name,
+//                overrideExistingValues,
+                holidayDayTypeId, extraWeekendDayTypeId);
     }
 
     @Override
@@ -199,7 +214,7 @@ public class ShiftPattern implements HasId {
                 .add("id=" + id)
                 .add("departmentId=" + departmentId)
                 .add("name='" + name + "'")
-                .add("overrideExistingValues=" + overrideExistingValues)
+//                .add("overrideExistingValues=" + overrideExistingValues)
                 .add("holidayDayTypeId=" + holidayDayTypeId)
                 .add("extraWeekendDayTypeId=" + extraWeekendDayTypeId)
                 .toString();

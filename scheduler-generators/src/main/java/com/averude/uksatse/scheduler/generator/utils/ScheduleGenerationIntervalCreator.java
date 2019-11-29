@@ -23,7 +23,7 @@ public class ScheduleGenerationIntervalCreator {
                                                                        int offset,
                                                                        int unitsSize) {
         var result = new ArrayList<ScheduleGenerationInterval>();
-        logger.debug("Creating intervals from=" + from + " to=" + to + " for composition: " + composition);
+        logger.debug("Creating intervals from={} to={} for composition {}.", from, to, composition);
 
         if (composition.getSubstitution()) {
             result.add(getIntervalForSubstitutionShift(from, to, composition, unitsSize, offset));
@@ -53,7 +53,7 @@ public class ScheduleGenerationIntervalCreator {
         interval.setTo(to.isBefore(composition.getTo()) ? to : composition.getTo());
         interval.setEmployeeId(composition.getEmployeeId());
         interval.setOffset(recalculateOffsetForDate(from, composition.getFrom(), unitsSize, offset));
-        logger.debug("Interval " + interval + " created.");
+        logger.debug("Interval {} is created", interval);
         return interval;
     }
 
@@ -64,7 +64,7 @@ public class ScheduleGenerationIntervalCreator {
                                                                       int unitsSize,
                                                                       int offset) {
         logger.debug("Creating interval for main shift");
-        logger.debug("Substitution compositions: " + compositions);
+        logger.debug("Substitution compositions: {}", compositions);
         var result = new ArrayList<ScheduleGenerationInterval>();
 
         LocalDate intervalStart = from;
@@ -97,7 +97,7 @@ public class ScheduleGenerationIntervalCreator {
             }
 
         }
-        logger.debug("Intervals " + result + " created.");
+        logger.debug("Intervals {} is created.", result);
         return result;
     }
 

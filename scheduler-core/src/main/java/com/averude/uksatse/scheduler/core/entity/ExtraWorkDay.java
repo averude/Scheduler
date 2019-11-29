@@ -2,46 +2,35 @@ package com.averude.uksatse.scheduler.core.entity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.util.Objects;
 import java.util.StringJoiner;
 
 @Entity
-@Table(
-        name = "holidays",
-        uniqueConstraints = {
-                @UniqueConstraint(
-                        name = "holidays_unique_constraint",
-                        columnNames = {"department_id", "date"}
-                )
-        }
-)
-public class Holiday implements HasId {
+@Table(name = "extra_work_days")
+public class ExtraWorkDay implements HasId {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotNull
-    @Column(name = "department_id",
-            nullable = false)
+    @Column(name = "department_id", nullable = false)
     private Long departmentId;
+
+    @Column(name = "extra_weekend_id", nullable = false)
+    private Long extraWeekendId;
 
     @NotNull
     @Column(nullable = false)
     private LocalDate date;
 
-    @NotNull
-    @Size(  max = 255,
-            min = 3,
-            message = "{holiday.name.size}")
-    @Column(nullable = false)
-    private String name;
-
+    @Override
     public Long getId() {
         return id;
     }
 
+    @Override
     public void setId(Long id) {
         this.id = id;
     }
@@ -54,6 +43,14 @@ public class Holiday implements HasId {
         this.departmentId = departmentId;
     }
 
+    public Long getExtraWeekendId() {
+        return extraWeekendId;
+    }
+
+    public void setExtraWeekendId(Long extraWeekendId) {
+        this.extraWeekendId = extraWeekendId;
+    }
+
     public LocalDate getDate() {
         return date;
     }
@@ -62,12 +59,19 @@ public class Holiday implements HasId {
         this.date = date;
     }
 
-    public String getName() {
-        return name;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ExtraWorkDay that = (ExtraWorkDay) o;
+        return departmentId.equals(that.departmentId) &&
+                Objects.equals(extraWeekendId, that.extraWeekendId) &&
+                date.equals(that.date);
     }
 
-    public void setName(String name) {
-        this.name = name;
+    @Override
+    public int hashCode() {
+        return Objects.hash(departmentId, extraWeekendId, date);
     }
 
     @Override
@@ -75,8 +79,8 @@ public class Holiday implements HasId {
         return new StringJoiner(", ", "{", "}")
                 .add("id=" + id)
                 .add("departmentId=" + departmentId)
+                .add("extraWeekendId=" + extraWeekendId)
                 .add("date=" + date)
-                .add("name='" + name + "'")
                 .toString();
     }
 }
