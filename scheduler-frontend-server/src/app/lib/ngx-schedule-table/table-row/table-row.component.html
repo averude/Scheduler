@@ -1,0 +1,23 @@
+<ng-container selectableRow
+              [element]="elementRef"
+              (onSelectionEnds)="onSelectionEnd($event.event, $event.selectedCells)">
+  <ng-container *ngFor="let column of beforeDateColumns"
+                [ngTemplateOutlet]="column.cellDef"
+                [ngTemplateOutletContext]="{$implicit: rowData}"></ng-container>
+  <td class="cell"
+      *ngFor="let cell of cellData"
+      selectableCell
+      [data]="cell"
+      app-table-cell
+      [cellData]="cell"
+      [cellLabelSetter]="cellLabelSetter"
+      [value]="cell.value"
+      [enabled]="cell.enabled"
+      [class.weekend]="cell.date.weekend"
+      [class.holiday]="cell.date.holiday"
+      [class.disabled]="!cell.enabled">
+  </td>
+  <ng-container *ngFor="let column of afterDateColumns"
+                [ngTemplateOutlet]="column.cellDef"
+                [ngTemplateOutletContext]="{$implicit: rowData}"></ng-container>
+</ng-container>

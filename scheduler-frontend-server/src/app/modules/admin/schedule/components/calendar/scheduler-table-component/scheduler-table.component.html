@@ -1,0 +1,76 @@
+<app-schedules-table [showSumColumns]="true"
+                     [rowGroupCollector]="rowGroupCollector"
+                     [rowCollector]="rowCollector"
+                     [cellCollector]="cellCollector"
+                     [cellLabelSetter]="cellLabelSetter">
+
+  <ng-template table-top-item>
+    <app-show-hours-control></app-show-hours-control>
+  </ng-template>
+  <ng-template table-top-item>
+    <app-schedule-generation></app-schedule-generation>
+  </ng-template>
+  <ng-template table-top-item>
+    <app-schedule-export-excel></app-schedule-export-excel>
+  </ng-template>
+
+  <ng-template paginatorDef>
+    <app-month-year-paginator></app-month-year-paginator>
+  </ng-template>
+
+  <ng-template headerDateCellDef let-date>
+    <th class="table-sticky-header month-header"
+        [class.weekend]="date.weekend"
+        [class.holiday]="date.holiday">
+      {{date.dayOfMonth}}
+    </th>
+  </ng-template>
+
+  <ng-container beforeDateColumnDef>
+    <th class="table-sticky-header th-null"
+        *headerCellDef></th>
+    <td class="td-name"
+        *cellDef="let rowData">
+      <div class="name"
+           [class.highlighted]="rowData.isSubstitution">
+        {{rowData.name}}
+      </div>
+      <div class="info">
+        {{rowData.position}}
+      </div>
+    </td>
+  </ng-container>
+
+  <ng-container afterDateColumnDef>
+    <th class="table-sticky-header th-sum"
+        *headerCellDef>Sum</th>
+    <td class="sum"
+        *cellDef="let rowData">
+      <p align="center">{{calculateSum(rowData)}}</p>
+    </td>
+  </ng-container>
+
+  <ng-container afterDateColumnDef>
+    <th class="table-sticky-header th-sum"
+        *headerCellDef>Norm</th>
+    <td class="sum"
+        *cellDef="let rowData">
+      <p align="center">{{rowData.timeNorm}}</p>
+    </td>
+  </ng-container>
+
+  <ng-container afterDateColumnDef>
+    <th class="table-sticky-header th-sum"
+        *headerCellDef>Diff</th>
+    <td class="sum"
+        *cellDef="let rowData"
+        [class.notEqual]="calculateDiff(rowData) !== 0">
+      <p align="center">{{calculateDiff(rowData)}}</p>
+    </td>
+  </ng-container>
+</app-schedules-table>
+
+<app-schedule-table-context-menu [dayTypes]="dayTypes"
+                                 [patterns]="patterns"
+                                 [dayTypeGroups]="dayTypeGroups">
+</app-schedule-table-context-menu>

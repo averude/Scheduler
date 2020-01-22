@@ -1,0 +1,99 @@
+<div class="management-table-container">
+  <mat-form-field class="management-table-filter">
+    <input matInput
+           (keyup)="applyFilter($event.target.value)"
+           placeholder="Filter">
+  </mat-form-field>
+
+  <table mat-table
+         matSort
+         class="management-table"
+         [dataSource]="dataSource">
+    <ng-container matColumnDef="select">
+      <th mat-header-cell *matHeaderCellDef>
+        <mat-checkbox (change)="$event ? masterToggle() : null"
+                      [checked]="selection.hasValue() && isAllSelected()"
+                      [indeterminate]="selection.hasValue() && !isAllSelected()"
+                      [aria-label]="checkboxLabel()">
+        </mat-checkbox>
+      </th>
+      <td mat-cell
+          *matCellDef="let row">
+        <mat-checkbox (click)="$event.stopPropagation()"
+                      (change)="$event ? selection.toggle(row) : null"
+                      [checked]="selection.isSelected(row)"
+                      [aria-label]="checkboxLabel(row)">
+        </mat-checkbox>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="username">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Username</th>
+      <td mat-cell *matCellDef="let userAccount">{{userAccount.username}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="firstName">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>First name</th>
+      <td mat-cell *matCellDef="let userAccount">{{userAccount.firstName}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="secondName">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Second name</th>
+      <td mat-cell *matCellDef="let userAccount">{{userAccount.secondName}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="department">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Department</th>
+      <td mat-cell *matCellDef="let userAccount">{{getDepartmentById(userAccount.departmentId)?.name}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="shift">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Shift</th>
+      <td mat-cell *matCellDef="let userAccount">{{getShiftById(userAccount.shiftId)?.name}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="employee">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Employee</th>
+      <td mat-cell *matCellDef="let userAccount">{{userAccount.employeeId}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="locked">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Locked</th>
+      <td mat-cell *matCellDef="let userAccount">{{userAccount.locked}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="enabled">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Enabled</th>
+      <td mat-cell *matCellDef="let userAccount">{{userAccount.enabled}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="authorities">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Authorities</th>
+      <td mat-cell *matCellDef="let userAccount">{{authoritiesToString(userAccount.authorities)}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="control">
+      <th mat-header-cell *matHeaderCellDef>
+        <button *ngIf="selection.isEmpty()"
+                class="management-table-control-button"
+                (click)="openDialog()">
+          <img class="management-table-button-icon" src="assets/img/add_circle.png">
+        </button>
+        <button *ngIf="!selection.isEmpty()"
+                (click)="removeDialog()"
+                class="management-table-control-button">
+          <img class="management-table-button-icon" src="assets/img/garbage.svg">
+        </button>
+      </th>
+      <td mat-cell *matCellDef="let userAccount">
+        <button class="management-table-control-button"
+                (click)="openDialog(userAccount)">
+          <img class="management-table-button-icon" src="assets/img/edit.svg">
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>

@@ -1,0 +1,57 @@
+.form-box {
+  display: grid;
+  grid-template-columns: 50px 80px 80px 200px 20px;
+  grid-template-rows: 50px 50px;
+  grid-column-gap: 10px;
+  grid-template-areas:
+    "color-block start-time break-start-time day-type control-button"
+    "color-block end-time break-end-time day-type control-button";
+  margin-right: 10px;
+}
+
+.color-container {
+  width: 50px;
+  background-color: transparent;
+  grid-area: color-block;
+}
+
+.start-time {
+  grid-area: start-time;
+}
+
+.end-time {
+  grid-area: end-time;
+}
+
+.break-start-time {
+  grid-area: break-start-time;
+}
+
+.break-end-time {
+  grid-area: break-end-time;
+}
+
+.day-type-container {
+  width: 100%;
+  align-self: center;
+  grid-area: day-type;
+}
+
+.control-button-box {
+  padding-right: 10px;
+  align-self: center;
+  grid-area: control-button;
+}
+
+.control-button {
+  font-size: 16px;
+  display: block;
+  background-color: transparent;
+  border-style: none;
+  cursor: pointer;
+}
+
+.control-button:hover {
+  color: red;
+}
+

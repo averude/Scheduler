@@ -1,0 +1,31 @@
+<div>
+  <div class="date-selector">
+    <ng-container [ngTemplateOutlet]="paginator"></ng-container>
+  </div>
+  <div>
+    <div class="table-top-buttons"
+         *ngFor="let template of topItems" >
+      <ng-container [ngTemplateOutlet]="template"></ng-container>
+    </div>
+  </div>
+</div>
+<div class="table-wrap">
+<table class="table-base">
+  <thead app-table-header
+         [headerDateCellDef]="headerDateCellDef"
+         [beforeDateColumns]="beforeDateColumns"
+         [afterDateColumns]="afterDateColumns">
+  </thead>
+  <tbody *ngFor="let group of rowGroups"
+         app-table-row-group
+         [datedCellDef]="datedCellDef"
+         [beforeDateColumns]="beforeDateColumns"
+         [afterDateColumns]="afterDateColumns"
+         [groupData]="group"
+         [cellLabelSetter]="cellLabelSetter"
+         [cellCollector]="cellCollector"
+         [rowCollector]="rowCollector"
+         [workingTimeNorm]="group.timeNorm">
+  </tbody>
+</table>
+</div>

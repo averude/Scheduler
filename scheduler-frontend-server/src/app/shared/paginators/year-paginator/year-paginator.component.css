@@ -1,0 +1,22 @@
+.btn-group {
+  position: relative;
+  display: inline-flex;
+  vertical-align: middle;
+}
+
+.btn-month-select {
+  width: 16px;
+  height: 16px;
+  margin: 4px 15px;
+  vertical-align: center;
+}
+
+.btn-month-select:hover {
+  cursor: pointer;
+}
+
+.date-label {
+  font-size: 16px;
+  padding-top: 2px;
+  text-align: center;
+}

@@ -1,0 +1,48 @@
+<div class="form-box">
+
+  <div class="color-container"
+       [style.background-color]="color"></div>
+
+  <mat-form-field class="start-time">
+    <input matInput
+           [disabled]="usePreviousValue"
+           placeholder="start time"
+           [(ngModel)]="unit.startTime">
+  </mat-form-field>
+
+  <mat-form-field class="end-time">
+    <input matInput
+           [disabled]="usePreviousValue"
+           placeholder="end time"
+           [(ngModel)]="unit.endTime">
+  </mat-form-field>
+
+  <mat-form-field class="break-start-time">
+    <input matInput
+           [disabled]="usePreviousValue"
+           placeholder="break start"
+           [(ngModel)]="unit.breakStartTime">
+  </mat-form-field>
+
+  <mat-form-field class="break-end-time">
+    <input matInput
+           [disabled]="usePreviousValue"
+           placeholder="break end"
+           [(ngModel)]="unit.breakEndTime">
+  </mat-form-field>
+
+  <mat-form-field class="day-type-container">
+    <mat-select placeholder="day type"
+                (selectionChange)="onChange($event)"
+                [(ngModel)]="unit.dayTypeId">
+      <mat-option *ngFor="let dayType of dayTypes"
+                  [value]="dayType.id">
+        {{dayType.name}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <div class="control-button-box">
+    <button class="control-button"
+            (click)="delete()">X</button>
+  </div>
+</div>

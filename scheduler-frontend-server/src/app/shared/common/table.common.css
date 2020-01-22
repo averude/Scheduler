@@ -1,0 +1,58 @@
+.management-table-container {
+  width: 100%;
+}
+
+.management-table-filter-container {
+  background-color: white;
+  display: flex;
+  flex-direction: row;
+}
+
+.management-table-year-paginator {
+  height: 100%;
+  margin: auto;
+}
+
+.management-table-filter {
+  background-color: white;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  padding: 10px 0 0 23px;
+  font-size: 14px;
+  width: 96%;
+}
+
+.management-table {
+  height: 100%;
+  width: 100%;
+  font-family: 'MuseoSansRegular', 'Roboto', sans-serif;
+}
+
+.management-table-control-button {
+  cursor: pointer;
+  padding: 0px 0px 0px 0px;
+  background-color: transparent;
+  border: none;
+  height: 40px;
+  width: 40px;
+  border-radius: 20px;
+}
+
+.management-table-button-icon {
+  height: 25px;
+  width: 25px;
+}
+
+.border-bottom-color1 {
+  border-bottom-color: #748ce8;
+}
+
+.mat-column-select {
+  width: 64px;
+}
+
+.mat-column-control {
+  width: 5%;
+  min-width: 40px;
+}

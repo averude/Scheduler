@@ -1,0 +1,20 @@
+<tr *ngIf="employees.length > 0">
+  <td colspan="12">{{shift.name}}</td>
+</tr>
+<ng-container *ngFor="let employee of employees">
+  <tr>
+    <td [rowSpan]="dayTypeGroups?.length + 1">
+      {{employee.secondName + ' ' + employee.firstName}}
+    </td>
+  </tr>
+  <ng-container *ngFor="let dayTypeGroup of dayTypeGroups; let i = index;">
+    <tr>
+      <td>{{dayTypeGroup.name}}</td>
+      <ng-container *ngFor="let month of months">
+        <td>10</td>
+        <td>160</td>
+        <td>160</td>
+      </ng-container>
+    </tr>
+  </ng-container>
+</ng-container>
