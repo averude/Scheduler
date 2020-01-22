@@ -2,6 +2,7 @@ package com.averude.uksatse.scheduler.monolith.service;
 
 import com.averude.uksatse.scheduler.core.entity.*;
 import com.averude.uksatse.scheduler.core.extractor.DataByAuthorityExtractor;
+import com.averude.uksatse.scheduler.generator.model.Report;
 import com.averude.uksatse.scheduler.generator.reports.ReportGenerator;
 import com.averude.uksatse.scheduler.shared.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,12 +1,17 @@
 package com.averude.uksatse.scheduler.core.entity;
 
+import com.averude.uksatse.scheduler.core.json.deserializer.StringToIntTimeDeserializer;
+import com.averude.uksatse.scheduler.core.json.serializer.IntToStringTimeSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.StringJoiner;
 
 @Entity
 @Table(
@@ -45,11 +50,25 @@ public class DayType implements HasId {
     @Column(nullable = true)
     private String label;
 
-    @PositiveOrZero(message = "{workDay.hours.negative}")
-    @DecimalMax(value = "24",
-                message = "{workDay.hours.max}")
-    @Column(name = "default_value")
-    private Float defaultValue;
+    @JsonSerialize(using = IntToStringTimeSerializer.class)
+    @JsonDeserialize(using = StringToIntTimeDeserializer.class)
+    @Column(name = "start_time")
+    private Integer startTime;
+
+    @JsonSerialize(using = IntToStringTimeSerializer.class)
+    @JsonDeserialize(using = StringToIntTimeDeserializer.class)
+    @Column(name = "break_start_time")
+    private Integer breakStartTime;
+
+    @JsonSerialize(using = IntToStringTimeSerializer.class)
+    @JsonDeserialize(using = StringToIntTimeDeserializer.class)
+    @Column(name = "break_end_time")
+    private Integer breakEndTime;
+
+    @JsonSerialize(using = IntToStringTimeSerializer.class)
+    @JsonDeserialize(using = StringToIntTimeDeserializer.class)
+    @Column(name = "end_time")
+    private Integer endTime;
 
     @NotNull
     @Column(name = "use_previous_value")
@@ -122,12 +141,36 @@ public class DayType implements HasId {
         this.label = name;
     }
 
-    public Float getDefaultValue() {
-        return defaultValue;
+    public Integer getStartTime() {
+        return startTime;
     }
 
-    public void setDefaultValue(Float defaultValue) {
-        this.defaultValue = defaultValue;
+    public void setStartTime(Integer startTime) {
+        this.startTime = startTime;
+    }
+
+    public Integer getBreakStartTime() {
+        return breakStartTime;
+    }
+
+    public void setBreakStartTime(Integer breakStartTime) {
+        this.breakStartTime = breakStartTime;
+    }
+
+    public Integer getBreakEndTime() {
+        return breakEndTime;
+    }
+
+    public void setBreakEndTime(Integer breakEndTime) {
+        this.breakEndTime = breakEndTime;
+    }
+
+    public Integer getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Integer endTime) {
+        this.endTime = endTime;
     }
 
     public Boolean getUsePreviousValue() {
@@ -173,11 +216,32 @@ public class DayType implements HasId {
                 dayTypeGroupId.equals(dayType.dayTypeGroupId) &&
                 name.equals(dayType.name) &&
                 Objects.equals(label, dayType.label) &&
-                Objects.equals(defaultValue, dayType.defaultValue);
+                Objects.equals(startTime, dayType.startTime) &&
+                Objects.equals(breakStartTime, dayType.breakStartTime) &&
+                Objects.equals(breakEndTime, dayType.breakEndTime) &&
+                Objects.equals(endTime, dayType.endTime) &&
+                usePreviousValue.equals(dayType.usePreviousValue);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(departmentId, dayTypeGroupId, name, label, defaultValue);
+        return Objects.hash(departmentId, dayTypeGroupId, name, label,
+                startTime, breakStartTime, breakEndTime, endTime, usePreviousValue);
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", DayType.class.getSimpleName() + "[", "]")
+                .add("id=" + id)
+                .add("departmentId=" + departmentId)
+                .add("dayTypeGroupId=" + dayTypeGroupId)
+                .add("name='" + name + "'")
+                .add("label='" + label + "'")
+                .add("startTime=" + startTime)
+                .add("breakStartTime=" + breakStartTime)
+                .add("breakEndTime=" + breakEndTime)
+                .add("endTime=" + endTime)
+                .add("usePreviousValue=" + usePreviousValue)
+                .toString();
     }
 }

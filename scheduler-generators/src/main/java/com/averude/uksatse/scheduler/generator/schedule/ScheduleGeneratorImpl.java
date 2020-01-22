@@ -34,6 +34,7 @@ public class ScheduleGeneratorImpl implements ScheduleGenerator {
 
         int datesSize = dates.size();
         int unitsSize = pattern.getSequence().size();
+        var offset    = interval.getOffset();
 
         for (int i = 0, scheduleIndex = 0; i < datesSize; i+=unitsSize) {
             for (int j = 0; j < unitsSize; j++) {
@@ -42,11 +43,11 @@ public class ScheduleGeneratorImpl implements ScheduleGenerator {
                     break;
                 }
 
-                var unitIndex = ((int) interval.getOffset() + j) % unitsSize;
+                var unitIndex = ((int) offset + j) % unitsSize;
 
                 var date = dates.get(dateIndex);
 
-                var isHoliday = isHoliday(holidays, date);
+                var isHoliday      = isHoliday(holidays, date);
                 var isExtraWeekend = isExtraWeekend(extraWeekends, date);
                 var isExtraWorkDay = isExtraWorkDay(extraWorkDays, date);
 
@@ -74,7 +75,10 @@ public class ScheduleGeneratorImpl implements ScheduleGenerator {
             logger.trace("Updating workday {}", workDay);
         }
         workDay.setDayTypeId(unit.getDayTypeId());
-        workDay.setHours(unit.getValue());
+        workDay.setStartTime(unit.getStartTime());
+        workDay.setEndTime(unit.getEndTime());
+        workDay.setBreakStartTime(unit.getBreakStartTime());
+        workDay.setBreakEndTime(unit.getBreakEndTime());
         workDay.setHoliday(isHoliday);
     }
 
@@ -96,8 +100,8 @@ public class ScheduleGeneratorImpl implements ScheduleGenerator {
                                        PatternUnit weekendUnit,
                                        PatternUnit workDayUnit,
                                        boolean isHoliday,
-                                       boolean isExtraWorkDay,
-                                       boolean isExtraWeekend) {
+                                       boolean isExtraWeekend,
+                                       boolean isExtraWorkDay) {
 
         if (holidayUnit != null && isHoliday) {
             logger.trace("Holiday found. Setting pattern unit to holiday's");
@@ -126,7 +130,12 @@ public class ScheduleGeneratorImpl implements ScheduleGenerator {
 
     private PatternUnit getPatternUnitByDayType(DayType dayType) {
         if (dayType != null) {
-            return new PatternUnit(0L, 0L, dayType.getId(), dayType.getDefaultValue());
+            var unit = new PatternUnit(0L, 0L, dayType.getId());
+            unit.setStartTime(dayType.getStartTime());
+            unit.setEndTime(dayType.getEndTime());
+            unit.setBreakStartTime(dayType.getBreakStartTime());
+            unit.setBreakEndTime(dayType.getBreakEndTime());
+            return unit;
         } else {
             return null;
         }

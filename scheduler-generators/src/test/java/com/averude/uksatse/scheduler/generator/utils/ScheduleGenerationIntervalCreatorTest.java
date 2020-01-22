@@ -67,11 +67,64 @@ public class ScheduleGenerationIntervalCreatorTest {
                 mainShiftComposition, substitutionCompositions,
                 from, to, offset, unitsSize);
 
-        System.out.println(intervals);
-
         assertEquals(2, intervals.size());
         assertEquals(subFrom.minusDays(1), intervals.get(0).getTo());
         assertEquals(subTo.plusDays(1), intervals.get(1).getFrom());
         assertFalse(intervals.isEmpty());
+    }
+
+    @Test
+    public void testCreateEmptyIntervalsForMainShiftComposition() {
+        var mainShiftComposition = new ShiftComposition();
+        mainShiftComposition.setFrom(LocalDate.parse("2019-01-01"));
+        mainShiftComposition.setTo(LocalDate.parse("2020-12-31"));
+        mainShiftComposition.setSubstitution(false);
+        mainShiftComposition.setEmployeeId(1L);
+        mainShiftComposition.setShiftId(9L);
+        mainShiftComposition.setId(15L);
+
+        var substitutionCompositions = new ArrayList<ShiftComposition>();
+
+        var subComposition = new ShiftComposition();
+        subComposition.setFrom(LocalDate.parse("2019-12-01"));
+        subComposition.setTo(LocalDate.parse("2020-02-29"));
+        subComposition.setSubstitution(true);
+        subComposition.setEmployeeId(1L);
+        subComposition.setShiftId(13L);
+        substitutionCompositions.add(subComposition);
+
+        var creator = new ScheduleGenerationIntervalCreator();
+        var from = LocalDate.parse("2020-01-01");
+        var to = LocalDate.parse("2020-01-31");
+        var offset = 0;
+        var unitsSize = 4;
+
+        var intervals = creator.getIntervalsForComposition(
+                mainShiftComposition, substitutionCompositions,
+                from, to, offset, unitsSize);
+
+        assertTrue(intervals.isEmpty());
+    }
+
+    @Test
+    public void testOffsetRecalculationForSubstitution() {
+        var subComposition = new ShiftComposition();
+        subComposition.setFrom(LocalDate.parse("2019-12-01"));
+        subComposition.setTo(LocalDate.parse("2020-02-29"));
+        subComposition.setSubstitution(true);
+        subComposition.setEmployeeId(1L);
+        subComposition.setShiftId(13L);
+
+        var creator = new ScheduleGenerationIntervalCreator();
+        var from = LocalDate.parse("2020-01-01");
+        var to = LocalDate.parse("2020-01-31");
+        var offset = 3;
+        var unitsSize = 4;
+
+        var intervals = creator.getIntervalsForComposition(
+                subComposition, null,
+                from, to, offset, unitsSize);
+
+        assertEquals(intervals.get(0).getOffset(), offset);
     }
 }

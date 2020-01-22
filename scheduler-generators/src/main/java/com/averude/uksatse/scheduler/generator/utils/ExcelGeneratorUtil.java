@@ -7,12 +7,17 @@ import org.apache.poi.hssf.usermodel.HSSFPalette;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 
+import java.time.Duration;
 import java.util.List;
 
 public class ExcelGeneratorUtil {
 
     public static String getCellValue(WorkDay workDay, List<DayType> dayTypes) {
-        String cellValue = String.valueOf(workDay.getHours());
+//        var workDuration = Duration
+//                .between(workDay.getEndTime(), workDay.getStartTime())
+//                .minusSeconds(workDay.getBreakStartTime().toSecondOfDay())
+//                .getSeconds() / 60 * 60;
+        String cellValue = String.valueOf(0);
         if (dayTypes != null && workDay.getDayTypeId() != null) {
             return dayTypes.stream()
                     .filter(dayType -> dayType.getId().equals(workDay.getDayTypeId()))

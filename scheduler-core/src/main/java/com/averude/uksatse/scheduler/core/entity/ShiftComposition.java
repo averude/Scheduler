@@ -1,5 +1,7 @@
 package com.averude.uksatse.scheduler.core.entity;
 
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
@@ -24,6 +26,8 @@ public class ShiftComposition implements HasId {
     private Long employeeId;
 
     @NotNull
+    @Type(type = "numeric_boolean")
+    @Column(nullable = false)
     private Boolean substitution;
 
     @NotNull
@@ -108,7 +112,7 @@ public class ShiftComposition implements HasId {
 
     @Override
     public String toString() {
-        return new StringJoiner(", ", "\r\n{", "}")
+        return new StringJoiner(", ", "{", "}")
                 .add("id=" + id)
                 .add("shiftId=" + shiftId)
                 .add("employeeId=" + employeeId)

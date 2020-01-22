@@ -1,5 +1,11 @@
 package com.averude.uksatse.scheduler.core.entity;
 
+import com.averude.uksatse.scheduler.core.json.deserializer.StringToIntTimeDeserializer;
+import com.averude.uksatse.scheduler.core.json.serializer.IntToStringTimeSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.time.LocalDate;
@@ -36,12 +42,25 @@ public class WorkDay implements HasId {
     @Column(nullable = false)
     private Boolean holiday;
 
-    @NotNull(message = "{workDay.hours.null}")
-    @PositiveOrZero(message = "{workDay.hours.negative}")
-    @DecimalMax(value = "24",
-                message = "{workDay.hours.max}")
-    @Column(nullable = false)
-    private Float hours;
+    @JsonSerialize(using = IntToStringTimeSerializer.class)
+    @JsonDeserialize(using = StringToIntTimeDeserializer.class)
+    @Column(name = "start_time")
+    private Integer startTime;
+
+    @JsonSerialize(using = IntToStringTimeSerializer.class)
+    @JsonDeserialize(using = StringToIntTimeDeserializer.class)
+    @Column(name = "break_start_time")
+    private Integer breakStartTime;
+
+    @JsonSerialize(using = IntToStringTimeSerializer.class)
+    @JsonDeserialize(using = StringToIntTimeDeserializer.class)
+    @Column(name = "break_end_time")
+    private Integer breakEndTime;
+
+    @JsonSerialize(using = IntToStringTimeSerializer.class)
+    @JsonDeserialize(using = StringToIntTimeDeserializer.class)
+    @Column(name = "end_time")
+    private Integer endTime;
 
     @NotNull(message = "{workDay.date.null}")
     @Column(nullable = false)
@@ -53,19 +72,16 @@ public class WorkDay implements HasId {
     public WorkDay(Long employeeId, LocalDate date) {
         this.employeeId = employeeId;
         this.holiday = false;
-        this.hours = 0F;
         this.date = date;
     }
 
     public WorkDay(Long employeeId,
                    Long dayTypeId,
                    Boolean holiday,
-                   Float hours,
                    LocalDate date) {
         this.employeeId = employeeId;
         this.dayTypeId = dayTypeId;
         this.holiday = holiday;
-        this.hours = hours;
         this.date = date;
     }
 
@@ -101,12 +117,36 @@ public class WorkDay implements HasId {
         this.holiday = holiday;
     }
 
-    public Float getHours() {
-        return hours;
+    public Integer getStartTime() {
+        return startTime;
     }
 
-    public void setHours(Float hours) {
-        this.hours = hours;
+    public void setStartTime(Integer startTime) {
+        this.startTime = startTime;
+    }
+
+    public Integer getBreakStartTime() {
+        return breakStartTime;
+    }
+
+    public void setBreakStartTime(Integer breakStartTime) {
+        this.breakStartTime = breakStartTime;
+    }
+
+    public Integer getBreakEndTime() {
+        return breakEndTime;
+    }
+
+    public void setBreakEndTime(Integer breakEndTime) {
+        this.breakEndTime = breakEndTime;
+    }
+
+    public Integer getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Integer endTime) {
+        this.endTime = endTime;
     }
 
     public LocalDate getDate() {
@@ -122,16 +162,19 @@ public class WorkDay implements HasId {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         WorkDay workDay = (WorkDay) o;
-        return Objects.equals(id, workDay.id) &&
-                Objects.equals(employeeId, workDay.employeeId) &&
-                Objects.equals(holiday, workDay.holiday) &&
-                Objects.equals(hours, workDay.hours) &&
-                Objects.equals(date, workDay.date);
+        return employeeId.equals(workDay.employeeId) &&
+                dayTypeId.equals(workDay.dayTypeId) &&
+                holiday.equals(workDay.holiday) &&
+                Objects.equals(startTime, workDay.startTime) &&
+                Objects.equals(breakStartTime, workDay.breakStartTime) &&
+                Objects.equals(breakEndTime, workDay.breakEndTime) &&
+                Objects.equals(endTime, workDay.endTime) &&
+                date.equals(workDay.date);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, employeeId, holiday, hours, date);
+        return Objects.hash(employeeId, dayTypeId, holiday, startTime, breakStartTime, breakEndTime, endTime, date);
     }
 
     @Override
@@ -141,8 +184,11 @@ public class WorkDay implements HasId {
                 .add("employeeId=" + employeeId)
                 .add("dayTypeId=" + dayTypeId)
                 .add("holiday=" + holiday)
-                .add("hours=" + hours)
                 .add("date=" + date)
+                .add("startTime=" + startTime)
+                .add("endTime=" + endTime)
+                .add("breakStartTime=" + breakStartTime)
+                .add("breakEndTime=" + breakEndTime)
                 .toString();
     }
 }

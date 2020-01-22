@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.StringJoiner;
-import java.util.stream.Collectors;
 
 @Entity
 @Table(
@@ -196,27 +195,30 @@ public class ShiftPattern implements HasId {
         ShiftPattern that = (ShiftPattern) o;
         return departmentId.equals(that.departmentId) &&
                 name.equals(that.name) &&
-//                overrideExistingValues.equals(that.overrideExistingValues) &&
                 Objects.equals(holidayDayTypeId, that.holidayDayTypeId) &&
-                Objects.equals(extraWeekendDayTypeId, that.extraWeekendDayTypeId);
+                Objects.equals(extraWeekendDayTypeId, that.extraWeekendDayTypeId) &&
+                Objects.equals(extraWorkDayDayTypeId, that.extraWorkDayDayTypeId) &&
+                Objects.equals(holidayDayType, that.holidayDayType) &&
+                Objects.equals(extraWeekendDayType, that.extraWeekendDayType) &&
+                Objects.equals(extraWorkDayDayType, that.extraWorkDayDayType);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(departmentId, name,
-//                overrideExistingValues,
-                holidayDayTypeId, extraWeekendDayTypeId);
+                holidayDayTypeId, extraWeekendDayTypeId, extraWorkDayDayTypeId,
+                holidayDayType, extraWeekendDayType, extraWorkDayDayType);
     }
 
     @Override
     public String toString() {
-        return new StringJoiner(", ", "\r\n{", "}")
+        return new StringJoiner(", ", "{", "}")
                 .add("id=" + id)
                 .add("departmentId=" + departmentId)
                 .add("name='" + name + "'")
-//                .add("overrideExistingValues=" + overrideExistingValues)
                 .add("holidayDayTypeId=" + holidayDayTypeId)
                 .add("extraWeekendDayTypeId=" + extraWeekendDayTypeId)
+                .add("extraWorkDayDayTypeId=" + extraWorkDayDayTypeId)
                 .toString();
     }
 }

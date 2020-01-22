@@ -48,11 +48,15 @@ public class ScheduleGenerationIntervalCreator {
                                                                        int unitsSize,
                                                                        int offset) {
         logger.debug("Creating interval for substitution shift");
-        var interval = new ScheduleGenerationInterval();
-        interval.setFrom(from.isAfter(composition.getFrom()) ? from : composition.getFrom());
-        interval.setTo(to.isBefore(composition.getTo()) ? to : composition.getTo());
+        var interval        = new ScheduleGenerationInterval();
+        var intervalStart   = from.isAfter(composition.getFrom()) ? from : composition.getFrom();
+        var intervalEnd     = to.isBefore(composition.getTo()) ? to : composition.getTo();
+        var intervalOffset  = recalculateOffsetForDate(from, intervalStart, unitsSize, offset);
+
+        interval.setFrom(intervalStart);
+        interval.setTo(intervalEnd);
         interval.setEmployeeId(composition.getEmployeeId());
-        interval.setOffset(recalculateOffsetForDate(from, composition.getFrom(), unitsSize, offset));
+        interval.setOffset(intervalOffset);
         logger.debug("Interval {} is created", interval);
         return interval;
     }
@@ -81,8 +85,12 @@ public class ScheduleGenerationIntervalCreator {
             var composition = compositions.get(i);
 
             if (intervalStart.isAfter(composition.getFrom())) {
-                intervalStart = composition.getTo();
-                continue;
+                if (composition.getTo().isBefore(to)) {
+                    intervalStart = composition.getTo();
+                    continue;
+                } else {
+                    break;
+                }
             }
 
             if (to.isAfter(composition.getFrom())) {

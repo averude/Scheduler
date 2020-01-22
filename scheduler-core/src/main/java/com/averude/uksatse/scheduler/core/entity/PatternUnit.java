@@ -1,7 +1,14 @@
 package com.averude.uksatse.scheduler.core.entity;
 
+import com.averude.uksatse.scheduler.core.json.deserializer.StringToIntTimeDeserializer;
+import com.averude.uksatse.scheduler.core.json.serializer.IntToStringTimeSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import java.util.Objects;
+import java.util.StringJoiner;
 
 @Entity
 @Table(
@@ -38,21 +45,33 @@ public class PatternUnit implements HasId {
             nullable = false)
     private Long dayTypeId;
 
-    @NotNull(message = "{unit.hours.null}")
-    @PositiveOrZero(message = "{unit.hours.negative}")
-    @DecimalMax(value = "24",
-                message = "{unit.hours.max}")
-    @Column(nullable = false)
-    private Float value;
+    @JsonSerialize(using = IntToStringTimeSerializer.class)
+    @JsonDeserialize(using = StringToIntTimeDeserializer.class)
+    @Column(name = "start_time")
+    private Integer startTime;
+
+    @JsonSerialize(using = IntToStringTimeSerializer.class)
+    @JsonDeserialize(using = StringToIntTimeDeserializer.class)
+    @Column(name = "break_start_time")
+    private Integer breakStartTime;
+
+    @JsonSerialize(using = IntToStringTimeSerializer.class)
+    @JsonDeserialize(using = StringToIntTimeDeserializer.class)
+    @Column(name = "break_end_time")
+    private Integer breakEndTime;
+
+    @JsonSerialize(using = IntToStringTimeSerializer.class)
+    @JsonDeserialize(using = StringToIntTimeDeserializer.class)
+    @Column(name = "end_time")
+    private Integer endTime;
 
     public PatternUnit() {
     }
 
-    public PatternUnit(Long patternId, Long orderId, Long dayTypeId, Float value) {
+    public PatternUnit(Long patternId, Long orderId, Long dayTypeId) {
         this.patternId = patternId;
         this.orderId = orderId;
         this.dayTypeId = dayTypeId;
-        this.value = value;
     }
 
     public Long getId() {
@@ -87,11 +106,69 @@ public class PatternUnit implements HasId {
         this.dayTypeId = dayTypeId;
     }
 
-    public Float getValue() {
-        return value;
+    public Integer getStartTime() {
+        return startTime;
     }
 
-    public void setValue(Float value) {
-        this.value = value;
+    public void setStartTime(Integer startTime) {
+        this.startTime = startTime;
+    }
+
+    public Integer getBreakStartTime() {
+        return breakStartTime;
+    }
+
+    public void setBreakStartTime(Integer breakStartTime) {
+        this.breakStartTime = breakStartTime;
+    }
+
+    public Integer getBreakEndTime() {
+        return breakEndTime;
+    }
+
+    public void setBreakEndTime(Integer breakEndTime) {
+        this.breakEndTime = breakEndTime;
+    }
+
+    public Integer getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Integer endTime) {
+        this.endTime = endTime;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PatternUnit unit = (PatternUnit) o;
+        return patternId.equals(unit.patternId) &&
+                orderId.equals(unit.orderId) &&
+                dayTypeId.equals(unit.dayTypeId) &&
+                Objects.equals(startTime, unit.startTime) &&
+                Objects.equals(breakStartTime, unit.breakStartTime) &&
+                Objects.equals(breakEndTime, unit.breakEndTime) &&
+                Objects.equals(endTime, unit.endTime);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(patternId, orderId, dayTypeId,
+                startTime, breakStartTime, breakEndTime, endTime);
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", "{", "}")
+                .add("id=" + id)
+                .add("patternId=" + patternId)
+                .add("orderId=" + orderId)
+                .add("dayTypeId=" + dayTypeId)
+                .add("startTime=" + startTime)
+                .add("breakStartTime=" + breakStartTime)
+                .add("breakEndTime=" + breakEndTime)
+                .add("endTime=" + endTime)
+                .toString();
     }
 }

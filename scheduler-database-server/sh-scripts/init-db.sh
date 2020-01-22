@@ -2,6 +2,8 @@
 
 echo "---CREATING DATABASE AND USER---"
 psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" -f /sql-scripts/1-init-db.sql
+echo "---CREATING EXTENSIONS IN DATABASE---"
+psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "schedulerdb" -c "CREATE EXTENSION btree_gist"
 echo "---CREATING TABLES---"
 psql -v ON_ERROR_STOP=1 --username "scheduler" --dbname "schedulerdb" -f /sql-scripts/2-database-create-tables.sql
 echo "---INSERTING TEST DATA---"
