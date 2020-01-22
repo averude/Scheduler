@@ -24,13 +24,13 @@ export class StatisticsTableComponent implements OnInit {
               private dayTypeGroupService: DayTypeGroupService) { }
 
   ngOnInit() {
-    this.employeeService.getAll()
+    this.employeeService.getAllByAuth()
       .subscribe(employees => this.employees = employees);
 
-    this.dayTypeGroupService.getAll()
+    this.dayTypeGroupService.getAllByAuth()
       .subscribe(groups => this.dayTypeGroups = groups);
 
-    this.shiftService.getAll()
+    this.shiftService.getAllByAuth()
       .subscribe(shifts => this.shifts = shifts);
   }
 

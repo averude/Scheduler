@@ -17,9 +17,30 @@
 
   <mat-form-field>
     <input matInput
-           placeholder="Default Value"
-           formControlName="defaultValue">
-    <mat-error *ngIf="isControlInvalid('defaultValue')">{{getErrorMessage()}}</mat-error>
+           placeholder="Start time"
+           formControlName="startTime">
+    <mat-error *ngIf="isControlInvalid('startTime')">{{getErrorMessage()}}</mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput
+           placeholder="End time"
+           formControlName="endTime">
+    <mat-error *ngIf="isControlInvalid('endTime')">{{getErrorMessage()}}</mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput
+           placeholder="Break start time"
+           formControlName="breakStartTime">
+    <mat-error *ngIf="isControlInvalid('breakStartTime')">{{getErrorMessage()}}</mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput
+           placeholder="Break end time"
+           formControlName="breakEndTime">
+    <mat-error *ngIf="isControlInvalid('breakEndTime')">{{getErrorMessage()}}</mat-error>
   </mat-form-field>
 
   <mat-form-field>
@@ -33,6 +54,10 @@
     </mat-select>
     <mat-error *ngIf="isControlInvalid('dayTypeGroupId')">{{getErrorMessage()}}</mat-error>
   </mat-form-field>
+
+  <mat-checkbox formControlName="usePreviousValue">
+    Use previous value
+  </mat-checkbox>
 
 </mat-dialog-content>
 

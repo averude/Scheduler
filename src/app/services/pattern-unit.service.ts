@@ -3,11 +3,12 @@ import { HttpClient } from '@angular/common/http';
 import { RestConfig } from '../rest.config';
 import { Observable } from 'rxjs';
 import { PatternUnit } from '../model/pattern-unit';
+import { CUDService } from "./interface/cud-service";
 
 @Injectable({
   providedIn: 'root'
 })
-export class PatternUnitService {
+export class PatternUnitService implements CUDService<PatternUnit> {
 
   constructor(private http: HttpClient,
               private config: RestConfig) { }

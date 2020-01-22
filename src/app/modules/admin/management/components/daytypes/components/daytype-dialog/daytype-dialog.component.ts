@@ -24,26 +24,37 @@ export class DayTypeDialogComponent extends DialogBaseComponent<DayType> {
 
   initTheForm() {
     this.dialogForm = this.fb.group({
-      id:             [],
-      departmentId:   [this.authService.currentUserValue.departmentId],
-      dayTypeGroupId: [null,  [Validators.required]],
-      name:           ['',    [Validators.required,
-                               Validators.minLength(3),
-                               Validators.maxLength(64)]],
-      label:          [null,  [Validators.maxLength(3)]],
-      defaultValue:   [null,  [Validators.min(0),
-                               Validators.max(24)]]
+      id:               [],
+      departmentId:     [this.authService.currentUserValue.departmentId],
+      dayTypeGroupId:   [null,  [Validators.required]],
+      name:             ['',    [Validators.required,
+                                 Validators.minLength(3),
+                                 Validators.maxLength(64)]],
+      label:            [null,  [Validators.maxLength(3)]],
+      startTime:        [null,  [Validators.min(0),
+                                 Validators.max(1440)]],
+      endTime:          [null,  [Validators.min(0),
+                                 Validators.max(1440)]],
+      breakStartTime:   [null,  [Validators.min(0),
+                                 Validators.max(1440)]],
+      breakEndTime:     [null,  [Validators.min(0),
+                                 Validators.max(1440)]],
+      usePreviousValue: [false]
     });
   }
 
   fillInTheForm(dayType: DayType) {
     this.dialogForm.setValue({
-      id:             dayType.id,
-      departmentId:   dayType.departmentId,
-      dayTypeGroupId: dayType.dayTypeGroupId,
-      name:           dayType.name,
-      label:          dayType.label,
-      defaultValue:   dayType.defaultValue
+      id:               dayType.id,
+      departmentId:     dayType.departmentId,
+      dayTypeGroupId:   dayType.dayTypeGroupId,
+      name:             dayType.name,
+      label:            dayType.label,
+      startTime:        dayType.startTime,
+      endTime:          dayType.endTime,
+      breakStartTime:   dayType.breakStartTime,
+      breakEndTime:     dayType.breakEndTime,
+      usePreviousValue: dayType.usePreviousValue
     });
   }
 }

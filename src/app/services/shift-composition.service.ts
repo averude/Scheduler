@@ -3,37 +3,33 @@ import { ShiftComposition } from "../model/shift-composition";
 import { Observable } from "rxjs";
 import { RestConfig } from "../rest.config";
 import { HttpClient } from "@angular/common/http";
-import { PageableByDateCrudService } from "./interface/pageable-by-date-crud.service";
 import { AuthService } from "./auth.service";
+import { CUDService } from "./interface/cud-service";
+import { APageableByDateService } from "./abstract-service/a-pageable-by-date-service";
 
-@Injectable({providedIn: "root"})
-export class ShiftCompositionService implements PageableByDateCrudService<ShiftComposition> {
-  constructor(private http: HttpClient,
-              private authService: AuthService,
-              private config: RestConfig) {}
+@Injectable({
+  providedIn: "root"
+})
+export class ShiftCompositionService
+  extends APageableByDateService<ShiftComposition> implements CUDService<ShiftComposition> {
 
-  getAll(): Observable<ShiftComposition[]> {
-    return this.http.get<ShiftComposition[]>(
-      `${this.config.baseUrl}/admin/shift_compositions`
-    );
+  constructor(authService: AuthService,
+              private http: HttpClient,
+              private config: RestConfig) {
+    super(authService);
   }
 
-  getAllByDate(from: string, to: string): Observable<ShiftComposition[]> {
-    let departmentId = this.authService.currentUserValue.departmentId;
-    return this.getAllByDepartmentIdAndDate(departmentId, from, to);
-  }
-
-  getAllByDepartmentIdAndDate(departmentId: number,
-                              from: string,
-                              to: string): Observable<ShiftComposition[]> {
+  getAllByDepartmentIdAndDateBetween(departmentId: number,
+                                     from: string,
+                                     to: string): Observable<ShiftComposition[]> {
     return this.http.get<ShiftComposition[]>(
       `${this.config.baseUrl}/admin/shift_compositions/departments/${departmentId}/dates?from=${from}&to=${to}`
     );
   }
 
-  getAllByShiftIdAndDate(shiftId: number,
-                              from: string,
-                              to: string): Observable<ShiftComposition[]> {
+  getAllByShiftIdAndDateBetween(shiftId: number,
+                                from: string,
+                                to: string): Observable<ShiftComposition[]> {
     return this.http.get<ShiftComposition[]>(
       `${this.config.baseUrl}/admin/shift_compositions/shifts/${shiftId}/dates?from=${from}&to=${to}`
     );
@@ -44,9 +40,6 @@ export class ShiftCompositionService implements PageableByDateCrudService<ShiftC
       `${this.config.baseUrl}/admin/shift_compositions`,
       shiftSchedule,
     );
-    // console.log(shiftSchedule);
-    // SS.push(shiftSchedule);
-    // return of(null);
   }
 
   update(shiftSchedule: ShiftComposition): Observable<any> {

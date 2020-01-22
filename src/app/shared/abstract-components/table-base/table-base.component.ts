@@ -2,10 +2,11 @@ import { OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogConfig, MatSort, MatTableDataSource } from "@angular/material";
 import { SelectionModel } from "@angular/cdk/collections";
 import { RemoveDialogComponent } from "../remove-dialog/remove-dialog.component";
-import { CrudService } from "../../../services/interface/crud.service";
 import { NotificationsService } from "angular2-notifications";
 import { IdEntity } from "../../../model/interface/id-entity";
 import { ComponentType } from "@angular/cdk/portal";
+import { CUDService } from "../../../services/interface/cud-service";
+import { IByAuthService } from "../../../services/interface/i-by-auth.service";
 
 export abstract class TableBaseComponent<T extends IdEntity> implements OnInit, OnDestroy {
 
@@ -16,7 +17,7 @@ export abstract class TableBaseComponent<T extends IdEntity> implements OnInit, 
   sort: MatSort;
 
   protected constructor(private matDialog: MatDialog,
-                        private crudService: CrudService<T>,
+                        private crudService: CUDService<T>,
                         private notification: NotificationsService) { }
 
   ngOnInit(): void {
@@ -32,8 +33,11 @@ export abstract class TableBaseComponent<T extends IdEntity> implements OnInit, 
   }
 
   initDataSourceValues() {
-    this.crudService.getAll()
-      .subscribe(values => this.dataSource.data = values);
+    let service = this.crudService as unknown as IByAuthService<T>;
+    if (service.getAllByAuth) {
+      service.getAllByAuth()
+        .subscribe(values => this.dataSource.data = values);
+    }
   }
 
   addRow(object: T) {
@@ -143,7 +147,7 @@ export abstract class TableBaseComponent<T extends IdEntity> implements OnInit, 
       this.dataSource.data.forEach(row => this.selection.select(row));
   }
 
-  /** The label for the checkbox on the passed row */
+  /** The label for the checkbox on the passed rowData */
   checkboxLabel(row?: T): string {
     if (!row) {
       return `${this.isAllSelected() ? 'select' : 'deselect'} all`;

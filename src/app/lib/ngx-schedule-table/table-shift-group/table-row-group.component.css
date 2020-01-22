@@ -1,0 +1,24 @@
+.group-label-row {
+  height: 32px;
+}
+
+.group-label {
+  font-family: 'MuseoSansMedium';
+  letter-spacing: .02em;
+  background-color: #f8fafc;
+  text-align: left;
+  font-size: 13px;
+  padding-left: 23px;
+  cursor: pointer;
+  color: #637286;
+  border:  1px solid #e5e9f0;
+}
+
+.row {
+  height: 32px;
+}
+
+.hide-button {
+  border: none;
+  background-color: transparent;
+}

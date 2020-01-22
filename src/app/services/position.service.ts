@@ -3,20 +3,39 @@ import { Position } from '../model/position';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { RestConfig } from '../rest.config';
-import { CrudService } from "./interface/crud.service";
+import { AuthService } from "./auth.service";
+import { ABaseService } from "./abstract-service/a-base-service";
+import { CUDService } from "./interface/cud-service";
+import { map } from "rxjs/operators";
 
 @Injectable({
   providedIn: 'root'
 })
-export class PositionService implements CrudService<Position> {
+export class PositionService
+  extends ABaseService<Position> implements CUDService<Position> {
 
-  constructor(private http: HttpClient,
-              private config: RestConfig) { }
+  constructor(authService: AuthService,
+              private http: HttpClient,
+              private config: RestConfig) {
+    super(authService);
+  }
 
   getAll(): Observable<Position[]> {
     return this.http.get<Position[]>(
       `${this.config.baseUrl}/admin/positions`
-    );
+    ).pipe(map(values => values.sort((a, b) => a.id - b.id)));
+  }
+
+  getAllByDepartmentId(departmentId: number): Observable<Position[]> {
+    return this.http.get<Position[]>(
+      `${this.config.baseUrl}/admin/positions/departments/${departmentId}`
+    ).pipe(map(values => values.sort((a, b) => a.id - b.id)));
+  }
+
+  getAllByShiftId(shiftId: number): Observable<Position[]> {
+    return this.http.get<Position[]>(
+      `${this.config.baseUrl}/admin/positions/shifts/${shiftId}`
+    ).pipe(map(values => values.sort((a, b) => a.id - b.id)));
   }
 
   create(position: Position): Observable<any> {

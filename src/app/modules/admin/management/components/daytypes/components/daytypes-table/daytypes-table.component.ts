@@ -16,7 +16,8 @@ import { DayTypeGroup } from "../../../../../../../model/day-type-group";
 export class DayTypesTableComponent extends TableBaseComponent<DayType> {
   dayTypeGroups: DayTypeGroup[] = [];
 
-  displayedColumns = ['select', 'name', 'label', 'group', 'default_value','control'];
+  displayedColumns = ['select', 'name', 'label', 'group',
+    'start_time', 'end_time', 'break_start', 'break_end','use_previous_value', 'control'];
 
   constructor(dialog: MatDialog,
               dayTypeService: DayTypeService,
@@ -30,7 +31,7 @@ export class DayTypesTableComponent extends TableBaseComponent<DayType> {
     this.dataSource.filterPredicate = ((data, filter) => {
       return data.name.toLowerCase().includes(filter)
     });
-    this.dayTypeGroupService.getAll()
+    this.dayTypeGroupService.getAllByAuth()
       .subscribe(dayTypeGroups => this.dayTypeGroups = dayTypeGroups);
   }
 

@@ -1,0 +1,74 @@
+<context-menu (close)="clearSelection()">
+
+  <context-menu #customDaySubMenu>
+    <ng-template contextMenuItem
+                 passive="true">
+      <div>
+        <input class="inputs"
+               [(ngModel)]="startTime"
+               required/>
+        <input class="inputs"
+               [(ngModel)]="endTime"
+               required/>
+        <input class="inputs"
+               [(ngModel)]="breakStartTime"
+               required/>
+        <input class="inputs"
+               [(ngModel)]="breakEndTime"
+               required/>
+      </div>
+    </ng-template>
+    <ng-template *ngFor="let dayType of dayTypes"
+                 contextMenuItem
+                 [enabled]="customHours >= 0 && customHours <= 24"
+                 (execute)="generateScheduleByCustomDay(dayType, $event.item)">
+      <app-context-menu-daytype-item [dayType]="dayType"
+                                     (mouseover)="onSelect(dayType)"
+                                     [dayTypeGroups]="dayTypeGroups">
+      </app-context-menu-daytype-item>
+    </ng-template>
+  </context-menu>
+  <ng-template contextMenuItem [subMenu]="customDaySubMenu">
+    Custom day
+  </ng-template>
+
+  <context-menu #singleDaySubMenu>
+    <ng-template *ngFor="let dayType of dayTypes"
+                 contextMenuItem
+                 (execute)="generateScheduleBySingleDay(dayType, $event.item)">
+      <app-context-menu-daytype-item [dayType]="dayType"
+                                     [dayTypeGroups]="dayTypeGroups">
+      </app-context-menu-daytype-item>
+    </ng-template>
+  </context-menu>
+  <ng-template contextMenuItem [subMenu]="singleDaySubMenu">
+    Single day
+  </ng-template>
+
+  <ng-template contextMenuItem
+               [divider]="true"></ng-template>
+
+  <ng-container *ngFor="let pattern of patterns">
+    <context-menu #patternsSubMenu>
+      <ng-template contextMenuItem
+                   passive="true">
+        <mat-form-field appearance="outline">
+          <mat-label>Offset</mat-label>
+          <input matInput
+                 type="number"
+                 step="1"
+                 [(ngModel)]="offset"
+                 required/>
+        </mat-form-field>
+      </ng-template>
+      <ng-template contextMenuItem
+                   [enabled]="offset >= 0"
+                   (execute)="generateSchedule(pattern, $event.item)">
+        Create schedule
+      </ng-template>
+    </context-menu>
+    <ng-template contextMenuItem [subMenu]="patternsSubMenu">
+      {{pattern.name}}
+    </ng-template>
+  </ng-container>
+</context-menu>

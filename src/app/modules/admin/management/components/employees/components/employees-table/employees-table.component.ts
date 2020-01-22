@@ -7,6 +7,7 @@ import { PositionService } from "../../../../../../../services/position.service"
 import { EmployeeDialogComponent } from "../employee-dialog/employee-dialog.component";
 import { NotificationsService } from "angular2-notifications";
 import { TableBaseComponent } from "../../../../../../../shared/abstract-components/table-base/table-base.component";
+import { binarySearch } from "../../../../../../../shared/utils/utils";
 
 @Component({
   selector: 'app-mat-employees-table',
@@ -33,7 +34,7 @@ export class EmployeesTableComponent extends TableBaseComponent<Employee> {
         || data.patronymic.toLowerCase().includes(filter)
         || this.getPositionName(data.positionId).toLowerCase().includes(filter);
     });
-    this.positionService.getAll()
+    this.positionService.getAllByAuth()
       .subscribe(positions => this.positions = positions);
   }
 
@@ -47,7 +48,7 @@ export class EmployeesTableComponent extends TableBaseComponent<Employee> {
   }
 
   getPositionName(positionId: number): string {
-    let position = this.positions.find(value => value.id === positionId);
+    let position = binarySearch<Position>(this.positions, positionId);
     if (position) {
       return position.name;
     } else {

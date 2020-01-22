@@ -4,7 +4,7 @@
   padding: 0;
   overflow-y: scroll;
   width: 300px;
-  max-height: 600px;
+  max-height: 400px;
   box-shadow: 0 5px 10px rgba(154,160,185,.35), 0 15px 40px rgba(166,173,201,.5);
 }
 .ngx-contextmenu li {

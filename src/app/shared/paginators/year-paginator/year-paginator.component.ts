@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { PaginatorService } from "../paginator.service";
 import * as moment from "moment";
 import { Moment } from "moment";
+import { DatePaginationService } from "../../../lib/ngx-schedule-table/service/date-pagination.service";
 
 @Component({
   selector: 'app-year-paginator',
@@ -14,7 +14,7 @@ export class YearPaginatorComponent implements OnInit {
   firstDateOfYear:  Moment;
   lastDateOfYear:   Moment;
 
-  constructor(private paginatorService: PaginatorService) { }
+  constructor(private datePaginationService: DatePaginationService) { }
 
   ngOnInit() {
     this.initCurrentYear();
@@ -45,6 +45,6 @@ export class YearPaginatorComponent implements OnInit {
     const from = this.firstDateOfYear.format("YYYY-MM-DD");
     const to   = this.lastDateOfYear.format("YYYY-MM-DD");
 
-    this.paginatorService.changeDate({from: from, to: to});
+    this.datePaginationService.changeDate({from: from, to: to});
   }
 }

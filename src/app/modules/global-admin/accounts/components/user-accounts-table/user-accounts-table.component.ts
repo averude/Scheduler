@@ -39,9 +39,9 @@ export class UserAccountsTableComponent extends TableBaseComponent<UserAccount> 
               private authoritiesService: AuthorityService) {
     super(dialog, userAccountService, notificationsService);
 
-    this.departmentService.getAll()
+    this.departmentService.getAllByAuth()
       .subscribe(departments => this.departments = departments);
-    this.shiftService.getAll()
+    this.shiftService.getAllByAuth()
       .subscribe(shifts => this.shifts = shifts);
     this.employeeService.getAll()
       .subscribe(employees => this.employees = employees);

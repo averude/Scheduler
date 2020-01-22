@@ -31,6 +31,7 @@ export class AuthService {
             user.roles = token_claims.authorities;
             user.employeeId = token_claims.employee_id;
             user.departmentId = token_claims.department_id;
+            user.shiftId = token_claims.shift_id;
             user.access_token = token.access_token;
             sessionStorage.setItem('currentUser', JSON.stringify(user));
             return user;

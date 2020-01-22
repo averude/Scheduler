@@ -1,35 +1,41 @@
 import { PatternUnit } from "../../model/pattern-unit";
 import { WorkDay } from "../../model/workday";
-import { TableCellComponent } from "../../modules/admin/schedule/components/calendar/components/table-cell/table-cell.component";
+import { CellData } from "../../lib/ngx-schedule-table/model/data/cell-data";
 
-export function createOrUpdateCell(overrideExistingValues: boolean,
+export function createOrUpdateCell(usePreviousValue: boolean,
                                    employeeId: number,
                                    unit: PatternUnit,
-                                   cell: TableCellComponent) {
-  if (cell.workDay) {
-    updateWorkDayInCell(overrideExistingValues, cell, unit);
+                                   cell: CellData) {
+  if (cell.value) {
+    updateWorkDayInCell(usePreviousValue, cell, unit);
   } else {
     createWorkDayInCell(employeeId, cell, unit);
   }
 }
 
 function createWorkDayInCell(employeeId: number,
-                             cell: TableCellComponent,
+                             cell: CellData,
                              unit: PatternUnit) {
-  cell.workDay            = new WorkDay();
-  cell.workDay.employeeId = employeeId;
-  cell.workDay.holiday    = cell.day.holiday;
-  cell.workDay.hours      = unit.value;
-  cell.workDay.date       = cell.day.isoString;
-  cell.workDay.dayTypeId  = unit.dayTypeId;
+  cell.value                = new WorkDay();
+  cell.value.employeeId     = employeeId;
+  cell.value.holiday        = cell.date.holiday;
+  cell.value.startTime      = unit.startTime;
+  cell.value.endTime        = unit.endTime;
+  cell.value.breakStartTime = unit.breakStartTime;
+  cell.value.breakEndTime   = unit.breakEndTime;
+  cell.value.date           = cell.date.isoString;
+  cell.value.dayTypeId      = unit.dayTypeId;
 }
 
-function updateWorkDayInCell(overrideExistingValues: boolean,
-                             cell: TableCellComponent,
+function updateWorkDayInCell(usePreviousValue: boolean,
+                             cell: CellData,
                              unit: PatternUnit) {
-  if (overrideExistingValues) {
-    cell.workDay.hours   = unit.value;
+  if (!usePreviousValue) {
+    cell.value.startTime      = unit.startTime;
+    cell.value.endTime        = unit.endTime;
+    cell.value.breakStartTime = unit.breakStartTime;
+    cell.value.breakEndTime   = unit.breakEndTime;
   }
-  cell.workDay.dayTypeId = unit.dayTypeId;
-  cell.workDay.holiday   = cell.day.holiday;
+  cell.value.dayTypeId = unit.dayTypeId;
+  cell.value.holiday   = cell.date.holiday;
 }

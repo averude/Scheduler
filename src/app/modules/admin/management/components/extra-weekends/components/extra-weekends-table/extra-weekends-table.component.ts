@@ -5,7 +5,7 @@ import { NotificationsService } from "angular2-notifications";
 import { ExtraWeekendService } from "../../../../../../../services/extra-weekend.service";
 import { ExtraWeekendsDialogComponent } from "../extra-weekends-dialog/extra-weekends-dialog.component";
 import { PageableTableBaseComponent } from "../../../../../../../shared/abstract-components/table-base/pageable-table-base.component";
-import { PaginatorService } from "../../../../../../../shared/paginators/paginator.service";
+import { DatePaginationService } from "../../../../../../../lib/ngx-schedule-table/service/date-pagination.service";
 
 @Component({
   selector: 'app-extra-weekends-table',
@@ -14,17 +14,17 @@ import { PaginatorService } from "../../../../../../../shared/paginators/paginat
     '../../../../../../../shared/common/table.common.css',
     './extra-weekends-table.component.css'
   ],
-  providers: [PaginatorService]
+  providers: [DatePaginationService]
 })
 export class ExtraWeekendsTableComponent extends PageableTableBaseComponent<ExtraWeekend> {
 
   displayedColumns = ['select', 'date', 'control'];
 
-  constructor(paginatorService: PaginatorService,
+  constructor(datePaginationService: DatePaginationService,
               dialog: MatDialog,
               notificationsService: NotificationsService,
               extraWeekendService: ExtraWeekendService) {
-    super(paginatorService, dialog, extraWeekendService, notificationsService);
+    super(datePaginationService, dialog, extraWeekendService, notificationsService);
   }
 
   openDialog(extraWeekend: ExtraWeekend) {

@@ -10,11 +10,12 @@ import {
   MatInputModule,
   MatSelectModule,
   MatSortModule,
-  MatTableModule
+  MatTableModule,
+  MatTabsModule
 } from "@angular/material";
-import { UnitControlService } from "./services/unit-control.service";
 import { PatternsTableComponent } from './components/patterns-table/patterns-table.component';
 import { PatternDialogComponent } from './components/pattern-dialog/pattern-dialog.component';
+import { DragDropModule } from "@angular/cdk/drag-drop";
 
 @NgModule({
   imports: [
@@ -25,6 +26,8 @@ import { PatternDialogComponent } from './components/pattern-dialog/pattern-dial
     MatFormFieldModule,
     MatInputModule,
     MatSortModule,
+    MatTabsModule,
+    DragDropModule,
     MatDialogModule,
     MatSelectModule,
     MatCheckboxModule,
@@ -35,9 +38,7 @@ import { PatternDialogComponent } from './components/pattern-dialog/pattern-dial
     PatternsTableComponent,
     PatternDialogComponent
   ],
-  providers: [
-    UnitControlService
-  ],
+  providers: [],
   entryComponents: [PatternDialogComponent]
 })
 export class PatternsModule {}

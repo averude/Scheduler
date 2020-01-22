@@ -10,6 +10,8 @@ import { DayTypeService } from "../../../../../../../services/day-type.service";
 import { DayType } from "../../../../../../../model/day-type";
 import { PatternDialogComponent, ShiftPatternWrapper } from "../pattern-dialog/pattern-dialog.component";
 import { PatternUnit } from "../../../../../../../model/pattern-unit";
+import { DayTypeGroup } from "../../../../../../../model/day-type-group";
+import { DayTypeGroupService } from "../../../../../../../services/day-type-group.service";
 
 @Component({
   selector: 'app-patterns-table',
@@ -21,14 +23,16 @@ import { PatternUnit } from "../../../../../../../model/pattern-unit";
 })
 export class PatternsTableComponent extends TableBaseComponent<ShiftPattern> {
 
-  displayedColumns = ['select', 'name', 'override', 'pattern', 'control'];
+  displayedColumns = ['select', 'name', 'onExtraWeekend', 'onHoliday', 'onExtraWorkDay', 'pattern', 'control'];
 
   patternUnits: any = [];
   dayTypes: DayType[];
+  dayTypeGroups: DayTypeGroup[];
 
   constructor(private dialog: MatDialog,
               private notificationsService: NotificationsService,
               private dayTypeService: DayTypeService,
+              private dayTypeGroupService: DayTypeGroupService,
               private shiftPatternService: ShiftPatternService,
               private patternUnitService: PatternUnitService) {
     super(dialog, shiftPatternService, notificationsService);
@@ -36,12 +40,14 @@ export class PatternsTableComponent extends TableBaseComponent<ShiftPattern> {
 
   ngOnInit() {
     super.ngOnInit();
-    this.dayTypeService.getAll()
+    this.dayTypeService.getAllByAuth()
       .subscribe(dayTypes => this.dayTypes = dayTypes);
+    this.dayTypeGroupService.getAllByAuth()
+      .subscribe(dayTypeGroups => this.dayTypeGroups = dayTypeGroups);
   }
 
   initDataSourceValues() {
-    this.shiftPatternService.getAll()
+    this.shiftPatternService.getAllByAuth()
       .pipe(map(patterns => {
         patterns.forEach(pattern =>
           this.patternUnitService.getByPatternId(pattern.id)
@@ -57,7 +63,8 @@ export class PatternsTableComponent extends TableBaseComponent<ShiftPattern> {
     const data = {
       pattern: shiftPattern,
       units: shiftPattern ? this.patternUnits[shiftPattern.id] : undefined,
-      dayTypes: this.dayTypes
+      dayTypes: this.dayTypes.filter(dayType => !dayType.usePreviousValue),
+      dayTypeGroups: this.dayTypeGroups
     };
 
     this.openAddOrEditDialog(shiftPattern, data, PatternDialogComponent);

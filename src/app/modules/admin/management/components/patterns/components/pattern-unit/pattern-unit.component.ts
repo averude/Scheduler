@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { PatternUnit } from '../../../../../../../model/pattern-unit';
 import { DayType } from '../../../../../../../model/day-type';
+import { DayTypeGroup } from "../../../../../../../model/day-type-group";
 
 @Component({
   selector: 'app-pattern-unit',
@@ -9,26 +10,23 @@ import { DayType } from '../../../../../../../model/day-type';
 })
 export class PatternUnitComponent implements OnInit {
 
-  @Input() overrideExistingValues: boolean;
-
   @Input() unit: PatternUnit;
   @Input() dayTypes: DayType[];
+  @Input() dayTypeGroups: DayTypeGroup[];
 
   @Output() onDelete:   EventEmitter<PatternUnit> = new EventEmitter();
-  @Output() onMoveUp:   EventEmitter<PatternUnit> = new EventEmitter();
-  @Output() onMoveDown: EventEmitter<PatternUnit> = new EventEmitter();
+
+  color: string = 'transparent';
+
+  usePreviousValue: boolean = false;
 
   constructor() { }
 
   ngOnInit() {
-  }
-
-  moveUp() {
-    this.onMoveUp.emit(this.unit);
-  }
-
-  moveDown() {
-    this.onMoveDown.emit(this.unit);
+    let dayType = this.dayTypes.find(dayType => dayType.id === this.unit.dayTypeId);
+    if (dayType) {
+      this.setColorOfUnit(dayType.dayTypeGroupId);
+    }
   }
 
   delete() {
@@ -37,6 +35,25 @@ export class PatternUnitComponent implements OnInit {
 
   onChange(event) {
     const dayTypeId = event.value;
-    this.unit.value = this.dayTypes.find(dayType => dayType.id === dayTypeId).defaultValue;
+    let type = this.dayTypes.find(dayType => dayType.id === dayTypeId);
+    if (type) {
+      this.fillInTheUnit(type);
+    }
+  }
+
+  private fillInTheUnit(type: DayType) {
+    this.unit.startTime     = type.startTime;
+    this.unit.endTime       = type.endTime;
+    this.unit.breakStartTime    = type.breakStartTime;
+    this.unit.breakEndTime      = type.breakEndTime;
+    this.usePreviousValue   = type.usePreviousValue;
+    this.setColorOfUnit(type.dayTypeGroupId);
+  }
+
+  private setColorOfUnit(dayTypeGroupId: number) {
+    let dayTypeGroup = this.dayTypeGroups.find(group => group.id === dayTypeGroupId);
+    if (dayTypeGroup) {
+      this.color = dayTypeGroup.color;
+    }
   }
 }

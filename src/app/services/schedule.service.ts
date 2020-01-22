@@ -5,9 +5,6 @@ import { HttpClient } from '@angular/common/http';
 import { RestConfig } from '../rest.config';
 import { ScheduleDto } from "../model/dto/schedule-dto";
 import { ScheduleGenerationDto } from "../model/dto/schedule-generation-dto";
-import { tap } from "rxjs/operators";
-import * as moment from "moment";
-
 
 @Injectable({
   providedIn: 'root'
@@ -22,12 +19,6 @@ export class ScheduleService {
     return this.http.get<ScheduleDto[]>(
       `${this.config.baseUrl}/schedule/dates?from=${from}&to=${to}`
     );
-  }
-
-  // Temporary! Move to the backend
-  private sort(): any {
-    return tap((value: ScheduleDto[]) => value.forEach(dto => dto.workDays
-        .sort((a, b) => moment(a.date).diff(moment(b.date), 'days'))));
   }
 
   create(schedule: WorkDay[]): Observable<any> {

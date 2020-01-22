@@ -1,0 +1,33 @@
+import { roundToTwo } from "./utils";
+
+export function convertTimeStringToMin(time: string): number {
+  if (time) {
+    let timeParts = time.split(':');
+    let hh = Number.parseInt(timeParts[0]);
+    let mm = Number.parseInt(timeParts[1]);
+
+    if (hh >= 0 && hh <= 24 && mm >= 0 && mm <= 59) {
+      return hh * 60 + mm;
+    } else {
+      return 0;
+    }
+  } else {
+    return 0;
+  }
+}
+
+export function calculateWorkHours(startTime: string,
+                                   endTime: string,
+                                   breakStartTime: string,
+                                   breakEndTime: string) {
+  if (startTime && endTime) {
+    let start = convertTimeStringToMin(startTime);
+    let end   = convertTimeStringToMin(endTime);
+    let brk_s = convertTimeStringToMin(breakStartTime);
+    let brk_e = convertTimeStringToMin(breakEndTime);
+
+    return roundToTwo((end - start - (brk_e - brk_s)) / 60);
+  } else {
+    return 0;
+  }
+}

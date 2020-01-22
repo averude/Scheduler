@@ -12,7 +12,7 @@ export class PatternUnitsStringPipe implements PipeTransform{
       return result;
     }
     for (let i = 0; i < units.length; i++) {
-      result += units[i].value;
+      result += units[i].startTime + '-' + units[i].endTime;
       if (i != units.length - 1) {
         result += ' ➢ ';
       }

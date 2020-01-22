@@ -4,26 +4,37 @@ import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { Holiday } from "../model/holiday";
 import { parseDateOfEntities } from "../shared/utils/utils";
-import { PageableByDateCrudService } from "./interface/pageable-by-date-crud.service";
+import { AuthService } from "./auth.service";
+import { CUDService } from "./interface/cud-service";
+import { APageableByDateService } from "./abstract-service/a-pageable-by-date-service";
 
 @Injectable({
   providedIn: "root"
 })
-export class HolidayService implements PageableByDateCrudService<Holiday> {
-  constructor(private http: HttpClient,
-              private config: RestConfig) {}
+export class HolidayService
+  extends APageableByDateService<Holiday> implements CUDService<Holiday> {
 
-  getAll(): Observable<Holiday[]> {
-    return this.http.get<Holiday[]>(
-      `${this.config.baseUrl}/admin/holidays`
-    ).pipe(parseDateOfEntities);
+  constructor(authService: AuthService,
+              private http: HttpClient,
+              private config: RestConfig) {
+    super(authService);
   }
 
-  getAllByDate(from: string, to: string): Observable<Holiday[]> {
+  getAllByDepartmentIdAndDateBetween(departmentId: number,
+                                     from: string,
+                                     to: string): Observable<Holiday[]> {
     return this.http.get<Holiday[]>(
-      `${this.config.baseUrl}/admin/holidays/search?from=${from}&to=${to}`
+      `${this.config.baseUrl}/admin/holidays/departments/${departmentId}/dates?from=${from}&to=${to}`
     ).pipe(parseDateOfEntities);
-  }
+  };
+
+  getAllByShiftIdAndDateBetween(shiftId: number,
+                                from: string,
+                                to: string): Observable<Holiday[]> {
+    return this.http.get<Holiday[]>(
+      `${this.config.baseUrl}/admin/holidays/shifts/${shiftId}/dates?from=${from}&to=${to}`
+    ).pipe(parseDateOfEntities);
+  };
 
   create(holiday: Holiday): Observable<any> {
     return this.http.post<number>(

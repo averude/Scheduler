@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
+  MatButtonModule,
   MatCheckboxModule,
   MatDatepickerModule,
   MatDialogModule,
@@ -25,6 +26,7 @@ import { ScheduleGeneratedService } from "./components/schedule-generated.servic
     FormsModule,
     ReactiveFormsModule,
     MatSelectModule,
+    MatButtonModule,
     MatDatepickerModule,
     MatInputModule,
     MatCheckboxModule,

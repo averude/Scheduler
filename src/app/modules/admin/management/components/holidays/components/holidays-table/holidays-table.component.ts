@@ -5,7 +5,7 @@ import { HolidayService } from "../../../../../../../services/holiday.service";
 import { Holiday } from "../../../../../../../model/holiday";
 import { HolidaysDialogComponent } from "../holidays-dialog/holidays-dialog.component";
 import { PageableTableBaseComponent } from "../../../../../../../shared/abstract-components/table-base/pageable-table-base.component";
-import { PaginatorService } from "../../../../../../../shared/paginators/paginator.service";
+import { DatePaginationService } from "../../../../../../../lib/ngx-schedule-table/service/date-pagination.service";
 
 @Component({
   selector: 'app-holidays-table',
@@ -14,17 +14,17 @@ import { PaginatorService } from "../../../../../../../shared/paginators/paginat
     '../../../../../../../shared/common/table.common.css',
     './holidays-table.component.css'
   ],
-  providers: [PaginatorService]
+  providers: [DatePaginationService]
 })
 export class HolidaysTableComponent extends PageableTableBaseComponent<Holiday> {
 
   displayedColumns = ['select', 'date', 'name', 'control'];
 
-  constructor(paginatorService: PaginatorService,
+  constructor(datePaginationService: DatePaginationService,
               dialog: MatDialog,
               notificationsService: NotificationsService,
               holidayService: HolidayService) {
-    super(paginatorService, dialog, holidayService, notificationsService);
+    super(datePaginationService, dialog, holidayService, notificationsService);
   }
 
   openDialog(holiday: Holiday) {

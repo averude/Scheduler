@@ -14,6 +14,7 @@ import {
   MatTableModule
 } from "@angular/material";
 import { RemoveDialogComponent } from "../../../shared/abstract-components/remove-dialog/remove-dialog.component";
+import { RemoveDialogModule } from "../../../shared/abstract-components/remove-dialog/remove-dialog.module";
 
 @NgModule({
   imports: [
@@ -27,12 +28,12 @@ import { RemoveDialogComponent } from "../../../shared/abstract-components/remov
     MatDialogModule,
     MatSelectModule,
     MatCheckboxModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    RemoveDialogModule,
   ],
   declarations: [
     UserAccountsTableComponent,
-    UserAccountsDialogComponent,
-    RemoveDialogComponent
+    UserAccountsDialogComponent
   ],
   entryComponents: [UserAccountsDialogComponent, RemoveDialogComponent]
 })

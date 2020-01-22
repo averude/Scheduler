@@ -6,10 +6,9 @@ import { DayTypesTableComponent } from "./components/daytypes/components/daytype
 import { PatternsTableComponent } from "./components/patterns/components/patterns-table/patterns-table.component";
 import { ShiftsTableComponent } from "./components/shifts/components/shifts-table/shifts-table.component";
 import { HolidaysTableComponent } from "./components/holidays/components/holidays-table/holidays-table.component";
-import { WorkingTimeTableComponent } from "./components/working-time/components/working-time-table/working-time-table.component";
 import { ExtraWeekendsTableComponent } from "./components/extra-weekends/components/extra-weekends-table/extra-weekends-table.component";
 import { ManagementComponent } from "./management/management.component";
-import { ShiftCompositionTableComponent } from "./components/shift-composition/components/shift-composition-table/shift-composition-table.component";
+import { ExtraWorkdaysTableComponent } from "./components/extra-workdays/components/extra-workdays-table/extra-workdays-table.component";
 
 const routes: Routes = [
   {
@@ -37,20 +36,16 @@ const routes: Routes = [
         component: ShiftsTableComponent
       },
       {
-        path: 'shiftcomposition',
-        component: ShiftCompositionTableComponent
-      },
-      {
         path: 'holidays',
         component: HolidaysTableComponent
       },
       {
-        path: 'workingtime',
-        component: WorkingTimeTableComponent
-      },
-      {
         path: 'extraweekends',
         component: ExtraWeekendsTableComponent
+      },
+      {
+        path: 'extraworkdays',
+        component: ExtraWorkdaysTableComponent
       }
     ]
   }

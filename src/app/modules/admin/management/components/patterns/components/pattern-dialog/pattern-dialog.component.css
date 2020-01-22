@@ -1,26 +1,82 @@
-.add-button {
-  background-color: lightblue;
-  width: 494.3px;
-  height: 36px;
-  border: 1px solid transparent;
-  margin: 10px 0 10px 0;
-  /*padding: 10px 20px 10px 20px;*/
+.patterns-general-panel {
+  margin-top: 20px;
 }
 
-.input-pattern-name {
-  width: 494.3px;
+.add-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: lightgrey;
+  height: 75.06px;
+  border: 2px dashed grey;
+  font-size: 20px;
+  font-weight: bolder;
 }
 
 .add-button:hover {
-  background-color: deepskyblue;
+  background-color: darkgrey;
   color: white;
 }
 
 .pattern-units-panel {
-  overflow: auto;
+  max-height: 600px;
+  /*overflow: scroll;*/
+  width: 480px;
+  max-width: 100%;
+  border: solid 1px #ccc;
+  /*min-height: 60px;*/
+  display: block;
+  background: white;
+  /*border-radius: 4px;*/
+  overflow: scroll;
 }
 
 .dialog-checkbox {
   display: block;
   padding: 5px 0;
+}
+
+.mat-form-field {
+  display: block;
+  width: 300px;
+}
+
+.pattern-unit {
+  border-bottom: solid 1px #ccc;
+  color: rgba(0, 0, 0, 0.87);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  cursor: move;
+  background: whitesmoke;
+  font-size: 14px;
+}
+
+.cdk-drag-preview {
+  box-sizing: border-box;
+  border-radius: 4px;
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+  0 8px 10px 1px rgba(0, 0, 0, 0.14),
+  0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.pattern-unit:last-child {
+  border: none;
+}
+
+.pattern-units-panel.cdk-drop-list-dragging .example-box:not(.cdk-drag-placeholder) {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.example-custom-placeholder {
+  background: #ccc;
+  border: dotted 3px #999;
+  height: 100px;
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
