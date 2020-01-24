@@ -49,5 +49,6 @@
           [matDialogClose]>Close</button>
   <button class="mat-raised-button mat-primary"
           mat-button
+          [disabled]="customDayTypeForm.invalid"
           (click)="create()">Create</button>
 </mat-dialog-actions>

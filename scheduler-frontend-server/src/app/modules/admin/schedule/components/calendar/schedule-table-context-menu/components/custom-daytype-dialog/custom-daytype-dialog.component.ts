@@ -43,6 +43,10 @@ export class CustomDaytypeDialogComponent implements OnInit {
   }
 
   create() {
+    if (this.customDayTypeForm.invalid) {
+      return;
+    }
+
     this.dialogRef.close(<PatternUnit> this.customDayTypeForm.value);
   }
 }
