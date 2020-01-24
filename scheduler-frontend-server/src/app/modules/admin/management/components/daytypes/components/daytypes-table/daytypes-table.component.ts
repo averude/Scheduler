@@ -17,7 +17,7 @@ export class DayTypesTableComponent extends TableBaseComponent<DayType> {
   dayTypeGroups: DayTypeGroup[] = [];
 
   displayedColumns = ['select', 'name', 'label', 'group',
-    'start_time', 'end_time', 'break_start', 'break_end','use_previous_value', 'control'];
+    'work_time', 'break_time', 'use_previous_value', 'control'];
 
   constructor(dialog: MatDialog,
               dayTypeService: DayTypeService,
@@ -46,5 +46,13 @@ export class DayTypesTableComponent extends TableBaseComponent<DayType> {
 
   getGroupById(id: number): DayTypeGroup {
     return this.dayTypeGroups.find(value => value.id === id);
+  }
+
+  getWorkTimeString(dayType: DayType): string {
+    return dayType.startTime && dayType.endTime ? dayType.startTime + ' - ' + dayType.endTime : '-';
+  }
+
+  getBreakTimeString(dayType: DayType): string {
+    return dayType.breakStartTime && dayType.breakEndTime ? dayType.breakStartTime + ' - ' + dayType.breakEndTime : '-';
   }
 }
