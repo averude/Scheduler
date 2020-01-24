@@ -42,11 +42,11 @@ export class PatternUnitComponent implements OnInit {
   }
 
   private fillInTheUnit(type: DayType) {
-    this.unit.startTime     = type.startTime;
-    this.unit.endTime       = type.endTime;
-    this.unit.breakStartTime    = type.breakStartTime;
-    this.unit.breakEndTime      = type.breakEndTime;
-    this.usePreviousValue   = type.usePreviousValue;
+    this.unit.startTime       = type.startTime;
+    this.unit.endTime         = type.endTime;
+    this.unit.breakStartTime  = type.breakStartTime;
+    this.unit.breakEndTime    = type.breakEndTime;
+    this.usePreviousValue     = type.usePreviousValue;
     this.setColorOfUnit(type.dayTypeGroupId);
   }
 

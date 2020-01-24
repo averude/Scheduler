@@ -1,0 +1,13 @@
+.daytype-select {
+  width: 250px;
+}
+
+.time-inputs-container {
+  display: flex;
+  justify-content: space-between;
+  width: 250px;
+}
+
+.time-input {
+  width: 120px;
+}

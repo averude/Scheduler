@@ -1,41 +1,14 @@
 <context-menu (close)="clearSelection()">
 
-  <context-menu #customDaySubMenu>
-    <ng-template contextMenuItem
-                 passive="true">
-      <div>
-        <input class="inputs"
-               [(ngModel)]="startTime"
-               required/>
-        <input class="inputs"
-               [(ngModel)]="endTime"
-               required/>
-        <input class="inputs"
-               [(ngModel)]="breakStartTime"
-               required/>
-        <input class="inputs"
-               [(ngModel)]="breakEndTime"
-               required/>
-      </div>
-    </ng-template>
-    <ng-template *ngFor="let dayType of dayTypes"
-                 contextMenuItem
-                 [enabled]="customHours >= 0 && customHours <= 24"
-                 (execute)="generateScheduleByCustomDay(dayType, $event.item)">
-      <app-context-menu-daytype-item [dayType]="dayType"
-                                     (mouseover)="onSelect(dayType)"
-                                     [dayTypeGroups]="dayTypeGroups">
-      </app-context-menu-daytype-item>
-    </ng-template>
-  </context-menu>
-  <ng-template contextMenuItem [subMenu]="customDaySubMenu">
+  <ng-template contextMenuItem
+               (execute)="openCustomDayDialog($event.item)">
     Custom day
   </ng-template>
 
   <context-menu #singleDaySubMenu>
     <ng-template *ngFor="let dayType of dayTypes"
                  contextMenuItem
-                 (execute)="generateScheduleBySingleDay(dayType, $event.item)">
+                 (execute)="scheduleGenerationService.generateScheduleBySingleDay(dayType, $event.item)">
       <app-context-menu-daytype-item [dayType]="dayType"
                                      [dayTypeGroups]="dayTypeGroups">
       </app-context-menu-daytype-item>
@@ -63,7 +36,7 @@
       </ng-template>
       <ng-template contextMenuItem
                    [enabled]="offset >= 0"
-                   (execute)="generateSchedule(pattern, $event.item)">
+                   (execute)="scheduleGenerationService.generateSchedule(pattern, $event.item, offset)">
         Create schedule
       </ng-template>
     </context-menu>
@@ -71,4 +44,5 @@
       {{pattern.name}}
     </ng-template>
   </ng-container>
+
 </context-menu>

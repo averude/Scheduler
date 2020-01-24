@@ -4,11 +4,11 @@ import { Moment } from "moment";
 import { CalendarDay } from "../../../lib/ngx-schedule-table/model/calendar-day";
 import { Holiday } from "../../../model/holiday";
 import { ExtraWeekend } from "../../../model/extra-weekend";
-import { HolidayService } from "../../../services/holiday.service";
-import { ExtraWeekendService } from "../../../services/extra-weekend.service";
+import { HolidayService } from "../../../http-services/holiday.service";
+import { ExtraWeekendService } from "../../../http-services/extra-weekend.service";
 import { forkJoin } from "rxjs";
 import { MatDatepicker } from "@angular/material";
-import { ExtraWorkdayService } from "../../../services/extra-workday.service";
+import { ExtraWorkdayService } from "../../../http-services/extra-workday.service";
 import { ExtraWorkDay } from "../../../model/extra-workday";
 import { DatePaginationService } from "../../../lib/ngx-schedule-table/service/date-pagination.service";
 

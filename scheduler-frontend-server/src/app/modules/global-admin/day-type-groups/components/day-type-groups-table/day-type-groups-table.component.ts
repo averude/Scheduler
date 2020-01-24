@@ -3,7 +3,7 @@ import { TableBaseComponent } from "../../../../../shared/abstract-components/ta
 import { DayTypeGroup } from "../../../../../model/day-type-group";
 import { MatDialog } from "@angular/material";
 import { NotificationsService } from "angular2-notifications";
-import { DayTypeGroupService } from "../../../../../services/day-type-group.service";
+import { DayTypeGroupService } from "../../../../../http-services/day-type-group.service";
 import { DayTypeGroupsDialogComponent } from "../day-type-groups-dialog/day-type-groups-dialog.component";
 
 @Component({

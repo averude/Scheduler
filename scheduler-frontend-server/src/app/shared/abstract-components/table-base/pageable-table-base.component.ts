@@ -4,8 +4,8 @@ import { MatDialog } from "@angular/material";
 import { NotificationsService } from "angular2-notifications";
 import { switchMap } from "rxjs/operators";
 import { Subscription } from "rxjs";
-import { IByAuthAndDateService } from "../../../services/interface/i-by-auth-and-date.service";
-import { CUDService } from "../../../services/interface/cud-service";
+import { IByAuthAndDateService } from "../../../http-services/interface/i-by-auth-and-date.service";
+import { CUDService } from "../../../http-services/interface/cud-service";
 import { DatePaginationService } from "../../../lib/ngx-schedule-table/service/date-pagination.service";
 
 export abstract class PageableTableBaseComponent<T extends IdEntity> extends TableBaseComponent<T> {

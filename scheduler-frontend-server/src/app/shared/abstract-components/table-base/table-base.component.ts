@@ -5,8 +5,8 @@ import { RemoveDialogComponent } from "../remove-dialog/remove-dialog.component"
 import { NotificationsService } from "angular2-notifications";
 import { IdEntity } from "../../../model/interface/id-entity";
 import { ComponentType } from "@angular/cdk/portal";
-import { CUDService } from "../../../services/interface/cud-service";
-import { IByAuthService } from "../../../services/interface/i-by-auth.service";
+import { CUDService } from "../../../http-services/interface/cud-service";
+import { IByAuthService } from "../../../http-services/interface/i-by-auth.service";
 
 export abstract class TableBaseComponent<T extends IdEntity> implements OnInit, OnDestroy {
 

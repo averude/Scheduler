@@ -5,6 +5,7 @@
 
   <mat-form-field class="start-time">
     <input matInput
+           maxlength="5"
            [disabled]="usePreviousValue"
            placeholder="start time"
            [(ngModel)]="unit.startTime">
@@ -12,6 +13,7 @@
 
   <mat-form-field class="end-time">
     <input matInput
+           maxlength="5"
            [disabled]="usePreviousValue"
            placeholder="end time"
            [(ngModel)]="unit.endTime">
@@ -19,6 +21,7 @@
 
   <mat-form-field class="break-start-time">
     <input matInput
+           maxlength="5"
            [disabled]="usePreviousValue"
            placeholder="break start"
            [(ngModel)]="unit.breakStartTime">
@@ -26,6 +29,7 @@
 
   <mat-form-field class="break-end-time">
     <input matInput
+           maxlength="5"
            [disabled]="usePreviousValue"
            placeholder="break end"
            [(ngModel)]="unit.breakEndTime">

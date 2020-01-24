@@ -1,17 +1,17 @@
 import { Component } from '@angular/core';
 import { TableBaseComponent } from "../../../../../../../shared/abstract-components/table-base/table-base.component";
 import { ShiftPattern } from "../../../../../../../model/shift-pattern";
-import { ShiftPatternService } from "../../../../../../../services/shift-pattern.service";
+import { ShiftPatternService } from "../../../../../../../http-services/shift-pattern.service";
 import { MatDialog } from "@angular/material";
 import { NotificationsService } from "angular2-notifications";
 import { map } from "rxjs/operators";
-import { PatternUnitService } from "../../../../../../../services/pattern-unit.service";
-import { DayTypeService } from "../../../../../../../services/day-type.service";
+import { PatternUnitService } from "../../../../../../../http-services/pattern-unit.service";
+import { DayTypeService } from "../../../../../../../http-services/day-type.service";
 import { DayType } from "../../../../../../../model/day-type";
 import { PatternDialogComponent, ShiftPatternWrapper } from "../pattern-dialog/pattern-dialog.component";
 import { PatternUnit } from "../../../../../../../model/pattern-unit";
 import { DayTypeGroup } from "../../../../../../../model/day-type-group";
-import { DayTypeGroupService } from "../../../../../../../services/day-type-group.service";
+import { DayTypeGroupService } from "../../../../../../../http-services/day-type-group.service";
 
 @Component({
   selector: 'app-patterns-table',

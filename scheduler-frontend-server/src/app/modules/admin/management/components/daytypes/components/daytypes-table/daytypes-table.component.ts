@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { DayType } from "../../../../../../../model/day-type";
-import { DayTypeService } from "../../../../../../../services/day-type.service";
+import { DayTypeService } from "../../../../../../../http-services/day-type.service";
 import { NotificationsService } from "angular2-notifications";
 import { MatDialog } from "@angular/material";
 import { TableBaseComponent } from "../../../../../../../shared/abstract-components/table-base/table-base.component";
 import { DayTypeDialogComponent } from "../daytype-dialog/daytype-dialog.component";
-import { DayTypeGroupService } from "../../../../../../../services/day-type-group.service";
+import { DayTypeGroupService } from "../../../../../../../http-services/day-type-group.service";
 import { DayTypeGroup } from "../../../../../../../model/day-type-group";
 
 @Component({

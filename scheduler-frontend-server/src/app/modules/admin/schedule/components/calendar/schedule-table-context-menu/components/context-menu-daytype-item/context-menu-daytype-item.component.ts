@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { DayType } from "../../../../../../../model/day-type";
-import { DayTypeGroup } from "../../../../../../../model/day-type-group";
+import { DayType } from "../../../../../../../../model/day-type";
+import { DayTypeGroup } from "../../../../../../../../model/day-type-group";
 
 @Component({
   selector: 'app-context-menu-daytype-item',

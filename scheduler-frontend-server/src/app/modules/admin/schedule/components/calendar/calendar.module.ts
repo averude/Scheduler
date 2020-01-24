@@ -8,9 +8,10 @@ import { ShowHoursControlComponent } from "./show-hours-control/show-hours-contr
 import { MonthYearPaginatorComponent } from "../../../../../shared/paginators/month-year-paginator/month-year-paginator.component";
 import { MatFormFieldModule, MatInputModule } from "@angular/material";
 import { SharedModule } from "../../../../../shared/shared.module";
-import { FormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { ScheduleGenerationDialogComponent } from "../schedule-generation/components/schedule-generation-dialog/schedule-generation-dialog.component";
 import { CommonModule } from "@angular/common";
+import { ScheduleGenerationService } from "../../../../../services/generators/schedule-generation.service";
 
 @NgModule({
   imports: [
@@ -29,6 +30,7 @@ import { CommonModule } from "@angular/common";
     ScheduleExportExcelComponent,
     MonthYearPaginatorComponent,
   ],
+  providers: [ScheduleGenerationService],
   entryComponents: [ScheduleGenerationDialogComponent],
 })
 export class CalendarModule {

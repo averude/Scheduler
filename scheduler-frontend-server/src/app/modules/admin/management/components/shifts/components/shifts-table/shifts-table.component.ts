@@ -3,9 +3,9 @@ import { TableBaseComponent } from "../../../../../../../shared/abstract-compone
 import { Shift } from "../../../../../../../model/shift";
 import { MatDialog } from "@angular/material";
 import { NotificationsService } from "angular2-notifications";
-import { ShiftService } from "../../../../../../../services/shift.service";
+import { ShiftService } from "../../../../../../../http-services/shift.service";
 import { ShiftPattern } from "../../../../../../../model/shift-pattern";
-import { ShiftPatternService } from "../../../../../../../services/shift-pattern.service";
+import { ShiftPatternService } from "../../../../../../../http-services/shift-pattern.service";
 import { ShiftDialogComponent } from "../shift-dialog/shift-dialog.component";
 
 @Component({

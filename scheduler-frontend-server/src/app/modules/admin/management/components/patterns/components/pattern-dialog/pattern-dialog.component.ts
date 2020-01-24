@@ -3,7 +3,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
 import { DayType } from "../../../../../../../model/day-type";
 import { PatternUnit } from "../../../../../../../model/pattern-unit";
 import { ShiftPattern } from "../../../../../../../model/shift-pattern";
-import { AuthService } from "../../../../../../../services/auth.service";
+import { AuthService } from "../../../../../../../http-services/auth.service";
 import { CdkDragDrop } from "@angular/cdk/drag-drop";
 import { DayTypeGroup } from "../../../../../../../model/day-type-group";
 

@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { TableBaseComponent } from "../../../../../shared/abstract-components/table-base/table-base.component";
 import { Department } from "../../../../../model/department";
 import { MatDialog } from "@angular/material";
-import { DepartmentService } from "../../../../../services/department.service";
+import { DepartmentService } from "../../../../../http-services/department.service";
 import { NotificationsService } from "angular2-notifications";
 import { DepartmentDialogComponent } from "../department-dialog/department-dialog.component";
 

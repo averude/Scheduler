@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Department } from '../../../model/department';
-import { DepartmentService } from '../../../services/department.service';
-import { AuthService } from "../../../services/auth.service";
+import { DepartmentService } from '../../../http-services/department.service';
+import { AuthService } from "../../../http-services/auth.service";
 
 @Component({
   selector: 'app-admin',

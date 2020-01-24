@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
-import { PatternUnit } from '../model/pattern-unit';
-import { DayType } from "../model/day-type";
-import { createOrUpdateCell } from "../shared/utils/schedule-generation-utils";
-import { RowData } from "../lib/ngx-schedule-table/model/data/row-data";
-import { CellData } from "../lib/ngx-schedule-table/model/data/cell-data";
+import { PatternUnit } from '../../model/pattern-unit';
+import { DayType } from "../../model/day-type";
+import { createOrUpdateCell } from "./schedule-generation-utils";
+import { RowData } from "../../lib/ngx-schedule-table/model/data/row-data";
+import { CellData } from "../../lib/ngx-schedule-table/model/data/cell-data";
 
 @Injectable({
   providedIn: 'root'
 })
-export class ScheduleGenerationService {
+export class ScheduleGenerator {
 
   constructor() { }
 
@@ -16,15 +16,23 @@ export class ScheduleGenerationService {
                               cells: CellData[],
                               patternUnits: PatternUnit[],
                               offset: number,
-                              usePreviousValue: boolean,
                               onSave: (rowData: RowData, selectedCells: CellData[]) => void,
                               onError: (message: string) => void) {
-    this.generate(rowData, cells, patternUnits, offset, usePreviousValue, onSave, onError);
+    this.generate(rowData, cells, patternUnits, offset, false, onSave, onError);
+  }
+
+  generateScheduleByPatternUnit(rowData: RowData,
+                                cells: CellData[],
+                                unit: PatternUnit,
+                                onSave: (rowData: RowData, selectedCells: CellData[]) => void,
+                                onError: (message: string) => void) {
+    const customUnits: PatternUnit[] = [unit];
+
+    this.generate(rowData, cells, customUnits, 0, false, onSave, onError);
   }
 
   generateScheduleBySingleDay(rowData: RowData,
                               cells: CellData[],
-                              hours: number,
                               dayType: DayType,
                               onSave: (rowData: RowData, selectedCells: CellData[]) => void,
                               onError: (message: string) => void) {

@@ -1,0 +1,53 @@
+<mat-dialog-content [formGroup]="customDayTypeForm">
+
+  <mat-form-field class="daytype-select">
+    <mat-select placeholder="Select a day type"
+                (selectionChange)="onDayTypeSelect($event)">
+      <mat-option *ngFor="let dayType of dayTypes"
+                  [value]="dayType">
+        {{dayType.name}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <div class="time-inputs-container">
+    <mat-form-field class="time-input">
+      <input matInput
+             maxlength="5"
+             placeholder="Start time"
+             formControlName="startTime">
+    </mat-form-field>
+
+    <mat-form-field class="time-input">
+      <input matInput
+             maxlength="5"
+             placeholder="End time"
+             formControlName="endTime">
+    </mat-form-field>
+  </div>
+
+  <div class="time-inputs-container">
+    <mat-form-field class="time-input">
+      <input matInput
+             maxlength="5"
+             placeholder="Break start time"
+             formControlName="breakStartTime">
+    </mat-form-field>
+
+    <mat-form-field class="time-input">
+      <input matInput
+             maxlength="5"
+             placeholder="Break end time"
+             formControlName="breakEndTime">
+    </mat-form-field>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button class="mat-raised-button"
+          mat-button
+          [matDialogClose]>Close</button>
+  <button class="mat-raised-button mat-primary"
+          mat-button
+          (click)="create()">Create</button>
+</mat-dialog-actions>

@@ -3,10 +3,10 @@ import { PageableTableBaseComponent } from "../../../../../../../shared/abstract
 import { ShiftComposition } from "../../../../../../../model/shift-composition";
 import { MatDialog } from "@angular/material";
 import { NotificationsService } from "angular2-notifications";
-import { ShiftCompositionService } from "../../../../../../../services/shift-composition.service";
+import { ShiftCompositionService } from "../../../../../../../http-services/shift-composition.service";
 import { ShiftCompositionDialogComponent } from "../shift-composition-dialog/shift-composition-dialog.component";
-import { EmployeeService } from "../../../../../../../services/employee.service";
-import { ShiftService } from "../../../../../../../services/shift.service";
+import { EmployeeService } from "../../../../../../../http-services/employee.service";
+import { ShiftService } from "../../../../../../../http-services/shift.service";
 import { Employee } from "../../../../../../../model/employee";
 import { Shift } from "../../../../../../../model/shift";
 import { getEmployeeShortName } from "../../../../../../../shared/utils/utils";

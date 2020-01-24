@@ -1,7 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
 import { Position } from "../../../../../../../model/position";
-import { AuthService } from "../../../../../../../services/auth.service";
+import { AuthService } from "../../../../../../../http-services/auth.service";
 import { DialogBaseComponent } from "../../../../../../../shared/abstract-components/dialog-base/dialog-base.component";
 import { FormBuilder, Validators } from "@angular/forms";
 

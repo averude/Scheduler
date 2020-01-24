@@ -2,9 +2,9 @@ import { Component } from '@angular/core';
 import { MatDialog } from "@angular/material";
 import { Position } from "../../../../../../../model/position";
 import { NotificationsService } from "angular2-notifications";
-import { PositionService } from "../../../../../../../services/position.service";
+import { PositionService } from "../../../../../../../http-services/position.service";
 import { PositionDialogComponent } from "../position-dialog/position-dialog.component";
-import { StatisticsService } from "../../../../../../../services/statistics.service";
+import { StatisticsService } from "../../../../../../../http-services/statistics.service";
 import { CountDTO } from "../../../../../../../model/dto/count-dto";
 import { TableBaseComponent } from "../../../../../../../shared/abstract-components/table-base/table-base.component";
 

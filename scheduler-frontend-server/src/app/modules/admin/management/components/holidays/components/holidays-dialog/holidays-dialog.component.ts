@@ -1,7 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { DialogBaseComponent } from "../../../../../../../shared/abstract-components/dialog-base/dialog-base.component";
 import { Holiday } from "../../../../../../../model/holiday";
-import { AuthService } from "../../../../../../../services/auth.service";
+import { AuthService } from "../../../../../../../http-services/auth.service";
 import { FormBuilder, Validators } from "@angular/forms";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
 

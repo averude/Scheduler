@@ -85,6 +85,3 @@ Method  | Path                                              | Description
 --------|---------------------------------------------------|-------------------------------
 GET     | /positions/employees                              | Get a number of employees in each position of the department 
 ---------------------------------------------------------------------------------------------
-
-##  Related Projects
-* [Scheduler Frontend](https://github.com/averude/SchedulerFrontend) - frontend side of the service.

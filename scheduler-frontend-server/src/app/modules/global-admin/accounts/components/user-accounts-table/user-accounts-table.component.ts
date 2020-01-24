@@ -1,17 +1,17 @@
 import { Component } from '@angular/core';
 import { TableBaseComponent } from "../../../../../shared/abstract-components/table-base/table-base.component";
 import { UserAccount } from "../../../../../model/user-account";
-import { UserAccountService } from "../../../../../services/user-account.service";
-import { AuthorityService } from "../../../../../services/authority.service";
+import { UserAccountService } from "../../../../../http-services/user-account.service";
+import { AuthorityService } from "../../../../../http-services/authority.service";
 import { MatDialog } from "@angular/material";
 import { NotificationsService } from "angular2-notifications";
 import { Authority } from "../../../../../model/authority";
-import { DepartmentService } from "../../../../../services/department.service";
+import { DepartmentService } from "../../../../../http-services/department.service";
 import { Department } from "../../../../../model/department";
 import { Shift } from "../../../../../model/shift";
-import { ShiftService } from "../../../../../services/shift.service";
+import { ShiftService } from "../../../../../http-services/shift.service";
 import { UserAccountsDialogComponent } from "../user-accounts-dialog/user-accounts-dialog.component";
-import { EmployeeService } from "../../../../../services/employee.service";
+import { EmployeeService } from "../../../../../http-services/employee.service";
 import { Employee } from "../../../../../model/employee";
 
 @Component({
