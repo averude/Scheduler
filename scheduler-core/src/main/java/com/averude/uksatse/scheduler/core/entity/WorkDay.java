@@ -1,11 +1,5 @@
 package com.averude.uksatse.scheduler.core.entity;
 
-import com.averude.uksatse.scheduler.core.json.deserializer.StringToIntTimeDeserializer;
-import com.averude.uksatse.scheduler.core.json.serializer.IntToStringTimeSerializer;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
-
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.time.LocalDate;
@@ -21,7 +15,7 @@ import java.util.StringJoiner;
                         columnNames = {"employee_id", "date"})
         }
 )
-public class WorkDay implements HasId {
+public class WorkDay implements HasId, HasTime {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,23 +36,15 @@ public class WorkDay implements HasId {
     @Column(nullable = false)
     private Boolean holiday;
 
-    @JsonSerialize(using = IntToStringTimeSerializer.class)
-    @JsonDeserialize(using = StringToIntTimeDeserializer.class)
     @Column(name = "start_time")
     private Integer startTime;
 
-    @JsonSerialize(using = IntToStringTimeSerializer.class)
-    @JsonDeserialize(using = StringToIntTimeDeserializer.class)
     @Column(name = "break_start_time")
     private Integer breakStartTime;
 
-    @JsonSerialize(using = IntToStringTimeSerializer.class)
-    @JsonDeserialize(using = StringToIntTimeDeserializer.class)
     @Column(name = "break_end_time")
     private Integer breakEndTime;
 
-    @JsonSerialize(using = IntToStringTimeSerializer.class)
-    @JsonDeserialize(using = StringToIntTimeDeserializer.class)
     @Column(name = "end_time")
     private Integer endTime;
 

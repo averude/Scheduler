@@ -4,7 +4,7 @@ import { binarySearch } from "../../../../../../shared/utils/utils";
 import { DayType } from "../../../../../../model/day-type";
 import { DayTypeGroup } from "../../../../../../model/day-type-group";
 import { WorkDay } from "../../../../../../model/workday";
-import { calculateWorkHours } from "../../../../../../shared/utils/time-converter";
+import { calculateWorkHoursByWorkDay } from "../../../../../../shared/utils/time-converter";
 
 export class SchedulerCellLabelSetter extends CellLabelSetter {
 
@@ -74,8 +74,6 @@ export class SchedulerCellLabelSetter extends CellLabelSetter {
   }
 
   private calcHours(workDay: WorkDay): number {
-    let result = 0;
-    result = calculateWorkHours(workDay.startTime, workDay.endTime, workDay.breakStartTime, workDay.breakEndTime);
-    return result;
+    return calculateWorkHoursByWorkDay(workDay);
   }
 }

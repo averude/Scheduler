@@ -1,4 +1,5 @@
 import { roundToTwo } from "./utils";
+import { WorkDay } from "../../model/workday";
 
 export function convertTimeStringToMin(time: string): number {
   if (time) {
@@ -16,10 +17,10 @@ export function convertTimeStringToMin(time: string): number {
   }
 }
 
-export function calculateWorkHours(startTime: string,
-                                   endTime: string,
-                                   breakStartTime: string,
-                                   breakEndTime: string) {
+export function calculateWorkHoursByTimeStrings(startTime: string,
+                                                endTime: string,
+                                                breakStartTime: string,
+                                                breakEndTime: string): number {
   if (startTime && endTime) {
     let start = convertTimeStringToMin(startTime);
     let end   = convertTimeStringToMin(endTime);
@@ -27,6 +28,21 @@ export function calculateWorkHours(startTime: string,
     let brk_e = convertTimeStringToMin(breakEndTime);
 
     return roundToTwo((end - start - (brk_e - brk_s)) / 60);
+  } else {
+    return 0;
+  }
+}
+
+export function calculateWorkHoursByWorkDay(workDay: WorkDay): number {
+  return calculateWorkHoursByTime(workDay.startTime, workDay.endTime, workDay.breakStartTime, workDay.breakEndTime);
+}
+
+export function calculateWorkHoursByTime(startTime: number,
+                                         endTime: number,
+                                         breakStartTime: number,
+                                         breakEndTime: number): number {
+  if (startTime && endTime) {
+    return roundToTwo((endTime - startTime - (breakEndTime - breakStartTime)) / 60);
   } else {
     return 0;
   }

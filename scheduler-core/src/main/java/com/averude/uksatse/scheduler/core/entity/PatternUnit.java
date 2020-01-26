@@ -20,7 +20,7 @@ import java.util.StringJoiner;
                 )
         }
 )
-public class PatternUnit implements HasId {
+public class PatternUnit implements HasId, HasTime {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

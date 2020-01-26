@@ -23,7 +23,7 @@ import { SchedulerCellCollector } from "../collectors/scheduler-cell-collector";
 import { SchedulerCellLabelSetter } from "../utils/scheduler-cell-label-setter";
 import { RowRendererService } from "../../../../../../lib/ngx-schedule-table/service/row-renderer.service";
 import { roundToTwo } from "../../../../../../shared/utils/utils";
-import { calculateWorkHours } from "../../../../../../shared/utils/time-converter";
+import { calculateWorkHoursByWorkDay } from "../../../../../../shared/utils/time-converter";
 
 @Component({
   selector: 'app-scheduler-table-component',
@@ -111,8 +111,7 @@ export class SchedulerTableComponent implements OnInit, OnDestroy {
   // Rewrite
   calculateSum(rowData: any) {
     rowData.sum = rowData.workDays
-      .map(workDay =>
-        calculateWorkHours(workDay.startTime, workDay.endTime, workDay.breakStartTime, workDay.breakEndTime))
+      .map(workDay => calculateWorkHoursByWorkDay(workDay))
       .reduce((prev, curr) => prev + curr, 0);
     return rowData.sum;
   }

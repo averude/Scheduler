@@ -23,7 +23,7 @@ import java.util.StringJoiner;
                 )
         }
 )
-public class DayType implements HasId {
+public class DayType implements HasId, HasTime {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

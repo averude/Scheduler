@@ -5,9 +5,9 @@ export class WorkDay implements IdEntity {
   employeeId:     number;
   dayTypeId:      number;
   holiday:        boolean;
-  startTime:      string;
-  breakStartTime: string;
-  breakEndTime:   string;
-  endTime:        string;
+  startTime:      number;
+  breakStartTime: number;
+  breakEndTime:   number;
+  endTime:        number;
   date:           string;
 }
