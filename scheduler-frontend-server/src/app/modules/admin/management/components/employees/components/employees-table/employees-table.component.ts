@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { MatDialog } from "@angular/material";
+import { MatDialog } from "@angular/material/dialog";
 import { EmployeeService } from "../../../../../../../http-services/employee.service";
 import { Employee } from "../../../../../../../model/employee";
 import { Position } from "../../../../../../../model/position";

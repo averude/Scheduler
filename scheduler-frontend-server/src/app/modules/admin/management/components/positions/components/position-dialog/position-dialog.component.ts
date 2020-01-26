@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
+import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { Position } from "../../../../../../../model/position";
 import { AuthService } from "../../../../../../../http-services/auth.service";
 import { DialogBaseComponent } from "../../../../../../../shared/abstract-components/dialog-base/dialog-base.component";
@@ -21,27 +21,22 @@ export class PositionDialogComponent extends DialogBaseComponent<Position>{
 
   initTheForm() {
     this.dialogForm = this.fb.group({
-      id: [],
-      name: ['', [Validators.required,
-                  Validators.minLength(3),
-                  Validators.maxLength(64)]],
-      shortName: [null,[Validators.minLength(1),
-                        Validators.maxLength(20)]],
-      departmentId: [this.tempMethod(), [Validators.required]]
+      id:           [],
+      name:         ['', [Validators.required,
+                          Validators.minLength(3),
+                          Validators.maxLength(64)]],
+      shortName:    [null,[Validators.minLength(1),
+                           Validators.maxLength(20)]],
+      departmentId: [this.authService.departmentId, [Validators.required]]
     });
   }
 
   fillInTheForm(position: Position) {
     this.dialogForm.setValue({
-      id: position.id,
-      name: position.name,
-      shortName: position.shortName,
+      id:           position.id,
+      name:         position.name,
+      shortName:    position.shortName,
       departmentId: position.departmentId
     })
-  }
-
-  tempMethod(): number {
-    let user = this.authService.currentUserValue;
-    return user ? user.departmentId : 1;
   }
 }

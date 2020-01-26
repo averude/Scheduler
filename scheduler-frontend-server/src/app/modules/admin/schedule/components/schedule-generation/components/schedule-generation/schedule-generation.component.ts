@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ShiftService } from "../../../../../../../http-services/shift.service";
 import { ScheduleService } from "../../../../../../../http-services/schedule.service";
 import { ShiftGenerationUnit, toScheduleGenerationDto } from "../../../../../../../model/ui/shift-generation-unit";
-import { MatDialog, MatDialogConfig } from "@angular/material";
+import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
 import { ScheduleGenerationDialogComponent } from "../schedule-generation-dialog/schedule-generation-dialog.component";
 import * as moment from "moment";
 import { ScheduleGeneratedService } from "../schedule-generated.service";

@@ -4,7 +4,7 @@ import { DayType } from "../../../../../../../../model/day-type";
 import { DayTypeGroup } from "../../../../../../../../model/day-type-group";
 import { ShiftPattern } from "../../../../../../../../model/shift-pattern";
 import { Subscription } from "rxjs";
-import { MatDialog, MatDialogConfig } from "@angular/material";
+import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
 import { ScheduleGenerationService } from "../../../../../../../../services/generators/schedule-generation.service";
 import { ClearSelectionService } from "../../../../../../../../lib/ngx-schedule-table/service/clear-selection.service";
 import { SelectionEndService } from "../../../../../../../../lib/ngx-schedule-table/service/selection-end.service";
@@ -20,7 +20,7 @@ import { SelectionData } from "../../../../../../../../lib/ngx-schedule-table/mo
 })
 export class ScheduleTableContextMenuComponent implements OnInit, OnDestroy {
 
-  @ViewChild(ContextMenuComponent)
+  @ViewChild(ContextMenuComponent, { static: false })
   patternMenu:  ContextMenuComponent;
   offset:       number = 0;
 
@@ -61,8 +61,11 @@ export class ScheduleTableContextMenuComponent implements OnInit, OnDestroy {
     // config.hasBackdrop = false;
 
     this.dialog.open(CustomDaytypeDialogComponent, config)
-      .afterClosed().subscribe(customDay =>
-      this.scheduleGenerationService.generateScheduleByPatternUnit(customDay, data));
+      .afterClosed().subscribe(customDay => {
+        if (customDay) {
+          this.scheduleGenerationService.generateScheduleByPatternUnit(customDay, data);
+        }
+    });
   }
 
   ngOnDestroy(): void {

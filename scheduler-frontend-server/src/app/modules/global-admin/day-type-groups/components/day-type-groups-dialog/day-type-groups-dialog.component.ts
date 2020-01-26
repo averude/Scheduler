@@ -2,7 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { DialogBaseComponent } from "../../../../../shared/abstract-components/dialog-base/dialog-base.component";
 import { DayTypeGroup } from "../../../../../model/day-type-group";
 import { FormBuilder, Validators } from "@angular/forms";
-import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
+import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 
 @Component({
   selector: 'app-day-type-groups-dialog',

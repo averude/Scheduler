@@ -3,7 +3,7 @@ import { TableBaseComponent } from "../../../../../shared/abstract-components/ta
 import { UserAccount } from "../../../../../model/user-account";
 import { UserAccountService } from "../../../../../http-services/user-account.service";
 import { AuthorityService } from "../../../../../http-services/authority.service";
-import { MatDialog } from "@angular/material";
+import { MatDialog } from "@angular/material/dialog";
 import { NotificationsService } from "angular2-notifications";
 import { Authority } from "../../../../../model/authority";
 import { DepartmentService } from "../../../../../http-services/department.service";

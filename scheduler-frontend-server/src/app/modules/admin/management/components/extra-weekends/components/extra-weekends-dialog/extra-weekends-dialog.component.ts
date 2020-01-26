@@ -3,7 +3,7 @@ import { DialogBaseComponent } from "../../../../../../../shared/abstract-compon
 import { ExtraWeekend } from "../../../../../../../model/extra-weekend";
 import { AuthService } from "../../../../../../../http-services/auth.service";
 import { FormBuilder, Validators } from "@angular/forms";
-import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
+import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 
 @Component({
   selector: 'app-extra-weekends-dialog',
@@ -22,7 +22,7 @@ export class ExtraWeekendsDialogComponent extends DialogBaseComponent<ExtraWeeke
   initTheForm() {
     this.dialogForm = this.fb.group({
       id:           [],
-      departmentId: this.authService.currentUserValue.departmentId,
+      departmentId: this.authService.departmentId,
       holidayId:    [],
       date:         [null, [Validators.required]]
     });

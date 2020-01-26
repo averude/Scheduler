@@ -1,6 +1,6 @@
 import { PageableTableBaseComponent } from "../../../../../../../shared/abstract-components/table-base/pageable-table-base.component";
 import { ExtraWorkDay } from "../../../../../../../model/extra-workday";
-import { MatDialog } from "@angular/material";
+import { MatDialog } from "@angular/material/dialog";
 import { NotificationsService } from "angular2-notifications";
 import { Component } from "@angular/core";
 import { ExtraWorkdayService } from "../../../../../../../http-services/extra-workday.service";

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { TableBaseComponent } from "../../../../../shared/abstract-components/table-base/table-base.component";
 import { DayTypeGroup } from "../../../../../model/day-type-group";
-import { MatDialog } from "@angular/material";
+import { MatDialog } from "@angular/material/dialog";
 import { NotificationsService } from "angular2-notifications";
 import { DayTypeGroupService } from "../../../../../http-services/day-type-group.service";
 import { DayTypeGroupsDialogComponent } from "../day-type-groups-dialog/day-type-groups-dialog.component";

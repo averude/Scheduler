@@ -1,6 +1,6 @@
 import { OnInit } from "@angular/core";
 import { FormGroup, ValidationErrors } from "@angular/forms";
-import { MatDialogRef } from "@angular/material";
+import { MatDialogRef } from "@angular/material/dialog";
 
 export abstract class DialogBaseComponent<T> implements OnInit {
   operation: string;

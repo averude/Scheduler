@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { MatDialog } from "@angular/material";
+import { MatDialog } from "@angular/material/dialog";
 import { NotificationsService } from "angular2-notifications";
 import { HolidayService } from "../../../../../../../http-services/holiday.service";
 import { Holiday } from "../../../../../../../model/holiday";

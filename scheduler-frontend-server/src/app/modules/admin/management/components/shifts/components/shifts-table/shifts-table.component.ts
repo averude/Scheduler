@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { TableBaseComponent } from "../../../../../../../shared/abstract-components/table-base/table-base.component";
 import { Shift } from "../../../../../../../model/shift";
-import { MatDialog } from "@angular/material";
+import { MatDialog } from "@angular/material/dialog";
 import { NotificationsService } from "angular2-notifications";
 import { ShiftService } from "../../../../../../../http-services/shift.service";
 import { ShiftPattern } from "../../../../../../../model/shift-pattern";

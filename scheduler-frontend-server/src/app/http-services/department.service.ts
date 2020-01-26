@@ -30,8 +30,7 @@ export class DepartmentService implements IByAuthService<Department>, CUDService
   }
 
   getCurrent(): Observable<Department> {
-    let user = this.authService.currentUserValue;
-    return this.getById(user.departmentId);
+    return this.getById(this.authService.departmentId);
   }
 
   getById(departmentId: number): Observable<Department> {

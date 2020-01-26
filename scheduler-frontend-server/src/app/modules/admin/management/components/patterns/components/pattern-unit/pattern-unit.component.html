@@ -5,32 +5,32 @@
 
   <mat-form-field class="start-time">
     <input matInput
-           maxlength="5"
-           [disabled]="usePreviousValue"
+           mask="00:00"
+           [dropSpecialCharacters]="false"
            placeholder="start time"
            [(ngModel)]="unit.startTime">
   </mat-form-field>
 
   <mat-form-field class="end-time">
     <input matInput
-           maxlength="5"
-           [disabled]="usePreviousValue"
+           mask="00:00"
+           [dropSpecialCharacters]="false"
            placeholder="end time"
            [(ngModel)]="unit.endTime">
   </mat-form-field>
 
   <mat-form-field class="break-start-time">
     <input matInput
-           maxlength="5"
-           [disabled]="usePreviousValue"
+           mask="00:00"
+           [dropSpecialCharacters]="false"
            placeholder="break start"
            [(ngModel)]="unit.breakStartTime">
   </mat-form-field>
 
   <mat-form-field class="break-end-time">
     <input matInput
-           maxlength="5"
-           [disabled]="usePreviousValue"
+           mask="00:00"
+           [dropSpecialCharacters]="false"
            placeholder="break end"
            [(ngModel)]="unit.breakEndTime">
   </mat-form-field>
@@ -45,6 +45,7 @@
       </mat-option>
     </mat-select>
   </mat-form-field>
+
   <div class="control-button-box">
     <button class="control-button"
             (click)="delete()">X</button>

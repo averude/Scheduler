@@ -6,7 +6,8 @@ import { ScheduleExportExcelComponent } from "./schedule-export-excel/schedule-e
 import { ScheduleGenerationModule } from "../schedule-generation/schedule-generation.module";
 import { ShowHoursControlComponent } from "./show-hours-control/show-hours-control.component";
 import { MonthYearPaginatorComponent } from "../../../../../shared/paginators/month-year-paginator/month-year-paginator.component";
-import { MatFormFieldModule, MatInputModule } from "@angular/material";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatInputModule } from "@angular/material/input";
 import { SharedModule } from "../../../../../shared/shared.module";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { ScheduleGenerationDialogComponent } from "../schedule-generation/components/schedule-generation-dialog/schedule-generation-dialog.component";

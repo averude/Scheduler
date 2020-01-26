@@ -1,7 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { Employee } from "../../../../../../../model/employee";
 import { Position } from "../../../../../../../model/position";
-import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
+import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { FormBuilder, Validators } from "@angular/forms";
 import { DialogBaseComponent } from "../../../../../../../shared/abstract-components/dialog-base/dialog-base.component";
 

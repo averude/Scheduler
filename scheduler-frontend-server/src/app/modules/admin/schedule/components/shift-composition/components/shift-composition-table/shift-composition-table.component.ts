@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { PageableTableBaseComponent } from "../../../../../../../shared/abstract-components/table-base/pageable-table-base.component";
 import { ShiftComposition } from "../../../../../../../model/shift-composition";
-import { MatDialog } from "@angular/material";
+import { MatDialog } from "@angular/material/dialog";
 import { NotificationsService } from "angular2-notifications";
 import { ShiftCompositionService } from "../../../../../../../http-services/shift-composition.service";
 import { ShiftCompositionDialogComponent } from "../shift-composition-dialog/shift-composition-dialog.component";

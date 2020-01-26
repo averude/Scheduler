@@ -46,6 +46,10 @@ export class AuthService {
     return JSON.parse(user);
   }
 
+  public get departmentId(): number {
+    return this.currentUserValue.departmentId;
+  }
+
   public isLogon(): boolean {
     return !!(this.currentUserValue && this.currentUserValue.access_token);
   }

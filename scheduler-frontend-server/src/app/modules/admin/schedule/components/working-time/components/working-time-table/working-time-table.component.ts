@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { WorkingTime } from "../../../../../../../model/working-time";
-import { MatDialog } from "@angular/material";
+import { MatDialog } from "@angular/material/dialog";
 import { NotificationsService } from "angular2-notifications";
 import { WorkingTimeService } from "../../../../../../../http-services/working-time.service";
 import { ShiftService } from "../../../../../../../http-services/shift.service";

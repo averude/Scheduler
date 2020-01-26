@@ -7,7 +7,7 @@ import { ExtraWeekend } from "../../../model/extra-weekend";
 import { HolidayService } from "../../../http-services/holiday.service";
 import { ExtraWeekendService } from "../../../http-services/extra-weekend.service";
 import { forkJoin } from "rxjs";
-import { MatDatepicker } from "@angular/material";
+import { MatDatepicker } from "@angular/material/datepicker";
 import { ExtraWorkdayService } from "../../../http-services/extra-workday.service";
 import { ExtraWorkDay } from "../../../model/extra-workday";
 import { DatePaginationService } from "../../../lib/ngx-schedule-table/service/date-pagination.service";

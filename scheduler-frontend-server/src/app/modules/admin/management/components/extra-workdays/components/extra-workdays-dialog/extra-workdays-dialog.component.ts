@@ -3,7 +3,7 @@ import { DialogBaseComponent } from "../../../../../../../shared/abstract-compon
 import { ExtraWorkDay } from "../../../../../../../model/extra-workday";
 import { AuthService } from "../../../../../../../http-services/auth.service";
 import { FormBuilder, Validators } from "@angular/forms";
-import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
+import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 
 @Component({
   selector: 'app-extra-workdays-dialog',
@@ -22,7 +22,7 @@ export class ExtraWorkdaysDialogComponent extends DialogBaseComponent<ExtraWorkD
   initTheForm() {
     this.dialogForm = this.fb.group({
       id:             [],
-      departmentId:   this.authService.currentUserValue.departmentId,
+      departmentId:   this.authService.departmentId,
       extraWeekendId: [],
       date:           [null, [Validators.required]]
     });

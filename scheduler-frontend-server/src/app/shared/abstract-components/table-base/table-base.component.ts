@@ -1,5 +1,7 @@
 import { OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { MatDialog, MatDialogConfig, MatSort, MatTableDataSource } from "@angular/material";
+import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
+import { MatSort } from "@angular/material/sort";
+import { MatTableDataSource } from "@angular/material/table";
 import { SelectionModel } from "@angular/cdk/collections";
 import { RemoveDialogComponent } from "../remove-dialog/remove-dialog.component";
 import { NotificationsService } from "angular2-notifications";
@@ -13,7 +15,7 @@ export abstract class TableBaseComponent<T extends IdEntity> implements OnInit, 
   dataSource  = new MatTableDataSource<T>([]);
   selection   = new SelectionModel<T>(true, []);
 
-  @ViewChild(MatSort)
+  @ViewChild(MatSort, { static: true })
   sort: MatSort;
 
   protected constructor(private matDialog: MatDialog,

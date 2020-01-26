@@ -17,7 +17,8 @@
 
   <mat-form-field>
     <input matInput
-           maxlength="5"
+           mask="00:00"
+           [dropSpecialCharacters]="false"
            placeholder="Start time"
            formControlName="startTime">
     <mat-error *ngIf="isControlInvalid('startTime')">{{getErrorMessage()}}</mat-error>
@@ -25,7 +26,8 @@
 
   <mat-form-field>
     <input matInput
-           maxlength="5"
+           mask="00:00"
+           [dropSpecialCharacters]="false"
            placeholder="End time"
            formControlName="endTime">
     <mat-error *ngIf="isControlInvalid('endTime')">{{getErrorMessage()}}</mat-error>
@@ -33,7 +35,8 @@
 
   <mat-form-field>
     <input matInput
-           maxlength="5"
+           mask="00:00"
+           [dropSpecialCharacters]="false"
            placeholder="Break start time"
            formControlName="breakStartTime">
     <mat-error *ngIf="isControlInvalid('breakStartTime')">{{getErrorMessage()}}</mat-error>
@@ -41,7 +44,8 @@
 
   <mat-form-field>
     <input matInput
-           maxlength="5"
+           mask="00:00"
+           [dropSpecialCharacters]="false"
            placeholder="Break end time"
            formControlName="breakEndTime">
     <mat-error *ngIf="isControlInvalid('breakEndTime')">{{getErrorMessage()}}</mat-error>

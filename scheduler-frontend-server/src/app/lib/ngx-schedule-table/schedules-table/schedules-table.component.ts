@@ -36,16 +36,16 @@ export class SchedulesTableComponent implements OnInit, OnChanges, OnDestroy {
   @Input() cellCollector:     CellCollector<any, any>;
   @Input() cellLabelSetter:   CellLabelSetter;
 
-  @ContentChild(PaginatorDef, {read: TemplateRef})
+  @ContentChild(PaginatorDef, {read: TemplateRef, static: false})
   paginator: TemplateRef<any>;
 
   @ContentChildren(TableTopItemDirective, {read: TemplateRef})
   topItems: QueryList<TemplateRef<any>>;
 
-  @ContentChild(DatedCellDef)
+  @ContentChild(DatedCellDef, {read: TemplateRef, static: false})
   datedCellDef: DatedCellDef;
 
-  @ContentChild(HeaderDateCellDef, {read: TemplateRef})
+  @ContentChild(HeaderDateCellDef, {read: TemplateRef, static: false})
   headerDateCellDef: TemplateRef<any>;
 
   @ContentChildren(BeforeDateColumnDef)

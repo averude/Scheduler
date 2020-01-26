@@ -104,7 +104,7 @@ export function getMouseMove() {
       throttleTime(5),
       filter(event => event.buttons === 1),
       map(event => event.clientX),
-      distinctUntilChanged(compFunction)
+      distinctUntilChanged((a, b) => a - b <= 3 && b - a <= 3)
     );
 }
 

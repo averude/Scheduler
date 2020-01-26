@@ -2,13 +2,13 @@ import { Component } from '@angular/core';
 import { TableBaseComponent } from "../../../../../../../shared/abstract-components/table-base/table-base.component";
 import { ShiftPattern } from "../../../../../../../model/shift-pattern";
 import { ShiftPatternService } from "../../../../../../../http-services/shift-pattern.service";
-import { MatDialog } from "@angular/material";
+import { MatDialog } from "@angular/material/dialog";
 import { NotificationsService } from "angular2-notifications";
 import { map } from "rxjs/operators";
 import { PatternUnitService } from "../../../../../../../http-services/pattern-unit.service";
 import { DayTypeService } from "../../../../../../../http-services/day-type.service";
 import { DayType } from "../../../../../../../model/day-type";
-import { PatternDialogComponent, ShiftPatternWrapper } from "../pattern-dialog/pattern-dialog.component";
+import { PatternDialogComponent } from "../pattern-dialog/pattern-dialog.component";
 import { PatternUnit } from "../../../../../../../model/pattern-unit";
 import { DayTypeGroup } from "../../../../../../../model/day-type-group";
 import { DayTypeGroupService } from "../../../../../../../http-services/day-type-group.service";
@@ -61,8 +61,8 @@ export class PatternsTableComponent extends TableBaseComponent<ShiftPattern> {
 
   openDialog(shiftPattern: ShiftPattern) {
     const data = {
-      pattern: shiftPattern,
-      units: shiftPattern ? this.patternUnits[shiftPattern.id] : undefined,
+      pattern:  shiftPattern,
+      units:    shiftPattern ? this.patternUnits[shiftPattern.id] : undefined,
       dayTypes: this.dayTypes.filter(dayType => !dayType.usePreviousValue),
       dayTypeGroups: this.dayTypeGroups
     };
@@ -71,7 +71,7 @@ export class PatternsTableComponent extends TableBaseComponent<ShiftPattern> {
   }
 
   addOrEditDialogAfterCloseFunction(oldValue: ShiftPattern): (value: any) => void {
-    return (wrapper: ShiftPatternWrapper) => {
+    return (wrapper) => {
       if (!wrapper) {
         return;
       }
@@ -87,6 +87,7 @@ export class PatternsTableComponent extends TableBaseComponent<ShiftPattern> {
       this.shiftPatternService.update(pattern)
         .subscribe(res => {
           this.createOrUpdateUnit(units);
+          this.notificationsService.success('Updated', 'Pattern was successfully updated.')
         });
     } else {
       this.shiftPatternService.create(pattern)
@@ -98,6 +99,7 @@ export class PatternsTableComponent extends TableBaseComponent<ShiftPattern> {
 
           units.forEach(unit => unit.patternId = pattern.id);
           this.createOrUpdateUnit(units);
+          this.notificationsService.success('Created', 'Pattern was successfully created.')
         });
     }
   }

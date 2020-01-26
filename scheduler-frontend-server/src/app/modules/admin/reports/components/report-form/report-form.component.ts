@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import * as moment from "moment";
 import { Moment } from "moment";
 import * as fileSaver from 'file-saver';
-import { MatDatepicker } from "@angular/material";
+import { MatDatepicker } from "@angular/material/datepicker";
 import { ReportService } from "../../../../../http-services/report.service";
 
 @Component({

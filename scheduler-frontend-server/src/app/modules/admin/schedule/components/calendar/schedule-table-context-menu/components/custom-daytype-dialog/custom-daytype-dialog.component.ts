@@ -1,8 +1,9 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { DayType } from "../../../../../../../../model/day-type";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
+import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { PatternUnit } from "../../../../../../../../model/pattern-unit";
+import { timeValidationPattern } from "../../../../../../../../shared/utils/time-converter";
 
 @Component({
   selector: 'app-custom-daytype-dialog',
@@ -23,10 +24,12 @@ export class CustomDaytypeDialogComponent implements OnInit {
   ngOnInit() {
     this.customDayTypeForm = this.fb.group({
       dayTypeId:        [null, Validators.required],
-      startTime:        [null, Validators.required],
-      endTime:          [null, Validators.required],
-      breakStartTime:   [null],
-      breakEndTime:     [null]
+      startTime:        [null, [Validators.required,
+                                Validators.pattern(timeValidationPattern)]],
+      endTime:          [null, [Validators.required,
+                                Validators.pattern(timeValidationPattern)]],
+      breakStartTime:   [null, Validators.pattern(timeValidationPattern)],
+      breakEndTime:     [null, Validators.pattern(timeValidationPattern)]
     });
   }
 

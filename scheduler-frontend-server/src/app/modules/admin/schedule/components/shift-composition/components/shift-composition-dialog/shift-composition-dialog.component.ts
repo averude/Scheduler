@@ -2,7 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { DialogBaseComponent } from "../../../../../../../shared/abstract-components/dialog-base/dialog-base.component";
 import { ShiftComposition } from "../../../../../../../model/shift-composition";
 import { FormBuilder, Validators } from "@angular/forms";
-import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
+import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { Employee } from "../../../../../../../model/employee";
 import { Shift } from "../../../../../../../model/shift";
 import { getEmployeeShortName } from "../../../../../../../shared/utils/utils";

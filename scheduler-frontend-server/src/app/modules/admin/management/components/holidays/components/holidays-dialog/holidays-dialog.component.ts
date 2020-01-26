@@ -3,7 +3,7 @@ import { DialogBaseComponent } from "../../../../../../../shared/abstract-compon
 import { Holiday } from "../../../../../../../model/holiday";
 import { AuthService } from "../../../../../../../http-services/auth.service";
 import { FormBuilder, Validators } from "@angular/forms";
-import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
+import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 
 @Component({
   selector: 'app-holidays-dialog',
@@ -25,7 +25,7 @@ export class HolidaysDialogComponent extends DialogBaseComponent<Holiday> {
   initTheForm() {
     this.dialogForm = this.fb.group({
       id: [],
-      departmentId: [this.authService.currentUserValue.departmentId],
+      departmentId: [this.authService.departmentId],
       name: [null, [Validators.required,
                     Validators.minLength(3),
                     Validators.maxLength(255)]],

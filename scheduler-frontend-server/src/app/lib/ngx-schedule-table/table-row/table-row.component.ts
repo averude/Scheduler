@@ -44,7 +44,7 @@ export class TableRowComponent implements OnInit, OnDestroy {
   daysInMonth:      CalendarDay[];
   cellData:         CellData[];
 
-  @ViewChild(SelectableRowDirective)
+  @ViewChild(SelectableRowDirective, { static: true })
   selectableRowDirective: SelectableRowDirective;
 
   private rowRenderSub:     Subscription;

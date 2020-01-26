@@ -3,7 +3,7 @@ import { DialogBaseComponent } from "../../../../../shared/abstract-components/d
 import { UserAccount } from "../../../../../model/user-account";
 import { FormBuilder, Validators } from "@angular/forms";
 import { AuthService } from "../../../../../http-services/auth.service";
-import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
+import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { Department } from "../../../../../model/department";
 import { Shift } from "../../../../../model/shift";
 import { Employee } from "../../../../../model/employee";

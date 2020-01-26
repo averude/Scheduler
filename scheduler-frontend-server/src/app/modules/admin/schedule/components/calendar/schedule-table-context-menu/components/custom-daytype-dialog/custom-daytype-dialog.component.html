@@ -13,14 +13,16 @@
   <div class="time-inputs-container">
     <mat-form-field class="time-input">
       <input matInput
-             maxlength="5"
+             mask="00:00"
+             [dropSpecialCharacters]="false"
              placeholder="Start time"
              formControlName="startTime">
     </mat-form-field>
 
     <mat-form-field class="time-input">
       <input matInput
-             maxlength="5"
+             mask="00:00"
+             [dropSpecialCharacters]="false"
              placeholder="End time"
              formControlName="endTime">
     </mat-form-field>
@@ -29,14 +31,16 @@
   <div class="time-inputs-container">
     <mat-form-field class="time-input">
       <input matInput
-             maxlength="5"
+             mask="00:00"
+             [dropSpecialCharacters]="false"
              placeholder="Break start time"
              formControlName="breakStartTime">
     </mat-form-field>
 
     <mat-form-field class="time-input">
       <input matInput
-             maxlength="5"
+             mask="00:00"
+             [dropSpecialCharacters]="false"
              placeholder="Break end time"
              formControlName="breakEndTime">
     </mat-form-field>

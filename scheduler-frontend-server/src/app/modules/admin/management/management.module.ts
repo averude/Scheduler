@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { MatSidenavModule } from '@angular/material';
+import { MatSidenavModule } from '@angular/material/sidenav';
 import { ManagementComponent } from './management/management.component';
 import { ManagementRoutingModule } from './management-routing.module';
 import { EmployeesModule } from './components/employees/employees.module';

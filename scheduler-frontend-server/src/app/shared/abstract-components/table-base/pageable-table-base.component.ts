@@ -1,6 +1,6 @@
 import { TableBaseComponent } from "./table-base.component";
 import { IdEntity } from "../../../model/interface/id-entity";
-import { MatDialog } from "@angular/material";
+import { MatDialog } from "@angular/material/dialog";
 import { NotificationsService } from "angular2-notifications";
 import { switchMap } from "rxjs/operators";
 import { Subscription } from "rxjs";

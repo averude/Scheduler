@@ -31,3 +31,5 @@ export function calculateWorkHours(startTime: string,
     return 0;
   }
 }
+
+export const timeValidationPattern: string = '^([01]?\\d|2[0-3]|24(?=:00?$)):([0-5]\\d)$';

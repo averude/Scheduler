@@ -1,5 +1,5 @@
 import { NgModule } from "@angular/core";
-import { MatDialogModule } from "@angular/material";
+import { MatDialogModule } from "@angular/material/dialog";
 import { RemoveDialogComponent } from "./remove-dialog.component";
 
 @NgModule({

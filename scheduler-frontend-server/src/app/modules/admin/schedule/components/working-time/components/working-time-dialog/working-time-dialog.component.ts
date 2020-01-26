@@ -1,7 +1,8 @@
 import { Component, Inject } from '@angular/core';
 import { DialogBaseComponent } from "../../../../../../../shared/abstract-components/dialog-base/dialog-base.component";
 import { WorkingTime } from "../../../../../../../model/working-time";
-import { MAT_DIALOG_DATA, MatDatepicker, MatDialogRef } from "@angular/material";
+import { MatDatepicker } from "@angular/material/datepicker";
+import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { AuthService } from "../../../../../../../http-services/auth.service";
 import { FormBuilder, Validators } from "@angular/forms";
 import { Shift } from "../../../../../../../model/shift";
@@ -30,7 +31,7 @@ export class WorkingTimeDialogComponent extends DialogBaseComponent<WorkingTime>
   initTheForm() {
     this.dialogForm = this.fb.group({
       id:           [],
-      departmentId: [this.authService.currentUserValue.departmentId, [Validators.required]],
+      departmentId: [this.authService.departmentId, [Validators.required]],
       shiftId:      [null, [Validators.required]],
       date:         [null, [Validators.required]],
       hours:        [null, [Validators.required]]

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { MatDialog } from "@angular/material";
+import { MatDialog } from "@angular/material/dialog";
 import { Position } from "../../../../../../../model/position";
 import { NotificationsService } from "angular2-notifications";
 import { PositionService } from "../../../../../../../http-services/position.service";

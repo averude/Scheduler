@@ -11,6 +11,7 @@ import { CalendarModule } from "./schedule/components/calendar/calendar.module";
 import { ShiftCompositionModule } from "./schedule/components/shift-composition/shift-composition.module";
 import { RemoveDialogModule } from "../../shared/abstract-components/remove-dialog/remove-dialog.module";
 import { WorkingTimeModule } from "./schedule/components/working-time/working-time.module";
+import { IConfig, NgxMaskModule } from "ngx-mask";
 
 @NgModule({
   imports: [
@@ -23,7 +24,8 @@ import { WorkingTimeModule } from "./schedule/components/working-time/working-ti
     ScheduleGenerationModule,
     ReportsModule,
     AdminRoutingModule,
-    SimpleNotificationsModule
+    SimpleNotificationsModule,
+    NgxMaskModule.forRoot()
   ],
   declarations: [
     AdminComponent,

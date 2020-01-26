@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
+import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { DayType } from "../../../../../../../model/day-type";
 import { PatternUnit } from "../../../../../../../model/pattern-unit";
 import { ShiftPattern } from "../../../../../../../model/shift-pattern";
@@ -16,18 +16,18 @@ export class PatternDialogComponent implements OnInit {
 
   operation: string;
 
-  pattern: ShiftPattern;
-  units: PatternUnit[];
-  dayTypes: DayType[];
-  dayTypeGroups: DayTypeGroup[];
+  pattern:        ShiftPattern;
+  units:          PatternUnit[];
+  dayTypes:       DayType[];
+  dayTypeGroups:  DayTypeGroup[];
 
   constructor(private authService: AuthService,
               private dialogRef: MatDialogRef<PatternDialogComponent>,
               @Inject(MAT_DIALOG_DATA) data) {
-    this.pattern = data.pattern ? data.pattern : this.newShiftPattern;
-    this.units = data.units ? data.units : [];
-    this.dayTypes = data.dayTypes ? data.dayTypes : [];
-    this.dayTypeGroups = data.dayTypeGroups ? data.dayTypeGroups : [];
+    this.pattern        = data.pattern ? data.pattern : this.newShiftPattern;
+    this.units          = data.units ? data.units : [];
+    this.dayTypes       = data.dayTypes ? data.dayTypes : [];
+    this.dayTypeGroups  = data.dayTypeGroups ? data.dayTypeGroups : [];
   }
 
   ngOnInit() {
@@ -37,13 +37,13 @@ export class PatternDialogComponent implements OnInit {
   addUnit() {
     const newUnit = new PatternUnit();
     newUnit.patternId = this.pattern.id;
-    newUnit.orderId = this.lastOrderId + 1;
+    newUnit.orderId   = this.lastOrderId + 1;
     this.units.push(newUnit);
   }
 
   drop(event: CdkDragDrop<PatternUnit[]>) {
     let previousIndex = event.previousIndex;
-    let currentIndex = event.currentIndex;
+    let currentIndex  = event.currentIndex;
     if (currentIndex === previousIndex) {
       return;
     }
@@ -68,14 +68,6 @@ export class PatternDialogComponent implements OnInit {
     return a === b;
   }
 
-  private swapUnits(fromUnit: PatternUnit, to: number) {
-    const fromNum = fromUnit.orderId;
-    const toUnit = this.units.find(value => value.orderId === to);
-    fromUnit.orderId = to;
-    toUnit.orderId = fromNum;
-    this.units.sort((a,b) => a.orderId - b.orderId);
-  }
-
   private get lastOrderId(): number {
     if (this.units.length > 0) {
       return this.units
@@ -88,7 +80,7 @@ export class PatternDialogComponent implements OnInit {
 
   private get newShiftPattern(): ShiftPattern {
     const pattern = new ShiftPattern();
-    pattern.departmentId = this.authService.currentUserValue.departmentId;
+    pattern.departmentId = this.authService.departmentId;
     pattern.name = '';
     return pattern;
   }
@@ -100,9 +92,4 @@ export class PatternDialogComponent implements OnInit {
   close() {
     this.dialogRef.close();
   }
-}
-
-export interface ShiftPatternWrapper {
-  pattern: ShiftPattern;
-  units: PatternUnit[];
 }
