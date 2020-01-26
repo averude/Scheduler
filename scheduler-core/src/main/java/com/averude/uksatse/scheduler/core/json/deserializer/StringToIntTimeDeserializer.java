@@ -13,12 +13,8 @@ import java.util.regex.Pattern;
 @Component
 public class StringToIntTimeDeserializer extends JsonDeserializer<Integer> {
 
-    private Pattern pattern;
-    private static final String TIME24HOURS_PATTERN = "([01]?[0-9]|2[0-4]):[0-5][0-9]";
-
-    public StringToIntTimeDeserializer() {
-        pattern = Pattern.compile(TIME24HOURS_PATTERN);
-    }
+    private static final String TIME24HOURS_PATTERN = "^([01]?\\d|2[0-3]|24(?=:00?$)):([0-5]\\d)$";
+    private static Pattern pattern = Pattern.compile(TIME24HOURS_PATTERN);
 
     @Override
     public Integer deserialize(JsonParser jsonParser,
@@ -28,6 +24,10 @@ public class StringToIntTimeDeserializer extends JsonDeserializer<Integer> {
     }
 
     private Integer convertTimeStringToMinutes(String time) {
+        if (time == null || time.isEmpty()) {
+            return null;
+        }
+
         if (pattern.matcher(time).matches()) {
             var timeParts = time.split(":");
             var hh = Integer.parseInt(timeParts[0]);
