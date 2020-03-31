@@ -13,7 +13,7 @@ export function convertTimeStringToMin(time: string): number {
       return 0;
     }
   } else {
-    return 0;
+    return null;
   }
 }
 
