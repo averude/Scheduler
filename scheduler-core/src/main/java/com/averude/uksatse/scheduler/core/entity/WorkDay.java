@@ -1,7 +1,8 @@
 package com.averude.uksatse.scheduler.core.entity;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.time.LocalDate;
 import java.util.Objects;
 import java.util.StringJoiner;
@@ -165,7 +166,7 @@ public class WorkDay implements HasId, HasTime {
 
     @Override
     public String toString() {
-        return new StringJoiner(", ", "\r\n{", "}")
+        return new StringJoiner(", ", WorkDay.class.getSimpleName() + "{", "}")
                 .add("id=" + id)
                 .add("employeeId=" + employeeId)
                 .add("dayTypeId=" + dayTypeId)

@@ -112,7 +112,7 @@ public class ShiftComposition implements HasId {
 
     @Override
     public String toString() {
-        return new StringJoiner(", ", "{", "}")
+        return new StringJoiner(", ", ShiftComposition.class.getSimpleName() + "{", "}")
                 .add("id=" + id)
                 .add("shiftId=" + shiftId)
                 .add("employeeId=" + employeeId)

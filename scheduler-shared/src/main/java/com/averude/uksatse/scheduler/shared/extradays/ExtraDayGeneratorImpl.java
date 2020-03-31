@@ -4,7 +4,6 @@ import com.averude.uksatse.scheduler.core.entity.ExtraWeekend;
 import com.averude.uksatse.scheduler.core.entity.ExtraWorkDay;
 import com.averude.uksatse.scheduler.core.entity.Holiday;
 import com.averude.uksatse.scheduler.shared.repository.ExtraWeekendRepository;
-import com.averude.uksatse.scheduler.shared.repository.ExtraWorkDayRepository;
 import com.averude.uksatse.scheduler.shared.repository.HolidayRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,16 +16,13 @@ public class ExtraDayGeneratorImpl implements ExtraDayGenerator {
 
     private final HolidayRepository holidayRepository;
     private final ExtraWeekendRepository extraWeekendRepository;
-//    private final ExtraWorkDayRepository extraWorkDayRepository;
 
     @Autowired
     public ExtraDayGeneratorImpl(HolidayRepository holidayRepository,
                                  ExtraWeekendRepository extraWeekendRepository
-//                                 ExtraWorkDayRepository extraWorkDayRepository
     ) {
         this.holidayRepository = holidayRepository;
         this.extraWeekendRepository = extraWeekendRepository;
-//        this.extraWorkDayRepository = extraWorkDayRepository;
     }
 
     @Override

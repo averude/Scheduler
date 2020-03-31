@@ -10,6 +10,7 @@ import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.StringJoiner;
 
 @Entity
 @Table(
@@ -125,5 +126,15 @@ public class Position implements HasId {
     @Override
     public int hashCode() {
         return Objects.hash(id, name);
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", Position.class.getSimpleName() + "{", "}")
+                .add("id=" + id)
+                .add("name='" + name + "'")
+                .add("shortName='" + shortName + "'")
+                .add("departmentId=" + departmentId)
+                .toString();
     }
 }

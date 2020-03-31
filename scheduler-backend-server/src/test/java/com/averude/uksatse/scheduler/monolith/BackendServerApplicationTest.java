@@ -1,20 +1,21 @@
 package com.averude.uksatse.scheduler.monolith;
 
-import com.averude.uksatse.scheduler.core.entity.*;
-import com.averude.uksatse.scheduler.shared.repository.*;
+import com.averude.uksatse.scheduler.core.entity.Department;
+import com.averude.uksatse.scheduler.core.entity.Employee;
+import com.averude.uksatse.scheduler.core.entity.Position;
+import com.averude.uksatse.scheduler.shared.repository.DepartmentRepository;
+import com.averude.uksatse.scheduler.shared.repository.EmployeeRepository;
+import com.averude.uksatse.scheduler.shared.repository.PositionRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-
-import java.time.LocalDate;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -51,10 +52,11 @@ public class BackendServerApplicationTest {
                 "\"dayTypeGroupId\": \"1\", " +
                 "\"name\":\"Test daytype\", " +
                 "\"label\": \"T\", " +
-                "\"startTime\": \"09:00\", " +
-                "\"endTime\": \"18:00\", " +
-                "\"breakStartTime\": \"10:00\", " +
-                "\"breakEndTime\": \"11:00\", " +
+                "\"timeOfWork\":{" +
+                    "\"startTime\": \"09:00\", " +
+                    "\"endTime\": \"18:00\", " +
+                    "\"breakStartTime\": \"10:00\", " +
+                    "\"breakEndTime\": \"11:00\"}, " +
                 "\"usePreviousValue\": \"false\"" +
                 "}";
 
@@ -93,7 +95,6 @@ public class BackendServerApplicationTest {
     }
 
     @Test
-    @Sql(value = "/2-database-create-tables.sql")
     public void testDeleteEmployee() throws Exception {
         Department dep = new Department();
         dep.setName("Test");

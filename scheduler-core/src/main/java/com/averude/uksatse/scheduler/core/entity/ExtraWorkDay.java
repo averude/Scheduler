@@ -76,7 +76,7 @@ public class ExtraWorkDay implements HasId {
 
     @Override
     public String toString() {
-        return new StringJoiner(", ", "{", "}")
+        return new StringJoiner(", ", ExtraWorkDay.class.getSimpleName() + "{", "}")
                 .add("id=" + id)
                 .add("departmentId=" + departmentId)
                 .add("extraWeekendId=" + extraWeekendId)

@@ -3,6 +3,8 @@ package com.averude.uksatse.scheduler.core.entity;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.Objects;
+import java.util.StringJoiner;
 
 @Entity
 @Table(
@@ -76,5 +78,32 @@ public class WorkingTime implements HasId {
 
     public void setHours(Float hours) {
         this.hours = hours;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        WorkingTime that = (WorkingTime) o;
+        return departmentId.equals(that.departmentId) &&
+                shiftId.equals(that.shiftId) &&
+                date.equals(that.date) &&
+                hours.equals(that.hours);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(departmentId, shiftId, date, hours);
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", WorkingTime.class.getSimpleName() + "{", "}")
+                .add("id=" + id)
+                .add("departmentId=" + departmentId)
+                .add("shiftId=" + shiftId)
+                .add("date=" + date)
+                .add("hours=" + hours)
+                .toString();
     }
 }

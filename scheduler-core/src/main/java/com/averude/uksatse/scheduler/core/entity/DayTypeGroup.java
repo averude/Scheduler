@@ -7,6 +7,7 @@ import javax.validation.constraints.NotNull;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import java.util.StringJoiner;
 
 @Entity
 @Table(
@@ -91,5 +92,14 @@ public class DayTypeGroup implements HasId {
     @Override
     public int hashCode() {
         return Objects.hash(name);
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", DayTypeGroup.class.getSimpleName() + "{", "}")
+                .add("id=" + id)
+                .add("name='" + name + "'")
+                .add("color='" + color + "'")
+                .toString();
     }
 }

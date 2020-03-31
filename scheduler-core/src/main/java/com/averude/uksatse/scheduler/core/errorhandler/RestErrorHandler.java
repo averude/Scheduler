@@ -1,6 +1,7 @@
 package com.averude.uksatse.scheduler.core.errorhandler;
 
 import com.averude.uksatse.scheduler.core.dto.ErrorDetails;
+import com.averude.uksatse.scheduler.core.exception.JsonTimeStringDeserializeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -77,6 +78,15 @@ public class RestErrorHandler extends ResponseEntityExceptionHandler {
         logger.error("Persistence error: {}", ex.getCause().getLocalizedMessage());
         ErrorDetails details = new ErrorDetails(LocalDateTime.now());
         details.addError("Persistence error", ex.getCause().getLocalizedMessage());
+        return new ResponseEntity<>(details, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler({JsonTimeStringDeserializeException.class})
+    public ResponseEntity<Object> handleJsonDeserializationException(PersistenceException ex,
+                                                             WebRequest request){
+        logger.error("Json deserialization error: {}", ex.getCause().getLocalizedMessage());
+        ErrorDetails details = new ErrorDetails(LocalDateTime.now());
+        details.addError("Json deserialization error", ex.getCause().getLocalizedMessage());
         return new ResponseEntity<>(details, HttpStatus.BAD_REQUEST);
     }
 }

@@ -212,7 +212,7 @@ public class ShiftPattern implements HasId {
 
     @Override
     public String toString() {
-        return new StringJoiner(", ", "{", "}")
+        return new StringJoiner(", ", ShiftPattern.class.getSimpleName() + "{", "}")
                 .add("id=" + id)
                 .add("departmentId=" + departmentId)
                 .add("name='" + name + "'")

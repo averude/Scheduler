@@ -10,6 +10,7 @@ import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.StringJoiner;
 
 @Entity
 @Table(
@@ -173,5 +174,16 @@ public class Employee implements HasId {
     @Override
     public int hashCode() {
         return Objects.hash(id, firstName, patronymic, secondName, positionId);
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", Employee.class.getSimpleName() + "{", "}")
+                .add("id=" + id)
+                .add("firstName='" + firstName + "'")
+                .add("patronymic='" + patronymic + "'")
+                .add("secondName='" + secondName + "'")
+                .add("positionId=" + positionId)
+                .toString();
     }
 }

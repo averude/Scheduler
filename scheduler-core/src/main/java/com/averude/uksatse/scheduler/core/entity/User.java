@@ -3,7 +3,9 @@ package com.averude.uksatse.scheduler.core.entity;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
+import java.util.StringJoiner;
 
 @Entity
 @Table(
@@ -152,5 +154,42 @@ public class User implements HasId {
     public void removeAuthority(Authority authority) {
         authorities.remove(authority);
         authority.getUsers().remove(this);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return locked == user.locked &&
+                enabled == user.enabled &&
+                username.equals(user.username) &&
+                password.equals(user.password) &&
+                Objects.equals(firstName, user.firstName) &&
+                Objects.equals(secondName, user.secondName) &&
+                Objects.equals(departmentId, user.departmentId) &&
+                Objects.equals(shiftId, user.shiftId) &&
+                Objects.equals(employeeId, user.employeeId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(username, password, firstName, secondName, departmentId, shiftId, employeeId, locked, enabled);
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", User.class.getSimpleName() + "{", "}")
+                .add("id=" + id)
+                .add("username='" + username + "'")
+                .add("password='" + password + "'")
+                .add("firstName='" + firstName + "'")
+                .add("secondName='" + secondName + "'")
+                .add("departmentId=" + departmentId)
+                .add("shiftId=" + shiftId)
+                .add("employeeId=" + employeeId)
+                .add("locked=" + locked)
+                .add("enabled=" + enabled)
+                .toString();
     }
 }

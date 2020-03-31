@@ -7,7 +7,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -231,7 +233,7 @@ public class DayType implements HasId, HasTime {
 
     @Override
     public String toString() {
-        return new StringJoiner(", ", DayType.class.getSimpleName() + "[", "]")
+        return new StringJoiner(", ", DayType.class.getSimpleName() + "{", "}")
                 .add("id=" + id)
                 .add("departmentId=" + departmentId)
                 .add("dayTypeGroupId=" + dayTypeGroupId)

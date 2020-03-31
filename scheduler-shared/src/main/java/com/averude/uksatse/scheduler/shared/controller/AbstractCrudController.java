@@ -42,13 +42,13 @@ public abstract class AbstractCrudController<T extends HasId> implements BasicCr
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/{id}")
                 .buildAndExpand(entity.getId()).toUri();
-        logger.debug("Created entity with id: {}...", entity.getId());
+        logger.debug("Created entity: {}...", entity.toString());
         return ResponseEntity.created(location).body(entity.getId());
     }
 
     public ResponseEntity<?> put(T entity) {
         genericService.save(entity);
-        logger.debug("Updated entity with id: {}...", entity.getId());
+        logger.debug("Updated entity: {}...", entity.toString());
         return ResponseEntity.ok("Entity with ID:" + entity.getId() +
                 " was successfully updated");
     }

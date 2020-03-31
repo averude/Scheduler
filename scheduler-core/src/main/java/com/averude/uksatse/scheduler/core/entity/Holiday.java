@@ -72,7 +72,7 @@ public class Holiday implements HasId {
 
     @Override
     public String toString() {
-        return new StringJoiner(", ", "{", "}")
+        return new StringJoiner(", ", Holiday.class.getSimpleName() + "{", "}")
                 .add("id=" + id)
                 .add("departmentId=" + departmentId)
                 .add("date=" + date)

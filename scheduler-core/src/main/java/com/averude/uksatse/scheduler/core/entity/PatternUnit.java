@@ -6,7 +6,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.util.Objects;
 import java.util.StringJoiner;
 
@@ -160,7 +161,7 @@ public class PatternUnit implements HasId, HasTime {
 
     @Override
     public String toString() {
-        return new StringJoiner(", ", "{", "}")
+        return new StringJoiner(", ", PatternUnit.class.getSimpleName() + "{", "}")
                 .add("id=" + id)
                 .add("patternId=" + patternId)
                 .add("orderId=" + orderId)
