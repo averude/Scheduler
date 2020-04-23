@@ -5,7 +5,7 @@ import { NotificationsService } from "angular2-notifications";
 import { Component } from "@angular/core";
 import { ExtraWorkdayService } from "../../../../../../../http-services/extra-workday.service";
 import { ExtraWorkdaysDialogComponent } from "../extra-workdays-dialog/extra-workdays-dialog.component";
-import { DatePaginationService } from "../../../../../../../lib/ngx-schedule-table/service/date-pagination.service";
+import { PaginationService } from "../../../../../../../lib/ngx-schedule-table/service/pagination.service";
 
 @Component({
   selector: 'app-extra-workdays-table',
@@ -14,13 +14,13 @@ import { DatePaginationService } from "../../../../../../../lib/ngx-schedule-tab
     '../../../../../../../shared/common/table.common.css',
     './extra-workdays-table.component.css'
   ],
-  providers: [DatePaginationService]
+  providers: [PaginationService]
 })
 export class ExtraWorkdaysTableComponent extends PageableTableBaseComponent<ExtraWorkDay> {
 
   displayedColumns = ['select', 'date', 'control'];
 
-  constructor(datePaginationService: DatePaginationService,
+  constructor(datePaginationService: PaginationService,
               dialog: MatDialog,
               notificationsService: NotificationsService,
               extraWorkDayService: ExtraWorkdayService) {

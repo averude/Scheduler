@@ -10,7 +10,7 @@ import { forkJoin } from "rxjs";
 import { MatDatepicker } from "@angular/material/datepicker";
 import { ExtraWorkdayService } from "../../../http-services/extra-workday.service";
 import { ExtraWorkDay } from "../../../model/extra-workday";
-import { DatePaginationService } from "../../../lib/ngx-schedule-table/service/date-pagination.service";
+import { PaginationService } from "../../../lib/ngx-schedule-table/service/pagination.service";
 
 @Component({
   selector: 'app-month-year-paginator',
@@ -28,7 +28,7 @@ export class MonthYearPaginatorComponent implements OnInit {
   extraWeekends:  ExtraWeekend[] = [];
   extraWorkDays:  ExtraWorkDay[] = [];
 
-  constructor(private datePaginationService: DatePaginationService,
+  constructor(private datePaginationService: PaginationService,
               private holidayService: HolidayService,
               private extraWeekendService: ExtraWeekendService,
               private extraWorkDayService: ExtraWorkdayService) {}
@@ -69,16 +69,16 @@ export class MonthYearPaginatorComponent implements OnInit {
     let lastDayOfMonthString  = this.lastDayOfMonth.format("YYYY-MM-DD");
 
     forkJoin(
-      this.holidayService.getAllByAuthAndDateBetween(firstDayOfMonthString, lastDayOfMonthString),
-      this.extraWeekendService.getAllByAuthAndDateBetween(firstDayOfMonthString, lastDayOfMonthString),
-      this.extraWorkDayService.getAllByAuthAndDateBetween(firstDayOfMonthString, lastDayOfMonthString)
+      this.holidayService.getAllByAuth(firstDayOfMonthString, lastDayOfMonthString),
+      this.extraWeekendService.getAllByAuth(firstDayOfMonthString, lastDayOfMonthString),
+      this.extraWorkDayService.getAllByAuth(firstDayOfMonthString, lastDayOfMonthString)
     ).subscribe(values => {
       this.holidays = values[0];
       this.extraWeekends = values[1];
       this.extraWorkDays = values[2];
 
       this.calculateDaysInMonth();
-      this.datePaginationService.changeDate(this.daysInMonth);
+      this.datePaginationService.change(this.daysInMonth);
     });
   }
 

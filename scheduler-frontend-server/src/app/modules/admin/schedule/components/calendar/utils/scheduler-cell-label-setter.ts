@@ -2,14 +2,21 @@ import { CellLabelSetter } from "../../../../../../lib/ngx-schedule-table/utils/
 import { TableCellComponent } from "../../../../../../lib/ngx-schedule-table/table-cell/table-cell.component";
 import { binarySearch } from "../../../../../../shared/utils/utils";
 import { DayType } from "../../../../../../model/day-type";
-import { DayTypeGroup } from "../../../../../../model/day-type-group";
 import { WorkDay } from "../../../../../../model/workday";
 import { calculateWorkHoursByWorkDay } from "../../../../../../shared/utils/time-converter";
+import { DayTypeService } from "../../../../../../http-services/day-type.service";
+import { Injectable } from "@angular/core";
 
+@Injectable()
 export class SchedulerCellLabelSetter extends CellLabelSetter {
 
   dayTypes: DayType[];
-  dayTypeGroups: DayTypeGroup[];
+
+  constructor(private dayTypeService: DayTypeService) {
+    super();
+    this.dayTypeService.getAllByAuth()
+      .subscribe(dayTypes => this.dayTypes = dayTypes.sort(((a, b) => a.id - b.id)));
+  }
 
   setLabel(cell: TableCellComponent): void {
     if (cell) {
@@ -30,45 +37,26 @@ export class SchedulerCellLabelSetter extends CellLabelSetter {
   }
 
   private setHoursWithColor(cell: TableCellComponent) {
-    // cell.label = cell.value.hours; // here!
     cell.label = this.calcHours(cell.value);
     if (this.dayTypes) {
-      // Replace with binary search
-      // let dayType = cell.dayTypes.find(item => item.id === cell.value.dayTypeId);
       let dayType = binarySearch(this.dayTypes, cell.value.dayTypeId);
       if (dayType) {
-        this.setLabelColor(cell, dayType);
+        cell.labelColor = dayType.dayTypeGroup.color;
       }
     }
   }
 
   private setLabelWithColor(cell: TableCellComponent) {
     if (this.dayTypes) {
-      // Replace with binary search
-      // let dayType = cell.dayTypes.find(item => item.id === cell.value.dayTypeId);
       let dayType = binarySearch(this.dayTypes, cell.value.dayTypeId);
       if (dayType) {
-
-        this.setLabelColor(cell, dayType);
+        cell.labelColor = dayType.dayTypeGroup.color;
 
         if (dayType.label && dayType.label.length > 0) {
           cell.label = dayType.label;
         } else {
-          // cell.label = cell.value.hours; // here!
           cell.label = this.calcHours(cell.value);
         }
-      }
-    }
-  }
-
-  private setLabelColor(cell: TableCellComponent,
-                        dayType: DayType) {
-    if (this.dayTypeGroups) {
-      // Replace with binary search
-      let group = this.dayTypeGroups
-        .find(dayTypeGroup => dayTypeGroup.id === dayType.dayTypeGroupId);
-      if (group) {
-        cell.labelColor = group.color;
       }
     }
   }

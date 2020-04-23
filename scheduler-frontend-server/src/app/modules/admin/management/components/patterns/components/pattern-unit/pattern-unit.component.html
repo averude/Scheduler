@@ -36,12 +36,13 @@
   </mat-form-field>
 
   <mat-form-field class="day-type-container">
-    <mat-select placeholder="day type"
-                (selectionChange)="onChange($event)"
-                [(ngModel)]="unit.dayTypeId">
-      <mat-option *ngFor="let dayType of dayTypes"
-                  [value]="dayType.id">
-        {{dayType.name}}
+    <mat-select placeholder="Day Type"
+                [value]="selectedDepartmentDayType"
+                [compareWith]="compareIdEntity"
+                (selectionChange)="onChange($event)">
+      <mat-option *ngFor="let departmentDayType of departmentDayTypes"
+                  [value]="departmentDayType">
+        {{departmentDayType.dayType.name}}
       </mat-option>
     </mat-select>
   </mat-form-field>

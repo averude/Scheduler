@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { PatternUnit } from '../../model/pattern-unit';
-import { DayType } from "../../model/day-type";
 import { createOrUpdateCell } from "./schedule-generation-utils";
 import { RowData } from "../../lib/ngx-schedule-table/model/data/row-data";
 import { CellData } from "../../lib/ngx-schedule-table/model/data/cell-data";
+import { DepartmentDayType } from "../../model/department-day-type";
 
 @Injectable({
   providedIn: 'root'
@@ -33,18 +33,18 @@ export class ScheduleGenerator {
 
   generateScheduleBySingleDay(rowData: RowData,
                               cells: CellData[],
-                              dayType: DayType,
+                              departmentDayType: DepartmentDayType,
                               onSave: (rowData: RowData, selectedCells: CellData[]) => void,
                               onError: (message: string) => void) {
     const patternUnit = new PatternUnit();
-    patternUnit.dayTypeId       = dayType.id;
-    patternUnit.startTime       = dayType.startTime;
-    patternUnit.endTime         = dayType.endTime;
-    patternUnit.breakStartTime  = dayType.breakStartTime;
-    patternUnit.breakEndTime    = dayType.breakEndTime;
+    patternUnit.dayTypeId       = departmentDayType.dayType.id;
+    patternUnit.startTime       = departmentDayType.startTime;
+    patternUnit.endTime         = departmentDayType.endTime;
+    patternUnit.breakStartTime  = departmentDayType.breakStartTime;
+    patternUnit.breakEndTime    = departmentDayType.breakEndTime;
     const customUnits: PatternUnit[] = [patternUnit];
 
-    this.generate(rowData, cells, customUnits, 0, dayType.usePreviousValue, onSave, onError);
+    this.generate(rowData, cells, customUnits, 0, departmentDayType.dayType.usePreviousValue, onSave, onError);
   }
 
   private generate(rowData: RowData,

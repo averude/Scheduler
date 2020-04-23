@@ -3,7 +3,7 @@
 
   <mat-form-field>
     <mat-select placeholder="Shift"
-                [compareWith]="compare"
+                [compareWith]="compareNums"
                 formControlName="shiftId">
       <mat-option *ngFor="let shift of shifts"
                   [value]="shift?.id">

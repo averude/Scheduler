@@ -24,14 +24,14 @@
 
   <mat-form-field>
     <mat-select placeholder="Position"
-                [compareWith]="compare"
-                formControlName="positionId">
+                [compareWith]="compareIdEntities"
+                formControlName="position">
       <mat-option *ngFor="let position of positions"
-                  [value]="position.id">
+                  [value]="position">
         {{position.name}}
       </mat-option>
     </mat-select>
-    <mat-error *ngIf="isControlInvalid('positionId')">{{getErrorMessage()}}</mat-error>
+    <mat-error *ngIf="isControlInvalid('position')">{{getErrorMessage()}}</mat-error>
   </mat-form-field>
 
 </mat-dialog-content>

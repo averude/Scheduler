@@ -4,6 +4,7 @@ import { WorkingTime } from "../../../../../../model/working-time";
 import { Shift } from "../../../../../../model/shift";
 
 export class SchedulerRowGroupCollector implements RowGroupCollector<SchedulerRowGroupData> {
+
   constructor(private shifts: Shift[],
               private workingTime: WorkingTime[]) {}
 
@@ -14,6 +15,7 @@ export class SchedulerRowGroupCollector implements RowGroupCollector<SchedulerRo
       rowGroup.groupId = shift.id;
       rowGroup.groupName = shift.name;
       rowGroup.timeNorm = shiftWorkingTime;
+      rowGroup.shiftsWorkingTime = this.workingTime;
       return rowGroup;
     });
   }

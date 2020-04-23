@@ -32,7 +32,7 @@
 
   <mat-form-field>
     <mat-select placeholder="Department"
-                [compareWith]="compare"
+                [compareWith]="compareNums"
                 formControlName="departmentId">
       <mat-option *ngFor="let department of departments"
                   [value]="department.id">
@@ -44,7 +44,7 @@
 
   <mat-form-field>
     <mat-select placeholder="Shift"
-                [compareWith]="compare"
+                [compareWith]="compareNums"
                 formControlName="shiftId">
       <mat-option *ngFor="let shift of shifts"
                   [value]="shift.id">
@@ -56,7 +56,7 @@
 
   <mat-form-field>
     <mat-select placeholder="Employee"
-                [compareWith]="compare"
+                [compareWith]="compareNums"
                 formControlName="employeeId">
       <mat-option *ngFor="let employee of employees"
                   [value]="employee.id">
@@ -76,7 +76,7 @@
 
   <mat-form-field>
     <mat-select placeholder="Authorities"
-                [compareWith]="compare"
+                [compareWith]="compareNums"
                 formControlName="authorities"
                 multiple>
       <mat-option *ngFor="let authority of authorities"

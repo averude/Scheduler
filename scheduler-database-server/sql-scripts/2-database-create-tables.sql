@@ -1,12 +1,23 @@
 -- PostgreSQL
 
-CREATE TABLE departments (
+CREATE TABLE enterprises (
   id            SERIAL,
   name          VARCHAR (128) NOT NULL,
 
   UNIQUE (name),
 
   PRIMARY KEY (id)
+);
+
+CREATE TABLE departments (
+  id            SERIAL,
+  enterprise_id INTEGER,
+  name          VARCHAR (128) NOT NULL,
+
+  UNIQUE (enterprise_id, name),
+
+  PRIMARY KEY (id),
+  FOREIGN KEY (enterprise_id) REFERENCES enterprises(id) ON DELETE CASCADE
 );
 
 CREATE TABLE positions (
@@ -33,40 +44,53 @@ CREATE TABLE day_type_groups (
 
 CREATE TABLE day_types (
   id                  SERIAL,
-  department_id       INTEGER       NOT NULL,
+  enterprise_id       INTEGER       NOT NULL,
   group_id            INTEGER       NOT NULL,
   name                VARCHAR (128) NOT NULL,
   label               VARCHAR (5),
   use_previous_value  BOOLEAN       NOT NULL  DEFAULT FALSE,
+  UNIQUE (enterprise_id, name),
+
+  PRIMARY KEY (id),
+  FOREIGN KEY (enterprise_id) REFERENCES enterprises(id)      ON DELETE CASCADE,
+  FOREIGN KEY (group_id)      REFERENCES day_type_groups(id)  ON DELETE CASCADE
+);
+
+CREATE TABLE department_day_types (
+  id                  SERIAL,
+  department_id       INTEGER       NOT NULL,
+  day_type_id         INTEGER       NOT NULL,
   start_time          INTEGER       CHECK ( 0 <= start_time and start_time <= 1440 ),
   end_time            INTEGER       CHECK ( 0 <= end_time and end_time <= 1440 ),
   break_start_time    INTEGER       CHECK ( 0 <= break_start_time and break_start_time <= 1440 ),
   break_end_time      INTEGER       CHECK ( 0 <= break_end_time and break_end_time <= 1440 ),
 
   CHECK ( start_time < end_time AND break_start_time < break_end_time
-            AND start_time < break_start_time AND end_time > break_end_time
-            AND (end_time - start_time) > (break_end_time - break_start_time) ),
-  UNIQUE (department_id, name),
+    AND start_time < break_start_time AND end_time > break_end_time
+    AND (end_time - start_time) > (break_end_time - break_start_time) ),
+  UNIQUE (department_id, day_type_id),
 
   PRIMARY KEY (id),
-  FOREIGN KEY (department_id) REFERENCES departments(id) ON DELETE CASCADE,
-  FOREIGN KEY (group_id)      REFERENCES day_type_groups ON DELETE CASCADE
+  FOREIGN KEY (department_id) REFERENCES departments(id)  ON DELETE CASCADE,
+  FOREIGN KEY (day_type_id)   REFERENCES day_types(id)    ON DELETE CASCADE
 );
 
 CREATE TABLE shift_patterns (
   id                          SERIAL,
   department_id               INTEGER       NOT NULL,
   name                        VARCHAR (128) NOT NULL,
-  holiday_day_type_id         INTEGER       DEFAULT NULL,
-  extra_weekend_day_type_id   INTEGER       DEFAULT NULL,
-  extra_work_day_day_type_id  INTEGER       DEFAULT NULL,
+
+  holiday_dep_day_type_id         INTEGER       DEFAULT NULL,
+  extra_weekend_dep_day_type_id   INTEGER       DEFAULT NULL,
+  extra_work_day_dep_day_type_id  INTEGER       DEFAULT NULL,
 
   UNIQUE (department_id, name),
 
   PRIMARY KEY (id),
   FOREIGN KEY (department_id)             REFERENCES departments(id)  ON DELETE CASCADE,
-  FOREIGN KEY (holiday_day_type_id)       REFERENCES day_types(id)    ON DELETE SET NULL,
-  FOREIGN KEY (extra_weekend_day_type_id) REFERENCES day_types(id)    ON DELETE SET NULL
+  FOREIGN KEY (holiday_dep_day_type_id)         REFERENCES department_day_types(id)    ON DELETE SET NULL,
+  FOREIGN KEY (extra_weekend_dep_day_type_id)   REFERENCES department_day_types(id)    ON DELETE SET NULL,
+  FOREIGN KEY (extra_work_day_dep_day_type_id)  REFERENCES department_day_types(id)    ON DELETE SET NULL
 );
 
 CREATE TABLE pattern_units (

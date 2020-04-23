@@ -1,4 +1,5 @@
 import { IdEntity } from "./interface/id-entity";
+import { Position } from "./position";
 
 export class Employee implements IdEntity {
   id: number;
@@ -6,5 +7,6 @@ export class Employee implements IdEntity {
   patronymic: string;
   secondName: string;
   positionId: number;
+  position: Position;
   shiftId: number;
 }

@@ -1,0 +1,55 @@
+<h2 matDialogTitle>{{operation}}</h2>
+<mat-dialog-content [formGroup]="dialogForm">
+
+  <mat-form-field>
+    <input matInput
+           placeholder="Name"
+           formControlName="name">
+    <mat-error *ngIf="isControlInvalid('name')">{{getErrorMessage()}}</mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput
+           placeholder="Label"
+           formControlName="label">
+    <mat-error *ngIf="isControlInvalid('label')">{{getErrorMessage()}}</mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-select placeholder="Enterprise"
+                [compareWith]="compareNums"
+                formControlName="enterpriseId">
+      <mat-option *ngFor="let enterprise of enterprises"
+                  [value]="enterprise.id">
+        {{enterprise.name}}
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="isControlInvalid('name')">{{getErrorMessage()}}</mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-select placeholder="Group"
+                [compareWith]="compareIdEntities"
+                formControlName="dayTypeGroup">
+      <mat-option *ngFor="let group of dayTypeGroups"
+                  [value]="group">
+        {{group.name}}
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="isControlInvalid('dayTypeGroup')">{{getErrorMessage()}}</mat-error>
+  </mat-form-field>
+
+  <mat-checkbox formControlName="usePreviousValue">
+    Use previous value
+  </mat-checkbox>
+
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button class="mat-raised-button"
+          (click)="close()">Close</button>
+  <button class="mat-raised-button mat-primary"
+          type="submit"
+          [disabled]="dialogForm.invalid"
+          (click)="submit()">Save</button>
+</mat-dialog-actions>

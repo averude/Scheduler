@@ -10,7 +10,7 @@
 
   <mat-form-field>
     <mat-select placeholder="Shift Pattern"
-                [compareWith]="compare"
+                [compareWith]="compareNums"
                 formControlName="patternId">
       <mat-option *ngFor="let pattern of patterns"
                   [value]="pattern.id">

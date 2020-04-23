@@ -18,7 +18,6 @@ export class EmployeeDialogComponent extends DialogBaseComponent<Employee> {
               private dialogRef: MatDialogRef<EmployeeDialogComponent>,
               @Inject(MAT_DIALOG_DATA) data) {
     super(data.employee, dialogRef);
-
     this.positions  = data.positions;
   }
 
@@ -37,7 +36,7 @@ export class EmployeeDialogComponent extends DialogBaseComponent<Employee> {
         Validators.minLength(3),
         Validators.maxLength(32)]
       ],
-      positionId: [null, [Validators.required]]
+      position:   [null, [Validators.required]]
     });
   }
 
@@ -47,7 +46,7 @@ export class EmployeeDialogComponent extends DialogBaseComponent<Employee> {
       firstName:  employee.firstName,
       secondName: employee.secondName,
       patronymic: employee.patronymic,
-      positionId: employee.positionId
+      position:   employee.position
     });
   }
 }

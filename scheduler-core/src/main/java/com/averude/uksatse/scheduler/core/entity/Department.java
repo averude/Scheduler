@@ -25,6 +25,11 @@ public class Department implements HasId {
     @Positive(message = "{entity.id.negative}")
     private Long id;
 
+    @NotNull
+    @Column(name = "enterprise_id",
+            nullable = false)
+    private Long enterpriseId;
+
     @NotNull(message = "{department.name.empty}")
     @Size(  max = 128,
             min = 3,
@@ -37,12 +42,6 @@ public class Department implements HasId {
                 cascade = CascadeType.ALL,
                 fetch = FetchType.LAZY)
     private List<@NotNull @Valid Position> positions = new LinkedList<>();
-
-    @JsonIgnore
-    @OneToMany( mappedBy = "departmentId",
-                cascade = CascadeType.ALL,
-                fetch = FetchType.LAZY)
-    private List<@NotNull @Valid DayType> dayTypes = new LinkedList<>();
 
     @JsonIgnore
     @OneToMany( mappedBy = "departmentId",
@@ -87,6 +86,14 @@ public class Department implements HasId {
         this.id = id;
     }
 
+    public Long getEnterpriseId() {
+        return enterpriseId;
+    }
+
+    public void setEnterpriseId(Long enterpriseId) {
+        this.enterpriseId = enterpriseId;
+    }
+
     public String getName() {
         return name;
     }
@@ -101,14 +108,6 @@ public class Department implements HasId {
 
     public void setPositions(List<@NotNull @Valid Position> positions) {
         this.positions = positions;
-    }
-
-    public List<DayType> getDayTypes() {
-        return dayTypes;
-    }
-
-    public void setDayTypes(List<DayType> dayTypes) {
-        this.dayTypes = dayTypes;
     }
 
     public List<@NotNull @Valid ShiftPattern> getPatterns() {
@@ -151,16 +150,6 @@ public class Department implements HasId {
     public void removePosition(Position position){
         position.setDepartmentId(null);
         positions.remove(position);
-    }
-
-    public void addDayType(DayType dayType) {
-        dayType.setDepartmentId(this.getId());
-        dayTypes.add(dayType);
-    }
-
-    public void removeDayType(DayType dayType) {
-        dayType.setDepartmentId(null);
-        dayTypes.remove(dayType);
     }
 
     public void addShift(Shift shift){
@@ -208,18 +197,20 @@ public class Department implements HasId {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Department that = (Department) o;
-        return name.equals(that.name);
+        return enterpriseId.equals(that.enterpriseId) &&
+                name.equals(that.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name);
+        return Objects.hash(enterpriseId, name);
     }
 
     @Override
     public String toString() {
         return new StringJoiner(", ", Department.class.getSimpleName() + "{", "}")
                 .add("id=" + id)
+                .add("enterpriseId=" + enterpriseId)
                 .add("name='" + name + "'")
                 .toString();
     }

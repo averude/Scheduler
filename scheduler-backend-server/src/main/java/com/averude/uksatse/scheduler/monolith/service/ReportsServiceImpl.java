@@ -2,7 +2,6 @@ package com.averude.uksatse.scheduler.monolith.service;
 
 import com.averude.uksatse.scheduler.core.entity.*;
 import com.averude.uksatse.scheduler.core.extractor.DataByAuthorityExtractor;
-import com.averude.uksatse.scheduler.generator.model.Report;
 import com.averude.uksatse.scheduler.generator.reports.ReportGenerator;
 import com.averude.uksatse.scheduler.shared.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,7 +101,7 @@ public class ReportsServiceImpl implements ReportsService {
                         .stream()
                         .map(Employee::getId)
                         .collect(Collectors.toList()), from, to);
-        List<DayType> dayTypes = dayTypeRepository.findAllByDepartmentId(departmentId);
+        List<DayType> dayTypes = dayTypeRepository.findAllByEnterpriseId(departmentId);
         List<LocalDate> dates = getDatesBetween(from, to);
         List<Holiday> holidays = holidayRepository.findAllByDepartmentIdAndDateBetween(departmentId, from, to);
         List<ExtraWeekend> extraWeekends = extraWeekendRepository.findAllByDepartmentIdAndDateBetween(departmentId, from, to);

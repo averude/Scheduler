@@ -4,64 +4,30 @@ import { RestConfig } from '../rest.config';
 import { Observable } from 'rxjs';
 import { DayType } from '../model/day-type';
 import { AuthService } from "./auth.service";
-import { ABaseService } from "./abstract-service/a-base-service";
 import { CUDService } from "./interface/cud-service";
 import { map } from "rxjs/operators";
+import { IByEnterpriseIdService } from "./interface/i-by-enterprise-id.service";
+import { ACrudService } from "./abstract-service/a-crud-service";
 
 @Injectable({
   providedIn: 'root'
 })
-export class DayTypeService extends ABaseService<DayType> implements CUDService<DayType> {
+export class DayTypeService extends ACrudService<DayType>
+  implements CUDService<DayType>, IByEnterpriseIdService<DayType> {
 
   constructor(authService: AuthService,
-              private http: HttpClient,
+              http: HttpClient,
               private config: RestConfig) {
-    super(authService);
-  }
-
-  getAll(): Observable<DayType[]> {
-    return this.http.get<DayType[]>(
-      `${this.config.baseUrl}/admin/day_types`
-    );
+    super(`${config.baseUrl}/admin/day_types`, http, authService);
   }
 
   getAllByDepartmentId(departmentId: number): Observable<DayType[]> {
-    return this.http.get<DayType[]>(
-      `${this.config.baseUrl}/admin/day_types/departments/${departmentId}`
-    ).pipe(map(values => values.sort((a, b) => a.id - b.id)));
+    return super.getAllByDepartmentId(departmentId)
+      .pipe(map(values => values.sort((a, b) => a.id - b.id)));
   }
 
   getAllByShiftId(shiftId: number): Observable<DayType[]> {
-    return this.http.get<DayType[]>(
-      `${this.config.baseUrl}/admin/day_types/shifts/${shiftId}`
-    ).pipe(map(values => values.sort((a, b) => a.id - b.id)));
-  }
-
-  getById(dayTypeId: number): Observable<DayType> {
-    return this.http.get<DayType>(
-      `${this.config.baseUrl}/admin/day_types/${dayTypeId}`
-    );
-  }
-
-  create(dayType: DayType): Observable<any> {
-    return this.http.post<number>(
-      `${this.config.baseUrl}/admin/day_types`,
-      dayType,
-    );
-  }
-
-  update(dayType: DayType): Observable<any> {
-    return this.http.put(
-      `${this.config.baseUrl}/admin/day_types/`,
-      dayType,
-      {responseType: 'text'}
-    );
-  }
-
-  delete(dayTypeId: number): Observable<any> {
-    return this.http.delete(
-      `${this.config.baseUrl}/admin/day_types/${dayTypeId}`,
-      {responseType: 'text'}
-    );
+    return super.getAllByShiftId(shiftId)
+      .pipe(map(values => values.sort((a, b) => a.id - b.id)));
   }
 }

@@ -4,19 +4,15 @@ import { ShiftComposition } from "../../../../../../model/shift-composition";
 import { WorkDay } from "../../../../../../model/workday";
 import { isBetween } from "../../../../../../lib/ngx-schedule-table/utils/table-utils";
 import { SchedulerRowData } from "../model/scheduler-row-data";
-import { SchedulerCellData } from "../model/scheduler-cell-data";
-import { DayType } from "../../../../../../model/day-type";
-import { DayTypeGroup } from "../../../../../../model/day-type-group";
 import { CellData } from "../../../../../../lib/ngx-schedule-table/model/data/cell-data";
+import { Injectable } from "@angular/core";
 
-export class SchedulerCellCollector implements CellCollector<SchedulerRowData, SchedulerCellData> {
-
-  constructor(private dayTypes: DayType[],
-              private dayTypeGroups: DayTypeGroup[]) {}
+@Injectable()
+export class SchedulerCellCollector extends CellCollector<SchedulerRowData, CellData> {
 
   collect(rowGroupId: number,
           rowData: SchedulerRowData,
-          daysInMonth: CalendarDay[]): SchedulerCellData[] {
+          daysInMonth: CalendarDay[]): CellData[] {
     return this.getCellData(rowData.id, rowGroupId, rowData.isSubstitution, rowData.compositions, rowData.workDays, daysInMonth);
   }
 
@@ -25,7 +21,7 @@ export class SchedulerCellCollector implements CellCollector<SchedulerRowData, S
                       isSubstitution: boolean,
                       shiftComposition: ShiftComposition[],
                       schedule: WorkDay[],
-                      calendarDays: CalendarDay[]): SchedulerCellData[] {
+                      calendarDays: CalendarDay[]): CellData[] {
     let shiftSchedules;
     let fn;
     if (isSubstitution) {
@@ -44,18 +40,16 @@ export class SchedulerCellCollector implements CellCollector<SchedulerRowData, S
                               schedule: WorkDay[],
                               onCellSet: (shiftComposition: ShiftComposition[],
                                           cell: CellData,
-                                          workDay: WorkDay) => void): SchedulerCellData[] {
-    let cells: SchedulerCellData[];
+                                          workDay: WorkDay) => void): CellData[] {
+    let cells: CellData[];
     if (schedule) {
       let workDayIndex = 0;
       cells = calendarDays.map(day => {
 
-        let cell: SchedulerCellData = {
+        let cell: CellData = {
           date: day,
           value: null,
           enabled: !isSubstitution,
-          dayTypes: this.dayTypes,
-          dayTypeGroups: this.dayTypeGroups
         };
 
         let workDay = schedule[workDayIndex];

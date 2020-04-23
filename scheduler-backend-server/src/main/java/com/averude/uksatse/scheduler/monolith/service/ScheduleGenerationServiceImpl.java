@@ -25,6 +25,7 @@ public class ScheduleGenerationServiceImpl implements ScheduleGenerationService 
     private final ScheduleRepository                scheduleRepository;
     private final ShiftPatternRepository            shiftPatternRepository;
     private final DayTypeRepository                 dayTypeRepository;
+    private final DepartmentDayTypeRepository       departmentDayTypeRepository;
     private final HolidayRepository                 holidayRepository;
     private final ExtraWeekendRepository            extraWeekendRepository;
     private final ExtraWorkDayRepository            extraWorkDayRepository;
@@ -37,6 +38,7 @@ public class ScheduleGenerationServiceImpl implements ScheduleGenerationService 
                                          ScheduleRepository scheduleRepository,
                                          ShiftPatternRepository shiftPatternRepository,
                                          DayTypeRepository dayTypeRepository,
+                                         DepartmentDayTypeRepository departmentDayTypeRepository,
                                          HolidayRepository holidayRepository,
                                          ExtraWeekendRepository extraWeekendRepository,
                                          ExtraWorkDayRepository extraWorkDayRepository,
@@ -47,6 +49,7 @@ public class ScheduleGenerationServiceImpl implements ScheduleGenerationService 
         this.scheduleRepository = scheduleRepository;
         this.shiftPatternRepository = shiftPatternRepository;
         this.dayTypeRepository = dayTypeRepository;
+        this.departmentDayTypeRepository = departmentDayTypeRepository;
         this.holidayRepository = holidayRepository;
         this.extraWeekendRepository = extraWeekendRepository;
         this.extraWorkDayRepository = extraWorkDayRepository;
@@ -64,7 +67,7 @@ public class ScheduleGenerationServiceImpl implements ScheduleGenerationService 
         logger.debug("Starting schedule generation for shift id={} from={} to={} with offset={}", shiftId, from, to, offset);
 
         var shift = shiftRepository.findById(shiftId).orElseThrow();
-        var pattern = getShiftPattern(shift.getPatternId());
+        var pattern = shiftPatternRepository.findById(shift.getPatternId()).orElseThrow();
         var holidays        = holidayRepository
                 .findAllByDepartmentIdAndDateBetween(shift.getDepartmentId(), from, to);
         var compositions = shiftCompositionRepository
@@ -130,24 +133,5 @@ public class ScheduleGenerationServiceImpl implements ScheduleGenerationService 
                 .findAllByEmployeeIdAndDateBetweenOrderByDateAsc(interval.getEmployeeId(), interval.getFrom(), interval.getTo());
         logger.debug("Existing schedule {}", intervalSchedule);
         return scheduleGenerator.generate(interval, pattern, intervalSchedule, holidays, extraWeekends, extraWorkDays);
-    }
-
-    private ShiftPattern getShiftPattern(Long id) {
-        return shiftPatternRepository.findById(id)
-                .map(pattern -> {
-                    Long holidayDayTypeId       = pattern.getHolidayDayTypeId();
-                    Long extraWeekendDayTypeId  = pattern.getExtraWeekendDayTypeId();
-                    Long extraWorkDayDayTypeId  = pattern.getExtraWorkDayDayTypeId();
-                    if (holidayDayTypeId != null) {
-                        pattern.setHolidayDayType(dayTypeRepository.findById(holidayDayTypeId).orElseThrow());
-                    }
-                    if (extraWeekendDayTypeId != null) {
-                        pattern.setExtraWeekendDayType(dayTypeRepository.findById(extraWeekendDayTypeId).orElseThrow());
-                    }
-                    if (extraWorkDayDayTypeId != null) {
-                        pattern.setExtraWorkDayDayType(dayTypeRepository.findById(extraWorkDayDayTypeId).orElseThrow());
-                    }
-                    return pattern;
-                }).orElseThrow();
     }
 }

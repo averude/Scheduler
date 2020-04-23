@@ -6,7 +6,7 @@ import { ManagementComponent } from './management/management.component';
 import { ManagementRoutingModule } from './management-routing.module';
 import { EmployeesModule } from './components/employees/employees.module';
 import { PositionsModule } from './components/positions/positions.module';
-import { DayTypesModule } from './components/daytypes/daytypes.module';
+import { DayTypesModule } from '../../global-admin/daytypes/daytypes.module';
 import { ShiftsModule } from './components/shifts/shifts.module';
 import { PatternsModule } from './components/patterns/patterns.module';
 import { RemoveDialogModule } from "../../../shared/abstract-components/remove-dialog/remove-dialog.module";
@@ -14,6 +14,7 @@ import { HolidaysModule } from "./components/holidays/holidays.module";
 import { WorkingTimeModule } from "../schedule/components/working-time/working-time.module";
 import { ExtraWeekendsModule } from "./components/extra-weekends/extra-weekends.module";
 import { ExtraWorkdaysModule } from "./components/extra-workdays/extra-workdays.module";
+import { DepartmentDayTypesModule } from "./components/department-day-types/department-day-types.module";
 
 @NgModule({
   imports: [
@@ -22,6 +23,7 @@ import { ExtraWorkdaysModule } from "./components/extra-workdays/extra-workdays.
     EmployeesModule,
     PositionsModule,
     DayTypesModule,
+    DepartmentDayTypesModule,
     ShiftsModule,
     PatternsModule,
     HolidaysModule,

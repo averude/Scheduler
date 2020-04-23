@@ -1,8 +1,6 @@
 <app-schedules-table [showSumColumns]="true"
                      [rowGroupCollector]="rowGroupCollector"
-                     [rowCollector]="rowCollector"
-                     [cellCollector]="cellCollector"
-                     [cellLabelSetter]="cellLabelSetter">
+                     [rowCollector]="rowCollector">
 
   <ng-template table-top-item>
     <app-show-hours-control></app-show-hours-control>
@@ -70,7 +68,4 @@
   </ng-container>
 </app-schedules-table>
 
-<app-schedule-table-context-menu [dayTypes]="dayTypes"
-                                 [patterns]="patterns"
-                                 [dayTypeGroups]="dayTypeGroups">
-</app-schedule-table-context-menu>
+<app-schedule-table-context-menu></app-schedule-table-context-menu>

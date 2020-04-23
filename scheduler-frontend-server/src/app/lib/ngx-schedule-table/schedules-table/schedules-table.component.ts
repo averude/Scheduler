@@ -15,8 +15,6 @@ import {
 import { RowGroupData } from "../model/data/row-group-data";
 import { RowGroupCollector } from "../collectors/row-group-collector";
 import { RowCollector } from "../collectors/row-collector";
-import { CellCollector } from "../collectors/cell-collector";
-import { CellLabelSetter } from "../utils/cell-label-setter";
 import { TableTopItemDirective } from "../directives/table-top-item.directive";
 import { AfterDateColumnDef, BeforeDateColumnDef } from "../directives/column";
 import { PaginatorDef } from "../directives/paginator";
@@ -33,8 +31,6 @@ export class SchedulesTableComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() rowGroupCollector: RowGroupCollector<any>;
   @Input() rowCollector:      RowCollector<any, any>;
-  @Input() cellCollector:     CellCollector<any, any>;
-  @Input() cellLabelSetter:   CellLabelSetter;
 
   @ContentChild(PaginatorDef, {read: TemplateRef, static: false})
   paginator: TemplateRef<any>;
@@ -59,11 +55,16 @@ export class SchedulesTableComponent implements OnInit, OnChanges, OnDestroy {
   constructor(private cd: ChangeDetectorRef) {
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    if(this.rowGroupCollector && changes['rowGroupCollector']) {
+    if(changes['rowGroupCollector']) {
+      this.getRowGroupsData();
+    }
+  }
+
+  private getRowGroupsData() {
+    if (this.rowGroupCollector) {
       this.rowGroups = this.rowGroupCollector.collect();
       this.cd.markForCheck();
     }

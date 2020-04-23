@@ -1,9 +1,9 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { DayType } from "../../../../../../../../model/day-type";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { PatternUnit } from "../../../../../../../../model/pattern-unit";
 import { timeValidationPattern } from "../../../../../../../../shared/utils/time-converter";
+import { DepartmentDayType } from "../../../../../../../../model/department-day-type";
 
 @Component({
   selector: 'app-custom-daytype-dialog',
@@ -12,13 +12,13 @@ import { timeValidationPattern } from "../../../../../../../../shared/utils/time
 })
 export class CustomDaytypeDialogComponent implements OnInit {
 
-  dayTypes: DayType[];
+  departmentDayTypes: DepartmentDayType[];
   customDayTypeForm: FormGroup;
 
   constructor(private fb: FormBuilder,
               private dialogRef: MatDialogRef<CustomDaytypeDialogComponent>,
               @Inject(MAT_DIALOG_DATA) data) {
-    this.dayTypes = data.filter(dayType => !dayType.usePreviousValue);
+    this.departmentDayTypes = data.filter(depDayType => !depDayType.dayType.usePreviousValue);
   }
 
   ngOnInit() {
@@ -34,14 +34,14 @@ export class CustomDaytypeDialogComponent implements OnInit {
   }
 
   onDayTypeSelect(event) {
-    let dayType: DayType = event.value;
+    let departmentDayType: DepartmentDayType = event.value;
 
     this.customDayTypeForm.patchValue({
-      dayTypeId:      dayType.id,
-      startTime:      dayType.startTime,
-      endTime:        dayType.endTime,
-      breakStartTime: dayType.breakStartTime,
-      breakEndTime:   dayType.breakEndTime
+      dayTypeId:      departmentDayType.dayType.id,
+      startTime:      departmentDayType.startTime,
+      endTime:        departmentDayType.endTime,
+      breakStartTime: departmentDayType.breakStartTime,
+      breakEndTime:   departmentDayType.breakEndTime
     });
   }
 

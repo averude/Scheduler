@@ -1,51 +1,44 @@
 package com.averude.uksatse.scheduler.core.json.serializer;
 
-import com.averude.uksatse.scheduler.core.entity.DayType;
+import com.averude.uksatse.scheduler.core.entity.DepartmentDayType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 
 import java.io.IOException;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class JsonSerializersAndDeserializersTest {
     private String dayTypeJsonString = "{" +
             "\"id\":1," +
             "\"departmentId\":1," +
-            "\"dayTypeGroupId\":1," +
-            "\"name\":\"Test\"," +
-            "\"label\":\"T\"," +
+            "\"dayType\":null," +
             "\"startTime\":\"08:00\"," +
             "\"breakStartTime\":\"10:00\"," +
             "\"breakEndTime\":\"11:00\"," +
-            "\"endTime\":\"16:45\"," +
-            "\"usePreviousValue\":false" +
+            "\"endTime\":\"16:45\"" +
             "}";
     private ObjectMapper om = new ObjectMapper();
 
     @Test
     public void testSerializer() throws IOException {
-        DayType dayType = new DayType();
-        dayType.setId(1L);
-        dayType.setDepartmentId(1L);
-        dayType.setDayTypeGroupId(1L);
-        dayType.setName("Test");
-        dayType.setLabel("T");
-        dayType.setStartTime(480);
-        dayType.setBreakStartTime(600);
-        dayType.setBreakEndTime(660);
-        dayType.setEndTime(1005);
-        dayType.setUsePreviousValue(false);
-        String jsonString = om.writeValueAsString(dayType);
+        DepartmentDayType departmentDayType = new DepartmentDayType();
+        departmentDayType.setId(1L);
+        departmentDayType.setDepartmentId(1L);
+        departmentDayType.setStartTime(480);
+        departmentDayType.setBreakStartTime(600);
+        departmentDayType.setBreakEndTime(660);
+        departmentDayType.setEndTime(1005);
+        String jsonString = om.writeValueAsString(departmentDayType);
         assertEquals(jsonString, dayTypeJsonString);
     }
 
     @Test
     public void testDeserializer() throws IOException {
-        DayType dayType = om.readValue(dayTypeJsonString, DayType.class);
-        assertEquals(dayType.getBreakStartTime().intValue(), 600);
-        assertEquals(dayType.getBreakEndTime().intValue(), 660);
-        assertEquals(dayType.getStartTime().intValue(), 480);
-        assertEquals(dayType.getEndTime().intValue(), 1005);
+        DepartmentDayType departmentDayType = om.readValue(dayTypeJsonString, DepartmentDayType.class);
+        assertEquals(departmentDayType.getBreakStartTime().intValue(), 600);
+        assertEquals(departmentDayType.getBreakEndTime().intValue(), 660);
+        assertEquals(departmentDayType.getStartTime().intValue(), 480);
+        assertEquals(departmentDayType.getEndTime().intValue(), 1005);
     }
 }

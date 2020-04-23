@@ -1,14 +1,14 @@
 import { Observable } from "rxjs";
 
 export interface IByDateCrudService<T> {
-  getAllByAuthAndDateBetween(from: string,
-                             to: string): Observable<T[]>;
+  getAllByAuth(from: string,
+               to: string): Observable<T[]>;
 
-  getAllByDepartmentIdAndDateBetween(departmentId: number,
-                                     from: string,
-                                     to: string): Observable<T[]>;
+  getAllByDepartmentId(departmentId: number,
+                       from: string,
+                       to: string): Observable<T[]>;
 
-  getAllByShiftIdAndDateBetween(shiftId: number,
-                                from: string,
-                                to: string): Observable<T[]>;
+  getAllByShiftId(shiftId: number,
+                  from: string,
+                  to: string): Observable<T[]>;
 }

@@ -7,21 +7,21 @@ import { ShiftService } from "../../../../../../../http-services/shift.service";
 import { Shift } from "../../../../../../../model/shift";
 import { WorkingTimeDialogComponent } from "../working-time-dialog/working-time-dialog.component";
 import { PageableTableBaseComponent } from "../../../../../../../shared/abstract-components/table-base/pageable-table-base.component";
-import { DatePaginationService } from "../../../../../../../lib/ngx-schedule-table/service/date-pagination.service";
+import { PaginationService } from "../../../../../../../lib/ngx-schedule-table/service/pagination.service";
 
 @Component({
   selector: 'app-working-time-table',
   templateUrl: './working-time-table.component.html',
   styleUrls: ['../../../../../../../shared/common/table.common.css',
     './working-time-table.component.css'],
-  providers: [DatePaginationService]
+  providers: [PaginationService]
 })
 export class WorkingTimeTableComponent extends PageableTableBaseComponent<WorkingTime> {
   displayedColumns = ['select', 'year', 'month', 'shift', 'hours', 'control'];
 
   shifts: Shift[] = [];
 
-  constructor(datePaginationService: DatePaginationService,
+  constructor(datePaginationService: PaginationService,
               dialog: MatDialog,
               notificationsService: NotificationsService,
               workingTimeService: WorkingTimeService,

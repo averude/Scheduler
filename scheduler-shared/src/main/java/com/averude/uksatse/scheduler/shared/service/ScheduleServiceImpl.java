@@ -1,6 +1,8 @@
 package com.averude.uksatse.scheduler.shared.service;
 
+import com.averude.uksatse.scheduler.core.dto.BasicDto;
 import com.averude.uksatse.scheduler.core.dto.ScheduleDTO;
+import com.averude.uksatse.scheduler.core.entity.Employee;
 import com.averude.uksatse.scheduler.core.entity.WorkDay;
 import com.averude.uksatse.scheduler.core.extractor.DataByAuthorityExtractor;
 import com.averude.uksatse.scheduler.shared.repository.EmployeeRepository;
@@ -34,6 +36,45 @@ public class ScheduleServiceImpl
         this.shiftCompositionRepository = shiftCompositionRepository;
         this.employeeRepository = employeeRepository;
         this.extractor = extractor;
+    }
+
+    @Override
+    public BasicDto<Employee, WorkDay> findEmployeeScheduleByEmployeeIdAndDate(Long employeeId,
+                                                                               LocalDate from,
+                                                                               LocalDate to) {
+        return employeeRepository.findById(employeeId)
+                .map(employee -> new BasicDto<>(employee, scheduleRepository.findAllByEmployeeIdAndDateBetweenOrderByDateAsc(employee.getId(), from, to)))
+                .orElse(null);
+    }
+
+    @Override
+    public List<BasicDto<Employee, WorkDay>> findEmployeeScheduleByDepartmentIdAndDate(Long departmentId,
+                                                                                       LocalDate from,
+                                                                                       LocalDate to) {
+        return employeeRepository.findAllByDepartmentId(departmentId)
+                .stream()
+                .map(employee -> new BasicDto<>(employee,
+                        scheduleRepository.findAllByEmployeeIdAndDateBetweenOrderByDateAsc(employee.getId(), from, to)))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BasicDto<Employee, WorkDay>> findEmployeeScheduleByShiftIdAndDate(Long shiftId,
+                                                                                  LocalDate from,
+                                                                                  LocalDate to) {
+        return shiftCompositionRepository.findAllByShiftIdAndToGreaterThanEqualAndFromLessThanEqual(shiftId, from, to)
+                .stream()
+                .map(shiftSchedule -> new BasicDto<>(
+                        employeeRepository.findById(shiftSchedule.getEmployeeId()).orElseThrow(),
+                        scheduleRepository.findAllByEmployeeIdAndDateBetweenOrderByDateAsc(shiftSchedule.getEmployeeId(), from, to)))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BasicDto<Employee, WorkDay>> findAllEmployeeScheduleByAuthAndDate(Authentication authentication, LocalDate from, LocalDate to) {
+        return extractor.getData(authentication,
+                (departmentId, shiftId) -> findEmployeeScheduleByDepartmentIdAndDate(departmentId, from, to),
+                (departmentId, shiftId) -> findEmployeeScheduleByShiftIdAndDate(shiftId, from, to));
     }
 
     @Override

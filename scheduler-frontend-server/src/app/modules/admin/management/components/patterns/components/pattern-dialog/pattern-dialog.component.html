@@ -11,38 +11,38 @@
             <input matInput
                    class="input-pattern-name"
                    placeholder="Shift pattern name"
-                   [(ngModel)]="pattern.name">
+                   [(ngModel)]="dto.entity.name">
           </mat-form-field>
 
           <mat-form-field>
             <mat-select placeholder="Holiday type of day"
-                        [compareWith]="compare"
-                        [(ngModel)]="pattern.holidayDayTypeId">
-              <mat-option *ngFor="let dayType of dayTypes"
-                          [value]="dayType.id">
-                {{dayType.name}}
+                        [compareWith]="compareIdEntity"
+                        [(ngModel)]="dto.entity.holidayDepDayType">
+              <mat-option *ngFor="let departmentDayType of departmentDayTypes"
+                          [value]="departmentDayType">
+                {{departmentDayType.dayType.name}}
               </mat-option>
             </mat-select>
           </mat-form-field>
 
           <mat-form-field>
             <mat-select placeholder="Extra weekend type of day"
-                        [compareWith]="compare"
-                        [(ngModel)]="pattern.extraWeekendDayTypeId">
-              <mat-option *ngFor="let dayType of dayTypes"
-                          [value]="dayType.id">
-                {{dayType.name}}
+                        [compareWith]="compareIdEntity"
+                        [(ngModel)]="dto.entity.extraWeekendDepDayType">
+              <mat-option *ngFor="let departmentDayType of departmentDayTypes"
+                          [value]="departmentDayType">
+                {{departmentDayType.dayType.name}}
               </mat-option>
             </mat-select>
           </mat-form-field>
 
           <mat-form-field>
             <mat-select placeholder="Extra work day type of day"
-                        [compareWith]="compare"
-                        [(ngModel)]="pattern.extraWorkDayDayTypeId">
-              <mat-option *ngFor="let dayType of dayTypes"
-                          [value]="dayType.id">
-                {{dayType.name}}
+                        [compareWith]="compareIdEntity"
+                        [(ngModel)]="dto.entity.extraWorkDayDepDayType">
+              <mat-option *ngFor="let departmentDayType of departmentDayTypes"
+                          [value]="departmentDayType">
+                {{departmentDayType.dayType.name}}
               </mat-option>
             </mat-select>
           </mat-form-field>
@@ -58,9 +58,8 @@
              class="pattern-units-panel"
              (cdkDropListDropped)="drop($event)">
           <app-pattern-unit class="pattern-unit"
-                            *ngFor="let unit of units"
-                            [dayTypes]="dayTypes"
-                            [dayTypeGroups]="dayTypeGroups"
+                            *ngFor="let unit of dto.collection"
+                            [departmentDayTypes]="departmentDayTypes"
                             [unit]="unit"
                             (onDelete)="delete($event)"
                             cdkDrag>

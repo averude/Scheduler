@@ -48,7 +48,7 @@ public class Position implements HasId {
     private Long departmentId;
 
     @JsonIgnore
-    @OneToMany( mappedBy = "positionId",
+    @OneToMany( mappedBy = "position",
                 cascade = CascadeType.ALL,
                 fetch = FetchType.LAZY)
     private Set<@NotNull @Valid Employee> employees = new HashSet<>();
@@ -105,12 +105,12 @@ public class Position implements HasId {
     }
 
     public void addEmployee(Employee employee){
-        employee.setPositionId(this.getId());
+        employee.setPosition(this);
         employees.add(employee);
     }
 
     public void removeEmployee(Employee employee){
-        employee.setPositionId(null);
+        employee.setPosition(null);
         employees.remove(employee);
     }
 

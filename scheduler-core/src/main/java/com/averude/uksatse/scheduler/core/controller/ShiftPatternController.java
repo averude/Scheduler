@@ -1,5 +1,7 @@
 package com.averude.uksatse.scheduler.core.controller;
 
+import com.averude.uksatse.scheduler.core.dto.BasicDto;
+import com.averude.uksatse.scheduler.core.entity.PatternUnit;
 import com.averude.uksatse.scheduler.core.entity.ShiftPattern;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,6 +15,22 @@ import java.util.Optional;
 
 @RequestMapping("/admin/patterns")
 public interface ShiftPatternController extends BasicCrudController<ShiftPattern> {
+
+    @RequestMapping(method = RequestMethod.GET,
+                    value = "/dto/departments/{departmentId}")
+    List<BasicDto<ShiftPattern, PatternUnit>> getAllDtoByDepartmentId(@PathVariable Long departmentId);
+
+    @RequestMapping(method = RequestMethod.GET,
+                    value = "/dto/shifts/{shiftId}")
+    List<BasicDto<ShiftPattern, PatternUnit>> getAllDtoByShiftId(@PathVariable Long shiftId);
+
+    @RequestMapping(method = RequestMethod.POST,
+                    value = "/dto")
+    BasicDto<ShiftPattern, PatternUnit> postDto(@RequestBody BasicDto<ShiftPattern, PatternUnit> dto);
+
+    @RequestMapping(method = RequestMethod.PUT,
+                    value = "/dto")
+    BasicDto<ShiftPattern, PatternUnit> putDto(@RequestBody BasicDto<ShiftPattern, PatternUnit> dto);
 
     @RequestMapping(method = RequestMethod.GET,
                     value = "/departments/{departmentId}")

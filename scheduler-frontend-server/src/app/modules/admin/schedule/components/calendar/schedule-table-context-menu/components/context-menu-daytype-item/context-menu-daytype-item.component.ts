@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { DayType } from "../../../../../../../../model/day-type";
-import { DayTypeGroup } from "../../../../../../../../model/day-type-group";
+import { DepartmentDayType } from "../../../../../../../../model/department-day-type";
 
 @Component({
   selector: 'app-context-menu-daytype-item',
@@ -9,26 +8,14 @@ import { DayTypeGroup } from "../../../../../../../../model/day-type-group";
 })
 export class ContextMenuDaytypeItemComponent implements OnInit {
 
-  @Input() dayType: DayType;
-  @Input() dayTypeGroups: DayTypeGroup[];
+  @Input() departmentDayType: DepartmentDayType;
 
   constructor() { }
 
   ngOnInit() {
   }
 
-  getDayTypeGroupColor(dayType: DayType): string {
-    let color = 'transparent';
-    if (this.dayTypeGroups && dayType && dayType.dayTypeGroupId) {
-      let dayTypeGroup = this.dayTypeGroups.find(value => value.id === dayType.dayTypeGroupId);
-      if (dayTypeGroup && dayTypeGroup.color && dayTypeGroup.color.length > 0) {
-        color = dayTypeGroup.color
-      }
-    }
-    return color;
-  }
-
   showTimeValues(): boolean {
-    return !!(this.dayType.startTime && this.dayType.endTime);
+    return !!(this.departmentDayType.startTime && this.departmentDayType.endTime);
   }
 }

@@ -5,14 +5,17 @@ import { ScheduleTableContextMenuModule } from "./schedule-table-context-menu/sc
 import { ScheduleExportExcelComponent } from "./schedule-export-excel/schedule-export-excel.component";
 import { ScheduleGenerationModule } from "../schedule-generation/schedule-generation.module";
 import { ShowHoursControlComponent } from "./show-hours-control/show-hours-control.component";
-import { MonthYearPaginatorComponent } from "../../../../../shared/paginators/month-year-paginator/month-year-paginator.component";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { SharedModule } from "../../../../../shared/shared.module";
-import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { FormsModule } from "@angular/forms";
 import { ScheduleGenerationDialogComponent } from "../schedule-generation/components/schedule-generation-dialog/schedule-generation-dialog.component";
 import { CommonModule } from "@angular/common";
 import { ScheduleGenerationService } from "../../../../../services/generators/schedule-generation.service";
+import { SchedulerCellLabelSetter } from "./utils/scheduler-cell-label-setter";
+import { CellLabelSetter } from "../../../../../lib/ngx-schedule-table/utils/cell-label-setter";
+import { CellCollector } from "../../../../../lib/ngx-schedule-table/collectors/cell-collector";
+import { SchedulerCellCollector } from "./collectors/scheduler-cell-collector";
 
 @NgModule({
   imports: [
@@ -29,10 +32,17 @@ import { ScheduleGenerationService } from "../../../../../services/generators/sc
     ShowHoursControlComponent,
     SchedulerTableComponent,
     ScheduleExportExcelComponent,
-    MonthYearPaginatorComponent,
+    // MonthYearPaginatorComponent,
   ],
-  providers: [ScheduleGenerationService],
+  providers: [
+    ScheduleGenerationService,
+    {provide: CellLabelSetter, useClass: SchedulerCellLabelSetter},
+    {provide: CellCollector, useClass: SchedulerCellCollector}
+    ],
   entryComponents: [ScheduleGenerationDialogComponent],
 })
 export class CalendarModule {
+  constructor(c: CellLabelSetter) {}
 }
+
+

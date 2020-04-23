@@ -11,16 +11,23 @@ import { AuthService } from "./auth.service";
   providedIn: 'root'
 })
 export class DepartmentService implements IByAuthService<Department>, CUDService<Department> {
+  private readonly url: string;
 
   constructor(private authService: AuthService,
               private http: HttpClient,
-              private config: RestConfig) { }
+              private config: RestConfig) {
+    this.url = `${config.baseUrl}/admin/departments`;
+  }
 
   getAllByAuth(): Observable<Department[]> {
     let user = this.authService.currentUserValue;
     if (user.roles.indexOf('GLOBAL_ADMIN') >= 0) {
       return this.getAll();
     }
+  }
+
+  getAllByEnterpriseId(enterpriseId: number): Observable<Department[]> {
+    return this.http.get<Department[]>(`${this.url}/enterprises/${enterpriseId}`);
   }
 
   getAll(): Observable<Department[]> {

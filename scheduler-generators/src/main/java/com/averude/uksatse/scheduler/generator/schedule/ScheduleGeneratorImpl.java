@@ -7,7 +7,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
@@ -24,9 +25,9 @@ public class ScheduleGeneratorImpl implements ScheduleGenerator {
                                   List<ExtraWorkDay> extraWorkDays) {
         var schedule = new ArrayList<>(existingSchedule);
 
-        var holidayUnit = getPatternUnitByDayType(pattern.getHolidayDayType());
-        var extraWeekendUnit = getPatternUnitByDayType(pattern.getExtraWeekendDayType());
-        var extraWorkDayUnit = getPatternUnitByDayType(pattern.getExtraWorkDayDayType());
+        var holidayUnit = getPatternUnitByDayType(pattern.getHolidayDepDayType());
+        var extraWeekendUnit = getPatternUnitByDayType(pattern.getExtraWeekendDepDayType());
+        var extraWorkDayUnit = getPatternUnitByDayType(pattern.getExtraWorkDayDepDayType());
 
         var dates = interval.getFrom()
                 .datesUntil(interval.getTo().plusDays(1))
@@ -128,13 +129,13 @@ public class ScheduleGeneratorImpl implements ScheduleGenerator {
         return null;
     }
 
-    private PatternUnit getPatternUnitByDayType(DayType dayType) {
-        if (dayType != null) {
-            var unit = new PatternUnit(0L, 0L, dayType.getId());
-            unit.setStartTime(dayType.getStartTime());
-            unit.setEndTime(dayType.getEndTime());
-            unit.setBreakStartTime(dayType.getBreakStartTime());
-            unit.setBreakEndTime(dayType.getBreakEndTime());
+    private PatternUnit getPatternUnitByDayType(DepartmentDayType departmentDayType) {
+        if (departmentDayType != null) {
+            var unit = new PatternUnit(0L, 0L, departmentDayType.getDayType().getId());
+            unit.setStartTime(departmentDayType.getStartTime());
+            unit.setEndTime(departmentDayType.getEndTime());
+            unit.setBreakStartTime(departmentDayType.getBreakStartTime());
+            unit.setBreakEndTime(departmentDayType.getBreakEndTime());
             return unit;
         } else {
             return null;

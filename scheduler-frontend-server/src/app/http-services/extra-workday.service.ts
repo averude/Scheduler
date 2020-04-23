@@ -1,4 +1,3 @@
-import { APageableByDateService } from "./abstract-service/a-pageable-by-date-service";
 import { ExtraWorkDay } from "../model/extra-workday";
 import { CUDService } from "./interface/cud-service";
 import { AuthService } from "./auth.service";
@@ -6,56 +5,30 @@ import { HttpClient } from "@angular/common/http";
 import { RestConfig } from "../rest.config";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { ExtraWeekend } from "../model/extra-weekend";
 import { parseDateOfEntities } from "../shared/utils/utils";
+import { ACrudService } from "./abstract-service/a-crud-service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ExtraWorkdayService
-  extends APageableByDateService<ExtraWorkDay> implements CUDService<ExtraWorkDay> {
+  extends ACrudService<ExtraWorkDay> implements CUDService<ExtraWorkDay> {
 
   constructor(authService: AuthService,
-              private http: HttpClient,
+              http: HttpClient,
               private config: RestConfig) {
-    super(authService);
+    super(`${config.baseUrl}/admin/extra_work_days`, http, authService);
   }
 
-  getAllByDepartmentIdAndDateBetween(departmentId: number,
-                                     from: string,
-                                     to: string): Observable<ExtraWorkDay[]> {
-    return this.http.get<ExtraWeekend[]>(
-      `${this.config.baseUrl}/admin/extra_work_days/departments/${departmentId}/dates?from=${from}&to=${to}`
-    ).pipe(parseDateOfEntities);
+  getAllByDepartmentId(departmentId: number,
+                       from: string,
+                       to: string): Observable<ExtraWorkDay[]> {
+    return super.getAllByDepartmentId(departmentId, from, to).pipe(parseDateOfEntities);
   };
 
-  getAllByShiftIdAndDateBetween(shiftId: number,
-                                from: string,
-                                to: string): Observable<ExtraWorkDay[]> {
-    return this.http.get<ExtraWeekend[]>(
-      `${this.config.baseUrl}/admin/extra_work_days/shifts/${shiftId}/dates?from=${from}&to=${to}`
-    ).pipe(parseDateOfEntities);
+  getAllByShiftId(shiftId: number,
+                  from: string,
+                  to: string): Observable<ExtraWorkDay[]> {
+    return super.getAllByShiftId(shiftId, from, to).pipe(parseDateOfEntities);
   };
-
-  create(extraWeekend: ExtraWorkDay): Observable<any> {
-    return this.http.post<number>(
-      `${this.config.baseUrl}/admin/extra_work_days`,
-      extraWeekend,
-    );
-  }
-
-  update(extraWeekend: ExtraWorkDay): Observable<any> {
-    return this.http.put(
-      `${this.config.baseUrl}/admin/extra_work_days`,
-      extraWeekend,
-      {responseType: 'text'}
-    );
-  }
-
-  delete(id: number): Observable<any> {
-    return this.http.delete(
-      `${this.config.baseUrl}/admin/extra_work_days/${id}`,
-      {responseType: 'text'}
-    );
-  }
 }

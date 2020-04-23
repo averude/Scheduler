@@ -34,7 +34,7 @@ public class DayTypeGroup implements HasId {
     private String color;
 
     @JsonIgnore
-    @OneToMany( mappedBy = "dayTypeGroupId",
+    @OneToMany( mappedBy = "dayTypeGroup",
                 fetch = FetchType.LAZY,
                 cascade = CascadeType.ALL)
     private List<DayType> dayTypes = new LinkedList<>();
@@ -72,12 +72,12 @@ public class DayTypeGroup implements HasId {
     }
 
     public void addDayType(DayType dayType) {
-        dayType.setDayTypeGroupId(this.getId());
+        dayType.setDayTypeGroup(this);
         dayTypes.add(dayType);
     }
 
     public void removeDayType(DayType dayType) {
-        dayType.setDayTypeGroupId(null);
+        dayType.setDayTypeGroup(null);
         dayTypes.remove(dayType);
     }
 

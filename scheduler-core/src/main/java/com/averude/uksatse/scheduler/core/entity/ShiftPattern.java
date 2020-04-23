@@ -41,31 +41,22 @@ public class ShiftPattern implements HasId {
     @Column(nullable = false)
     private String name;
 
-    @Column(name = "holiday_day_type_id")
-    private Long holidayDayTypeId;
+    @ManyToOne
+    @JoinColumn(name = "holiday_dep_day_type_id")
+    private DepartmentDayType holidayDepDayType;
 
-    @Column(name = "extra_weekend_day_type_id")
-    private Long extraWeekendDayTypeId;
+    @ManyToOne
+    @JoinColumn(name = "extra_weekend_dep_day_type_id")
+    private DepartmentDayType extraWeekendDepDayType;
 
-    @Column(name = "extra_work_day_day_type_id")
-    private Long extraWorkDayDayTypeId;
-
-    @JsonIgnore
-    @Transient
-    private DayType holidayDayType;
-
-    @JsonIgnore
-    @Transient
-    private DayType extraWeekendDayType;
-
-    @JsonIgnore
-    @Transient
-    private DayType extraWorkDayDayType;
+    @ManyToOne
+    @JoinColumn(name = "extra_work_day_dep_day_type_id")
+    private DepartmentDayType extraWorkDayDepDayType;
 
     @JsonIgnore
     @OneToMany( mappedBy = "patternId",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true)
+                fetch = FetchType.LAZY,
+                cascade = CascadeType.ALL)
     @OrderBy("orderId ASC")
     private List<PatternUnit> sequence = new ArrayList<>();
 
@@ -104,52 +95,28 @@ public class ShiftPattern implements HasId {
         this.name = name;
     }
 
-    public Long getHolidayDayTypeId() {
-        return holidayDayTypeId;
+    public DepartmentDayType getHolidayDepDayType() {
+        return holidayDepDayType;
     }
 
-    public void setHolidayDayTypeId(Long holidayDayTypeId) {
-        this.holidayDayTypeId = holidayDayTypeId;
+    public void setHolidayDepDayType(DepartmentDayType holidayDepDayType) {
+        this.holidayDepDayType = holidayDepDayType;
     }
 
-    public Long getExtraWeekendDayTypeId() {
-        return extraWeekendDayTypeId;
+    public DepartmentDayType getExtraWeekendDepDayType() {
+        return extraWeekendDepDayType;
     }
 
-    public void setExtraWeekendDayTypeId(Long extraWeekendDayTypeId) {
-        this.extraWeekendDayTypeId = extraWeekendDayTypeId;
+    public void setExtraWeekendDepDayType(DepartmentDayType extraWeekendDepDayType) {
+        this.extraWeekendDepDayType = extraWeekendDepDayType;
     }
 
-    public DayType getHolidayDayType() {
-        return holidayDayType;
+    public DepartmentDayType getExtraWorkDayDepDayType() {
+        return extraWorkDayDepDayType;
     }
 
-    public void setHolidayDayType(DayType holidayDayType) {
-        this.holidayDayType = holidayDayType;
-    }
-
-    public DayType getExtraWeekendDayType() {
-        return extraWeekendDayType;
-    }
-
-    public void setExtraWeekendDayType(DayType extraWeekendDayType) {
-        this.extraWeekendDayType = extraWeekendDayType;
-    }
-
-    public Long getExtraWorkDayDayTypeId() {
-        return extraWorkDayDayTypeId;
-    }
-
-    public void setExtraWorkDayDayTypeId(Long extraWorkDayDayTypeId) {
-        this.extraWorkDayDayTypeId = extraWorkDayDayTypeId;
-    }
-
-    public DayType getExtraWorkDayDayType() {
-        return extraWorkDayDayType;
-    }
-
-    public void setExtraWorkDayDayType(DayType extraWorkDayDayType) {
-        this.extraWorkDayDayType = extraWorkDayDayType;
+    public void setExtraWorkDayDepDayType(DepartmentDayType extraWorkDayDepDayType) {
+        this.extraWorkDayDepDayType = extraWorkDayDepDayType;
     }
 
     public List<PatternUnit> getSequence() {
@@ -195,19 +162,14 @@ public class ShiftPattern implements HasId {
         ShiftPattern that = (ShiftPattern) o;
         return departmentId.equals(that.departmentId) &&
                 name.equals(that.name) &&
-                Objects.equals(holidayDayTypeId, that.holidayDayTypeId) &&
-                Objects.equals(extraWeekendDayTypeId, that.extraWeekendDayTypeId) &&
-                Objects.equals(extraWorkDayDayTypeId, that.extraWorkDayDayTypeId) &&
-                Objects.equals(holidayDayType, that.holidayDayType) &&
-                Objects.equals(extraWeekendDayType, that.extraWeekendDayType) &&
-                Objects.equals(extraWorkDayDayType, that.extraWorkDayDayType);
+                Objects.equals(holidayDepDayType, that.holidayDepDayType) &&
+                Objects.equals(extraWeekendDepDayType, that.extraWeekendDepDayType) &&
+                Objects.equals(extraWorkDayDepDayType, that.extraWorkDayDepDayType);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(departmentId, name,
-                holidayDayTypeId, extraWeekendDayTypeId, extraWorkDayDayTypeId,
-                holidayDayType, extraWeekendDayType, extraWorkDayDayType);
+        return Objects.hash(departmentId, name, holidayDepDayType, extraWeekendDepDayType, extraWorkDayDepDayType);
     }
 
     @Override
@@ -216,9 +178,9 @@ public class ShiftPattern implements HasId {
                 .add("id=" + id)
                 .add("departmentId=" + departmentId)
                 .add("name='" + name + "'")
-                .add("holidayDayTypeId=" + holidayDayTypeId)
-                .add("extraWeekendDayTypeId=" + extraWeekendDayTypeId)
-                .add("extraWorkDayDayTypeId=" + extraWorkDayDayTypeId)
+                .add("holidayDepDayType=" + holidayDepDayType)
+                .add("extraWeekendDepDayType=" + extraWeekendDepDayType)
+                .add("extraWorkDayDepDayType=" + extraWorkDayDepDayType)
                 .toString();
     }
 }

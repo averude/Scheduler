@@ -3,14 +3,13 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.junit.Test;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
 public class TestRowShift {
-    @Test
+//    @Test
     public void testShiftRow() {
         try(Workbook workbook = new HSSFWorkbook(this.getClass().getResourceAsStream("schedule-report.xls"));
             FileOutputStream fos = new FileOutputStream("test.xls")) {

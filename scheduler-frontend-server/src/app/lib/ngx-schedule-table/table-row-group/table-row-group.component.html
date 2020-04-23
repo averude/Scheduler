@@ -1,0 +1,19 @@
+<ng-container *ngIf="rowData && rowData.length > 0">
+  <tr class="group-label-row">
+    <td class="group-label"
+        [attr.colspan]="numberOfColumns"
+        (click)="isHidden = !isHidden">
+      {{(isHidden ? "▶" : "▼") + ' ' + groupData.groupName}}
+    </td>
+  </tr>
+  <tr [hidden]="isHidden"
+      class="row"
+      *ngFor="let row of rowData"
+      app-table-row
+      [datedCellDef]="datedCellDef"
+      [beforeDateColumns]="beforeDateColumns"
+      [afterDateColumns]="afterDateColumns"
+      [rowGroupId]="groupData.groupId"
+      [rowData]="row">
+  </tr>
+</ng-container>

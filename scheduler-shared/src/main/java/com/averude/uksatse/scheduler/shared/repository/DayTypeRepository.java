@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface DayTypeRepository extends JpaRepository<DayType, Long> {
-    List<DayType> findAllByDepartmentId(Long departmentId);
+    List<DayType> findAllByEnterpriseId(Long enterpriseId);
 }

@@ -9,7 +9,7 @@ import {
   QueryList,
   ViewChild,
 } from '@angular/core';
-import { RowRendererService } from "../service/row-renderer.service";
+import { TableRenderer } from "../service/table-renderer.service";
 import { Subscription } from "rxjs";
 import { filter } from "rxjs/operators";
 import { ClearSelectionService } from "../service/clear-selection.service";
@@ -18,8 +18,7 @@ import { SelectableRowDirective } from "../directives/selectable-row.directive";
 import { RowData } from "../model/data/row-data";
 import { CellCollector } from "../collectors/cell-collector";
 import { CellData } from "../model/data/cell-data";
-import { DatePaginationService } from "../service/date-pagination.service";
-import { CellLabelSetter } from "../utils/cell-label-setter";
+import { PaginationService } from "../service/pagination.service";
 import { SelectionEndService } from "../service/selection-end.service";
 import { AfterDateColumnDef, BeforeDateColumnDef } from "../directives/column";
 import { DatedCellDef } from "../directives/cell";
@@ -38,8 +37,6 @@ export class TableRowComponent implements OnInit, OnDestroy {
 
   @Input() rowGroupId:      number;
   @Input() rowData:         RowData;
-  @Input() cellCollector:   CellCollector<any, any>;
-  @Input() cellLabelSetter: CellLabelSetter;
 
   daysInMonth:      CalendarDay[];
   cellData:         CellData[];
@@ -48,29 +45,26 @@ export class TableRowComponent implements OnInit, OnDestroy {
   selectableRowDirective: SelectableRowDirective;
 
   private rowRenderSub:     Subscription;
-  private allRowRenderSub:  Subscription;
   private rowClearSub:      Subscription;
   private paginatorSub:     Subscription;
 
   constructor(public elementRef: ElementRef,
-              private paginatorService: DatePaginationService,
+              private paginatorService: PaginationService,
               private cd: ChangeDetectorRef,
-              private rowRenderer: RowRendererService,
+              private cellCollector: CellCollector<any, any>,
+              private tableRenderer: TableRenderer,
               private selectionEndService: SelectionEndService,
               private rowClearSelection: ClearSelectionService) { }
 
   ngOnInit() {
-    this.rowRenderSub = this.rowRenderer.onRenderRow
+    this.rowRenderSub = this.tableRenderer.onRenderRow
       .pipe(filter(rowDataId => this.rowData.id === rowDataId))
-      .subscribe(() => this.getCells());
-
-    this.allRowRenderSub = this.rowRenderer.onRenderAllRows
       .subscribe(() => this.getCells());
 
     this.rowClearSub = this.rowClearSelection.onClearSelection()
       .subscribe(() => this.clearSelection());
 
-    this.paginatorSub = this.paginatorService.dates
+    this.paginatorSub = this.paginatorService.onValueChange
       .subscribe(daysInMonth => {
         if (!this.daysInMonth) {
           this.daysInMonth = daysInMonth;
@@ -83,7 +77,6 @@ export class TableRowComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.rowRenderSub.unsubscribe();
-    this.allRowRenderSub.unsubscribe();
     this.rowClearSub.unsubscribe();
     this.paginatorSub.unsubscribe();
   }

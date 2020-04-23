@@ -8,6 +8,18 @@
     <mat-error *ngIf="isControlInvalid('name')">{{getErrorMessage()}}</mat-error>
   </mat-form-field>
 
+  <mat-form-field>
+    <mat-select placeholder="Enterprise"
+                [compareWith]="compareNums"
+                formControlName="enterpriseId">
+      <mat-option *ngFor="let enterprise of enterprises"
+                  [value]="enterprise.id">
+        {{enterprise.name}}
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="isControlInvalid('name')">{{getErrorMessage()}}</mat-error>
+  </mat-form-field>
+
 </mat-dialog-content>
 
 <mat-dialog-actions>

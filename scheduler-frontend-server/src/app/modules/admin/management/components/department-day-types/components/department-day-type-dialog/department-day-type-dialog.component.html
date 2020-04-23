@@ -1,0 +1,61 @@
+<h2 matDialogTitle>{{operation}}</h2>
+<mat-dialog-content [formGroup]="dialogForm">
+
+  <mat-form-field>
+    <mat-select placeholder="Day type"
+                [compareWith]="compareIdEntities"
+                formControlName="dayType">
+      <mat-option *ngFor="let dayType of dayTypes"
+                  [value]="dayType">
+        {{dayType.name}}
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="isControlInvalid('dayType')">{{getErrorMessage()}}</mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput
+           mask="00:00"
+           [dropSpecialCharacters]="false"
+           placeholder="Start time"
+           formControlName="startTime">
+    <mat-error *ngIf="isControlInvalid('startTime')">{{getErrorMessage()}}</mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput
+           mask="00:00"
+           [dropSpecialCharacters]="false"
+           placeholder="End time"
+           formControlName="endTime">
+    <mat-error *ngIf="isControlInvalid('endTime')">{{getErrorMessage()}}</mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput
+           mask="00:00"
+           [dropSpecialCharacters]="false"
+           placeholder="Break start time"
+           formControlName="breakStartTime">
+    <mat-error *ngIf="isControlInvalid('breakStartTime')">{{getErrorMessage()}}</mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput
+           mask="00:00"
+           [dropSpecialCharacters]="false"
+           placeholder="Break end time"
+           formControlName="breakEndTime">
+    <mat-error *ngIf="isControlInvalid('breakEndTime')">{{getErrorMessage()}}</mat-error>
+  </mat-form-field>
+
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button class="mat-raised-button"
+          (click)="close()">Close</button>
+  <button class="mat-raised-button mat-primary"
+          type="submit"
+          [disabled]="dialogForm.invalid"
+          (click)="submit()">Save</button>
+</mat-dialog-actions>

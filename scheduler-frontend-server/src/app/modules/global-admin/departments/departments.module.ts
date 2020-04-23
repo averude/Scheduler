@@ -11,6 +11,7 @@ import { MatSelectModule } from "@angular/material/select";
 import { MatSortModule } from "@angular/material/sort";
 import { MatTableModule } from "@angular/material/table";
 import { DepartmentDialogComponent } from './components/department-dialog/department-dialog.component';
+import { PaginationService } from "../../../lib/ngx-schedule-table/service/pagination.service";
 
 @NgModule({
   imports: [
@@ -28,6 +29,7 @@ import { DepartmentDialogComponent } from './components/department-dialog/depart
   ],
   declarations: [DepartmentsTableComponent, DepartmentDialogComponent],
   exports: [DepartmentsTableComponent],
+  providers: [PaginationService],
   entryComponents: [DepartmentDialogComponent]
 })
 export class DepartmentsModule {}

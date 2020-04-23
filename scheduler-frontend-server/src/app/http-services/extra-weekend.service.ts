@@ -5,56 +5,30 @@ import { HttpClient } from "@angular/common/http";
 import { RestConfig } from "../rest.config";
 import { parseDateOfEntities } from "../shared/utils/utils";
 import { AuthService } from "./auth.service";
-import { APageableByDateService } from "./abstract-service/a-pageable-by-date-service";
 import { CUDService } from "./interface/cud-service";
+import { ACrudService } from "./abstract-service/a-crud-service";
 
 @Injectable({
   providedIn: "root"
 })
 export class ExtraWeekendService
-  extends APageableByDateService<ExtraWeekend> implements CUDService<ExtraWeekend> {
+  extends ACrudService<ExtraWeekend> implements CUDService<ExtraWeekend> {
 
   constructor(authService: AuthService,
-              private http: HttpClient,
+              http: HttpClient,
               private config: RestConfig) {
-    super(authService);
+    super(`${config.baseUrl}/admin/extra_weekends`, http, authService);
   }
 
-  getAllByDepartmentIdAndDateBetween(departmentId: number,
-                                     from: string,
-                                     to: string): Observable<ExtraWeekend[]> {
-    return this.http.get<ExtraWeekend[]>(
-      `${this.config.baseUrl}/admin/extra_weekends/departments/${departmentId}/dates?from=${from}&to=${to}`
-    ).pipe(parseDateOfEntities);
+  getAllByDepartmentId(departmentId: number,
+                       from: string,
+                       to: string): Observable<ExtraWeekend[]> {
+    return super.getAllByDepartmentId(departmentId, from, to).pipe(parseDateOfEntities);
   };
 
-  getAllByShiftIdAndDateBetween(shiftId: number,
-                                from: string,
-                                to: string): Observable<ExtraWeekend[]> {
-    return this.http.get<ExtraWeekend[]>(
-      `${this.config.baseUrl}/admin/extra_weekends/shifts/${shiftId}/dates?from=${from}&to=${to}`
-    ).pipe(parseDateOfEntities);
+  getAllByShiftId(shiftId: number,
+                  from: string,
+                  to: string): Observable<ExtraWeekend[]> {
+    return super.getAllByShiftId(shiftId, from, to).pipe(parseDateOfEntities);
   };
-
-  create(extraWeekend: ExtraWeekend): Observable<any> {
-    return this.http.post<number>(
-      `${this.config.baseUrl}/admin/extra_weekends`,
-      extraWeekend,
-    );
-  }
-
-  update(extraWeekend: ExtraWeekend): Observable<any> {
-    return this.http.put(
-      `${this.config.baseUrl}/admin/extra_weekends`,
-      extraWeekend,
-      {responseType: 'text'}
-    );
-  }
-
-  delete(id: number): Observable<any> {
-    return this.http.delete(
-      `${this.config.baseUrl}/admin/extra_weekends/${id}`,
-      {responseType: 'text'}
-    );
-  }
 }

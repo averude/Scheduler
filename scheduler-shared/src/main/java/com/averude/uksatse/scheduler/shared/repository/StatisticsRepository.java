@@ -12,7 +12,7 @@ public interface StatisticsRepository extends Repository<Position, Long> {
             "from Employee e " +
             "inner join " +
             "Position p " +
-            "on e.positionId = p.id " +
+            "on e.position = p " +
             "where p.departmentId = ?1 " +
             "group by p.id")
     List<CountDTO> countEmployeesOnPositionsByDepartmentId(long departmentId);

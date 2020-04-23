@@ -1,11 +1,12 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
-import { DayType } from "../../../../../../../model/day-type";
 import { PatternUnit } from "../../../../../../../model/pattern-unit";
 import { ShiftPattern } from "../../../../../../../model/shift-pattern";
 import { AuthService } from "../../../../../../../http-services/auth.service";
 import { CdkDragDrop } from "@angular/cdk/drag-drop";
-import { DayTypeGroup } from "../../../../../../../model/day-type-group";
+import { DepartmentDayType } from "../../../../../../../model/department-day-type";
+import { IdEntity } from "../../../../../../../model/interface/id-entity";
+import { ShiftPatternDto } from "../../../../../../../model/dto/basic-dto";
 
 @Component({
   selector: 'app-pattern-dialog',
@@ -16,51 +17,50 @@ export class PatternDialogComponent implements OnInit {
 
   operation: string;
 
-  pattern:        ShiftPattern;
-  units:          PatternUnit[];
-  dayTypes:       DayType[];
-  dayTypeGroups:  DayTypeGroup[];
+  dto: ShiftPatternDto;
+  departmentDayTypes: DepartmentDayType[];
 
   constructor(private authService: AuthService,
               private dialogRef: MatDialogRef<PatternDialogComponent>,
               @Inject(MAT_DIALOG_DATA) data) {
-    this.pattern        = data.pattern ? data.pattern : this.newShiftPattern;
-    this.units          = data.units ? data.units : [];
-    this.dayTypes       = data.dayTypes ? data.dayTypes : [];
-    this.dayTypeGroups  = data.dayTypeGroups ? data.dayTypeGroups : [];
+    this.dto = data.dto ? data.dto : this.newDto;
+    this.departmentDayTypes = data.departmentDayTypes ? data.departmentDayTypes : [];
   }
 
   ngOnInit() {
-    this.operation = this.pattern ? 'Edit' : 'Add';
+    this.operation = this.dto ? 'Edit' : 'Add';
   }
 
   addUnit() {
     const newUnit = new PatternUnit();
-    newUnit.patternId = this.pattern.id;
+    newUnit.patternId = this.dto.entity.id;
     newUnit.orderId   = this.lastOrderId + 1;
-    this.units.push(newUnit);
+    this.dto.collection.push(newUnit);
   }
 
   drop(event: CdkDragDrop<PatternUnit[]>) {
-    let previousIndex = event.previousIndex;
-    let currentIndex  = event.currentIndex;
+    const previousIndex = event.previousIndex;
+    const currentIndex  = event.currentIndex;
     if (currentIndex === previousIndex) {
       return;
     }
-    let element = this.units[previousIndex];
-    this.units.splice(previousIndex, 1);
-    this.units.splice(currentIndex, 0, element);
 
-    this.units.forEach((value, index) => {
+    const sequence = this.dto.collection;
+    const element = sequence[previousIndex];
+    sequence.splice(previousIndex, 1);
+    sequence.splice(currentIndex, 0, element);
+
+    sequence.forEach((value, index) => {
       value.orderId = index + 1;
     });
   }
 
   delete(unit: PatternUnit) {
-    const index = this.units.findIndex(value => value === unit);
-    this.units.splice(index, 1);
-    for (let i = index; i < this.units.length; i++) {
-      this.units[i].orderId--;
+    const sequence = this.dto.collection;
+    const index = sequence.findIndex(value => value === unit);
+    sequence.splice(index, 1);
+    for (let i = index; i < sequence.length; i++) {
+      sequence[i].orderId--;
     }
   }
 
@@ -68,25 +68,32 @@ export class PatternDialogComponent implements OnInit {
     return a === b;
   }
 
+  compareIdEntity(a: IdEntity, b: IdEntity): boolean {
+    return (a && b) && (a.id === b.id);
+  }
+
   private get lastOrderId(): number {
-    if (this.units.length > 0) {
-      return this.units
-        .sort((a, b) => a.orderId - b.orderId)[this.units.length - 1]
+    let sequence = this.dto.collection;
+    if (sequence.length > 0) {
+      return sequence
+        .sort((a, b) => a.orderId - b.orderId)[sequence.length - 1]
         .orderId;
     } else {
       return 0;
     }
   }
 
-  private get newShiftPattern(): ShiftPattern {
-    const pattern = new ShiftPattern();
-    pattern.departmentId = this.authService.departmentId;
-    pattern.name = '';
-    return pattern;
+  private get newDto(): ShiftPatternDto {
+    const dto = new ShiftPatternDto();
+    dto.entity = new ShiftPattern();
+    dto.entity.departmentId = this.authService.departmentId;
+    dto.entity.name = '';
+    dto.collection = [];
+    return dto;
   }
 
   submit() {
-    this.dialogRef.close({pattern: this.pattern, units: this.units});
+    this.dialogRef.close(this.dto);
   }
 
   close() {

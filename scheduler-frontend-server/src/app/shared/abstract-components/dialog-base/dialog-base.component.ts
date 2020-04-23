@@ -1,6 +1,7 @@
 import { OnInit } from "@angular/core";
 import { FormGroup, ValidationErrors } from "@angular/forms";
 import { MatDialogRef } from "@angular/material/dialog";
+import { IdEntity } from "../../../model/interface/id-entity";
 
 export abstract class DialogBaseComponent<T> implements OnInit {
   operation: string;
@@ -36,8 +37,12 @@ export abstract class DialogBaseComponent<T> implements OnInit {
     return this.dialogForm.controls[controlName].errors;
   }
 
-  compare(a: number, b: number): boolean {
+  compareNums(a: number, b: number): boolean {
     return a === b;
+  }
+
+  compareIdEntities(a: IdEntity, b: IdEntity): boolean {
+    return a && b ? a.id === b.id : false;
   }
 
   getErrorMessage(): string {

@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { PatternUnit } from '../../../../../../../model/pattern-unit';
-import { DayType } from '../../../../../../../model/day-type';
-import { DayTypeGroup } from "../../../../../../../model/day-type-group";
+import { DepartmentDayType } from "../../../../../../../model/department-day-type";
+import { IdEntity } from "../../../../../../../model/interface/id-entity";
 
 @Component({
   selector: 'app-pattern-unit',
@@ -11,8 +11,9 @@ import { DayTypeGroup } from "../../../../../../../model/day-type-group";
 export class PatternUnitComponent implements OnInit {
 
   @Input() unit: PatternUnit;
-  @Input() dayTypes: DayType[];
-  @Input() dayTypeGroups: DayTypeGroup[];
+  @Input() departmentDayTypes: DepartmentDayType[];
+
+  selectedDepartmentDayType: DepartmentDayType;
 
   @Output() onDelete:   EventEmitter<PatternUnit> = new EventEmitter();
 
@@ -23,9 +24,11 @@ export class PatternUnitComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    let dayType = this.dayTypes.find(dayType => dayType.id === this.unit.dayTypeId);
-    if (dayType) {
-      this.setColorOfUnit(dayType.dayTypeGroupId);
+    let depDayType = this.departmentDayTypes
+      .find(depDayType => depDayType.dayType.id === this.unit.dayTypeId);
+    if (depDayType) {
+      this.selectedDepartmentDayType = depDayType;
+      this.color = depDayType.dayType.dayTypeGroup.color;
     }
   }
 
@@ -34,26 +37,23 @@ export class PatternUnitComponent implements OnInit {
   }
 
   onChange(event) {
-    const dayTypeId = event.value;
-    let type = this.dayTypes.find(dayType => dayType.id === dayTypeId);
-    if (type) {
-      this.fillInTheUnit(type);
+    const depDayType = event.value;
+    if (depDayType) {
+      this.fillInTheUnit(depDayType);
     }
   }
 
-  private fillInTheUnit(type: DayType) {
+  private fillInTheUnit(type: DepartmentDayType) {
+    this.unit.dayTypeId       = type.dayType.id;
     this.unit.startTime       = type.startTime;
     this.unit.endTime         = type.endTime;
     this.unit.breakStartTime  = type.breakStartTime;
     this.unit.breakEndTime    = type.breakEndTime;
-    this.usePreviousValue     = type.usePreviousValue;
-    this.setColorOfUnit(type.dayTypeGroupId);
+    this.usePreviousValue     = type.dayType.usePreviousValue;
+    this.color                = type.dayType.dayTypeGroup.color;
   }
 
-  private setColorOfUnit(dayTypeGroupId: number) {
-    let dayTypeGroup = this.dayTypeGroups.find(group => group.id === dayTypeGroupId);
-    if (dayTypeGroup) {
-      this.color = dayTypeGroup.color;
-    }
+  compareIdEntity(a: IdEntity, b: IdEntity): boolean {
+    return (a && b) && (a.id === b.id);
   }
 }

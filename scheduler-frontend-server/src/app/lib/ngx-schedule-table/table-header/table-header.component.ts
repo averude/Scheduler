@@ -1,7 +1,6 @@
 import { Component, Input, OnDestroy, OnInit, QueryList, TemplateRef } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { CalendarDay } from "../model/calendar-day";
-import { DatePaginationService } from "../service/date-pagination.service";
+import { PaginationService } from "../service/pagination.service";
 import { AfterDateColumnDef, BeforeDateColumnDef } from "../directives/column";
 
 @Component({
@@ -16,13 +15,13 @@ export class TableHeaderComponent implements OnInit, OnDestroy {
 
   @Input() headerDateCellDef: TemplateRef<any>;
 
-  dates: CalendarDay[] = [];
+  dates: any[] = [];
   private sub: Subscription;
 
-  constructor(private paginatorService: DatePaginationService) { }
+  constructor(private paginatorService: PaginationService) { }
 
   ngOnInit() {
-    this.sub = this.paginatorService.dates
+    this.sub = this.paginatorService.onValueChange
       .subscribe(dates => this.dates = dates);
   }
 

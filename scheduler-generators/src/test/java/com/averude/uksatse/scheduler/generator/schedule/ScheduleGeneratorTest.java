@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class ScheduleGeneratorTest {
 
@@ -19,35 +19,40 @@ public class ScheduleGeneratorTest {
         var to = LocalDate.parse("2020-01-31");
         var interval = new ScheduleGenerationInterval(from, to, 0L);
 
-        var workDayType = new DayType();
+        var firstDayType = new DayType();
+        firstDayType.setId(1L);
+        var secondDayType = new DayType();
+        secondDayType.setId(2L);
+
+        var workDayType = new DepartmentDayType();
         workDayType.setId(1L);
-        workDayType.setLabel("WD");
+        workDayType.setDayType(firstDayType);
         workDayType.setStartTime(480);
         workDayType.setEndTime(1005);
         workDayType.setBreakStartTime(600);
         workDayType.setBreakEndTime(660);
 
-        var weekendDayType = new DayType();
+        var weekendDayType = new DepartmentDayType();
         weekendDayType.setId(2L);
-        weekendDayType.setLabel("WE");
+        weekendDayType.setDayType(secondDayType);
 
         var firstUnit = new PatternUnit();
-        firstUnit.setDayTypeId(workDayType.getId());
+        firstUnit.setDayTypeId(workDayType.getDayType().getId());
         firstUnit.setStartTime(workDayType.getStartTime());
         firstUnit.setEndTime(workDayType.getEndTime());
         firstUnit.setBreakStartTime(workDayType.getBreakStartTime());
         firstUnit.setBreakEndTime(workDayType.getBreakEndTime());
 
         var secondUnit = new PatternUnit();
-        secondUnit.setDayTypeId(weekendDayType.getId());
+        secondUnit.setDayTypeId(weekendDayType.getDayType().getId());
 
         var pattern = new ShiftPattern();
-        pattern.setHolidayDayType(weekendDayType);
-        pattern.setHolidayDayTypeId(1L);
-        pattern.setExtraWeekendDayType(weekendDayType);
-        pattern.setExtraWeekendDayTypeId(2L);
-        pattern.setExtraWorkDayDayType(workDayType);
-        pattern.setExtraWorkDayDayTypeId(1L);
+        pattern.setHolidayDepDayType(weekendDayType);
+//        pattern.setHolidayDepDayTypeId(weekendDayType.getDayType().getId());
+        pattern.setExtraWeekendDepDayType(weekendDayType);
+//        pattern.setExtraWeekendDepDayTypeId(weekendDayType.getDayType().getId());
+        pattern.setExtraWorkDayDepDayType(workDayType);
+//        pattern.setExtraWorkDayDepDayTypeId(workDayType.getDayType().getId());
         pattern.setSequence(Arrays.asList(firstUnit, secondUnit));
 
         var extraWeekend = new ExtraWeekend();

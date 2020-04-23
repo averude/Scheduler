@@ -1,44 +1,37 @@
 import { RowCollector } from "../../../../../../lib/ngx-schedule-table/collectors/row-collector";
-import { Employee } from "../../../../../../model/employee";
-import { Position } from "../../../../../../model/position";
-import { binarySearch, getEmployeeShortName } from "../../../../../../shared/utils/utils";
+import { getEmployeeShortName } from "../../../../../../shared/utils/utils";
 import { ShiftComposition } from "../../../../../../model/shift-composition";
 import { WorkingTime } from "../../../../../../model/working-time";
-import { WorkDay } from "../../../../../../model/workday";
 import { SchedulerRowGroupData } from "../model/scheduler-row-group-data";
 import { SchedulerRowData } from "../model/scheduler-row-data";
-import { ScheduleDto } from "../../../../../../model/dto/schedule-dto";
+import { EmployeeScheduleDto } from "../../../../../../model/dto/basic-dto";
 
 export class SchedulerRowCollector implements RowCollector<SchedulerRowGroupData, SchedulerRowData> {
 
-  constructor(private schedule: ScheduleDto[],
-              private employees: Employee[],
-              private positions: Position[],
-              private shiftsWorkingTime: WorkingTime[],
-              private compositions: ShiftComposition[]) {
-  }
+  constructor(private schedule: EmployeeScheduleDto[],
+              private compositions: ShiftComposition[]) {}
 
   collect(rowGroup: SchedulerRowGroupData): SchedulerRowData[] {
-    return this.getRowData(rowGroup.groupId, rowGroup.timeNorm);
+    return this.getRowData(rowGroup.groupId, rowGroup.timeNorm, rowGroup.shiftsWorkingTime);
   }
 
   private getRowData(shiftId: number,
-                     workingTimeNorm: number): SchedulerRowData[] {
-    return this.getEmployeesInShift(shiftId)
-      .map(employee => {
-        let compositions  = this.getEmployeeShiftCompositions(employee.id);
-        let workDays      = this.getScheduleByEmployeeId(employee.id);
+                     workingTimeNorm: number,
+                     shiftsWorkingTime: WorkingTime[]): SchedulerRowData[] {
+    return this.getEmployeeScheduleForShift(shiftId)
+      .map(employeeSchedule => {
+        let compositions  = this.getEmployeeShiftCompositions(employeeSchedule.entity.id);
 
         let isSubstitution = !compositions.find(value => !value.substitution && value.shiftId === shiftId);
 
         let row = new SchedulerRowData();
-        row.id = employee.id;
-        row.name = getEmployeeShortName(employee);
-        row.position = this.getPositionName(employee);
+        row.id = employeeSchedule.entity.id;
+        row.name = getEmployeeShortName(employeeSchedule.entity);
+        row.position = employeeSchedule.entity.position.shortName;
         row.isSubstitution = isSubstitution;
-        row.workDays = workDays;
+        row.workDays = employeeSchedule.collection;
         if (isSubstitution) {
-          row.timeNorm = this.getEmployeeMainShiftWorkingTime(employee.id, compositions, this.shiftsWorkingTime);
+          row.timeNorm = this.getEmployeeMainShiftWorkingTime(employeeSchedule.entity.id, compositions, shiftsWorkingTime);
         } else {
           row.timeNorm = workingTimeNorm;
         }
@@ -47,21 +40,12 @@ export class SchedulerRowCollector implements RowCollector<SchedulerRowGroupData
       });
   }
 
-  private getEmployeesInShift(shiftId: number): Employee[] {
+  private getEmployeeScheduleForShift(shiftId: number): EmployeeScheduleDto[] {
     let employeeIds = this.compositions
       .filter(value => value.shiftId === shiftId)
       .map(value => value.employeeId);
-    return this.employees
-      .filter(value => employeeIds.findIndex(id => value.id === id) >= 0);
-  }
-
-  private getPositionName(employee: Employee): string {
-    let position = binarySearch<Position>(this.positions, employee.positionId);
-    if (position) {
-      return position.shortName;
-    } else {
-      return '';
-    }
+    return this.schedule
+      .filter(value => employeeIds.findIndex(id => value.entity.id === id) >= 0);
   }
 
   private getEmployeeShiftCompositions(employeeId: number): ShiftComposition[] {
@@ -79,12 +63,5 @@ export class SchedulerRowCollector implements RowCollector<SchedulerRowGroupData
                               shiftsWorkingTime: WorkingTime[]): number {
     let workingTime = shiftsWorkingTime.find(workingTime => workingTime.shiftId === shiftId);
     return workingTime ? workingTime.hours : 0;
-  }
-
-  private getScheduleByEmployeeId(employeeId: number): WorkDay[] {
-    let dto = this.schedule.find(schedule => schedule.employeeId === employeeId);
-    if (dto) {
-      return dto.workDays;
-    }
   }
 }

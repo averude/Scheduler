@@ -1,39 +1,34 @@
 import { ScheduleGenerator } from "./schedule-generator";
-import { ShiftPattern } from "../../model/shift-pattern";
 import { SelectionData } from "../../lib/ngx-schedule-table/model/selection-data";
-import { DayType } from "../../model/day-type";
 import { WorkDay } from "../../model/workday";
 import * as moment from 'moment';
-import { RowRendererService } from "../../lib/ngx-schedule-table/service/row-renderer.service";
-import { PatternUnitService } from "../../http-services/pattern-unit.service";
+import { TableRenderer } from "../../lib/ngx-schedule-table/service/table-renderer.service";
 import { ScheduleService } from "../../http-services/schedule.service";
 import { NotificationsService } from "angular2-notifications";
 import { Injectable } from "@angular/core";
 import { PatternUnit } from "../../model/pattern-unit";
+import { DepartmentDayType } from "../../model/department-day-type";
+import { ShiftPatternDto } from "../../model/dto/basic-dto";
 
 @Injectable()
 export class ScheduleGenerationService {
 
-  constructor(private rowRenderer: RowRendererService,
-              private patternUnitService: PatternUnitService,
+  constructor(private rowRenderer: TableRenderer,
               private scheduleService: ScheduleService,
               private notificationService: NotificationsService,
               private scheduleGenerator: ScheduleGenerator) {}
 
-  generateSchedule(pattern: ShiftPattern,
+  generateSchedule(dto: ShiftPatternDto,
                    data: SelectionData,
                    offset: number) {
-    this.patternUnitService.getByPatternId(pattern.id)
-      .subscribe(patternUnits => {
-        this.scheduleGenerator
-          .generateScheduleWithPattern(
-            data.rowData,
-            data.selectedCells,
-            patternUnits,
-            offset,
-            this.scheduleGeneratedHandler,
-            this.errorHandler)
-      });
+    this.scheduleGenerator.generateScheduleWithPattern(
+      data.rowData,
+      data.selectedCells,
+      dto.collection,
+      offset,
+      this.scheduleGeneratedHandler,
+      this.errorHandler
+    );
   }
 
   generateScheduleByPatternUnit(unit: PatternUnit,
@@ -48,13 +43,13 @@ export class ScheduleGenerationService {
       );
   }
 
-  generateScheduleBySingleDay(dayType: DayType,
+  generateScheduleBySingleDay(departmentDayType: DepartmentDayType,
                               data: SelectionData) {
     this.scheduleGenerator
       .generateScheduleBySingleDay(
         data.rowData,
         data.selectedCells,
-        dayType,
+        departmentDayType,
         this.scheduleGeneratedHandler,
         this.errorHandler);
   }

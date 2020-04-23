@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface PatternUnitRepository extends JpaRepository<PatternUnit, Long> {
     List<PatternUnit> findAllByPatternIdOrderByOrderId(long patternId);
+    void deleteAllByPatternId(Long patternId);
+    void deleteAllByPatternIdAndIdIsNotIn(Long patternId, List<Long> ids);
 }

@@ -7,7 +7,6 @@ import { PositionService } from "../../../../../../../http-services/position.ser
 import { EmployeeDialogComponent } from "../employee-dialog/employee-dialog.component";
 import { NotificationsService } from "angular2-notifications";
 import { TableBaseComponent } from "../../../../../../../shared/abstract-components/table-base/table-base.component";
-import { binarySearch } from "../../../../../../../shared/utils/utils";
 
 @Component({
   selector: 'app-mat-employees-table',
@@ -15,7 +14,7 @@ import { binarySearch } from "../../../../../../../shared/utils/utils";
   styleUrls: ['../../../../../../../shared/common/table.common.css','./employees-table.component.css']
 })
 export class EmployeesTableComponent extends TableBaseComponent<Employee> {
-  displayedColumns = ['select', 'secondName', 'firstName', 'patronymic', 'positionId', 'control'];
+  displayedColumns = ['select', 'secondName', 'firstName', 'patronymic', 'position', 'control'];
 
   positions: Position[] = [];
 
@@ -32,7 +31,7 @@ export class EmployeesTableComponent extends TableBaseComponent<Employee> {
       return data.secondName.toLowerCase().includes(filter)
         || data.firstName.toLowerCase().includes(filter)
         || data.patronymic.toLowerCase().includes(filter)
-        || this.getPositionName(data.positionId).toLowerCase().includes(filter);
+        || data.position.name.toLowerCase().includes(filter);
     });
     this.positionService.getAllByAuth()
       .subscribe(positions => this.positions = positions);
@@ -45,14 +44,5 @@ export class EmployeesTableComponent extends TableBaseComponent<Employee> {
     };
 
     this.openAddOrEditDialog(employee, data, EmployeeDialogComponent);
-  }
-
-  getPositionName(positionId: number): string {
-    let position = binarySearch<Position>(this.positions, positionId);
-    if (position) {
-      return position.name;
-    } else {
-      return '-';
-    }
   }
 }

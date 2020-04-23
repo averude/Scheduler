@@ -10,14 +10,14 @@ import { ShiftService } from "../../../../../../../http-services/shift.service";
 import { Employee } from "../../../../../../../model/employee";
 import { Shift } from "../../../../../../../model/shift";
 import { getEmployeeShortName } from "../../../../../../../shared/utils/utils";
-import { DatePaginationService } from "../../../../../../../lib/ngx-schedule-table/service/date-pagination.service";
+import { PaginationService } from "../../../../../../../lib/ngx-schedule-table/service/pagination.service";
 
 @Component({
   selector: 'app-shift-composition-table',
   templateUrl: './shift-composition-table.component.html',
   styleUrls: ['../../../../../../../shared/common/table.common.css',
     './shift-composition-table.component.css'],
-  providers: [DatePaginationService]
+  providers: [PaginationService]
 })
 export class ShiftCompositionTableComponent extends PageableTableBaseComponent<ShiftComposition> {
   displayedColumns = ['select', 'shift', 'employee', 'from', 'to', 'substitution', 'control'];
@@ -25,7 +25,7 @@ export class ShiftCompositionTableComponent extends PageableTableBaseComponent<S
   employees:  Employee[]  = [];
   shifts:     Shift[]     = [];
 
-  constructor(datePaginationService: DatePaginationService,
+  constructor(datePaginationService: PaginationService,
               dialog: MatDialog,
               shiftScheduleService: ShiftCompositionService,
               private employeeService: EmployeeService,

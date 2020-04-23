@@ -1,10 +1,6 @@
 package com.averude.uksatse.scheduler.core.entity;
 
-import com.averude.uksatse.scheduler.core.json.deserializer.StringToIntTimeDeserializer;
-import com.averude.uksatse.scheduler.core.json.serializer.IntToStringTimeSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -21,11 +17,11 @@ import java.util.StringJoiner;
         uniqueConstraints = {
                 @UniqueConstraint(
                         name = "day_types_unique_constraint",
-                        columnNames = {"department_id", "name"}
+                        columnNames = {"enterprise_id", "name"}
                 )
         }
 )
-public class DayType implements HasId, HasTime {
+public class DayType implements HasId {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,12 +29,17 @@ public class DayType implements HasId, HasTime {
     private Long id;
 
     @NotNull
-    @Column(name = "department_id", nullable = false)
-    private Long departmentId;
+    @Column(name = "enterprise_id", nullable = false)
+    private Long enterpriseId;
+
+//    @NotNull
+//    @Column(name = "group_id", insertable = false, updatable = false)
+//    private Long dayTypeGroupId;
 
     @NotNull
-    @Column(name = "group_id", nullable = false)
-    private Long dayTypeGroupId;
+    @ManyToOne
+    @JoinColumn(name = "group_id", nullable = false)
+    private DayTypeGroup dayTypeGroup;
 
     @NotNull(message = "{daytype.name.null}")
     @Size(  max = 128,
@@ -52,29 +53,9 @@ public class DayType implements HasId, HasTime {
     @Column(nullable = true)
     private String label;
 
-    @JsonSerialize(using = IntToStringTimeSerializer.class)
-    @JsonDeserialize(using = StringToIntTimeDeserializer.class)
-    @Column(name = "start_time")
-    private Integer startTime;
-
-    @JsonSerialize(using = IntToStringTimeSerializer.class)
-    @JsonDeserialize(using = StringToIntTimeDeserializer.class)
-    @Column(name = "break_start_time")
-    private Integer breakStartTime;
-
-    @JsonSerialize(using = IntToStringTimeSerializer.class)
-    @JsonDeserialize(using = StringToIntTimeDeserializer.class)
-    @Column(name = "break_end_time")
-    private Integer breakEndTime;
-
-    @JsonSerialize(using = IntToStringTimeSerializer.class)
-    @JsonDeserialize(using = StringToIntTimeDeserializer.class)
-    @Column(name = "end_time")
-    private Integer endTime;
-
     @NotNull
     @Column(name = "use_previous_value")
-    private Boolean usePreviousValue;
+    private Boolean usePreviousValue = false;
 
     @JsonIgnore
     @OneToMany( mappedBy = "dayTypeId",
@@ -87,6 +68,12 @@ public class DayType implements HasId, HasTime {
                 fetch = FetchType.LAZY,
                 cascade = CascadeType.ALL)
     private List<WorkDay> workDays = new ArrayList<>();
+
+    @JsonIgnore
+    @OneToMany( mappedBy = "dayType",
+                fetch = FetchType.LAZY,
+                cascade = CascadeType.ALL)
+    private List<DepartmentDayType> departmentDayTypes = new ArrayList<>();
 
     public DayType() {
     }
@@ -103,28 +90,30 @@ public class DayType implements HasId, HasTime {
         this.label = label;
     }
 
+    @Override
     public Long getId() {
         return id;
     }
 
+    @Override
     public void setId(Long id) {
         this.id = id;
     }
 
-    public Long getDepartmentId() {
-        return departmentId;
+    public Long getEnterpriseId() {
+        return enterpriseId;
     }
 
-    public void setDepartmentId(Long departmentId) {
-        this.departmentId = departmentId;
+    public void setEnterpriseId(Long enterpriseId) {
+        this.enterpriseId = enterpriseId;
     }
 
-    public Long getDayTypeGroupId() {
-        return dayTypeGroupId;
+    public DayTypeGroup getDayTypeGroup() {
+        return dayTypeGroup;
     }
 
-    public void setDayTypeGroupId(Long dayTypeGroupId) {
-        this.dayTypeGroupId = dayTypeGroupId;
+    public void setDayTypeGroup(DayTypeGroup dayTypeGroup) {
+        this.dayTypeGroup = dayTypeGroup;
     }
 
     public String getName() {
@@ -139,40 +128,8 @@ public class DayType implements HasId, HasTime {
         return label;
     }
 
-    public void setLabel(String name) {
-        this.label = name;
-    }
-
-    public Integer getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(Integer startTime) {
-        this.startTime = startTime;
-    }
-
-    public Integer getBreakStartTime() {
-        return breakStartTime;
-    }
-
-    public void setBreakStartTime(Integer breakStartTime) {
-        this.breakStartTime = breakStartTime;
-    }
-
-    public Integer getBreakEndTime() {
-        return breakEndTime;
-    }
-
-    public void setBreakEndTime(Integer breakEndTime) {
-        this.breakEndTime = breakEndTime;
-    }
-
-    public Integer getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(Integer endTime) {
-        this.endTime = endTime;
+    public void setLabel(String label) {
+        this.label = label;
     }
 
     public Boolean getUsePreviousValue() {
@@ -199,6 +156,14 @@ public class DayType implements HasId, HasTime {
         this.workDays = workDays;
     }
 
+    public List<DepartmentDayType> getDepartmentDayTypes() {
+        return departmentDayTypes;
+    }
+
+    public void setDepartmentDayTypes(List<DepartmentDayType> departmentDayTypes) {
+        this.departmentDayTypes = departmentDayTypes;
+    }
+
     public void addPatternUnit(PatternUnit unit) {
         unit.setDayTypeId(this.getId());
         units.add(unit);
@@ -214,35 +179,26 @@ public class DayType implements HasId, HasTime {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         DayType dayType = (DayType) o;
-        return departmentId.equals(dayType.departmentId) &&
-                dayTypeGroupId.equals(dayType.dayTypeGroupId) &&
+        return enterpriseId.equals(dayType.enterpriseId) &&
+                dayTypeGroup.equals(dayType.dayTypeGroup) &&
                 name.equals(dayType.name) &&
                 Objects.equals(label, dayType.label) &&
-                Objects.equals(startTime, dayType.startTime) &&
-                Objects.equals(breakStartTime, dayType.breakStartTime) &&
-                Objects.equals(breakEndTime, dayType.breakEndTime) &&
-                Objects.equals(endTime, dayType.endTime) &&
                 usePreviousValue.equals(dayType.usePreviousValue);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(departmentId, dayTypeGroupId, name, label,
-                startTime, breakStartTime, breakEndTime, endTime, usePreviousValue);
+        return Objects.hash(enterpriseId, dayTypeGroup, name, label, usePreviousValue);
     }
 
     @Override
     public String toString() {
         return new StringJoiner(", ", DayType.class.getSimpleName() + "{", "}")
                 .add("id=" + id)
-                .add("departmentId=" + departmentId)
-                .add("dayTypeGroupId=" + dayTypeGroupId)
+                .add("enterpriseId=" + enterpriseId)
+                .add("dayTypeGroup=" + dayTypeGroup)
                 .add("name='" + name + "'")
                 .add("label='" + label + "'")
-                .add("startTime=" + startTime)
-                .add("breakStartTime=" + breakStartTime)
-                .add("breakEndTime=" + breakEndTime)
-                .add("endTime=" + endTime)
                 .add("usePreviousValue=" + usePreviousValue)
                 .toString();
     }

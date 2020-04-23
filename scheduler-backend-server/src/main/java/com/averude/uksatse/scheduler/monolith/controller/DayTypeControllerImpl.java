@@ -25,10 +25,16 @@ public class DayTypeControllerImpl
     }
 
     @Override
+    public List<DayType> getAllByEnterpriseId(Long enterpriseId) {
+        return dayTypeService.findAllByEnterpriseId(enterpriseId);
+    }
+
+    @Override
     public List<DayType> getAllByDepartmentId(Long departmentId) {
         return dayTypeService.findAllByDepartmentId(departmentId);
     }
 
+    // Should be removed
     @Override
     public List<DayType> getAllByShiftId(Long shiftId) {
         return dayTypeService.findAllByShiftId(shiftId);

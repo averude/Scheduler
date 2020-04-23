@@ -1,5 +1,5 @@
 import { Observable } from "rxjs";
 
 export interface IByAuthAndDateService<T> {
-  getAllByAuthAndDateBetween(from: string, to: string): Observable<T[]>;
+  getAllByAuth(from: string, to: string): Observable<T[]>;
 }

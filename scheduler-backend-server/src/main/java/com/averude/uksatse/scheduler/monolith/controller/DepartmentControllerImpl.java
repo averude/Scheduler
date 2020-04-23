@@ -29,6 +29,11 @@ public class DepartmentControllerImpl
     }
 
     @Override
+    public Iterable<Department> getAllByEnterpriseId(Long enterpriseId) {
+        return departmentService.findAllByEnterpriseId(enterpriseId);
+    }
+
+    @Override
     public Optional<Department> get(Long id) {
         return super.get(id);
     }

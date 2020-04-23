@@ -6,11 +6,10 @@
   </ng-template>
 
   <context-menu #singleDaySubMenu>
-    <ng-template *ngFor="let dayType of dayTypes"
+    <ng-template *ngFor="let departmentDayType of departmentDayTypes"
                  contextMenuItem
-                 (execute)="scheduleGenerationService.generateScheduleBySingleDay(dayType, $event.item)">
-      <app-context-menu-daytype-item [dayType]="dayType"
-                                     [dayTypeGroups]="dayTypeGroups">
+                 (execute)="scheduleGenerationService.generateScheduleBySingleDay(departmentDayType, $event.item)">
+      <app-context-menu-daytype-item [departmentDayType]="departmentDayType">
       </app-context-menu-daytype-item>
     </ng-template>
   </context-menu>
@@ -21,27 +20,18 @@
   <ng-template contextMenuItem
                [divider]="true"></ng-template>
 
-  <ng-container *ngFor="let pattern of patterns">
+  <ng-container *ngFor="let dto of patternDtos">
     <context-menu #patternsSubMenu>
-      <ng-template contextMenuItem
-                   passive="true">
-        <mat-form-field appearance="outline">
-          <mat-label>Offset</mat-label>
-          <input matInput
-                 type="number"
-                 step="1"
-                 [(ngModel)]="offset"
-                 required/>
-        </mat-form-field>
-      </ng-template>
-      <ng-template contextMenuItem
-                   [enabled]="offset >= 0"
-                   (execute)="scheduleGenerationService.generateSchedule(pattern, $event.item, offset)">
-        Create schedule
-      </ng-template>
+      <ng-container *ngFor="let unit of dto.collection; index as i">
+        <ng-template contextMenuItem
+                     (execute)="scheduleGenerationService.generateSchedule(dto, $event.item, i)">
+          <app-context-menu-daytype-item [departmentDayType]="getDepDayType(unit)">
+          </app-context-menu-daytype-item>
+        </ng-template>
+      </ng-container>
     </context-menu>
     <ng-template contextMenuItem [subMenu]="patternsSubMenu">
-      {{pattern.name}}
+      {{dto.entity.name}}
     </ng-template>
   </ng-container>
 

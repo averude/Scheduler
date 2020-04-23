@@ -1,9 +1,11 @@
 import { IdEntity } from "./interface/id-entity";
+import { DayTypeGroup } from "./day-type-group";
 
 export class DayType implements IdEntity {
   id:               number;
   departmentId:     number;
-  dayTypeGroupId:   number;
+  enterpriseId:     number;
+  dayTypeGroup:     DayTypeGroup;
   name:             string;
   label:            string;
   startTime:        string;

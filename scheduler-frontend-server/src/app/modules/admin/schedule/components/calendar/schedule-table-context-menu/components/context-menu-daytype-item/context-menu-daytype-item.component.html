@@ -1,13 +1,16 @@
 <div class="context-menu-item">
   <div class="menu-daytype-label-box"
-       [style.background-color]="getDayTypeGroupColor(dayType)">
-    <p>{{dayType.label}}</p>
+       [style.background-color]="departmentDayType?.dayType?.dayTypeGroup?.color">
+    <p>{{departmentDayType.dayType.label}}</p>
   </div>
   <div class="menu-daytype-name">
-    {{dayType.name}}
+    {{departmentDayType.dayType.name}}
   </div>
   <div *ngIf="showTimeValues()"
        class="menu-daytype-value">
-    {{dayType.startTime + ' - ' + dayType.endTime + '; break: ' + dayType.breakStartTime + ' - ' + dayType.breakEndTime}}
+    {{departmentDayType.startTime + ' - '
+  + departmentDayType.endTime + '; break: '
+  + departmentDayType.breakStartTime + ' - '
+  + departmentDayType.breakEndTime}}
   </div>
 </div>

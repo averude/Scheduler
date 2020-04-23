@@ -21,7 +21,7 @@ public interface ScheduleRepository extends JpaRepository<WorkDay, Long> {
             "on sched.employeeId = emp.id " +
             "inner join " +
             "Position pos " +
-            "on emp.positionId = pos.id " +
+            "on emp.position = pos " +
             "where pos.departmentId = ?1 and sched.date = ?2")
     List<WorkDay> findAllByDepartmentIdAndDate(Long departmentId, LocalDate date);
 }

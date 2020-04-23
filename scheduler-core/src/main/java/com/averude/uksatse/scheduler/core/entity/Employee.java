@@ -54,10 +54,10 @@ public class Employee implements HasId {
     private String secondName;
 
     @NotNull(message = "{employee.position.null}")
-    @Positive(message = "{employee.position.negative}")
-    @Column(name = "position_id",
-            nullable = false)
-    private Long positionId;
+    @ManyToOne
+    @JoinColumn(name = "position_id",
+                nullable = false)
+    private Position position;
 
     @JsonIgnore
     @OneToMany( mappedBy = "employeeId",
@@ -124,12 +124,12 @@ public class Employee implements HasId {
         this.secondName = secondName;
     }
 
-    public Long getPositionId() {
-        return positionId;
+    public Position getPosition() {
+        return position;
     }
 
-    public void setPositionId(Long positionId) {
-        this.positionId = positionId;
+    public void setPosition(Position position) {
+        this.position = position;
     }
 
     public List<ShiftComposition> getShiftsList() {
@@ -168,12 +168,12 @@ public class Employee implements HasId {
                 Objects.equals(firstName, employee.firstName) &&
                 Objects.equals(patronymic, employee.patronymic) &&
                 Objects.equals(secondName, employee.secondName) &&
-                Objects.equals(positionId, employee.positionId);
+                Objects.equals(position, employee.position);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstName, patronymic, secondName, positionId);
+        return Objects.hash(id, firstName, patronymic, secondName, position);
     }
 
     @Override
@@ -183,7 +183,7 @@ public class Employee implements HasId {
                 .add("firstName='" + firstName + "'")
                 .add("patronymic='" + patronymic + "'")
                 .add("secondName='" + secondName + "'")
-                .add("positionId=" + positionId)
+                .add("position=" + position)
                 .toString();
     }
 }

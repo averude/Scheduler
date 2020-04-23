@@ -3,8 +3,8 @@ import { WorkDay } from '../model/workday';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { RestConfig } from '../rest.config';
-import { ScheduleDto } from "../model/dto/schedule-dto";
 import { ScheduleGenerationDto } from "../model/dto/schedule-generation-dto";
+import { EmployeeScheduleDto } from "../model/dto/basic-dto";
 
 @Injectable({
   providedIn: 'root'
@@ -15,8 +15,8 @@ export class ScheduleService {
               private config: RestConfig) { }
 
   getAllByDate(from: string,
-               to: string): Observable<ScheduleDto[]> {
-    return this.http.get<ScheduleDto[]>(
+               to: string): Observable<EmployeeScheduleDto[]> {
+    return this.http.get<EmployeeScheduleDto[]>(
       `${this.config.baseUrl}/schedule/dates?from=${from}&to=${to}`
     );
   }

@@ -84,25 +84,33 @@ export abstract class TableBaseComponent<T extends IdEntity> implements OnInit, 
       }
       if (value.id) {
         this.crudService.update(value)
-          .subscribe(res => {
-            this.updateRow(value, oldValue);
-            this.notification
-              .success(
-                'Updated',
-                `Entity was successfully updated`);
-          });
+          .subscribe(this.onUpdated(value, oldValue));
       } else {
         this.crudService.create(value)
-          .subscribe(res => {
-            value.id = res;
-            this.addRow(value);
-            this.notification
-              .success(
-                'Created',
-                `Entity was successfully created`)
-          });
+          .subscribe(this.onCreated(value));
       }
     };
+  }
+
+  onUpdated(value: T, oldValue: T): (value: any) => void {
+    return res => {
+      this.updateRow(value, oldValue);
+      this.notification
+        .success(
+          'Updated',
+          `Entity was successfully updated`);
+    }
+  }
+
+  onCreated(value: T): (value: any) => void {
+    return res => {
+      value.id = res;
+      this.addRow(value);
+      this.notification
+        .success(
+          'Created',
+          `Entity was successfully created`)
+    }
   }
 
   removeDialog() {

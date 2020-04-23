@@ -3,7 +3,7 @@ import { Subscription } from "rxjs";
 import { CalendarDay } from "../../../../../../lib/ngx-schedule-table/model/calendar-day";
 import { ReportService } from "../../../../../../http-services/report.service";
 import * as fileSaver from 'file-saver';
-import { DatePaginationService } from "../../../../../../lib/ngx-schedule-table/service/date-pagination.service";
+import { PaginationService } from "../../../../../../lib/ngx-schedule-table/service/pagination.service";
 
 @Component({
   selector: 'app-schedule-export-excel',
@@ -15,11 +15,11 @@ export class ScheduleExportExcelComponent implements OnInit, OnDestroy {
   private paginatorSub: Subscription;
   private daysInMonth: CalendarDay[] = [];
 
-  constructor(private paginatorService: DatePaginationService,
+  constructor(private paginatorService: PaginationService,
               private reportService: ReportService) { }
 
   ngOnInit() {
-    this.paginatorSub = this.paginatorService.dates
+    this.paginatorSub = this.paginatorService.onValueChange
       .subscribe(daysInMonth => this.daysInMonth = daysInMonth);
   }
 

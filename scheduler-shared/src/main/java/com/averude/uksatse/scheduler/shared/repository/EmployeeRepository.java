@@ -13,7 +13,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
             "from Position p " +
             "inner join " +
             "Employee e " +
-            "on e.positionId = p.id " +
+            "on e.position = p " +
             "where p.departmentId = ?1 " +
             "order by e.secondName, e.firstName, e.patronymic")
     List<Employee> findAllByDepartmentId(long departmentId);

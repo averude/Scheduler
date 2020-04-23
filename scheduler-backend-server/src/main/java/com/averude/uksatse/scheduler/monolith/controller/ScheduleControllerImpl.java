@@ -1,8 +1,9 @@
 package com.averude.uksatse.scheduler.monolith.controller;
 
 import com.averude.uksatse.scheduler.core.controller.ScheduleController;
-import com.averude.uksatse.scheduler.core.dto.ScheduleDTO;
+import com.averude.uksatse.scheduler.core.dto.BasicDto;
 import com.averude.uksatse.scheduler.core.dto.ScheduleGenerationDTO;
+import com.averude.uksatse.scheduler.core.entity.Employee;
 import com.averude.uksatse.scheduler.core.entity.WorkDay;
 import com.averude.uksatse.scheduler.monolith.service.ScheduleGenerationService;
 import com.averude.uksatse.scheduler.shared.service.ScheduleService;
@@ -50,15 +51,15 @@ public class ScheduleControllerImpl implements ScheduleController {
 
     @RequestMapping(method = RequestMethod.GET,
                     value = "/dates")
-    public Iterable<ScheduleDTO> searchByAuthAndDate(Authentication authentication,
-                                                     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    public Iterable<BasicDto<Employee, WorkDay>> searchByAuthAndDate(Authentication authentication,
+                                                            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
                                                      @RequestParam(value = "from")
                                                              LocalDate from,
-                                                     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                                            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
                                                      @RequestParam(value = "to")
                                                              LocalDate to){
         logger.debug("Received GET request with params: from={}, to={}", from, to);
-        return scheduleService.findAllByAuthAndDate(authentication, from, to);
+        return scheduleService.findAllEmployeeScheduleByAuthAndDate(authentication, from, to);
     }
 
     @RequestMapping(method = RequestMethod.POST,

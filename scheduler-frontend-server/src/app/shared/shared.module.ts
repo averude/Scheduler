@@ -5,10 +5,19 @@ import { PatternUnitsStringPipe } from "./pipes/pattern-units-string.pipe";
 import { YearPaginatorComponent } from "./paginators/year-paginator/year-paginator.component";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatMomentDateModule } from "@angular/material-moment-adapter";
+import { SimplePaginatorComponent } from './paginators/simple-paginator/simple-paginator.component';
+import { MonthYearPaginatorComponent } from "./paginators/month-year-paginator/month-year-paginator.component";
+import { MatFormFieldModule, MatInputModule } from "@angular/material";
+import { CommonModule } from "@angular/common";
+import { FormsModule } from "@angular/forms";
 
 @NgModule({
   imports: [
+    CommonModule,
+    FormsModule,
     MatDatepickerModule,
+    MatInputModule,
+    MatFormFieldModule,
     MatMomentDateModule
   ],
   declarations: [
@@ -16,12 +25,16 @@ import { MatMomentDateModule } from "@angular/material-moment-adapter";
     MonthNameImpurePipe,
     PatternUnitsStringPipe,
     YearPaginatorComponent,
+    MonthYearPaginatorComponent,
+    SimplePaginatorComponent,
   ],
   exports: [
     EditableRowDirective,
     MonthNameImpurePipe,
     PatternUnitsStringPipe,
     YearPaginatorComponent,
+    MonthYearPaginatorComponent,
+    SimplePaginatorComponent,
     MatDatepickerModule
   ],
   providers: [

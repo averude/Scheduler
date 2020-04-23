@@ -15,6 +15,9 @@ public interface DepartmentController extends BasicCrudController<Department> {
     @RequestMapping(method = RequestMethod.GET)
     Iterable<Department> getAll();
 
+    @RequestMapping(method = RequestMethod.GET, value = "/enterprises/{enterpriseId}")
+    Iterable<Department> getAllByEnterpriseId(@PathVariable Long enterpriseId);
+
     @RequestMapping(method = RequestMethod.GET, value = "/{id}")
     Optional<Department> get(@PathVariable Long id);
 
