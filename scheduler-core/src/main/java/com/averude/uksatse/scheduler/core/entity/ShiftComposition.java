@@ -1,5 +1,11 @@
 package com.averude.uksatse.scheduler.core.entity;
 
+import com.averude.uksatse.scheduler.core.entity.interfaces.HasId;
+import com.averude.uksatse.scheduler.core.entity.structure.Shift;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -9,6 +15,10 @@ import java.time.LocalDate;
 import java.util.Objects;
 import java.util.StringJoiner;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 @Entity()
 @Table(name = "shift_composition")
 public class ShiftComposition implements HasId {
@@ -38,59 +48,9 @@ public class ShiftComposition implements HasId {
     @Column(name = "to_date")
     private LocalDate to;
 
-    public ShiftComposition() {}
-
     public ShiftComposition(Shift shift, Employee employee) {
         this.shiftId = shift.getId();
         this.employeeId = employee.getId();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getShiftId() {
-        return shiftId;
-    }
-
-    public void setShiftId(Long shiftId) {
-        this.shiftId = shiftId;
-    }
-
-    public Long getEmployeeId() {
-        return employeeId;
-    }
-
-    public void setEmployeeId(Long employeeId) {
-        this.employeeId = employeeId;
-    }
-
-    public Boolean getSubstitution() {
-        return substitution;
-    }
-
-    public void setSubstitution(Boolean substitution) {
-        this.substitution = substitution;
-    }
-
-    public LocalDate getFrom() {
-        return from;
-    }
-
-    public void setFrom(LocalDate from) {
-        this.from = from;
-    }
-
-    public LocalDate getTo() {
-        return to;
-    }
-
-    public void setTo(LocalDate to) {
-        this.to = to;
     }
 
     @Override

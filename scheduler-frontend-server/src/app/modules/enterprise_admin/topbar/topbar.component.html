@@ -1,0 +1,45 @@
+<div class="topbar">
+    <div class="boxrow">
+        <div class="logo-container">
+            <img class="uksatse-logo" src="assets/img/logo_scheduler1.png">
+        </div>
+        <div class="toolbar-container">
+            <div class="department">
+                <div id="department-name" >
+                    <a>{{enterprise?.name || '-'}}</a>
+                </div>
+                <div id="department-position" >
+                    <a *ngIf="roles.includes('ENTERPRISE_ADMIN')">Enterprise administrator</a>
+                </div>
+            </div>
+
+            <div class="toolbar-set">
+              <ul class="toolbar">
+
+                <!--<li class="toolbar-li calendar-icon">-->
+                  <!--<img src="assets/img/cal_icon.png"-->
+                       <!--routerLink="schedule/calendar">-->
+                <!--</li>-->
+
+                <!--<li class="toolbar-li menu-icon"-->
+                    <!--*ngIf="roles.indexOf('DEPARTMENT_ADMIN') >= 0">-->
+                  <!--<img src="assets/img/set_icon.png"-->
+                       <!--routerLink="management">-->
+                <!--</li>-->
+
+                <li class="toolbar-li divider">
+                </li>
+
+                <li class="toolbar-li exit-icon">
+                  <img src="assets/img/exit.png"
+                       (click)="logout()">
+                </li>
+              </ul>
+            </div>
+          </div>
+    </div>
+</div>
+<div class="content-box">
+  <app-sidebar-component></app-sidebar-component>
+</div>
+<simple-notifications></simple-notifications>

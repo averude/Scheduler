@@ -73,6 +73,7 @@
   float: right;
 }
 .department {
+  margin-right: 28px;
   position: relative;
   display:inline-block;
   vertical-align: top;
@@ -125,7 +126,7 @@
 .calendar-icon {
   width: 28px;
   height: 30px;
-  margin: 0 28px;
+  margin-right: 28px;
   padding-top: 10px;
 }
 
@@ -255,11 +256,6 @@
   transition: .5s background
 }
 
-.main-nav a.active {
-  color: #2b3944;
-}
-
-
 .main-nav a span {
   -webkit-transition: .2s;
   -o-transition: .2s;
@@ -271,6 +267,7 @@
 .main-nav a:focus,
 .main-nav a:hover {
   background-color: #eef2f5 !important;
+  color: black;
   position: relative;
   text-decoration: none;
 }

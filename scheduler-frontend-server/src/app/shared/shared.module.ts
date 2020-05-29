@@ -6,7 +6,6 @@ import { YearPaginatorComponent } from "./paginators/year-paginator/year-paginat
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatMomentDateModule } from "@angular/material-moment-adapter";
 import { SimplePaginatorComponent } from './paginators/simple-paginator/simple-paginator.component';
-import { MonthYearPaginatorComponent } from "./paginators/month-year-paginator/month-year-paginator.component";
 import { MatFormFieldModule, MatInputModule } from "@angular/material";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
@@ -25,7 +24,7 @@ import { FormsModule } from "@angular/forms";
     MonthNameImpurePipe,
     PatternUnitsStringPipe,
     YearPaginatorComponent,
-    MonthYearPaginatorComponent,
+    // MonthYearPaginatorComponent,
     SimplePaginatorComponent,
   ],
   exports: [
@@ -33,7 +32,7 @@ import { FormsModule } from "@angular/forms";
     MonthNameImpurePipe,
     PatternUnitsStringPipe,
     YearPaginatorComponent,
-    MonthYearPaginatorComponent,
+    // MonthYearPaginatorComponent,
     SimplePaginatorComponent,
     MatDatepickerModule
   ],

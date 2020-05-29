@@ -3,6 +3,7 @@ import { RestConfig } from "../rest.config";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { CountDTO } from "../model/dto/count-dto";
+import { SummationDto } from "../model/dto/summation-dto";
 
 @Injectable({
   providedIn: "root"
@@ -14,6 +15,12 @@ export class StatisticsService {
   getNumberOfEmployeesInPositions(): Observable<CountDTO[]> {
     return this.http.get<CountDTO[]>(
       `${this.config.baseUrl}/statistics/positions/employees`
+    );
+  }
+
+  getSummationDto(from: string, to: string): Observable<SummationDto[]> {
+    return this.http.get<SummationDto[]>(
+      `${this.config.baseUrl}/statistics/summation_columns/dates?from=${from}&to=${to}`
     );
   }
 }

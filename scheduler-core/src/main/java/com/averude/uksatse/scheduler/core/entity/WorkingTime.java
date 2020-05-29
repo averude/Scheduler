@@ -1,11 +1,22 @@
 package com.averude.uksatse.scheduler.core.entity;
 
+import com.averude.uksatse.scheduler.core.entity.interfaces.HasDepartmentId;
+import com.averude.uksatse.scheduler.core.entity.interfaces.HasId;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.Objects;
 import java.util.StringJoiner;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 @Entity
 @Table(
         name = "working_time",
@@ -16,7 +27,7 @@ import java.util.StringJoiner;
                 )
         }
 )
-public class WorkingTime implements HasId {
+public class WorkingTime implements HasId, HasDepartmentId {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,46 +50,6 @@ public class WorkingTime implements HasId {
     @NotNull
     @Column(nullable = false)
     private Float hours;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getDepartmentId() {
-        return departmentId;
-    }
-
-    public void setDepartmentId(Long departmentId) {
-        this.departmentId = departmentId;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
-    public Long getShiftId() {
-        return shiftId;
-    }
-
-    public void setShiftId(Long shiftId) {
-        this.shiftId = shiftId;
-    }
-
-    public Float getHours() {
-        return hours;
-    }
-
-    public void setHours(Float hours) {
-        this.hours = hours;
-    }
 
     @Override
     public boolean equals(Object o) {

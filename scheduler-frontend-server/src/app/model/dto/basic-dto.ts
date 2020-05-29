@@ -1,20 +1,14 @@
 import { IdEntity } from "../interface/id-entity";
-import { ShiftPattern } from "../shift-pattern";
-import { PatternUnit } from "../pattern-unit";
-import { Employee } from "../employee";
-import { WorkDay } from "../workday";
 
-export class BasicDto<E, C>{
-  entity:     E;
+export class BasicDto<E extends IdEntity, C> implements IdEntity {
+  parent:     E;
   collection: C[];
-}
 
-export class ShiftPatternDto extends BasicDto<ShiftPattern, PatternUnit> implements IdEntity {
   get id(): number {
-    return this.entity.id;
+    return this.parent.id;
   }
-}
 
-export class EmployeeScheduleDto extends BasicDto<Employee, WorkDay> {
-
+  set id(id: number) {
+    this.parent.id = id;
+  }
 }

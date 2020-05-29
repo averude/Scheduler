@@ -1,16 +1,26 @@
 package com.averude.uksatse.scheduler.core.entity;
 
+import com.averude.uksatse.scheduler.core.entity.interfaces.HasDepartmentId;
+import com.averude.uksatse.scheduler.core.entity.interfaces.HasId;
+import com.averude.uksatse.scheduler.core.entity.structure.Shift;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.StringJoiner;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 @Entity
 @Table(
         name = "shift_patterns",
@@ -21,13 +31,14 @@ import java.util.StringJoiner;
                 )
         }
 )
-public class ShiftPattern implements HasId {
+public class ShiftPattern implements HasId, HasDepartmentId {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Positive(message = "{entity.id.negative}")
     private Long id;
 
+    @JsonIgnore
     @NotNull(message = "{shiftpattern.department.null}")
     @Positive(message = "{shiftpattern.department.negative}")
     @Column(name = "department_id",
@@ -58,102 +69,11 @@ public class ShiftPattern implements HasId {
                 fetch = FetchType.LAZY,
                 cascade = CascadeType.ALL)
     @OrderBy("orderId ASC")
-    private List<PatternUnit> sequence = new ArrayList<>();
+    private List<PatternUnit> sequence;
 
     @JsonIgnore
     @OneToMany(mappedBy = "patternId")
-    private List<Shift> shifts = new ArrayList<>();
-
-    public ShiftPattern() {
-    }
-
-    public ShiftPattern(String name) {
-        this.name = name;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getDepartmentId() {
-        return departmentId;
-    }
-
-    public void setDepartmentId(Long departmentId) {
-        this.departmentId = departmentId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public DepartmentDayType getHolidayDepDayType() {
-        return holidayDepDayType;
-    }
-
-    public void setHolidayDepDayType(DepartmentDayType holidayDepDayType) {
-        this.holidayDepDayType = holidayDepDayType;
-    }
-
-    public DepartmentDayType getExtraWeekendDepDayType() {
-        return extraWeekendDepDayType;
-    }
-
-    public void setExtraWeekendDepDayType(DepartmentDayType extraWeekendDepDayType) {
-        this.extraWeekendDepDayType = extraWeekendDepDayType;
-    }
-
-    public DepartmentDayType getExtraWorkDayDepDayType() {
-        return extraWorkDayDepDayType;
-    }
-
-    public void setExtraWorkDayDepDayType(DepartmentDayType extraWorkDayDepDayType) {
-        this.extraWorkDayDepDayType = extraWorkDayDepDayType;
-    }
-
-    public List<PatternUnit> getSequence() {
-        return sequence;
-    }
-
-    public void setSequence(List<PatternUnit> sequence) {
-        this.sequence = sequence;
-    }
-
-    public List<Shift> getShifts() {
-        return shifts;
-    }
-
-    public void setShifts(List<Shift> shifts) {
-        this.shifts = shifts;
-    }
-
-    public void addPatternUnit(PatternUnit patternUnit) {
-        patternUnit.setPatternId(this.getId());
-        sequence.add(patternUnit);
-    }
-
-    public void removePatternUnit(PatternUnit patternUnit) {
-        patternUnit.setPatternId(null);
-        sequence.remove(patternUnit);
-    }
-
-    public void addShift(Shift shift) {
-        shift.setPatternId(this.getId());
-        shifts.add(shift);
-    }
-
-    public void removeShift(Shift shift) {
-        shift.setPatternId(null);
-        shifts.remove(shift);
-    }
+    private List<Shift> shifts;
 
     @Override
     public boolean equals(Object o) {

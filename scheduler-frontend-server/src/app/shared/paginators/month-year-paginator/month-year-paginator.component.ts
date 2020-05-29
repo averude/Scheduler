@@ -1,16 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import * as moment from "moment";
 import { Moment } from "moment";
-import { CalendarDay } from "../../../lib/ngx-schedule-table/model/calendar-day";
-import { Holiday } from "../../../model/holiday";
-import { ExtraWeekend } from "../../../model/extra-weekend";
-import { HolidayService } from "../../../http-services/holiday.service";
-import { ExtraWeekendService } from "../../../http-services/extra-weekend.service";
-import { forkJoin } from "rxjs";
 import { MatDatepicker } from "@angular/material/datepicker";
-import { ExtraWorkdayService } from "../../../http-services/extra-workday.service";
-import { ExtraWorkDay } from "../../../model/extra-workday";
 import { PaginationService } from "../../../lib/ngx-schedule-table/service/pagination.service";
+import { APaginationStrategy } from "../pagination-strategy/a-pagination-strategy";
 
 @Component({
   selector: 'app-month-year-paginator',
@@ -18,20 +11,13 @@ import { PaginationService } from "../../../lib/ngx-schedule-table/service/pagin
   styleUrls: ['./month-year-paginator.component.css']
 })
 export class MonthYearPaginatorComponent implements OnInit {
+  @Input() paginationStrategy: APaginationStrategy;
+
   currentDate:      Moment;
   firstDayOfMonth:  Moment;
   lastDayOfMonth:   Moment;
 
-  daysInMonth: CalendarDay[] = [];
-
-  holidays:       Holiday[]     = [];
-  extraWeekends:  ExtraWeekend[] = [];
-  extraWorkDays:  ExtraWorkDay[] = [];
-
-  constructor(private datePaginationService: PaginationService,
-              private holidayService: HolidayService,
-              private extraWeekendService: ExtraWeekendService,
-              private extraWorkDayService: ExtraWorkdayService) {}
+  constructor(private datePaginationService: PaginationService) {}
 
   ngOnInit() {
     this.initCurrentMonth();
@@ -65,47 +51,10 @@ export class MonthYearPaginatorComponent implements OnInit {
 
   private changeDate() {
     this.initFirstAndLastDaysOfMonth();
-    let firstDayOfMonthString = this.firstDayOfMonth.format("YYYY-MM-DD");
-    let lastDayOfMonthString  = this.lastDayOfMonth.format("YYYY-MM-DD");
-
-    forkJoin(
-      this.holidayService.getAllByAuth(firstDayOfMonthString, lastDayOfMonthString),
-      this.extraWeekendService.getAllByAuth(firstDayOfMonthString, lastDayOfMonthString),
-      this.extraWorkDayService.getAllByAuth(firstDayOfMonthString, lastDayOfMonthString)
-    ).subscribe(values => {
-      this.holidays = values[0];
-      this.extraWeekends = values[1];
-      this.extraWorkDays = values[2];
-
-      this.calculateDaysInMonth();
-      this.datePaginationService.change(this.daysInMonth);
-    });
-  }
-
-  private calculateDaysInMonth() {
-    this.daysInMonth.length = 0;
-    const daysNum = this.currentDate.daysInMonth();
-    const day = this.currentDate.clone().startOf('month');
-
-    for (let i = 0; i < daysNum; i++) {
-      let holiday = this.holidays
-        .find(value => day.isSame(value.date, 'date'));
-
-      let extraWeekend = this.extraWeekends
-        .find(value => day.isSame(value.date, 'date'));
-
-      let extraWorkDay = this.extraWorkDays
-        .find(value => day.isSame(value.date, 'date'));
-
-      this.daysInMonth[i] = {
-        isoString: day.format("YYYY-MM-DD"),
-        dayOfMonth: day.date(),
-        dayOfWeek: day.weekday(),
-        holiday: !!holiday,
-        weekend: (day.weekday() == 0 || day.weekday() == 6 || !!extraWeekend) && !extraWorkDay
-      };
-
-      day.add(1, 'day');
+    if (this.paginationStrategy) {
+      this.paginationStrategy
+        .getPaginationObject(this.currentDate, this.firstDayOfMonth, this.lastDayOfMonth)
+        .subscribe(value => this.datePaginationService.change(value));
     }
   }
 }

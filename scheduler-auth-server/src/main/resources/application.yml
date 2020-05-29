@@ -2,20 +2,16 @@ spring:
   application:
     name: scheduler-auth-server
   datasource:
-    driver-class-name: ${DB_DRIVER_CLASS_NAME}
     url: ${DB_URL}
     username: ${DB_USERNAME}
     password: ${DB_PASSWD}
-  jpa:
-    hibernate:
-      ddl-auto: none
-    properties:
-      hibernate:
-        temp:
-          use_jdbc_metadata_defaults: false
+    driver-class-name: ${DB_DRIVER_CLASS_NAME}
   jackson:
     date-format: "yyyy-MM-dd"
 server:
   port: 5000
   servlet:
     context-path: /
+logging:
+  level:
+    org.springframework.web: TRACE

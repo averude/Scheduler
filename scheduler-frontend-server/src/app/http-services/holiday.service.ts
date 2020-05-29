@@ -17,7 +17,7 @@ export class HolidayService
   constructor(authService: AuthService,
               http: HttpClient,
               private config: RestConfig) {
-    super(`${config.baseUrl}/admin/holidays`, http, authService);
+    super(`${config.baseUrl}/admin/holidays`, http);
   }
 
   getAllByDepartmentId(departmentId: number,

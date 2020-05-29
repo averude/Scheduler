@@ -15,6 +15,6 @@ export class ShiftCompositionService
   constructor(authService: AuthService,
               http: HttpClient,
               private config: RestConfig) {
-    super(`${config.baseUrl}/admin/shift_compositions`, http, authService);
+    super(`${config.baseUrl}/admin/shift_compositions`, http);
   }
 }

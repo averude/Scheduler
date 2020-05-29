@@ -17,7 +17,7 @@ export class WorkingTimeService
   constructor(authService: AuthService,
               http: HttpClient,
               private config: RestConfig) {
-    super(`${config.baseUrl}/admin/working_time`, http, authService);
+    super(`${config.baseUrl}/admin/working_time`, http);
   }
 
   getAllByDepartmentId(departmentId: number,

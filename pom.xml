@@ -12,14 +12,14 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.1.6.RELEASE</version>
+        <version>2.2.7.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!--Should be the same as parent version-->
-        <spring-boot.version>2.1.6.RELEASE</spring-boot.version>
+        <spring-boot.version>2.2.7.RELEASE</spring-boot.version>
         <spring-cloud.version>Greenwich.RELEASE</spring-cloud.version>
         <java.version>11</java.version>
     </properties>
@@ -31,6 +31,9 @@
         <module>scheduler-gateway-server</module>
         <module>scheduler-auth-server</module>
         <module>scheduler-backend-server</module>
+        <module>scheduler-statistics</module>
+        <module>scheduler-security</module>
+        <module>scheduler-controllers</module>
     </modules>
 
     <dependencyManagement>

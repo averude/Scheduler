@@ -1,9 +1,15 @@
 package com.averude.uksatse.scheduler.core.entity;
 
+import com.averude.uksatse.scheduler.core.entity.interfaces.HasId;
+import com.averude.uksatse.scheduler.core.entity.interfaces.HasTime;
 import com.averude.uksatse.scheduler.core.json.deserializer.StringToIntTimeDeserializer;
 import com.averude.uksatse.scheduler.core.json.serializer.IntToStringTimeSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -11,6 +17,10 @@ import javax.validation.constraints.Positive;
 import java.util.Objects;
 import java.util.StringJoiner;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 @Entity
 @Table(
         name = "pattern_units",
@@ -66,77 +76,10 @@ public class PatternUnit implements HasId, HasTime {
     @Column(name = "end_time")
     private Integer endTime;
 
-    public PatternUnit() {
-    }
-
     public PatternUnit(Long patternId, Long orderId, Long dayTypeId) {
         this.patternId = patternId;
         this.orderId = orderId;
         this.dayTypeId = dayTypeId;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getPatternId() {
-        return patternId;
-    }
-
-    public void setPatternId(Long patternId) {
-        this.patternId = patternId;
-    }
-
-    public Long getOrderId() {
-        return orderId;
-    }
-
-    public void setOrderId(Long orderId) {
-        this.orderId = orderId;
-    }
-
-    public Long getDayTypeId() {
-        return dayTypeId;
-    }
-
-    public void setDayTypeId(Long dayTypeId) {
-        this.dayTypeId = dayTypeId;
-    }
-
-    public Integer getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(Integer startTime) {
-        this.startTime = startTime;
-    }
-
-    public Integer getBreakStartTime() {
-        return breakStartTime;
-    }
-
-    public void setBreakStartTime(Integer breakStartTime) {
-        this.breakStartTime = breakStartTime;
-    }
-
-    public Integer getBreakEndTime() {
-        return breakEndTime;
-    }
-
-    public void setBreakEndTime(Integer breakEndTime) {
-        this.breakEndTime = breakEndTime;
-    }
-
-    public Integer getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(Integer endTime) {
-        this.endTime = endTime;
     }
 
     @Override

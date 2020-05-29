@@ -17,7 +17,7 @@ export class PositionService
   constructor(authService: AuthService,
               http: HttpClient,
               private config: RestConfig) {
-    super(`${config.baseUrl}/admin/positions`, http, authService);
+    super(`${config.baseUrl}/admin/positions`, http);
   }
 
   getAll(): Observable<Position[]> {

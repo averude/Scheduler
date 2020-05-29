@@ -1,0 +1,26 @@
+<div class="date-selector">
+  <app-month-year-paginator [paginationStrategy]="paginationStrategy"></app-month-year-paginator>
+</div>
+<div class="table-wrap">
+  <table class="table-base">
+    <thead class="thead-border">
+      <tr>
+        <th>Name</th>
+        <th>Position</th>
+        <th *ngFor="let column of summationColumns">
+          {{column.name}}
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let dto of summationDtos">
+      <td>{{dto.employee.secondName}}</td>
+      <td>{{dto.employee.position.shortName}}</td>
+      <td *ngFor="let summResult of dto.results">
+        {{summResult.value / 60}}
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+

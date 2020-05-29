@@ -1,12 +1,12 @@
 package com.averude.uksatse.scheduler.shared.repository;
 
 import com.averude.uksatse.scheduler.core.entity.Employee;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.averude.uksatse.scheduler.shared.repository.interfaces.IByDepartmentIdRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface EmployeeRepository extends JpaRepository<Employee, Long> {
+public interface EmployeeRepository extends IByDepartmentIdRepository<Employee, Long> {
     List<Employee> findAllByPositionIdOrderBySecondNameAscFirstNameAscPatronymicAsc(long positionId);
 
     @Query("select e " +
@@ -16,5 +16,5 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
             "on e.position = p " +
             "where p.departmentId = ?1 " +
             "order by e.secondName, e.firstName, e.patronymic")
-    List<Employee> findAllByDepartmentId(long departmentId);
+    List<Employee> findAllByDepartmentId(Long departmentId);
 }

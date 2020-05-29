@@ -67,14 +67,14 @@ export class LoginComponent implements OnInit{
     if (user.roles.indexOf('GLOBAL_ADMIN') >= 0) {
       this.router.navigate(['/global_admin']);
     }
+    if (user.roles.indexOf('ENTERPRISE_ADMIN') >= 0) {
+      this.router.navigate(['/enterprise_admin']);
+    }
     if (user.roles.indexOf('DEPARTMENT_ADMIN') >= 0) {
-      this.router.navigate(['/admin/schedule/calendar']);
+      this.router.navigate(['/shift_or_department_admin/schedule/calendar']);
     }
     if (user.roles.indexOf('SHIFT_ADMIN') >= 0 ) {
-      this.router.navigate(['/admin/schedule/calendar']);
-    }
-    if (user.roles.indexOf('ROLE_CLIENT') >= 0) {
-      this.router.navigate(['/client']);
+      this.router.navigate(['/shift_or_department_admin/schedule/calendar']);
     }
   }
 }

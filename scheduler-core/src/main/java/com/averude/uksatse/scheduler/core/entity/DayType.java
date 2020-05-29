@@ -1,6 +1,12 @@
 package com.averude.uksatse.scheduler.core.entity;
 
+import com.averude.uksatse.scheduler.core.entity.interfaces.HasEnterpriseId;
+import com.averude.uksatse.scheduler.core.entity.interfaces.HasId;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -11,6 +17,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.StringJoiner;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 @Entity
 @Table(
         name = "day_types",
@@ -21,20 +31,17 @@ import java.util.StringJoiner;
                 )
         }
 )
-public class DayType implements HasId {
+public class DayType implements HasId, HasEnterpriseId {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Positive(message = "{entity.id.negative}")
     private Long id;
 
+    @JsonIgnore
     @NotNull
     @Column(name = "enterprise_id", nullable = false)
     private Long enterpriseId;
-
-//    @NotNull
-//    @Column(name = "group_id", insertable = false, updatable = false)
-//    private Long dayTypeGroupId;
 
     @NotNull
     @ManyToOne
@@ -75,93 +82,16 @@ public class DayType implements HasId {
                 cascade = CascadeType.ALL)
     private List<DepartmentDayType> departmentDayTypes = new ArrayList<>();
 
-    public DayType() {
-    }
+    @JsonIgnore
+    @OneToMany( mappedBy = "dayTypeId",
+                fetch = FetchType.LAZY,
+                cascade = CascadeType.ALL)
+    private List<SummationColumnDayTypeRange> summationColumns;
 
-    public DayType(@NotNull(message = "{daytype.name.null}")
-                   @Size(max = 128,
-                         min = 1,
-                         message = "{daytype.name.size}")
-                   String name,
-                   @Size(max = 5,
-                         message = "{daytype.label.size}")
+    public DayType(String name,
                    String label) {
         this.name = name;
         this.label = label;
-    }
-
-    @Override
-    public Long getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getEnterpriseId() {
-        return enterpriseId;
-    }
-
-    public void setEnterpriseId(Long enterpriseId) {
-        this.enterpriseId = enterpriseId;
-    }
-
-    public DayTypeGroup getDayTypeGroup() {
-        return dayTypeGroup;
-    }
-
-    public void setDayTypeGroup(DayTypeGroup dayTypeGroup) {
-        this.dayTypeGroup = dayTypeGroup;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getLabel() {
-        return label;
-    }
-
-    public void setLabel(String label) {
-        this.label = label;
-    }
-
-    public Boolean getUsePreviousValue() {
-        return usePreviousValue;
-    }
-
-    public void setUsePreviousValue(Boolean usePreviousValue) {
-        this.usePreviousValue = usePreviousValue;
-    }
-
-    public List<PatternUnit> getUnits() {
-        return units;
-    }
-
-    public void setUnits(List<PatternUnit> units) {
-        this.units = units;
-    }
-
-    public List<WorkDay> getWorkDays() {
-        return workDays;
-    }
-
-    public void setWorkDays(List<WorkDay> workDays) {
-        this.workDays = workDays;
-    }
-
-    public List<DepartmentDayType> getDepartmentDayTypes() {
-        return departmentDayTypes;
-    }
-
-    public void setDepartmentDayTypes(List<DepartmentDayType> departmentDayTypes) {
-        this.departmentDayTypes = departmentDayTypes;
     }
 
     public void addPatternUnit(PatternUnit unit) {

@@ -1,0 +1,9 @@
+package com.averude.uksatse.scheduler.controllers.interfaces;
+
+import org.springframework.security.core.Authentication;
+
+import java.util.List;
+
+public interface IByAuthController<T> {
+    List<T> getAllByAuth(Authentication authentication);
+}

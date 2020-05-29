@@ -1,0 +1,31 @@
+<!--SIDEBAR-->
+<ul class="sidebar">
+  <li class="sidebar-list-element">
+    <button class="sidebar-button"
+            routerLink="employees"
+            routerLinkActive="active">Employees</button>
+  </li>
+  <li class="sidebar-list-element">
+    <button class="sidebar-button"
+            routerLink="positions"
+            routerLinkActive="active">Positions</button>
+  </li>
+  <li class="sidebar-list-element">
+    <button class="sidebar-button"
+            routerLink="shifts"
+            routerLinkActive="active">Shifts</button>
+  </li>
+  <li class="sidebar-list-element">
+    <button class="sidebar-button"
+            routerLink="department_day_types"
+            routerLinkActive="active">Day types</button>
+  </li>
+  <li class="sidebar-list-element">
+    <button class="sidebar-button"
+            routerLink="patterns"
+            routerLinkActive="active">Patterns</button>
+  </li>
+</ul>
+<div class="sidebar-content-box">
+  <router-outlet></router-outlet>
+</div>

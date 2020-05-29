@@ -1,6 +1,6 @@
 export class ExtraWeekend {
   id: number;
-  departmentId: number;
+  // departmentId: number;
   holidayId: number;
-  date: Date;
+  date: string;
 }

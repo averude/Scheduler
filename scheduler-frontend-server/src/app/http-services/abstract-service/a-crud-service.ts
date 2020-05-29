@@ -1,8 +1,7 @@
-import { Observable, of } from "rxjs";
+import { Observable } from "rxjs";
 import { HttpClient } from "@angular/common/http";
 import { ICrudService } from "../interface/crud.service";
 import { IByAuthService } from "../interface/i-by-auth.service";
-import { AuthService } from "../auth.service";
 import { CUDService } from "../interface/cud-service";
 import { IByDateCrudService } from "../interface/by-date-crud.service";
 import { IByAuthAndDateService } from "../interface/i-by-auth-and-date.service";
@@ -12,23 +11,11 @@ export abstract class ACrudService<T>
   implements ICrudService<T>, IByDateCrudService<T>, IByAuthService<T>,
     IByAuthAndDateService<T>, IByEnterpriseIdService<T>, CUDService<T> {
 
-  protected constructor(public url: string,
-                        public http: HttpClient,
-                        private authService: AuthService) {}
+  protected constructor(protected url: string,
+                        protected http: HttpClient) {}
 
   getAllByAuth(from?: string, to?: string): Observable<T[]> {
-    let user = this.authService.currentUserValue;
-    let result = of([]);
-    if (user.roles.indexOf('GLOBAL_ADMIN') >= 0) {
-      result = this.getAll(from, to);
-    } else if (user.roles.indexOf('ENTERPRISE_ADMIN') >= 0) {
-      result = this.getAllByEnterpriseId(null, from, to); // temp
-    } else if (user.roles.indexOf('DEPARTMENT_ADMIN') >= 0) {
-      result = this.getAllByDepartmentId(user.departmentId, from, to);
-    } else if (user.roles.indexOf('SHIFT_ADMIN') >= 0) {
-      result = this.getAllByShiftId(user.shiftId, from, to);
-    }
-    return result;
+    return this.getAll(from, to);
   }
 
   getAll(from?: string, to?: string): Observable<T[]> {

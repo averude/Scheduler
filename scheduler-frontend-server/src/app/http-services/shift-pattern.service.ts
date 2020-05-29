@@ -15,6 +15,6 @@ export class ShiftPatternService
   constructor(authService: AuthService,
               http: HttpClient,
               private config: RestConfig) {
-    super(`${config.baseUrl}/admin/patterns`, http, authService);
+    super(`${config.baseUrl}/admin/patterns`, http);
   }
 }

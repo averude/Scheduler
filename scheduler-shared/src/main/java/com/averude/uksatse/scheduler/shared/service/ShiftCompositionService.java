@@ -1,16 +1,12 @@
 package com.averude.uksatse.scheduler.shared.service;
 
 import com.averude.uksatse.scheduler.core.entity.ShiftComposition;
+import com.averude.uksatse.scheduler.core.service.IByDepartmentIdAndDateService;
+import com.averude.uksatse.scheduler.core.service.IByShiftIdAndDateService;
+import com.averude.uksatse.scheduler.core.service.IService;
 
-import java.time.LocalDate;
-import java.util.List;
-
-public interface ShiftCompositionService extends GenericService<ShiftComposition, Long> {
-    List<ShiftComposition> findAllByShiftIdAndDate(Long shiftId,
-                                                   LocalDate from,
-                                                   LocalDate to);
-
-    List<ShiftComposition> findAllByDepartmentIdAndDate(Long departmentId,
-                                                        LocalDate from,
-                                                        LocalDate to);
+public interface ShiftCompositionService extends
+        IByDepartmentIdAndDateService<ShiftComposition, Long>,
+        IByShiftIdAndDateService<ShiftComposition, Long>,
+        IService<ShiftComposition, Long> {
 }

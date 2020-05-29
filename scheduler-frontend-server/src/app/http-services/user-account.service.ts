@@ -1,4 +1,4 @@
-import { UserAccount } from "../model/user-account";
+import { DepartmentAdminUserAccount, EnterpriseAdminUserAccount, UserAccount } from "../model/accounts/user-account";
 import { Observable } from "rxjs";
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
@@ -14,15 +14,29 @@ export class UserAccountService implements IByAuthService<UserAccount>, CUDServi
   constructor(private http: HttpClient,
               private config: RestConfig) {}
 
-  getAllByAuth(): Observable<UserAccount[]> {
-    return this.http.get<UserAccount[]>(
+  getAllByAuth(): Observable<any[]> {
+    return this.http.get<any[]>(
       `${this.config.baseUrl}/uaa/users`
     );
   }
 
   create(userAccount: UserAccount): Observable<any> {
     return this.http.post<number>(
-      `${this.config.baseUrl}/uaa/users`,
+      `${this.config.baseUrl}/uaa/users/enterprise_admins`,
+      userAccount
+    );
+  }
+
+  createEnterpriseAdmin(userAccount: EnterpriseAdminUserAccount): Observable<any> {
+    return this.http.post<string>(
+      `${this.config.baseUrl}/uaa/users/enterprise_admins`,
+      userAccount
+    );
+  }
+
+  createDepartmentAdmin(userAccount: DepartmentAdminUserAccount): Observable<any> {
+    return this.http.post<string>(
+      `${this.config.baseUrl}/uaa/users/department_admins`,
       userAccount
     );
   }
@@ -35,7 +49,7 @@ export class UserAccountService implements IByAuthService<UserAccount>, CUDServi
     );
   }
 
-  delete(id: number): Observable<any> {
+  delete(id: string): Observable<any> {
     return this.http.delete(
       `${this.config.baseUrl}/uaa/users/${id}`,
       {responseType: 'text'}

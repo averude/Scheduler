@@ -24,6 +24,10 @@ export class EnterpriseService implements IByAuthService<Enterprise>, CUDService
     }
   }
 
+  getCurrent(): Observable<Enterprise> {
+    return this.http.get<Enterprise>(`${this.url}/current`);
+  }
+
   getAll(): Observable<Enterprise[]> {
     return this.http.get<Enterprise[]>(this.url);
   }

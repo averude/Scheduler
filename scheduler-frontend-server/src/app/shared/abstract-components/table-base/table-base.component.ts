@@ -19,8 +19,8 @@ export abstract class TableBaseComponent<T extends IdEntity> implements OnInit, 
   sort: MatSort;
 
   protected constructor(private matDialog: MatDialog,
-                        private crudService: CUDService<T>,
-                        private notification: NotificationsService) { }
+                        protected crudService: CUDService<T>,
+                        protected notification: NotificationsService) { }
 
   ngOnInit(): void {
     this.initDataSourceSort();
@@ -132,15 +132,18 @@ export abstract class TableBaseComponent<T extends IdEntity> implements OnInit, 
   }
 
   removeSelected() {
-    this.selection.selected.forEach(value =>
-      this.crudService.delete(value.id)
-        .subscribe(res => {
-          this.removeRow(value);
-          this.notification.success(
-            'Deleted',
-            'Selected values was successfully deleted'
-          );
-        }));
+    this.selection.selected.forEach(value => this.removeEntity(value));
+  }
+
+  removeEntity(entity: T): void {
+    this.crudService.delete(entity.id)
+      .subscribe(res => {
+        this.removeRow(entity);
+        this.notification.success(
+          'Deleted',
+          'Selected values was successfully deleted'
+        );
+      });
   }
 
   /** Whether the number of selected elements matches the total number of rows. */

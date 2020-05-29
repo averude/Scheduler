@@ -17,7 +17,7 @@ export class ExtraWorkdayService
   constructor(authService: AuthService,
               http: HttpClient,
               private config: RestConfig) {
-    super(`${config.baseUrl}/admin/extra_work_days`, http, authService);
+    super(`${config.baseUrl}/admin/extra_work_days`, http);
   }
 
   getAllByDepartmentId(departmentId: number,

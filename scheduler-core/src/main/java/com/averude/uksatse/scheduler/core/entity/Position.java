@@ -1,17 +1,26 @@
 package com.averude.uksatse.scheduler.core.entity;
 
+import com.averude.uksatse.scheduler.core.entity.interfaces.HasDepartmentId;
+import com.averude.uksatse.scheduler.core.entity.interfaces.HasId;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
-import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.StringJoiner;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 @Entity
 @Table(
         name = "positions",
@@ -21,7 +30,7 @@ import java.util.StringJoiner;
                         columnNames = {"name", "department_id"})
         }
 )
-public class Position implements HasId {
+public class Position implements HasId, HasDepartmentId {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,6 +50,7 @@ public class Position implements HasId {
     @Column(name = "short_name")
     private String shortName;
 
+    @JsonIgnore
     @NotNull(message = "{position.department.null}")
     @Positive(message = "{position.department.negative}")
     @Column(name = "department_id",
@@ -51,10 +61,7 @@ public class Position implements HasId {
     @OneToMany( mappedBy = "position",
                 cascade = CascadeType.ALL,
                 fetch = FetchType.LAZY)
-    private Set<@NotNull @Valid Employee> employees = new HashSet<>();
-
-    public Position() {
-    }
+    private Set<@NotNull @Valid Employee> employees;
 
     public Position(@NotNull(message = "{position.name.null}")
                     @Size(max = 64,
@@ -62,56 +69,6 @@ public class Position implements HasId {
                           message = "{position.name.size}")
                     String name) {
         this.name = name;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getShortName() {
-        return shortName;
-    }
-
-    public void setShortName(String shortName) {
-        this.shortName = shortName;
-    }
-
-    public Long getDepartmentId() {
-        return departmentId;
-    }
-
-    public void setDepartmentId(Long departmentId) {
-        this.departmentId = departmentId;
-    }
-
-    public void setEmployees(Set<Employee> employees) {
-        this.employees = employees;
-    }
-
-    public Set<Employee> getEmployees() {
-        return employees;
-    }
-
-    public void addEmployee(Employee employee){
-        employee.setPosition(this);
-        employees.add(employee);
-    }
-
-    public void removeEmployee(Employee employee){
-        employee.setPosition(null);
-        employees.remove(employee);
     }
 
     @Override

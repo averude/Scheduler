@@ -1,0 +1,38 @@
+<div class="form-box">
+
+  <div class="color-container"
+       [style.background-color]="color"></div>
+
+  <mat-form-field class="start-time">
+    <input matInput
+           mask="00:00"
+           [dropSpecialCharacters]="false"
+           placeholder="From time"
+           [(ngModel)]="child.from">
+  </mat-form-field>
+
+  <mat-form-field class="end-time">
+    <input matInput
+           mask="00:00"
+           [dropSpecialCharacters]="false"
+           placeholder="To time"
+           [(ngModel)]="child.to">
+  </mat-form-field>
+
+  <mat-form-field class="day-type-container">
+    <mat-select placeholder="Day Type"
+                [value]="selectedDayType"
+                [compareWith]="compareNumber"
+                [(ngModel)]="child.dayTypeId">
+      <mat-option *ngFor="let dayType of dayTypes"
+                  [value]="dayType.id">
+        {{dayType.name}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <div class="control-button-box">
+    <button class="control-button"
+            (click)="delete()">X</button>
+  </div>
+</div>

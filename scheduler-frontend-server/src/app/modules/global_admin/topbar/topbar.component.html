@@ -1,0 +1,34 @@
+<div class="topbar">
+    <div class="boxrow">
+        <div class="logo-container">
+            <img class="uksatse-logo" src="assets/img/logo_scheduler1.png">
+        </div>
+        <div class="toolbar-container">
+            <div class="department">
+                <div id="department-name" >
+                    <a>Andrew Kolesnyk</a>
+                </div>
+                <div id="department-position" >
+                    <a>Global administrator</a>
+                </div>
+            </div>
+
+            <div class="toolbar-set">
+              <ul class="toolbar">
+
+                <li class="toolbar-li divider">
+                </li>
+
+                <li class="toolbar-li exit-icon">
+                  <img src="assets/img/exit.png"
+                       (click)="logout()">
+                </li>
+              </ul>
+            </div>
+          </div>
+    </div>
+</div>
+<div class="content-box">
+  <app-sidebar-component></app-sidebar-component>
+</div>
+<simple-notifications></simple-notifications>

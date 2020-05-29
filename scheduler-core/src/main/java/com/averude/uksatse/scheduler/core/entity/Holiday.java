@@ -1,31 +1,44 @@
 package com.averude.uksatse.scheduler.core.entity;
 
+import com.averude.uksatse.scheduler.core.entity.interfaces.HasEnterpriseId;
+import com.averude.uksatse.scheduler.core.entity.interfaces.HasId;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.StringJoiner;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 @Entity
 @Table(
         name = "holidays",
         uniqueConstraints = {
                 @UniqueConstraint(
                         name = "holidays_unique_constraint",
-                        columnNames = {"department_id", "date"}
+                        columnNames = {"enterprise_id", "date"}
                 )
         }
 )
-public class Holiday implements HasId {
+public class Holiday implements HasId, HasEnterpriseId {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonIgnore
     @NotNull
-    @Column(name = "department_id",
+    @Column(name = "enterprise_id",
             nullable = false)
-    private Long departmentId;
+    private Long enterpriseId;
 
     @NotNull
     @Column(nullable = false)
@@ -38,43 +51,11 @@ public class Holiday implements HasId {
     @Column(nullable = false)
     private String name;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getDepartmentId() {
-        return departmentId;
-    }
-
-    public void setDepartmentId(Long departmentId) {
-        this.departmentId = departmentId;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     @Override
     public String toString() {
         return new StringJoiner(", ", Holiday.class.getSimpleName() + "{", "}")
                 .add("id=" + id)
-                .add("departmentId=" + departmentId)
+                .add("enterpriseId=" + enterpriseId)
                 .add("date=" + date)
                 .add("name='" + name + "'")
                 .toString();

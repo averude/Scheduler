@@ -1,12 +1,7 @@
 package com.averude.uksatse.scheduler.shared.repository;
 
 import com.averude.uksatse.scheduler.core.entity.WorkingTime;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.averude.uksatse.scheduler.shared.repository.interfaces.IByDepartmentIdAndDateRepository;
 
-import java.time.LocalDate;
-import java.util.List;
-
-public interface WorkingTimeRepository extends JpaRepository<WorkingTime, Long> {
-    List<WorkingTime> findAllByDepartmentId(Long departmentId);
-    List<WorkingTime> findAllByDepartmentIdAndDateBetween(Long departmentId, LocalDate from, LocalDate to);
+public interface WorkingTimeRepository extends IByDepartmentIdAndDateRepository<WorkingTime, Long> {
 }

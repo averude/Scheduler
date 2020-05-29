@@ -17,7 +17,7 @@ export class EmployeeService
   constructor(authService: AuthService,
               http: HttpClient,
               private config: RestConfig) {
-    super(`${config.baseUrl}/admin/employees`, http, authService);
+    super(`${config.baseUrl}/admin/employees`, http);
   }
 
   getByPositionId(positionId: number): Observable<Employee[]> {

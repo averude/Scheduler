@@ -13,6 +13,6 @@ export class DepartmentDayTypeService
   constructor(authService: AuthService,
               http: HttpClient,
               config: RestConfig) {
-    super(`${config.baseUrl}/admin/department_day_types`, http, authService);
+    super(`${config.baseUrl}/admin/department_day_types`, http);
   }
 }

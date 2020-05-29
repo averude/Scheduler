@@ -1,17 +1,25 @@
 package com.averude.uksatse.scheduler.core.entity;
 
+import com.averude.uksatse.scheduler.core.entity.interfaces.HasId;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.StringJoiner;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 @Entity
 @Table(
         name = "employees",
@@ -62,101 +70,24 @@ public class Employee implements HasId {
     @JsonIgnore
     @OneToMany( mappedBy = "employeeId",
                 cascade = CascadeType.ALL)
-    private List<@NotNull @Valid ShiftComposition> shiftsList = new ArrayList<>();
+    private List<@NotNull @Valid ShiftComposition> shiftsList;
 
     @OneToMany( mappedBy = "employeeId",
                 cascade = CascadeType.ALL,
                 fetch = FetchType.LAZY)
-    private List<@NotNull @Valid WorkDay> schedule = new ArrayList<>();
+    private List<@NotNull @Valid WorkDay> schedule;
 
-    public Employee() {
-    }
-
-    public Employee(@NotNull(message = "{employee.secondname.null}")
-                    @Size(max = 20,
-                            min = 3,
-                            message = "{employee.secondname.size}")
-                            String secondName,
-                    @NotNull(message = "{employee.firstname.null}")
-                    @Size(max = 20,
-                          min = 3,
-                          message = "{employee.firstname.size}")
+    public Employee(String secondName,
                     String firstName,
-                    @Size(max = 20,
-                          min = 3,
-                          message = "{employee.patronymic.size}")
-                    String patronymic
-                    ) {
+                    String patronymic) {
         this.firstName = firstName;
         this.patronymic = patronymic;
         this.secondName = secondName;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getPatronymic() {
-        return patronymic;
-    }
-
-    public void setPatronymic(String patronymic) {
-        this.patronymic = patronymic;
-    }
-
-    public String getSecondName() {
-        return secondName;
-    }
-
-    public void setSecondName(String secondName) {
-        this.secondName = secondName;
-    }
-
-    public Position getPosition() {
-        return position;
-    }
-
-    public void setPosition(Position position) {
-        this.position = position;
-    }
-
-    public List<ShiftComposition> getShiftsList() {
-        return shiftsList;
-    }
-
-    public void setShiftsList(List<ShiftComposition> shiftsList) {
-        this.shiftsList = shiftsList;
     }
 
     @JsonIgnore // Don't know why, but in this case field annotation doesn't work.
     public List<WorkDay> getSchedule() {
         return schedule;
-    }
-
-    public void setSchedule(List<WorkDay> scheduleList) {
-        this.schedule = scheduleList;
-    }
-
-    public void addWorkDay(WorkDay workDay){
-        workDay.setEmployeeId(this.getId());
-        schedule.add(workDay);
-    }
-
-    public void removeWorkDay(WorkDay workDay){
-        workDay.setEmployeeId(null);
-        schedule.remove(workDay);
     }
 
     @Override

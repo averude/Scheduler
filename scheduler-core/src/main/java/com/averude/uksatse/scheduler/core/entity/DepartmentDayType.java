@@ -1,19 +1,29 @@
 package com.averude.uksatse.scheduler.core.entity;
 
+import com.averude.uksatse.scheduler.core.entity.interfaces.HasDepartmentId;
+import com.averude.uksatse.scheduler.core.entity.interfaces.HasId;
+import com.averude.uksatse.scheduler.core.entity.interfaces.HasTime;
 import com.averude.uksatse.scheduler.core.json.deserializer.StringToIntTimeDeserializer;
 import com.averude.uksatse.scheduler.core.json.serializer.IntToStringTimeSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.StringJoiner;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 @Entity
 @Table(
         name = "department_day_types",
@@ -24,13 +34,14 @@ import java.util.StringJoiner;
                 )
         }
 )
-public class DepartmentDayType implements HasId, HasTime {
+public class DepartmentDayType implements HasId, HasTime, HasDepartmentId {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Positive(message = "{entity.id.negative}")
     private Long id;
 
+    @JsonIgnore
     @NotNull
     @Column(name = "department_id", nullable = false)
     private Long departmentId;
@@ -62,108 +73,15 @@ public class DepartmentDayType implements HasId, HasTime {
 
     @JsonIgnore
     @OneToMany( mappedBy = "holidayDepDayType")
-    private List<ShiftPattern> patternsWithHolidays = new ArrayList<>();
+    private List<ShiftPattern> patternsWithHolidays;
 
     @JsonIgnore
     @OneToMany( mappedBy = "extraWeekendDepDayType")
-    private List<ShiftPattern> patternsWithExtraWeekends = new ArrayList<>();
+    private List<ShiftPattern> patternsWithExtraWeekends;
 
     @JsonIgnore
     @OneToMany( mappedBy = "extraWorkDayDepDayType")
-    private List<ShiftPattern> patternsWithExtraWorkDays = new ArrayList<>();
-
-    public DepartmentDayType() {
-    }
-
-    @Override
-    public Long getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getDepartmentId() {
-        return departmentId;
-    }
-
-    public void setDepartmentId(Long departmentId) {
-        this.departmentId = departmentId;
-    }
-
-    public DayType getDayType() {
-        return dayType;
-    }
-
-    public void setDayType(DayType dayType) {
-        this.dayType = dayType;
-    }
-
-    @Override
-    public Integer getStartTime() {
-        return startTime;
-    }
-
-    @Override
-    public void setStartTime(Integer startTime) {
-        this.startTime = startTime;
-    }
-
-    @Override
-    public Integer getBreakStartTime() {
-        return breakStartTime;
-    }
-
-    @Override
-    public void setBreakStartTime(Integer breakStartTime) {
-        this.breakStartTime = breakStartTime;
-    }
-
-    @Override
-    public Integer getBreakEndTime() {
-        return breakEndTime;
-    }
-
-    @Override
-    public void setBreakEndTime(Integer breakEndTime) {
-        this.breakEndTime = breakEndTime;
-    }
-
-    @Override
-    public Integer getEndTime() {
-        return endTime;
-    }
-
-    @Override
-    public void setEndTime(Integer endTime) {
-        this.endTime = endTime;
-    }
-
-    public List<ShiftPattern> getPatternsWithHolidays() {
-        return patternsWithHolidays;
-    }
-
-    public void setPatternsWithHolidays(List<ShiftPattern> patternsWithHolidays) {
-        this.patternsWithHolidays = patternsWithHolidays;
-    }
-
-    public List<ShiftPattern> getPatternsWithExtraWeekends() {
-        return patternsWithExtraWeekends;
-    }
-
-    public void setPatternsWithExtraWeekends(List<ShiftPattern> patternsWithExtraWeekends) {
-        this.patternsWithExtraWeekends = patternsWithExtraWeekends;
-    }
-
-    public List<ShiftPattern> getPatternsWithExtraWorkDays() {
-        return patternsWithExtraWorkDays;
-    }
-
-    public void setPatternsWithExtraWorkDays(List<ShiftPattern> patternsWithExtraWorkDays) {
-        this.patternsWithExtraWorkDays = patternsWithExtraWorkDays;
-    }
+    private List<ShiftPattern> patternsWithExtraWorkDays;
 
     @Override
     public boolean equals(Object o) {

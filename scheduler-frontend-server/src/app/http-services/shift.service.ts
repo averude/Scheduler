@@ -17,7 +17,7 @@ export class ShiftService
   constructor(authService: AuthService,
               http: HttpClient,
               private config: RestConfig) {
-    super(`${config.baseUrl}/admin/shifts`, http, authService);
+    super(`${config.baseUrl}/admin/shifts`, http);
   }
 
   getAllByShiftId(shiftId: number): Observable<Shift[]> {

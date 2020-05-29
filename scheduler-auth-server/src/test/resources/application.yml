@@ -1,21 +1,8 @@
 spring:
-  cloud:
-    config:
-      enabled: false
-#  main:
-#    allow-bean-definition-overriding: true
+  application:
+    name: test
   jpa:
-    hibernate:
-      ddl-auto: create-drop
-    properties:
-      hibernate:
-        temp:
-          use_jdbc_metadata_defaults: false
     show-sql: true
-#eureka:
-#  client:
-#    enabled: false
-server:
-  port: 5000
-  servlet:
-    context-path: /
+logging:
+  level:
+    org.springframework.web: TRACE

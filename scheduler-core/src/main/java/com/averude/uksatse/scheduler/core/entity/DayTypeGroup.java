@@ -1,6 +1,11 @@
 package com.averude.uksatse.scheduler.core.entity;
 
+import com.averude.uksatse.scheduler.core.entity.interfaces.HasId;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -9,6 +14,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.StringJoiner;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 @Entity
 @Table(
         name = "day_type_groups",
@@ -38,38 +47,6 @@ public class DayTypeGroup implements HasId {
                 fetch = FetchType.LAZY,
                 cascade = CascadeType.ALL)
     private List<DayType> dayTypes = new LinkedList<>();
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
-
-    public List<DayType> getDayTypes() {
-        return dayTypes;
-    }
-
-    public void setDayTypes(List<DayType> dayTypes) {
-        this.dayTypes = dayTypes;
-    }
 
     public void addDayType(DayType dayType) {
         dayType.setDayTypeGroup(this);

@@ -1,5 +1,12 @@
 package com.averude.uksatse.scheduler.core.entity;
 
+import com.averude.uksatse.scheduler.core.entity.interfaces.HasId;
+import com.averude.uksatse.scheduler.core.entity.interfaces.HasTime;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
@@ -7,6 +14,10 @@ import java.time.LocalDate;
 import java.util.Objects;
 import java.util.StringJoiner;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 @Entity
 @Table(
         name = "work_schedule",
@@ -53,9 +64,6 @@ public class WorkDay implements HasId, HasTime {
     @Column(nullable = false)
     private LocalDate date;
 
-    public WorkDay() {
-    }
-
     public WorkDay(Long employeeId, LocalDate date) {
         this.employeeId = employeeId;
         this.holiday = false;
@@ -72,76 +80,26 @@ public class WorkDay implements HasId, HasTime {
         this.date = date;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getEmployeeId() {
-        return employeeId;
-    }
-
-    public void setEmployeeId(Long employeeId) {
+    public WorkDay(Long employeeId,
+                   Long dayTypeId,
+                   Boolean holiday,
+                   Integer startTime,
+                   Integer breakStartTime,
+                   Integer breakEndTime,
+                   Integer endTime,
+                   LocalDate date) {
         this.employeeId = employeeId;
-    }
-
-    public Long getDayTypeId() {
-        return dayTypeId;
-    }
-
-    public void setDayTypeId(Long dayTypeId) {
         this.dayTypeId = dayTypeId;
-    }
-
-    public Boolean getHoliday() {
-        return holiday;
-    }
-
-    public void setHoliday(Boolean holiday) {
         this.holiday = holiday;
-    }
-
-    public Integer getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(Integer startTime) {
         this.startTime = startTime;
-    }
-
-    public Integer getBreakStartTime() {
-        return breakStartTime;
-    }
-
-    public void setBreakStartTime(Integer breakStartTime) {
         this.breakStartTime = breakStartTime;
-    }
-
-    public Integer getBreakEndTime() {
-        return breakEndTime;
-    }
-
-    public void setBreakEndTime(Integer breakEndTime) {
         this.breakEndTime = breakEndTime;
-    }
-
-    public Integer getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(Integer endTime) {
         this.endTime = endTime;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
         this.date = date;
+    }
+
+    public int getTimeHash() {
+        return Objects.hash(dayTypeId, startTime, breakStartTime, breakEndTime, endTime);
     }
 
     @Override

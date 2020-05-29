@@ -29,9 +29,6 @@ export class AuthService {
             const user = new User();
             const token_claims = decode(token.access_token);
             user.roles = token_claims.authorities;
-            user.employeeId = token_claims.employee_id;
-            user.departmentId = token_claims.department_id;
-            user.shiftId = token_claims.shift_id;
             user.access_token = token.access_token;
             sessionStorage.setItem('currentUser', JSON.stringify(user));
             return user;
@@ -44,10 +41,6 @@ export class AuthService {
   public get currentUserValue(): User {
     let user = sessionStorage.getItem('currentUser');
     return JSON.parse(user);
-  }
-
-  public get departmentId(): number {
-    return this.currentUserValue.departmentId;
   }
 
   public isLogon(): boolean {

@@ -18,7 +18,7 @@ export class DayTypeService extends ACrudService<DayType>
   constructor(authService: AuthService,
               http: HttpClient,
               private config: RestConfig) {
-    super(`${config.baseUrl}/admin/day_types`, http, authService);
+    super(`${config.baseUrl}/admin/day_types`, http);
   }
 
   getAllByDepartmentId(departmentId: number): Observable<DayType[]> {

@@ -1,6 +1,6 @@
 -- PostgreSQL
 
-CREATE TABLE enterprises (
+CREATE TABLE IF NOT EXISTS enterprises (
   id            SERIAL,
   name          VARCHAR (128) NOT NULL,
 
@@ -9,7 +9,7 @@ CREATE TABLE enterprises (
   PRIMARY KEY (id)
 );
 
-CREATE TABLE departments (
+CREATE TABLE IF NOT EXISTS departments (
   id            SERIAL,
   enterprise_id INTEGER,
   name          VARCHAR (128) NOT NULL,
@@ -20,7 +20,7 @@ CREATE TABLE departments (
   FOREIGN KEY (enterprise_id) REFERENCES enterprises(id) ON DELETE CASCADE
 );
 
-CREATE TABLE positions (
+CREATE TABLE IF NOT EXISTS positions (
   id            SERIAL,
   department_id INTEGER       NOT NULL,
   name          VARCHAR (128) NOT NULL,
@@ -32,7 +32,7 @@ CREATE TABLE positions (
   FOREIGN KEY (department_id) REFERENCES departments(id) ON DELETE CASCADE
 );
 
-CREATE TABLE day_type_groups (
+CREATE TABLE IF NOT EXISTS day_type_groups (
   id            SERIAL,
   name          VARCHAR(128)  NOT NULL,
   color         VARCHAR(7)    NOT NULL,
@@ -42,7 +42,7 @@ CREATE TABLE day_type_groups (
   PRIMARY KEY (id)
 );
 
-CREATE TABLE day_types (
+CREATE TABLE IF NOT EXISTS day_types (
   id                  SERIAL,
   enterprise_id       INTEGER       NOT NULL,
   group_id            INTEGER       NOT NULL,
@@ -56,7 +56,32 @@ CREATE TABLE day_types (
   FOREIGN KEY (group_id)      REFERENCES day_type_groups(id)  ON DELETE CASCADE
 );
 
-CREATE TABLE department_day_types (
+CREATE TABLE IF NOT EXISTS summation_columns (
+  id                  SERIAL,
+  enterprise_id       INTEGER       NOT NULL,
+  name                VARCHAR (128) NOT NULL,
+
+  UNIQUE (enterprise_id, name),
+
+  PRIMARY KEY (id),
+  FOREIGN KEY (enterprise_id) REFERENCES enterprises(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS summation_columns_day_types_ranges (
+  id                  SERIAL,
+  summation_column_id INTEGER       NOT NULL,
+  day_type_id         INTEGER       NOT NULL,
+  from_time           INTEGER       CHECK ( 0 <= from_time and from_time <= 1440 ),
+  to_time             INTEGER       CHECK ( 0 <= to_time and to_time <= 1440 ),
+
+  CHECK ( from_time != to_time ),
+
+  PRIMARY KEY (id),
+  FOREIGN KEY (day_type_id)         REFERENCES day_types(id) ON UPDATE CASCADE ON DELETE CASCADE,
+  FOREIGN KEY (summation_column_id) REFERENCES summation_columns(id) ON UPDATE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS department_day_types (
   id                  SERIAL,
   department_id       INTEGER       NOT NULL,
   day_type_id         INTEGER       NOT NULL,
@@ -75,7 +100,7 @@ CREATE TABLE department_day_types (
   FOREIGN KEY (day_type_id)   REFERENCES day_types(id)    ON DELETE CASCADE
 );
 
-CREATE TABLE shift_patterns (
+CREATE TABLE IF NOT EXISTS shift_patterns (
   id                          SERIAL,
   department_id               INTEGER       NOT NULL,
   name                        VARCHAR (128) NOT NULL,
@@ -93,7 +118,7 @@ CREATE TABLE shift_patterns (
   FOREIGN KEY (extra_work_day_dep_day_type_id)  REFERENCES department_day_types(id)    ON DELETE SET NULL
 );
 
-CREATE TABLE pattern_units (
+CREATE TABLE IF NOT EXISTS pattern_units (
   id                  SERIAL,
   pattern_id          INTEGER     NOT NULL,
   order_id            INTEGER     NOT NULL,
@@ -113,7 +138,7 @@ CREATE TABLE pattern_units (
   FOREIGN KEY (day_type_id)   REFERENCES day_types(id)      ON DELETE CASCADE
 );
 
-CREATE TABLE shifts (
+CREATE TABLE IF NOT EXISTS shifts (
   id            SERIAL,
   department_id INTEGER       NOT NULL,
   pattern_id    INTEGER,
@@ -126,7 +151,7 @@ CREATE TABLE shifts (
   FOREIGN KEY (pattern_id)    REFERENCES shift_patterns(id) ON DELETE SET NULL
 );
 
-CREATE TABLE employees (
+CREATE TABLE IF NOT EXISTS employees (
   id            SERIAL,
   position_id   INTEGER       NOT NULL,
   first_name    VARCHAR (64)  NOT NULL,
@@ -139,7 +164,7 @@ CREATE TABLE employees (
   FOREIGN KEY (position_id)   REFERENCES positions(id) ON DELETE CASCADE
 );
 
-CREATE TABLE shift_composition (
+CREATE TABLE IF NOT EXISTS shift_composition (
   id            SERIAL,
   shift_id      INTEGER       NOT NULL,
   employee_id   INTEGER       NOT NULL,
@@ -160,7 +185,7 @@ CREATE TABLE shift_composition (
   FOREIGN KEY (employee_id)   REFERENCES employees(id)  ON UPDATE CASCADE ON DELETE CASCADE
 );
 
-CREATE TABLE work_schedule (
+CREATE TABLE IF NOT EXISTS work_schedule (
   id                  SERIAL,
   employee_id         INTEGER     NOT NULL,
   day_type_id         INTEGER,
@@ -181,7 +206,7 @@ CREATE TABLE work_schedule (
   FOREIGN KEY (day_type_id)   REFERENCES day_types(id) ON DELETE SET NULL
 );
 
-CREATE TABLE working_time (
+CREATE TABLE IF NOT EXISTS working_time (
   id            SERIAL,
   department_id INTEGER       NOT NULL,
   shift_id      INTEGER       NOT NULL,
@@ -195,77 +220,88 @@ CREATE TABLE working_time (
   FOREIGN KEY (shift_id)      REFERENCES shifts(id)      ON DELETE CASCADE
 );
 
-CREATE TABLE holidays (
+CREATE TABLE IF NOT EXISTS holidays (
   id            SERIAL,
-  department_id INTEGER       NOT NULL,
+  enterprise_id INTEGER       NOT NULL,
   date          DATE          NOT NULL,
   name          VARCHAR (255) NOT NULL,
 
-  UNIQUE (department_id, date, name),
+  UNIQUE (enterprise_id, date),
 
   PRIMARY KEY (id),
-  FOREIGN KEY (department_id) REFERENCES departments(id) ON DELETE CASCADE
+  FOREIGN KEY (enterprise_id) REFERENCES enterprises(id) ON DELETE CASCADE
 );
 
-CREATE TABLE extra_weekends (
+CREATE TABLE IF NOT EXISTS extra_weekends (
   id            SERIAL,
-  department_id INTEGER       NOT NULL,
+  enterprise_id INTEGER       NOT NULL,
   holiday_id    INTEGER,
   date          DATE          NOT NULL,
 
   UNIQUE (holiday_id),
-  UNIQUE (department_id, date),
+  UNIQUE (enterprise_id, date),
 
   PRIMARY KEY (id),
-  FOREIGN KEY (department_id) REFERENCES departments(id)  ON DELETE CASCADE,
+  FOREIGN KEY (enterprise_id) REFERENCES enterprises(id)  ON DELETE CASCADE,
   FOREIGN KEY (holiday_id)    REFERENCES holidays(id)     ON DELETE CASCADE
 );
 
-CREATE TABLE extra_work_days (
+CREATE TABLE IF NOT EXISTS extra_work_days (
   id                SERIAL,
-  department_id     INTEGER   NOT NULL,
+  enterprise_id     INTEGER   NOT NULL,
   extra_weekend_id  INTEGER,
   date              DATE      NOT NULL,
 
   UNIQUE (extra_weekend_id),
-  UNIQUE (department_id, date),
+  UNIQUE (enterprise_id, date),
 
   PRIMARY KEY (id),
-  FOREIGN KEY (department_id)     REFERENCES departments(id)    ON DELETE CASCADE,
+  FOREIGN KEY (enterprise_id)     REFERENCES enterprises(id)    ON DELETE CASCADE,
   FOREIGN KEY (extra_weekend_id)  REFERENCES extra_weekends(id) ON DELETE CASCADE
 );
 
 -- Security
 
-CREATE TABLE authorities (
-  id            SERIAL,
-  name          VARCHAR (255) NOT NULL,
-  UNIQUE (name),
-  PRIMARY KEY (id)
+CREATE TABLE IF NOT EXISTS user_accounts (
+  username        VARCHAR(64)     NOT NULL,
+  password        VARCHAR(64)     NOT NULL,
+  locked          BOOLEAN         NOT NULL    DEFAULT FALSE,
+  enabled         BOOLEAN         NOT NULL    DEFAULT TRUE,
+
+  PRIMARY KEY (username)
 );
 
-CREATE TABLE users (
-  id            SERIAL,
-  username      VARCHAR (64)  NOT NULL,
-  password      VARCHAR (64)  NOT NULL,
-  first_name    VARCHAR (64)  NOT NULL,
-  second_name   VARCHAR (64)  NOT NULL,
-  department_id INTEGER,
-  shift_id      INTEGER,
-  employee_id   INTEGER,
-  locked        BOOLEAN       NOT NULL  DEFAULT FALSE,
-  enabled       BOOLEAN       NOT NULL  DEFAULT TRUE,
+CREATE TABLE IF NOT EXISTS shift_admin_user_accounts (
+  username        VARCHAR(64)     NOT NULL,
+  shift_id        INTEGER         NOT NULL,
 
-  UNIQUE (username),
-
-  PRIMARY KEY (id)
+  PRIMARY KEY (username),
+  FOREIGN KEY (username)    REFERENCES user_accounts(username) ON DELETE CASCADE,
+  FOREIGN KEY (shift_id)    REFERENCES shifts(id)              ON DELETE CASCADE
 );
 
-CREATE TABLE users_authorities (
-  authority_id  INTEGER       NOT NULL,
-  user_id       INTEGER       NOT NULL,
+CREATE TABLE IF NOT EXISTS department_admin_user_accounts (
+  username        VARCHAR(64)     NOT NULL,
+  department_id   INTEGER         NOT NULL,
 
-  PRIMARY KEY (authority_id, user_id),
-  FOREIGN KEY (authority_id)  REFERENCES authorities(id)  ON UPDATE CASCADE ON DELETE CASCADE,
-  FOREIGN KEY (user_id)       REFERENCES users(id)        ON UPDATE CASCADE
+  PRIMARY KEY (username),
+  FOREIGN KEY (username)        REFERENCES user_accounts(username)  ON DELETE CASCADE,
+  FOREIGN KEY (department_id)   REFERENCES departments(id)          ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS enterprise_admin_user_accounts (
+  username        VARCHAR(64)     NOT NULL,
+  enterprise_id   INTEGER         NOT NULL,
+
+  PRIMARY KEY (username),
+  FOREIGN KEY (username)        REFERENCES user_accounts(username)  ON DELETE CASCADE,
+  FOREIGN KEY (enterprise_id)   REFERENCES enterprises(id)          ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS global_admin_user_accounts (
+  username        VARCHAR(64)     NOT NULL,
+  is_global_admin BOOLEAN         NOT NULL,
+
+  PRIMARY KEY (username),
+  FOREIGN KEY (username)        REFERENCES user_accounts(username)  ON DELETE CASCADE
 );

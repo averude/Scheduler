@@ -1,6 +1,6 @@
 package com.averude.uksatse.scheduler.server.auth.config;
 
-import com.averude.uksatse.scheduler.core.security.converter.ExtraInfoJwtAccessTokenConverter;
+import com.averude.uksatse.scheduler.server.auth.service.UserAccountDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -14,8 +14,8 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
-import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
-import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.oauth2.provider.token.*;
+import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
 @Configuration
@@ -25,6 +25,9 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
     @Autowired
     @Qualifier("authenticationManagerBean")
     private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private UserAccountDetailsService userAccountDetailsService;
 
     @Autowired
     private Environment environment;
@@ -73,10 +76,19 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
     }
 
     @Bean
-    public ExtraInfoJwtAccessTokenConverter accessTokenConverter() {
-        ExtraInfoJwtAccessTokenConverter converter = new ExtraInfoJwtAccessTokenConverter();
-        converter.setSigningKey("123");
-        return converter;
+    public UserAuthenticationConverter userAuthenticationConverter() {
+        DefaultUserAuthenticationConverter defaultUserAuthenticationConverter = new DefaultUserAuthenticationConverter();
+        defaultUserAuthenticationConverter.setUserDetailsService(userAccountDetailsService);
+        return defaultUserAuthenticationConverter;
+    }
+
+    @Bean
+    public JwtAccessTokenConverter accessTokenConverter() {
+        final JwtAccessTokenConverter jwtAccessTokenConverter = new JwtAccessTokenConverter();
+        jwtAccessTokenConverter.setSigningKey("123");
+        ((DefaultAccessTokenConverter) jwtAccessTokenConverter.getAccessTokenConverter())
+                .setUserTokenConverter(userAuthenticationConverter());
+        return jwtAccessTokenConverter;
     }
 
     @Bean

@@ -20,14 +20,7 @@ export class DepartmentService implements IByAuthService<Department>, CUDService
   }
 
   getAllByAuth(): Observable<Department[]> {
-    let user = this.authService.currentUserValue;
-    if (user.roles.indexOf('GLOBAL_ADMIN') >= 0) {
-      return this.getAll();
-    }
-  }
-
-  getAllByEnterpriseId(enterpriseId: number): Observable<Department[]> {
-    return this.http.get<Department[]>(`${this.url}/enterprises/${enterpriseId}`);
+    return this.getAll();
   }
 
   getAll(): Observable<Department[]> {
@@ -37,7 +30,9 @@ export class DepartmentService implements IByAuthService<Department>, CUDService
   }
 
   getCurrent(): Observable<Department> {
-    return this.getById(this.authService.departmentId);
+    return this.http.get<Department>(
+      `${this.config.baseUrl}/admin/departments/current`
+    );
   }
 
   getById(departmentId: number): Observable<Department> {

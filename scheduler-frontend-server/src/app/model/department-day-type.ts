@@ -3,7 +3,7 @@ import { DayType } from "./day-type";
 
 export class DepartmentDayType implements IdEntity {
   id:               number;
-  departmentId:     number;
+  // departmentId:     number;
   // Probably it should be taken like
   // dayTypeId:        number;
   dayType:          DayType;

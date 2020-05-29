@@ -17,7 +17,7 @@ export class ExtraWeekendService
   constructor(authService: AuthService,
               http: HttpClient,
               private config: RestConfig) {
-    super(`${config.baseUrl}/admin/extra_weekends`, http, authService);
+    super(`${config.baseUrl}/admin/extra_weekends`, http);
   }
 
   getAllByDepartmentId(departmentId: number,

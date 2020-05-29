@@ -10,7 +10,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RestConfig } from './rest.config';
 import { httpInterceptorProviders } from "./http-interceptors/interceptor-providers";
 import { SimpleNotificationsModule } from "angular2-notifications";
-import { OPTIONS } from "./modules/admin/notification-options";
+import { OPTIONS } from "./modules/shift_or_department_admin/notification-options";
 
 @NgModule({
   declarations: [

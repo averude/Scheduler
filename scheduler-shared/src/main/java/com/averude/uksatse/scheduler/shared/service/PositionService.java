@@ -1,11 +1,10 @@
 package com.averude.uksatse.scheduler.shared.service;
 
 import com.averude.uksatse.scheduler.core.entity.Position;
+import com.averude.uksatse.scheduler.core.service.IByDepartmentIdService;
+import com.averude.uksatse.scheduler.core.service.IByShiftIdService;
+import com.averude.uksatse.scheduler.core.service.IService;
 
-import java.util.List;
-
-public interface PositionService extends GenericService<Position, Long> {
-    List<Position> findAllByDepartmentId(Long departmentId);
-
-    List<Position> findAllByShiftId(Long shiftId);
+public interface PositionService extends IByDepartmentIdService<Position, Long>,
+        IByShiftIdService<Position, Long>, IService<Position, Long> {
 }

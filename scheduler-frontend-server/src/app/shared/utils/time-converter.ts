@@ -42,7 +42,7 @@ export function calculateWorkHoursByTime(startTime: number,
                                          breakStartTime: number,
                                          breakEndTime: number): number {
   if (startTime >= 0 && endTime > startTime) {
-    return roundToTwo((endTime - startTime - (breakEndTime - breakStartTime)) / 60);
+    return roundToTwo((endTime - startTime - (breakStartTime && breakEndTime ? (breakEndTime - breakStartTime) : 0)) / 60);
   } else {
     return 0;
   }
