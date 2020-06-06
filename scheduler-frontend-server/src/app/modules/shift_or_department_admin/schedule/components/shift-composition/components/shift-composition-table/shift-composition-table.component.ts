@@ -37,8 +37,8 @@ export class ShiftCompositionTableComponent extends PageableTableBaseComponent<S
 
   ngOnInit(): void {
     super.ngOnInit();
-    this.employeeService.getAllByAuth().subscribe(employees => this.employees = employees);
-    this.shiftService.getAllByAuth().subscribe(shifts => this.shifts = shifts);
+    this.employeeService.getAll().subscribe(employees => this.employees = employees);
+    this.shiftService.getAll().subscribe(shifts => this.shifts = shifts);
   }
 
   openDialog(shiftSchedule: ShiftComposition) {

@@ -28,7 +28,7 @@ export class DepartmentDayTypesTableComponent extends TableBaseComponent<Departm
 
   ngOnInit() {
     super.ngOnInit();
-    this.dayTypeService.getAllByAuth()
+    this.dayTypeService.getAll()
       .subscribe(dayTypes => this.dayTypes = dayTypes);
   }
 

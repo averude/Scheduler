@@ -42,21 +42,21 @@ export class SchedulerTableComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.paginationService.clearStoredValue();
-    this.paginatorSub.unsubscribe();
+    if (this.paginatorSub) this.paginatorSub.unsubscribe();
   }
 
   private uploadData() {
-    this.shiftService.getAllByAuth()
+    this.shiftService.getAll()
       .subscribe(shifts => {
         this.paginatorSub = this.paginationService.onValueChange.subscribe(daysInMonth => {
           forkJoin([
-            this.shiftCompositionService.getAllByAuth(
+            this.shiftCompositionService.getAll(
               daysInMonth[0].isoString,
               daysInMonth[daysInMonth.length - 1].isoString),
             this.scheduleService.getAllByDate(
               daysInMonth[0].isoString,
               daysInMonth[daysInMonth.length - 1].isoString),
-            this.workingTimeService.getAllByAuth(
+            this.workingTimeService.getAll(
               daysInMonth[0].isoString,
               daysInMonth[daysInMonth.length - 1].isoString)
           ]).subscribe((values: any[][]) => {

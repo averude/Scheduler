@@ -27,7 +27,7 @@ export class ScheduleGenerationComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.shiftService.getAllByAuth()
+    this.shiftService.getAll()
       .subscribe(shifts => {
         const data: ShiftGenerationUnit[] = [];
         shifts.forEach(shift => data.push({

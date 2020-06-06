@@ -36,8 +36,8 @@ export abstract class TableBaseComponent<T extends IdEntity> implements OnInit, 
 
   initDataSourceValues() {
     let service = this.crudService as unknown as IByAuthService<T>;
-    if (service.getAllByAuth) {
-      service.getAllByAuth()
+    if (service.getAll) {
+      service.getAll()
         .subscribe(values => this.dataSource.data = values);
     }
   }

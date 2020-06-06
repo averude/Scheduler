@@ -31,7 +31,7 @@ export class ShiftsTableComponent extends TableBaseComponent<Shift> implements O
       return data.name.toLowerCase().includes(filter) ||
         this.getPatternName(data.patternId).toLowerCase().includes(filter)
     });
-    this.shiftPatternService.getAllByAuth()
+    this.shiftPatternService.getAll()
       .subscribe(patterns => this.patterns = patterns);
   }
 

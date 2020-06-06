@@ -14,7 +14,7 @@ export class SchedulerCellLabelSetter extends CellLabelSetter {
 
   constructor(private dayTypeService: DayTypeService) {
     super();
-    this.dayTypeService.getAllByAuth()
+    this.dayTypeService.getAll()
       .subscribe(dayTypes => this.dayTypes = dayTypes.sort(((a, b) => a.id - b.id)));
   }
 

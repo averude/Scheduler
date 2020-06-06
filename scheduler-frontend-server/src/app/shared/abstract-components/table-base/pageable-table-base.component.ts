@@ -4,9 +4,9 @@ import { MatDialog } from "@angular/material/dialog";
 import { NotificationsService } from "angular2-notifications";
 import { switchMap } from "rxjs/operators";
 import { Subscription } from "rxjs";
-import { IByAuthAndDateService } from "../../../http-services/interface/i-by-auth-and-date.service";
 import { CUDService } from "../../../http-services/interface/cud-service";
 import { PaginationService } from "../../../lib/ngx-schedule-table/service/pagination.service";
+import { IByAuthService } from "../../../http-services/interface/i-by-auth.service";
 
 export abstract class PageableTableBaseComponent<T extends IdEntity> extends TableBaseComponent<T> {
 
@@ -14,7 +14,7 @@ export abstract class PageableTableBaseComponent<T extends IdEntity> extends Tab
 
   protected constructor(private datePaginationService: PaginationService,
                         matDialog: MatDialog,
-                        private pageableByDateCrudService: IByAuthAndDateService<T> & CUDService<T>,
+                        private pageableByDateCrudService: IByAuthService<T> & CUDService<T>,
                         notification: NotificationsService) {
     super(matDialog, pageableByDateCrudService, notification);
   }
@@ -23,7 +23,7 @@ export abstract class PageableTableBaseComponent<T extends IdEntity> extends Tab
     this.sub = this.datePaginationService.onValueChange
       .pipe(switchMap(value => {
         return this.pageableByDateCrudService
-            .getAllByAuth(value.from, value.to);
+            .getAll(value.from, value.to);
         })
       ).subscribe(values => this.dataSource.data = values);
   }

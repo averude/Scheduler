@@ -33,7 +33,7 @@ export class EmployeesTableComponent extends TableBaseComponent<Employee> {
         || data.patronymic.toLowerCase().includes(filter)
         || data.position.name.toLowerCase().includes(filter);
     });
-    this.positionService.getAllByAuth()
+    this.positionService.getAll()
       .subscribe(positions => this.positions = positions);
   }
 

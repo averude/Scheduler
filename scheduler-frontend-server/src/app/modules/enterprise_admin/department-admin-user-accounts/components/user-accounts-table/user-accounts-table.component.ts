@@ -26,7 +26,7 @@ export class UserAccountsTableComponent extends TableBaseComponent<UserAccount> 
               private departmentService: DepartmentService) {
     super(dialog, userAccountService, notificationsService);
 
-    this.departmentService.getAllByAuth()
+    this.departmentService.getAll()
       .subscribe(departments => this.departments = departments);
   }
 

@@ -31,7 +31,7 @@ export class WorkingTimeTableComponent extends PageableTableBaseComponent<Workin
 
   ngOnInit() {
     super.ngOnInit();
-    this.shiftService.getAllByAuth()
+    this.shiftService.getAll()
       .subscribe(shifts => this.shifts = shifts);
   }
 

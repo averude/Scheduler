@@ -33,7 +33,7 @@ export class PatternsTableComponent extends TableBaseComponent<BasicDto<ShiftPat
 
   ngOnInit() {
     super.ngOnInit();
-    this.departmentDayTypeService.getAllByAuth()
+    this.departmentDayTypeService.getAll()
       .subscribe(departmentDayTypes => this.departmentDayTypes = departmentDayTypes);
   }
 

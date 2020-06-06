@@ -26,7 +26,7 @@ export class UserAccountsTableComponent extends TableBaseComponent<UserAccount> 
               private enterpriseService: EnterpriseService) {
     super(dialog, userAccountService, notificationsService);
 
-    this.enterpriseService.getAllByAuth()
+    this.enterpriseService.getAll()
       .subscribe(enterprises => this.enterprises = enterprises);
   }
 

@@ -30,7 +30,7 @@ export class DayTypesTableComponent extends TableBaseComponent<DayType> {
     this.dataSource.filterPredicate = ((data, filter) => {
       return data.name.toLowerCase().includes(filter)
     });
-    this.dayTypeGroupService.getAllByAuth()
+    this.dayTypeGroupService.getAll()
       .subscribe(dayTypeGroups => this.dayTypeGroups = dayTypeGroups);
   }
 

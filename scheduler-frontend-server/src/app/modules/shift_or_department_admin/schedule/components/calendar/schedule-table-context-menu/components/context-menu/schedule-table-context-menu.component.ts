@@ -41,8 +41,8 @@ export class ScheduleTableContextMenuComponent implements OnInit, OnDestroy {
               private contextMenuService: ContextMenuService) { }
 
   ngOnInit() {
-    forkJoin([this.shiftPatternDtoService.getAllByAuth(),
-      this.departmentDayTypeService.getAllByAuth()]
+    forkJoin([this.shiftPatternDtoService.getAll(),
+      this.departmentDayTypeService.getAll()]
     ).subscribe(values => {
       this.patternDtos = values[0];
       this.departmentDayTypes = values[1];
