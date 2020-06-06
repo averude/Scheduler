@@ -1,7 +1,10 @@
 package com.averude.uksatse.scheduler.shared.service.base;
 
 import com.averude.uksatse.scheduler.core.dto.BasicDto;
+import com.averude.uksatse.scheduler.core.service.IByDepartmentIdDtoService;
 import com.averude.uksatse.scheduler.core.service.IByEnterpriseIdDtoService;
+import com.averude.uksatse.scheduler.core.service.IByShiftIdDtoService;
+import com.averude.uksatse.scheduler.core.service.IDtoService;
 import com.averude.uksatse.scheduler.shared.repository.DepartmentRepository;
 import com.averude.uksatse.scheduler.shared.repository.ShiftRepository;
 import com.averude.uksatse.scheduler.shared.repository.interfaces.IByEnterpriseIdRepository;
@@ -11,14 +14,18 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.Serializable;
 import java.util.List;
 
-public abstract class AByEnterpriseIdDtoService<T extends Serializable, C extends Serializable, ID>
-        extends AByEnterpriseIdService<T, ID> implements IByEnterpriseIdDtoService<T, C, ID> {
+public abstract class AByEnterpriseIdDtoService<P extends Serializable, C extends Serializable, ID>
+        extends AByEnterpriseIdService<P, ID>
+        implements IByEnterpriseIdDtoService<P, C, ID>,
+        IByDepartmentIdDtoService<P, C, ID>,
+        IByShiftIdDtoService<P, C, ID>,
+        IDtoService<P, C, ID> {
 
-    private IByEnterpriseIdRepository<T, ID>    parentRepository;
+    private IByEnterpriseIdRepository<P, ID>    parentRepository;
     private IByEnterpriseIdRepository<C, ID>    childRepository;
     private BasicDtoSavingUtil                  basicDtoSavingUtil;
 
-    public AByEnterpriseIdDtoService(IByEnterpriseIdRepository<T, ID> parentRepository,
+    public AByEnterpriseIdDtoService(IByEnterpriseIdRepository<P, ID> parentRepository,
                                      IByEnterpriseIdRepository<C, ID> childRepository,
                                      DepartmentRepository departmentRepository,
                                      ShiftRepository shiftRepository,
@@ -31,32 +38,32 @@ public abstract class AByEnterpriseIdDtoService<T extends Serializable, C extend
 
     @Override
     @Transactional
-    public List<BasicDto<T, C>> findAllDtoByEnterpriseId(Long enterpriseId) {
+    public List<BasicDto<P, C>> findAllDtoByEnterpriseId(Long enterpriseId) {
         return basicDtoSavingUtil.convertToDto(findAllByEnterpriseId(enterpriseId), this::getChildren);
     }
 
     @Override
     @Transactional
-    public List<BasicDto<T, C>> findAllDtoByDepartmentId(Long departmentId) {
+    public List<BasicDto<P, C>> findAllDtoByDepartmentId(Long departmentId) {
         return basicDtoSavingUtil.convertToDto(findAllByDepartmentId(departmentId), this::getChildren);
     }
 
     @Override
     @Transactional
-    public List<BasicDto<T, C>> findAllDtoByShiftId(Long shiftId) {
+    public List<BasicDto<P, C>> findAllDtoByShiftId(Long shiftId) {
         return basicDtoSavingUtil.convertToDto(findAllByShiftId(shiftId), this::getChildren);
     }
 
     @Override
     @Transactional
-    public BasicDto<T, C> saveDto(BasicDto<T, C> dto) {
+    public BasicDto<P, C> saveDto(BasicDto<P, C> dto) {
         return basicDtoSavingUtil.saveDto(dto, parentRepository, childRepository,
                 this::removeExcessChildren, this::setChildParentRelation);
     }
 
-    protected abstract List<C> getChildren(T parent);
+    protected abstract List<C> getChildren(P parent);
 
-    protected abstract void setChildParentRelation(T parent, List<C> children);
+    protected abstract void setChildParentRelation(P parent, List<C> children);
 
-    protected abstract void removeExcessChildren(T parent, List<C> children);
+    protected abstract void removeExcessChildren(P parent, List<C> children);
 }
