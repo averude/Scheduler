@@ -1,5 +1,5 @@
 import { HttpHandler, HttpInterceptor, HttpRequest, HttpResponse } from "@angular/common/http";
-import { CacheMapService } from "../http-services/cache-map.service";
+import { CacheMapService } from "../services/cache/cache-map.service";
 import { tap } from "rxjs/operators";
 import { of } from "rxjs";
 import { Injectable } from "@angular/core";

@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { HttpRequest, HttpResponse } from "@angular/common/http";
-import { CacheEntry, MAX_CACHE_AGE } from "../model/cache/cache-entry";
+import { CacheEntry, MAX_CACHE_AGE } from "../../model/cache/cache-entry";
 
 @Injectable({
   providedIn: "root"
