@@ -34,7 +34,7 @@ const routes: Routes = [
             component: ShiftCompositionTableComponent
           },
           {
-            path: 'workingtime',
+            path: 'working_time',
             component: WorkingTimeTableComponent
           },
           {

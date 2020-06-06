@@ -50,7 +50,7 @@ export abstract class DtoDialogBaseComponent<P extends IdEntity, C> implements O
     return (a && b) && (a.id === b.id);
   }
 
-  private get newDto(): BasicDto<P, C> {
+  get newDto(): BasicDto<P, C> {
     const dto = new BasicDto<P, C>();
     dto.parent = <P> {};
     dto.collection = [];
