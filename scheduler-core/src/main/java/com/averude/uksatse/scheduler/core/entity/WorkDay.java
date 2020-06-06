@@ -99,7 +99,7 @@ public class WorkDay implements HasId, HasTime {
     }
 
     public int getTimeHash() {
-        return Objects.hash(dayTypeId, startTime, breakStartTime, breakEndTime, endTime);
+        return Objects.hash(dayTypeId, holiday, startTime, breakStartTime, breakEndTime, endTime);
     }
 
     @Override

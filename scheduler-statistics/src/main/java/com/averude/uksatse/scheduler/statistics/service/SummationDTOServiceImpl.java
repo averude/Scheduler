@@ -1,8 +1,8 @@
 package com.averude.uksatse.scheduler.statistics.service;
 
 import com.averude.uksatse.scheduler.core.dto.SummationDTO;
+import com.averude.uksatse.scheduler.shared.repository.SummationColumnRepository;
 import com.averude.uksatse.scheduler.shared.service.ScheduleService;
-import com.averude.uksatse.scheduler.shared.service.SummationColumnService;
 import com.averude.uksatse.scheduler.statistics.calculator.StatisticsCalculator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,15 +16,15 @@ import java.util.stream.Collectors;
 public class SummationDTOServiceImpl implements SummationDTOService {
 
     private final StatisticsCalculator      statisticsCalculator;
-    private final SummationColumnService    summationColumnService;
+    private final SummationColumnRepository summationColumnRepository;
     private final ScheduleService           scheduleService;
 
     @Autowired
     public SummationDTOServiceImpl(StatisticsCalculator statisticsCalculator,
-                                   SummationColumnService summationColumnService,
+                                   SummationColumnRepository summationColumnRepository,
                                    ScheduleService scheduleService) {
         this.statisticsCalculator = statisticsCalculator;
-        this.summationColumnService = summationColumnService;
+        this.summationColumnRepository = summationColumnRepository;
         this.scheduleService = scheduleService;
     }
 
@@ -33,7 +33,7 @@ public class SummationDTOServiceImpl implements SummationDTOService {
     public List<SummationDTO> findAllByDepartmentIdAndDateBetween(Long departmentId,
                                                                   LocalDate from,
                                                                   LocalDate to) {
-        var summationColumns = summationColumnService.findAllByDepartmentId(departmentId);
+        var summationColumns = summationColumnRepository.findAllByDepartmentId(departmentId);
         if (summationColumns == null || summationColumns.size() == 0) {
             return null;
         }
@@ -47,7 +47,7 @@ public class SummationDTOServiceImpl implements SummationDTOService {
     @Override
     @Transactional
     public List<SummationDTO> findAllByShiftIdAndDateBetween(Long shiftId, LocalDate from, LocalDate to) {
-        var summationColumns = summationColumnService.findAllByShiftId(shiftId);
+        var summationColumns = summationColumnRepository.findAllByShiftId(shiftId);
         if (summationColumns == null || summationColumns.size() == 0) {
             return null;
         }

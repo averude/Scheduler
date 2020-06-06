@@ -59,6 +59,7 @@ CREATE TABLE IF NOT EXISTS day_types (
 CREATE TABLE IF NOT EXISTS summation_columns (
   id                  SERIAL,
   enterprise_id       INTEGER       NOT NULL,
+  only_holidays       BOOLEAN       NOT NULL    DEFAULT FALSE,
   name                VARCHAR (128) NOT NULL,
 
   UNIQUE (enterprise_id, name),

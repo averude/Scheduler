@@ -29,6 +29,10 @@ public class SummationColumn implements HasId, HasEnterpriseId {
     private Long enterpriseId;
 
     @NotNull
+    @Column(name = "only_holidays")
+    private Boolean onlyHolidays = false;
+
+    @NotNull
     private String name;
 
     @OneToMany( fetch = FetchType.EAGER,
