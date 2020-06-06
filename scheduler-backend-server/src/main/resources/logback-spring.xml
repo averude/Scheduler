@@ -42,6 +42,24 @@
         </rollingPolicy>
     </appender>
 
+    <appender name="TransactionsFile"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOGS}/scheduler-backend-server-transactions.log</file>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>%d %p %C{1.} [%t] - %m%n</Pattern>
+        </encoder>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- rollover daily and when the file reaches 10 MegaBytes -->
+            <fileNamePattern>${LOGS}/archived/scheduler-backend-server-transactions-%d{yyyy-MM-dd}.%i.log
+            </fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+    </appender>
+
     <appender name="RequestsFile"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOGS}/scheduler-backend-server-requests.log</file>
@@ -68,6 +86,10 @@
     <!-- LOG "com.averude.uksatse.scheduler" at DEBUG level -->
     <logger name="com.averude.uksatse.scheduler" level="debug" additivity="false">
         <appender-ref ref="DebugFile" />
+    </logger>
+
+    <logger name="org.springframework.transaction" level="debug" additivity="false">
+        <appender-ref ref="TransactionsFile"/>
     </logger>
 
     <logger name="org.springframework.web" level="trace">
