@@ -48,11 +48,8 @@ public class ScheduleGeneratorTest {
 
         var pattern = new ShiftPattern();
         pattern.setHolidayDepDayType(weekendDayType);
-//        pattern.setHolidayDepDayTypeId(weekendDayType.getDayType().getId());
         pattern.setExtraWeekendDepDayType(weekendDayType);
-//        pattern.setExtraWeekendDepDayTypeId(weekendDayType.getDayType().getId());
         pattern.setExtraWorkDayDepDayType(workDayType);
-//        pattern.setExtraWorkDayDepDayTypeId(workDayType.getDayType().getId());
         pattern.setSequence(Arrays.asList(firstUnit, secondUnit));
 
         var extraWeekend = new ExtraWeekend();
