@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import * as moment from "moment";
-import { Moment } from "moment";
+import { DurationInputArg1, DurationInputArg2, Moment } from "moment";
 import { MatDatepicker } from "@angular/material/datepicker";
 import { PaginationService } from "../../../lib/ngx-schedule-table/service/pagination.service";
 import { APaginationStrategy } from "../pagination-strategy/a-pagination-strategy";
@@ -11,7 +11,10 @@ import { APaginationStrategy } from "../pagination-strategy/a-pagination-strateg
   styleUrls: ['./month-year-paginator.component.css']
 })
 export class MonthYearPaginatorComponent implements OnInit {
-  @Input() paginationStrategy: APaginationStrategy;
+  @Input() paginationStrategy:  APaginationStrategy;
+  @Input() dateUnit: DurationInputArg2 = 'month';
+
+  private dateStep: DurationInputArg1 = 1;
 
   currentDate:      Moment;
   firstDayOfMonth:  Moment;
@@ -20,21 +23,21 @@ export class MonthYearPaginatorComponent implements OnInit {
   constructor(private datePaginationService: PaginationService) {}
 
   ngOnInit() {
-    this.initCurrentMonth();
+    this.initCurrentDate();
   }
 
-  initCurrentMonth() {
+  private initCurrentDate() {
     this.currentDate = moment.utc();
     this.changeDate();
   }
 
-  nextMonth() {
-    this.currentDate = this.currentDate.add(1, 'month');
+  nextDate() {
+    this.currentDate = this.currentDate.add(this.dateStep, this.dateUnit);
     this.changeDate();
   }
 
-  prevMonth() {
-    this.currentDate = this.currentDate.subtract(1, 'month');
+  prevDate() {
+    this.currentDate = this.currentDate.subtract(this.dateStep, this.dateUnit);
     this.changeDate();
   }
 
@@ -44,13 +47,28 @@ export class MonthYearPaginatorComponent implements OnInit {
     this.changeDate();
   }
 
-  private initFirstAndLastDaysOfMonth() {
-    this.firstDayOfMonth = this.currentDate.clone().startOf('month');
-    this.lastDayOfMonth  = this.currentDate.clone().endOf('month');
+  onYearSelected(selectedDate: Moment, datepicker: MatDatepicker<Moment>) {
+    if (this.dateUnit === 'year') {
+      this.currentDate = selectedDate;
+      datepicker.close();
+      this.changeDate();
+    }
+  }
+
+  dateString(): string {
+    switch (this.dateUnit) {
+      case 'year' : return this.currentDate.format("YYYY");
+      case 'month' : return this.currentDate.format("MMMM YYYY");
+    }
+  }
+
+  private initFirstAndLastDaysOfDateUnit() {
+    this.firstDayOfMonth = this.currentDate.clone().startOf(this.dateUnit);
+    this.lastDayOfMonth  = this.currentDate.clone().endOf(this.dateUnit);
   }
 
   private changeDate() {
-    this.initFirstAndLastDaysOfMonth();
+    this.initFirstAndLastDaysOfDateUnit();
     if (this.paginationStrategy) {
       this.paginationStrategy
         .getPaginationObject(this.currentDate, this.firstDayOfMonth, this.lastDayOfMonth)

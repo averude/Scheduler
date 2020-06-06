@@ -8,15 +8,20 @@
   padding-bottom: 10px;
 }
 
-.btn-month-select {
+.btn-date-select {
   width: 16px;
   height: 16px;
   margin: 10px 15px;
   vertical-align: center;
 }
 
-.btn-month-select:hover {
+.btn-date-select:hover {
   cursor: pointer;
+}
+
+.hidden-input {
+  width:1px;
+  visibility:hidden;
 }
 
 .month-container {
@@ -24,6 +29,7 @@
   padding-top: 7px;
   height: 32px;
 }
+
 .month-container:hover {
   background-color: #f0f6fb;
   border-radius: 20px;

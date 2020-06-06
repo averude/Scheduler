@@ -1,24 +1,25 @@
 <!--Hidden-->
-<mat-form-field style="width:1px;visibility:hidden;">
+<mat-form-field class="hidden-input">
   <input matInput [matDatepicker]="picker" [(ngModel)]="currentDate">
   <mat-datepicker #picker
                   startView="multi-year"
-                  (monthSelected)="onMonthSelected($event, picker)"></mat-datepicker>
+                  (monthSelected)="onMonthSelected($event, picker)"
+                  (yearSelected)="onYearSelected($event, picker)"></mat-datepicker>
 </mat-form-field>
 
 <div class="btn-group">
-  <img class="btn-month-select"
+  <img class="btn-date-select"
        src="assets/img/left.svg"
-       (click)="prevMonth()">
+       (click)="prevDate()">
 
   <div class="month-container" (click)="picker.open()">
     <div class="date-label">
-      {{(currentDate.format("MMMM YYYY"))}}
+      {{dateString()}}
     </div>
   </div>
 
-  <img class="btn-month-select"
+  <img class="btn-date-select"
        src="assets/img/right.svg"
-       (click)="nextMonth()">
+       (click)="nextDate()">
 </div>
 

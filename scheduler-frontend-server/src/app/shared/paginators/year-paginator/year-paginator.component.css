@@ -4,14 +4,14 @@
   vertical-align: middle;
 }
 
-.btn-month-select {
+.btn-date-select {
   width: 16px;
   height: 16px;
   margin: 4px 15px;
   vertical-align: center;
 }
 
-.btn-month-select:hover {
+.btn-date-select:hover {
   cursor: pointer;
 }
 

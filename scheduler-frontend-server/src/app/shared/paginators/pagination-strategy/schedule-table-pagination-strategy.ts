@@ -23,9 +23,9 @@ export class ScheduleTablePaginationStrategy implements APaginationStrategy {
     let lastDayOfMonthString = lastDayOfMonth.format("YYYY-MM-DD");
 
     return forkJoin([
-      this.holidayService.getAllByAuth(firstDayOfMonthString, lastDayOfMonthString),
-      this.extraWeekendService.getAllByAuth(firstDayOfMonthString, lastDayOfMonthString),
-      this.extraWorkDayService.getAllByAuth(firstDayOfMonthString, lastDayOfMonthString)
+      this.holidayService.getAll(firstDayOfMonthString, lastDayOfMonthString),
+      this.extraWeekendService.getAll(firstDayOfMonthString, lastDayOfMonthString),
+      this.extraWorkDayService.getAll(firstDayOfMonthString, lastDayOfMonthString)
     ]).pipe(map(values => {
       return this.calculateDaysInMonth(currentDate,
         values[0].map(value => value.date),
