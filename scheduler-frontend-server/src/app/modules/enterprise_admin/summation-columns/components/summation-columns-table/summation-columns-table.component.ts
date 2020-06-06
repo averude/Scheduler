@@ -20,7 +20,7 @@ import { DtoTableBaseComponent } from "../../../../../shared/abstract-components
 })
 export class SummationColumnsTableComponent extends DtoTableBaseComponent<SummationColumn, SummationColumnDayTypeRange> {
 
-  displayedColumns = ['select', 'name', 'control'];
+  displayedColumns = ['select', 'name', 'only_holidays', 'control'];
 
   dayTypes: DayType[];
 
@@ -33,7 +33,7 @@ export class SummationColumnsTableComponent extends DtoTableBaseComponent<Summat
 
   ngOnInit() {
     super.ngOnInit();
-    this.dayTypeService.getAllByAuth()
+    this.dayTypeService.getAll()
       .subscribe(dayTypes => this.dayTypes = dayTypes);
   }
 

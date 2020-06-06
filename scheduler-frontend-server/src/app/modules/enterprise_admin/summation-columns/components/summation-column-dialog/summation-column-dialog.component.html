@@ -13,6 +13,10 @@
                    placeholder="Summation column name"
                    [(ngModel)]="dto.parent.name">
           </mat-form-field>
+
+          <mat-checkbox [(ngModel)]="dto.parent.onlyHolidays">
+            Only holidays
+          </mat-checkbox>
         </div>
       </ng-template>
 

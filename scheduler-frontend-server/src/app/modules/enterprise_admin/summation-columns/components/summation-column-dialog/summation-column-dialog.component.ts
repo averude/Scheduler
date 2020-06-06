@@ -5,6 +5,7 @@ import { SummationColumn } from "../../../../../model/summation-column";
 import { SummationColumnDayTypeRange } from "../../../../../model/summation-column-day-type-range";
 import { DtoDialogBaseComponent } from "../../../../../shared/abstract-components/dialog-base/dto-dialog-base.component";
 import { AuthService } from "../../../../../http-services/auth.service";
+import { BasicDto } from "../../../../../model/dto/basic-dto";
 
 @Component({
   selector: 'app-summation-column-dialog',
@@ -20,5 +21,12 @@ export class SummationColumnDialogComponent extends DtoDialogBaseComponent<Summa
               @Inject(MAT_DIALOG_DATA) data) {
     super(data.dto, dialogRef);
     this.dayTypes = data.dayTypes ? data.dayTypes : [];
+  }
+
+
+  get newDto(): BasicDto<SummationColumn, SummationColumnDayTypeRange> {
+    let newDto = super.newDto;
+    newDto.parent.onlyHolidays = false;
+    return newDto;
   }
 }
