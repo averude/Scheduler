@@ -1,25 +1,33 @@
 <div class="date-selector">
-  <app-month-year-paginator [paginationStrategy]="paginationStrategy"></app-month-year-paginator>
+  <app-month-year-paginator [paginationStrategy]="paginationStrategy"
+                            dateUnit="year"></app-month-year-paginator>
 </div>
 <div class="table-wrap">
   <table class="table-base">
     <thead class="thead-border">
       <tr>
-        <th>Name</th>
-        <th>Position</th>
-        <th *ngFor="let column of summationColumns">
+        <th class="table-sticky-header th-null">Name</th>
+        <th class="table-sticky-header th-sum"
+            *ngFor="let column of summationColumns">
           {{column.name}}
         </th>
       </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let dto of summationDtos">
-      <td>{{dto.employee.secondName}}</td>
-      <td>{{dto.employee.position.shortName}}</td>
-      <td *ngFor="let summResult of dto.results">
-        {{summResult.value / 60}}
-      </td>
-    </tr>
+      <tr *ngFor="let dto of summationDtos">
+        <td class="td-name">
+          <div class="name">
+            {{dto.employee.secondName}}
+          </div>
+          <div class="info">
+            {{dto.employee.position.shortName}}
+          </div>
+        </td>
+        <td class="sum"
+            *ngFor="let summResult of dto.results">
+          <p align="center">{{summResult.value / 60}}</p>
+        </td>
+      </tr>
     </tbody>
   </table>
 </div>

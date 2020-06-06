@@ -16,6 +16,10 @@
   border-collapse: collapse;
 }
 
+tr:hover {
+  background-color: #e8f2fb;
+}
+
 .thead-border {
   border: 1px solid #e5e9f0;
   border-radius: 5px;
@@ -33,4 +37,67 @@
 
 .table-top-buttons:first-child {
   margin-left: 95px;
+}
+
+.td-name {
+  border: 1px solid #e5e9f0;
+  height: 32px;
+  padding-left: 40px;
+}
+
+.name {
+  color: #2b3944;
+  font-family: 'MuseoSansMedium';
+  font-size: 14px;
+}
+
+.highlighted {
+  color: rosybrown;
+}
+
+.info {
+  padding-top: 4px;
+  font-size: 11px;
+  color: #7d8c9f;
+}
+
+.table-sticky-header {
+  font-family: 'MuseoSansRegular', 'Roboto', sans-serif;
+  font-size: 13px;
+  color: #000;
+  position: sticky;
+  top: 0;
+  background-color: #d9ebfd;
+  border-color: white;
+}
+
+.th-null {
+  height: 39px;
+  min-width: 150px;
+}
+
+.th-sum {
+  border: 1px solid #e5e9f0;
+}
+
+.sum {
+  width: 20%;
+  padding-top: 8px;
+  border: 1px solid #e5e9f0;
+}
+
+.sum p {
+  font-family: 'MuseoSansMedium';
+  font-size: 12px;
+}
+
+.notEqual {
+  background-color: cornsilk;
+}
+
+.cell {
+  cursor: cell;
+  padding: 0px;
+  border: 1px solid #e5e9f0;
+  vertical-align: top;
 }
