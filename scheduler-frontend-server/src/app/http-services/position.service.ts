@@ -23,12 +23,4 @@ export class PositionService
   getAll(): Observable<Position[]> {
     return super.getAll().pipe(map(values => values.sort((a, b) => a.id - b.id)));
   }
-
-  getAllByDepartmentId(departmentId: number): Observable<Position[]> {
-    return super.getAllByDepartmentId(departmentId).pipe(map(values => values.sort((a, b) => a.id - b.id)));
-  }
-
-  getAllByShiftId(shiftId: number): Observable<Position[]> {
-    return super.getAllByShiftId(shiftId).pipe(map(values => values.sort((a, b) => a.id - b.id)));
-  }
 }

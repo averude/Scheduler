@@ -20,15 +20,7 @@ export class ExtraWeekendService
     super(`${config.baseUrl}/admin/extra_weekends`, http);
   }
 
-  getAllByDepartmentId(departmentId: number,
-                       from: string,
-                       to: string): Observable<ExtraWeekend[]> {
-    return super.getAllByDepartmentId(departmentId, from, to).pipe(parseDateOfEntities);
-  };
-
-  getAllByShiftId(shiftId: number,
-                  from: string,
-                  to: string): Observable<ExtraWeekend[]> {
-    return super.getAllByShiftId(shiftId, from, to).pipe(parseDateOfEntities);
-  };
+  getAll(from?: string, to?: string): Observable<ExtraWeekend[]> {
+    return super.getAll(from, to).pipe(parseDateOfEntities);
+  }
 }

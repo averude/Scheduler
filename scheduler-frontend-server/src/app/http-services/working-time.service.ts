@@ -20,15 +20,7 @@ export class WorkingTimeService
     super(`${config.baseUrl}/admin/working_time`, http);
   }
 
-  getAllByDepartmentId(departmentId: number,
-                       from: string,
-                       to: string): Observable<WorkingTime[]> {
-    return super.getAllByDepartmentId(departmentId, from, to).pipe(parseDateOfEntities);
-  }
-
-  getAllByShiftId(shiftId: number,
-                  from: string,
-                  to: string): Observable<WorkingTime[]> {
-    return super.getAllByShiftId(shiftId, from, to).pipe(parseDateOfEntities);
+  getAll(from?: string, to?: string): Observable<WorkingTime[]> {
+    return super.getAll(from, to).pipe(parseDateOfEntities);
   }
 }

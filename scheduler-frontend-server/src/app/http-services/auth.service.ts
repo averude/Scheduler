@@ -6,7 +6,7 @@ import { Observable } from "rxjs";
 import { User } from "../model/user";
 import decode from "jwt-decode";
 import { RestConfig } from "../rest.config";
-import { CacheMapService } from "./cache-map.service";
+import { CacheMapService } from "../services/cache/cache-map.service";
 
 @Injectable({
   providedIn: 'root'

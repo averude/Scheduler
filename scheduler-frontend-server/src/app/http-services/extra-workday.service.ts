@@ -20,15 +20,7 @@ export class ExtraWorkdayService
     super(`${config.baseUrl}/admin/extra_work_days`, http);
   }
 
-  getAllByDepartmentId(departmentId: number,
-                       from: string,
-                       to: string): Observable<ExtraWorkDay[]> {
-    return super.getAllByDepartmentId(departmentId, from, to).pipe(parseDateOfEntities);
-  };
-
-  getAllByShiftId(shiftId: number,
-                  from: string,
-                  to: string): Observable<ExtraWorkDay[]> {
-    return super.getAllByShiftId(shiftId, from, to).pipe(parseDateOfEntities);
-  };
+  getAll(from?: string, to?: string): Observable<ExtraWorkDay[]> {
+    return super.getAll(from, to).pipe(parseDateOfEntities);
+  }
 }

@@ -14,7 +14,7 @@ export class UserAccountService implements IByAuthService<UserAccount>, CUDServi
   constructor(private http: HttpClient,
               private config: RestConfig) {}
 
-  getAllByAuth(): Observable<any[]> {
+  getAll(): Observable<any[]> {
     return this.http.get<any[]>(
       `${this.config.baseUrl}/uaa/users`
     );

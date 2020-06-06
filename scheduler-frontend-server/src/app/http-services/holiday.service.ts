@@ -20,15 +20,7 @@ export class HolidayService
     super(`${config.baseUrl}/admin/holidays`, http);
   }
 
-  getAllByDepartmentId(departmentId: number,
-                       from: string,
-                       to: string): Observable<Holiday[]> {
-    return super.getAllByDepartmentId(departmentId, from, to).pipe(parseDateOfEntities);
-  };
-
-  getAllByShiftId(shiftId: number,
-                  from: string,
-                  to: string): Observable<Holiday[]> {
-    return super.getAllByShiftId(shiftId, from, to).pipe(parseDateOfEntities);
-  };
+  getAll(from?: string, to?: string): Observable<Holiday[]> {
+    return super.getAll(from, to).pipe(parseDateOfEntities);
+  }
 }

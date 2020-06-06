@@ -20,12 +20,6 @@ export class SummationColumnDtoService
     super(`${config.baseUrl}/admin/summation_columns/dto`, http);
   }
 
-  // getAll(from?: string, to?: string): Observable<BasicDto<SummationColumn, SummationColumnDayTypeRange>[]> {
-  //   return this.http.get<BasicDto<SummationColumn, SummationColumnDayTypeRange>[]>(
-  //     `${this.config.baseUrl}/admin/summation_columns`
-  //   );
-  // }
-
   create(dto: BasicDto<SummationColumn, SummationColumnDayTypeRange>): Observable<BasicDto<SummationColumn, SummationColumnDayTypeRange>> {
     return this.http.post<BasicDto<SummationColumn, SummationColumnDayTypeRange>>(`${this.url}`, dto);
   }
