@@ -1,4 +1,4 @@
-package com.averude.uksatse.scheduler.controllers.impl;
+package com.averude.uksatse.scheduler.controllers;
 
 import com.averude.uksatse.scheduler.controllers.base.ACrudController;
 import com.averude.uksatse.scheduler.controllers.interfaces.PatternUnitController;
