@@ -1,0 +1,33 @@
+<div class="top-bar">
+    <div class="box-row">
+        <div class="logo-container">
+            <img src="assets/img/logo_scheduler1.png">
+        </div>
+        <div class="toolbar-container">
+
+          <ng-container [ngTemplateOutlet]="toolBarContent?.authorityDef"></ng-container> <!--Name of authority-->
+
+            <div class="toolbar-set">
+              <ul class="toolbar">
+                <li *ngIf="toolBarContent?.toolBarItemsDef?.length > 0" class="toolbar-li divider">
+                </li>
+
+                <li class="toolbar-li toolbar-icon" *ngFor="let toolbarItem of toolBarContent?.toolBarItemsDef">
+                  <ng-container [ngTemplateOutlet]="toolbarItem"></ng-container>
+                </li>
+
+                <li class="toolbar-li divider">
+                </li>
+
+                <li class="toolbar-li exit-icon">
+                  <img src="assets/img/exit.png"
+                       (click)="logout()">
+                </li>
+              </ul>
+            </div>
+          </div>
+    </div>
+</div>
+<div class="content-box" [class.sticky-content-box]="sticky">
+  <ng-container [ngTemplateOutlet]="topBarContent"></ng-container>
+</div>

@@ -1,0 +1,22 @@
+<avr-top-bar (onLogout)="logout()">
+
+  <ng-template topBarContentDef>
+    <app-sidebar-component></app-sidebar-component>
+  </ng-template>
+
+  <ng-container toolBarContentDef>
+    <ng-template authorityDef>
+      <div class="department">
+        <div id="department-name" >
+          <a>Andrew Kolesnyk</a>
+        </div>
+        <div id="department-position" >
+          <a>Global administrator</a>
+        </div>
+      </div>
+    </ng-template>
+  </ng-container>
+
+</avr-top-bar>
+
+<simple-notifications></simple-notifications>

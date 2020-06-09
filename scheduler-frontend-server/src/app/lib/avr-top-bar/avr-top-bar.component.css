@@ -1,0 +1,69 @@
+.top-bar {
+  overflow: hidden;
+  height: 72px;
+  background-color: #061420;
+  padding-top: 18px;
+  padding-left: 60px;
+  padding-right: 50px;
+}
+
+.box-row {
+  white-space: nowrap;
+}
+
+.logo-container {
+  padding-top: 10px;
+  display:inline-block;
+  width: 300px;
+}
+
+.toolbar-container {
+  display:inline-block;
+  float: right;
+}
+
+.toolbar-set {
+  display:inline-block;
+  vertical-align: top;
+}
+
+.toolbar {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.toolbar-li {
+  float: left;
+  height: 22px;
+  width: 27px;
+  cursor: pointer;
+}
+
+.toolbar-icon {
+  width: 28px;
+  height: 30px;
+  margin-right: 28px;
+  padding-top: 10px;
+}
+
+.divider {
+  width: 1px;
+  background-color: #838a90;
+  height: 48px;
+  margin-right: 28px;
+  padding-top: 5px;
+}
+
+.exit-icon {
+  width: 24px;
+  height: 28px;
+  padding-top: 12px;
+}
+
+.content-box {
+  position: relative;
+  overflow: scroll;
+  height: 100%;
+}

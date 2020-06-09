@@ -1,0 +1,21 @@
+<avr-top-bar (onLogout)="logout()">
+
+  <ng-container toolBarContentDef>
+    <ng-template authorityDef>
+      <div class="department">
+        <div id="department-name" >
+          <a>{{enterprise?.name || '-'}}</a>
+        </div>
+        <div id="department-position" >
+          <a *ngIf="roles.includes('ENTERPRISE_ADMIN')">Enterprise administrator</a>
+        </div>
+      </div>
+    </ng-template>
+  </ng-container>
+
+  <ng-template topBarContentDef>
+    <app-sidebar-component></app-sidebar-component>
+  </ng-template>
+
+</avr-top-bar>
+<simple-notifications></simple-notifications>

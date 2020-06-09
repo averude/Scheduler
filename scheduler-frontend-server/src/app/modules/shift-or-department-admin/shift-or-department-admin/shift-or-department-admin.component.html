@@ -1,0 +1,30 @@
+<avr-top-bar (onLogout)="logout()">
+  <ng-template topBarContentDef>
+    <router-outlet></router-outlet>
+  </ng-template>
+
+  <ng-container toolBarContentDef>
+    <ng-template authorityDef>
+      <div class="department">
+        <div id="department-name" >
+          <a>{{department?.name || '-'}}</a>
+        </div>
+        <div id="department-position" >
+          <a *ngIf="roles.includes('DEPARTMENT_ADMIN')">Department administrator</a>
+          <a *ngIf="roles.includes('SHIFT_ADMIN')">Shift administrator</a>
+        </div>
+      </div>
+    </ng-template>
+
+    <ng-template toolBarItemDef>
+      <img src="assets/img/cal_icon.png"
+           routerLink="schedule/calendar">
+    </ng-template>
+
+    <ng-template toolBarItemDef>
+      <img src="assets/img/set_icon.png"
+           routerLink="management">
+    </ng-template>
+  </ng-container>
+</avr-top-bar>
+<simple-notifications></simple-notifications>
