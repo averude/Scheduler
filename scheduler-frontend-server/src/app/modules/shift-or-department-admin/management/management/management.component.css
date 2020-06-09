@@ -1,0 +1,27 @@
+.sidebar-button {
+  font-family: 'MuseoSansRegular', 'Roboto', sans-serif;
+  display: block;
+  width: 100%;
+  padding-left: 30px;
+  height: 60px;
+  font-size: 15px;
+  color: #ffffff;
+  text-align: left;
+  border-style: none;
+  background: transparent;
+  user-select: none;
+  text-decoration: none;
+}
+
+.active {
+  background-color: #4f5a66;
+  color: #ffffff;
+}
+
+.sidebar-button:hover {
+  background: #4f5a66;
+}
+
+.sidebar-button:focus {
+  outline: 0;
+}

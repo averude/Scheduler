@@ -1,0 +1,49 @@
+.sidebar {
+  display: block;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  width: 20%;
+  min-width: 130px;
+  background-color: #444d58;
+  position: fixed;
+  height: 100%;
+  overflow: auto;
+}
+
+.sidebar-list-element {
+  width: 100%;
+}
+
+.sidebar-content-box {
+  margin: 0 20%;
+  width: 80%;
+}
+
+.sidebar-button {
+  font-family: 'MuseoSansRegular', 'Roboto', sans-serif;
+  display: block;
+  width: 100%;
+  padding-left: 30px;
+  height: 60px;
+  font-size: 15px;
+  color: #ffffff;
+  text-align: left;
+  border-style: none;
+  background: transparent;
+  user-select: none;
+  text-decoration: none;
+}
+
+.active {
+  background-color: #4f5a66;
+  color: #ffffff;
+}
+
+.sidebar-button:hover {
+  background: #4f5a66;
+}
+
+.sidebar-button:focus {
+  outline: 0;
+}

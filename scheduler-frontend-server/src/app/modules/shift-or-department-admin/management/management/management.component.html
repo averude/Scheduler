@@ -1,31 +1,37 @@
-<!--SIDEBAR-->
-<ul class="sidebar">
-  <li class="sidebar-list-element">
+<avr-side-bar>
+
+  <ng-template avr-side-bar-content>
+    <router-outlet></router-outlet>
+  </ng-template>
+
+  <ng-template avr-side-bar-item-def>
     <button class="sidebar-button"
             routerLink="employees"
             routerLinkActive="active">Employees</button>
-  </li>
-  <li class="sidebar-list-element">
+  </ng-template>
+
+  <ng-template avr-side-bar-item-def>
     <button class="sidebar-button"
             routerLink="positions"
             routerLinkActive="active">Positions</button>
-  </li>
-  <li class="sidebar-list-element">
+  </ng-template>
+
+  <ng-template avr-side-bar-item-def>
     <button class="sidebar-button"
             routerLink="shifts"
             routerLinkActive="active">Shifts</button>
-  </li>
-  <li class="sidebar-list-element">
+  </ng-template>
+
+  <ng-template avr-side-bar-item-def>
     <button class="sidebar-button"
             routerLink="department_day_types"
             routerLinkActive="active">Day types</button>
-  </li>
-  <li class="sidebar-list-element">
+  </ng-template>
+
+  <ng-template avr-side-bar-item-def>
     <button class="sidebar-button"
             routerLink="patterns"
             routerLinkActive="active">Patterns</button>
-  </li>
-</ul>
-<div class="sidebar-content-box">
-  <router-outlet></router-outlet>
-</div>
+  </ng-template>
+
+</avr-side-bar>

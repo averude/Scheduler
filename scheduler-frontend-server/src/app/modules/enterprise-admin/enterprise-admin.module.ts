@@ -10,15 +10,16 @@ import { ExtraWeekendsModule } from "./extra-weekends/extra-weekends.module";
 import { ExtraWorkdaysModule } from "./extra-workdays/extra-workdays.module";
 import { HolidaysModule } from "./holidays/holidays.module";
 import { EnterpriseAdminComponent } from "./enterprise-admin/enterprise-admin.component";
-import { SidebarComponent } from "./sidebar/sidebar.component";
-import { RemoveDialogModule } from "../../shared/abstract-components/remove-dialog/remove-dialog.module";
 import { DepartmentAdminUserAccountsModule } from "./department-admin-user-accounts/department-admin-user-accounts.module";
+import { RemoveDialogModule } from "../../shared/abstract-components/remove-dialog/remove-dialog.module";
 import { AvrTopBarModule } from "../../lib/avr-top-bar/avr-top-bar.module";
+import { AvrSideBarModule } from "../../lib/avr-side-bar/avr-side-bar.module";
 
 @NgModule({
   imports: [
     CommonModule,
     AvrTopBarModule,
+    AvrSideBarModule,
     EnterpriseAdminRoutingModule,
     DayTypesModule,
     DepartmentsModule,
@@ -31,6 +32,6 @@ import { AvrTopBarModule } from "../../lib/avr-top-bar/avr-top-bar.module";
     SimpleNotificationsModule,
     NgxMaskModule.forRoot()
   ],
-  declarations: [EnterpriseAdminComponent, SidebarComponent]
+  declarations: [EnterpriseAdminComponent]
 })
 export class EnterpriseAdminModule {}

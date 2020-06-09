@@ -1,7 +1,31 @@
 <avr-top-bar (onLogout)="logout()">
 
   <ng-template topBarContentDef>
-    <app-sidebar-component></app-sidebar-component>
+    <avr-side-bar>
+
+      <ng-template avr-side-bar-content>
+        <router-outlet></router-outlet>
+      </ng-template>
+
+      <ng-template avr-side-bar-item-def>
+        <button class="sidebar-button"
+                routerLink="enterprises"
+                routerLinkActive="active">Enterprises</button>
+      </ng-template>
+
+      <ng-template avr-side-bar-item-def>
+        <button class="sidebar-button"
+                routerLink="accounts"
+                routerLinkActive="active">Accounts</button>
+      </ng-template >
+
+      <ng-template avr-side-bar-item-def>
+        <button class="sidebar-button"
+                routerLink="groups"
+                routerLinkActive="active">Day type groups</button>
+      </ng-template>
+
+    </avr-side-bar>
   </ng-template>
 
   <ng-container toolBarContentDef>
