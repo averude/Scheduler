@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { MatDialog } from "@angular/material/dialog";
-import { EmployeeService } from "../../../../../../../http-services/employee.service";
+import { EmployeeService } from "../../../../../../../services/http/employee.service";
 import { Employee } from "../../../../../../../model/employee";
 import { Position } from "../../../../../../../model/position";
-import { PositionService } from "../../../../../../../http-services/position.service";
+import { PositionService } from "../../../../../../../services/http/position.service";
 import { EmployeeDialogComponent } from "../employee-dialog/employee-dialog.component";
 import { NotificationsService } from "angular2-notifications";
 import { TableBaseComponent } from "../../../../../../../shared/abstract-components/table-base/table-base.component";

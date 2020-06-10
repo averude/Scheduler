@@ -1,13 +1,13 @@
 import { CUDService } from "./interface/cud-service";
 import { AuthService } from "./auth.service";
 import { HttpClient } from "@angular/common/http";
-import { RestConfig } from "../rest.config";
+import { RestConfig } from "../../rest.config";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { BasicDto } from "../model/dto/basic-dto";
+import { BasicDto } from "../../model/dto/basic-dto";
 import { ACrudService } from "./abstract-service/a-crud-service";
-import { ShiftPattern } from "../model/shift-pattern";
-import { PatternUnit } from "../model/pattern-unit";
+import { ShiftPattern } from "../../model/shift-pattern";
+import { PatternUnit } from "../../model/pattern-unit";
 
 @Injectable({
   providedIn: 'root'

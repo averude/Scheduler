@@ -3,10 +3,10 @@ import { Router } from "@angular/router";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { map, shareReplay } from "rxjs/operators";
 import { Observable } from "rxjs";
-import { User } from "../model/user";
+import { User } from "../../model/user";
 import decode from "jwt-decode";
-import { RestConfig } from "../rest.config";
-import { CacheMapService } from "../services/cache/cache-map.service";
+import { RestConfig } from "../../rest.config";
+import { CacheMapService } from "../cache/cache-map.service";
 
 @Injectable({
   providedIn: 'root'

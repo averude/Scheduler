@@ -4,7 +4,7 @@ import { binarySearch } from "../../../../../../shared/utils/utils";
 import { DayType } from "../../../../../../model/day-type";
 import { WorkDay } from "../../../../../../model/workday";
 import { calculateWorkHoursByWorkDay } from "../../../../../../shared/utils/time-converter";
-import { DayTypeService } from "../../../../../../http-services/day-type.service";
+import { DayTypeService } from "../../../../../../services/http/day-type.service";
 import { Injectable } from "@angular/core";
 
 @Injectable()

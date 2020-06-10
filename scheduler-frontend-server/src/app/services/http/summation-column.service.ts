@@ -1,10 +1,10 @@
 import { ACrudService } from "./abstract-service/a-crud-service";
-import { SummationColumn } from "../model/summation-column";
+import { SummationColumn } from "../../model/summation-column";
 import { Injectable } from "@angular/core";
 import { CUDService } from "./interface/cud-service";
 import { AuthService } from "./auth.service";
 import { HttpClient } from "@angular/common/http";
-import { RestConfig } from "../rest.config";
+import { RestConfig } from "../../rest.config";
 
 @Injectable({
   providedIn: "root"

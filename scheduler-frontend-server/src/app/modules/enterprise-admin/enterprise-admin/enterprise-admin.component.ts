@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from "../../../http-services/auth.service";
-import { EnterpriseService } from "../../../http-services/enterprise.service";
+import { AuthService } from "../../../services/http/auth.service";
+import { EnterpriseService } from "../../../services/http/enterprise.service";
 import { Enterprise } from "../../../model/enterprise";
 
 @Component({

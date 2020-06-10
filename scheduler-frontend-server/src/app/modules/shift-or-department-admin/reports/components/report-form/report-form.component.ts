@@ -3,7 +3,7 @@ import * as moment from "moment";
 import { Moment } from "moment";
 import * as fileSaver from 'file-saver';
 import { MatDatepicker } from "@angular/material/datepicker";
-import { ReportService } from "../../../../../http-services/report.service";
+import { ReportService } from "../../../../../services/http/report.service";
 
 @Component({
   selector: 'app-report-form',

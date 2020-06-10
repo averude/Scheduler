@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { WorkDay } from '../model/workday';
+import { WorkDay } from '../../model/workday';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { RestConfig } from '../rest.config';
-import { ScheduleGenerationDto } from "../model/dto/schedule-generation-dto";
-import { BasicDto } from "../model/dto/basic-dto";
-import { Employee } from "../model/employee";
+import { RestConfig } from '../../rest.config';
+import { ScheduleGenerationDto } from "../../model/dto/schedule-generation-dto";
+import { BasicDto } from "../../model/dto/basic-dto";
+import { Employee } from "../../model/employee";
 
 @Injectable({
   providedIn: 'root'

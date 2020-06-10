@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
-import { ShiftComposition } from "../model/shift-composition";
-import { RestConfig } from "../rest.config";
+import { ShiftComposition } from "../../model/shift-composition";
+import { RestConfig } from "../../rest.config";
 import { HttpClient } from "@angular/common/http";
 import { AuthService } from "./auth.service";
 import { CUDService } from "./interface/cud-service"

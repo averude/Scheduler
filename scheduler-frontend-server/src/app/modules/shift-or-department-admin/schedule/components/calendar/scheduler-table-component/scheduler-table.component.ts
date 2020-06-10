@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, } from '@angular/core';
 import { PaginationService } from "../../../../../../lib/ngx-schedule-table/service/pagination.service";
-import { ShiftService } from "../../../../../../http-services/shift.service";
-import { ShiftCompositionService } from "../../../../../../http-services/shift-composition.service";
-import { ScheduleService } from "../../../../../../http-services/schedule.service";
-import { WorkingTimeService } from "../../../../../../http-services/working-time.service";
+import { ShiftService } from "../../../../../../services/http/shift.service";
+import { ShiftCompositionService } from "../../../../../../services/http/shift-composition.service";
+import { ScheduleService } from "../../../../../../services/http/schedule.service";
+import { WorkingTimeService } from "../../../../../../services/http/working-time.service";
 import { forkJoin, Subscription } from "rxjs";
 import { RowGroupCollector } from "../../../../../../lib/ngx-schedule-table/collectors/row-group-collector";
 import { SchedulerRowGroupCollector } from "../collectors/scheduler-row-group-collector";

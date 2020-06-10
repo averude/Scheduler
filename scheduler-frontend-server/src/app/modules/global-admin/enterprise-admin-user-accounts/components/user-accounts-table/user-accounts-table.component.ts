@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { TableBaseComponent } from "../../../../../shared/abstract-components/table-base/table-base.component";
 import { UserAccount } from "../../../../../model/accounts/user-account";
-import { UserAccountService } from "../../../../../http-services/user-account.service";
+import { UserAccountService } from "../../../../../services/http/user-account.service";
 import { MatDialog } from "@angular/material/dialog";
 import { NotificationsService } from "angular2-notifications";
 import { UserAccountsDialogComponent } from "../user-accounts-dialog/user-accounts-dialog.component";
-import { EnterpriseService } from "../../../../../http-services/enterprise.service";
+import { EnterpriseService } from "../../../../../services/http/enterprise.service";
 import { Enterprise } from "../../../../../model/enterprise";
 
 @Component({

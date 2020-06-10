@@ -2,7 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { PatternUnit } from "../../../../../../../model/pattern-unit";
 import { ShiftPattern } from "../../../../../../../model/shift-pattern";
-import { AuthService } from "../../../../../../../http-services/auth.service";
+import { AuthService } from "../../../../../../../services/http/auth.service";
 import { CdkDragDrop } from "@angular/cdk/drag-drop";
 import { DepartmentDayType } from "../../../../../../../model/department-day-type";
 import { DtoDialogBaseComponent } from "../../../../../../../shared/abstract-components/dialog-base/dto-dialog-base.component";

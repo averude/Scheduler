@@ -3,7 +3,7 @@ import { DialogBaseComponent } from "../../../../../shared/abstract-components/d
 import { DayType } from "../../../../../model/day-type";
 import { FormBuilder, Validators } from "@angular/forms";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
-import { AuthService } from "../../../../../http-services/auth.service";
+import { AuthService } from "../../../../../services/http/auth.service";
 import { DayTypeGroup } from "../../../../../model/day-type-group";
 
 @Component({

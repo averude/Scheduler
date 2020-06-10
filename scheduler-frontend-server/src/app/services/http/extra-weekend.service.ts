@@ -1,9 +1,9 @@
 import { Injectable } from "@angular/core";
-import { ExtraWeekend } from "../model/extra-weekend";
+import { ExtraWeekend } from "../../model/extra-weekend";
 import { Observable } from "rxjs";
 import { HttpClient } from "@angular/common/http";
-import { RestConfig } from "../rest.config";
-import { parseDateOfEntities } from "../shared/utils/utils";
+import { RestConfig } from "../../rest.config";
+import { parseDateOfEntities } from "../../shared/utils/utils";
 import { AuthService } from "./auth.service";
 import { CUDService } from "./interface/cud-service";
 import { ACrudService } from "./abstract-service/a-crud-service";

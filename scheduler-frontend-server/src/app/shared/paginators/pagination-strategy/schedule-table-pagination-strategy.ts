@@ -1,8 +1,8 @@
 import { Injectable } from "@angular/core";
 import { CalendarDay } from "../../../lib/ngx-schedule-table/model/calendar-day";
-import { HolidayService } from "../../../http-services/holiday.service";
-import { ExtraWeekendService } from "../../../http-services/extra-weekend.service";
-import { ExtraWorkdayService } from "../../../http-services/extra-workday.service";
+import { HolidayService } from "../../../services/http/holiday.service";
+import { ExtraWeekendService } from "../../../services/http/extra-weekend.service";
+import { ExtraWorkdayService } from "../../../services/http/extra-workday.service";
 import { Moment } from "moment";
 import { forkJoin, Observable } from "rxjs";
 import { map } from "rxjs/operators";

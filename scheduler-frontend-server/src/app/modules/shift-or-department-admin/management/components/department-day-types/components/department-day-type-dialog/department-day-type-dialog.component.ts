@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { FormBuilder, Validators } from "@angular/forms";
-import { AuthService } from "../../../../../../../http-services/auth.service";
+import { AuthService } from "../../../../../../../services/http/auth.service";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
 import { DialogBaseComponent } from "../../../../../../../shared/abstract-components/dialog-base/dialog-base.component";
 import { DepartmentDayType } from "../../../../../../../model/department-day-type";

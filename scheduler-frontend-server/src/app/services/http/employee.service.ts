@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Employee } from '../model/employee';
+import { Employee } from '../../model/employee';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { RestConfig } from '../rest.config';
+import { RestConfig } from '../../rest.config';
 import { AuthService } from "./auth.service";
 import { CUDService } from "./interface/cud-service";
 import { IByAuthService } from "./interface/i-by-auth.service";

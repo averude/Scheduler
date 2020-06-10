@@ -2,7 +2,7 @@ import { TableBaseComponent } from "./table-base.component";
 import { BasicDto } from "../../../model/dto/basic-dto";
 import { IdEntity } from "../../../model/interface/id-entity";
 import { NotificationsService } from "angular2-notifications";
-import { CUDService } from "../../../http-services/interface/cud-service";
+import { CUDService } from "../../../services/http/interface/cud-service";
 import { MatDialog } from "@angular/material";
 
 export abstract class DtoTableBaseComponent<P extends IdEntity, C> extends TableBaseComponent<BasicDto<P, C>> {

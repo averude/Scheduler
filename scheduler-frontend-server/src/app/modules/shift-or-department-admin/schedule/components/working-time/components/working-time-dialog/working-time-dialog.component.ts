@@ -3,7 +3,7 @@ import { DialogBaseComponent } from "../../../../../../../shared/abstract-compon
 import { WorkingTime } from "../../../../../../../model/working-time";
 import { MatDatepicker } from "@angular/material/datepicker";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
-import { AuthService } from "../../../../../../../http-services/auth.service";
+import { AuthService } from "../../../../../../../services/http/auth.service";
 import { FormBuilder, Validators } from "@angular/forms";
 import { Shift } from "../../../../../../../model/shift";
 import { Moment } from "moment";

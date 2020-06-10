@@ -4,9 +4,9 @@ import { SummationColumn } from "../../../../../model/summation-column";
 import { SummationColumnDayTypeRange } from "../../../../../model/summation-column-day-type-range";
 import { MatDialog } from "@angular/material";
 import { NotificationsService } from "angular2-notifications";
-import { DayTypeService } from "../../../../../http-services/day-type.service";
+import { DayTypeService } from "../../../../../services/http/day-type.service";
 import { DayType } from "../../../../../model/day-type";
-import { SummationColumnDtoService } from "../../../../../http-services/summation-column-dto.service";
+import { SummationColumnDtoService } from "../../../../../services/http/summation-column-dto.service";
 import { SummationColumnDialogComponent } from "../summation-column-dialog/summation-column-dialog.component";
 import { DtoTableBaseComponent } from "../../../../../shared/abstract-components/table-base/dto-table-base.component";
 

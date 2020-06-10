@@ -1,7 +1,7 @@
-import { DayTypeGroup } from "../model/day-type-group";
+import { DayTypeGroup } from "../../model/day-type-group";
 import { Observable } from "rxjs";
 import { HttpClient } from "@angular/common/http";
-import { RestConfig } from "../rest.config";
+import { RestConfig } from "../../rest.config";
 import { Injectable } from "@angular/core";
 import { IByAuthService } from "./interface/i-by-auth.service";
 import { CUDService } from "./interface/cud-service";

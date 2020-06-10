@@ -2,7 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { DialogBaseComponent } from "../../../../../shared/abstract-components/dialog-base/dialog-base.component";
 import { DepartmentAdminUserAccount, UserAccount } from "../../../../../model/accounts/user-account";
 import { FormBuilder, Validators } from "@angular/forms";
-import { AuthService } from "../../../../../http-services/auth.service";
+import { AuthService } from "../../../../../services/http/auth.service";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { Department } from "../../../../../model/department";
 

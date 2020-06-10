@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import { TableBaseComponent } from "../../../../../shared/abstract-components/table-base/table-base.component";
 import { UserAccount } from "../../../../../model/accounts/user-account";
-import { UserAccountService } from "../../../../../http-services/user-account.service";
+import { UserAccountService } from "../../../../../services/http/user-account.service";
 import { MatDialog } from "@angular/material/dialog";
 import { NotificationsService } from "angular2-notifications";
 import { UserAccountsDialogComponent } from "../user-accounts-dialog/user-accounts-dialog.component";
 import { Department } from "../../../../../model/department";
-import { DepartmentService } from "../../../../../http-services/department.service";
+import { DepartmentService } from "../../../../../services/http/department.service";
 
 @Component({
   selector: 'app-user-accounts-table',

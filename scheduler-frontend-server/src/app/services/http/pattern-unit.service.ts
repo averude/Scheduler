@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { RestConfig } from '../rest.config';
+import { RestConfig } from '../../rest.config';
 import { Observable } from 'rxjs';
-import { PatternUnit } from '../model/pattern-unit';
+import { PatternUnit } from '../../model/pattern-unit';
 import { CUDService } from "./interface/cud-service";
 
 @Injectable({

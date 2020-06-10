@@ -4,9 +4,9 @@ import { MatDialog } from "@angular/material/dialog";
 import { NotificationsService } from "angular2-notifications";
 import { switchMap } from "rxjs/operators";
 import { Subscription } from "rxjs";
-import { CUDService } from "../../../http-services/interface/cud-service";
+import { CUDService } from "../../../services/http/interface/cud-service";
 import { PaginationService } from "../../../lib/ngx-schedule-table/service/pagination.service";
-import { IByAuthService } from "../../../http-services/interface/i-by-auth.service";
+import { IByAuthService } from "../../../services/http/interface/i-by-auth.service";
 
 export abstract class PageableTableBaseComponent<T extends IdEntity> extends TableBaseComponent<T> {
 

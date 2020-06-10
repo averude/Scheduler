@@ -1,10 +1,10 @@
 import { Injectable } from "@angular/core";
 import { IByAuthService } from "./interface/i-by-auth.service";
-import { Enterprise } from "../model/enterprise";
+import { Enterprise } from "../../model/enterprise";
 import { CUDService } from "./interface/cud-service";
 import { Observable } from "rxjs";
 import { HttpClient } from "@angular/common/http";
-import { RestConfig } from "../rest.config";
+import { RestConfig } from "../../rest.config";
 import { ACrudService } from "./abstract-service/a-crud-service";
 
 @Injectable({providedIn: 'root'})

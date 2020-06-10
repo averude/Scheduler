@@ -1,13 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { StatisticsService } from "../../../../../../../http-services/statistics.service";
+import { StatisticsService } from "../../../../../../../services/http/statistics.service";
 import { SummationDto } from "../../../../../../../model/dto/summation-dto";
 import { PaginationService } from "../../../../../../../lib/ngx-schedule-table/service/pagination.service";
 import { forkJoin, Subscription } from "rxjs";
-import { SummationColumnDtoService } from "../../../../../../../http-services/summation-column-dto.service";
+import { SummationColumnDtoService } from "../../../../../../../services/http/summation-column-dto.service";
 import { SummationColumn } from "../../../../../../../model/summation-column";
 import { SimplePaginationStrategy } from "../../../../../../../shared/paginators/pagination-strategy/simple-pagination-strategy";
 import { Shift } from "../../../../../../../model/shift";
-import { ShiftService } from "../../../../../../../http-services/shift.service";
+import { ShiftService } from "../../../../../../../services/http/shift.service";
 
 @Component({
   selector: 'app-statistics-table',

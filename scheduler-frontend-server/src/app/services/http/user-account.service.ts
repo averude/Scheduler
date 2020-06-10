@@ -1,8 +1,8 @@
-import { DepartmentAdminUserAccount, EnterpriseAdminUserAccount, UserAccount } from "../model/accounts/user-account";
+import { DepartmentAdminUserAccount, EnterpriseAdminUserAccount, UserAccount } from "../../model/accounts/user-account";
 import { Observable } from "rxjs";
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { RestConfig } from "../rest.config";
+import { RestConfig } from "../../rest.config";
 import { CUDService } from "./interface/cud-service";
 import { IByAuthService } from "./interface/i-by-auth.service";
 

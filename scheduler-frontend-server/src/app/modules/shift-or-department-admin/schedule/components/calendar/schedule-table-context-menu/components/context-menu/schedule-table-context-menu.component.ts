@@ -11,8 +11,8 @@ import { SelectionData } from "../../../../../../../../lib/ngx-schedule-table/mo
 import { DepartmentDayType } from "../../../../../../../../model/department-day-type";
 import { BasicDto } from "../../../../../../../../model/dto/basic-dto";
 import { PatternUnit } from "../../../../../../../../model/pattern-unit";
-import { ShiftPatternDtoService } from "../../../../../../../../http-services/shift-pattern-dto.service";
-import { DepartmentDayTypeService } from "../../../../../../../../http-services/department-day-type.service";
+import { ShiftPatternDtoService } from "../../../../../../../../services/http/shift-pattern-dto.service";
+import { DepartmentDayTypeService } from "../../../../../../../../services/http/department-day-type.service";
 import { ShiftPattern } from "../../../../../../../../model/shift-pattern";
 
 @Component({

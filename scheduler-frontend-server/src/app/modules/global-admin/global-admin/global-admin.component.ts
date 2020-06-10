@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from "../../../http-services/auth.service";
+import { AuthService } from "../../../services/http/auth.service";
 
 @Component({
   selector: 'app-global-admin',

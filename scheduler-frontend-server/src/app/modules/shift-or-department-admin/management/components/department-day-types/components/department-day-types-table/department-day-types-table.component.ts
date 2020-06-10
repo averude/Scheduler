@@ -4,9 +4,9 @@ import { NotificationsService } from "angular2-notifications";
 import { DayType } from "../../../../../../../model/day-type";
 import { TableBaseComponent } from "../../../../../../../shared/abstract-components/table-base/table-base.component";
 import { DepartmentDayType } from "../../../../../../../model/department-day-type";
-import { DepartmentDayTypeService } from "../../../../../../../http-services/department-day-type.service";
+import { DepartmentDayTypeService } from "../../../../../../../services/http/department-day-type.service";
 import { DepartmentDayTypeDialogComponent } from "../department-day-type-dialog/department-day-type-dialog.component";
-import { DayTypeService } from "../../../../../../../http-services/day-type.service";
+import { DayTypeService } from "../../../../../../../services/http/day-type.service";
 
 @Component({
   selector: 'app-department-day-types-table',

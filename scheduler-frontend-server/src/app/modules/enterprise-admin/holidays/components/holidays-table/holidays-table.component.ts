@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { MatDialog } from "@angular/material/dialog";
 import { NotificationsService } from "angular2-notifications";
-import { HolidayService } from "../../../../../http-services/holiday.service";
+import { HolidayService } from "../../../../../services/http/holiday.service";
 import { Holiday } from "../../../../../model/holiday";
 import { HolidaysDialogComponent } from "../holidays-dialog/holidays-dialog.component";
 import { PageableTableBaseComponent } from "../../../../../shared/abstract-components/table-base/pageable-table-base.component";

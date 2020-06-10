@@ -3,7 +3,7 @@ import { ExtraWorkDay } from "../../../../../model/extra-workday";
 import { MatDialog } from "@angular/material/dialog";
 import { NotificationsService } from "angular2-notifications";
 import { Component } from "@angular/core";
-import { ExtraWorkdayService } from "../../../../../http-services/extra-workday.service";
+import { ExtraWorkdayService } from "../../../../../services/http/extra-workday.service";
 import { ExtraWorkdaysDialogComponent } from "../extra-workdays-dialog/extra-workdays-dialog.component";
 import { PaginationService } from "../../../../../lib/ngx-schedule-table/service/pagination.service";
 

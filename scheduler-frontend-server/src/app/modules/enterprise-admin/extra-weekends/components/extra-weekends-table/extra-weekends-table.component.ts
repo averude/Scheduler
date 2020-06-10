@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { ExtraWeekend } from "../../../../../model/extra-weekend";
 import { MatDialog } from "@angular/material/dialog";
 import { NotificationsService } from "angular2-notifications";
-import { ExtraWeekendService } from "../../../../../http-services/extra-weekend.service";
+import { ExtraWeekendService } from "../../../../../services/http/extra-weekend.service";
 import { ExtraWeekendsDialogComponent } from "../extra-weekends-dialog/extra-weekends-dialog.component";
 import { PageableTableBaseComponent } from "../../../../../shared/abstract-components/table-base/pageable-table-base.component";
 import { PaginationService } from "../../../../../lib/ngx-schedule-table/service/pagination.service";

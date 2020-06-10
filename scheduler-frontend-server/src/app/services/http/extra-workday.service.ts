@@ -1,11 +1,11 @@
-import { ExtraWorkDay } from "../model/extra-workday";
+import { ExtraWorkDay } from "../../model/extra-workday";
 import { CUDService } from "./interface/cud-service";
 import { AuthService } from "./auth.service";
 import { HttpClient } from "@angular/common/http";
-import { RestConfig } from "../rest.config";
+import { RestConfig } from "../../rest.config";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { parseDateOfEntities } from "../shared/utils/utils";
+import { parseDateOfEntities } from "../../shared/utils/utils";
 import { ACrudService } from "./abstract-service/a-crud-service";
 
 @Injectable({

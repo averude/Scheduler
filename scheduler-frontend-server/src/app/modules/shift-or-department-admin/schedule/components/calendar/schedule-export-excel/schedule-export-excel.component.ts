@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from "rxjs";
 import { CalendarDay } from "../../../../../../lib/ngx-schedule-table/model/calendar-day";
-import { ReportService } from "../../../../../../http-services/report.service";
+import { ReportService } from "../../../../../../services/http/report.service";
 import * as fileSaver from 'file-saver';
 import { PaginationService } from "../../../../../../lib/ngx-schedule-table/service/pagination.service";
 

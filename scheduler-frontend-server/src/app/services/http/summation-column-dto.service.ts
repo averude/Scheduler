@@ -1,12 +1,12 @@
 import { Injectable } from "@angular/core";
 import { ACrudService } from "./abstract-service/a-crud-service";
-import { BasicDto } from "../model/dto/basic-dto";
-import { SummationColumn } from "../model/summation-column";
-import { SummationColumnDayTypeRange } from "../model/summation-column-day-type-range";
+import { BasicDto } from "../../model/dto/basic-dto";
+import { SummationColumn } from "../../model/summation-column";
+import { SummationColumnDayTypeRange } from "../../model/summation-column-day-type-range";
 import { CUDService } from "./interface/cud-service";
 import { AuthService } from "./auth.service";
 import { HttpClient } from "@angular/common/http";
-import { RestConfig } from "../rest.config";
+import { RestConfig } from "../../rest.config";
 import { Observable } from "rxjs";
 
 @Injectable({providedIn: "root"})

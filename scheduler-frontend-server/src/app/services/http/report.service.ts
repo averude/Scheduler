@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { RestConfig } from "../rest.config";
+import { RestConfig } from "../../rest.config";
 import { HttpClient, HttpResponse } from "@angular/common/http";
 import { Observable } from "rxjs";
 

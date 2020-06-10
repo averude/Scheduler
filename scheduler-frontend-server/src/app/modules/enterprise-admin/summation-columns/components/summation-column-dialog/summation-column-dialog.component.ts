@@ -4,7 +4,7 @@ import { DayType } from "../../../../../model/day-type";
 import { SummationColumn } from "../../../../../model/summation-column";
 import { SummationColumnDayTypeRange } from "../../../../../model/summation-column-day-type-range";
 import { DtoDialogBaseComponent } from "../../../../../shared/abstract-components/dialog-base/dto-dialog-base.component";
-import { AuthService } from "../../../../../http-services/auth.service";
+import { AuthService } from "../../../../../services/http/auth.service";
 import { BasicDto } from "../../../../../model/dto/basic-dto";
 
 @Component({

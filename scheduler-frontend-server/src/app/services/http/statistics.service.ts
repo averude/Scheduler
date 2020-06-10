@@ -1,9 +1,9 @@
 import { Injectable } from "@angular/core";
-import { RestConfig } from "../rest.config";
+import { RestConfig } from "../../rest.config";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
-import { CountDTO } from "../model/dto/count-dto";
-import { SummationDto } from "../model/dto/summation-dto";
+import { CountDTO } from "../../model/dto/count-dto";
+import { SummationDto } from "../../model/dto/summation-dto";
 
 @Injectable({
   providedIn: "root"

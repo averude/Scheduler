@@ -3,7 +3,7 @@ import { SelectionData } from "../../lib/ngx-schedule-table/model/selection-data
 import { WorkDay } from "../../model/workday";
 import * as moment from 'moment';
 import { TableRenderer } from "../../lib/ngx-schedule-table/service/table-renderer.service";
-import { ScheduleService } from "../../http-services/schedule.service";
+import { ScheduleService } from "../http/schedule.service";
 import { NotificationsService } from "angular2-notifications";
 import { Injectable } from "@angular/core";
 import { PatternUnit } from "../../model/pattern-unit";
