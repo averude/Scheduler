@@ -1,13 +1,14 @@
 package com.averude.uksatse.scheduler.generator.utils;
 
-import com.averude.uksatse.scheduler.core.entity.*;
+import com.averude.uksatse.scheduler.core.entity.ShiftComposition;
+import com.averude.uksatse.scheduler.core.util.OffsetCalculator;
 import com.averude.uksatse.scheduler.generator.model.ScheduleGenerationInterval;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +16,13 @@ import java.util.List;
 public class ScheduleGenerationIntervalCreator {
 
     private static Logger logger = LoggerFactory.getLogger(ScheduleGenerationIntervalCreator.class);
+
+    private final OffsetCalculator offsetCalculator;
+
+    @Autowired
+    public ScheduleGenerationIntervalCreator(OffsetCalculator offsetCalculator) {
+        this.offsetCalculator = offsetCalculator;
+    }
 
     public List<ScheduleGenerationInterval> getIntervalsForComposition(ShiftComposition composition,
                                                                        List<ShiftComposition> employeeCompositions,
@@ -34,14 +42,6 @@ public class ScheduleGenerationIntervalCreator {
         return result;
     }
 
-    private long recalculateOffsetForDate(LocalDate from,
-                                          LocalDate date,
-                                          int unitsSize,
-                                          int offset) {
-        long daysBetween = Math.abs(from.until(date, ChronoUnit.DAYS));
-        return (daysBetween + offset) % unitsSize;
-    }
-
     private ScheduleGenerationInterval getIntervalForSubstitutionShift(LocalDate from,
                                                                        LocalDate to,
                                                                        ShiftComposition composition,
@@ -51,7 +51,7 @@ public class ScheduleGenerationIntervalCreator {
         var interval        = new ScheduleGenerationInterval();
         var intervalStart   = from.isAfter(composition.getFrom()) ? from : composition.getFrom();
         var intervalEnd     = to.isBefore(composition.getTo()) ? to : composition.getTo();
-        var intervalOffset  = recalculateOffsetForDate(from, intervalStart, unitsSize, offset);
+        var intervalOffset  = offsetCalculator.recalculateForDate(from, intervalStart, unitsSize, offset);
 
         interval.setFrom(intervalStart);
         interval.setTo(intervalEnd);
@@ -119,7 +119,7 @@ public class ScheduleGenerationIntervalCreator {
         interval.setFrom(intervalStart);
         interval.setTo(to);
         interval.setEmployeeId(employeeId);
-        interval.setOffset(recalculateOffsetForDate(from, intervalStart, unitsSize, offset));
+        interval.setOffset(offsetCalculator.recalculateForDate(from, intervalStart, unitsSize, offset));
     }
 
 }

@@ -1,5 +1,6 @@
 import com.averude.uksatse.scheduler.core.dto.SummationResult;
 import com.averude.uksatse.scheduler.core.entity.*;
+import com.averude.uksatse.scheduler.core.util.TimeCalculatorImpl;
 import com.averude.uksatse.scheduler.generator.model.ScheduleGenerationInterval;
 import com.averude.uksatse.scheduler.generator.schedule.ScheduleGeneratorImpl;
 import com.averude.uksatse.scheduler.statistics.calculator.StatisticsCalculatorImpl;
@@ -14,7 +15,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.BiFunction;
 
 public class StatisticsCalculatorTest {
-    private StatisticsCalculatorImpl statisticsCalculator = new StatisticsCalculatorImpl();
+    private StatisticsCalculatorImpl statisticsCalculator = new StatisticsCalculatorImpl(new TimeCalculatorImpl());
 
     @Test
     public void test() {

@@ -72,7 +72,7 @@ public class ShiftPattern implements HasId, HasDepartmentId {
     private List<PatternUnit> sequence;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "patternId")
+    @OneToMany(mappedBy = "shiftPattern")
     private List<Shift> shifts;
 
     @Override

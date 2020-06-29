@@ -1,7 +1,7 @@
 package com.averude.uksatse.scheduler.core.entity;
 
+import com.averude.uksatse.scheduler.core.entity.interfaces.HasDayTypeIdAndTime;
 import com.averude.uksatse.scheduler.core.entity.interfaces.HasId;
-import com.averude.uksatse.scheduler.core.entity.interfaces.HasTime;
 import com.averude.uksatse.scheduler.core.json.deserializer.StringToIntTimeDeserializer;
 import com.averude.uksatse.scheduler.core.json.serializer.IntToStringTimeSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -31,7 +31,7 @@ import java.util.StringJoiner;
                 )
         }
 )
-public class PatternUnit implements HasId, HasTime {
+public class PatternUnit implements HasId, HasDayTypeIdAndTime {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

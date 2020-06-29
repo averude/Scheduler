@@ -1,6 +1,7 @@
 package com.averude.uksatse.scheduler.generator.utils;
 
 import com.averude.uksatse.scheduler.core.entity.ShiftComposition;
+import com.averude.uksatse.scheduler.core.util.OffsetCalculator;
 import org.junit.Test;
 
 import java.time.LocalDate;
@@ -9,6 +10,8 @@ import java.util.ArrayList;
 import static org.junit.Assert.*;
 
 public class ScheduleGenerationIntervalCreatorTest {
+
+    private final OffsetCalculator offsetCalculator = new OffsetCalculator();
 
     @Test
     public void getIntervalsForSubstitutionComposition() {
@@ -21,7 +24,7 @@ public class ScheduleGenerationIntervalCreatorTest {
         composition.setSubstitution(true);
         composition.setEmployeeId(1L);
 
-        var creator = new ScheduleGenerationIntervalCreator();
+        var creator = new ScheduleGenerationIntervalCreator(offsetCalculator);
         var from = LocalDate.parse("2019-03-01");
         var to = LocalDate.parse("2019-10-31");
         var offset = 0;
@@ -57,7 +60,7 @@ public class ScheduleGenerationIntervalCreatorTest {
         subComposition.setSubstitution(true);
         substitutionCompositions.add(subComposition);
 
-        var creator = new ScheduleGenerationIntervalCreator();
+        var creator = new ScheduleGenerationIntervalCreator(offsetCalculator);
         var from = LocalDate.parse("2019-01-01");
         var to = LocalDate.parse("2019-12-31");
         var offset = 0;
@@ -93,7 +96,7 @@ public class ScheduleGenerationIntervalCreatorTest {
         subComposition.setShiftId(13L);
         substitutionCompositions.add(subComposition);
 
-        var creator = new ScheduleGenerationIntervalCreator();
+        var creator = new ScheduleGenerationIntervalCreator(offsetCalculator);
         var from = LocalDate.parse("2020-01-01");
         var to = LocalDate.parse("2020-01-31");
         var offset = 0;
@@ -115,7 +118,7 @@ public class ScheduleGenerationIntervalCreatorTest {
         subComposition.setEmployeeId(1L);
         subComposition.setShiftId(13L);
 
-        var creator = new ScheduleGenerationIntervalCreator();
+        var creator = new ScheduleGenerationIntervalCreator(offsetCalculator);
         var from = LocalDate.parse("2020-01-01");
         var to = LocalDate.parse("2020-01-31");
         var offset = 3;

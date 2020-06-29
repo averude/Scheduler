@@ -1,7 +1,8 @@
 package com.averude.uksatse.scheduler.core.entity;
 
+import com.averude.uksatse.scheduler.core.entity.interfaces.HasDate;
+import com.averude.uksatse.scheduler.core.entity.interfaces.HasDayTypeIdAndTime;
 import com.averude.uksatse.scheduler.core.entity.interfaces.HasId;
-import com.averude.uksatse.scheduler.core.entity.interfaces.HasTime;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,7 +28,7 @@ import java.util.StringJoiner;
                         columnNames = {"employee_id", "date"})
         }
 )
-public class WorkDay implements HasId, HasTime {
+public class WorkDay implements HasId, HasDayTypeIdAndTime, HasDate {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

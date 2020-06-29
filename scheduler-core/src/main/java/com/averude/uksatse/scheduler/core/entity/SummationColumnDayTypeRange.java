@@ -1,5 +1,6 @@
 package com.averude.uksatse.scheduler.core.entity;
 
+import com.averude.uksatse.scheduler.core.entity.interfaces.HasDuration;
 import com.averude.uksatse.scheduler.core.entity.interfaces.HasId;
 import com.averude.uksatse.scheduler.core.json.deserializer.StringToIntTimeDeserializer;
 import com.averude.uksatse.scheduler.core.json.serializer.IntToStringTimeSerializer;
@@ -17,7 +18,7 @@ import javax.validation.constraints.NotNull;
 @ToString
 @Entity
 @Table(name = "summation_columns_day_types_ranges")
-public class SummationColumnDayTypeRange implements HasId {
+public class SummationColumnDayTypeRange implements HasId, HasDuration {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

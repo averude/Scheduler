@@ -1,5 +1,6 @@
 package com.averude.uksatse.scheduler.core.entity;
 
+import com.averude.uksatse.scheduler.core.entity.interfaces.HasDate;
 import com.averude.uksatse.scheduler.core.entity.interfaces.HasEnterpriseId;
 import com.averude.uksatse.scheduler.core.entity.interfaces.HasId;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -19,7 +20,7 @@ import java.util.StringJoiner;
 @Setter
 @Entity
 @Table(name = "extra_weekends")
-public class ExtraWeekend implements HasId, HasEnterpriseId {
+public class ExtraWeekend implements HasId, HasEnterpriseId, HasDate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

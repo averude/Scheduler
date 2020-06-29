@@ -17,6 +17,7 @@ import org.springframework.web.filter.CorsFilter;
         "com.averude.uksatse.scheduler.monolith",
         "com.averude.uksatse.scheduler.core.configuration",
         "com.averude.uksatse.scheduler.core.json",
+        "com.averude.uksatse.scheduler.core.util",
         "com.averude.uksatse.scheduler.generator",
         "com.averude.uksatse.scheduler.shared.service",
         "com.averude.uksatse.scheduler.shared.creator",

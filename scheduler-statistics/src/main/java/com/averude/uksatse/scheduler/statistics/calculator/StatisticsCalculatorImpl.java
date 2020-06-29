@@ -2,9 +2,10 @@ package com.averude.uksatse.scheduler.statistics.calculator;
 
 import com.averude.uksatse.scheduler.core.dto.SummationResult;
 import com.averude.uksatse.scheduler.core.entity.SummationColumn;
-import com.averude.uksatse.scheduler.core.entity.SummationColumnDayTypeRange;
 import com.averude.uksatse.scheduler.core.entity.WorkDay;
+import com.averude.uksatse.scheduler.core.util.TimeCalculator;
 import com.averude.uksatse.scheduler.statistics.wrapper.WorkDayWrapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -15,6 +16,13 @@ import java.util.stream.Collectors;
 
 @Component
 public class StatisticsCalculatorImpl implements StatisticsCalculator {
+
+    private TimeCalculator timeCalculator;
+
+    @Autowired
+    public StatisticsCalculatorImpl(TimeCalculator timeCalculator) {
+        this.timeCalculator = timeCalculator;
+    }
 
     @Override
     public List<SummationResult> calcSum(List<SummationColumn> summationColumns, List<WorkDay> workDays) {
@@ -50,66 +58,15 @@ public class StatisticsCalculatorImpl implements StatisticsCalculator {
     }
 
     private int getWorkDayLength(WorkDay workDay, SummationColumn summationColumn) {
-        if (workDay.getStartTime() == null || workDay.getEndTime() == null) {
-            return 0;
-        }
-
         if (summationColumn.getDayTypeRanges() == null || summationColumn.getDayTypeRanges().isEmpty()) {
-            return getLength(workDay, null);
+            return timeCalculator.getLength(workDay, null);
         } else {
             return summationColumn.getDayTypeRanges()
                     .stream()
                     .filter(range -> range.getDayTypeId().equals(workDay.getDayTypeId()))
                     .findFirst()
-                    .map(range -> getLength(workDay, range))
+                    .map(range -> timeCalculator.getLength(workDay, range))
                     .orElse(0);
         }
-    }
-
-    private Integer getLength(WorkDay workDay, SummationColumnDayTypeRange range) {
-        if (workDay.getBreakStartTime() != null && workDay.getBreakEndTime() != null) {
-            int beforeBreak = getTimeLength(workDay.getStartTime(), workDay.getBreakStartTime(), range);
-            int afterBreak = getTimeLength(workDay.getBreakEndTime(), workDay.getEndTime(), range);
-            return beforeBreak + afterBreak;
-        } else {
-            return getTimeLength(workDay.getStartTime(), workDay.getEndTime(), range);
-        }
-    }
-
-    private int getTimeLength(int x, int y, SummationColumnDayTypeRange columnDayTypeRange) {
-        if (columnDayTypeRange == null) {
-            return getTimeLength(x, y, null, null);
-        } else {
-            return getTimeLength(x, y, columnDayTypeRange.getFrom(), columnDayTypeRange.getTo());
-        }
-    }
-
-    private int getTimeLength(Integer from, Integer to, Integer leftBound, Integer rightBound) {
-        if (leftBound == null || rightBound == null) {
-            return to - from;
-        }
-
-        int result  = 0;
-        int limit   = 1;
-
-        var intervals = new int[2][2];
-
-        if (leftBound > rightBound) {
-            intervals[0] = new int[]{leftBound, 1440};
-            intervals[1] = new int[]{0, rightBound};
-            limit = 2;
-        } else {
-            intervals[0] = new int[]{leftBound, rightBound};
-        }
-
-        for (int i = 0; i < limit; i++) {
-            int right   = intervals[i][1];
-            int left    = intervals[i][0];
-            if (right <= from || left >= to) {
-                continue;
-            }
-            result += (right >= to ? to : right) - (left <= from ? from : left);
-        }
-        return result;
     }
 }

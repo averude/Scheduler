@@ -1,7 +1,7 @@
 package com.averude.uksatse.scheduler.controllers.interfaces;
 
 import com.averude.uksatse.scheduler.core.dto.BasicDto;
-import com.averude.uksatse.scheduler.core.dto.ScheduleGenerationDTO;
+import com.averude.uksatse.scheduler.core.dto.GenerationDTO;
 import com.averude.uksatse.scheduler.core.entity.Employee;
 import com.averude.uksatse.scheduler.core.entity.WorkDay;
 import com.averude.uksatse.scheduler.security.annotations.IsDepartmentOrShiftAdmin;
@@ -41,5 +41,5 @@ public interface ScheduleController {
     @IsDepartmentOrShiftAdmin
     @RequestMapping(method = RequestMethod.POST,
                     value = "/generate")
-    ResponseEntity<?> generate(@Valid @RequestBody ScheduleGenerationDTO scheduleGenerationDTO);
+    ResponseEntity<?> generate(@Valid @RequestBody GenerationDTO generationDTO);
 }

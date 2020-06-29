@@ -1,9 +1,10 @@
 package com.averude.uksatse.scheduler.generator.schedule;
 
 import com.averude.uksatse.scheduler.core.entity.*;
+import com.averude.uksatse.scheduler.core.entity.interfaces.HasDate;
+import com.averude.uksatse.scheduler.core.entity.interfaces.HasDayTypeIdAndTime;
 import com.averude.uksatse.scheduler.generator.model.ScheduleGenerationInterval;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -11,10 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Component
 public class ScheduleGeneratorImpl implements ScheduleGenerator {
-
-    private static Logger logger = LoggerFactory.getLogger(ScheduleGenerator.class);
 
     @Override
     public List<WorkDay> generate(ScheduleGenerationInterval interval,
@@ -24,10 +24,6 @@ public class ScheduleGeneratorImpl implements ScheduleGenerator {
                                   List<ExtraWeekend> extraWeekends,
                                   List<ExtraWorkDay> extraWorkDays) {
         var schedule = new ArrayList<>(existingSchedule);
-
-        var holidayUnit = getPatternUnitByDayType(pattern.getHolidayDepDayType());
-        var extraWeekendUnit = getPatternUnitByDayType(pattern.getExtraWeekendDepDayType());
-        var extraWorkDayUnit = getPatternUnitByDayType(pattern.getExtraWorkDayDepDayType());
 
         var dates = interval.getFrom()
                 .datesUntil(interval.getTo().plusDays(1))
@@ -48,12 +44,13 @@ public class ScheduleGeneratorImpl implements ScheduleGenerator {
 
                 var date = dates.get(dateIndex);
 
-                var isHoliday      = isHoliday(holidays, date);
-                var isExtraWeekend = isExtraWeekend(extraWeekends, date);
-                var isExtraWorkDay = isExtraWorkDay(extraWorkDays, date);
+                var isHoliday      = isDateFromList(holidays, date);
+                var isExtraWeekend = isDateFromList(extraWeekends, date);
+                var isExtraWorkDay = isDateFromList(extraWorkDays, date);
 
                 var unit = getPatternUnit(pattern, unitIndex,
-                        holidayUnit, extraWeekendUnit, extraWorkDayUnit,
+                        pattern.getHolidayDepDayType(), pattern.getExtraWeekendDepDayType(),
+                        pattern.getExtraWorkDayDepDayType(),
                         isHoliday, isExtraWeekend, isExtraWorkDay);
 
                 var workDay = getExistingWorkDay(schedule, scheduleIndex);
@@ -70,10 +67,10 @@ public class ScheduleGeneratorImpl implements ScheduleGenerator {
     }
 
     private void updateWorkDay(WorkDay workDay,
-                               PatternUnit unit,
+                               HasDayTypeIdAndTime unit,
                                boolean isHoliday) {
         if (workDay.getId() != null) {
-            logger.trace("Updating workday {}", workDay);
+            log.trace("Updating workday {}", workDay);
         }
         workDay.setDayTypeId(unit.getDayTypeId());
         workDay.setStartTime(unit.getStartTime());
@@ -84,38 +81,38 @@ public class ScheduleGeneratorImpl implements ScheduleGenerator {
     }
 
     private WorkDay createWorkDay(Long employeeId,
-                                  PatternUnit unit,
+                                  HasDayTypeIdAndTime unit,
                                   LocalDate date,
                                   boolean isHoliday) {
         var workDay = new WorkDay();
         workDay.setEmployeeId(employeeId);
         workDay.setDate(date);
         updateWorkDay(workDay, unit, isHoliday);
-        logger.trace("Creating workday {}", workDay);
+        log.trace("Creating workday {}", workDay);
         return workDay;
     }
 
-    private PatternUnit getPatternUnit(ShiftPattern pattern,
-                                       int unitIndex,
-                                       PatternUnit holidayUnit,
-                                       PatternUnit weekendUnit,
-                                       PatternUnit workDayUnit,
-                                       boolean isHoliday,
-                                       boolean isExtraWeekend,
-                                       boolean isExtraWorkDay) {
+    private HasDayTypeIdAndTime getPatternUnit(ShiftPattern pattern,
+                                               int unitIndex,
+                                               HasDayTypeIdAndTime holidayUnit,
+                                               HasDayTypeIdAndTime weekendUnit,
+                                               HasDayTypeIdAndTime workDayUnit,
+                                               boolean isHoliday,
+                                               boolean isExtraWeekend,
+                                               boolean isExtraWorkDay) {
 
         if (holidayUnit != null && isHoliday) {
-            logger.trace("Holiday found. Setting pattern unit to holiday's");
+            log.trace("Holiday found. Setting pattern unit to holiday's");
             return holidayUnit;
         }
 
         if (weekendUnit != null && isExtraWeekend) {
-            logger.trace("Extra weekend found. Setting pattern unit to an extra weekend's");
+            log.trace("Extra weekend found. Setting pattern unit to an extra weekend's");
             return weekendUnit;
         }
 
         if (workDayUnit != null && isExtraWorkDay) {
-            logger.trace("Extra work day found. Setting pattern unit to an extra work day's");
+            log.trace("Extra work day found. Setting pattern unit to an extra work day's");
             return workDayUnit;
         }
 
@@ -129,31 +126,7 @@ public class ScheduleGeneratorImpl implements ScheduleGenerator {
         return null;
     }
 
-    private PatternUnit getPatternUnitByDayType(DepartmentDayType departmentDayType) {
-        if (departmentDayType != null) {
-            var unit = new PatternUnit(0L, 0L, departmentDayType.getDayType().getId());
-            unit.setStartTime(departmentDayType.getStartTime());
-            unit.setEndTime(departmentDayType.getEndTime());
-            unit.setBreakStartTime(departmentDayType.getBreakStartTime());
-            unit.setBreakEndTime(departmentDayType.getBreakEndTime());
-            return unit;
-        } else {
-            return null;
-        }
-    }
-
-    private boolean isExtraWeekend(List<ExtraWeekend> extraWeekends, LocalDate date) {
-        return extraWeekends.stream()
-                .anyMatch(extraWeekend -> extraWeekend.getDate().equals(date));
-    }
-
-    private boolean isHoliday(List<Holiday> holidays, LocalDate date) {
-        return holidays.stream()
-                .anyMatch(value -> value.getDate().equals(date));
-    }
-
-    private boolean isExtraWorkDay(List<ExtraWorkDay> extraWorkDays, LocalDate date) {
-        return extraWorkDays.stream()
-                .anyMatch(value -> value.getDate().equals(date));
+    private boolean isDateFromList(List<? extends HasDate> hasDateList, LocalDate date) {
+        return hasDateList.stream().anyMatch(value -> value.getDate().equals(date));
     }
 }

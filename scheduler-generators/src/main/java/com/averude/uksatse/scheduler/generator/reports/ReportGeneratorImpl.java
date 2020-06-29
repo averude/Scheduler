@@ -2,7 +2,10 @@ package com.averude.uksatse.scheduler.generator.reports;
 
 import com.averude.uksatse.scheduler.core.entity.*;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.springframework.stereotype.Component;
 
 import java.io.ByteArrayOutputStream;

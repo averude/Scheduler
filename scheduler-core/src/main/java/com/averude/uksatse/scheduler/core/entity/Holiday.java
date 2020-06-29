@@ -1,5 +1,6 @@
 package com.averude.uksatse.scheduler.core.entity;
 
+import com.averude.uksatse.scheduler.core.entity.interfaces.HasDate;
 import com.averude.uksatse.scheduler.core.entity.interfaces.HasEnterpriseId;
 import com.averude.uksatse.scheduler.core.entity.interfaces.HasId;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -28,7 +29,7 @@ import java.util.StringJoiner;
                 )
         }
 )
-public class Holiday implements HasId, HasEnterpriseId {
+public class Holiday implements HasId, HasEnterpriseId, HasDate {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

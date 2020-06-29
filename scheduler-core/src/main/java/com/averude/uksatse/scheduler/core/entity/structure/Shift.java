@@ -2,6 +2,7 @@ package com.averude.uksatse.scheduler.core.entity.structure;
 
 import com.averude.uksatse.scheduler.core.entity.Employee;
 import com.averude.uksatse.scheduler.core.entity.ShiftComposition;
+import com.averude.uksatse.scheduler.core.entity.ShiftPattern;
 import com.averude.uksatse.scheduler.core.entity.interfaces.HasDepartmentId;
 import com.averude.uksatse.scheduler.core.entity.interfaces.HasId;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -53,10 +54,9 @@ public class Shift implements HasId, HasDepartmentId {
             nullable = false)
     private Long departmentId;
 
-    @Positive(message = "{shift.pattern.negative}")
-    @Column(name = "pattern_id",
-            nullable = true)
-    private Long patternId;
+    @JoinColumn(name = "pattern_id")
+    @ManyToOne
+    private ShiftPattern shiftPattern;
 
     @JsonIgnore
     @OneToMany( mappedBy = "shiftId",
@@ -98,7 +98,7 @@ public class Shift implements HasId, HasDepartmentId {
                 .add("id=" + id)
                 .add("name='" + name + "'")
                 .add("departmentId=" + departmentId)
-                .add("patternId=" + patternId)
+                .add("shiftPattern=" + shiftPattern)
                 .toString();
     }
 }

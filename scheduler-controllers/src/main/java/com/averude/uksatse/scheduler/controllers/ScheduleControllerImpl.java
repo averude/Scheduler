@@ -2,7 +2,7 @@ package com.averude.uksatse.scheduler.controllers;
 
 import com.averude.uksatse.scheduler.controllers.interfaces.ScheduleController;
 import com.averude.uksatse.scheduler.core.dto.BasicDto;
-import com.averude.uksatse.scheduler.core.dto.ScheduleGenerationDTO;
+import com.averude.uksatse.scheduler.core.dto.GenerationDTO;
 import com.averude.uksatse.scheduler.core.entity.Employee;
 import com.averude.uksatse.scheduler.core.entity.WorkDay;
 import com.averude.uksatse.scheduler.security.entity.DepartmentAdminUserAccount;
@@ -12,11 +12,11 @@ import com.averude.uksatse.scheduler.shared.service.ScheduleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.List;
 
 @Slf4j
@@ -62,17 +62,17 @@ public class ScheduleControllerImpl implements ScheduleController {
         } else if (userAccount instanceof ShiftAdminUserAccount) {
             var account = (ShiftAdminUserAccount) userAccount;
             return scheduleService.findAllDtoByShiftIdAndDate(account.getShiftId(), from, to);
-        } else return Collections.emptyList();
+        } else throw new AccessDeniedException("User doesn't have required permission");
     }
 
     @Override
-    public ResponseEntity<?> generate(ScheduleGenerationDTO scheduleGenerationDTO) {
+    public ResponseEntity<?> generate(GenerationDTO generationDTO) {
         scheduleGenerationService.generate(
-                scheduleGenerationDTO.getShiftId(),
-                scheduleGenerationDTO.getFrom(),
-                scheduleGenerationDTO.getTo(),
-                scheduleGenerationDTO.getOffset());
-        String body = "Schedule " + scheduleGenerationDTO.toString() + " was successfully generated";
+                generationDTO.getShiftId(),
+                generationDTO.getFrom(),
+                generationDTO.getTo(),
+                generationDTO.getOffset());
+        String body = "Schedule " + generationDTO.toString() + " was successfully generated";
         log.debug(body);
         return ResponseEntity.ok(body);
     }
