@@ -1,7 +1,5 @@
-import { CalendarDay } from "../calendar-day";
-
 export interface CellData {
-  date: CalendarDay;
+  date: any;
   enabled: boolean;
   value: any;
 }

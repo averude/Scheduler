@@ -1,24 +1,21 @@
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   ContentChild,
   ContentChildren,
   Input,
-  OnChanges,
   OnDestroy,
   OnInit,
   QueryList,
-  SimpleChanges,
   TemplateRef
 } from "@angular/core";
 import { RowGroupData } from "../model/data/row-group-data";
-import { RowGroupCollector } from "../collectors/row-group-collector";
-import { RowCollector } from "../collectors/row-collector";
 import { TableTopItemDirective } from "../directives/table-top-item.directive";
 import { AfterDateColumnDef, BeforeDateColumnDef } from "../directives/column";
 import { PaginatorDef } from "../directives/paginator";
 import { DatedCellDef, HeaderDateCellDef } from "../directives/cell";
+import { RowData } from "../model/data/row-data";
+import { CellLabelSetter, SimpleCellLabelSetter } from "../utils/cell-label-setter";
 
 @Component({
   selector: 'app-schedules-table',
@@ -26,11 +23,12 @@ import { DatedCellDef, HeaderDateCellDef } from "../directives/cell";
   styleUrls: ['./schedules-table.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SchedulesTableComponent implements OnInit, OnChanges, OnDestroy {
-  @Input() showSumColumns:    boolean;
+export class SchedulesTableComponent implements OnInit, OnDestroy {
+  @Input() groupable: boolean = true;
+  @Input() selectionDisabled  = false;
+  @Input() multipleSelect     = true;
 
-  @Input() rowGroupCollector: RowGroupCollector<any>;
-  @Input() rowCollector:      RowCollector<any, any>;
+  @Input() showSumColumns:    boolean;
 
   @ContentChild(PaginatorDef, {read: TemplateRef, static: false})
   paginator: TemplateRef<any>;
@@ -50,23 +48,17 @@ export class SchedulesTableComponent implements OnInit, OnChanges, OnDestroy {
   @ContentChildren(AfterDateColumnDef)
   afterDateColumns: QueryList<AfterDateColumnDef>;
 
-  rowGroups: RowGroupData[];
+  @Input() rowGroupData:  RowGroupData[];
+  @Input() rowData:       RowData[];
 
-  constructor(private cd: ChangeDetectorRef) {
+  @Input() cellLabelSetter: CellLabelSetter;
+
+  constructor() {
   }
 
-  ngOnInit() {}
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if(changes['rowGroupCollector']) {
-      this.getRowGroupsData();
-    }
-  }
-
-  private getRowGroupsData() {
-    if (this.rowGroupCollector) {
-      this.rowGroups = this.rowGroupCollector.collect();
-      this.cd.markForCheck();
+  ngOnInit() {
+    if (!this.cellLabelSetter) {
+      this.cellLabelSetter = new SimpleCellLabelSetter();
     }
   }
 

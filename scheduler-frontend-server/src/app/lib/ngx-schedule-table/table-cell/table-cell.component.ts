@@ -34,6 +34,7 @@ export class TableCellComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   @Input() cellData:        CellData;
+  @Input() cellLabelSetter: CellLabelSetter;
 
   @Input() labelColor = "transparent";
   @Input() enabled: boolean = true;
@@ -44,7 +45,6 @@ export class TableCellComponent implements OnInit, OnChanges, OnDestroy {
   private cellStateSub: Subscription;
 
   constructor(private cd: ChangeDetectorRef,
-              private cellLabelSetter: CellLabelSetter,
               private cellStateService: CellStateService) {
   }
 

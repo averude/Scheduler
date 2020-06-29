@@ -24,8 +24,10 @@ export class SelectableRowDirective implements OnInit, OnDestroy, AfterViewInit 
   static mouseMove$:  Observable<number>      = getMouseMove();
   static mouseUp$:    Observable<MouseEvent>  = getMouseUp();
 
-  @Input() element: ElementRef;
-  @Input() value:   CellData;
+  @Input() disabled:  boolean;
+  @Input() element:   ElementRef;
+  @Input() value:     CellData;
+
   @Output() onSelectionEnds: EventEmitter<any> = new EventEmitter();
 
   private mouseMoveSub: Subscription;
@@ -44,13 +46,13 @@ export class SelectableRowDirective implements OnInit, OnDestroy, AfterViewInit 
   }
 
   ngOnDestroy(): void {
-    if (this.mouseMoveSub) this.mouseMoveSub.unsubscribe();
-    this.mouseDownSub.unsubscribe();
-    this.mouseUpSub.unsubscribe();
+    if (this.mouseMoveSub)  this.mouseMoveSub.unsubscribe();
+    if (this.mouseDownSub)  this.mouseDownSub.unsubscribe();
+    if (this.mouseUpSub)    this.mouseUpSub.unsubscribe();
   }
 
   ngAfterViewInit(): void {
-    if (this.element) {
+    if (!this.disabled && this.element) {
       this.mouseDownSub = fromEvent<MouseEvent>(this.element.nativeElement, 'mousedown')
         .subscribe(event => {
           this.dragging = true;

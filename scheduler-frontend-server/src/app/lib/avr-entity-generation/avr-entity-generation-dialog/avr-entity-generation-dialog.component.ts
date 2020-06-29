@@ -1,21 +1,19 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
-import { MatTableDataSource } from "@angular/material/table";
-import { ShiftGenerationUnit } from "../../../../../../../model/ui/shift-generation-unit";
+import { MAT_DIALOG_DATA, MatDialogRef, MatTableDataSource } from "@angular/material";
 import { SelectionModel } from "@angular/cdk/collections";
 
 @Component({
-  selector: 'app-schedule-generation-dialog',
-  templateUrl: './schedule-generation-dialog.component.html',
-  styleUrls: ['./schedule-generation-dialog.component.css']
+  selector: 'app-avr-entity-generation-dialog',
+  templateUrl: './avr-entity-generation-dialog.component.html',
+  styleUrls: ['./avr-entity-generation-dialog.component.css']
 })
-export class ScheduleGenerationDialogComponent implements OnInit {
+export class AvrEntityGenerationDialogComponent implements OnInit {
 
-  dataSource = new MatTableDataSource<ShiftGenerationUnit>();
+  dataSource = new MatTableDataSource<any>();
   displayedColumns = ['select', 'shift', 'offset', 'dateFrom', 'dateTo'];
-  selection = new SelectionModel<ShiftGenerationUnit>(true, []);
+  selection = new SelectionModel<any>(true, []);
 
-  constructor(private dialogRef: MatDialogRef<ScheduleGenerationDialogComponent>,
+  constructor(private dialogRef: MatDialogRef<any>,
               @Inject(MAT_DIALOG_DATA) data) {
     this.dataSource.data = data;
   }
@@ -54,5 +52,4 @@ export class ScheduleGenerationDialogComponent implements OnInit {
     }
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
   }
-
 }

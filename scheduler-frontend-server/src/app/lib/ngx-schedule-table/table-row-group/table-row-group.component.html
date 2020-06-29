@@ -1,4 +1,4 @@
-<ng-container *ngIf="rowData && rowData.length > 0">
+<ng-container *ngIf="groupData?.rowData && groupData?.rowData.length > 0">
   <tr class="group-label-row">
     <td class="group-label"
         [attr.colspan]="numberOfColumns"
@@ -8,12 +8,15 @@
   </tr>
   <tr [hidden]="isHidden"
       class="row"
-      *ngFor="let row of rowData"
+      *ngFor="let row of groupData.rowData"
       app-table-row
+      [selectionDisabled]="selectionDisabled"
+      [multipleSelect]="multipleSelect"
       [datedCellDef]="datedCellDef"
       [beforeDateColumns]="beforeDateColumns"
       [afterDateColumns]="afterDateColumns"
       [rowGroupId]="groupData.groupId"
-      [rowData]="row">
+      [rowData]="row"
+      [cellLabelSetter]="cellLabelSetter">
   </tr>
 </ng-container>

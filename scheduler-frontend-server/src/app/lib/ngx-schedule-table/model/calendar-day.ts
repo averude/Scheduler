@@ -4,4 +4,5 @@ export class CalendarDay {
   isoString: string;
   holiday: boolean;
   weekend: boolean;
+  isNow: boolean;
 }

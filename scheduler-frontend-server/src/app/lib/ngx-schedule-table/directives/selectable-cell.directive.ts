@@ -1,35 +1,63 @@
-import { Directive, ElementRef, HostListener, Input } from "@angular/core";
+import { Directive, ElementRef, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output } from "@angular/core";
 import { toggleClass } from "../utils/table-cell.utils";
 import { CellData } from "../model/data/cell-data";
+import { ClearSelectionService } from "../service/clear-selection.service";
+import { Subscription } from "rxjs";
 
 @Directive({
   selector: '[selectableCell]'
 })
-export class SelectableCellDirective {
-  @Input() data: CellData;
-  @Input() enabled: boolean = true;
+export class SelectableCellDirective implements OnInit, OnDestroy {
+  @Input() data:              CellData;
+  @Input() selectionEnabled:  boolean;
+  @Input() multipleSelect:    boolean;
+
+  @Output() onClick: EventEmitter<any> = new EventEmitter();
 
   selected: boolean;
   className = "selected";
 
-  constructor(public element: ElementRef) {}
+  private clearSelectionSub: Subscription;
+
+  constructor(public element: ElementRef,
+              private clearSelectionService: ClearSelectionService) {}
+
+  ngOnInit(): void {
+    this.clearSelectionSub = this.clearSelectionService.onClearSelection()
+      .subscribe(() => {
+        if (!this.multipleSelect && this.selected) this.deselect();
+      });
+  }
+
+  ngOnDestroy(): void {
+    if (this.clearSelectionSub) this.clearSelectionSub.unsubscribe();
+  }
+
 
   @HostListener('mousedown')
   mouseDown() {
-    if (this.enabled) {
+    if (this.selectionEnabled && this.multipleSelect) {
       this.select();
     }
   }
 
+  @HostListener('click', ['$event'])
+  click(event) {
+    if (!this.multipleSelect) {
+      this.select();
+      this.onClick.emit({event: event, selectedCells: [this.data]});
+    }
+  }
+
   select() {
-    if (this.enabled && !this.selected) {
+    if (this.selectionEnabled && !this.selected) {
       this.selected = true;
       toggleClass(this.element, this.className);
     }
   }
 
   deselect() {
-    if (this.enabled && this.selected) {
+    if (this.selectionEnabled && this.selected) {
       this.selected = false;
       toggleClass(this.element, this.className);
     }

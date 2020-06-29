@@ -16,12 +16,12 @@ import { ClearSelectionService } from "../service/clear-selection.service";
 import { CalendarDay } from "../model/calendar-day";
 import { SelectableRowDirective } from "../directives/selectable-row.directive";
 import { RowData } from "../model/data/row-data";
-import { CellCollector } from "../collectors/cell-collector";
 import { CellData } from "../model/data/cell-data";
 import { PaginationService } from "../service/pagination.service";
 import { SelectionEndService } from "../service/selection-end.service";
 import { AfterDateColumnDef, BeforeDateColumnDef } from "../directives/column";
 import { DatedCellDef } from "../directives/cell";
+import { CellLabelSetter } from "../utils/cell-label-setter";
 
 @Component({
   selector: '[app-table-row]',
@@ -31,15 +31,19 @@ import { DatedCellDef } from "../directives/cell";
 })
 export class TableRowComponent implements OnInit, OnDestroy {
 
+  @Input() selectionDisabled: boolean;
+  @Input() multipleSelect: boolean;
+
   @Input() datedCellDef:      DatedCellDef;
   @Input() beforeDateColumns: QueryList<BeforeDateColumnDef>;
   @Input() afterDateColumns:  QueryList<AfterDateColumnDef>;
 
+  @Input() cellLabelSetter:   CellLabelSetter;
+
   @Input() rowGroupId:      number;
   @Input() rowData:         RowData;
 
-  daysInMonth:      CalendarDay[];
-  cellData:         CellData[];
+  dates: CalendarDay[];
 
   @ViewChild(SelectableRowDirective, { static: true })
   selectableRowDirective: SelectableRowDirective;
@@ -51,7 +55,6 @@ export class TableRowComponent implements OnInit, OnDestroy {
   constructor(public elementRef: ElementRef,
               private paginatorService: PaginationService,
               private cd: ChangeDetectorRef,
-              private cellCollector: CellCollector<any, any>,
               private tableRenderer: TableRenderer,
               private selectionEndService: SelectionEndService,
               private rowClearSelection: ClearSelectionService) { }
@@ -59,20 +62,13 @@ export class TableRowComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.rowRenderSub = this.tableRenderer.onRenderRow
       .pipe(filter(rowDataId => this.rowData.id === rowDataId))
-      .subscribe(() => this.getCells());
+      .subscribe(() => this.renderCells());
 
     this.rowClearSub = this.rowClearSelection.onClearSelection()
       .subscribe(() => this.clearSelection());
 
     this.paginatorSub = this.paginatorService.onValueChange
-      .subscribe(daysInMonth => {
-        if (!this.daysInMonth) {
-          this.daysInMonth = daysInMonth;
-          this.getCells();
-        } else {
-          this.daysInMonth = daysInMonth;
-        }
-      });
+      .subscribe(daysInMonth => this.dates = daysInMonth);
   }
 
   ngOnDestroy(): void {
@@ -90,12 +86,10 @@ export class TableRowComponent implements OnInit, OnDestroy {
     this.selectableRowDirective.clearSelection();
   }
 
-  getCells() {
-    if (!this.rowGroupId || !this.rowData || !this.daysInMonth) {
+  renderCells() {
+    if (!this.rowData || !this.dates) {
       return;
     }
-
-    this.cellData = this.cellCollector.collect(this.rowGroupId, this.rowData, this.daysInMonth);
     this.cd.markForCheck();
   }
 }

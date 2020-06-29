@@ -16,13 +16,30 @@
          [beforeDateColumns]="beforeDateColumns"
          [afterDateColumns]="afterDateColumns">
   </thead>
-  <tbody *ngFor="let group of rowGroups"
-         app-table-row-group
-         [datedCellDef]="datedCellDef"
-         [beforeDateColumns]="beforeDateColumns"
-         [afterDateColumns]="afterDateColumns"
-         [groupData]="group"
-         [rowCollector]="rowCollector">
-  </tbody>
+  <ng-container *ngIf="groupable">
+    <tbody *ngFor="let group of rowGroupData"
+           app-table-row-group
+           [selectionDisabled]="selectionDisabled"
+           [multipleSelect]="multipleSelect"
+           [datedCellDef]="datedCellDef"
+           [beforeDateColumns]="beforeDateColumns"
+           [afterDateColumns]="afterDateColumns"
+           [groupData]="group"
+           [cellLabelSetter]="cellLabelSetter">
+    </tbody>
+  </ng-container>
+  <ng-container>
+    <tr class="row"
+        *ngFor="let row of rowData"
+        app-table-row
+        [selectionDisabled]="selectionDisabled"
+        [multipleSelect]="multipleSelect"
+        [datedCellDef]="datedCellDef"
+        [beforeDateColumns]="beforeDateColumns"
+        [afterDateColumns]="afterDateColumns"
+        [rowData]="row"
+        [cellLabelSetter]="cellLabelSetter">
+    </tr>
+  </ng-container>
 </table>
 </div>
