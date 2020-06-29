@@ -3,7 +3,7 @@ import { WorkDay } from '../../model/workday';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { RestConfig } from '../../rest.config';
-import { ScheduleGenerationDto } from "../../model/dto/schedule-generation-dto";
+import { GenerationDto } from "../../model/dto/generation-dto";
 import { BasicDto } from "../../model/dto/basic-dto";
 import { Employee } from "../../model/employee";
 
@@ -37,10 +37,10 @@ export class ScheduleService {
     );
   }
 
-  generate(scheduleGenerationDTO: ScheduleGenerationDto): Observable<any> {
+  generate(generationDto: GenerationDto): Observable<any> {
     return this.http.post(
       `${this.config.baseUrl}/schedule/generate`,
-      scheduleGenerationDTO,
+      generationDto,
       {responseType: 'text'}
     );
   }

@@ -41,11 +41,11 @@ export class DepartmentDayTypesTableComponent extends TableBaseComponent<Departm
     this.openAddOrEditDialog(departmentDayType, data, DepartmentDayTypeDialogComponent);
   }
 
-  getWorkTimeString(dayType: DayType): string {
+  getWorkTimeString(dayType: DepartmentDayType): string {
     return dayType.startTime && dayType.endTime ? dayType.startTime + ' - ' + dayType.endTime : '-';
   }
 
-  getBreakTimeString(dayType: DayType): string {
+  getBreakTimeString(dayType: DepartmentDayType): string {
     return dayType.breakStartTime && dayType.breakEndTime ? dayType.breakStartTime + ' - ' + dayType.breakEndTime : '-';
   }
 }

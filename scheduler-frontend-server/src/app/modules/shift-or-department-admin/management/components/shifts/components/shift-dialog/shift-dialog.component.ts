@@ -30,17 +30,15 @@ export class ShiftDialogComponent extends DialogBaseComponent<Shift> {
       name:         ['',    [Validators.required,
                       Validators.minLength(3),
                       Validators.maxLength(64)]],
-      // departmentId: [this.authService.departmentId],
-      patternId:    []
+      shiftPattern: []
     })
   }
 
   fillInTheForm(shift: Shift) {
     this.dialogForm.setValue({
-      id: shift.id,
-      name: shift.name,
-      // departmentId: shift.departmentId,
-      patternId: shift.patternId
+      id:           shift.id,
+      name:         shift.name,
+      shiftPattern: shift.shiftPattern
     })
   }
 }

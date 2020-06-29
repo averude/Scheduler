@@ -51,7 +51,7 @@
       <th mat-header-cell *matHeaderCellDef>
         <button *ngIf="selection.isEmpty()"
                 class="management-table-control-button"
-                (click)="openDialog()">
+                (click)="openDialog(null)">
           <img class="management-table-button-icon" src="assets/img/add_circle.png">
         </button>
         <button *ngIf="!selection.isEmpty()"

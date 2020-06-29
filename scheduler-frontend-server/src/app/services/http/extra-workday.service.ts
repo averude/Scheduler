@@ -4,8 +4,6 @@ import { AuthService } from "./auth.service";
 import { HttpClient } from "@angular/common/http";
 import { RestConfig } from "../../rest.config";
 import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
-import { parseDateOfEntities } from "../../shared/utils/utils";
 import { ACrudService } from "./abstract-service/a-crud-service";
 
 @Injectable({
@@ -18,9 +16,5 @@ export class ExtraWorkdayService
               http: HttpClient,
               private config: RestConfig) {
     super(`${config.baseUrl}/admin/extra_work_days`, http);
-  }
-
-  getAll(from?: string, to?: string): Observable<ExtraWorkDay[]> {
-    return super.getAll(from, to).pipe(parseDateOfEntities);
   }
 }

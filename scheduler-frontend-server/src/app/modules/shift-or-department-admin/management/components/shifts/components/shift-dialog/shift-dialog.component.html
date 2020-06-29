@@ -10,14 +10,14 @@
 
   <mat-form-field>
     <mat-select placeholder="Shift Pattern"
-                [compareWith]="compareNums"
-                formControlName="patternId">
+                [compareWith]="compareIdEntities"
+                formControlName="shiftPattern">
       <mat-option *ngFor="let pattern of patterns"
-                  [value]="pattern.id">
+                  [value]="pattern">
         {{pattern.name}}
       </mat-option>
     </mat-select>
-    <mat-error *ngIf="isControlInvalid('patternId')">{{getErrorMessage()}}</mat-error>
+    <mat-error *ngIf="isControlInvalid('shiftPattern')">{{getErrorMessage()}}</mat-error>
   </mat-form-field>
 
 </mat-dialog-content>

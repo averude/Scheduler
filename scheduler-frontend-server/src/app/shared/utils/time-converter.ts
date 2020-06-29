@@ -34,6 +34,7 @@ export function calculateWorkHoursByTimeStrings(startTime: string,
 }
 
 export function calculateWorkHoursByWorkDay(workDay: WorkDay): number {
+  if (!workDay) return 0;
   return calculateWorkHoursByTime(workDay.startTime, workDay.endTime, workDay.breakStartTime, workDay.breakEndTime);
 }
 

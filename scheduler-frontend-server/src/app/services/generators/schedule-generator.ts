@@ -4,6 +4,7 @@ import { createOrUpdateCell } from "./schedule-generation-utils";
 import { RowData } from "../../lib/ngx-schedule-table/model/data/row-data";
 import { CellData } from "../../lib/ngx-schedule-table/model/data/cell-data";
 import { DepartmentDayType } from "../../model/department-day-type";
+import { HasDayTypeIdAndTime } from "../../model/interface/has-day-type-id-and-time";
 
 @Injectable({
   providedIn: 'root'
@@ -21,40 +22,31 @@ export class ScheduleGenerator {
     this.generate(rowData, cells, patternUnits, offset, false, onSave, onError);
   }
 
-  generateScheduleByPatternUnit(rowData: RowData,
-                                cells: CellData[],
-                                unit: PatternUnit,
-                                onSave: (rowData: RowData, selectedCells: CellData[]) => void,
-                                onError: (message: string) => void) {
-    const customUnits: PatternUnit[] = [unit];
+  generateScheduleByUnit(rowData: RowData,
+                         cells: CellData[],
+                         unit: HasDayTypeIdAndTime,
+                         onSave: (rowData: RowData, selectedCells: CellData[]) => void,
+                         onError: (message: string) => void) {
 
-    this.generate(rowData, cells, customUnits, 0, false, onSave, onError);
+    this.generate(rowData, cells, [unit], 0, false, onSave, onError);
   }
 
-  generateScheduleBySingleDay(rowData: RowData,
-                              cells: CellData[],
-                              departmentDayType: DepartmentDayType,
-                              onSave: (rowData: RowData, selectedCells: CellData[]) => void,
-                              onError: (message: string) => void) {
-    const patternUnit = new PatternUnit();
-    patternUnit.dayTypeId       = departmentDayType.dayType.id;
-    patternUnit.startTime       = departmentDayType.startTime;
-    patternUnit.endTime         = departmentDayType.endTime;
-    patternUnit.breakStartTime  = departmentDayType.breakStartTime;
-    patternUnit.breakEndTime    = departmentDayType.breakEndTime;
-    const customUnits: PatternUnit[] = [patternUnit];
-
-    this.generate(rowData, cells, customUnits, 0, departmentDayType.dayType.usePreviousValue, onSave, onError);
+  generateScheduleByDepartmentDayType(rowData: RowData,
+                                      cells: CellData[],
+                                      departmentDayType: DepartmentDayType,
+                                      onSave: (rowData: RowData, selectedCells: CellData[]) => void,
+                                      onError: (message: string) => void) {
+    this.generate(rowData, cells, [departmentDayType], 0, departmentDayType.dayType.usePreviousValue, onSave, onError);
   }
 
   private generate(rowData: RowData,
                    cells: CellData[],
-                   patternUnits: PatternUnit[],
+                   units: HasDayTypeIdAndTime[],
                    offset: number,
                    usePreviousValue: boolean,
                    onSave: (rowData: RowData, selectedCells: CellData[]) => void,
                    onError: (message: string) => void) {
-    if (!cells || !patternUnits || !(patternUnits.length > 0)) {
+    if (!cells || !units || !(units.length > 0)) {
       onError('Illegal arguments');
       return;
     }
@@ -70,7 +62,7 @@ export class ScheduleGenerator {
     }
 
     const cellsNum = cells.length;
-    const unitsSize = patternUnits.length;
+    const unitsSize = units.length;
 
     for (let i = 0; i < cellsNum; i += unitsSize) {
       for (let j = 0; j < unitsSize; j++) {
@@ -85,7 +77,7 @@ export class ScheduleGenerator {
         createOrUpdateCell(
           usePreviousValue,
           rowData.id,
-          patternUnits[unit_index],
+          units[unit_index],
           cells[cell_index]);
       }
     }

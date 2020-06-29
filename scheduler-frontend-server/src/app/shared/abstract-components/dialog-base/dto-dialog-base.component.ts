@@ -8,7 +8,7 @@ export abstract class DtoDialogBaseComponent<P extends IdEntity, C> implements O
 
   operation: string;
 
-  constructor(protected dto: BasicDto<P, C>,
+  constructor(public dto: BasicDto<P, C>,
               protected dialogRef: MatDialogRef<any>) {
     this.dto = dto ? dto : this.newDto;
     this.operation = dto ? 'Edit' : 'Add';

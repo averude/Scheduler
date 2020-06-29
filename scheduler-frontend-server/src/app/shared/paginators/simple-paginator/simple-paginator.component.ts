@@ -1,6 +1,5 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { PaginationService } from "../../../lib/ngx-schedule-table/service/pagination.service";
-import { IdEntity } from "../../../model/interface/id-entity";
 
 @Component({
   selector: 'app-simple-paginator',
@@ -10,7 +9,7 @@ import { IdEntity } from "../../../model/interface/id-entity";
 export class SimplePaginatorComponent implements OnInit, OnChanges {
   curr_index: number = 0;
 
-  @Input() data: IdEntity[];
+  @Input() data: any[];
 
   constructor(private paginationService: PaginationService) { }
 

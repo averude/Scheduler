@@ -3,7 +3,7 @@ import * as moment from "moment";
 import { DurationInputArg1, DurationInputArg2, Moment } from "moment";
 import { MatDatepicker } from "@angular/material/datepicker";
 import { PaginationService } from "../../../lib/ngx-schedule-table/service/pagination.service";
-import { APaginationStrategy } from "../pagination-strategy/a-pagination-strategy";
+import { IPaginationStrategy } from "../pagination-strategy/i-pagination-strategy";
 
 @Component({
   selector: 'app-month-year-paginator',
@@ -11,7 +11,7 @@ import { APaginationStrategy } from "../pagination-strategy/a-pagination-strateg
   styleUrls: ['./month-year-paginator.component.css']
 })
 export class MonthYearPaginatorComponent implements OnInit {
-  @Input() paginationStrategy:  APaginationStrategy;
+  @Input() paginationStrategy:  IPaginationStrategy;
   @Input() dateUnit: DurationInputArg2 = 'month';
 
   private dateStep: DurationInputArg1 = 1;

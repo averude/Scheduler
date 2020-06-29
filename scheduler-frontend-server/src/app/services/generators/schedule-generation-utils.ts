@@ -1,11 +1,11 @@
-import { PatternUnit } from "../../model/pattern-unit";
 import { WorkDay } from "../../model/workday";
 import { CellData } from "../../lib/ngx-schedule-table/model/data/cell-data";
 import { convertTimeStringToMin } from "../../shared/utils/time-converter";
+import { HasDayTypeIdAndTime } from "../../model/interface/has-day-type-id-and-time";
 
 export function createOrUpdateCell(usePreviousValue: boolean,
                                    employeeId: number,
-                                   unit: PatternUnit,
+                                   unit: HasDayTypeIdAndTime,
                                    cell: CellData) {
   if (cell.value) {
     updateWorkDayInCell(usePreviousValue, cell, unit);
@@ -16,7 +16,7 @@ export function createOrUpdateCell(usePreviousValue: boolean,
 
 function createWorkDayInCell(employeeId: number,
                              cell: CellData,
-                             unit: PatternUnit) {
+                             unit: HasDayTypeIdAndTime) {
   cell.value                = new WorkDay();
   cell.value.employeeId     = employeeId;
   cell.value.holiday        = cell.date.holiday;
@@ -30,7 +30,7 @@ function createWorkDayInCell(employeeId: number,
 
 function updateWorkDayInCell(usePreviousValue: boolean,
                              cell: CellData,
-                             unit: PatternUnit) {
+                             unit: HasDayTypeIdAndTime) {
   if (!usePreviousValue) {
     cell.value.startTime      = convertTimeStringToMin(unit.startTime);
     cell.value.endTime        = convertTimeStringToMin(unit.endTime);

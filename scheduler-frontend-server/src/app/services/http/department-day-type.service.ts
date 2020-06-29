@@ -5,6 +5,8 @@ import { HttpClient } from "@angular/common/http";
 import { RestConfig } from "../../rest.config";
 import { AuthService } from "./auth.service";
 import { ACrudService } from "./abstract-service/a-crud-service";
+import { Observable } from "rxjs";
+import { tap } from "rxjs/operators";
 
 @Injectable({providedIn: "root"})
 export class DepartmentDayTypeService
@@ -14,5 +16,11 @@ export class DepartmentDayTypeService
               http: HttpClient,
               config: RestConfig) {
     super(`${config.baseUrl}/admin/department_day_types`, http);
+  }
+
+  getAll(from?: string, to?: string): Observable<DepartmentDayType[]> {
+    return super.getAll(from, to)
+      .pipe(tap(values => values
+        .forEach(value => value.dayTypeId = value.dayType.id)));
   }
 }

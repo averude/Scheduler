@@ -25,9 +25,11 @@ export function roundToTwo(num): number {
 }
 
 export function getEmployeeShortName(employee: Employee): string {
-  return employee.secondName + ' '
-    + employee.firstName.charAt(0) + '.' + ' '
-    + employee.patronymic.charAt(0) + '.';
+  if (employee && employee.secondName && employee.firstName && employee.patronymic) {
+    return employee.secondName + ' '
+      + employee.firstName.charAt(0) + '.' + ' '
+      + employee.patronymic.charAt(0) + '.';
+  }
 }
 
 export function binarySearch<T extends IdEntity>(arr: T[], id: number): T {
