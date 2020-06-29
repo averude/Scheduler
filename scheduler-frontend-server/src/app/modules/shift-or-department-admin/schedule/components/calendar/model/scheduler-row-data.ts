@@ -1,13 +1,11 @@
 import { RowData } from "../../../../../../lib/ngx-schedule-table/model/data/row-data";
-import { ShiftComposition } from "../../../../../../model/shift-composition";
-import { WorkDay } from "../../../../../../model/workday";
+import { CellData } from "../../../../../../lib/ngx-schedule-table/model/data/cell-data";
 
 export class SchedulerRowData implements RowData {
   id: number;
   name: string;
   position: string;
+  cellData: CellData[];
   timeNorm: number;
   isSubstitution: boolean;
-  workDays: WorkDay[];
-  compositions: ShiftComposition[];
 }

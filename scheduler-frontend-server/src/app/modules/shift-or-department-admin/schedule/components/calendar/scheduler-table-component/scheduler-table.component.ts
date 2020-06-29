@@ -4,15 +4,17 @@ import { ShiftService } from "../../../../../../services/http/shift.service";
 import { ShiftCompositionService } from "../../../../../../services/http/shift-composition.service";
 import { ScheduleService } from "../../../../../../services/http/schedule.service";
 import { WorkingTimeService } from "../../../../../../services/http/working-time.service";
-import { forkJoin, Subscription } from "rxjs";
-import { RowGroupCollector } from "../../../../../../lib/ngx-schedule-table/collectors/row-group-collector";
-import { SchedulerRowGroupCollector } from "../collectors/scheduler-row-group-collector";
-import { RowCollector } from "../../../../../../lib/ngx-schedule-table/collectors/row-collector";
-import { SchedulerRowCollector } from "../collectors/scheduler-row-collector";
-import { TableRenderer } from "../../../../../../lib/ngx-schedule-table/service/table-renderer.service";
+import { forkJoin, from, Subscription } from "rxjs";
 import { roundToTwo } from "../../../../../../shared/utils/utils";
 import { calculateWorkHoursByWorkDay } from "../../../../../../shared/utils/time-converter";
 import { ScheduleTablePaginationStrategy } from "../../../../../../shared/paginators/pagination-strategy/schedule-table-pagination-strategy";
+import { ScheduleTableDataCollector } from "../collectors/schedule-table-data-collector";
+import { RowGroupData } from "../../../../../../lib/ngx-schedule-table/model/data/row-group-data";
+import { SchedulerCellLabelSetter } from "../utils/scheduler-cell-label-setter";
+import { ShiftGenerationUnit } from "../../../../../../model/ui/shift-generation-unit";
+import { getGenerationUnits, toGenerationDto } from "../../../../../../lib/avr-entity-generation/util/utils";
+import { NotificationsService } from "angular2-notifications";
+import { concatMap } from "rxjs/operators";
 
 @Component({
   selector: 'app-scheduler-table-component',
@@ -22,19 +24,23 @@ import { ScheduleTablePaginationStrategy } from "../../../../../../shared/pagina
 })
 export class SchedulerTableComponent implements OnInit, OnDestroy {
 
-  rowGroupCollector:  RowGroupCollector<any>;
-  rowCollector:       RowCollector<any, any>;
+  units: ShiftGenerationUnit[];
+
+  rowGroupData: RowGroupData[];
 
   paginatorSub: Subscription;
 
   constructor(private cd: ChangeDetectorRef,
-              private paginationStrategy: ScheduleTablePaginationStrategy,
+              public cellLabelSetter: SchedulerCellLabelSetter,
+              public paginationStrategy: ScheduleTablePaginationStrategy,
               private paginationService: PaginationService,
-              private rowRenderer: TableRenderer,
               private shiftService: ShiftService,
               private shiftCompositionService: ShiftCompositionService,
               private scheduleService: ScheduleService,
-              private workingTimeService: WorkingTimeService) { }
+              private workingTimeService: WorkingTimeService,
+              private scheduleTableDataCollector: ScheduleTableDataCollector,
+              private notificationsService: NotificationsService) {
+  }
 
   ngOnInit() {
     this.uploadData();
@@ -48,6 +54,7 @@ export class SchedulerTableComponent implements OnInit, OnDestroy {
   private uploadData() {
     this.shiftService.getAll()
       .subscribe(shifts => {
+        this.units = getGenerationUnits(shifts);
         this.paginatorSub = this.paginationService.onValueChange.subscribe(daysInMonth => {
           forkJoin([
             this.shiftCompositionService.getAll(
@@ -60,23 +67,29 @@ export class SchedulerTableComponent implements OnInit, OnDestroy {
               daysInMonth[0].isoString,
               daysInMonth[daysInMonth.length - 1].isoString)
           ]).subscribe((values: any[][]) => {
-            this.rowGroupCollector = new SchedulerRowGroupCollector(shifts, values[2]);
-            this.rowCollector = new SchedulerRowCollector(values[1], values[0]);
+            this.rowGroupData = this.scheduleTableDataCollector.getTableData(daysInMonth, shifts, values[0], values[1], values[2]);
             this.cd.markForCheck();
           })
         })
       });
   }
 
-  // Rewrite
   calculateSum(rowData: any) {
-    rowData.sum = rowData.workDays
-      .map(workDay => calculateWorkHoursByWorkDay(workDay))
+    rowData.sum = rowData.cellData
+      .map(cell => calculateWorkHoursByWorkDay(cell.value))
       .reduce((prev, curr) => prev + curr, 0);
     return rowData.sum;
   }
 
   calculateDiff(rowData: any) {
     return roundToTwo(rowData.timeNorm - rowData.sum);
+  }
+
+  onScheduleGenerate(generationUnits: ShiftGenerationUnit[]) {
+    let dtos = generationUnits.map(unit => toGenerationDto(unit));
+
+    from(dtos).pipe(
+      concatMap(generationDto => this.scheduleService.generate(generationDto))
+    ).subscribe(res => this.notificationsService.success('Generated', res));
   }
 }

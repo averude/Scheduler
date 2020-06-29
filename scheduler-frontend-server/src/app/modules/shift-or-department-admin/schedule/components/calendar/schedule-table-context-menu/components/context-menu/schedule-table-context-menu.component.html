@@ -8,7 +8,7 @@
   <context-menu #singleDaySubMenu>
     <ng-template *ngFor="let departmentDayType of departmentDayTypes"
                  contextMenuItem
-                 (execute)="scheduleGenerationService.generateScheduleBySingleDay(departmentDayType, $event.item)">
+                 (execute)="scheduleGenerationService.generateScheduleByDepartmentDayType(departmentDayType, $event.item)">
       <app-context-menu-daytype-item [departmentDayType]="departmentDayType">
       </app-context-menu-daytype-item>
     </ng-template>

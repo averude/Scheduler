@@ -14,6 +14,7 @@ import { PatternUnit } from "../../../../../../../../model/pattern-unit";
 import { ShiftPatternDtoService } from "../../../../../../../../services/http/shift-pattern-dto.service";
 import { DepartmentDayTypeService } from "../../../../../../../../services/http/department-day-type.service";
 import { ShiftPattern } from "../../../../../../../../model/shift-pattern";
+import { DayTypeService } from "../../../../../../../../services/http/day-type.service";
 
 @Component({
   selector: 'app-schedule-table-context-menu',
@@ -34,18 +35,22 @@ export class ScheduleTableContextMenuComponent implements OnInit, OnDestroy {
   constructor(private dialog: MatDialog,
               private cd: ChangeDetectorRef,
               private shiftPatternDtoService: ShiftPatternDtoService,
+              private dayTypeService: DayTypeService,
               private departmentDayTypeService: DepartmentDayTypeService,
-              private scheduleGenerationService: ScheduleGenerationService,
+              public  scheduleGenerationService: ScheduleGenerationService,
               private rowClearSelection: ClearSelectionService,
               private selectionEndService: SelectionEndService,
               private contextMenuService: ContextMenuService) { }
 
   ngOnInit() {
     forkJoin([this.shiftPatternDtoService.getAll(),
-      this.departmentDayTypeService.getAll()]
+      this.departmentDayTypeService.getAll(),
+      this.dayTypeService.getAll()]
     ).subscribe(values => {
       this.patternDtos = values[0];
-      this.departmentDayTypes = values[1];
+      this.departmentDayTypes = values[1].concat(values[2]
+        .filter(dayType => dayType.usePreviousValue)
+        .map(dayType => ({dayType: dayType, dayTypeId: dayType.id} as DepartmentDayType)));
       this.cd.markForCheck();
     });
 
@@ -70,12 +75,11 @@ export class ScheduleTableContextMenuComponent implements OnInit, OnDestroy {
   openCustomDayDialog(data: SelectionData) {
     const config = new MatDialogConfig();
     config.data = this.departmentDayTypes;
-    // config.hasBackdrop = false;
 
     this.dialog.open(CustomDaytypeDialogComponent, config)
       .afterClosed().subscribe(customDay => {
         if (customDay) {
-          this.scheduleGenerationService.generateScheduleByPatternUnit(customDay, data);
+          this.scheduleGenerationService.generateScheduleByUnit(customDay, data);
         }
     });
   }

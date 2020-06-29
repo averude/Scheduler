@@ -1,7 +1,6 @@
 import { ScheduleGenerator } from "./schedule-generator";
 import { SelectionData } from "../../lib/ngx-schedule-table/model/selection-data";
 import { WorkDay } from "../../model/workday";
-import * as moment from 'moment';
 import { TableRenderer } from "../../lib/ngx-schedule-table/service/table-renderer.service";
 import { ScheduleService } from "../http/schedule.service";
 import { NotificationsService } from "angular2-notifications";
@@ -10,6 +9,8 @@ import { PatternUnit } from "../../model/pattern-unit";
 import { DepartmentDayType } from "../../model/department-day-type";
 import { BasicDto } from "../../model/dto/basic-dto";
 import { ShiftPattern } from "../../model/shift-pattern";
+import { RowData } from "../../lib/ngx-schedule-table/model/data/row-data";
+import { HasDayTypeIdAndTime } from "../../model/interface/has-day-type-id-and-time";
 
 @Injectable()
 export class ScheduleGenerationService {
@@ -32,10 +33,10 @@ export class ScheduleGenerationService {
     );
   }
 
-  generateScheduleByPatternUnit(unit: PatternUnit,
-                                data: SelectionData) {
+  generateScheduleByUnit(unit: HasDayTypeIdAndTime,
+                         data: SelectionData) {
     this.scheduleGenerator
-      .generateScheduleByPatternUnit(
+      .generateScheduleByUnit(
         data.rowData,
         data.selectedCells,
         unit,
@@ -44,15 +45,16 @@ export class ScheduleGenerationService {
       );
   }
 
-  generateScheduleBySingleDay(departmentDayType: DepartmentDayType,
-                              data: SelectionData) {
+  generateScheduleByDepartmentDayType(departmentDayType: DepartmentDayType,
+                                      data: SelectionData) {
     this.scheduleGenerator
-      .generateScheduleBySingleDay(
+      .generateScheduleByDepartmentDayType(
         data.rowData,
         data.selectedCells,
         departmentDayType,
         this.scheduleGeneratedHandler,
-        this.errorHandler);
+        this.errorHandler
+      );
   }
 
   private get scheduleGeneratedHandler(): (rowData, selectedCells) => void {
@@ -69,7 +71,7 @@ export class ScheduleGenerationService {
       if (createdSchedule.length > 0) {
         this.scheduleService.create(createdSchedule)
           .subscribe(response => {
-            this.createSchedule(rowData.workDays, response);
+            this.updateCellData(rowData, response);
             this.rowRenderer.renderRow(rowData.id);
             this.notificationService.success(
               'Created',
@@ -79,7 +81,7 @@ export class ScheduleGenerationService {
       if (updatedSchedule.length > 0) {
         this.scheduleService.update(updatedSchedule)
           .subscribe(res => {
-            this.updateSchedule(rowData.workDays, updatedSchedule);
+            this.updateCellData(rowData, updatedSchedule);
             this.rowRenderer.renderRow(rowData.id);
             this.notificationService.success(
               'Updated',
@@ -93,24 +95,22 @@ export class ScheduleGenerationService {
     return (message) => this.notificationService.error('Error', message);
   }
 
-  private createSchedule(schedule: WorkDay[], createdSchedule: WorkDay[]) {
-    createdSchedule.forEach(workDay => schedule.push(workDay));
-    schedule.sort(((a, b) => moment(a.date).diff(moment(b.date))));
-  }
+  private updateCellData(rowData: RowData, schedule: WorkDay[]) {
+    let cellData = rowData.cellData;
+    let newCellData = [];
+    for (let cellIdx = 0, schedIdx = 0; cellIdx < cellData.length; cellIdx++) {
 
-  private updateSchedule(schedule: WorkDay[], updatedSchedule: WorkDay[]) {
-    for (let scheduleIdx = 0, updatedScheduleIdx = 0; scheduleIdx < schedule.length; scheduleIdx++) {
-      if (updatedScheduleIdx >= updatedSchedule.length) {
-        break;
-      }
+      let cell = Object.assign({}, cellData[cellIdx]);
+      newCellData[cellIdx] = cell;
 
-      let oldValue = schedule[scheduleIdx];
-      let newValue = updatedSchedule[updatedScheduleIdx];
-
-      if (oldValue.date === newValue.date) {
-        updatedScheduleIdx++;
-        schedule[scheduleIdx] = newValue;
+      if (schedIdx < schedule.length) {
+        let value = schedule[schedIdx];
+        if (cell.date.isoString == value.date) {
+          schedIdx++;
+          newCellData[cellIdx].value = value;
+        }
       }
     }
+    rowData.cellData = newCellData;
   }
 }

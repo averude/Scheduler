@@ -22,7 +22,7 @@ export class StatisticsTableComponent implements OnInit, OnDestroy {
 
   private paginationSub: Subscription;
 
-  constructor(private paginationStrategy: SimplePaginationStrategy,
+  constructor(public paginationStrategy: SimplePaginationStrategy,
               private paginationService: PaginationService,
               private shiftService: ShiftService,
               private summationColumnDtoService: SummationColumnDtoService,

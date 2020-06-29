@@ -1,16 +1,19 @@
 <app-schedules-table [showSumColumns]="true"
-                     [rowGroupCollector]="rowGroupCollector"
-                     [rowCollector]="rowCollector">
+                     [multipleSelect]="true"
+                     [rowGroupData]="rowGroupData"
+                     [cellLabelSetter]="cellLabelSetter">
 
   <ng-template table-top-item>
     <app-show-hours-control></app-show-hours-control>
   </ng-template>
   <ng-template table-top-item>
-    <app-schedule-generation></app-schedule-generation>
+    <avr-entity-generation name="Generate schedule"
+                           [units]="units"
+                           (onEntityGenerated)="onScheduleGenerate($event)"></avr-entity-generation>
   </ng-template>
-  <ng-template table-top-item>
-    <app-schedule-export-excel></app-schedule-export-excel>
-  </ng-template>
+  <!--<ng-template table-top-item>-->
+    <!--<app-schedule-export-excel></app-schedule-export-excel>-->
+  <!--</ng-template>-->
 
   <ng-template paginatorDef>
     <app-month-year-paginator [paginationStrategy]="paginationStrategy"></app-month-year-paginator>
@@ -19,7 +22,8 @@
   <ng-template headerDateCellDef let-date>
     <th class="table-sticky-header month-header"
         [class.weekend]="date.weekend"
-        [class.holiday]="date.holiday">
+        [class.holiday]="date.holiday"
+        [class.current-day]="date.isNow">
       {{date.dayOfMonth}}
     </th>
   </ng-template>

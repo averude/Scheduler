@@ -1,9 +1,8 @@
 import { RowGroupData } from "../../../../../../lib/ngx-schedule-table/model/data/row-group-data";
-import { WorkingTime } from "../../../../../../model/working-time";
+import { RowData } from "../../../../../../lib/ngx-schedule-table/model/data/row-data";
 
 export class SchedulerRowGroupData implements RowGroupData {
   groupId: number;
   groupName: string;
-  timeNorm: number;
-  shiftsWorkingTime: WorkingTime[];
+  rowData: RowData[];
 }

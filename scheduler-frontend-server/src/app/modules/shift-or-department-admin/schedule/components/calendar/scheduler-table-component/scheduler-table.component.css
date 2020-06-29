@@ -68,6 +68,10 @@
   background-color: #ffd5d5;
 }
 
+.current-day {
+  background-color: lightgoldenrodyellow;
+}
+
 .cell {
   cursor: cell;
   padding: 0px;

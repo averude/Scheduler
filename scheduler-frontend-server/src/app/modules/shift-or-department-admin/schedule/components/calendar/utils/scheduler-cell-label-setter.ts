@@ -8,12 +8,11 @@ import { DayTypeService } from "../../../../../../services/http/day-type.service
 import { Injectable } from "@angular/core";
 
 @Injectable()
-export class SchedulerCellLabelSetter extends CellLabelSetter {
+export class SchedulerCellLabelSetter implements CellLabelSetter {
 
   dayTypes: DayType[];
 
   constructor(private dayTypeService: DayTypeService) {
-    super();
     this.dayTypeService.getAll()
       .subscribe(dayTypes => this.dayTypes = dayTypes.sort(((a, b) => a.id - b.id)));
   }
