@@ -59,10 +59,13 @@ services:
     ports:
       - 8080:8080
 
-#  scheduler-frontend-server:
-#    build:
-#      dockerfile: Dockerfile
-#    image: scheduler-frontend-server
-#    restart: always
-#    ports:
-#      - 80:80 #50400
+  scheduler-frontend-server:
+    build:
+      context: ./scheduler-frontend-server
+      dockerfile: Dockerfile
+    image: scheduler-frontend-server
+    restart: always
+    volumes:
+      - ${FRONTEND_VOLUME_PATH}:/usr/share/nginx/html
+    ports:
+      - 80:80 #50680
