@@ -28,5 +28,8 @@
         "../node_modules/collections/sorted-array-set.js"
       ]
     }
+  },
+  "angularCompilerOptions": {
+    "fullTemplateTypeCheck": true
   }
 }
