@@ -2,32 +2,9 @@
 <mat-dialog-content [formGroup]="dialogForm">
 
   <mat-form-field>
-    <mat-select placeholder="Shift"
-                [compareWith]="compareNums"
-                formControlName="shiftId">
-      <mat-option *ngFor="let shift of shifts"
-                  [value]="shift?.id">
-        {{shift?.name}}
-      </mat-option>
-    </mat-select>
-    <mat-error *ngIf="isControlInvalid('shiftId')">{{getErrorMessage()}}</mat-error>
-  </mat-form-field>
-
-  <mat-form-field>
-    <input matInput
-           [matDatepicker]="picker"
-           placeholder="Choose a date"
-           formControlName="date">
-    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-    <mat-datepicker #picker
-                    startView="multi-year"
-                    (monthSelected)="onMonthSelected($event, picker)"></mat-datepicker>
-    <mat-error *ngIf="isControlInvalid('date')">{{getErrorMessage()}}</mat-error>
-  </mat-form-field>
-
-  <mat-form-field>
     <input matInput
            placeholder="Hours"
+           type="number"
            formControlName="hours">
     <mat-error *ngIf="isControlInvalid('hours')">{{getErrorMessage()}}</mat-error>
   </mat-form-field>

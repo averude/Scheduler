@@ -5,8 +5,8 @@ import { MatDatepicker } from "@angular/material/datepicker";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { AuthService } from "../../../../../../../services/http/auth.service";
 import { FormBuilder, Validators } from "@angular/forms";
-import { Shift } from "../../../../../../../model/shift";
 import { Moment } from "moment";
+import { SelectionData } from "../../../../../../../lib/ngx-schedule-table/model/selection-data";
 
 @Component({
   selector: 'app-working-time-dialog',
@@ -18,22 +18,21 @@ import { Moment } from "moment";
 })
 export class WorkingTimeDialogComponent extends DialogBaseComponent<WorkingTime> {
 
-  shifts: Shift[] = [];
+  selectionData: SelectionData;
 
   constructor(private authService: AuthService,
               private fb: FormBuilder,
               private dialogRef: MatDialogRef<WorkingTimeDialogComponent>,
               @Inject(MAT_DIALOG_DATA) data) {
-    super(data.workingTime, dialogRef);
-    this.shifts = data.shifts;
+    super(data.selectedCells[0].value, dialogRef);
+    this.selectionData   = data;
   }
 
   initTheForm() {
     this.dialogForm = this.fb.group({
       id:           [],
-      // departmentId: [this.authService.departmentId, [Validators.required]],
-      shiftId:      [null, [Validators.required]],
-      date:         [null, [Validators.required]],
+      shiftId:      [this.selectionData.rowData.id],
+      date:         [this.selectionData.selectedCells[0].date],
       hours:        [null, [Validators.required]]
     });
   }
@@ -41,7 +40,6 @@ export class WorkingTimeDialogComponent extends DialogBaseComponent<WorkingTime>
   fillInTheForm(workingTime: WorkingTime) {
     this.dialogForm.setValue({
       id:           workingTime.id,
-      // departmentId: workingTime.departmentId,
       shiftId:      workingTime.shiftId,
       date:         workingTime.date,
       hours:        workingTime.hours

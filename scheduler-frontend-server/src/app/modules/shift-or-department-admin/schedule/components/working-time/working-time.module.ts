@@ -1,66 +1,49 @@
 import { NgModule } from "@angular/core";
-import { WorkingTimeTableComponent } from './components/working-time-table/working-time-table.component';
 import { CommonModule } from "@angular/common";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { SharedModule } from "../../../../../shared/shared.module";
-import { MatCheckboxModule } from "@angular/material/checkbox";
-import { MAT_DATE_FORMATS } from "@angular/material/core";
-import { MatDatepickerModule } from "@angular/material/datepicker";
-import { MatDialogModule } from "@angular/material/dialog";
-import { MatFormFieldModule } from "@angular/material/form-field";
-import { MatInputModule } from "@angular/material/input";
-import { MatSelectModule } from "@angular/material/select";
-import { MatSortModule } from "@angular/material/sort";
-import { MatTableModule } from "@angular/material/table";
+import { ScheduleTableModule } from "../../../../../lib/ngx-schedule-table/schedule-table.module";
+import { MonthYearPaginatorModule } from "../../../../../shared/paginators/month-year-paginator/month-year-paginator.module";
+import { YearPaginationStrategy } from "../../../../../shared/paginators/pagination-strategy/year-pagination-strategy";
+import { WorkingTimeTableDataCollector } from "./components/collectors/working-time-table-data-collector";
+import { WorkingTimeCellLabelSetter } from "./components/utils/working-time-cell-label-setter";
+import { WorkingTimeTableComponent } from "./components/working-time-table/working-time-table.component";
 import { WorkingTimeDialogComponent } from './components/working-time-dialog/working-time-dialog.component';
-import { RemoveDialogComponent } from "../../../../../shared/abstract-components/remove-dialog/remove-dialog.component";
-import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MatMomentDateModule } from "@angular/material-moment-adapter";
-
-export const MONTH_FORMAT = {
-  parse: {
-    dateInput: 'MM/YYYY',
-  },
-  display: {
-    dateInput: 'MM/YYYY',
-    monthYearLabel: 'MMM YYYY',
-    dateA11yLabel: 'LL',
-    monthYearA11yLabel: 'MMMM YYYY',
-  },
-};
+import {
+  MatButtonModule,
+  MatDialogModule,
+  MatFormFieldModule,
+  MatInputModule,
+  MatSelectModule
+} from "@angular/material";
+import { AvrEntityGenerationModule } from "../../../../../lib/avr-entity-generation/avr-entity-generation.module";
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     SharedModule,
-    MatTableModule,
+    AvrEntityGenerationModule,
+    ReactiveFormsModule,
+    ScheduleTableModule,
+    MonthYearPaginatorModule,
+    MatDialogModule,
+    MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
-    MatSortModule,
-    MatDialogModule,
-    MatSelectModule,
-    MatCheckboxModule,
-    MatDatepickerModule,
-    MatMomentDateModule,
-    ReactiveFormsModule
+    MatSelectModule
   ],
   declarations: [
     WorkingTimeTableComponent,
     WorkingTimeDialogComponent
   ],
   entryComponents: [
-    WorkingTimeDialogComponent,
-    RemoveDialogComponent
+    WorkingTimeDialogComponent
   ],
   providers: [
-    {
-      provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS,
-      useValue: { useUtc: true }
-    },
-    {
-      provide: MAT_DATE_FORMATS,
-      useValue: MONTH_FORMAT
-    }
+    YearPaginationStrategy,
+    WorkingTimeTableDataCollector,
+    WorkingTimeCellLabelSetter
   ]
 })
 export class WorkingTimeModule {}
