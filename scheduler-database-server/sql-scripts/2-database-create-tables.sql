@@ -176,7 +176,6 @@ CREATE TABLE IF NOT EXISTS shift_composition (
   EXCLUDE USING GIST (
     employee_id WITH =,
     shift_id WITH =,
-    substitution WITH =,
     daterange(from_date, to_date, '[]') WITH &&
   ),
   CHECK ( from_date <= to_date ),
