@@ -83,7 +83,7 @@ export class WorkingTimeTableComponent implements OnInit, OnDestroy {
   openDialog(selectionData: SelectionData) {
     const config = new MatDialogConfig();
     config.data = selectionData;
-    config.hasBackdrop = false;
+    config.hasBackdrop = true;
 
     this.dialog.open(WorkingTimeDialogComponent, config)
       .afterClosed().subscribe(workingTime => {
