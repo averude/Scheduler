@@ -38,7 +38,6 @@ import { NgxMaskModule } from "ngx-mask";
     PatternsTableComponent,
     PatternDialogComponent
   ],
-  providers: [],
-  entryComponents: [PatternDialogComponent]
+  providers: []
 })
 export class PatternsModule {}

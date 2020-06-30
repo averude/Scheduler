@@ -11,7 +11,7 @@ export class AvrSideBarComponent implements OnInit {
   @ContentChildren(AvrSideBarItemDef, {read: TemplateRef})
   sideBarItems: QueryList<AvrSideBarItemDef>;
 
-  @ContentChild(AvrSideBarContent, {read: TemplateRef, static: false})
+  @ContentChild(AvrSideBarContent, { read: TemplateRef })
   sideBarContent: TemplateRef<any>;
 
   constructor() {

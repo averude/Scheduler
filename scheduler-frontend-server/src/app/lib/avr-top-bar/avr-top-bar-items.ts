@@ -28,10 +28,10 @@ export class RoleDef {
   selector: '[toolBarContentDef]'
 })
 export class ToolBarContentDef {
-  @ContentChild(AuthorityDef, {read: TemplateRef, static: false})
+  @ContentChild(AuthorityDef, { read: TemplateRef })
   authorityDef: TemplateRef<any>;
 
-  @ContentChild(RoleDef, {read: TemplateRef, static: false})
+  @ContentChild(RoleDef, { read: TemplateRef })
   roleDef:      TemplateRef<any>;
 
   @ContentChildren(ToolBarItemDef, {read: TemplateRef})

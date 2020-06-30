@@ -8,10 +8,10 @@ import { ToolBarContentDef, TopBarContentDef } from "./avr-top-bar-items";
 })
 export class AvrTopBarComponent implements OnInit {
 
-  @ContentChild(TopBarContentDef, {read: TemplateRef, static: false})
+  @ContentChild(TopBarContentDef, { read: TemplateRef })
   topBarContent: TemplateRef<any>;
 
-  @ContentChild(ToolBarContentDef, {read: ToolBarContentDef, static: false})
+  @ContentChild(ToolBarContentDef, { read: ToolBarContentDef })
   toolBarContent: ToolBarContentDef;
 
   @Output() onLogout: EventEmitter<void> = new EventEmitter();

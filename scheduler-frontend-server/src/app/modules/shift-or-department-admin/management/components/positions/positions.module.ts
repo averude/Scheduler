@@ -29,9 +29,6 @@ import { PositionDialogComponent } from './components/position-dialog/position-d
   declarations: [
     PositionsTableComponent,
     PositionDialogComponent
-  ],
-  entryComponents: [
-    PositionDialogComponent
   ]
 })
 export class PositionsModule {}

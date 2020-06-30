@@ -17,9 +17,6 @@ import { ContextMenuContentComponent } from './contextMenuContent.component';
     ContextMenuContentComponent,
     ContextMenuItemDirective,
   ],
-  entryComponents: [
-    ContextMenuContentComponent,
-  ],
   exports: [
     ContextMenuAttachDirective,
     ContextMenuComponent,
@@ -31,7 +28,7 @@ import { ContextMenuContentComponent } from './contextMenuContent.component';
   ],
 })
 export class ContextMenuModule {
-  public static forRoot(options?: IContextMenuOptions): ModuleWithProviders {
+  public static forRoot(options?: IContextMenuOptions): ModuleWithProviders<ContextMenuModule> {
     return {
       ngModule: ContextMenuModule,
       providers: [

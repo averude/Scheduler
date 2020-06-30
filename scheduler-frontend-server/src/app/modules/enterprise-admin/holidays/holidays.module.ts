@@ -34,9 +34,6 @@ import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MatMomentDateModule } from "@angular/m
     HolidaysTableComponent,
     HolidaysDialogComponent
   ],
-  entryComponents: [
-    HolidaysDialogComponent
-  ],
   providers: [
     {
       provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS,

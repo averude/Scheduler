@@ -39,7 +39,6 @@ import { ExtraWeekendsDialogComponent } from './components/extra-weekends-dialog
       provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS,
       useValue: { useUtc: true }
     }
-  ],
-  entryComponents: [ExtraWeekendsDialogComponent]
+  ]
 })
 export class ExtraWeekendsModule {}

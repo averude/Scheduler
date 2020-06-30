@@ -9,15 +9,15 @@ abstract class BaseColumnDef {
   selector: '[beforeDateColumnDef]'
 })
 export class BeforeDateColumnDef extends BaseColumnDef {
-  @ContentChild(HeaderCellDef, {read: TemplateRef, static: false}) headerCell;
-  @ContentChild(CellDef, {read: TemplateRef, static: false}) cellDef;
+  @ContentChild(HeaderCellDef, { read: TemplateRef }) headerCell;
+  @ContentChild(CellDef, { read: TemplateRef }) cellDef;
 }
 
 @Directive({
   selector: '[afterDateColumnDef]'
 })
 export class AfterDateColumnDef extends BaseColumnDef {
-  @ContentChild(HeaderCellDef, {read: TemplateRef, static: false}) headerCell;
-  @ContentChild(CellDef, {read: TemplateRef, static: false}) cellDef;
+  @ContentChild(HeaderCellDef, { read: TemplateRef }) headerCell;
+  @ContentChild(CellDef, { read: TemplateRef }) cellDef;
 }
 

@@ -30,16 +30,16 @@ export class SchedulesTableComponent implements OnInit, OnDestroy {
 
   @Input() showSumColumns:    boolean;
 
-  @ContentChild(PaginatorDef, {read: TemplateRef, static: false})
+  @ContentChild(PaginatorDef, { read: TemplateRef })
   paginator: TemplateRef<any>;
 
   @ContentChildren(TableTopItemDirective, {read: TemplateRef})
   topItems: QueryList<TemplateRef<any>>;
 
-  @ContentChild(DatedCellDef, {read: TemplateRef, static: false})
+  @ContentChild(DatedCellDef, { read: TemplateRef })
   datedCellDef: DatedCellDef;
 
-  @ContentChild(HeaderDateCellDef, {read: TemplateRef, static: false})
+  @ContentChild(HeaderDateCellDef, { read: TemplateRef })
   headerDateCellDef: TemplateRef<any>;
 
   @ContentChildren(BeforeDateColumnDef)

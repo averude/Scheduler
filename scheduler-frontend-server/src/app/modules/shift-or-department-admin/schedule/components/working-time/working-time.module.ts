@@ -9,13 +9,11 @@ import { WorkingTimeTableDataCollector } from "./components/collectors/working-t
 import { WorkingTimeCellLabelSetter } from "./components/utils/working-time-cell-label-setter";
 import { WorkingTimeTableComponent } from "./components/working-time-table/working-time-table.component";
 import { WorkingTimeDialogComponent } from './components/working-time-dialog/working-time-dialog.component';
-import {
-  MatButtonModule,
-  MatDialogModule,
-  MatFormFieldModule,
-  MatInputModule,
-  MatSelectModule
-} from "@angular/material";
+import { MatButtonModule } from "@angular/material/button";
+import { MatDialogModule } from "@angular/material/dialog";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatInputModule } from "@angular/material/input";
+import { MatSelectModule } from "@angular/material/select";
 import { AvrEntityGenerationModule } from "../../../../../lib/avr-entity-generation/avr-entity-generation.module";
 
 @NgModule({
@@ -35,9 +33,6 @@ import { AvrEntityGenerationModule } from "../../../../../lib/avr-entity-generat
   ],
   declarations: [
     WorkingTimeTableComponent,
-    WorkingTimeDialogComponent
-  ],
-  entryComponents: [
     WorkingTimeDialogComponent
   ],
   providers: [

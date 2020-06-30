@@ -27,7 +27,6 @@ import { DepartmentDialogComponent } from './components/department-dialog/depart
     ReactiveFormsModule
   ],
   declarations: [DepartmentsTableComponent, DepartmentDialogComponent],
-  exports: [DepartmentsTableComponent],
-  entryComponents: [DepartmentDialogComponent]
+  exports: [DepartmentsTableComponent]
 })
 export class DepartmentsModule {}

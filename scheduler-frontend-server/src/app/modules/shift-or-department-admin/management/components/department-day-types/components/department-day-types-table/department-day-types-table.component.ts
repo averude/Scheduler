@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { MatDialog } from "@angular/material";
+import { MatDialog } from "@angular/material/dialog";
 import { NotificationsService } from "angular2-notifications";
 import { DayType } from "../../../../../../../model/day-type";
 import { TableBaseComponent } from "../../../../../../../shared/abstract-components/table-base/table-base.component";

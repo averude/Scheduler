@@ -1,4 +1,4 @@
-import { OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Directive, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
 import { MatSort } from "@angular/material/sort";
 import { MatTableDataSource } from "@angular/material/table";
@@ -10,6 +10,7 @@ import { ComponentType } from "@angular/cdk/portal";
 import { CUDService } from "../../../services/http/interface/cud-service";
 import { IByAuthService } from "../../../services/http/interface/i-by-auth.service";
 
+@Directive()
 export abstract class TableBaseComponent<T extends IdEntity> implements OnInit, OnDestroy {
 
   dataSource  = new MatTableDataSource<T>([]);

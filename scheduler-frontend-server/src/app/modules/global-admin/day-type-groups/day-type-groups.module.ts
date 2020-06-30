@@ -29,7 +29,6 @@ import { MatTableModule } from "@angular/material/table";
   declarations: [
     DayTypeGroupsTableComponent,
     DayTypeGroupsDialogComponent
-  ],
-  entryComponents: [DayTypeGroupsDialogComponent]
+  ]
 })
 export class DayTypeGroupsModule { }

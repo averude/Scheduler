@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { MatDialog, MatDialogConfig } from "@angular/material";
+import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
 import { AvrEntityGenerationDialogComponent } from "../avr-entity-generation-dialog/avr-entity-generation-dialog.component";
 
 @Component({

@@ -3,8 +3,10 @@ import { BasicDto } from "../../../model/dto/basic-dto";
 import { IdEntity } from "../../../model/interface/id-entity";
 import { NotificationsService } from "angular2-notifications";
 import { CUDService } from "../../../services/http/interface/cud-service";
-import { MatDialog } from "@angular/material";
+import { MatDialog } from "@angular/material/dialog";
+import { Directive } from "@angular/core";
 
+@Directive()
 export abstract class DtoTableBaseComponent<P extends IdEntity, C> extends TableBaseComponent<BasicDto<P, C>> {
 
   constructor(matDialog: MatDialog,

@@ -2,7 +2,7 @@ import { Component } from "@angular/core";
 import { BasicDto } from "../../../../../model/dto/basic-dto";
 import { SummationColumn } from "../../../../../model/summation-column";
 import { SummationColumnDayTypeRange } from "../../../../../model/summation-column-day-type-range";
-import { MatDialog } from "@angular/material";
+import { MatDialog } from "@angular/material/dialog";
 import { NotificationsService } from "angular2-notifications";
 import { DayTypeService } from "../../../../../services/http/day-type.service";
 import { DayType } from "../../../../../model/day-type";

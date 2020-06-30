@@ -7,7 +7,9 @@ import { Subscription } from "rxjs";
 import { CUDService } from "../../../services/http/interface/cud-service";
 import { PaginationService } from "../../../lib/ngx-schedule-table/service/pagination.service";
 import { IByAuthService } from "../../../services/http/interface/i-by-auth.service";
+import { Directive } from "@angular/core";
 
+@Directive()
 export abstract class PageableTableBaseComponent<T extends IdEntity> extends TableBaseComponent<T> {
 
   private sub: Subscription;

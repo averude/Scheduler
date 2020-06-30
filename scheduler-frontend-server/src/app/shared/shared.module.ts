@@ -6,7 +6,8 @@ import { YearPaginatorComponent } from "./paginators/year-paginator/year-paginat
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatMomentDateModule } from "@angular/material-moment-adapter";
 import { SimplePaginatorComponent } from './paginators/simple-paginator/simple-paginator.component';
-import { MatFormFieldModule, MatInputModule } from "@angular/material";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatInputModule } from "@angular/material/input";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 

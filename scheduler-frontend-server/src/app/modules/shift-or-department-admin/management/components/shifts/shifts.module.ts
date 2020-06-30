@@ -29,9 +29,6 @@ import { ShiftDialogComponent } from './components/shift-dialog/shift-dialog.com
   declarations: [
     ShiftsTableComponent,
     ShiftDialogComponent
-  ],
-  entryComponents: [
-    ShiftDialogComponent
   ]
 })
 export class ShiftsModule {}

@@ -1,9 +1,10 @@
-import { OnInit } from "@angular/core";
+import { Directive, OnInit } from "@angular/core";
 import { BasicDto } from "../../../model/dto/basic-dto";
-import { MatDialogRef } from "@angular/material";
+import { MatDialogRef } from "@angular/material/dialog";
 import { CdkDragDrop } from "@angular/cdk/drag-drop";
 import { IdEntity } from "../../../model/interface/id-entity";
 
+@Directive()
 export abstract class DtoDialogBaseComponent<P extends IdEntity, C> implements OnInit {
 
   operation: string;

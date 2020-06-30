@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { TableBaseComponent } from "../../../../../shared/abstract-components/table-base/table-base.component";
 import { Enterprise } from "../../../../../model/enterprise";
-import { MatDialog } from "@angular/material";
+import { MatDialog } from "@angular/material/dialog";
 import { EnterpriseService } from "../../../../../services/http/enterprise.service";
 import { NotificationsService } from "angular2-notifications";
 import { EnterpriseDialogComponent } from "../enterprise-dialog/enterprise-dialog.component";

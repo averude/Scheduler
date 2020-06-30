@@ -39,7 +39,6 @@ import { ExtraWorkdaysDialogComponent } from './components/extra-workdays-dialog
       provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS,
       useValue: { useUtc: true }
     }
-  ],
-  entryComponents: [ExtraWorkdaysDialogComponent]
+  ]
 })
 export class ExtraWorkdaysModule {}

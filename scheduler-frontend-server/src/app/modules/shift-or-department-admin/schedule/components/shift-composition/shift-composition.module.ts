@@ -12,7 +12,6 @@ import { MatSelectModule } from "@angular/material/select";
 import { MatSortModule } from "@angular/material/sort";
 import { MatTableModule } from "@angular/material/table";
 import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MatMomentDateModule } from "@angular/material-moment-adapter";
-import { RemoveDialogComponent } from "../../../../../shared/abstract-components/remove-dialog/remove-dialog.component";
 import { ShiftCompositionTableComponent } from './components/shift-composition-table/shift-composition-table.component';
 import { ShiftCompositionDialogComponent } from './components/shift-composition-dialog/shift-composition-dialog.component';
 
@@ -47,10 +46,6 @@ export const MONTH_FORMAT = {
   declarations: [
     ShiftCompositionTableComponent,
     ShiftCompositionDialogComponent
-  ],
-  entryComponents: [
-    ShiftCompositionDialogComponent,
-    RemoveDialogComponent
   ],
   providers: [
     {

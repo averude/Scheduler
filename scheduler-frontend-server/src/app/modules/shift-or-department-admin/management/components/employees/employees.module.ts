@@ -29,9 +29,6 @@ import { EmployeeDialogComponent } from './components/employee-dialog/employee-d
   declarations: [
     EmployeesTableComponent,
     EmployeeDialogComponent
-  ],
-  entryComponents: [
-    EmployeeDialogComponent
   ]
 })
 export class EmployeesModule {}

@@ -40,8 +40,7 @@ import { ShiftCompositionDivider } from "../../../../../services/divider/shift-c
     SchedulerCellLabelSetter,
     ShiftCompositionDivider,
     ScheduleTableDataCollector,
-  ],
-  entryComponents: [],
+  ]
 })
 export class CalendarModule {}
 

@@ -61,7 +61,7 @@ import { TableCellComponent } from "./table-cell/table-cell.component";
   ]
 })
 export class ScheduleTableModule {
-  static forRoot(providers: Provider[]): ModuleWithProviders {
+  static forRoot(providers: Provider[]): ModuleWithProviders<ScheduleTableModule> {
     return {
       ngModule: ScheduleTableModule,
       providers: providers

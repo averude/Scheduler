@@ -24,7 +24,7 @@ import { DayTypeService } from "../../../../../../../../services/http/day-type.s
 })
 export class ScheduleTableContextMenuComponent implements OnInit, OnDestroy {
 
-  @ViewChild(ContextMenuComponent, { static: false })
+  @ViewChild(ContextMenuComponent)
   patternMenu:  ContextMenuComponent;
 
   patternDtos:         BasicDto<ShiftPattern, PatternUnit>[]   = [];

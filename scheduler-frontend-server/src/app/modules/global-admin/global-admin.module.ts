@@ -13,7 +13,6 @@ import { EnterprisesModule } from "./enterprises/enterprises.module";
 import { SummationColumnsModule } from "../enterprise-admin/summation-columns/summation-columns.module";
 import { RemoveDialogModule } from "../../shared/abstract-components/remove-dialog/remove-dialog.module";
 import { NgxMaskModule } from "ngx-mask";
-import { RemoveDialogComponent } from "../../shared/abstract-components/remove-dialog/remove-dialog.component";
 
 @NgModule({
   imports: [
@@ -31,7 +30,6 @@ import { RemoveDialogComponent } from "../../shared/abstract-components/remove-d
     SimpleNotificationsModule,
     NgxMaskModule.forRoot()
   ],
-  declarations: [GlobalAdminComponent],
-  entryComponents: [RemoveDialogComponent]
+  declarations: [GlobalAdminComponent]
 })
 export class GlobalAdminModule {}

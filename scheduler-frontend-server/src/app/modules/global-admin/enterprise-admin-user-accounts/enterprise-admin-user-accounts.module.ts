@@ -11,7 +11,6 @@ import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
 import { MatSortModule } from "@angular/material/sort";
 import { MatTableModule } from "@angular/material/table";
-import { RemoveDialogComponent } from "../../../shared/abstract-components/remove-dialog/remove-dialog.component";
 
 @NgModule({
   imports: [
@@ -30,7 +29,6 @@ import { RemoveDialogComponent } from "../../../shared/abstract-components/remov
   declarations: [
     UserAccountsTableComponent,
     UserAccountsDialogComponent
-  ],
-  entryComponents: [UserAccountsDialogComponent, RemoveDialogComponent]
+  ]
 })
 export class EnterpriseAdminUserAccountsModule {}

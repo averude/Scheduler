@@ -8,7 +8,7 @@ import { WorkingTimeTableDataCollector } from "../collectors/working-time-table-
 import { WorkingTimeCellLabelSetter } from "../utils/working-time-cell-label-setter";
 import { ClearSelectionService } from "../../../../../../../lib/ngx-schedule-table/service/clear-selection.service";
 import { SelectionEndService } from "../../../../../../../lib/ngx-schedule-table/service/selection-end.service";
-import { MatDialog, MatDialogConfig } from "@angular/material";
+import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
 import { Shift } from "../../../../../../../model/shift";
 import { WorkingTimeDialogComponent } from "../working-time-dialog/working-time-dialog.component";
 import { SelectionData } from "../../../../../../../lib/ngx-schedule-table/model/selection-data";

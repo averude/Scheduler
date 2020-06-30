@@ -1,8 +1,9 @@
-import { OnInit } from "@angular/core";
+import { Directive, OnInit } from "@angular/core";
 import { FormGroup, ValidationErrors } from "@angular/forms";
 import { MatDialogRef } from "@angular/material/dialog";
 import { IdEntity } from "../../../model/interface/id-entity";
 
+@Directive()
 export abstract class DialogBaseComponent<T> implements OnInit {
   operation: string;
 

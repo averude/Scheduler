@@ -31,7 +31,6 @@ import { NgxMaskModule } from "ngx-mask";
   declarations: [
     DayTypesTableComponent,
     DayTypeDialogComponent
-  ],
-  entryComponents: [DayTypeDialogComponent]
+  ]
 })
 export class DayTypesModule {}
