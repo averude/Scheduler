@@ -1,7 +1,6 @@
 import { RowGroupData } from "../../../../../../lib/ngx-schedule-table/model/data/row-group-data";
 import { Shift } from "../../../../../../model/shift";
 import { WorkingTime } from "../../../../../../model/working-time";
-import { SchedulerRowGroupData } from "../model/scheduler-row-group-data";
 import { BasicDto } from "../../../../../../model/dto/basic-dto";
 import { Employee } from "../../../../../../model/employee";
 import { WorkDay } from "../../../../../../model/workday";
@@ -23,15 +22,28 @@ export class ScheduleTableDataCollector {
                shifts: Shift[],
                compositions: ShiftComposition[],
                schedule: BasicDto<Employee, WorkDay>[],
-               workingTime: WorkingTime[]): RowGroupData[] {
-    return shifts.map(shift => {
-      let shiftWorkingTime = this.getShiftWorkingTime(shift.id, workingTime);
-      return {
+               workingTimeNorms: WorkingTime[]): RowGroupData[] {
+    let rowGroups = [];
+    for (let shiftIndex = 0, shiftWorkingTimeNormIndex = 0; shiftIndex < shifts.length; shiftIndex++) {
+      let shift       = shifts[shiftIndex];
+      let workingTime = workingTimeNorms[shiftWorkingTimeNormIndex];
+      let hoursNorm   = 0;
+
+      let groupData = {
         groupId:    shift.id,
         groupName:  shift.name,
-        rowData:    this.getRowData(dates, shift.id, compositions, schedule, shiftWorkingTime, workingTime)
-      } as SchedulerRowGroupData;
-    });
+      } as RowGroupData;
+
+      if (workingTime && shift.id === workingTime.shiftId) {
+        shiftWorkingTimeNormIndex++;
+        hoursNorm = workingTime.hours;
+      }
+
+      groupData.rowData = this.getRowData(dates, shift.id, compositions, schedule, hoursNorm, workingTimeNorms);
+      rowGroups.push(groupData)
+    }
+
+    return rowGroups;
   }
 
   private getShiftWorkingTime(shiftId: number,
