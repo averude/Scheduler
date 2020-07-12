@@ -15,6 +15,7 @@
       app-table-cell
       [cellLabelSetter]="cellLabelSetter"
       [cellData]="cell"
+      [enabled]="cell.enabled"
       [value]="cell.value"
       [selectionEnabled]="cell.enabled && !selectionDisabled"
       [class.weekend]="cell.date.weekend"
