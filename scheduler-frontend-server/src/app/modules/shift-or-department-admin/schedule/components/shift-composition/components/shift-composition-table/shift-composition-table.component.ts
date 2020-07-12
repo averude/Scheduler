@@ -58,17 +58,4 @@ export class ShiftCompositionTableComponent extends PageableTableBaseComponent<S
   getShift(shiftId: number): Shift {
     return this.shifts.find(value => value.id === shiftId);
   }
-
-  generate() {
-    this.employees.forEach(employee => {
-      this.shiftCompositionService.create({
-        id: null,
-        employeeId: employee.id,
-        shiftId: this.shifts[0].id,
-        substitution: false,
-        from: "2020-01-01",
-        to: "2020-12-31"
-      }).subscribe(res => console.log(res));
-    })
-  }
 }
