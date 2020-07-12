@@ -86,7 +86,7 @@ public class ScheduleGenerationIntervalCreator {
 
             if (intervalStart.isAfter(composition.getFrom())) {
                 if (composition.getTo().isBefore(to)) {
-                    intervalStart = composition.getTo();
+                    intervalStart = composition.getTo().plusDays(1); //should be tested
                     continue;
                 } else {
                     break;
