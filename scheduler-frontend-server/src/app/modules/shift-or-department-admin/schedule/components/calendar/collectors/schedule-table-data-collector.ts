@@ -8,189 +8,135 @@ import { ShiftComposition } from "../../../../../../model/shift-composition";
 import { SchedulerRowData } from "../model/scheduler-row-data";
 import { getEmployeeShortName } from "../../../../../../shared/utils/utils";
 import { CalendarDay } from "../../../../../../lib/ngx-schedule-table/model/calendar-day";
-import { CellData } from "../../../../../../lib/ngx-schedule-table/model/data/cell-data";
-import { isBetween } from "../../../../../../lib/ngx-schedule-table/utils/table-utils";
 import { Injectable } from "@angular/core";
 import { ShiftCompositionDivider } from "../../../../../../services/divider/shift-composition-divider";
+import * as moment from "moment";
 
 @Injectable()
 export class ScheduleTableDataCollector {
 
-  constructor(private compositionDivider: ShiftCompositionDivider) {}
+  constructor(private divider: ShiftCompositionDivider) {}
 
   getTableData(dates: CalendarDay[],
                shifts: Shift[],
                compositions: ShiftComposition[],
                schedule: BasicDto<Employee, WorkDay>[],
                workingTimeNorms: WorkingTime[]): RowGroupData[] {
-    let rowGroups = [];
-    for (let shiftIndex = 0, shiftWorkingTimeNormIndex = 0; shiftIndex < shifts.length; shiftIndex++) {
-      let shift       = shifts[shiftIndex];
-      let workingTime = workingTimeNorms[shiftWorkingTimeNormIndex];
-      let hoursNorm   = 0;
+    let groupData: RowGroupData[] = [];
 
-      let groupData = {
+    let compositionsMap = this.divider.divideMainCompositionsByEmployee(compositions);
+
+    for (let shift of shifts) {
+      groupData[shift.id] = {
         groupId:    shift.id,
         groupName:  shift.name,
-      } as RowGroupData;
-
-      if (workingTime && shift.id === workingTime.shiftId) {
-        shiftWorkingTimeNormIndex++;
-        hoursNorm = workingTime.hours;
-      }
-
-      groupData.rowData = this.getRowData(dates, shift.id, compositions, schedule, hoursNorm, workingTimeNorms);
-      rowGroups.push(groupData)
+        rowData:    []
+      };
     }
 
-    return rowGroups;
+    for (let employeeSchedule of schedule) {
+
+      let employee            = employeeSchedule.parent;
+      let employeeWorkDays    = employeeSchedule.collection;
+      let employeeCompositions = compositionsMap.get(employee.id);
+      let employeeTimeNorm    = this.getTimeNorm(employeeCompositions, workingTimeNorms);
+
+      if (!employeeCompositions) {
+        continue;
+      }
+
+      for (let dayIndex = 0, scheduleIndex = 0; dayIndex < dates.length; dayIndex++) {
+
+        let date    = dates[dayIndex];
+        let workDay = employeeWorkDays[scheduleIndex];
+
+        if (workDay && workDay.date === date.isoString) {
+          scheduleIndex++;
+        } else workDay = null;
+
+        mainloop:
+          for (let index = 0; index < employeeCompositions.length; index++) {
+            let composition = employeeCompositions[index];
+            for (let subComposition of composition) {
+              if (this.isInComposition(date.isoString, subComposition)) {
+                this.insertDataInGroup(groupData[subComposition.shiftId], subComposition,
+                  date, employee, workDay, employeeTimeNorm, true, dayIndex);
+                this.fillOtherGroups(subComposition.shiftId, date, employee, workDay,
+                  employeeTimeNorm, groupData, employeeCompositions, index, dayIndex);
+                break mainloop;
+              } else {
+                this.insertDataInGroup(groupData[subComposition.shiftId], subComposition,
+                  date, employee, workDay, employeeTimeNorm, false, dayIndex);
+              }
+            }
+          }
+      }
+    }
+
+    groupData.forEach(value => value.rowData = value.rowData.filter(v => v));
+    groupData = groupData.filter(value => value);
+
+    return groupData;
   }
 
-  private getShiftWorkingTime(shiftId: number,
-                              workingTime: WorkingTime[]): number {
-    let time = workingTime.find(value => value.shiftId === shiftId);
-    return time ? time.hours : 0;
+  private insertDataInGroup(rowGroup: RowGroupData,
+                            composition: ShiftComposition,
+                            date: CalendarDay,
+                            employee: Employee,
+                            workDay: WorkDay,
+                            timeNorm: number,
+                            isEnabled: boolean,
+                            dayIndex: number) {
+    let employeeId  = composition.employeeId;
+    let rowData     = rowGroup.rowData[employeeId];
+
+    if (!rowData) {
+      rowGroup.rowData[employeeId] = {
+        id:             employeeId,
+        name:           getEmployeeShortName(employee),
+        position:       employee.position.shortName,
+        isSubstitution: composition.substitution,
+        timeNorm:       timeNorm,
+        cellData:       []
+      } as SchedulerRowData;
+    }
+
+    rowGroup.rowData[employeeId].cellData[dayIndex] = {
+      date: date,
+      value: workDay,
+      enabled: isEnabled,
+    };
   }
 
-  private getRowData(dates: CalendarDay[],
-                     shiftId: number,
-                     compositions: ShiftComposition[],
-                     schedule: BasicDto<Employee, WorkDay>[],
-                     workingTimeNorm: number,
-                     shiftsWorkingTime: WorkingTime[]): SchedulerRowData[] {
-    return this.getEmployeeScheduleForShift(shiftId, compositions, schedule)
-      .map(employeeSchedule => {
-        let employeeCompositions  = this.getEmployeeShiftCompositions(employeeSchedule.parent.id, compositions);
-
-        let isSubstitution = !employeeCompositions.find(value => !value.substitution && value.shiftId === shiftId);
-
-        let row = new SchedulerRowData();
-        row.id = employeeSchedule.parent.id;
-        row.name = getEmployeeShortName(employeeSchedule.parent);
-        row.position = employeeSchedule.parent.position.shortName;
-        row.isSubstitution = isSubstitution;
-        row.cellData = this.getCellData(row.id, shiftId, isSubstitution, employeeCompositions, employeeSchedule.collection, dates);
-        if (isSubstitution) {
-          row.timeNorm = this.getEmployeeMainShiftWorkingTime(employeeSchedule.parent.id, employeeCompositions, shiftsWorkingTime);
-        } else {
-          row.timeNorm = workingTimeNorm;
+  private fillOtherGroups(shiftId: number,
+                          date: CalendarDay,
+                          employee: Employee,
+                          workDay: WorkDay,
+                          timeNorm: number,
+                          groupData: RowGroupData[],
+                          compositions: ShiftComposition[][],
+                          compositionIndex: number,
+                          dayIndex: number) {
+    for (let subCompositions of compositions) {
+      for (let subComposition of subCompositions) {
+        if (subComposition.shiftId === shiftId) {
+          continue;
         }
-        return row;
-      });
-  }
-
-  private getEmployeeScheduleForShift(shiftId: number,
-                                      compositions: ShiftComposition[],
-                                      schedule: BasicDto<Employee, WorkDay>[]): BasicDto<Employee, WorkDay>[] {
-    let employeeIds = compositions
-      .filter(value => value.shiftId === shiftId)
-      .map(value => value.employeeId);
-    return schedule
-      .filter(value => employeeIds.findIndex(id => value.parent.id === id) >= 0);
-  }
-
-  private getEmployeeShiftCompositions(employeeId: number,
-                                       compositions: ShiftComposition[]): ShiftComposition[] {
-    return compositions.filter(value => value.employeeId === employeeId);
-  }
-
-  private getEmployeeMainShiftWorkingTime(employeeId: number,
-                                          shiftCompositions: ShiftComposition[],
-                                          shiftsWorkingTime: WorkingTime[]): number {
-    let shiftComposition = shiftCompositions.find(value => !value.substitution && value.employeeId === employeeId);
-    return shiftComposition ? this.getShiftWorkingTime(shiftComposition.shiftId, shiftsWorkingTime) : 0;
-  }
-
-  private getCellData(employeeId: number,
-                      shiftId: number,
-                      isSubstitution: boolean,
-                      shiftComposition: ShiftComposition[],
-                      schedule: WorkDay[],
-                      calendarDays: CalendarDay[]): CellData[] {
-    let compositions = this.getCompositions(isSubstitution, employeeId, shiftId, shiftComposition);
-    return this.getCellDataForShift(calendarDays, compositions, schedule);
-  }
-
-  private getCompositions(isSubstitution: boolean,
-                          employeeId: number,
-                          shiftId: number,
-                          shiftComposition: ShiftComposition[]) {
-    if (isSubstitution) {
-      return this.getSubstitutionShiftComposition(employeeId, shiftId, shiftComposition);
-    } else {
-      let tuple = this.getMainAndSubstitutionCompositions(employeeId, shiftId, shiftComposition);
-      return this.compositionDivider.divide(tuple[0], tuple[1]);
-    }
-  }
-
-  private getMainAndSubstitutionCompositions(
-    employeeId: number,
-    shiftId: number,
-    shiftCompositions: ShiftComposition[]
-  ): [ShiftComposition, ShiftComposition[]] {
-    let mainComposition;
-    let substitutions = [];
-    for (let composition of shiftCompositions) {
-      if (!composition.substitution
-        && composition.employeeId === employeeId
-        && composition.shiftId === shiftId) {
-        mainComposition = composition;
-      }
-
-      if (composition.substitution
-        && composition.employeeId === employeeId
-        && composition.shiftId !== shiftId) {
-        substitutions.push(composition);
+        this.insertDataInGroup(groupData[subComposition.shiftId], subComposition,
+          date, employee, workDay, timeNorm, false, dayIndex);
       }
     }
-
-    return [mainComposition, substitutions];
   }
 
-  private getCellDataForShift(calendarDays: CalendarDay[],
-                              shiftComposition: ShiftComposition[],
-                              schedule: WorkDay[]): CellData[] {
-    let cells: CellData[];
-    if (schedule) {
-      let workDayIndex = 0;
-      cells = calendarDays.map(day => {
+  private isInComposition(date: string, composition: ShiftComposition): boolean {
+    return moment(date).isBetween(composition.from, composition.to, 'date', '[]')
+  }
 
-        let cell: CellData = {
-          date: day,
-          value: null,
-          enabled: false,
-        };
-
-        let workDay = schedule[workDayIndex];
-
-        if (workDay && day.isoString === workDay.date) {
-          workDayIndex++;
-          this.setCell(shiftComposition, cell, workDay);
-        } else {
-          this.setCell(shiftComposition, cell, null);
-        }
-        return cell;
-      });
-      return cells;
+  private getTimeNorm(employeeCompositions: ShiftComposition[], workingTimeNorms: WorkingTime[]): number {
+    if (employeeCompositions && employeeCompositions[0]) {
+      let shiftId = employeeCompositions[0][0].shiftId;
+      let shiftTimeNorm = workingTimeNorms.find(value => value.shiftId === shiftId);
+      return shiftTimeNorm ? shiftTimeNorm.hours : 0;
     }
-  }
-
-  private getSubstitutionShiftComposition(employeeId: number,
-                                          shiftId: number,
-                                          shiftComposition: ShiftComposition[]): ShiftComposition[] {
-    return shiftComposition
-      .filter(value =>
-        value.employeeId === employeeId && value.substitution && value.shiftId === shiftId);
-  }
-
-  private setCell(shiftComposition: ShiftComposition[],
-                  cell: CellData,
-                  workDay: WorkDay) {
-    shiftComposition.forEach(value => {
-      if (isBetween(cell.date.isoString, value.from, value.to)) {
-        cell.enabled = true;
-        cell.value = workDay;
-      }
-    });
   }
 }
