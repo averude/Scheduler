@@ -1,5 +1,6 @@
 package com.averude.uksatse.scheduler.core.entity;
 
+import com.averude.uksatse.scheduler.core.entity.interfaces.HasDateDuration;
 import com.averude.uksatse.scheduler.core.entity.interfaces.HasId;
 import com.averude.uksatse.scheduler.core.entity.structure.Shift;
 import lombok.AllArgsConstructor;
@@ -21,7 +22,7 @@ import java.util.StringJoiner;
 @Setter
 @Entity()
 @Table(name = "shift_composition")
-public class ShiftComposition implements HasId {
+public class ShiftComposition implements HasId, HasDateDuration {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Positive(message = "{entity.id.negative}")

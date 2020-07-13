@@ -1,9 +1,11 @@
 package com.averude.uksatse.scheduler.generator.model;
 
+import com.averude.uksatse.scheduler.core.entity.interfaces.HasDateDuration;
+
 import java.time.LocalDate;
 import java.util.Objects;
 
-public class ScheduleGenerationInterval {
+public class ScheduleGenerationInterval implements HasDateDuration {
 
     private LocalDate from;
     private LocalDate to;

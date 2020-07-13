@@ -1,7 +1,7 @@
 package com.averude.uksatse.scheduler.core.util;
 
-import com.averude.uksatse.scheduler.core.entity.interfaces.HasDuration;
 import com.averude.uksatse.scheduler.core.entity.interfaces.HasTime;
+import com.averude.uksatse.scheduler.core.entity.interfaces.HasTimeDuration;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -45,25 +45,25 @@ public class TimeCalculatorImpl implements TimeCalculator {
     }
 
     @Override
-    public Integer getLength(HasTime hasTime, HasDuration hasDuration) {
+    public Integer getLength(HasTime hasTime, HasTimeDuration hasTimeDuration) {
         if (hasTime.getStartTime() == null || hasTime.getEndTime() == null) {
             return 0;
         }
 
         if (hasTime.getBreakStartTime() != null && hasTime.getBreakEndTime() != null) {
-            int beforeBreak = getTimeLength(hasTime.getStartTime(), hasTime.getBreakStartTime(), hasDuration);
-            int afterBreak = getTimeLength(hasTime.getBreakEndTime(), hasTime.getEndTime(), hasDuration);
+            int beforeBreak = getTimeLength(hasTime.getStartTime(), hasTime.getBreakStartTime(), hasTimeDuration);
+            int afterBreak = getTimeLength(hasTime.getBreakEndTime(), hasTime.getEndTime(), hasTimeDuration);
             return beforeBreak + afterBreak;
         } else {
-            return getTimeLength(hasTime.getStartTime(), hasTime.getEndTime(), hasDuration);
+            return getTimeLength(hasTime.getStartTime(), hasTime.getEndTime(), hasTimeDuration);
         }
     }
 
-    private int getTimeLength(int x, int y, HasDuration hasDuration) {
-        if (hasDuration == null) {
+    private int getTimeLength(int x, int y, HasTimeDuration hasTimeDuration) {
+        if (hasTimeDuration == null) {
             return getTimeLength(x, y, null, null);
         } else {
-            return getTimeLength(x, y, hasDuration.getFrom(), hasDuration.getTo());
+            return getTimeLength(x, y, hasTimeDuration.getFrom(), hasTimeDuration.getTo());
         }
     }
 

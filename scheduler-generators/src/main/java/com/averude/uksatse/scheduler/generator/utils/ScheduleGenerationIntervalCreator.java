@@ -1,6 +1,7 @@
 package com.averude.uksatse.scheduler.generator.utils;
 
 import com.averude.uksatse.scheduler.core.entity.ShiftComposition;
+import com.averude.uksatse.scheduler.core.entity.interfaces.HasDateDuration;
 import com.averude.uksatse.scheduler.core.util.OffsetCalculator;
 import com.averude.uksatse.scheduler.generator.model.ScheduleGenerationInterval;
 import org.slf4j.Logger;
@@ -63,7 +64,7 @@ public class ScheduleGenerationIntervalCreator {
 
     private List<ScheduleGenerationInterval> getIntervalsForMainShift(LocalDate from,
                                                                       LocalDate to,
-                                                                      List<ShiftComposition> compositions,
+                                                                      List<? extends HasDateDuration> compositions,
                                                                       long employeeId,
                                                                       int unitsSize,
                                                                       int offset) {
