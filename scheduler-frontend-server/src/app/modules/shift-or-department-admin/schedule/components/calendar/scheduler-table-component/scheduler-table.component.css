@@ -8,8 +8,8 @@
   color: #2b3944;
   font-family: 'MuseoSansMedium';
   font-size: 14px;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  /*white-space: nowrap;*/
+  /*text-overflow: ellipsis;*/
 }
 
 .highlighted {

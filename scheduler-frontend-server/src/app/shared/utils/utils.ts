@@ -33,16 +33,20 @@ export function getEmployeeShortName(employee: Employee): string {
 }
 
 export function binarySearch<T extends IdEntity>(arr: T[], id: number): T {
+  return bs(arr, 'id', id);
+}
+
+function bs(arr: any[], field, value) {
   let start = 0;
   let end = arr.length - 1;
 
   while (start <= end) {
     let mid = Math.floor((start + end) / 2);
 
-    if (arr[mid].id === id) {
+    if (arr[mid][field] === value) {
       return arr[mid];
     }
-    if (id < arr[mid].id) {
+    if (value < arr[mid][field]) {
       end = mid - 1;
     } else {
       start = mid + 1;
