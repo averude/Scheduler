@@ -15,6 +15,7 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
 import { AvrEntityGenerationModule } from "../../../../../lib/avr-entity-generation/avr-entity-generation.module";
+import { TableSumCalculator } from "../../../../../services/calculators/table-sum-calculator.service";
 
 @NgModule({
   imports: [
@@ -38,7 +39,8 @@ import { AvrEntityGenerationModule } from "../../../../../lib/avr-entity-generat
   providers: [
     YearPaginationStrategy,
     WorkingTimeTableDataCollector,
-    WorkingTimeCellLabelSetter
+    WorkingTimeCellLabelSetter,
+    TableSumCalculator
   ]
 })
 export class WorkingTimeModule {}

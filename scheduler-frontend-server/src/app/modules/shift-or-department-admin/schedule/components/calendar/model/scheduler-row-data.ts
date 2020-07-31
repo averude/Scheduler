@@ -6,6 +6,8 @@ export class SchedulerRowData implements RowData {
   name: string;
   position: string;
   cellData: CellData[];
+  sum?: number;
   timeNorm: number;
+  diff?: number;
   isSubstitution: boolean;
 }

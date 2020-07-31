@@ -5,8 +5,6 @@ import { ShiftCompositionService } from "../../../../../../services/http/shift-c
 import { ScheduleService } from "../../../../../../services/http/schedule.service";
 import { WorkingTimeService } from "../../../../../../services/http/working-time.service";
 import { forkJoin, from, Subscription } from "rxjs";
-import { roundToTwo } from "../../../../../../shared/utils/utils";
-import { calculateWorkHoursByWorkDay } from "../../../../../../shared/utils/time-converter";
 import { ScheduleTablePaginationStrategy } from "../../../../../../shared/paginators/pagination-strategy/schedule-table-pagination-strategy";
 import { ScheduleTableDataCollector } from "../collectors/schedule-table-data-collector";
 import { RowGroupData } from "../../../../../../lib/ngx-schedule-table/model/data/row-group-data";
@@ -15,25 +13,30 @@ import { ShiftGenerationUnit } from "../../../../../../model/ui/shift-generation
 import { getGenerationUnits, toGenerationDto } from "../../../../../../lib/avr-entity-generation/util/utils";
 import { NotificationsService } from "angular2-notifications";
 import { concatMap } from "rxjs/operators";
+import { TableRenderer } from "../../../../../../lib/ngx-schedule-table/service/table-renderer.service";
+import { TableSumCalculator } from "../../../../../../services/calculators/table-sum-calculator.service";
 
 @Component({
   selector: 'app-scheduler-table-component',
-  templateUrl: './scheduler-table.component.html',
-  styleUrls: ['./scheduler-table.component.css'],
+  templateUrl: './schedule-table.component.html',
+  styleUrls: ['./schedule-table.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SchedulerTableComponent implements OnInit, OnDestroy {
+export class ScheduleTableComponent implements OnInit, OnDestroy {
 
   units: ShiftGenerationUnit[];
 
   rowGroupData: RowGroupData[];
 
-  paginatorSub: Subscription;
+  private paginatorSub: Subscription;
+  private rowRenderSub: Subscription;
 
   constructor(private cd: ChangeDetectorRef,
               public cellLabelSetter: SchedulerCellLabelSetter,
               public paginationStrategy: ScheduleTablePaginationStrategy,
               private paginationService: PaginationService,
+              private tableRenderer: TableRenderer,
+              private sumCalculator: TableSumCalculator,
               private shiftService: ShiftService,
               private shiftCompositionService: ShiftCompositionService,
               private scheduleService: ScheduleService,
@@ -44,11 +47,15 @@ export class SchedulerTableComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.uploadData();
+
+    this.rowRenderSub = this.tableRenderer.onRenderRow
+      .subscribe(rowId => this.sumCalculator.calculateWorkHoursSum(this.rowGroupData, rowId));
   }
 
   ngOnDestroy(): void {
     this.paginationService.clearStoredValue();
     if (this.paginatorSub) this.paginatorSub.unsubscribe();
+    if (this.rowRenderSub) this.rowRenderSub.unsubscribe();
   }
 
   private uploadData() {
@@ -68,21 +75,11 @@ export class SchedulerTableComponent implements OnInit, OnDestroy {
               daysInMonth[daysInMonth.length - 1].isoString)
           ]).subscribe((values: any[][]) => {
             this.rowGroupData = this.scheduleTableDataCollector.getTableData(daysInMonth, shifts, values[0], values[1], values[2]);
+            this.sumCalculator.calculateWorkHoursSum(this.rowGroupData);
             this.cd.markForCheck();
           })
         })
       });
-  }
-
-  calculateSum(rowData: any) {
-    rowData.sum = rowData.cellData
-      .map(cell => calculateWorkHoursByWorkDay(cell.value))
-      .reduce((prev, curr) => prev + curr, 0);
-    return rowData.sum;
-  }
-
-  calculateDiff(rowData: any) {
-    return roundToTwo(rowData.timeNorm - rowData.sum);
   }
 
   onScheduleGenerate(generationUnits: ShiftGenerationUnit[]) {

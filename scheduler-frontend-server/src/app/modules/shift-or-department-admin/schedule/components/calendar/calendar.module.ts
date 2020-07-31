@@ -1,6 +1,6 @@
 import { NgModule } from "@angular/core";
 import { ScheduleTableModule } from "../../../../../lib/ngx-schedule-table/schedule-table.module";
-import { SchedulerTableComponent } from './scheduler-table-component/scheduler-table.component';
+import { ScheduleTableComponent } from './scheduler-table-component/schedule-table.component';
 import { ScheduleTableContextMenuModule } from "./schedule-table-context-menu/schedule-table-context-menu.module";
 import { ScheduleExportExcelComponent } from "./schedule-export-excel/schedule-export-excel.component";
 import { ShowHoursControlComponent } from "./show-hours-control/show-hours-control.component";
@@ -16,6 +16,7 @@ import { SchedulerCellLabelSetter } from "./utils/scheduler-cell-label-setter";
 import { AvrEntityGenerationModule } from "../../../../../lib/avr-entity-generation/avr-entity-generation.module";
 import { ScheduleTableDataCollector } from "./collectors/schedule-table-data-collector";
 import { ShiftCompositionDivider } from "../../../../../services/divider/shift-composition-divider";
+import { TableSumCalculator } from "../../../../../services/calculators/table-sum-calculator.service";
 
 @NgModule({
   imports: [
@@ -31,7 +32,7 @@ import { ShiftCompositionDivider } from "../../../../../services/divider/shift-c
   ],
   declarations: [
     ShowHoursControlComponent,
-    SchedulerTableComponent,
+    ScheduleTableComponent,
     ScheduleExportExcelComponent
   ],
   providers: [
@@ -40,6 +41,7 @@ import { ShiftCompositionDivider } from "../../../../../services/divider/shift-c
     SchedulerCellLabelSetter,
     ShiftCompositionDivider,
     ScheduleTableDataCollector,
+    TableSumCalculator
   ]
 })
 export class CalendarModule {}

@@ -48,7 +48,7 @@
         *headerCellDef>Sum</th>
     <td class="sum"
         *cellDef="let rowData">
-      <p align="center">{{calculateSum(rowData)}}</p>
+      <p align="center">{{rowData.sum}}</p>
     </td>
   </ng-container>
 
@@ -66,8 +66,8 @@
         *headerCellDef>Diff</th>
     <td class="sum"
         *cellDef="let rowData"
-        [class.notEqual]="calculateDiff(rowData) !== 0">
-      <p align="center">{{calculateDiff(rowData)}}</p>
+        [class.notEqual]="rowData.diff !== 0">
+      <p align="center">{{rowData.diff}}</p>
     </td>
   </ng-container>
 </app-schedules-table>

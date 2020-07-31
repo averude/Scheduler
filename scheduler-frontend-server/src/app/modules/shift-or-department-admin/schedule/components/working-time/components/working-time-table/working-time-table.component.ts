@@ -18,6 +18,7 @@ import { NotificationsService } from "angular2-notifications";
 import { ShiftGenerationUnit } from "../../../../../../../model/ui/shift-generation-unit";
 import { getGenerationUnits, toGenerationDto } from "../../../../../../../lib/avr-entity-generation/util/utils";
 import { concatMap } from "rxjs/operators";
+import { TableSumCalculator } from "../../../../../../../services/calculators/table-sum-calculator.service";
 
 @Component({
   selector: 'app-working-time-table',
@@ -34,12 +35,14 @@ export class WorkingTimeTableComponent implements OnInit, OnDestroy {
 
   private paginatorSub:     Subscription;
   private selectionEndSub:  Subscription;
+  private rowRenderSub: Subscription;
 
   constructor(private cd: ChangeDetectorRef,
               private dialog: MatDialog,
               private rowClearSelection: ClearSelectionService,
               private selectionEndService: SelectionEndService,
               private tableRenderer: TableRenderer,
+              private sumCalculator: TableSumCalculator,
               public cellLabelSetter: WorkingTimeCellLabelSetter,
               public paginationStrategy: YearPaginationStrategy,
               private dataCollector: WorkingTimeTableDataCollector,
@@ -55,6 +58,7 @@ export class WorkingTimeTableComponent implements OnInit, OnDestroy {
           this.shifts = dtos.map(dto => dto.parent);
           this.generationUnits = getGenerationUnits(this.shifts);
           this.rowData = this.dataCollector.getRowData(months, dtos);
+          this.sumCalculator.calculateHoursNormSum(this.rowData);
           this.cd.markForCheck();
         }));
 
@@ -64,20 +68,16 @@ export class WorkingTimeTableComponent implements OnInit, OnDestroy {
           this.openDialog(selectionData);
         }
       });
+
+    this.rowRenderSub = this.tableRenderer.onRenderRow
+      .subscribe(rowId => this.sumCalculator.calculateHoursNormSum(this.rowData, rowId));
   }
 
   ngOnDestroy() {
     this.paginationService.clearStoredValue();
     if (this.paginatorSub) this.paginatorSub.unsubscribe();
     if (this.selectionEndSub) this.selectionEndSub.unsubscribe();
-  }
-
-  calculateSum(rowData: RowData) {
-    if (rowData) {
-      return rowData.cellData
-        .map(cell => (cell.value) ? cell.value.hours : 0)
-        .reduce((prev, curr) => prev + curr, 0);
-    }
+    if (this.rowRenderSub) this.rowRenderSub.unsubscribe();
   }
 
   openDialog(selectionData: SelectionData) {
