@@ -62,6 +62,8 @@ tr:hover {
 }
 
 .table-sticky-header {
+  min-width: 40px;
+  max-width: 60px;
   font-family: 'MuseoSansRegular', 'Roboto', sans-serif;
   font-size: 13px;
   color: #000;
@@ -81,7 +83,6 @@ tr:hover {
 }
 
 .sum {
-  width: 20%;
   padding-top: 8px;
   border: 1px solid #e5e9f0;
 }

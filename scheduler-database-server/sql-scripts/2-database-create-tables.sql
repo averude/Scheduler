@@ -61,6 +61,7 @@ CREATE TABLE IF NOT EXISTS summation_columns (
   enterprise_id       INTEGER       NOT NULL,
   only_holidays       BOOLEAN       NOT NULL    DEFAULT FALSE,
   name                VARCHAR (128) NOT NULL,
+  column_type         VARCHAR (64)  NOT NULL    DEFAULT 'hours_sum',
 
   UNIQUE (enterprise_id, name),
 

@@ -17,7 +17,7 @@
       <tr *ngFor="let dto of summationDtos">
         <td class="td-name">
           <div class="name">
-            {{dto.employee.secondName}}
+            {{getEmployeeShortName(dto.employee)}}
           </div>
           <div class="info">
             {{dto.employee.position.shortName}}
@@ -25,7 +25,7 @@
         </td>
         <td class="sum"
             *ngFor="let summResult of dto.results">
-          <p align="center">{{summResult.value / 60}}</p>
+          <p align="center">{{convertStat(summResult)}}</p>
         </td>
       </tr>
     </tbody>

@@ -40,7 +40,7 @@ public class SummationDTOServiceImpl implements SummationDTOService {
         return scheduleService.findAllDtoByDepartmentIdAndDate(departmentId, from, to)
                 .stream()
                 .map(scheduleDTO -> new SummationDTO(scheduleDTO.getParent(), from, to,
-                        statisticsCalculator.calcSum(summationColumns, scheduleDTO.getCollection())))
+                        statisticsCalculator.calculate(summationColumns, scheduleDTO.getCollection())))
                 .collect(Collectors.toList());
     }
 
@@ -54,7 +54,7 @@ public class SummationDTOServiceImpl implements SummationDTOService {
         return scheduleService.findAllDtoByShiftIdAndDate(shiftId, from, to)
                 .stream()
                 .map(scheduleDTO -> new SummationDTO(scheduleDTO.getParent(), from, to,
-                        statisticsCalculator.calcSum(summationColumns, scheduleDTO.getCollection())))
+                        statisticsCalculator.calculate(summationColumns, scheduleDTO.getCollection())))
                 .collect(Collectors.toList());
     }
 }

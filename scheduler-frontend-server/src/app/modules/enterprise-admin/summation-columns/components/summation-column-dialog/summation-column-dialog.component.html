@@ -11,7 +11,17 @@
             <input matInput
                    class="input-pattern-name"
                    placeholder="Summation column name"
-                   [(ngModel)]="dto.parent.name">
+                   [(ngModel)]="dto.parent.name"
+                   required>
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Summation type</mat-label>
+            <mat-select [(ngModel)]="dto.parent.type"
+                        required>
+              <mat-option value="hours_sum">Sum of hours</mat-option>
+              <mat-option value="count">Days count</mat-option>
+            </mat-select>
           </mat-form-field>
 
           <mat-checkbox [(ngModel)]="dto.parent.onlyHolidays">
@@ -49,6 +59,7 @@
     <button class="mat-raised-button"
             (click)="close()">Close</button>
     <button class="mat-raised-button mat-primary"
+            [disabled]="!dto.parent.name || !dto.parent.type"
             type="submit"
             (click)="submit()">Save</button>
   </mat-dialog-actions>

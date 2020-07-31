@@ -33,6 +33,10 @@ public class SummationColumn implements HasId, HasEnterpriseId {
     private Boolean onlyHolidays = false;
 
     @NotNull
+    @Column(name = "column_type")
+    private String type;
+
+    @NotNull
     private String name;
 
     @OneToMany( fetch = FetchType.EAGER,

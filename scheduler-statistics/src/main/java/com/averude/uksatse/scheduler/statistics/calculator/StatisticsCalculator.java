@@ -7,5 +7,5 @@ import com.averude.uksatse.scheduler.core.entity.WorkDay;
 import java.util.List;
 
 public interface StatisticsCalculator {
-    List<SummationResult> calcSum(List<SummationColumn> summationColumns, List<WorkDay> workDays);
+    List<SummationResult> calculate(List<SummationColumn> summationColumns, List<WorkDay> workDays);
 }

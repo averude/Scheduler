@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { StatisticsService } from "../../../../../../../services/http/statistics.service";
-import { SummationDto } from "../../../../../../../model/dto/summation-dto";
+import { SummationDto, SummationResult } from "../../../../../../../model/dto/summation-dto";
 import { PaginationService } from "../../../../../../../lib/ngx-schedule-table/service/pagination.service";
 import { forkJoin, Subscription } from "rxjs";
 import { SummationColumnDtoService } from "../../../../../../../services/http/summation-column-dto.service";
@@ -8,6 +8,8 @@ import { SummationColumn } from "../../../../../../../model/summation-column";
 import { SimplePaginationStrategy } from "../../../../../../../shared/paginators/pagination-strategy/simple-pagination-strategy";
 import { Shift } from "../../../../../../../model/shift";
 import { ShiftService } from "../../../../../../../services/http/shift.service";
+import { Employee } from "../../../../../../../model/employee";
+import { getEmployeeShortName } from "../../../../../../../shared/utils/utils";
 
 @Component({
   selector: 'app-statistics-table',
@@ -47,5 +49,13 @@ export class StatisticsTableComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.paginationService.clearStoredValue();
     if (this.paginationSub) this.paginationSub.unsubscribe();
+  }
+
+  convertStat(summationResult: SummationResult): number {
+    return summationResult.type === 'hours_sum' ? summationResult.value / 60 : summationResult.value;
+  }
+
+  getEmployeeShortName(employee: Employee): string {
+    return getEmployeeShortName(employee);
   }
 }

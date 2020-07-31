@@ -3,23 +3,34 @@ import com.averude.uksatse.scheduler.core.entity.*;
 import com.averude.uksatse.scheduler.core.util.TimeCalculatorImpl;
 import com.averude.uksatse.scheduler.generator.model.ScheduleGenerationInterval;
 import com.averude.uksatse.scheduler.generator.schedule.ScheduleGeneratorImpl;
+import com.averude.uksatse.scheduler.statistics.calculator.StatisticsCalculator;
 import com.averude.uksatse.scheduler.statistics.calculator.StatisticsCalculatorImpl;
+import com.averude.uksatse.scheduler.statistics.config.StatisticsConfig;
+import com.averude.uksatse.scheduler.statistics.strategy.WorkDaysCountCalculationStrategy;
+import com.averude.uksatse.scheduler.statistics.strategy.WorkDaysHoursCalculationStrategy;
 import org.junit.Test;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.Set;
 import java.util.function.BiFunction;
 
 public class StatisticsCalculatorTest {
-    private StatisticsCalculatorImpl statisticsCalculator = new StatisticsCalculatorImpl(new TimeCalculatorImpl());
+
+    private static StatisticsCalculator getStatisticsCalculator() {
+        StatisticsConfig config = new StatisticsConfig();
+        WorkDaysHoursCalculationStrategy workDaysHoursCalculationStrategy = new WorkDaysHoursCalculationStrategy(new TimeCalculatorImpl());
+        WorkDaysCountCalculationStrategy workDaysCountCalculationStrategy = new WorkDaysCountCalculationStrategy();
+        return new StatisticsCalculatorImpl(config.calculationStrategies(Arrays.asList(workDaysHoursCalculationStrategy, workDaysCountCalculationStrategy)));
+    }
+
+    private StatisticsCalculator statisticsCalculator = getStatisticsCalculator();
 
     @Test
     public void test() {
-        testMethod(statisticsCalculator::calcSum);
+        testMethod(statisticsCalculator::calculate);
     }
 
     private void testMethod(BiFunction<List<SummationColumn>, List<WorkDay>, List<SummationResult>> function) {
@@ -33,9 +44,9 @@ public class StatisticsCalculatorTest {
             startTime = System.nanoTime();
             var dtos = function.apply(bounds, workDays);
             endTime = System.nanoTime();
-//            System.out.println(dtos);
             long time = endTime - startTime;
             times[i] = time;
+//            System.out.println(dtos);
         }
         System.out.print("Ending measuring. Calculating result: ");
         long sum = times[0];
@@ -57,9 +68,16 @@ public class StatisticsCalculatorTest {
         var sc = new SummationColumn();
         sc.setName("");
         sc.setEnterpriseId(1L);
-//        sc.setDayTypeRanges(Set.of(dtr1));
+        sc.setType("hours_sum");
+        sc.setDayTypeRanges(Set.of(dtr1));
 
-        return Arrays.asList(sc);
+        var countSc = new SummationColumn();
+        countSc.setName("Days count column");
+        countSc.setEnterpriseId(1L);
+        countSc.setType("count");
+        countSc.setDayTypeRanges(Set.of(dtr1));
+
+        return Arrays.asList(sc, countSc);
     }
 
     private List<WorkDay> getWorkDays() {
@@ -117,33 +135,5 @@ public class StatisticsCalculatorTest {
         return generator.generate(interval, pattern,
                 Collections.emptyList(), Collections.emptyList(),
                 Arrays.asList(extraWeekend), Arrays.asList(extraWorkDay));
-    }
-
-    private List<WorkDay> getWorkDays(int size) {
-        var random = ThreadLocalRandom.current();
-        var workDays = new ArrayList<WorkDay>();
-        for (int i = 0; i < size/2; i++) {
-            workDays.add(new WorkDay(null,
-                    null,
-                    null,
-                    500,
-//                    random.nextInt(300, 600),
-                    720,
-                    750,
-                    1040,
-//                    random.nextInt(800, 1100),
-                    null));
-            workDays.add(new WorkDay(null,
-                    null,
-                    null,
-                    499,
-//                    random.nextInt(300, 600),
-                    720,
-                    750,
-                    1040,
-//                    random.nextInt(800, 1100),
-                    null));
-        }
-        return workDays;
     }
 }

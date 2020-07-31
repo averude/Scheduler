@@ -13,12 +13,14 @@ import java.util.StringJoiner;
 @Setter
 public class SummationResult {
     private Long summationColumnId;
+    private String type;
     private Long value;
 
     @Override
     public String toString() {
         return new StringJoiner(", ", SummationResult.class.getSimpleName() + "{", "}")
                 .add("summationColumnId=" + summationColumnId)
+                .add("type=" + type)
                 .add("value=" + value)
                 .toString();
     }

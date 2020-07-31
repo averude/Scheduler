@@ -9,5 +9,6 @@ export class SummationDto {
 
 export class SummationResult {
   summationColumnId:  number;
+  type:               string;
   value:              number;
 }
