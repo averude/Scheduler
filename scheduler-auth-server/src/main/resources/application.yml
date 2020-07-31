@@ -12,6 +12,6 @@ server:
   port: 5000
   servlet:
     context-path: /
-logging:
-  level:
-    org.springframework.web: TRACE
+  compression:
+    enabled: true
+    mime-types: application/json,application/xml,text/html,text/xml,text/plain

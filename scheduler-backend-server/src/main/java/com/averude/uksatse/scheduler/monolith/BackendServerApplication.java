@@ -22,8 +22,7 @@ import org.springframework.web.filter.CorsFilter;
         "com.averude.uksatse.scheduler.shared.service",
         "com.averude.uksatse.scheduler.shared.creator",
         "com.averude.uksatse.scheduler.shared.utils",
-        "com.averude.uksatse.scheduler.statistics.calculator",
-        "com.averude.uksatse.scheduler.statistics.service",
+        "com.averude.uksatse.scheduler.statistics",
         "com.averude.uksatse.scheduler.controllers",
         "com.averude.uksatse.scheduler.security"
 })

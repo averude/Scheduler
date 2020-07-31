@@ -5,6 +5,7 @@ import com.averude.uksatse.scheduler.security.entity.UserAccount;
 import com.averude.uksatse.scheduler.server.auth.repository.UserAccountRepository;
 import com.averude.uksatse.scheduler.shared.service.base.AService;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Service
 public class UserAccountDetailsServiceImpl
         extends AService<UserAccount, String>
@@ -64,6 +66,7 @@ public class UserAccountDetailsServiceImpl
     @Transactional
     public UserAccount save(UserAccount user) {
         encodePassword(user);
+        log.info("User {} saved in the database", user.getUsername());
         return super.save(user);
     }
 

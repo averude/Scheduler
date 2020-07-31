@@ -31,12 +31,12 @@ public abstract class ACrudController<T extends HasId> implements ICrudControlle
     }
 
     public List<T> getAll() {
-        logger.debug("Getting all entities...");
+        logger.trace("Getting all entities...");
         return service.findAll();
     }
 
     public Optional<T> get(Long id) {
-        logger.debug("Getting entity by id: {}...", id);
+        logger.trace("Getting entity by id: {}...", id);
         return service.findById(id);
     }
 
@@ -45,20 +45,20 @@ public abstract class ACrudController<T extends HasId> implements ICrudControlle
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/{id}")
                 .buildAndExpand(entity.getId()).toUri();
-        logger.debug("Created entity: {}...", entity.toString());
+        logger.info("Created entity: {}...", entity.toString());
         return ResponseEntity.created(location).body(entity.getId());
     }
 
     public ResponseEntity<?> put(T entity, Authentication authentication) {
         service.save(entity);
-        logger.debug("Updated entity: {}...", entity.toString());
+        logger.info("Updated entity: {}...", entity.toString());
         return ResponseEntity.ok("Entity with ID:" + entity.getId() +
                 " was successfully updated");
     }
 
     public ResponseEntity<?> delete(Long id) {
         service.deleteById(id);
-        logger.debug("Removed entity with id: {}...", id);
+        logger.info("Removed entity with id: {}...", id);
         return new ResponseEntity<>("Entity with ID:" + id +
                 " was successfully deleted", HttpStatus.NO_CONTENT);
     }

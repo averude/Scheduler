@@ -106,18 +106,18 @@ public class AuthServerControllerTest {
                 .header("Authorization", "Bearer " + accessToken)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andDo(mvcResult -> System.out.println(mvcResult.getResponse().getContentAsString()));
+                .andExpect(status().isOk());
+//                .andDo(mvcResult -> System.out.println(mvcResult.getResponse().getContentAsString()));
 
         mockMvc.perform(get("/current")
                 .header("Authorization", "Bearer " + accessToken)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andDo(mvcResult -> {
-                    System.out.println("-----CURRENT-------");
-                    System.out.println(mvcResult.getResponse().getContentAsString());
-                });
+                .andExpect(status().isOk());
+//                .andDo(mvcResult -> {
+//                    System.out.println("-----CURRENT-------");
+//                    System.out.println(mvcResult.getResponse().getContentAsString());
+//                });
     }
 
     private String obtainAccessToken(String username, String password) throws Exception {

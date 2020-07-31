@@ -6,7 +6,13 @@ services:
       context: ./scheduler-database-server
       dockerfile: Dockerfile
     image: scheduler-database-server
+    hostname: scheduler-database-server
     restart: always
+    logging:
+      driver: gelf
+      options:
+        gelf-address: "udp://${GRAYLOG_HOST}:${GRAYLOG_GELF_PORT}"
+        tag: "schedulerdb"
     volumes:
       - ${DB_VOLUME_PATH}:/var/lib/postgresql/data
     ports:
@@ -14,6 +20,8 @@ services:
 
   scheduler-auth-server:
     environment:
+      GRAYLOG_HOST: $GRAYLOG_HOST
+      GRAYLOG_GELF_PORT: $GRAYLOG_GELF_PORT
       BACKEND_SERVER_ID: $BACKEND_SERVER_ID
       BACKEND_SERVER_PASSWORD: $BACKEND_SERVER_PASSWORD
       DB_DRIVER_CLASS_NAME: $DB_DRIVER_CLASS_NAME
@@ -24,6 +32,7 @@ services:
       context: ./scheduler-auth-server
       dockerfile: Dockerfile
     image: scheduler-auth-server
+    hostname: scheduler-auth-server
     restart: always
     ports:
       - 5000:5000
@@ -33,12 +42,15 @@ services:
       context: ./scheduler-gateway-server
       dockerfile: Dockerfile
     image: scheduler-gateway-server
+    hostname: scheduler-gateway-server
     restart: always
     ports:
       - 4000:4000
 
   scheduler-backend-server:
     environment:
+      GRAYLOG_HOST: $GRAYLOG_HOST
+      GRAYLOG_GELF_PORT: $GRAYLOG_GELF_PORT
       USER_INFO_URI: $USER_INFO_URI
       ACCESS_TOKEN_URI: $ACCESS_TOKEN_URI
       BACKEND_SERVER_ID: $BACKEND_SERVER_ID
@@ -51,6 +63,7 @@ services:
       context: ./scheduler-backend-server
       dockerfile: Dockerfile
     image: scheduler-backend-server
+    hostname: scheduler-backend-server
     restart: always
     volumes:
       - ${LOG_VOLUME_PATH}:/logs
@@ -64,6 +77,7 @@ services:
       context: ./scheduler-frontend-server
       dockerfile: Dockerfile
     image: scheduler-frontend-server
+    hostname: scheduler-frontend-server
     restart: always
     volumes:
       - ${FRONTEND_VOLUME_PATH}:/usr/share/nginx/html

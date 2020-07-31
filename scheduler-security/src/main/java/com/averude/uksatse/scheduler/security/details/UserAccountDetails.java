@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.StringJoiner;
 
 @AllArgsConstructor
 @Getter
@@ -50,5 +51,13 @@ public class UserAccountDetails implements UserDetails {
     @Override
     public boolean isEnabled() {
         return userAccount.isEnabled();
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", UserAccountDetails.class.getSimpleName() + "[", "]")
+                .add("username=" + userAccount.getUsername())
+                .add("authority=" + grantedAuthority.getAuthority())
+                .toString();
     }
 }

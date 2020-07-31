@@ -59,6 +59,13 @@
             <artifactId>postgresql</artifactId>
         </dependency>
 
+        <!--Logging to Graylog-->
+        <dependency>
+            <groupId>de.siegmar</groupId>
+            <artifactId>logback-gelf</artifactId>
+            <version>3.0.0</version>
+        </dependency>
+
         <!--TESTS-->
         <dependency>
             <groupId>org.springframework.boot</groupId>

@@ -3,6 +3,6 @@ spring:
     name: test
   jpa:
     show-sql: true
-logging:
-  level:
-    org.springframework.web: TRACE
+#logging:
+#  level:
+#    org.springframework.web: DEBUG

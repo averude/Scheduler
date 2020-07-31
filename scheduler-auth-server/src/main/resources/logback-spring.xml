@@ -10,7 +10,7 @@
 
     <appender name="ErrorFile"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LOGS}/scheduler-backend-server-errors.log</file>
+        <file>${LOGS}/scheduler-auth-server-errors.log</file>
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>ERROR</level>
         </filter>
@@ -20,7 +20,7 @@
 
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- rollover daily and when the file reaches 10 MegaBytes -->
-            <fileNamePattern>${LOGS}/archived/scheduler-errors-%d{yyyy-MM-dd}.%i.log
+            <fileNamePattern>${LOGS}/archived/scheduler-auth-server-errors-%d{yyyy-MM-dd}.%i.log
             </fileNamePattern>
             <timeBasedFileNamingAndTriggeringPolicy
                     class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
@@ -35,6 +35,9 @@
     </root>
 
     <logger name="com.averude.uksatse.scheduler" level="debug" additivity="false">
+        <appender-ref ref="GELF"/>
+    </logger>
+    <logger name="org.springframework.security.oauth2" level="debug" additivity="false">
         <appender-ref ref="GELF"/>
     </logger>
 

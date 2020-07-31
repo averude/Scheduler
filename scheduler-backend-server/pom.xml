@@ -47,6 +47,13 @@
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
 
+        <!--Logging to Graylog-->
+        <dependency>
+            <groupId>de.siegmar</groupId>
+            <artifactId>logback-gelf</artifactId>
+            <version>3.0.0</version>
+        </dependency>
+
         <!--Spring Security-->
         <dependency>
             <groupId>org.springframework.security.oauth.boot</groupId>

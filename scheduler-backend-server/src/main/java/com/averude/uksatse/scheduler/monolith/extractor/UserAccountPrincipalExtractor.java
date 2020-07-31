@@ -32,7 +32,7 @@ public class UserAccountPrincipalExtractor implements PrincipalExtractor {
         if (map.containsKey("principal")) {
             var principal = (LinkedHashMap) map.get("principal");
             Object userAccount = principal.get("userAccount");
-            log.info("Account: " + userAccount);
+            log.trace("Account: " + userAccount);
             Collection<LinkedHashMap<String, String>> authorities = (Collection<LinkedHashMap<String, String>>) map.get("authorities");
             String authority = authorities.iterator().next().get("authority");
             switch (authority) {
