@@ -37,8 +37,5 @@
     <logger name="com.averude.uksatse.scheduler" level="debug" additivity="false">
         <appender-ref ref="GELF"/>
     </logger>
-    <logger name="org.springframework.security.oauth2" level="debug" additivity="false">
-        <appender-ref ref="GELF"/>
-    </logger>
 
 </configuration>

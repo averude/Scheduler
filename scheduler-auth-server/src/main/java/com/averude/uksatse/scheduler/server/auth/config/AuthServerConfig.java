@@ -1,5 +1,6 @@
 package com.averude.uksatse.scheduler.server.auth.config;
 
+import com.averude.uksatse.scheduler.server.auth.filter.LoginRequestLogFilter;
 import com.averude.uksatse.scheduler.server.auth.service.UserAccountDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -39,7 +40,8 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
     public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
         oauthServer.tokenKeyAccess("permitAll()")
                 .checkTokenAccess("isAuthenticated()")
-                .passwordEncoder(encoder);
+                .passwordEncoder(encoder)
+                .addTokenEndpointAuthenticationFilter(new LoginRequestLogFilter());
     }
 
     @Override
