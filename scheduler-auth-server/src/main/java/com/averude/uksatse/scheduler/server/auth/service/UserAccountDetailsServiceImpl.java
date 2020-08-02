@@ -66,7 +66,7 @@ public class UserAccountDetailsServiceImpl
     @Transactional
     public UserAccount save(UserAccount user) {
         encodePassword(user);
-        log.info("User {} saved in the database", user.getUsername());
+        log.info("User {} created/updated in the database", user.getUsername());
         return super.save(user);
     }
 

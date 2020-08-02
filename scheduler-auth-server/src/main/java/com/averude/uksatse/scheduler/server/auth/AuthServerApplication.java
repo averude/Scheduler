@@ -31,7 +31,7 @@ public class AuthServerApplication {
 
     @Bean
     public FilterRegistrationBean customCorsFilter() {
-        FilterRegistrationBean bean = new FilterRegistrationBean<CorsFilter>(new CustomCorsFilter());
+        var bean = new FilterRegistrationBean<CorsFilter>(new CustomCorsFilter());
         bean.setOrder(Ordered.HIGHEST_PRECEDENCE);
         return bean;
     }
