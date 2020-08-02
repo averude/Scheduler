@@ -19,4 +19,15 @@ public interface HolidayRepository extends IByEnterpriseIdAndDateRepository<Holi
     List<Holiday> findAllByDepartmentIdAndDateBetween(Long departmentId,
                                                       LocalDate from,
                                                       LocalDate to);
+
+    @Query("select h " +
+            "from Holiday as h " +
+            "inner join Department as d " +
+            "on h.enterpriseId = d.enterpriseId " +
+            "inner join Shift as s " +
+            "on d.id = s.departmentId " +
+            "where s.id = ?1 and h.date between ?2 and ?3")
+    List<Holiday> findAllByShiftIdAndDateBetween(Long shiftId,
+                                                 LocalDate from,
+                                                 LocalDate to);
 }

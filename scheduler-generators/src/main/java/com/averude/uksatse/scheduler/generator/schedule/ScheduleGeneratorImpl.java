@@ -44,22 +44,14 @@ public class ScheduleGeneratorImpl implements ScheduleGenerator {
 
                 var date = dates.get(dateIndex);
 
-                var isHoliday      = isDateFromList(holidays, date);
-                var isExtraWeekend = isDateFromList(extraWeekends, date);
-                var isExtraWorkDay = isDateFromList(extraWorkDays, date);
-
-                var unit = getPatternUnit(pattern, unitIndex,
-                        pattern.getHolidayDepDayType(), pattern.getExtraWeekendDepDayType(),
-                        pattern.getExtraWorkDayDepDayType(),
-                        isHoliday, isExtraWeekend, isExtraWorkDay);
-
+                var unit = getPatternUnit(pattern, unitIndex, date, holidays, extraWeekends, extraWorkDays);
                 var workDay = getExistingWorkDay(schedule, scheduleIndex);
 
                 if (workDay != null && date.equals(workDay.getDate())) {
                     scheduleIndex++;
-                    updateWorkDay(workDay, unit, isHoliday);
+                    updateWorkDay(workDay, unit);
                 } else {
-                    schedule.add(createWorkDay(interval.getEmployeeId(), unit, date, isHoliday));
+                    schedule.add(createWorkDay(interval.getEmployeeId(), unit, date));
                 }
             }
         }
@@ -67,8 +59,7 @@ public class ScheduleGeneratorImpl implements ScheduleGenerator {
     }
 
     private void updateWorkDay(WorkDay workDay,
-                               HasDayTypeIdAndTime unit,
-                               boolean isHoliday) {
+                               HasDayTypeIdAndTime unit) {
         if (workDay.getId() != null) {
             log.trace("Updating workday {}", workDay);
         }
@@ -77,43 +68,38 @@ public class ScheduleGeneratorImpl implements ScheduleGenerator {
         workDay.setEndTime(unit.getEndTime());
         workDay.setBreakStartTime(unit.getBreakStartTime());
         workDay.setBreakEndTime(unit.getBreakEndTime());
-        workDay.setHoliday(isHoliday);
     }
 
     private WorkDay createWorkDay(Long employeeId,
                                   HasDayTypeIdAndTime unit,
-                                  LocalDate date,
-                                  boolean isHoliday) {
+                                  LocalDate date) {
         var workDay = new WorkDay();
         workDay.setEmployeeId(employeeId);
         workDay.setDate(date);
-        updateWorkDay(workDay, unit, isHoliday);
+        updateWorkDay(workDay, unit);
         log.trace("Creating workday {}", workDay);
         return workDay;
     }
 
     private HasDayTypeIdAndTime getPatternUnit(ShiftPattern pattern,
                                                int unitIndex,
-                                               HasDayTypeIdAndTime holidayUnit,
-                                               HasDayTypeIdAndTime weekendUnit,
-                                               HasDayTypeIdAndTime workDayUnit,
-                                               boolean isHoliday,
-                                               boolean isExtraWeekend,
-                                               boolean isExtraWorkDay) {
-
-        if (holidayUnit != null && isHoliday) {
-            log.trace("Holiday found. Setting pattern unit to holiday's");
-            return holidayUnit;
+                                               LocalDate date,
+                                               List<? extends HasDate> holidays,
+                                               List<? extends HasDate> extraWeekends,
+                                               List<? extends HasDate> extraWorkDays) {
+        var holidayDepDayType = pattern.getHolidayDepDayType();
+        if (holidayDepDayType != null && isDateFromList(holidays, date)) {
+            return holidayDepDayType;
         }
 
-        if (weekendUnit != null && isExtraWeekend) {
-            log.trace("Extra weekend found. Setting pattern unit to an extra weekend's");
-            return weekendUnit;
+        var extraWeekendDepDayType = pattern.getExtraWeekendDepDayType();
+        if (extraWeekendDepDayType != null && isDateFromList(extraWeekends, date)) {
+            return extraWeekendDepDayType;
         }
 
-        if (workDayUnit != null && isExtraWorkDay) {
-            log.trace("Extra work day found. Setting pattern unit to an extra work day's");
-            return workDayUnit;
+        var extraWorkDayDepDayType = pattern.getExtraWorkDayDepDayType();
+        if (extraWeekendDepDayType != null && isDateFromList(extraWorkDays, date)) {
+            return extraWorkDayDepDayType;
         }
 
         return pattern.getSequence().get(unitIndex);

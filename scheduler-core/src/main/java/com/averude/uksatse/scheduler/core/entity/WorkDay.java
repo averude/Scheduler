@@ -45,10 +45,6 @@ public class WorkDay implements HasId, HasDayTypeIdAndTime, HasDate {
     @Column(name = "day_type_id")
     private Long dayTypeId;
 
-    @NotNull(message = "{workDay.isholiday.null}")
-    @Column(nullable = false)
-    private Boolean holiday;
-
     @Column(name = "start_time")
     private Integer startTime;
 
@@ -67,23 +63,19 @@ public class WorkDay implements HasId, HasDayTypeIdAndTime, HasDate {
 
     public WorkDay(Long employeeId, LocalDate date) {
         this.employeeId = employeeId;
-        this.holiday = false;
         this.date = date;
     }
 
     public WorkDay(Long employeeId,
                    Long dayTypeId,
-                   Boolean holiday,
                    LocalDate date) {
         this.employeeId = employeeId;
         this.dayTypeId = dayTypeId;
-        this.holiday = holiday;
         this.date = date;
     }
 
     public WorkDay(Long employeeId,
                    Long dayTypeId,
-                   Boolean holiday,
                    Integer startTime,
                    Integer breakStartTime,
                    Integer breakEndTime,
@@ -91,16 +83,11 @@ public class WorkDay implements HasId, HasDayTypeIdAndTime, HasDate {
                    LocalDate date) {
         this.employeeId = employeeId;
         this.dayTypeId = dayTypeId;
-        this.holiday = holiday;
         this.startTime = startTime;
         this.breakStartTime = breakStartTime;
         this.breakEndTime = breakEndTime;
         this.endTime = endTime;
         this.date = date;
-    }
-
-    public int getTimeHash() {
-        return Objects.hash(dayTypeId, holiday, startTime, breakStartTime, breakEndTime, endTime);
     }
 
     @Override
@@ -110,7 +97,6 @@ public class WorkDay implements HasId, HasDayTypeIdAndTime, HasDate {
         WorkDay workDay = (WorkDay) o;
         return employeeId.equals(workDay.employeeId) &&
                 dayTypeId.equals(workDay.dayTypeId) &&
-                holiday.equals(workDay.holiday) &&
                 Objects.equals(startTime, workDay.startTime) &&
                 Objects.equals(breakStartTime, workDay.breakStartTime) &&
                 Objects.equals(breakEndTime, workDay.breakEndTime) &&
@@ -120,7 +106,7 @@ public class WorkDay implements HasId, HasDayTypeIdAndTime, HasDate {
 
     @Override
     public int hashCode() {
-        return Objects.hash(employeeId, dayTypeId, holiday, startTime, breakStartTime, breakEndTime, endTime, date);
+        return Objects.hash(employeeId, dayTypeId, startTime, breakStartTime, breakEndTime, endTime, date);
     }
 
     @Override
@@ -129,7 +115,6 @@ public class WorkDay implements HasId, HasDayTypeIdAndTime, HasDate {
                 .add("id=" + id)
                 .add("employeeId=" + employeeId)
                 .add("dayTypeId=" + dayTypeId)
-                .add("holiday=" + holiday)
                 .add("date=" + date)
                 .add("startTime=" + startTime)
                 .add("endTime=" + endTime)

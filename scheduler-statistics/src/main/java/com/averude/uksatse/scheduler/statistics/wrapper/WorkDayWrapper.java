@@ -1,21 +1,23 @@
 package com.averude.uksatse.scheduler.statistics.wrapper;
 
 import com.averude.uksatse.scheduler.core.entity.WorkDay;
+import lombok.Getter;
+import lombok.Setter;
 
+import java.util.Objects;
 import java.util.StringJoiner;
 
 public class WorkDayWrapper {
-
+    @Getter
     private final WorkDay workDay;
-    private final int hash;
 
-    public WorkDayWrapper(WorkDay workDay) {
+    @Setter
+    @Getter
+    private boolean holiday;
+
+    public WorkDayWrapper(WorkDay workDay, boolean holiday) {
         this.workDay = workDay;
-        this.hash = workDay.getTimeHash();
-    }
-
-    public WorkDay getWorkDay() {
-        return workDay;
+        this.holiday = holiday;
     }
 
     @Override
@@ -23,12 +25,13 @@ public class WorkDayWrapper {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         WorkDayWrapper that = (WorkDayWrapper) o;
-        return hash == that.hashCode();
+        return this.hashCode() == that.hashCode();
     }
 
     @Override
     public int hashCode() {
-        return hash;
+        return Objects.hash(workDay.getDayTypeId(), workDay.getStartTime(), workDay.getEndTime(),
+                workDay.getBreakStartTime(), workDay.getBreakEndTime(), holiday);
     }
 
     @Override

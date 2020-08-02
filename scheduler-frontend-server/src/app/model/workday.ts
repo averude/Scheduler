@@ -5,7 +5,6 @@ export class WorkDay implements IdEntity, HasDayTypeIdAndTime {
   id:             number;
   employeeId:     number;
   dayTypeId:      number;
-  holiday:        boolean;
   startTime:      number;
   breakStartTime: number;
   breakEndTime:   number;

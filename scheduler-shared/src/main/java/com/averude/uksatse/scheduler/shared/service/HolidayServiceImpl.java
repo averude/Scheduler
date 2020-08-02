@@ -2,7 +2,10 @@ package com.averude.uksatse.scheduler.shared.service;
 
 import com.averude.uksatse.scheduler.core.entity.Holiday;
 import com.averude.uksatse.scheduler.shared.creator.ExtraDayCreator;
-import com.averude.uksatse.scheduler.shared.repository.*;
+import com.averude.uksatse.scheduler.shared.repository.DepartmentRepository;
+import com.averude.uksatse.scheduler.shared.repository.ExtraWeekendRepository;
+import com.averude.uksatse.scheduler.shared.repository.HolidayRepository;
+import com.averude.uksatse.scheduler.shared.repository.ShiftRepository;
 import com.averude.uksatse.scheduler.shared.service.base.AByEnterpriseIdAndDateService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,13 +24,11 @@ public class HolidayServiceImpl
 
     private final HolidayRepository         holidayRepository;
     private final ExtraWeekendRepository    extraWeekendRepository;
-    private final ScheduleRepository        scheduleRepository;
     private final ExtraDayCreator extraDayCreator;
 
     @Autowired
     public HolidayServiceImpl(HolidayRepository holidayRepository,
                               ExtraWeekendRepository extraWeekendRepository,
-                              ScheduleRepository scheduleRepository,
                               DepartmentRepository departmentRepository,
                               ShiftRepository shiftRepository,
                               ExtraDayCreator extraDayCreator) {
@@ -35,7 +36,6 @@ public class HolidayServiceImpl
         this.holidayRepository = holidayRepository;
         this.extraWeekendRepository = extraWeekendRepository;
         this.extraDayCreator = extraDayCreator;
-        this.scheduleRepository = scheduleRepository;
     }
 
     @Override
@@ -55,8 +55,6 @@ public class HolidayServiceImpl
             logger.debug("Extra weekend for holiday created.");
         }
 
-        logger.debug("Setting existing schedule holiday flag to true...");
-        scheduleRepository.setHolidayByEnterpriseIdAndDate(true, holiday.getEnterpriseId(), holiday.getDate());
         return holiday;
     }
 
@@ -80,8 +78,6 @@ public class HolidayServiceImpl
                     });
         }
 
-        logger.debug("Setting existing schedule holiday flag to false...");
-        scheduleRepository.setHolidayByEnterpriseIdAndDate(false, holiday.getEnterpriseId(), holiday.getDate());
         super.delete(holiday);
         logger.debug("Holiday {} is deleted.", holiday);
     }

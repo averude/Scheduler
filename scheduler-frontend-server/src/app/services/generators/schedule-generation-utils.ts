@@ -19,7 +19,6 @@ function createWorkDayInCell(employeeId: number,
                              unit: HasDayTypeIdAndTime) {
   cell.value                = new WorkDay();
   cell.value.employeeId     = employeeId;
-  cell.value.holiday        = cell.date.holiday;
   cell.value.startTime      = convertTimeStringToMin(unit.startTime);
   cell.value.endTime        = convertTimeStringToMin(unit.endTime);
   cell.value.breakStartTime = convertTimeStringToMin(unit.breakStartTime);
@@ -38,5 +37,4 @@ function updateWorkDayInCell(usePreviousValue: boolean,
     cell.value.breakEndTime   = convertTimeStringToMin(unit.breakEndTime);
   }
   cell.value.dayTypeId = unit.dayTypeId;
-  cell.value.holiday   = cell.date.holiday;
 }

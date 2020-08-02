@@ -1,6 +1,7 @@
 package com.averude.uksatse.scheduler.statistics.calculator;
 
 import com.averude.uksatse.scheduler.core.dto.SummationResult;
+import com.averude.uksatse.scheduler.core.entity.Holiday;
 import com.averude.uksatse.scheduler.core.entity.SummationColumn;
 import com.averude.uksatse.scheduler.core.entity.WorkDay;
 import com.averude.uksatse.scheduler.statistics.exceptions.NoCalculationStrategyFoundException;
@@ -28,16 +29,36 @@ public class StatisticsCalculatorImpl implements StatisticsCalculator {
     }
 
     @Override
-    public List<SummationResult> calculate(List<SummationColumn> summationColumns, List<WorkDay> workDays) {
-        var set = getCountMap(workDays).entrySet();
+    public List<SummationResult> calculate(List<SummationColumn> summationColumns,
+                                           List<WorkDay> workDays,
+                                           List<Holiday> holidays) {
+        var set = getCountMap(workDays, holidays).entrySet();
         return summationColumns.stream()
                 .map(column -> new SummationResult(column.getId(), column.getType(), calculateSum(set, column)))
                 .collect(Collectors.toList());
     }
 
-    private Map<WorkDayWrapper, Integer> getCountMap(List<WorkDay> workDays) {
+    private Map<WorkDayWrapper, Integer> getCountMap(List<WorkDay> workDays,
+                                                     List<Holiday> holidays) {
         Map<WorkDayWrapper, Integer> workDayCountMap = new HashMap<>();
-        workDays.forEach(workDay -> workDayCountMap.merge(new WorkDayWrapper(workDay), 1, Integer::sum));
+        if (holidays != null && !holidays.isEmpty()) {
+            for (int workDayIndex = 0, holidayIndex = 0; workDayIndex < workDays.size(); workDayIndex++) {
+                var workDay = workDays.get(workDayIndex);
+                var wrapper = new WorkDayWrapper(workDay, false);
+
+                if (holidayIndex < holidays.size()) {
+                    var holiday = holidays.get(holidayIndex);
+                    if (holiday != null && holiday.getDate().equals(workDay.getDate())) {
+                        wrapper.setHoliday(true);
+                        holidayIndex++;
+                    }
+                }
+
+                workDayCountMap.merge(wrapper, 1, Integer::sum);
+            }
+        } else {
+            workDays.forEach(workDay -> workDayCountMap.merge(new WorkDayWrapper(workDay, false), 1, Integer::sum));
+        }
         return workDayCountMap;
     }
 
@@ -53,7 +74,7 @@ public class StatisticsCalculatorImpl implements StatisticsCalculator {
         }
 
         if (column.getOnlyHolidays()) {
-            entryStream = entryStream.filter(entry -> entry.getKey().getWorkDay().getHoliday());
+            entryStream = entryStream.filter(entry -> entry.getKey().isHoliday());
         }
 
         CalculationStrategy calculationStrategy = calculationStrategies.get(column.getType());

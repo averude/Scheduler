@@ -190,7 +190,6 @@ CREATE TABLE IF NOT EXISTS work_schedule (
   id                  SERIAL,
   employee_id         INTEGER     NOT NULL,
   day_type_id         INTEGER,
-  holiday             BOOLEAN     NOT NULL  DEFAULT FALSE,
   date                DATE        NOT NULL,
   start_time          INTEGER     CHECK ( 0 <= start_time and start_time <= 1440 ),
   end_time            INTEGER     CHECK ( 0 <= end_time and end_time <= 1440 ),

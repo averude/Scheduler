@@ -15,7 +15,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-import java.util.function.BiFunction;
 
 public class StatisticsCalculatorTest {
 
@@ -33,7 +32,7 @@ public class StatisticsCalculatorTest {
         testMethod(statisticsCalculator::calculate);
     }
 
-    private void testMethod(BiFunction<List<SummationColumn>, List<WorkDay>, List<SummationResult>> function) {
+    private void testMethod(TriFunction<List<SummationColumn>, List<WorkDay>, List<Holiday>, List<SummationResult>> function) {
         var bounds = getBounds();
         var times = new long[1000];
         long startTime = 0;
@@ -42,7 +41,8 @@ public class StatisticsCalculatorTest {
         var workDays = getWorkDays();
         for (int i = 0; i < times.length; i++) {
             startTime = System.nanoTime();
-            var dtos = function.apply(bounds, workDays);
+            var dtos = function.apply(bounds, workDays,
+                    Arrays.asList(new Holiday(null, 1L, LocalDate.parse("2020-01-01"), "Test")));
             endTime = System.nanoTime();
             long time = endTime - startTime;
             times[i] = time;
@@ -82,7 +82,7 @@ public class StatisticsCalculatorTest {
 
     private List<WorkDay> getWorkDays() {
         var from = LocalDate.parse("2020-01-01");
-        var to = LocalDate.parse("2020-01-31");
+        var to = LocalDate.parse("2020-12-31");
         var interval = new ScheduleGenerationInterval(from, to, 0L);
 
         var firstDayType = new DayType();
@@ -135,5 +135,9 @@ public class StatisticsCalculatorTest {
         return generator.generate(interval, pattern,
                 Collections.emptyList(), Collections.emptyList(),
                 Arrays.asList(extraWeekend), Arrays.asList(extraWorkDay));
+    }
+
+    private interface TriFunction<T1, T2, T3, R> {
+        R apply(T1 t1, T2 t2, T3 t3);
     }
 }
