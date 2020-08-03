@@ -6,8 +6,7 @@ import com.averude.uksatse.scheduler.generator.model.ScheduleGenerationInterval;
 import com.averude.uksatse.scheduler.generator.schedule.ScheduleGenerator;
 import com.averude.uksatse.scheduler.generator.utils.ScheduleGenerationIntervalCreator;
 import com.averude.uksatse.scheduler.shared.repository.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,10 +15,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 public class ScheduleGenerationServiceImpl implements ScheduleGenerationService {
-
-    private Logger logger = LoggerFactory.getLogger(ScheduleGenerationService.class);
 
     private final ShiftRepository                   shiftRepository;
     private final ShiftCompositionRepository        shiftCompositionRepository;
@@ -56,10 +54,16 @@ public class ScheduleGenerationServiceImpl implements ScheduleGenerationService 
                          LocalDate from,
                          LocalDate to,
                          int offset) {
-        logger.debug("Starting schedule generation for shift id={} from={} to={} with offset={}", shiftId, from, to, offset);
+        log.debug("Starting schedule generation for shift id={} from={} to={} with offset={}", shiftId, from, to, offset);
 
         var shift = shiftRepository.findById(shiftId).orElseThrow();
-        var holidays        = holidayRepository
+        if (shift.getShiftPattern() == null
+                || shift.getShiftPattern().getSequence() == null
+                || shift.getShiftPattern().getSequence().isEmpty()) {
+            log.error("Shift hasn't pattern to generate the schedule.");
+            throw new RuntimeException();
+        }
+        var holidays = holidayRepository
                 .findAllByEnterpriseIdAndDateBetween(shift.getDepartmentId(), from, to);
         var compositions = shiftCompositionRepository
                 .findAllByShiftIdAndToGreaterThanEqualAndFromLessThanEqual(shiftId, from, to);
@@ -68,7 +72,7 @@ public class ScheduleGenerationServiceImpl implements ScheduleGenerationService 
         var extraWorkDays = extraWorkDayRepository
                 .findAllByEnterpriseIdAndDateBetween(shift.getDepartmentId(), from, to);
 
-        logger.debug("Data for generation:\r\n" +
+        log.debug("Data for generation:\r\n" +
                 "Shift:         {}\r\n" +
                 "Compositions:  {}\r\n" +
                 "Holidays:      {}\r\n" +
@@ -77,7 +81,7 @@ public class ScheduleGenerationServiceImpl implements ScheduleGenerationService 
 
         var workDays = generateSchedule(from, to, offset, shift, holidays, compositions, extraWeekends, extraWorkDays);
 
-        logger.debug("Saving generated schedule to database...");
+        log.debug("Saving generated schedule to database...");
         scheduleRepository.saveAll(workDays);
     }
 
@@ -93,7 +97,7 @@ public class ScheduleGenerationServiceImpl implements ScheduleGenerationService 
 
         for (var composition : compositions) {
 
-            logger.debug("Generating schedule for composition {}. ", composition);
+            log.debug("Generating schedule for composition {}. ", composition);
 
             var employeeCompositions = shiftCompositionRepository
                     .findAllByEmployeeIdAndSubstitutionAndToGreaterThanEqualAndFromLessThanEqual(
@@ -107,7 +111,7 @@ public class ScheduleGenerationServiceImpl implements ScheduleGenerationService 
 
             for(var interval : intervals) {
                 var workDays = generateWorkDaysForInterval(interval, shiftPattern, holidays, extraWeekends, extraWorkDays);
-                logger.trace("Generated for interval {} schedule {} ", interval, workDays);
+                log.trace("Generated for interval {} schedule {} ", interval, workDays);
                 result.addAll(workDays);
             }
         }
@@ -122,7 +126,6 @@ public class ScheduleGenerationServiceImpl implements ScheduleGenerationService 
                                                       List<ExtraWorkDay> extraWorkDays) {
         var intervalSchedule = scheduleRepository
                 .findAllByEmployeeIdAndDateBetweenOrderByDateAsc(interval.getEmployeeId(), interval.getFrom(), interval.getTo());
-        logger.debug("Existing schedule {}", intervalSchedule);
         return scheduleGenerator.generate(interval, pattern, intervalSchedule, holidays, extraWeekends, extraWorkDays);
     }
 }
