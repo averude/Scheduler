@@ -17,7 +17,7 @@ import { TableRenderer } from "../../../../../../lib/ngx-schedule-table/service/
 import { TableSumCalculator } from "../../../../../../services/calculators/table-sum-calculator.service";
 
 @Component({
-  selector: 'app-scheduler-table-component',
+  selector: 'app-schedule-table-component',
   templateUrl: './schedule-table.component.html',
   styleUrls: ['./schedule-table.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -32,8 +32,8 @@ export class ScheduleTableComponent implements OnInit, OnDestroy {
   private rowRenderSub: Subscription;
 
   constructor(private cd: ChangeDetectorRef,
-              public cellLabelSetter: SchedulerCellLabelSetter,
-              public paginationStrategy: ScheduleTablePaginationStrategy,
+              public  cellLabelSetter: SchedulerCellLabelSetter,
+              public  paginationStrategy: ScheduleTablePaginationStrategy,
               private paginationService: PaginationService,
               private tableRenderer: TableRenderer,
               private sumCalculator: TableSumCalculator,

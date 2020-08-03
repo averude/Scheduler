@@ -4,13 +4,15 @@ import { GenerationDto } from "../../../model/dto/generation-dto";
 import { ShiftGenerationUnit } from "../../../model/ui/shift-generation-unit";
 
 export function getGenerationUnits(shifts: Shift[]) {
-  return shifts.map(shift => {
-    return {
-      shift: shift,
-      offset: 0,
-      from: moment.utc().startOf("year"),
-      to: moment.utc().endOf("year")
-    }
+  return shifts
+    .filter(shift => shift.shiftPattern)
+    .map(shift => {
+      return {
+        shift: shift,
+        offset: 0,
+        from: moment.utc().startOf("year"),
+        to: moment.utc().endOf("year")
+      }
   });
 }
 
