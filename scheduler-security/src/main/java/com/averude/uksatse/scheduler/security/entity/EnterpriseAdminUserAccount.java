@@ -5,6 +5,7 @@ import lombok.Data;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.util.StringJoiner;
 
 @Data
 @Entity
@@ -12,4 +13,12 @@ import javax.persistence.Table;
 public class EnterpriseAdminUserAccount extends UserAccount {
     @Column(name = "enterprise_id")
     private Long enterpriseId;
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", ShiftAdminUserAccount.class.getSimpleName() + "[", "]")
+                .add("username=" + super.getUsername())
+                .add("enterpriseId=" + enterpriseId)
+                .toString();
+    }
 }

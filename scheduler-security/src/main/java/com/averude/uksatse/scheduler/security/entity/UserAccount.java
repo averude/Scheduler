@@ -8,6 +8,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.StringJoiner;
 
 @Data
 @Entity(name = "user_accounts")
@@ -21,5 +22,12 @@ public class UserAccount implements Serializable {
     private boolean locked = false;
     @NotNull
     private boolean enabled = true;
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", UserAccount.class.getSimpleName() + "[", "]")
+                .add("username='" + username + "'")
+                .toString();
+    }
 }
 
