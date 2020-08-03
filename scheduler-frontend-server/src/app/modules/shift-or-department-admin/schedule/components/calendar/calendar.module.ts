@@ -1,6 +1,6 @@
 import { NgModule } from "@angular/core";
 import { ScheduleTableModule } from "../../../../../lib/ngx-schedule-table/schedule-table.module";
-import { ScheduleTableComponent } from './scheduler-table-component/schedule-table.component';
+import { ScheduleTableComponent } from './schedule-table-component/schedule-table.component';
 import { ScheduleTableContextMenuModule } from "./schedule-table-context-menu/schedule-table-context-menu.module";
 import { ScheduleExportExcelComponent } from "./schedule-export-excel/schedule-export-excel.component";
 import { ShowHoursControlComponent } from "./show-hours-control/show-hours-control.component";

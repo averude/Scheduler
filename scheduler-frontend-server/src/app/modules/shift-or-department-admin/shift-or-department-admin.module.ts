@@ -5,7 +5,7 @@ import { RoleGuard } from '../../guards/role-guard.service';
 import { StatisticsTableComponent } from "./schedule/components/statistics/components/statistics-table/statistics-table.component";
 import { ScheduleTabBarComponent } from "./schedule/components/schedule-tab-bar/schedule-tab-bar.component";
 import { ReportFormComponent } from "./reports/components/report-form/report-form.component";
-import { ScheduleTableComponent } from "./schedule/components/calendar/scheduler-table-component/schedule-table.component";
+import { ScheduleTableComponent } from "./schedule/components/calendar/schedule-table-component/schedule-table.component";
 import { ShiftCompositionTableComponent } from "./schedule/components/shift-composition/components/shift-composition-table/shift-composition-table.component";
 import { WorkingTimeTableComponent } from "./schedule/components/working-time/components/working-time-table/working-time-table.component";
 
