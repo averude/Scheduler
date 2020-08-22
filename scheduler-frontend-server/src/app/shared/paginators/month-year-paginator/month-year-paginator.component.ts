@@ -1,19 +1,22 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import * as moment from "moment";
 import { DurationInputArg1, DurationInputArg2, Moment } from "moment";
 import { MatDatepicker } from "@angular/material/datepicker";
 import { PaginationService } from "../../../lib/ngx-schedule-table/service/pagination.service";
 import { IPaginationStrategy } from "../pagination-strategy/i-pagination-strategy";
+import { Subject, Subscription } from "rxjs";
+import { debounceTime, switchMap } from "rxjs/operators";
 
 @Component({
   selector: 'app-month-year-paginator',
   templateUrl: './month-year-paginator.component.html',
   styleUrls: ['./month-year-paginator.component.css']
 })
-export class MonthYearPaginatorComponent implements OnInit {
+export class MonthYearPaginatorComponent implements OnInit, OnDestroy {
   @Input() paginationStrategy:  IPaginationStrategy;
   @Input() dateUnit: DurationInputArg2 = 'month';
 
+  private limiter:  Subject<any> = new Subject();
   private dateStep: DurationInputArg1 = 1;
 
   currentDate:      Moment;
@@ -22,8 +25,22 @@ export class MonthYearPaginatorComponent implements OnInit {
 
   constructor(private datePaginationService: PaginationService) {}
 
+  private limiterSub: Subscription;
+
   ngOnInit() {
+    this.limiterSub = this.limiter
+      .asObservable()
+      .pipe(
+        debounceTime(400),
+        switchMap(values => this.paginationStrategy.getPaginationObject(values[0], values[1], values[2]))
+      )
+      .subscribe(value => this.datePaginationService.change(value));
+
     this.initCurrentDate();
+  }
+
+  ngOnDestroy(): void {
+    this.limiterSub.unsubscribe();
   }
 
   private initCurrentDate() {
@@ -70,9 +87,8 @@ export class MonthYearPaginatorComponent implements OnInit {
   private changeDate() {
     this.initFirstAndLastDaysOfDateUnit();
     if (this.paginationStrategy) {
-      this.paginationStrategy
-        .getPaginationObject(this.currentDate, this.firstDayOfMonth, this.lastDayOfMonth)
-        .subscribe(value => this.datePaginationService.change(value));
+      let values = [this.currentDate, this.firstDayOfMonth, this.lastDayOfMonth];
+      this.limiter.next(values);
     }
   }
 }
