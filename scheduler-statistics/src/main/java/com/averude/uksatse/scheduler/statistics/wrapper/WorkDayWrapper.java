@@ -13,11 +13,11 @@ public class WorkDayWrapper {
 
     @Setter
     @Getter
-    private boolean holiday;
+    private String specialDateType;
 
-    public WorkDayWrapper(WorkDay workDay, boolean holiday) {
+    public WorkDayWrapper(WorkDay workDay, String specialDateType) {
         this.workDay = workDay;
-        this.holiday = holiday;
+        this.specialDateType = specialDateType;
     }
 
     @Override
@@ -31,13 +31,14 @@ public class WorkDayWrapper {
     @Override
     public int hashCode() {
         return Objects.hash(workDay.getDayTypeId(), workDay.getStartTime(), workDay.getEndTime(),
-                workDay.getBreakStartTime(), workDay.getBreakEndTime(), holiday);
+                workDay.getBreakStartTime(), workDay.getBreakEndTime(), specialDateType);
     }
 
     @Override
     public String toString() {
         return new StringJoiner(", ", WorkDayWrapper.class.getSimpleName() + "[", "]")
                 .add("workDay=" + workDay)
+                .add("specialDateType=" + specialDateType)
                 .toString();
     }
 }

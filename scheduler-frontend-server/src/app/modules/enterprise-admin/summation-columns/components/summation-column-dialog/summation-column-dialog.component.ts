@@ -1,11 +1,12 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { DayType } from "../../../../../model/day-type";
-import { SummationColumn } from "../../../../../model/summation-column";
+import { SUMMATION_COLUMN_TYPES, SummationColumn } from "../../../../../model/summation-column";
 import { SummationColumnDayTypeRange } from "../../../../../model/summation-column-day-type-range";
 import { DtoDialogBaseComponent } from "../../../../../shared/abstract-components/dialog-base/dto-dialog-base.component";
 import { AuthService } from "../../../../../services/http/auth.service";
 import { BasicDto } from "../../../../../model/dto/basic-dto";
+import { SPECIAL_CALENDAR_DATE_TYPES } from "../../../../../model/special-calendar-date";
 
 @Component({
   selector: 'app-summation-column-dialog',
@@ -15,6 +16,9 @@ import { BasicDto } from "../../../../../model/dto/basic-dto";
 export class SummationColumnDialogComponent extends DtoDialogBaseComponent<SummationColumn, SummationColumnDayTypeRange> {
 
   dayTypes: DayType[];
+
+  columnTypes:  string[] = SUMMATION_COLUMN_TYPES;
+  dateTypes:    string[] = SPECIAL_CALENDAR_DATE_TYPES;
 
   constructor(private authService: AuthService,
               dialogRef: MatDialogRef<SummationColumnDialogComponent>,

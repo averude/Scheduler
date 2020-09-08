@@ -4,6 +4,7 @@ import com.averude.uksatse.scheduler.core.entity.interfaces.HasDateDuration;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.stream.Stream;
 
 @Data
 public class ScheduleGenerationInterval implements HasDateDuration {
@@ -20,5 +21,9 @@ public class ScheduleGenerationInterval implements HasDateDuration {
         this.from = from;
         this.to = to;
         this.offset = offset;
+    }
+
+    public Stream<LocalDate> datesBetween() {
+        return from.datesUntil(to.plusDays(1L));
     }
 }

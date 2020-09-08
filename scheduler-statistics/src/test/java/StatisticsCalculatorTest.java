@@ -16,6 +16,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import static com.averude.uksatse.scheduler.core.entity.SummationColumnType.COUNT;
+import static com.averude.uksatse.scheduler.core.entity.SummationColumnType.HOURS_SUM;
+
 public class StatisticsCalculatorTest {
 
     private static StatisticsCalculator getStatisticsCalculator() {
@@ -32,7 +35,7 @@ public class StatisticsCalculatorTest {
         testMethod(statisticsCalculator::calculate);
     }
 
-    private void testMethod(TriFunction<List<SummationColumn>, List<WorkDay>, List<Holiday>, List<SummationResult>> function) {
+    private void testMethod(TriFunction<List<SummationColumn>, List<WorkDay>, List<SpecialCalendarDate>, List<SummationResult>> function) {
         var bounds = getBounds();
         var times = new long[1000];
         long startTime = 0;
@@ -42,7 +45,7 @@ public class StatisticsCalculatorTest {
         for (int i = 0; i < times.length; i++) {
             startTime = System.nanoTime();
             var dtos = function.apply(bounds, workDays,
-                    Arrays.asList(new Holiday(null, 1L, LocalDate.parse("2020-01-01"), "Test")));
+                    Arrays.asList(new SpecialCalendarDate(null, 1L, LocalDate.parse("2020-01-01"), "Test", SpecialCalendarDateType.HOLIDAY)));
             endTime = System.nanoTime();
             long time = endTime - startTime;
             times[i] = time;
@@ -68,13 +71,13 @@ public class StatisticsCalculatorTest {
         var sc = new SummationColumn();
         sc.setName("");
         sc.setEnterpriseId(1L);
-        sc.setType("hours_sum");
+        sc.setColumnType(HOURS_SUM);
         sc.setDayTypeRanges(Set.of(dtr1));
 
         var countSc = new SummationColumn();
         countSc.setName("Days count column");
         countSc.setEnterpriseId(1L);
-        countSc.setType("count");
+        countSc.setColumnType(COUNT);
         countSc.setDayTypeRanges(Set.of(dtr1));
 
         return Arrays.asList(sc, countSc);
@@ -125,16 +128,17 @@ public class StatisticsCalculatorTest {
         pattern.setExtraWorkDayDepDayType(workDayType);
         pattern.setSequence(Arrays.asList(firstUnit, secondUnit, thirdUnit));
 
-        var extraWeekend = new ExtraWeekend();
+        var extraWeekend = new SpecialCalendarDate();
         extraWeekend.setDate(LocalDate.parse("2020-01-05"));
+        extraWeekend.setDateType(SpecialCalendarDateType.EXTRA_WEEKEND);
 
-        var extraWorkDay = new ExtraWorkDay();
+        var extraWorkDay = new SpecialCalendarDate();
         extraWorkDay.setDate(LocalDate.parse("2020-01-10"));
+        extraWorkDay.setDateType(SpecialCalendarDateType.EXTRA_WORK_DAY);
 
         var generator = new ScheduleGeneratorImpl();
         return generator.generate(interval, pattern,
-                Collections.emptyList(), Collections.emptyList(),
-                Arrays.asList(extraWeekend), Arrays.asList(extraWorkDay));
+                Collections.emptyList(), Arrays.asList(extraWorkDay, extraWeekend));
     }
 
     private interface TriFunction<T1, T2, T3, R> {

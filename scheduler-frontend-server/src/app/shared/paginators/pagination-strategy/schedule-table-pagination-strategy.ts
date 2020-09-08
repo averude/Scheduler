@@ -1,20 +1,17 @@
 import { Injectable } from "@angular/core";
 import { CalendarDay } from "../../../lib/ngx-schedule-table/model/calendar-day";
-import { HolidayService } from "../../../services/http/holiday.service";
-import { ExtraWeekendService } from "../../../services/http/extra-weekend.service";
-import { ExtraWorkdayService } from "../../../services/http/extra-workday.service";
 import * as moment from "moment";
 import { Moment } from "moment";
-import { forkJoin, Observable } from "rxjs";
+import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { IPaginationStrategy } from "./i-pagination-strategy";
+import { SpecialCalendarDateService } from "../../../services/http/special-calendar-date.service";
+import { SpecialCalendarDate } from "../../../model/special-calendar-date";
 
 @Injectable()
 export class ScheduleTablePaginationStrategy implements IPaginationStrategy {
 
-  constructor(private holidayService:       HolidayService,
-              private extraWeekendService:  ExtraWeekendService,
-              private extraWorkDayService:  ExtraWorkdayService) {
+  constructor(private specialCalendarDateService: SpecialCalendarDateService) {
   }
 
   getPaginationObject(selectedDate: Moment,
@@ -23,22 +20,12 @@ export class ScheduleTablePaginationStrategy implements IPaginationStrategy {
     let firstDayOfMonthString = firstDay.format("YYYY-MM-DD");
     let lastDayOfMonthString = lastDay.format("YYYY-MM-DD");
 
-    return forkJoin([
-      this.holidayService.getAll(firstDayOfMonthString, lastDayOfMonthString),
-      this.extraWeekendService.getAll(firstDayOfMonthString, lastDayOfMonthString),
-      this.extraWorkDayService.getAll(firstDayOfMonthString, lastDayOfMonthString)
-    ]).pipe(map(values => {
-      return this.calculateDaysInMonth(selectedDate,
-        values[0].map(value => value.date),
-        values[1].map(value => value.date),
-        values[2].map(value => value.date));
-    }));
+    return this.specialCalendarDateService.getAll(firstDayOfMonthString, lastDayOfMonthString)
+      .pipe(map(specialCalendarDates => this.calcDaysInMonth(selectedDate, specialCalendarDates)));
   }
 
-  public calculateDaysInMonth(selectedDate:   Moment,
-                              holidays:       string[],
-                              extraWeekends:  string[],
-                              extraWorkDays:  string[]): CalendarDay[] {
+  private calcDaysInMonth(selectedDate: Moment,
+               specialCalendarDates: SpecialCalendarDate[]): CalendarDay[] {
     const currDateIso = moment().format("YYYY-MM-DD");
 
     let daysInMonth: CalendarDay[] = [];
@@ -49,16 +36,15 @@ export class ScheduleTablePaginationStrategy implements IPaginationStrategy {
     for (let i = 0; i < daysNum; i++) {
       let isoString = day.format("YYYY-MM-DD");
 
-      let isHoliday       = holidays.includes(isoString);
-      let isExtraWeekend  = extraWeekends.includes(isoString);
-      let isExtraWorkDay  = extraWorkDays.includes(isoString);
+      // Temporary
+      let specialCalendarDate = specialCalendarDates.find(value => value.date === isoString);
 
       daysInMonth[i] = {
         isoString: isoString,
         dayOfMonth: day.date(),
         dayOfWeek: day.weekday(),
-        holiday: isHoliday,
-        weekend: (day.weekday() == 0 || day.weekday() == 6 || isExtraWeekend) && !isExtraWorkDay,
+        holiday: this.checkSpecialDate(specialCalendarDate, 'holiday'),
+        weekend: this.isWeekend(day, specialCalendarDate),
         isNow:   currDateIso === isoString
       };
 
@@ -66,5 +52,15 @@ export class ScheduleTablePaginationStrategy implements IPaginationStrategy {
     }
 
     return daysInMonth;
+  }
+
+  private checkSpecialDate(specialCalendarDate: SpecialCalendarDate, type: string) {
+    return specialCalendarDate && specialCalendarDate.dateType === type;
+  }
+
+  private isWeekend(day: Moment, specialDate: SpecialCalendarDate) {
+    return (day.weekday() == 0 || day.weekday() == 6
+      || this.checkSpecialDate(specialDate, 'extra_weekend'))
+      && !this.checkSpecialDate(specialDate, 'extra_work_day');
   }
 }

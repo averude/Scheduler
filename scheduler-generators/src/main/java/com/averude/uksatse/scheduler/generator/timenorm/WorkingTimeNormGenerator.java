@@ -1,7 +1,9 @@
 package com.averude.uksatse.scheduler.generator.timenorm;
 
-import com.averude.uksatse.scheduler.core.entity.*;
-import com.averude.uksatse.scheduler.core.entity.interfaces.HasDate;
+import com.averude.uksatse.scheduler.core.entity.PatternUnit;
+import com.averude.uksatse.scheduler.core.entity.ShiftPattern;
+import com.averude.uksatse.scheduler.core.entity.SpecialCalendarDate;
+import com.averude.uksatse.scheduler.core.entity.WorkingTime;
 import com.averude.uksatse.scheduler.core.entity.structure.Shift;
 import com.averude.uksatse.scheduler.core.util.OffsetCalculator;
 import com.averude.uksatse.scheduler.core.util.TimeCalculator;
@@ -10,9 +12,10 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.Period;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.averude.uksatse.scheduler.core.entity.SpecialCalendarDateType.*;
 
 @Component
 public class WorkingTimeNormGenerator {
@@ -31,72 +34,57 @@ public class WorkingTimeNormGenerator {
                                                           Shift shift,
                                                           LocalDate from,
                                                           LocalDate to,
-                                                          List<Holiday> holidays,
-                                                          List<ExtraWeekend> extraWeekends,
-                                                          List<ExtraWorkDay> extraWorkDays) {
+                                                          List<SpecialCalendarDate> specialCalendarDates) {
         var shiftPattern    = shift.getShiftPattern();
         var units           = shiftPattern.getSequence();
 
-        var dayTypeIndexes = new int[]{0, 0, 0};
+        var dayTypeIndexes = new int[]{0};
+        return from.datesUntil(to, Period.ofMonths(1))
+                .map(month -> {
+                    var extraCoefficient = getExtraCoefficient(specialCalendarDates, shiftPattern, dayTypeIndexes, month);
 
-        var result = new ArrayList<WorkingTime>();
+                    var offsetForDate = (int) offsetCalculator
+                            .recalculateForDate(from, month, units.size(), offset);
 
-        var yearMonths = from.datesUntil(to, Period.ofMonths(1)).collect(Collectors.toList());
-        for (var month : yearMonths) {
-            var extraCoefficient = getExtraCoefficient(holidays, extraWeekends, extraWorkDays,
-                    shiftPattern, dayTypeIndexes, month);
+                    float hours = getHours(units, month, offsetForDate) - extraCoefficient;
+                    hours = hours >= 0 ? hours : 0;
 
-            var offsetForDate = (int) offsetCalculator
-                    .recalculateForDate(from, month, units.size(), offset);
-
-            float hours = getHours(units, month, offsetForDate) - extraCoefficient;
-            hours = hours >= 0 ? hours : 0;
-
-            var workingTime = createWorkingTime(shift.getId(),
-                    shift.getDepartmentId(),
-                    hours,
-                    month);
-            result.add(workingTime);
-        }
-
-        return result;
+                    return createWorkingTime(shift.getId(),
+                            shift.getDepartmentId(),
+                            hours,
+                            month);
+                })
+                .collect(Collectors.toList());
     }
 
-    private long getExtraCoefficient(List<Holiday> holidays,
-                                     List<ExtraWeekend> extraWeekends,
-                                     List<ExtraWorkDay> extraWorkDays,
+    private long getExtraCoefficient(List<SpecialCalendarDate> specialCalendarDates,
                                      ShiftPattern shiftPattern,
-                                     int[] dayTypeIndexes,
+                                     int[] index,
                                      LocalDate month) {
-        var extraCoefficient = 0L;
-
-        var holidayDepDayType       = shiftPattern.getHolidayDepDayType();
-        var extraWeekendDepDayType  = shiftPattern.getExtraWeekendDepDayType();
-        var extraWorkDayDepDayType  = shiftPattern.getExtraWorkDayDepDayType();
-
-        extraCoefficient += calcExtraCoefficient(month, holidayDepDayType, holidays, dayTypeIndexes, 0);
-        extraCoefficient += calcExtraCoefficient(month, extraWeekendDepDayType, extraWeekends, dayTypeIndexes, 1);
-        extraCoefficient += calcExtraCoefficient(month, extraWorkDayDepDayType, extraWorkDays, dayTypeIndexes, 2);
-
-        return extraCoefficient;
-    }
-
-    private long calcExtraCoefficient(LocalDate date,
-                                      DepartmentDayType departmentDayType,
-                                      List<? extends HasDate> hasDateList,
-                                      int[] dayTypeIndexes,
-                                      int idx) {
-        var extraCoefficient = 0;
-
-        if (departmentDayType != null && hasDateList != null && hasDateList.size() > 0) {
-            var holiday = hasDateList.get(dayTypeIndexes[idx]);
-            if (compareMonthAndYear(date, holiday.getDate())) {
-                extraCoefficient = timeCalculator.getLength(departmentDayType, null);
-                dayTypeIndexes[idx]++;
-            }
+        if (specialCalendarDates == null || specialCalendarDates.isEmpty() || index[0] >= specialCalendarDates.size()) {
+            return 0L;
         }
 
-        return extraCoefficient;
+        var specialCalendarDate = specialCalendarDates.get(index[0]);
+        if (specialCalendarDate != null && compareMonthAndYear(specialCalendarDate.getDate(), month)) {
+            index[0]++;
+            return getDayTypeLengthBySpecialDate(shiftPattern, specialCalendarDate);
+        }
+
+        return 0L;
+    }
+
+    private long getDayTypeLengthBySpecialDate(ShiftPattern shiftPattern,
+                                               SpecialCalendarDate specialCalendarDate) {
+        switch (specialCalendarDate.getDateType()) {
+            case HOLIDAY :        return timeCalculator
+                    .getLength(shiftPattern.getHolidayDepDayType(), null);
+            case EXTRA_WEEKEND :  return timeCalculator
+                    .getLength(shiftPattern.getExtraWeekendDepDayType(), null);
+            case EXTRA_WORK_DAY : return timeCalculator
+                    .getLength(shiftPattern.getExtraWorkDayDepDayType(), null);
+            default : throw new RuntimeException();
+        }
     }
 
     private boolean compareMonthAndYear(LocalDate date1,

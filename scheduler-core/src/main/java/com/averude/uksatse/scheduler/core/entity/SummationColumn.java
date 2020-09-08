@@ -1,5 +1,6 @@
 package com.averude.uksatse.scheduler.core.entity;
 
+import com.averude.uksatse.scheduler.core.converters.ListStringConverter;
 import com.averude.uksatse.scheduler.core.entity.interfaces.HasEnterpriseId;
 import com.averude.uksatse.scheduler.core.entity.interfaces.HasId;
 import lombok.AllArgsConstructor;
@@ -9,6 +10,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 import java.util.Set;
 import java.util.StringJoiner;
 
@@ -29,12 +31,12 @@ public class SummationColumn implements HasId, HasEnterpriseId {
     private Long enterpriseId;
 
     @NotNull
-    @Column(name = "only_holidays")
-    private Boolean onlyHolidays = false;
-
-    @NotNull
     @Column(name = "column_type")
-    private String type;
+    private String columnType;
+
+    @Convert(converter = ListStringConverter.class)
+    @Column(name = "special_calendar_date_types")
+    private List<String> specialCalendarDateTypes;
 
     @NotNull
     private String name;

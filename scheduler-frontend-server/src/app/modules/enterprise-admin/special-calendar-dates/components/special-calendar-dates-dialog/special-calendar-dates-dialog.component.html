@@ -12,6 +12,16 @@
   </mat-form-field>
 
   <mat-form-field>
+    <mat-select formControlName="dateType"
+                placeholder="Date type">
+      <mat-option *ngFor="let type of dateTypes"
+                  [value]="type">
+        {{type}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field>
     <input matInput
            placeholder="Name"
            formControlName="name">

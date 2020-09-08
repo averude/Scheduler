@@ -1,6 +1,8 @@
 package com.averude.uksatse.scheduler.generator.schedule;
 
-import com.averude.uksatse.scheduler.core.entity.*;
+import com.averude.uksatse.scheduler.core.entity.ShiftPattern;
+import com.averude.uksatse.scheduler.core.entity.SpecialCalendarDate;
+import com.averude.uksatse.scheduler.core.entity.WorkDay;
 import com.averude.uksatse.scheduler.core.entity.interfaces.HasDate;
 import com.averude.uksatse.scheduler.core.entity.interfaces.HasDayTypeIdAndTime;
 import com.averude.uksatse.scheduler.generator.model.ScheduleGenerationInterval;
@@ -10,7 +12,10 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static com.averude.uksatse.scheduler.core.entity.SpecialCalendarDateType.*;
 
 @Slf4j
 @Component
@@ -20,20 +25,20 @@ public class ScheduleGeneratorImpl implements ScheduleGenerator {
     public List<WorkDay> generate(ScheduleGenerationInterval interval,
                                   ShiftPattern pattern,
                                   List<WorkDay> existingSchedule,
-                                  List<Holiday> holidays,
-                                  List<ExtraWeekend> extraWeekends,
-                                  List<ExtraWorkDay> extraWorkDays) {
+                                  List<SpecialCalendarDate> specialCalendarDates) {
         var schedule = new ArrayList<>(existingSchedule);
 
-        var dates = interval.getFrom()
-                .datesUntil(interval.getTo().plusDays(1))
-                .collect(Collectors.toList());
+        var dates = interval.datesBetween().collect(Collectors.toList());
 
         int datesSize = dates.size();
         int unitsSize = pattern.getSequence().size();
         var offset    = interval.getOffset();
 
-        for (int i = 0, scheduleIndex = 0; i < datesSize; i+=unitsSize) {
+        // The first element is the special date index,
+        // the second one is the schedule index
+        int[] indices = {0, 0};
+
+        for (int i = 0; i < datesSize; i+=unitsSize) {
             for (int j = 0; j < unitsSize; j++) {
                 int dateIndex = i + j;
                 if (dateIndex >= datesSize) {
@@ -44,15 +49,14 @@ public class ScheduleGeneratorImpl implements ScheduleGenerator {
 
                 var date = dates.get(dateIndex);
 
-                var unit = getPatternUnit(pattern, unitIndex, date, holidays, extraWeekends, extraWorkDays);
-                var workDay = getExistingWorkDay(schedule, scheduleIndex);
+                var unit = getValue(specialCalendarDates, date, indices, 0)
+                        .map(specialDate -> getDepartmentDayType(pattern, specialDate))
+                        .orElse(pattern.getSequence().get(unitIndex));
 
-                if (workDay != null && date.equals(workDay.getDate())) {
-                    scheduleIndex++;
-                    updateWorkDay(workDay, unit);
-                } else {
-                    schedule.add(createWorkDay(interval.getEmployeeId(), unit, date));
-                }
+                getValue(schedule, date, indices, 1)
+                        .ifPresentOrElse(
+                                (workDay) -> updateWorkDay(workDay, unit),
+                                () -> schedule.add(createWorkDay(interval.getEmployeeId(), unit, date)));
             }
         }
         return schedule;
@@ -61,7 +65,7 @@ public class ScheduleGeneratorImpl implements ScheduleGenerator {
     private void updateWorkDay(WorkDay workDay,
                                HasDayTypeIdAndTime unit) {
         if (workDay.getId() != null) {
-            log.trace("Updating workday {}", workDay);
+            log.trace("Updating workday {} by unit {}", workDay, unit);
         }
         workDay.setDayTypeId(unit.getDayTypeId());
         workDay.setStartTime(unit.getStartTime());
@@ -81,38 +85,32 @@ public class ScheduleGeneratorImpl implements ScheduleGenerator {
         return workDay;
     }
 
-    private HasDayTypeIdAndTime getPatternUnit(ShiftPattern pattern,
-                                               int unitIndex,
-                                               LocalDate date,
-                                               List<? extends HasDate> holidays,
-                                               List<? extends HasDate> extraWeekends,
-                                               List<? extends HasDate> extraWorkDays) {
-        var holidayDepDayType = pattern.getHolidayDepDayType();
-        if (holidayDepDayType != null && isDateFromList(holidays, date)) {
-            return holidayDepDayType;
-        }
-
-        var extraWeekendDepDayType = pattern.getExtraWeekendDepDayType();
-        if (extraWeekendDepDayType != null && isDateFromList(extraWeekends, date)) {
-            return extraWeekendDepDayType;
-        }
-
-        var extraWorkDayDepDayType = pattern.getExtraWorkDayDepDayType();
-        if (extraWeekendDepDayType != null && isDateFromList(extraWorkDays, date)) {
-            return extraWorkDayDepDayType;
-        }
-
-        return pattern.getSequence().get(unitIndex);
+    private <T extends HasDate> Optional<T> getValue(List<T> values,
+                                                     LocalDate date,
+                                                     int[] indices,
+                                                     int indexNumber) {
+        return getValueFromList(values, indices[indexNumber])
+                .filter(value -> date.equals(value.getDate()))
+                .map(value -> {
+                    indices[indexNumber]++;
+                    return value;
+                });
     }
 
-    private WorkDay getExistingWorkDay(ArrayList<WorkDay> schedule, int scheduleIndex) {
-        if (scheduleIndex < schedule.size()) {
-            return schedule.get(scheduleIndex);
+    private HasDayTypeIdAndTime getDepartmentDayType(ShiftPattern pattern,
+                                                     SpecialCalendarDate specialDate) {
+        switch (specialDate.getDateType()) {
+            case HOLIDAY            : return pattern.getHolidayDepDayType();
+            case EXTRA_WEEKEND      : return pattern.getExtraWeekendDepDayType();
+            case EXTRA_WORK_DAY     : return pattern.getExtraWorkDayDepDayType();
+            default                 : throw new RuntimeException();
         }
-        return null;
     }
 
-    private boolean isDateFromList(List<? extends HasDate> hasDateList, LocalDate date) {
-        return hasDateList.stream().anyMatch(value -> value.getDate().equals(date));
+    private <T> Optional<T> getValueFromList(List<T> list, int index) {
+        if (index < list.size()) {
+            return Optional.ofNullable(list.get(index));
+        }
+        return Optional.empty();
     }
 }

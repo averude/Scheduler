@@ -7,8 +7,9 @@ import org.junit.Test;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 
+import static com.averude.uksatse.scheduler.core.entity.SpecialCalendarDateType.EXTRA_WEEKEND;
+import static com.averude.uksatse.scheduler.core.entity.SpecialCalendarDateType.EXTRA_WORK_DAY;
 import static org.junit.Assert.assertEquals;
 
 public class ScheduleGeneratorTest {
@@ -52,16 +53,17 @@ public class ScheduleGeneratorTest {
         pattern.setExtraWorkDayDepDayType(workDayType);
         pattern.setSequence(Arrays.asList(firstUnit, secondUnit));
 
-        var extraWeekend = new ExtraWeekend();
+        var extraWeekend = new SpecialCalendarDate();
         extraWeekend.setDate(LocalDate.parse("2020-01-05"));
+        extraWeekend.setDateType(EXTRA_WEEKEND);
 
-        var extraWorkDay = new ExtraWorkDay();
+        var extraWorkDay = new SpecialCalendarDate();
         extraWorkDay.setDate(LocalDate.parse("2020-01-10"));
+        extraWorkDay.setDateType(EXTRA_WORK_DAY);
 
         var generator = new ScheduleGeneratorImpl();
-        List<WorkDay> workDays = generator.generate(interval, pattern,
-                Collections.emptyList(), Collections.emptyList(),
-                Arrays.asList(extraWeekend), Arrays.asList(extraWorkDay));
+        var workDays = generator.generate(interval, pattern,
+                Collections.emptyList(), Arrays.asList(extraWeekend, extraWorkDay));
 
         assertEquals(workDays.size(), 31);
         assertEquals(workDays.get(9).getDayTypeId().longValue(), 1L);

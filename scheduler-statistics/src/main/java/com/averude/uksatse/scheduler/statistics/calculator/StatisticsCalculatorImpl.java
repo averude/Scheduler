@@ -1,7 +1,7 @@
 package com.averude.uksatse.scheduler.statistics.calculator;
 
 import com.averude.uksatse.scheduler.core.dto.SummationResult;
-import com.averude.uksatse.scheduler.core.entity.Holiday;
+import com.averude.uksatse.scheduler.core.entity.SpecialCalendarDate;
 import com.averude.uksatse.scheduler.core.entity.SummationColumn;
 import com.averude.uksatse.scheduler.core.entity.WorkDay;
 import com.averude.uksatse.scheduler.statistics.exceptions.NoCalculationStrategyFoundException;
@@ -31,33 +31,33 @@ public class StatisticsCalculatorImpl implements StatisticsCalculator {
     @Override
     public List<SummationResult> calculate(List<SummationColumn> summationColumns,
                                            List<WorkDay> workDays,
-                                           List<Holiday> holidays) {
-        var set = getCountMap(workDays, holidays).entrySet();
+                                           List<SpecialCalendarDate> specialCalendarDates) {
+        var set = getCountMap(workDays, specialCalendarDates).entrySet();
         return summationColumns.stream()
-                .map(column -> new SummationResult(column.getId(), column.getType(), calculateSum(set, column)))
+                .map(column -> new SummationResult(column.getId(), column.getColumnType(), calculateSum(set, column)))
                 .collect(Collectors.toList());
     }
 
     private Map<WorkDayWrapper, Integer> getCountMap(List<WorkDay> workDays,
-                                                     List<Holiday> holidays) {
+                                                     List<SpecialCalendarDate> specialCalendarDates) {
         Map<WorkDayWrapper, Integer> workDayCountMap = new HashMap<>();
-        if (holidays != null && !holidays.isEmpty()) {
-            for (int workDayIndex = 0, holidayIndex = 0; workDayIndex < workDays.size(); workDayIndex++) {
+        if (specialCalendarDates != null && !specialCalendarDates.isEmpty()) {
+            for (int workDayIndex = 0, specialDateIndex = 0; workDayIndex < workDays.size(); workDayIndex++) {
                 var workDay = workDays.get(workDayIndex);
-                var wrapper = new WorkDayWrapper(workDay, false);
+                var wrapper = new WorkDayWrapper(workDay, null);
 
-                if (holidayIndex < holidays.size()) {
-                    var holiday = holidays.get(holidayIndex);
-                    if (holiday != null && holiday.getDate().equals(workDay.getDate())) {
-                        wrapper.setHoliday(true);
-                        holidayIndex++;
+                if (specialDateIndex < specialCalendarDates.size()) {
+                    var specialCalendarDate = specialCalendarDates.get(specialDateIndex);
+                    if (specialCalendarDate != null && specialCalendarDate.getDate().equals(workDay.getDate())) {
+                        wrapper.setSpecialDateType(specialCalendarDate.getDateType());
+                        specialDateIndex++;
                     }
                 }
 
                 workDayCountMap.merge(wrapper, 1, Integer::sum);
             }
         } else {
-            workDays.forEach(workDay -> workDayCountMap.merge(new WorkDayWrapper(workDay, false), 1, Integer::sum));
+            workDays.forEach(workDay -> workDayCountMap.merge(new WorkDayWrapper(workDay, null), 1, Integer::sum));
         }
         return workDayCountMap;
     }
@@ -73,11 +73,13 @@ public class StatisticsCalculatorImpl implements StatisticsCalculator {
                                     .equals(entry.getKey().getWorkDay().getDayTypeId())));
         }
 
-        if (column.getOnlyHolidays()) {
-            entryStream = entryStream.filter(entry -> entry.getKey().isHoliday());
+        if (column.getSpecialCalendarDateTypes() != null
+                && !column.getSpecialCalendarDateTypes().isEmpty()) {
+            entryStream = entryStream.filter(entry -> column.getSpecialCalendarDateTypes()
+                    .contains(entry.getKey().getSpecialDateType()));
         }
 
-        CalculationStrategy calculationStrategy = calculationStrategies.get(column.getType());
+        var calculationStrategy = calculationStrategies.get(column.getColumnType());
         if (calculationStrategy == null) throw new NoCalculationStrategyFoundException();
 
         return calculationStrategy.calculate(entryStream, column);

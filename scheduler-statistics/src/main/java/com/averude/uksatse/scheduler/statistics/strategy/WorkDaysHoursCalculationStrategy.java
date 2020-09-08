@@ -10,6 +10,8 @@ import org.springframework.stereotype.Component;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import static com.averude.uksatse.scheduler.core.entity.SummationColumnType.HOURS_SUM;
+
 @Component
 public class WorkDaysHoursCalculationStrategy implements CalculationStrategy {
 
@@ -41,6 +43,6 @@ public class WorkDaysHoursCalculationStrategy implements CalculationStrategy {
 
     @Override
     public String getName() {
-        return "hours_sum";
+        return HOURS_SUM;
     }
 }

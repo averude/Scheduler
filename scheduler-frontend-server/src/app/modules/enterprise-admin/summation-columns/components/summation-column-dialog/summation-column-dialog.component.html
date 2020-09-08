@@ -17,16 +17,25 @@
 
           <mat-form-field>
             <mat-label>Summation type</mat-label>
-            <mat-select [(ngModel)]="dto.parent.type"
+            <mat-select [(ngModel)]="dto.parent.columnType"
                         required>
-              <mat-option value="hours_sum">Sum of hours</mat-option>
-              <mat-option value="count">Days count</mat-option>
+              <mat-option *ngFor="let type of columnTypes"
+                          [value]="type">
+                {{type}}
+              </mat-option>
             </mat-select>
           </mat-form-field>
 
-          <mat-checkbox [(ngModel)]="dto.parent.onlyHolidays">
-            Only holidays
-          </mat-checkbox>
+          <mat-form-field>
+            <mat-select [(ngModel)]="dto.parent.specialCalendarDateTypes"
+                        placeholder="Special Date Types"
+                        multiple>
+              <mat-option *ngFor="let type of dateTypes"
+                          [value]="type">
+                {{type}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
       </ng-template>
 
@@ -59,7 +68,7 @@
     <button class="mat-raised-button"
             (click)="close()">Close</button>
     <button class="mat-raised-button mat-primary"
-            [disabled]="!dto.parent.name || !dto.parent.type"
+            [disabled]="!dto.parent.name || !dto.parent.columnType"
             type="submit"
             (click)="submit()">Save</button>
   </mat-dialog-actions>

@@ -4,7 +4,9 @@ import com.averude.uksatse.scheduler.core.dto.BasicDto;
 import com.averude.uksatse.scheduler.core.entity.WorkingTime;
 import com.averude.uksatse.scheduler.core.entity.structure.Shift;
 import com.averude.uksatse.scheduler.generator.timenorm.WorkingTimeNormGenerator;
-import com.averude.uksatse.scheduler.shared.repository.*;
+import com.averude.uksatse.scheduler.shared.repository.ShiftRepository;
+import com.averude.uksatse.scheduler.shared.repository.SpecialCalendarDateRepository;
+import com.averude.uksatse.scheduler.shared.repository.WorkingTimeRepository;
 import com.averude.uksatse.scheduler.shared.service.base.AByDepartmentIdAndDateService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,27 +27,18 @@ public class WorkingTimeServiceImpl
     private final ShiftRepository           shiftRepository;
     private final WorkingTimeNormGenerator  timeNormGenerator;
 
-    private final DepartmentRepository      departmentRepository;
-    private final HolidayRepository         holidayRepository;
-    private final ExtraWeekendRepository    extraWeekendRepository;
-    private final ExtraWorkDayRepository    extraWorkDayRepository;
+    private final SpecialCalendarDateRepository specialCalendarDateRepository;
 
     @Autowired
     public WorkingTimeServiceImpl(WorkingTimeRepository     workingTimeRepository,
                                   ShiftRepository           shiftRepository,
                                   WorkingTimeNormGenerator  timeNormGenerator,
-                                  DepartmentRepository      departmentRepository,
-                                  HolidayRepository         holidayRepository,
-                                  ExtraWeekendRepository    extraWeekendRepository,
-                                  ExtraWorkDayRepository    extraWorkDayRepository) {
+                                  SpecialCalendarDateRepository specialCalendarDateRepository) {
         super(workingTimeRepository, shiftRepository);
         this.workingTimeRepository  = workingTimeRepository;
         this.shiftRepository        = shiftRepository;
         this.timeNormGenerator      = timeNormGenerator;
-        this.departmentRepository   = departmentRepository;
-        this.holidayRepository      = holidayRepository;
-        this.extraWeekendRepository = extraWeekendRepository;
-        this.extraWorkDayRepository = extraWorkDayRepository;
+        this.specialCalendarDateRepository = specialCalendarDateRepository;
     }
 
     @Override
@@ -70,23 +63,18 @@ public class WorkingTimeServiceImpl
         shiftRepository.findById(shiftId)
                 .filter(shift -> shift.getDepartmentId().equals(departmentId)) // make sure that shift is from required department
                 .ifPresent(shift -> {
-                    departmentRepository.findById(departmentId).ifPresent(department -> {
-                        var enterpriseId = department.getEnterpriseId();
-                        var holidays = holidayRepository.findAllByEnterpriseIdAndDateBetween(enterpriseId, from, to);
-                        var extraWeekends = extraWeekendRepository.findAllByEnterpriseIdAndDateBetween(enterpriseId, from, to);
-                        var extraWorkDays = extraWorkDayRepository.findAllByEnterpriseIdAndDateBetween(enterpriseId, from, to);
+                    var specialCalendarDates = specialCalendarDateRepository.findAllByDepartmentIdAndDateBetween(departmentId, from, to);
 
-                        log.debug("Generating time norm for shift {} and period betweeen {} and {}", shift, from, to);
-                        var workingTimeList = timeNormGenerator
-                                .calculateWorkingTimeForShift(offset, shift, from, to, holidays, extraWeekends, extraWorkDays);
+                    log.debug("Generating time norm for shift {} and period betweeen {} and {}", shift, from, to);
+                    var workingTimeList = timeNormGenerator
+                            .calculateWorkingTimeForShift(offset, shift, from, to, specialCalendarDates);
 
-                        log.debug("Removing old working time norm...");
-                        workingTimeRepository.deleteAllByShiftIdAndDateBetween(shiftId, from, to);
-                        workingTimeRepository.flush();
+                    log.debug("Removing old working time norm...");
+                    workingTimeRepository.deleteAllByShiftIdAndDateBetween(shiftId, from, to);
+                    workingTimeRepository.flush();
 
-                        log.debug("Saving new working time norm...");
-                        workingTimeRepository.saveAll(workingTimeList);
-                    });
+                    log.debug("Saving new working time norm...");
+                    workingTimeRepository.saveAll(workingTimeList);
                 });
     }
 }

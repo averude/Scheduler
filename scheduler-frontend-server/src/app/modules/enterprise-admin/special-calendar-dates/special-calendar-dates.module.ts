@@ -1,5 +1,5 @@
 import { NgModule } from "@angular/core";
-import { HolidaysTableComponent } from './components/holidays-table/holidays-table.component';
+import { SpecialCalendarDatesTableComponent } from './components/special-calendar-dates-table/special-calendar-dates-table.component';
 import { CommonModule } from "@angular/common";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { SharedModule } from "../../../shared/shared.module";
@@ -11,7 +11,7 @@ import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
 import { MatSortModule } from "@angular/material/sort";
 import { MatTableModule } from "@angular/material/table";
-import { HolidaysDialogComponent } from './components/holidays-dialog/holidays-dialog.component';
+import { SpecialCalendarDatesDialogComponent } from './components/special-calendar-dates-dialog/special-calendar-dates-dialog.component';
 import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MatMomentDateModule } from "@angular/material-moment-adapter";
 
 @NgModule({
@@ -31,8 +31,8 @@ import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MatMomentDateModule } from "@angular/m
     ReactiveFormsModule
   ],
   declarations: [
-    HolidaysTableComponent,
-    HolidaysDialogComponent
+    SpecialCalendarDatesTableComponent,
+    SpecialCalendarDatesDialogComponent
   ],
   providers: [
     {
@@ -41,4 +41,4 @@ import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MatMomentDateModule } from "@angular/m
     }
   ]
 })
-export class HolidaysModule {}
+export class SpecialCalendarDatesModule {}

@@ -6,14 +6,12 @@ import { SummationColumnsModule } from "./summation-columns/summation-columns.mo
 import { SimpleNotificationsModule } from "angular2-notifications";
 import { NgxMaskModule } from "ngx-mask";
 import { EnterpriseAdminRoutingModule } from "./enterprise-admin-routing.module";
-import { ExtraWeekendsModule } from "./extra-weekends/extra-weekends.module";
-import { ExtraWorkdaysModule } from "./extra-workdays/extra-workdays.module";
-import { HolidaysModule } from "./holidays/holidays.module";
 import { EnterpriseAdminComponent } from "./enterprise-admin/enterprise-admin.component";
 import { DepartmentAdminUserAccountsModule } from "./department-admin-user-accounts/department-admin-user-accounts.module";
 import { RemoveDialogModule } from "../../shared/abstract-components/remove-dialog/remove-dialog.module";
 import { AvrTopBarModule } from "../../lib/avr-top-bar/avr-top-bar.module";
 import { AvrSideBarModule } from "../../lib/avr-side-bar/avr-side-bar.module";
+import { SpecialCalendarDatesModule } from "./special-calendar-dates/special-calendar-dates.module";
 
 @NgModule({
   imports: [
@@ -24,9 +22,7 @@ import { AvrSideBarModule } from "../../lib/avr-side-bar/avr-side-bar.module";
     DayTypesModule,
     DepartmentsModule,
     SummationColumnsModule,
-    ExtraWeekendsModule,
-    ExtraWorkdaysModule,
-    HolidaysModule,
+    SpecialCalendarDatesModule,
     DepartmentAdminUserAccountsModule,
     RemoveDialogModule,
     SimpleNotificationsModule,

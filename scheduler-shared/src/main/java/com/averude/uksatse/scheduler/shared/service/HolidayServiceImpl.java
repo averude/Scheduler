@@ -7,8 +7,7 @@ import com.averude.uksatse.scheduler.shared.repository.ExtraWeekendRepository;
 import com.averude.uksatse.scheduler.shared.repository.HolidayRepository;
 import com.averude.uksatse.scheduler.shared.repository.ShiftRepository;
 import com.averude.uksatse.scheduler.shared.service.base.AByEnterpriseIdAndDateService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,14 +16,13 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 
 @Service
+@Slf4j
 public class HolidayServiceImpl
         extends AByEnterpriseIdAndDateService<Holiday, Long> implements HolidayService {
 
-    private static Logger logger = LoggerFactory.getLogger(HolidayService.class);
-
     private final HolidayRepository         holidayRepository;
     private final ExtraWeekendRepository    extraWeekendRepository;
-    private final ExtraDayCreator extraDayCreator;
+    private final ExtraDayCreator           extraDayCreator;
 
     @Autowired
     public HolidayServiceImpl(HolidayRepository holidayRepository,
@@ -42,17 +40,17 @@ public class HolidayServiceImpl
     @Transactional
     public Holiday save(Holiday holiday) {
         holiday = super.save(holiday);
-        logger.debug("Holiday {} is created", holiday);
-        logger.debug("Checking whether holiday is on weekend...");
+        log.debug("Holiday {} is created", holiday);
+        log.debug("Checking whether specialDateType is on weekend...");
 
         LocalDate holidayDate = holiday.getDate();
 
         if (isWeekend(holidayDate)) {
-            logger.debug("Holiday is on weekend.");
+            log.debug("Holiday is on weekend.");
             var extraWeekend = extraDayCreator.createExtraWeekend(holiday);
-            logger.debug("Extra weekend {} for holiday {} is created", extraWeekend, holiday);
+            log.debug("Extra weekend {} for specialDateType {} is created", extraWeekend, holiday);
             extraWeekendRepository.save(extraWeekend);
-            logger.debug("Extra weekend for holiday created.");
+            log.debug("Extra weekend for specialDateType created.");
         }
 
         return holiday;
@@ -61,7 +59,7 @@ public class HolidayServiceImpl
     @Override
     @Transactional
     public void delete(Holiday holiday) {
-        logger.debug("Removing holiday {} from database...", holiday);
+        log.debug("Removing specialDateType {} from database...", holiday);
         var holidayDate = holiday.getDate();
 
         if (holidayDate.getDayOfWeek().compareTo(DayOfWeek.SATURDAY) == 0) {
@@ -69,8 +67,8 @@ public class HolidayServiceImpl
                     .ifPresent(sundayHoliday -> {
                         extraWeekendRepository.findByHolidayId(sundayHoliday.getId())
                                 .ifPresent(sundayHolidayExtraWeekend -> {
-                                    // Deleting holiday and its extra weekend
-                                    // to free date for the next holiday's extra weekend
+                                    // Deleting specialDateType and its extra weekend
+                                    // to free date for the next specialDateType's extra weekend
                                     super.delete(holiday);
                                     sundayHolidayExtraWeekend
                                             .setDate(sundayHolidayExtraWeekend.getDate().minusDays(1L));
@@ -79,7 +77,7 @@ public class HolidayServiceImpl
         }
 
         super.delete(holiday);
-        logger.debug("Holiday {} is deleted.", holiday);
+        log.debug("Holiday {} is deleted.", holiday);
     }
 
     @Override

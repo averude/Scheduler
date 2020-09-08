@@ -20,7 +20,7 @@ import { DtoTableBaseComponent } from "../../../../../shared/abstract-components
 })
 export class SummationColumnsTableComponent extends DtoTableBaseComponent<SummationColumn, SummationColumnDayTypeRange> {
 
-  displayedColumns = ['select', 'name', 'type', 'only_holidays', 'control'];
+  displayedColumns = ['select', 'name', 'type', 'special_calendar_date_types', 'control'];
 
   dayTypes: DayType[];
 

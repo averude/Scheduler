@@ -34,9 +34,9 @@ public class ExtraDayCreatorImpl implements ExtraDayCreator {
 
         // Check if an extra weekend exists
         return extraWeekendRepository.findByDateAndEnterpriseId(nextWeekFirstDay, holiday.getEnterpriseId())
-                // If an extra weekend is found then search for a linked holiday
+                // If an extra weekend is found then search for a linked specialDateType
                 .map(weekend -> holidayRepository.findById(weekend.getHolidayId())
-                        // If a holiday is found then move date of this weekend
+                        // If a specialDateType is found then move date of this weekend
                         // and create the new one
                         .map(existentHoliday -> {
                             var dayOfWeek = existentHoliday.getDate().getDayOfWeek();
@@ -47,7 +47,7 @@ public class ExtraDayCreatorImpl implements ExtraDayCreator {
                                 return createNewExtraWeekend(holiday,nextWeekFirstDay.plusDays(1L));
                             }
                         })
-                        // ..or change this existent weekend's holiday id
+                        // ..or change this existent weekend's specialDateType id
                         .orElseGet(() -> {
                             weekend.setHolidayId(holiday.getId());
                             return weekend;

@@ -59,9 +59,9 @@ CREATE TABLE IF NOT EXISTS day_types (
 CREATE TABLE IF NOT EXISTS summation_columns (
   id                  SERIAL,
   enterprise_id       INTEGER       NOT NULL,
-  only_holidays       BOOLEAN       NOT NULL    DEFAULT FALSE,
   name                VARCHAR (128) NOT NULL,
   column_type         VARCHAR (64)  NOT NULL    DEFAULT 'hours_sum',
+  special_calendar_date_types VARCHAR (255),
 
   UNIQUE (enterprise_id, name),
 
@@ -220,9 +220,10 @@ CREATE TABLE IF NOT EXISTS working_time (
   FOREIGN KEY (shift_id)      REFERENCES shifts(id)      ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS holidays (
+CREATE TABLE IF NOT EXISTS special_calendar_dates (
   id            SERIAL,
   enterprise_id INTEGER       NOT NULL,
+  date_type     VARCHAR (64)  NOT NULL,
   date          DATE          NOT NULL,
   name          VARCHAR (255) NOT NULL,
 
@@ -232,33 +233,45 @@ CREATE TABLE IF NOT EXISTS holidays (
   FOREIGN KEY (enterprise_id) REFERENCES enterprises(id) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS extra_weekends (
-  id            SERIAL,
-  enterprise_id INTEGER       NOT NULL,
-  holiday_id    INTEGER,
-  date          DATE          NOT NULL,
-
-  UNIQUE (holiday_id),
-  UNIQUE (enterprise_id, date),
-
-  PRIMARY KEY (id),
-  FOREIGN KEY (enterprise_id) REFERENCES enterprises(id)  ON DELETE CASCADE,
-  FOREIGN KEY (holiday_id)    REFERENCES holidays(id)     ON DELETE CASCADE
-);
-
-CREATE TABLE IF NOT EXISTS extra_work_days (
-  id                SERIAL,
-  enterprise_id     INTEGER   NOT NULL,
-  extra_weekend_id  INTEGER,
-  date              DATE      NOT NULL,
-
-  UNIQUE (extra_weekend_id),
-  UNIQUE (enterprise_id, date),
-
-  PRIMARY KEY (id),
-  FOREIGN KEY (enterprise_id)     REFERENCES enterprises(id)    ON DELETE CASCADE,
-  FOREIGN KEY (extra_weekend_id)  REFERENCES extra_weekends(id) ON DELETE CASCADE
-);
+-- CREATE TABLE IF NOT EXISTS holidays (
+--   id            SERIAL,
+--   enterprise_id INTEGER       NOT NULL,
+--   date          DATE          NOT NULL,
+--   name          VARCHAR (255) NOT NULL,
+--
+--   UNIQUE (enterprise_id, date),
+--
+--   PRIMARY KEY (id),
+--   FOREIGN KEY (enterprise_id) REFERENCES enterprises(id) ON DELETE CASCADE
+-- );
+--
+-- CREATE TABLE IF NOT EXISTS extra_weekends (
+--   id            SERIAL,
+--   enterprise_id INTEGER       NOT NULL,
+--   holiday_id    INTEGER,
+--   date          DATE          NOT NULL,
+--
+--   UNIQUE (holiday_id),
+--   UNIQUE (enterprise_id, date),
+--
+--   PRIMARY KEY (id),
+--   FOREIGN KEY (enterprise_id) REFERENCES enterprises(id)  ON DELETE CASCADE,
+--   FOREIGN KEY (holiday_id)    REFERENCES holidays(id)     ON DELETE CASCADE
+-- );
+--
+-- CREATE TABLE IF NOT EXISTS extra_work_days (
+--   id                SERIAL,
+--   enterprise_id     INTEGER   NOT NULL,
+--   extra_weekend_id  INTEGER,
+--   date              DATE      NOT NULL,
+--
+--   UNIQUE (extra_weekend_id),
+--   UNIQUE (enterprise_id, date),
+--
+--   PRIMARY KEY (id),
+--   FOREIGN KEY (enterprise_id)     REFERENCES enterprises(id)    ON DELETE CASCADE,
+--   FOREIGN KEY (extra_weekend_id)  REFERENCES extra_weekends(id) ON DELETE CASCADE
+-- );
 
 -- Security
 

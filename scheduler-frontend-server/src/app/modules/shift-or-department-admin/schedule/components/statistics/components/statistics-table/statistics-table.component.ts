@@ -4,7 +4,7 @@ import { SummationDto, SummationResult } from "../../../../../../../model/dto/su
 import { PaginationService } from "../../../../../../../lib/ngx-schedule-table/service/pagination.service";
 import { forkJoin, Subscription } from "rxjs";
 import { SummationColumnDtoService } from "../../../../../../../services/http/summation-column-dto.service";
-import { SummationColumn } from "../../../../../../../model/summation-column";
+import { HOURS_SUM, SummationColumn } from "../../../../../../../model/summation-column";
 import { SimplePaginationStrategy } from "../../../../../../../shared/paginators/pagination-strategy/simple-pagination-strategy";
 import { Shift } from "../../../../../../../model/shift";
 import { ShiftService } from "../../../../../../../services/http/shift.service";
@@ -52,7 +52,7 @@ export class StatisticsTableComponent implements OnInit, OnDestroy {
   }
 
   convertStat(summationResult: SummationResult): number {
-    return summationResult.type === 'hours_sum' ? summationResult.value / 60 : summationResult.value;
+    return summationResult.type === HOURS_SUM ? summationResult.value / 60 : summationResult.value;
   }
 
   getEmployeeShortName(employee: Employee): string {

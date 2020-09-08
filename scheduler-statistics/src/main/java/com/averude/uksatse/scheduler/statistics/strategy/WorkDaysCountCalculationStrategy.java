@@ -7,6 +7,8 @@ import org.springframework.stereotype.Component;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import static com.averude.uksatse.scheduler.core.entity.SummationColumnType.COUNT;
+
 @Component
 public class WorkDaysCountCalculationStrategy implements CalculationStrategy {
 
@@ -17,6 +19,6 @@ public class WorkDaysCountCalculationStrategy implements CalculationStrategy {
 
     @Override
     public String getName() {
-        return "count";
+        return COUNT;
     }
 }

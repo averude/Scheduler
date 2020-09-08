@@ -46,7 +46,7 @@ public class TimeCalculatorImpl implements TimeCalculator {
 
     @Override
     public Integer getLength(HasTime hasTime, HasTimeDuration hasTimeDuration) {
-        if (hasTime.getStartTime() == null || hasTime.getEndTime() == null) {
+        if (hasTime == null || hasTime.getStartTime() == null || hasTime.getEndTime() == null) {
             return 0;
         }
 
