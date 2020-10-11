@@ -9,7 +9,7 @@ export class WorkingTimeCellLabelSetter implements CellLabelSetter {
   setLabel(cell: TableCellComponent): void {
     let workingTime: WorkingTime = cell.value;
     if (workingTime) {
-      cell.label = workingTime.hours;
+      cell.label = workingTime.hours + ' / ' + workingTime.days ;
       cell.labelColor = 'mistyrose';
     }
   }
