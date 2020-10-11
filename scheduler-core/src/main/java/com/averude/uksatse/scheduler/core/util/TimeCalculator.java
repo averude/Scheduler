@@ -12,8 +12,8 @@ public interface TimeCalculator {
                          LocalDate startOfMonth);
 
     long calculateDays(int offset,
-                      List<? extends HasTime> hasTimeList,
-                      LocalDate startOfMonth);
+                       List<? extends HasTime> hasTimeList,
+                       LocalDate startOfMonth);
 
     Integer getLength(HasTime hasTime, HasTimeDuration hasTimeDuration);
 }

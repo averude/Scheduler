@@ -33,11 +33,20 @@ public class TimeCalculatorImpl implements TimeCalculator {
                                LocalDate to) {
         var daysInMonth     = from.until(to, ChronoUnit.DAYS) + 1;
         int hasTimeListSize = hasTimeList.size();
+        long workDaysCount = getWorkDaysCount(hasTimeList);
 
         var fullPeriods = daysInMonth / hasTimeListSize;
         var extraDays   = daysInMonth % hasTimeListSize;
 
-        return fullPeriods + extraDays;
+        var result = fullPeriods * workDaysCount;
+        for (int i = 0; i < extraDays; i++) {
+            var unitIndex = (offset + i) % hasTimeListSize;
+            var unit = hasTimeList.get(unitIndex);
+            if (unit != null && isWorkingDay(unit)) {
+                result++;
+            }
+        }
+        return result;
     }
 
     private long calculateTime(int offset,
@@ -63,6 +72,17 @@ public class TimeCalculatorImpl implements TimeCalculator {
         return hasTimeList.stream()
                 .mapToLong(unit -> getLength(unit, null))
                 .sum();
+    }
+
+    private long getWorkDaysCount(List<? extends HasTime> hasTimeList) {
+        return hasTimeList.stream()
+                .filter(unit -> isWorkingDay((HasTime) unit))
+                .count();
+    }
+
+    private boolean isWorkingDay(HasTime unit) {
+        return unit.getStartTime() != null && unit.getEndTime() != null
+                && unit.getStartTime() >= 0 && unit.getEndTime() > 0;
     }
 
     @Override
