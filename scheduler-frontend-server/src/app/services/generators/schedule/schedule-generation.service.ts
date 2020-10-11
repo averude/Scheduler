@@ -1,16 +1,16 @@
 import { ScheduleGenerator } from "./schedule-generator";
-import { SelectionData } from "../../lib/ngx-schedule-table/model/selection-data";
-import { WorkDay } from "../../model/workday";
-import { TableRenderer } from "../../lib/ngx-schedule-table/service/table-renderer.service";
-import { ScheduleService } from "../http/schedule.service";
+import { SelectionData } from "../../../lib/ngx-schedule-table/model/selection-data";
+import { WorkDay } from "../../../model/workday";
+import { TableRenderer } from "../../../lib/ngx-schedule-table/service/table-renderer.service";
+import { ScheduleService } from "../../http/schedule.service";
 import { NotificationsService } from "angular2-notifications";
 import { Injectable } from "@angular/core";
-import { PatternUnit } from "../../model/pattern-unit";
-import { DepartmentDayType } from "../../model/department-day-type";
-import { BasicDto } from "../../model/dto/basic-dto";
-import { ShiftPattern } from "../../model/shift-pattern";
-import { RowData } from "../../lib/ngx-schedule-table/model/data/row-data";
-import { HasDayTypeIdAndTime } from "../../model/interface/has-day-type-id-and-time";
+import { PatternUnit } from "../../../model/pattern-unit";
+import { DepartmentDayType } from "../../../model/department-day-type";
+import { BasicDto } from "../../../model/dto/basic-dto";
+import { ShiftPattern } from "../../../model/shift-pattern";
+import { RowData } from "../../../lib/ngx-schedule-table/model/data/row-data";
+import { HasDayTypeIdAndTime } from "../../../model/interface/has-day-type-id-and-time";
 
 @Injectable()
 export class ScheduleGenerationService {

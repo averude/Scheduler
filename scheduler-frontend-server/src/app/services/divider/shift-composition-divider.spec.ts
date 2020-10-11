@@ -10,7 +10,7 @@ describe('Test shift composition divider', () => {
   const shiftCompositionDivider = new ShiftCompositionDivider();
   let dividedMainShiftCompositions = shiftCompositionDivider.divide(mainShiftComposition, substitutionCompositions);
   it('Result array consists of 2 elements', () => {
-    expect(dividedMainShiftCompositions.length).toEqual(2);
+    expect(dividedMainShiftCompositions.length).toEqual(3);
   });
 });
 

@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { PatternUnit } from '../../model/pattern-unit';
+import { PatternUnit } from '../../../model/pattern-unit';
 import { createOrUpdateCell } from "./schedule-generation-utils";
-import { RowData } from "../../lib/ngx-schedule-table/model/data/row-data";
-import { CellData } from "../../lib/ngx-schedule-table/model/data/cell-data";
-import { DepartmentDayType } from "../../model/department-day-type";
-import { HasDayTypeIdAndTime } from "../../model/interface/has-day-type-id-and-time";
+import { RowData } from "../../../lib/ngx-schedule-table/model/data/row-data";
+import { CellData } from "../../../lib/ngx-schedule-table/model/data/cell-data";
+import { DepartmentDayType } from "../../../model/department-day-type";
+import { HasDayTypeIdAndTime } from "../../../model/interface/has-day-type-id-and-time";
 
 @Injectable({
   providedIn: 'root'

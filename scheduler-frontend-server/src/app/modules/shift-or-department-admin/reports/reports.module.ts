@@ -4,7 +4,12 @@ import { ReportFormComponent } from "./components/report-form/report-form.compon
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatInputModule } from "@angular/material/input";
 import { MatMomentDateModule } from "@angular/material-moment-adapter";
-import { FormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { ReportGenerator } from "../../../services/generators/report/report-generator";
+import { ReportDataCollector } from "../../../services/generators/report/collector/report-data-collector";
+import { ReportService } from "../../../services/generators/report/report.service";
+import { MatCheckboxModule } from "@angular/material/checkbox";
+import { MatSelectModule } from "@angular/material/select";
 
 @NgModule({
   imports: [
@@ -12,13 +17,19 @@ import { FormsModule } from "@angular/forms";
     FormsModule,
     MatInputModule,
     MatDatepickerModule,
-    MatMomentDateModule
+    MatMomentDateModule,
+    ReactiveFormsModule,
+    MatCheckboxModule,
+    MatSelectModule
   ],
   declarations: [
     ReportFormComponent
   ],
   providers: [
-    MatMomentDateModule
+    MatMomentDateModule,
+    ReportService,
+    ReportGenerator,
+    ReportDataCollector
   ]
 })
 export class ReportsModule { }

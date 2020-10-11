@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnIni
 import { ContextMenuComponent } from "../../../../../../../../lib/ngx-contextmenu/contextMenu.component";
 import { forkJoin, Subscription } from "rxjs";
 import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
-import { ScheduleGenerationService } from "../../../../../../../../services/generators/schedule-generation.service";
+import { ScheduleGenerationService } from "../../../../../../../../services/generators/schedule/schedule-generation.service";
 import { ClearSelectionService } from "../../../../../../../../lib/ngx-schedule-table/service/clear-selection.service";
 import { SelectionEndService } from "../../../../../../../../lib/ngx-schedule-table/service/selection-end.service";
 import { ContextMenuService } from "../../../../../../../../lib/ngx-contextmenu/contextMenu.service";

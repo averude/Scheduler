@@ -3,7 +3,10 @@ import * as moment from "moment";
 import { Moment } from "moment";
 import * as fileSaver from 'file-saver';
 import { MatDatepicker } from "@angular/material/datepicker";
-import { ReportService } from "../../../../../services/http/report.service";
+import { ReportService } from "../../../../../services/generators/report/report.service";
+import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { SummationColumn } from "../../../../../model/summation-column";
+import { SummationColumnDtoService } from "../../../../../services/http/summation-column-dto.service";
 
 @Component({
   selector: 'app-report-form',
@@ -11,23 +14,71 @@ import { ReportService } from "../../../../../services/http/report.service";
   styleUrls: ['./report-form.component.css']
 })
 export class ReportFormComponent implements OnInit {
-  date: Moment;
 
-  constructor(private reportService: ReportService) { }
+  decorationDataForm: FormGroup;
+  date: Moment;
+  sortByShift: boolean;
+
+  summationColumns: SummationColumn[] = [];
+  selectedSummationColumns: SummationColumn[] = [];
+
+  constructor(private fb: FormBuilder,
+              private reportService: ReportService,
+              private summationColumnDtoService: SummationColumnDtoService) { }
 
   ngOnInit() {
+    this.summationColumnDtoService.getAll()
+      .subscribe(dtos => this.summationColumns = dtos.map(value => value.parent));
+
     this.date = moment.utc();
+
+    this.decorationDataForm = this.fb.group({
+      agreedPerson:         [],
+      agreedPosition:       [],
+      year:                 [this.date.year()],
+      month:                [this.date.clone().locale('uk-UA').format("MMMM")],
+      approvedPosition:     [],
+      approvedPerson:       [],
+      schedAndServiceName:  [null, [Validators.required]],
+      documentCreators:     this.fb.array([
+        this.createDocumentCreator()
+      ])
+    });
+  }
+
+  private createDocumentCreator() {
+    return this.fb.group({
+      position: [],
+      name:     []
+    });
+  }
+
+  get documentCreators(): FormArray {
+    return this.decorationDataForm.get('documentCreators') as FormArray;
+  }
+
+  addDocumentCreator() {
+    this.documentCreators.push(this.createDocumentCreator());
+  }
+
+  removeDocumentCreator(index: number) {
+    this.documentCreators.removeAt(index);
   }
 
   chosenMonthHandler(selectedDate: Moment, datepicker: MatDatepicker<Moment>) {
     this.date = selectedDate.clone();
+
+    this.decorationDataForm.patchValue({
+      year: this.date.year(),
+      month: this.date.format("MMMM")
+    });
     datepicker.close();
   }
 
-  generateAndSaveReport() {
-    const from = this.date.clone().startOf('month').format('YYYY-MM-DD');
-    const to   = this.date.clone().endOf('month').format('YYYY-MM-DD');
-    this.reportService.getReport(from, to)
-      .subscribe(report => fileSaver.saveAs(report.body, `schedule_${from}_${to}.xls`));
+  generateReport() {
+    const reportName = `report-${this.date.format("MM-YYYY")}.xlsx`;
+    this.reportService
+      .generateReport(this.date, this.decorationDataForm.value, this.sortByShift, this.selectedSummationColumns)
+      .subscribe(buffer => fileSaver.saveAs(new Blob([buffer]), reportName));
   }
 }

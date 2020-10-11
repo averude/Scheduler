@@ -24,8 +24,8 @@ export class ScheduleTablePaginationStrategy implements IPaginationStrategy {
       .pipe(map(specialCalendarDates => this.calcDaysInMonth(selectedDate, specialCalendarDates)));
   }
 
-  private calcDaysInMonth(selectedDate: Moment,
-               specialCalendarDates: SpecialCalendarDate[]): CalendarDay[] {
+  calcDaysInMonth(selectedDate: Moment,
+                  specialCalendarDates: SpecialCalendarDate[]): CalendarDay[] {
     const currDateIso = moment().format("YYYY-MM-DD");
 
     let daysInMonth: CalendarDay[] = [];

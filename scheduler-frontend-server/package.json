@@ -25,6 +25,7 @@
     "@types/file-saver": "^2.0.1",
     "angular2-notifications": "^9.0.0",
     "core-js": "^3.6.5",
+    "exceljs": "^4.1.1",
     "file-saver": "^2.0.2",
     "jwt-decode": "^2.2.0",
     "moment": "^2.27.0",

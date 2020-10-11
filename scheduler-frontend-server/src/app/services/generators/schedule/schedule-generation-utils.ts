@@ -1,7 +1,7 @@
-import { WorkDay } from "../../model/workday";
-import { CellData } from "../../lib/ngx-schedule-table/model/data/cell-data";
-import { convertTimeStringToMin } from "../../shared/utils/time-converter";
-import { HasDayTypeIdAndTime } from "../../model/interface/has-day-type-id-and-time";
+import { WorkDay } from "../../../model/workday";
+import { CellData } from "../../../lib/ngx-schedule-table/model/data/cell-data";
+import { convertTimeStringToMin } from "../../../shared/utils/time-converter";
+import { HasDayTypeIdAndTime } from "../../../model/interface/has-day-type-id-and-time";
 
 export function createOrUpdateCell(usePreviousValue: boolean,
                                    employeeId: number,

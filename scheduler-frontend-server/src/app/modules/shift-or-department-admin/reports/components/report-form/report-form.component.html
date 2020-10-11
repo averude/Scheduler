@@ -11,4 +11,69 @@
                   (monthSelected)="chosenMonthHandler($event, picker)"></mat-datepicker>
 </mat-form-field>
 
-<button (click)="generateAndSaveReport()">Generate and save report</button>
+<mat-select [(ngModel)]="selectedSummationColumns"
+            multiple>
+  <mat-option *ngFor="let column of summationColumns"
+              [value]="column">
+    {{column.name}}
+  </mat-option>
+</mat-select>
+
+<mat-checkbox [(ngModel)]="sortByShift">Sort by shift</mat-checkbox>
+
+<ng-container [formGroup]="decorationDataForm">
+  <mat-form-field>
+    <input matInput
+           formControlName="agreedPosition"
+           placeholder="Agreed position"/>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput
+           formControlName="agreedPerson"
+           placeholder="Agreed person"/>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput
+           formControlName="approvedPosition"
+           placeholder="Approved position"/>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput
+           formControlName="approvedPerson"
+           placeholder="Approved person"/>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput
+           formControlName="schedAndServiceName"
+           placeholder="Schedule and service name"/>
+  </mat-form-field>
+
+  <ng-container formArrayName="documentCreators">
+    <div *ngFor="let creator of documentCreators.controls; let i = index; let l = last">
+      <label>
+        <ng-container [formGroup]="creator">
+          <mat-form-field>
+            <input matInput
+                   placeholder="Position"
+                   formControlName="position">
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput
+                   placeholder="Name"
+                   formControlName="name">
+          </mat-form-field>
+          <button *ngIf="l" (click)="addDocumentCreator()">+</button>
+          <button *ngIf="!l" (click)="removeDocumentCreator(i)">-</button>
+        </ng-container>
+      </label>
+    </div>
+  </ng-container>
+
+</ng-container>
+
+
+<button (click)="generateReport()">Generate and save report</button>
