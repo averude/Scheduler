@@ -34,6 +34,7 @@
         <module>scheduler-statistics</module>
         <module>scheduler-security</module>
         <module>scheduler-controllers</module>
+        <module>scheduler-test-kit</module>
     </modules>
 
     <dependencyManagement>

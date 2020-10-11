@@ -82,6 +82,14 @@ public class PatternUnit implements HasId, HasDayTypeIdAndTime {
         this.dayTypeId = dayTypeId;
     }
 
+    public PatternUnit(HasDayTypeIdAndTime hasDayTypeIdAndTime) {
+        this.dayTypeId      = hasDayTypeIdAndTime.getDayTypeId();
+        this.startTime      = hasDayTypeIdAndTime.getStartTime();
+        this.endTime        = hasDayTypeIdAndTime.getEndTime();
+        this.breakStartTime = hasDayTypeIdAndTime.getBreakStartTime();
+        this.breakEndTime   = hasDayTypeIdAndTime.getBreakEndTime();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
