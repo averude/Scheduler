@@ -46,13 +46,13 @@ public class WorkingTimeNormGenerator {
                     var offsetForDate = (int) offsetCalculator
                             .recalculateForDate(from, month, units.size(), offset);
 
+                    long days = getDays(units, month, offsetForDate);
                     float hours = getHours(units, month, offsetForDate) - extraCoefficient;
                     hours = hours >= 0 ? hours : 0;
 
                     return createWorkingTime(shift.getId(),
                             shift.getDepartmentId(),
-                            hours,
-                            month);
+                            hours, days, month);
                 })
                 .collect(Collectors.toList());
     }
@@ -99,15 +99,23 @@ public class WorkingTimeNormGenerator {
         return timeCalculator.calculateHours(offsetForDate, units, date);
     }
 
+    private long getDays(List<PatternUnit> units,
+                         LocalDate date,
+                         int offsetForDate) {
+        return timeCalculator.calculateDays(offsetForDate, units, date);
+    }
+
     private WorkingTime createWorkingTime(Long shiftId,
                                           Long departmentId,
                                           Float hours,
+                                          Long days,
                                           LocalDate date) {
         var workingTime = new WorkingTime();
         workingTime.setShiftId(shiftId);
         workingTime.setDepartmentId(departmentId);
         workingTime.setHours(hours);
         workingTime.setDate(date);
+        workingTime.setDays(days);
         return workingTime;
     }
 }

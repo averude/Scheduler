@@ -9,6 +9,14 @@
     <mat-error *ngIf="isControlInvalid('hours')">{{getErrorMessage()}}</mat-error>
   </mat-form-field>
 
+  <mat-form-field>
+    <input matInput
+           placeholder="Days"
+           type="number"
+           formControlName="days">
+    <mat-error *ngIf="isControlInvalid('days')">{{getErrorMessage()}}</mat-error>
+  </mat-form-field>
+
 </mat-dialog-content>
 
 <mat-dialog-actions>

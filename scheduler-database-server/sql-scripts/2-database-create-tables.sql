@@ -211,7 +211,8 @@ CREATE TABLE IF NOT EXISTS working_time (
   department_id INTEGER       NOT NULL,
   shift_id      INTEGER       NOT NULL,
   date          DATE          NOT NULL,
-  hours         FLOAT         NOT NULL  CHECK ( hours >= 0 ),
+  hours         FLOAT         NOT NULL  CHECK ( hours >= 0 ) DEFAULT 0,
+  days          INTEGER       NOT NULL  CHECK ( days >= 0 ) DEFAULT 0,
 
   UNIQUE (shift_id, date),
 

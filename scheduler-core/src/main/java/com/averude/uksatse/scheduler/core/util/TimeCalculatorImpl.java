@@ -19,6 +19,27 @@ public class TimeCalculatorImpl implements TimeCalculator {
         return calculateTime(offset, hasTimeList, startOfMonth, endOfMonth) / 60.0F;
     }
 
+    @Override
+    public long calculateDays(int offset,
+                             List<? extends HasTime> hasTimeList,
+                             LocalDate startOfMonth) {
+        var endOfMonth = startOfMonth.plusDays(startOfMonth.lengthOfMonth() - 1);
+        return calculateDays(offset, hasTimeList, startOfMonth, endOfMonth);
+    }
+
+    private long calculateDays(int offset,
+                               List<? extends HasTime> hasTimeList,
+                               LocalDate from,
+                               LocalDate to) {
+        var daysInMonth     = from.until(to, ChronoUnit.DAYS) + 1;
+        int hasTimeListSize = hasTimeList.size();
+
+        var fullPeriods = daysInMonth / hasTimeListSize;
+        var extraDays   = daysInMonth % hasTimeListSize;
+
+        return fullPeriods + extraDays;
+    }
+
     private long calculateTime(int offset,
                                List<? extends HasTime> hasTimeList,
                                LocalDate from,

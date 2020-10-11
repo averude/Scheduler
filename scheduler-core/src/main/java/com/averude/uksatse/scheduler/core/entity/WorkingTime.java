@@ -52,6 +52,9 @@ public class WorkingTime implements HasId, HasDepartmentId, HasDate {
     @Column(nullable = false)
     private Float hours;
 
+    @NotNull
+    private Long days;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -60,12 +63,13 @@ public class WorkingTime implements HasId, HasDepartmentId, HasDate {
         return departmentId.equals(that.departmentId) &&
                 shiftId.equals(that.shiftId) &&
                 date.equals(that.date) &&
-                hours.equals(that.hours);
+                hours.equals(that.hours) &&
+                days.equals(that.days);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(departmentId, shiftId, date, hours);
+        return Objects.hash(departmentId, shiftId, date, hours, days);
     }
 
     @Override
@@ -76,6 +80,7 @@ public class WorkingTime implements HasId, HasDepartmentId, HasDate {
                 .add("shiftId=" + shiftId)
                 .add("date=" + date)
                 .add("hours=" + hours)
+                .add("days=" + days)
                 .toString();
     }
 }

@@ -5,4 +5,5 @@ export class WorkingTime implements IdEntity {
   shiftId: number;
   date: Date;
   hours: number;
+  days: number;
 }

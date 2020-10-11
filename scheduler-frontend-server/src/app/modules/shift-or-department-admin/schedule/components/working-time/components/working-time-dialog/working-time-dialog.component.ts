@@ -33,7 +33,8 @@ export class WorkingTimeDialogComponent extends DialogBaseComponent<WorkingTime>
       id:           [],
       shiftId:      [this.selectionData.rowData.id],
       date:         [this.selectionData.selectedCells[0].date],
-      hours:        [null, [Validators.required]]
+      hours:        [null, [Validators.required]],
+      days:         [null, [Validators.required]]
     });
   }
 
@@ -42,7 +43,8 @@ export class WorkingTimeDialogComponent extends DialogBaseComponent<WorkingTime>
       id:           workingTime.id,
       shiftId:      workingTime.shiftId,
       date:         workingTime.date,
-      hours:        workingTime.hours
+      hours:        workingTime.hours,
+      days:         workingTime.days
     });
   }
 
