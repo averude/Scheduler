@@ -9,7 +9,8 @@ import { SimplePaginationStrategy } from "../../../../../../../shared/paginators
 import { Shift } from "../../../../../../../model/shift";
 import { ShiftService } from "../../../../../../../services/http/shift.service";
 import { Employee } from "../../../../../../../model/employee";
-import { getEmployeeShortName } from "../../../../../../../shared/utils/utils";
+import { getEmployeeShortName, sortBy } from "../../../../../../../shared/utils/utils";
+import { ShiftCompositionService } from "../../../../../../../services/http/shift-composition.service";
 
 @Component({
   selector: 'app-statistics-table',
@@ -28,21 +29,29 @@ export class StatisticsTableComponent implements OnInit, OnDestroy {
               private paginationService: PaginationService,
               private shiftService: ShiftService,
               private summationColumnDtoService: SummationColumnDtoService,
-              private statisticsService: StatisticsService) { }
+              private statisticsService: StatisticsService,
+              private shiftCompositionService: ShiftCompositionService) { }
 
   ngOnInit() {
     forkJoin([
       this.shiftService.getAll(),
-      this.summationColumnDtoService.getAll()
+      this.summationColumnDtoService.getAll(),
     ]).subscribe(values => {
       this.shifts           = values[0];
       this.summationColumns = values[1].map(value => value.parent);
 
       this.paginationSub = this.paginationService.onValueChange
         .subscribe(monthPaginationObject =>
-          this.statisticsService
-            .getSummationDto(monthPaginationObject.firstDayOfMonth, monthPaginationObject.lastDayOfMonth)
-            .subscribe(summationDtos => this.summationDtos = summationDtos));
+          forkJoin([
+            this.statisticsService
+              .getSummationDto(monthPaginationObject.firstDayOfMonth, monthPaginationObject.lastDayOfMonth),
+            this.shiftCompositionService
+              .getAll(monthPaginationObject.firstDayOfMonth, monthPaginationObject.lastDayOfMonth)
+          ]).subscribe(values => {
+            sortBy(values[0], values[1]);
+            this.summationDtos = values[0].slice(0, values[1].length);
+          })
+        );
     });
   }
 

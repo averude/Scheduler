@@ -1,10 +1,9 @@
 import { Employee } from "../employee";
+import { BasicDto } from "./basic-dto";
 
-export class SummationDto {
-  employee: Employee;
-  from:     string;
-  to:       string;
-  results:  SummationResult[];
+export class SummationDto extends BasicDto<Employee, SummationResult> {
+  from:       string;
+  to:         string;
 }
 
 export class SummationResult {

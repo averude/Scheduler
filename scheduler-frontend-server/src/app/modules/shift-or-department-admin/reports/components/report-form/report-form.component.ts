@@ -17,7 +17,6 @@ export class ReportFormComponent implements OnInit {
 
   decorationDataForm: FormGroup;
   date: Moment;
-  sortByShift: boolean;
 
   summationColumns: SummationColumn[] = [];
   selectedSummationColumns: SummationColumn[] = [];
@@ -28,7 +27,8 @@ export class ReportFormComponent implements OnInit {
 
   ngOnInit() {
     this.summationColumnDtoService.getAll()
-      .subscribe(dtos => this.summationColumns = dtos.map(value => value.parent));
+      .subscribe(dtos =>this.summationColumns = dtos
+        .map(value => value.parent));
 
     this.date = moment.utc();
 
@@ -78,7 +78,7 @@ export class ReportFormComponent implements OnInit {
   generateReport() {
     const reportName = `report-${this.date.format("MM-YYYY")}.xlsx`;
     this.reportService
-      .generateReport(this.date, this.decorationDataForm.value, this.sortByShift, this.selectedSummationColumns)
+      .generateReport(this.date, this.decorationDataForm.value, this.selectedSummationColumns)
       .subscribe(buffer => fileSaver.saveAs(new Blob([buffer]), reportName));
   }
 }

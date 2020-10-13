@@ -17,14 +17,14 @@
       <tr *ngFor="let dto of summationDtos">
         <td class="td-name">
           <div class="name">
-            {{getEmployeeShortName(dto.employee)}}
+            {{getEmployeeShortName(dto.parent)}}
           </div>
           <div class="info">
-            {{dto.employee.position.shortName}}
+            {{dto.parent.position.shortName}}
           </div>
         </td>
         <td class="sum"
-            *ngFor="let summResult of dto.results">
+            *ngFor="let summResult of dto.collection">
           <p align="center">{{convertStat(summResult)}}</p>
         </td>
       </tr>

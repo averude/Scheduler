@@ -2,6 +2,11 @@ import { OperatorFunction } from "rxjs";
 import { map } from "rxjs/operators";
 import { Employee } from "../../model/employee";
 import { IdEntity } from "../../model/interface/id-entity";
+import { BasicDto } from "../../model/dto/basic-dto";
+import { ShiftComposition } from "../../model/shift-composition";
+import { WorkDay } from "../../model/workday";
+import { DayType } from "../../model/day-type";
+import { calculateWorkHoursByWorkDay } from "./time-converter";
 
 export const parseDateOfEntities: OperatorFunction<any, any> =
   map((response: Array<any>) => response.map(value => {
@@ -93,4 +98,27 @@ export function sortByPattern<T1, T2>(arr: T1[],
       }
     }
   }
+}
+
+export function sortBy<T extends IdEntity>(dtos: BasicDto<T, any>[],
+                       compositions: ShiftComposition[]) {
+  const employeeMainShiftCompositions = uniqById(
+    compositions
+      .filter(value => !value.substitution)
+      .sort((a, b) => a.shiftId - b.shiftId),
+    (element => element.employeeId)
+  );
+  sortByPattern(dtos, employeeMainShiftCompositions,
+    ((arrayElement, patternElement) => arrayElement.parent.id === patternElement.employeeId));
+}
+
+export function getCellValue(workDay: WorkDay, dayTypes: DayType[]) {
+  if (dayTypes && workDay.dayTypeId) {
+    const dayType = binarySearch(dayTypes, workDay.dayTypeId);
+    if (dayType && dayType.label) {
+      return dayType.label;
+    }
+  }
+
+  return calculateWorkHoursByWorkDay(workDay);
 }

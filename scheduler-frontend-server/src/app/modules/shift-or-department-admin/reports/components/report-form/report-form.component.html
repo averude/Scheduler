@@ -11,15 +11,16 @@
                   (monthSelected)="chosenMonthHandler($event, picker)"></mat-datepicker>
 </mat-form-field>
 
-<mat-select [(ngModel)]="selectedSummationColumns"
-            multiple>
-  <mat-option *ngFor="let column of summationColumns"
-              [value]="column">
-    {{column.name}}
-  </mat-option>
-</mat-select>
-
-<mat-checkbox [(ngModel)]="sortByShift">Sort by shift</mat-checkbox>
+<mat-form-field>
+  <mat-select [(ngModel)]="selectedSummationColumns"
+              placeholder="Summation columns"
+              multiple>
+    <mat-option *ngFor="let column of summationColumns"
+                [value]="column">
+      {{column.name}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
 
 <ng-container [formGroup]="decorationDataForm">
   <mat-form-field>
