@@ -2,15 +2,16 @@ import { BasicDto } from "../../../../model/dto/basic-dto";
 import { Employee } from "../../../../model/employee";
 import { WorkDay } from "../../../../model/workday";
 import { ReportRowData } from "../model/report-row-data";
-import { getCellValue, getEmployeeShortName, roundToTwo, sortBy } from "../../../../shared/utils/utils";
+import { getCellValue, getEmployeeShortName, roundToTwo } from "../../../../shared/utils/utils";
 import { DayType } from "../../../../model/day-type";
 import { CellData } from "../../../../lib/ngx-schedule-table/model/data/cell-data";
-import { SummationDto } from "../../../../model/dto/summation-dto";
+import { SummationDto, SummationResult } from "../../../../model/dto/summation-dto";
 import { CalendarDay } from "../../../../lib/ngx-schedule-table/model/calendar-day";
 import { Injectable } from "@angular/core";
 import { HOURS_SUM } from "../../../../model/summation-column";
 import { ShiftComposition } from "../../../../model/shift-composition";
 import { WorkingTime } from "../../../../model/working-time";
+import { sortByPattern, uniqById } from "../../../../shared/utils/collection-utils";
 
 @Injectable()
 export class ReportDataCollector {
@@ -25,9 +26,18 @@ export class ReportDataCollector {
           compositions: ShiftComposition[],
           columnIds?: number[]): ReportRowData[] {
     if (compositions) {
-      sortBy(schedule, compositions);
-      schedule = schedule.slice(0, compositions.length);
+      // sortByCompositions(schedule, compositions);
     }
+
+    const employeeMainShiftCompositions = uniqById(
+      compositions
+        .filter(value => !value.substitution)
+        .sort((a, b) => a.shiftId - b.shiftId),
+      (element => element.employeeId)
+    );
+    sortByPattern(schedule, employeeMainShiftCompositions,
+      ((arrayElement, patternElement) => arrayElement.parent.id === patternElement.employeeId));
+    schedule = schedule.slice(0, employeeMainShiftCompositions.length);
 
     return schedule.map(dto => {
       const reportRowData = new ReportRowData();
@@ -35,6 +45,15 @@ export class ReportDataCollector {
       reportRowData.position = dto.parent.position.shortName;
       reportRowData.cellData = this.getCellData(dto.collection, dates, dayTypes);
       reportRowData.summationResults = this.getSummationResults(summations, dto, columnIds);
+
+      let employeeComposition = employeeMainShiftCompositions
+        .find(value => value.employeeId === dto.parent.id);
+      if (employeeComposition && employeeComposition.shiftId) {
+        let daysNorm = norms
+          .find(value => value.shiftId === employeeComposition.shiftId)
+          .days;
+        reportRowData.summationResults.push(<SummationResult>{value: daysNorm});
+      }
 
       return reportRowData;
     })

@@ -9,8 +9,9 @@ import { SimplePaginationStrategy } from "../../../../../../../shared/paginators
 import { Shift } from "../../../../../../../model/shift";
 import { ShiftService } from "../../../../../../../services/http/shift.service";
 import { Employee } from "../../../../../../../model/employee";
-import { getEmployeeShortName, sortBy } from "../../../../../../../shared/utils/utils";
+import { getEmployeeShortName } from "../../../../../../../shared/utils/utils";
 import { ShiftCompositionService } from "../../../../../../../services/http/shift-composition.service";
+import { sortByCompositions } from "../../../../../../../shared/utils/collection-utils";
 
 @Component({
   selector: 'app-statistics-table',
@@ -48,7 +49,7 @@ export class StatisticsTableComponent implements OnInit, OnDestroy {
             this.shiftCompositionService
               .getAll(monthPaginationObject.firstDayOfMonth, monthPaginationObject.lastDayOfMonth)
           ]).subscribe(values => {
-            sortBy(values[0], values[1]);
+            sortByCompositions(values[0], values[1]);
             this.summationDtos = values[0].slice(0, values[1].length);
           })
         );

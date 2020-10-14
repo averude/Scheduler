@@ -1,61 +1,92 @@
-<!--Year and month-->
-<mat-form-field>
-  <input matInput
-         [(ngModel)]="date"
-         [matDatepicker]="picker"
-         placeholder="Choose a date">
-  <mat-datepicker-toggle matSuffix
-                         [for]="picker"></mat-datepicker-toggle>
-  <mat-datepicker #picker
-                  startView="year"
-                  (monthSelected)="chosenMonthHandler($event, picker)"></mat-datepicker>
-</mat-form-field>
+<mat-horizontal-stepper>
 
-<mat-form-field>
-  <mat-select [(ngModel)]="selectedSummationColumns"
-              placeholder="Summation columns"
-              multiple>
-    <mat-option *ngFor="let column of summationColumns"
-                [value]="column">
-      {{column.name}}
-    </mat-option>
-  </mat-select>
-</mat-form-field>
+  <mat-step [stepControl]="decorationDataForm">
+    <ng-template matStepLabel>Date and caption</ng-template>
+    <!--Year and month-->
+    <mat-form-field>
+      <input matInput
+             [(ngModel)]="date"
+             [matDatepicker]="picker"
+             placeholder="Month and year">
+      <mat-datepicker-toggle matSuffix
+                             [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker
+                      startView="year"
+                      (monthSelected)="chosenMonthHandler($event, picker)">
+      </mat-datepicker>
+    </mat-form-field>
 
-<ng-container [formGroup]="decorationDataForm">
-  <mat-form-field>
-    <input matInput
-           formControlName="agreedPosition"
-           placeholder="Agreed position"/>
-  </mat-form-field>
+    <mat-form-field [formGroup]="decorationDataForm">
+      <input matInput
+             formControlName="schedAndServiceName"
+             placeholder="Schedule and service name"/>
+    </mat-form-field>
 
-  <mat-form-field>
-    <input matInput
-           formControlName="agreedPerson"
-           placeholder="Agreed person"/>
-  </mat-form-field>
+    <div>
+      <button mat-button
+              matStepperNext>Next</button>
+    </div>
+  </mat-step>
 
-  <mat-form-field>
-    <input matInput
-           formControlName="approvedPosition"
-           placeholder="Approved position"/>
-  </mat-form-field>
+  <mat-step [stepControl]="decorationDataForm">
+    <ng-template matStepLabel>Summation columns</ng-template>
+    <mat-form-field>
+      <mat-select [(ngModel)]="selectedSummationColumns"
+                  placeholder="Summation columns"
+                  multiple>
+        <mat-option *ngFor="let column of summationColumns"
+                    [value]="column">
+          {{column.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
 
-  <mat-form-field>
-    <input matInput
-           formControlName="approvedPerson"
-           placeholder="Approved person"/>
-  </mat-form-field>
+    <div>
+      <button mat-button
+              matStepperPrevious>Back</button>
+      <button mat-button
+              matStepperNext>Next</button>
+    </div>
+  </mat-step>
 
-  <mat-form-field>
-    <input matInput
-           formControlName="schedAndServiceName"
-           placeholder="Schedule and service name"/>
-  </mat-form-field>
+  <mat-step [formGroup]="decorationDataForm" [stepControl]="decorationDataForm">
+    <ng-template matStepLabel>Agreed and approved persons</ng-template>
+    <mat-form-field>
+      <input matInput
+             formControlName="agreedPosition"
+             placeholder="Agreed position"/>
+    </mat-form-field>
 
-  <ng-container formArrayName="documentCreators">
-    <div *ngFor="let creator of documentCreators.controls; let i = index; let l = last">
-      <label>
+    <mat-form-field>
+      <input matInput
+             formControlName="agreedPerson"
+             placeholder="Agreed person"/>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput
+             formControlName="approvedPosition"
+             placeholder="Approved position"/>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput
+             formControlName="approvedPerson"
+             placeholder="Approved person"/>
+    </mat-form-field>
+
+    <div>
+      <button mat-button
+              matStepperPrevious>Back</button>
+      <button mat-button
+              matStepperNext>Next</button>
+    </div>
+  </mat-step>
+
+  <mat-step [formGroup]="decorationDataForm" [stepControl]="decorationDataForm">
+    <ng-template matStepLabel>Creators</ng-template>
+    <ng-container formArrayName="documentCreators">
+      <div *ngFor="let creator of documentCreators.controls; let i = index; let l = last">
         <ng-container [formGroup]="creator">
           <mat-form-field>
             <input matInput
@@ -67,14 +98,22 @@
                    placeholder="Name"
                    formControlName="name">
           </mat-form-field>
-          <button *ngIf="l" (click)="addDocumentCreator()">+</button>
-          <button *ngIf="!l" (click)="removeDocumentCreator(i)">-</button>
+          <button mat-button
+                  *ngIf="l"
+                  (click)="addDocumentCreator()">+</button>
+          <button mat-button
+                  *ngIf="!l"
+                  (click)="removeDocumentCreator(i)">-</button>
         </ng-container>
-      </label>
+      </div>
+    </ng-container>
+
+    <div>
+      <button mat-button
+              matStepperPrevious>Back</button>
+      <button mat-button
+              matStepperNext
+              (click)="generateReport()">Generate</button>
     </div>
-  </ng-container>
-
-</ng-container>
-
-
-<button (click)="generateReport()">Generate and save report</button>
+  </mat-step>
+</mat-horizontal-stepper>

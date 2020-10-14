@@ -1,6 +1,6 @@
 import { CellLabelSetter } from "../../../../../../lib/ngx-schedule-table/utils/cell-label-setter";
 import { TableCellComponent } from "../../../../../../lib/ngx-schedule-table/table-cell/table-cell.component";
-import { binarySearch } from "../../../../../../shared/utils/utils";
+import { binarySearch } from "../../../../../../shared/utils/collection-utils";
 import { DayType } from "../../../../../../model/day-type";
 import { WorkDay } from "../../../../../../model/workday";
 import { calculateWorkHoursByWorkDay } from "../../../../../../shared/utils/time-converter";

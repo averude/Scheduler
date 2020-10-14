@@ -70,13 +70,17 @@ export class ReportFormComponent implements OnInit {
 
     this.decorationDataForm.patchValue({
       year: this.date.year(),
-      month: this.date.format("MMMM")
+      month: this.date.clone().locale('uk-UA').format("MMMM")
     });
     datepicker.close();
   }
 
   generateReport() {
     const reportName = `report-${this.date.format("MM-YYYY")}.xlsx`;
+    this.selectedSummationColumns.push(<SummationColumn>{
+      name: 'Норма явок'
+    });
+
     this.reportService
       .generateReport(this.date, this.decorationDataForm.value, this.selectedSummationColumns)
       .subscribe(buffer => fileSaver.saveAs(new Blob([buffer]), reportName));

@@ -10,6 +10,22 @@ import { ReportDataCollector } from "../../../services/generators/report/collect
 import { ReportService } from "../../../services/generators/report/report.service";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatSelectModule } from "@angular/material/select";
+import { MatStepperModule } from "@angular/material/stepper";
+import { MatButtonModule } from "@angular/material/button";
+import { MatCardModule } from "@angular/material/card";
+import { MAT_DATE_FORMATS } from "@angular/material/core";
+
+export const MY_FORMATS = {
+  parse: {
+    dateInput: 'MM/YYYY',
+  },
+  display: {
+    dateInput: 'MM/YYYY',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY',
+  },
+};
 
 @NgModule({
   imports: [
@@ -20,7 +36,10 @@ import { MatSelectModule } from "@angular/material/select";
     MatMomentDateModule,
     ReactiveFormsModule,
     MatCheckboxModule,
-    MatSelectModule
+    MatSelectModule,
+    MatStepperModule,
+    MatButtonModule,
+    MatCardModule
   ],
   declarations: [
     ReportFormComponent
@@ -29,7 +48,8 @@ import { MatSelectModule } from "@angular/material/select";
     MatMomentDateModule,
     ReportService,
     ReportGenerator,
-    ReportDataCollector
+    ReportDataCollector,
+    {provide: MAT_DATE_FORMATS, useValue: MY_FORMATS},
   ]
 })
 export class ReportsModule { }
