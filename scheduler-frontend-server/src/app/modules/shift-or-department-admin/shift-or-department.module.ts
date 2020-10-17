@@ -5,7 +5,7 @@ import { ShiftOrDepartmentAdmin } from './shift-or-department-admin.module';
 import { SimpleNotificationsModule } from "angular2-notifications";
 import { StatisticsModule } from "./schedule/components/statistics/statistics.module";
 import { ScheduleTabBarComponent } from './schedule/components/schedule-tab-bar/schedule-tab-bar.component';
-import { ReportsModule } from "./reports/reports.module";
+import { ReportsModule } from "./schedule/components/reports/reports.module";
 import { CalendarModule } from "./schedule/components/calendar/calendar.module";
 import { ShiftCompositionModule } from "./schedule/components/shift-composition/shift-composition.module";
 import { RemoveDialogModule } from "../../shared/abstract-components/remove-dialog/remove-dialog.module";

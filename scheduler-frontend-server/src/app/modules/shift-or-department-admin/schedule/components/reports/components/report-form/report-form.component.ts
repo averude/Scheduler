@@ -3,10 +3,10 @@ import * as moment from "moment";
 import { Moment } from "moment";
 import * as fileSaver from 'file-saver';
 import { MatDatepicker } from "@angular/material/datepicker";
-import { ReportService } from "../../../../../services/generators/report/report.service";
+import { ReportService } from "../../../../../../../services/generators/report/report.service";
 import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { SummationColumn } from "../../../../../model/summation-column";
-import { SummationColumnDtoService } from "../../../../../services/http/summation-column-dto.service";
+import { SummationColumn } from "../../../../../../../model/summation-column";
+import { SummationColumnDtoService } from "../../../../../../../services/http/summation-column-dto.service";
 
 @Component({
   selector: 'app-report-form',
