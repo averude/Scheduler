@@ -3,7 +3,7 @@ package com.averude.uksatse.scheduler.generator.timenorm;
 import com.averude.uksatse.scheduler.core.entity.PatternUnit;
 import com.averude.uksatse.scheduler.core.entity.ShiftPattern;
 import com.averude.uksatse.scheduler.core.entity.SpecialCalendarDate;
-import com.averude.uksatse.scheduler.core.entity.WorkingTime;
+import com.averude.uksatse.scheduler.core.entity.WorkingNorm;
 import com.averude.uksatse.scheduler.core.entity.structure.Shift;
 import com.averude.uksatse.scheduler.core.util.OffsetCalculator;
 import com.averude.uksatse.scheduler.core.util.TimeCalculator;
@@ -18,19 +18,19 @@ import java.util.stream.Collectors;
 import static com.averude.uksatse.scheduler.core.entity.SpecialCalendarDateType.*;
 
 @Component
-public class WorkingTimeNormGenerator {
+public class WorkingNormGenerator {
 
     private final TimeCalculator    timeCalculator;
     private final OffsetCalculator  offsetCalculator;
 
     @Autowired
-    public WorkingTimeNormGenerator(TimeCalculator timeCalculator,
-                                    OffsetCalculator offsetCalculator) {
+    public WorkingNormGenerator(TimeCalculator timeCalculator,
+                                OffsetCalculator offsetCalculator) {
         this.timeCalculator = timeCalculator;
         this.offsetCalculator = offsetCalculator;
     }
 
-    public List<WorkingTime> calculateWorkingTimeForShift(int offset,
+    public List<WorkingNorm> calculateWorkingNormForShift(int offset,
                                                           Shift shift,
                                                           LocalDate from,
                                                           LocalDate to,
@@ -50,7 +50,7 @@ public class WorkingTimeNormGenerator {
                     float hours = getHours(units, month, offsetForDate) - extraCoefficient;
                     hours = hours >= 0 ? hours : 0;
 
-                    return createWorkingTime(shift.getId(),
+                    return createWorkingNorm(shift.getId(),
                             shift.getDepartmentId(),
                             hours, days, month);
                 })
@@ -105,17 +105,17 @@ public class WorkingTimeNormGenerator {
         return timeCalculator.calculateDays(offsetForDate, units, date);
     }
 
-    private WorkingTime createWorkingTime(Long shiftId,
+    private WorkingNorm createWorkingNorm(Long shiftId,
                                           Long departmentId,
                                           Float hours,
                                           Long days,
                                           LocalDate date) {
-        var workingTime = new WorkingTime();
-        workingTime.setShiftId(shiftId);
-        workingTime.setDepartmentId(departmentId);
-        workingTime.setHours(hours);
-        workingTime.setDate(date);
-        workingTime.setDays(days);
-        return workingTime;
+        var workingNorm = new WorkingNorm();
+        workingNorm.setShiftId(shiftId);
+        workingNorm.setDepartmentId(departmentId);
+        workingNorm.setHours(hours);
+        workingNorm.setDate(date);
+        workingNorm.setDays(days);
+        return workingNorm;
     }
 }

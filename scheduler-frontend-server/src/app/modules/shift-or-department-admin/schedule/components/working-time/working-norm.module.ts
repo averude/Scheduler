@@ -5,10 +5,10 @@ import { SharedModule } from "../../../../../shared/shared.module";
 import { ScheduleTableModule } from "../../../../../lib/ngx-schedule-table/schedule-table.module";
 import { MonthYearPaginatorModule } from "../../../../../shared/paginators/month-year-paginator/month-year-paginator.module";
 import { YearPaginationStrategy } from "../../../../../shared/paginators/pagination-strategy/year-pagination-strategy";
-import { WorkingTimeTableDataCollector } from "./components/collectors/working-time-table-data-collector";
-import { WorkingTimeCellLabelSetter } from "./components/utils/working-time-cell-label-setter";
-import { WorkingTimeTableComponent } from "./components/working-time-table/working-time-table.component";
-import { WorkingTimeDialogComponent } from './components/working-time-dialog/working-time-dialog.component';
+import { WorkingNormTableDataCollector } from "./components/collectors/working-norm-table-data-collector.service";
+import { WorkingNormCellLabelSetter } from "./components/utils/working-norm-cell-label-setter.service";
+import { WorkingNormTableComponent } from "./components/working-time-table/working-norm-table.component";
+import { WorkingNormDialogComponent } from './components/working-time-dialog/working-norm-dialog.component';
 import { MatButtonModule } from "@angular/material/button";
 import { MatDialogModule } from "@angular/material/dialog";
 import { MatFormFieldModule } from "@angular/material/form-field";
@@ -33,14 +33,14 @@ import { TableSumCalculator } from "../../../../../services/calculators/table-su
     MatSelectModule
   ],
   declarations: [
-    WorkingTimeTableComponent,
-    WorkingTimeDialogComponent
+    WorkingNormTableComponent,
+    WorkingNormDialogComponent
   ],
   providers: [
     YearPaginationStrategy,
-    WorkingTimeTableDataCollector,
-    WorkingTimeCellLabelSetter,
+    WorkingNormTableDataCollector,
+    WorkingNormCellLabelSetter,
     TableSumCalculator
   ]
 })
-export class WorkingTimeModule {}
+export class WorkingNormModule {}

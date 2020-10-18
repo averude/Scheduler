@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { RestConfig } from "../../rest.config";
 import { Observable } from "rxjs";
-import { WorkingTime } from "../../model/working-time";
+import { WorkingNorm } from "../../model/working-norm";
 import { HttpClient } from "@angular/common/http";
 import { parseDateOfEntities } from "../../shared/utils/utils";
 import { AuthService } from "./auth.service";
@@ -14,22 +14,22 @@ import { GenerationDto } from "../../model/dto/generation-dto";
 @Injectable({
   providedIn: "root"
 })
-export class WorkingTimeService
-  extends ACrudService<WorkingTime> implements CUDService<WorkingTime> {
+export class WorkingNormService
+  extends ACrudService<WorkingNorm> implements CUDService<WorkingNorm> {
 
   constructor(authService: AuthService,
               http: HttpClient,
               private config: RestConfig) {
-    super(`${config.baseUrl}/admin/working_time`, http);
+    super(`${config.baseUrl}/admin/working_norm`, http);
   }
 
-  getAllDto(from?: string, to?: string): Observable<BasicDto<Shift, WorkingTime>[]> {
-    return this.http.get<BasicDto<Shift, WorkingTime>[]>(
+  getAllDto(from?: string, to?: string): Observable<BasicDto<Shift, WorkingNorm>[]> {
+    return this.http.get<BasicDto<Shift, WorkingNorm>[]>(
       `${this.url}/dto/dates?from=${from}&to=${to}`
     );
   }
 
-  getAll(from?: string, to?: string): Observable<WorkingTime[]> {
+  getAll(from?: string, to?: string): Observable<WorkingNorm[]> {
     return super.getAll(from, to).pipe(parseDateOfEntities);
   }
 

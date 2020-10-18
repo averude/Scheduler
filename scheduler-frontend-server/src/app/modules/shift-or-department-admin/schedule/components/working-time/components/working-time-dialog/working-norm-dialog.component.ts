@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { DialogBaseComponent } from "../../../../../../../shared/abstract-components/dialog-base/dialog-base.component";
-import { WorkingTime } from "../../../../../../../model/working-time";
+import { WorkingNorm } from "../../../../../../../model/working-norm";
 import { MatDatepicker } from "@angular/material/datepicker";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { AuthService } from "../../../../../../../services/http/auth.service";
@@ -9,20 +9,20 @@ import { Moment } from "moment";
 import { SelectionData } from "../../../../../../../lib/ngx-schedule-table/model/selection-data";
 
 @Component({
-  selector: 'app-working-time-dialog',
-  templateUrl: './working-time-dialog.component.html',
+  selector: 'app-working-norm-dialog',
+  templateUrl: './working-norm-dialog.component.html',
   styleUrls: [
     '../../../../../../../shared/common/dialog.common.css',
-    './working-time-dialog.component.css'
+    './working-norm-dialog.component.css'
   ]
 })
-export class WorkingTimeDialogComponent extends DialogBaseComponent<WorkingTime> {
+export class WorkingNormDialogComponent extends DialogBaseComponent<WorkingNorm> {
 
   selectionData: SelectionData;
 
   constructor(private authService: AuthService,
               private fb: FormBuilder,
-              private dialogRef: MatDialogRef<WorkingTimeDialogComponent>,
+              private dialogRef: MatDialogRef<WorkingNormDialogComponent>,
               @Inject(MAT_DIALOG_DATA) data) {
     super(data.selectedCells[0].value, dialogRef);
     this.selectionData   = data;
@@ -38,13 +38,13 @@ export class WorkingTimeDialogComponent extends DialogBaseComponent<WorkingTime>
     });
   }
 
-  fillInTheForm(workingTime: WorkingTime) {
+  fillInTheForm(workingNorm: WorkingNorm) {
     this.dialogForm.setValue({
-      id:           workingTime.id,
-      shiftId:      workingTime.shiftId,
-      date:         workingTime.date,
-      hours:        workingTime.hours,
-      days:         workingTime.days
+      id:           workingNorm.id,
+      shiftId:      workingNorm.shiftId,
+      date:         workingNorm.date,
+      hours:        workingNorm.hours,
+      days:         workingNorm.days
     });
   }
 

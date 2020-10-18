@@ -2,7 +2,7 @@ package com.averude.uksatse.scheduler.core.entity.structure;
 
 import com.averude.uksatse.scheduler.core.entity.Position;
 import com.averude.uksatse.scheduler.core.entity.ShiftPattern;
-import com.averude.uksatse.scheduler.core.entity.WorkingTime;
+import com.averude.uksatse.scheduler.core.entity.WorkingNorm;
 import com.averude.uksatse.scheduler.core.entity.interfaces.HasEnterpriseId;
 import com.averude.uksatse.scheduler.core.entity.interfaces.HasId;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -75,7 +75,7 @@ public class Department implements HasId, HasEnterpriseId {
     @OneToMany( mappedBy = "departmentId",
                 cascade = CascadeType.ALL,
                 fetch = FetchType.LAZY)
-    private List<@NotNull @Valid WorkingTime> workingTimes;
+    private List<@NotNull @Valid WorkingNorm> workingNorms;
 
     public Department(String name) {
         this.name = name;

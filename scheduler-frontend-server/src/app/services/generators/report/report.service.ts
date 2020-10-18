@@ -13,7 +13,7 @@ import { DecorationData } from "./model/decoration-data";
 import { Buffer } from "exceljs";
 import { ShiftCompositionService } from "../../http/shift-composition.service";
 import { SummationColumn } from "../../../model/summation-column";
-import { WorkingTimeService } from "../../http/working-time.service";
+import { WorkingNormService } from "../../http/working-norm.service";
 
 @Injectable()
 export class ReportService {
@@ -26,7 +26,7 @@ export class ReportService {
               private dayTypeService: DayTypeService,
               private statisticsService: StatisticsService,
               private shiftCompositionService: ShiftCompositionService,
-              private workingTimeService: WorkingTimeService){}
+              private workingNormService: WorkingNormService){}
 
   generateReport(date: Moment,
                  decorationData: DecorationData,
@@ -39,7 +39,7 @@ export class ReportService {
       this.scheduleService.getAllByDate(from, to),
       this.statisticsService.getSummationDto(from, to),
       this.dayTypeService.getAll().pipe(map(values => values.sort((a, b) => a.id - b.id))),
-      this.workingTimeService.getAll(from, to),
+      this.workingNormService.getAll(from, to),
       this.shiftCompositionService.getAll(from, to)
     ];
 

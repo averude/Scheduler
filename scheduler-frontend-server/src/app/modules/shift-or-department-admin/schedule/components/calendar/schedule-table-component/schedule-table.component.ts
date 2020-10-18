@@ -3,7 +3,7 @@ import { PaginationService } from "../../../../../../lib/ngx-schedule-table/serv
 import { ShiftService } from "../../../../../../services/http/shift.service";
 import { ShiftCompositionService } from "../../../../../../services/http/shift-composition.service";
 import { ScheduleService } from "../../../../../../services/http/schedule.service";
-import { WorkingTimeService } from "../../../../../../services/http/working-time.service";
+import { WorkingNormService } from "../../../../../../services/http/working-norm.service";
 import { forkJoin, from, Subscription } from "rxjs";
 import { ScheduleTablePaginationStrategy } from "../../../../../../shared/paginators/pagination-strategy/schedule-table-pagination-strategy";
 import { ScheduleTableDataCollector } from "../collectors/schedule-table-data-collector";
@@ -40,7 +40,7 @@ export class ScheduleTableComponent implements OnInit, OnDestroy {
               private shiftService: ShiftService,
               private shiftCompositionService: ShiftCompositionService,
               private scheduleService: ScheduleService,
-              private workingTimeService: WorkingTimeService,
+              private workingNormService: WorkingNormService,
               private scheduleTableDataCollector: ScheduleTableDataCollector,
               private notificationsService: NotificationsService) {
   }
@@ -70,7 +70,7 @@ export class ScheduleTableComponent implements OnInit, OnDestroy {
             this.scheduleService.getAllByDate(
               daysInMonth[0].isoString,
               daysInMonth[daysInMonth.length - 1].isoString),
-            this.workingTimeService.getAll(
+            this.workingNormService.getAll(
               daysInMonth[0].isoString,
               daysInMonth[daysInMonth.length - 1].isoString)
           ]).subscribe((values: any[][]) => {

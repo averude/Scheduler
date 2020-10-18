@@ -1,6 +1,6 @@
 import { RowGroupData } from "../../../../../../lib/ngx-schedule-table/model/data/row-group-data";
 import { Shift } from "../../../../../../model/shift";
-import { WorkingTime } from "../../../../../../model/working-time";
+import { WorkingNorm } from "../../../../../../model/working-norm";
 import { BasicDto } from "../../../../../../model/dto/basic-dto";
 import { Employee } from "../../../../../../model/employee";
 import { WorkDay } from "../../../../../../model/workday";
@@ -21,7 +21,7 @@ export class ScheduleTableDataCollector {
                shifts: Shift[],
                compositions: ShiftComposition[],
                schedule: BasicDto<Employee, WorkDay>[],
-               workingTimeNorms: WorkingTime[]): RowGroupData[] {
+               workingNorms: WorkingNorm[]): RowGroupData[] {
     let groupData: RowGroupData[] = [];
 
     let compositionsMap = this.divider.divideMainCompositionsByEmployee(compositions);
@@ -39,7 +39,7 @@ export class ScheduleTableDataCollector {
       let employee            = employeeSchedule.parent;
       let employeeWorkDays    = employeeSchedule.collection;
       let employeeCompositions = compositionsMap.get(employee.id);
-      let employeeTimeNorm    = this.getTimeNorm(employeeCompositions, workingTimeNorms);
+      let employeeWorkNorm    = this.getWorkingNorm(employeeCompositions, workingNorms);
 
       if (!employeeCompositions) {
         continue;
@@ -62,13 +62,13 @@ export class ScheduleTableDataCollector {
               let subComposition = compositions[subIndex];
               if (this.isInComposition(date.isoString, subComposition)) {
                 this.insertDataInGroup(groupData[subComposition.shiftId], subComposition,
-                  date, employee, workDay, employeeTimeNorm, true, dayIndex);
+                  date, employee, workDay, employeeWorkNorm, true, dayIndex);
                 this.fillOtherGroups(subComposition.shiftId, date, employee, workDay,
-                  employeeTimeNorm, groupData, employeeCompositions, index, dayIndex);
+                  employeeWorkNorm, groupData, employeeCompositions, index, dayIndex);
                 break compositionsLoop;
               } else {
                 this.insertDataInGroup(groupData[subComposition.shiftId], subComposition,
-                  date, employee, workDay, employeeTimeNorm, false, dayIndex);
+                  date, employee, workDay, employeeWorkNorm, false, dayIndex);
               }
             }
           }
@@ -86,7 +86,7 @@ export class ScheduleTableDataCollector {
                             date: CalendarDay,
                             employee: Employee,
                             workDay: WorkDay,
-                            timeNorm: number,
+                            workingNorm: number,
                             isEnabled: boolean,
                             dayIndex: number) {
     let employeeId  = composition.employeeId;
@@ -98,7 +98,7 @@ export class ScheduleTableDataCollector {
         name:           getEmployeeShortName(employee),
         position:       employee.position.shortName,
         isSubstitution: composition.substitution,
-        timeNorm:       timeNorm,
+        workingNorm:    workingNorm,
         cellData:       []
       } as SchedulerRowData;
     }
@@ -114,7 +114,7 @@ export class ScheduleTableDataCollector {
                           date: CalendarDay,
                           employee: Employee,
                           workDay: WorkDay,
-                          timeNorm: number,
+                          workingNorm: number,
                           groupData: RowGroupData[],
                           compositions: ShiftComposition[][],
                           compositionIndex: number,
@@ -125,7 +125,7 @@ export class ScheduleTableDataCollector {
           continue;
         }
         this.insertDataInGroup(groupData[subComposition.shiftId], subComposition,
-          date, employee, workDay, timeNorm, false, dayIndex);
+          date, employee, workDay, workingNorm, false, dayIndex);
       }
     }
   }
@@ -134,11 +134,11 @@ export class ScheduleTableDataCollector {
     return moment(date).isBetween(composition.from, composition.to, 'date', '[]')
   }
 
-  private getTimeNorm(employeeCompositions: ShiftComposition[], workingTimeNorms: WorkingTime[]): number {
+  private getWorkingNorm(employeeCompositions: ShiftComposition[], workingNorms: WorkingNorm[]): number {
     if (employeeCompositions && employeeCompositions[0]) {
       let shiftId = employeeCompositions[0][0].shiftId;
-      let shiftTimeNorm = workingTimeNorms.find(value => value.shiftId === shiftId);
-      return shiftTimeNorm ? shiftTimeNorm.hours : 0;
+      let shiftWorkingNorm = workingNorms.find(value => value.shiftId === shiftId);
+      return shiftWorkingNorm ? shiftWorkingNorm.hours : 0;
     } else return 0;
   }
 }

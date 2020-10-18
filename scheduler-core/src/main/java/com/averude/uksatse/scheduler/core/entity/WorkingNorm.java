@@ -20,15 +20,15 @@ import java.util.StringJoiner;
 @Setter
 @Entity
 @Table(
-        name = "working_time",
+        name = "working_norm",
         uniqueConstraints = {
                 @UniqueConstraint(
-                        name = "working_time_unique_constraint",
+                        name = "working_norm_unique_constraint",
                         columnNames = {"date", "shift_id"}
                 )
         }
 )
-public class WorkingTime implements HasId, HasDepartmentId, HasDate {
+public class WorkingNorm implements HasId, HasDepartmentId, HasDate {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -59,7 +59,7 @@ public class WorkingTime implements HasId, HasDepartmentId, HasDate {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        WorkingTime that = (WorkingTime) o;
+        WorkingNorm that = (WorkingNorm) o;
         return departmentId.equals(that.departmentId) &&
                 shiftId.equals(that.shiftId) &&
                 date.equals(that.date) &&
@@ -74,7 +74,7 @@ public class WorkingTime implements HasId, HasDepartmentId, HasDate {
 
     @Override
     public String toString() {
-        return new StringJoiner(", ", WorkingTime.class.getSimpleName() + "{", "}")
+        return new StringJoiner(", ", WorkingNorm.class.getSimpleName() + "{", "}")
                 .add("id=" + id)
                 .add("departmentId=" + departmentId)
                 .add("shiftId=" + shiftId)

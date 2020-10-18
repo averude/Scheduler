@@ -1,16 +1,16 @@
-import { WorkingTimeRowData } from "../model/working-time-row-data";
-import { WorkingTime } from "../../../../../../../model/working-time";
+import { WorkingNormRowData } from "../model/working-norm-row-data";
+import { WorkingNorm } from "../../../../../../../model/working-norm";
 import { CellData } from "../../../../../../../lib/ngx-schedule-table/model/data/cell-data";
 import { BasicDto } from "../../../../../../../model/dto/basic-dto";
 import { Shift } from "../../../../../../../model/shift";
 import { Injectable } from "@angular/core";
 
 @Injectable()
-export class WorkingTimeTableDataCollector {
+export class WorkingNormTableDataCollector {
 
-  getRowData(dates: any, workingTimeDtos: BasicDto<Shift, WorkingTime>[]) {
-    return workingTimeDtos.map(dto => {
-      let rowData = new WorkingTimeRowData();
+  getRowData(dates: any, workingNormDtos: BasicDto<Shift, WorkingNorm>[]) {
+    return workingNormDtos.map(dto => {
+      let rowData = new WorkingNormRowData();
       rowData.id = dto.parent.id;
       rowData.shiftName = dto.parent.name;
       let shiftPattern = dto.parent.shiftPattern;
@@ -20,7 +20,7 @@ export class WorkingTimeTableDataCollector {
     });
   }
 
-  getCellData(dates: any[], arr: WorkingTime[]) {
+  getCellData(dates: any[], arr: WorkingNorm[]) {
     let cellData: CellData[] = [];
 
     for (let dateIdx = 0, arrIdx = 0; dateIdx < dates.length; dateIdx++) {
@@ -32,9 +32,9 @@ export class WorkingTimeTableDataCollector {
         enabled: true
       };
 
-      let workingTime = arr[arrIdx];
-      if (workingTime && (date === workingTime.date)) {
-        cell.value = workingTime;
+      let workingNorm = arr[arrIdx];
+      if (workingNorm && (date === workingNorm.date)) {
+        cell.value = workingNorm;
         arrIdx++;
       }
 

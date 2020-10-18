@@ -1,12 +1,12 @@
 package com.averude.uksatse.scheduler.shared.service;
 
 import com.averude.uksatse.scheduler.core.dto.BasicDto;
-import com.averude.uksatse.scheduler.core.entity.WorkingTime;
+import com.averude.uksatse.scheduler.core.entity.WorkingNorm;
 import com.averude.uksatse.scheduler.core.entity.structure.Shift;
-import com.averude.uksatse.scheduler.generator.timenorm.WorkingTimeNormGenerator;
+import com.averude.uksatse.scheduler.generator.timenorm.WorkingNormGenerator;
 import com.averude.uksatse.scheduler.shared.repository.ShiftRepository;
 import com.averude.uksatse.scheduler.shared.repository.SpecialCalendarDateRepository;
-import com.averude.uksatse.scheduler.shared.repository.WorkingTimeRepository;
+import com.averude.uksatse.scheduler.shared.repository.WorkingNormRepository;
 import com.averude.uksatse.scheduler.shared.service.base.AByDepartmentIdAndDateService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,61 +20,61 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-public class WorkingTimeServiceImpl
-        extends AByDepartmentIdAndDateService<WorkingTime, Long> implements WorkingTimeService {
+public class WorkingNormServiceImpl
+        extends AByDepartmentIdAndDateService<WorkingNorm, Long> implements WorkingNormService {
 
-    private final WorkingTimeRepository     workingTimeRepository;
+    private final WorkingNormRepository workingNormRepository;
     private final ShiftRepository           shiftRepository;
-    private final WorkingTimeNormGenerator  timeNormGenerator;
+    private final WorkingNormGenerator workingNormGenerator;
 
     private final SpecialCalendarDateRepository specialCalendarDateRepository;
 
     @Autowired
-    public WorkingTimeServiceImpl(WorkingTimeRepository     workingTimeRepository,
+    public WorkingNormServiceImpl(WorkingNormRepository workingNormRepository,
                                   ShiftRepository           shiftRepository,
-                                  WorkingTimeNormGenerator  timeNormGenerator,
+                                  WorkingNormGenerator workingNormGenerator,
                                   SpecialCalendarDateRepository specialCalendarDateRepository) {
-        super(workingTimeRepository, shiftRepository);
-        this.workingTimeRepository  = workingTimeRepository;
+        super(workingNormRepository, shiftRepository);
+        this.workingNormRepository = workingNormRepository;
         this.shiftRepository        = shiftRepository;
-        this.timeNormGenerator      = timeNormGenerator;
+        this.workingNormGenerator = workingNormGenerator;
         this.specialCalendarDateRepository = specialCalendarDateRepository;
     }
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
-    public List<BasicDto<Shift, WorkingTime>> findAllDtoByDepartmentIdAndDate(Long departmentId,
+    public List<BasicDto<Shift, WorkingNorm>> findAllDtoByDepartmentIdAndDate(Long departmentId,
                                                                               LocalDate from,
                                                                               LocalDate to) {
         return shiftRepository.findAllByDepartmentId(departmentId)
                 .stream()
-                .map(shift -> new BasicDto<>(shift, workingTimeRepository
+                .map(shift -> new BasicDto<>(shift, workingNormRepository
                         .findAllByShiftIdAndDateBetweenOrderByDateAsc(shift.getId(), from, to)))
                 .collect(Collectors.toList());
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public void generateWorkingTimeNorm(Long departmentId,
-                                        Long shiftId,
-                                        LocalDate from,
-                                        LocalDate to,
-                                        int offset) {
+    public void generateWorkingNorm(Long departmentId,
+                                    Long shiftId,
+                                    LocalDate from,
+                                    LocalDate to,
+                                    int offset) {
         shiftRepository.findById(shiftId)
                 .filter(shift -> shift.getDepartmentId().equals(departmentId)) // make sure that shift is from required department
                 .ifPresent(shift -> {
                     var specialCalendarDates = specialCalendarDateRepository.findAllByDepartmentIdAndDateBetween(departmentId, from, to);
 
-                    log.debug("Generating time norm for shift {} and period betweeen {} and {}", shift, from, to);
-                    var workingTimeList = timeNormGenerator
-                            .calculateWorkingTimeForShift(offset, shift, from, to, specialCalendarDates);
+                    log.debug("Generating working norm for shift {} and period between {} and {}", shift, from, to);
+                    var workingNormList = workingNormGenerator
+                            .calculateWorkingNormForShift(offset, shift, from, to, specialCalendarDates);
 
-                    log.debug("Removing old working time norm...");
-                    workingTimeRepository.deleteAllByShiftIdAndDateBetween(shiftId, from, to);
-                    workingTimeRepository.flush();
+                    log.debug("Removing old working norm...");
+                    workingNormRepository.deleteAllByShiftIdAndDateBetween(shiftId, from, to);
+                    workingNormRepository.flush();
 
-                    log.debug("Saving new working time norm...");
-                    workingTimeRepository.saveAll(workingTimeList);
+                    log.debug("Saving new working norm...");
+                    workingNormRepository.saveAll(workingNormList);
                 });
     }
 }

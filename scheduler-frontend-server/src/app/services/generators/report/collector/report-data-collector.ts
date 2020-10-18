@@ -10,7 +10,7 @@ import { CalendarDay } from "../../../../lib/ngx-schedule-table/model/calendar-d
 import { Injectable } from "@angular/core";
 import { HOURS_SUM } from "../../../../model/summation-column";
 import { ShiftComposition } from "../../../../model/shift-composition";
-import { WorkingTime } from "../../../../model/working-time";
+import { WorkingNorm } from "../../../../model/working-norm";
 import { sortByPattern, uniqById } from "../../../../shared/utils/collection-utils";
 
 @Injectable()
@@ -22,7 +22,7 @@ export class ReportDataCollector {
           dayTypes: DayType[],
           schedule: BasicDto<Employee, WorkDay>[],
           summations: SummationDto[],
-          norms: WorkingTime[],
+          norms: WorkingNorm[],
           compositions: ShiftComposition[],
           columnIds?: number[]): ReportRowData[] {
     if (compositions) {

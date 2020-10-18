@@ -2,17 +2,17 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnIni
 import { YearPaginationStrategy } from "../../../../../../../shared/paginators/pagination-strategy/year-pagination-strategy";
 import { PaginationService } from "../../../../../../../lib/ngx-schedule-table/service/pagination.service";
 import { from, Subscription } from "rxjs";
-import { WorkingTimeService } from "../../../../../../../services/http/working-time.service";
+import { WorkingNormService } from "../../../../../../../services/http/working-norm.service";
 import { RowData } from "../../../../../../../lib/ngx-schedule-table/model/data/row-data";
-import { WorkingTimeTableDataCollector } from "../collectors/working-time-table-data-collector";
-import { WorkingTimeCellLabelSetter } from "../utils/working-time-cell-label-setter";
+import { WorkingNormTableDataCollector } from "../collectors/working-norm-table-data-collector.service";
+import { WorkingNormCellLabelSetter } from "../utils/working-norm-cell-label-setter.service";
 import { ClearSelectionService } from "../../../../../../../lib/ngx-schedule-table/service/clear-selection.service";
 import { SelectionEndService } from "../../../../../../../lib/ngx-schedule-table/service/selection-end.service";
 import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
 import { Shift } from "../../../../../../../model/shift";
-import { WorkingTimeDialogComponent } from "../working-time-dialog/working-time-dialog.component";
+import { WorkingNormDialogComponent } from "../working-time-dialog/working-norm-dialog.component";
 import { SelectionData } from "../../../../../../../lib/ngx-schedule-table/model/selection-data";
-import { WorkingTime } from "../../../../../../../model/working-time";
+import { WorkingNorm } from "../../../../../../../model/working-norm";
 import { TableRenderer } from "../../../../../../../lib/ngx-schedule-table/service/table-renderer.service";
 import { NotificationsService } from "angular2-notifications";
 import { ShiftGenerationUnit } from "../../../../../../../model/ui/shift-generation-unit";
@@ -21,12 +21,12 @@ import { concatMap } from "rxjs/operators";
 import { TableSumCalculator } from "../../../../../../../services/calculators/table-sum-calculator.service";
 
 @Component({
-  selector: 'app-working-time-table',
-  templateUrl: './working-time-table.component.html',
-  styleUrls: ['./working-time-table.component.css'],
+  selector: 'app-working-norm-table',
+  templateUrl: './working-norm-table.component.html',
+  styleUrls: ['./working-norm-table.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class WorkingTimeTableComponent implements OnInit, OnDestroy {
+export class WorkingNormTableComponent implements OnInit, OnDestroy {
 
   rowData:  RowData[] = [];
   private shifts:   Shift[]   = [];
@@ -43,16 +43,16 @@ export class WorkingTimeTableComponent implements OnInit, OnDestroy {
               private selectionEndService: SelectionEndService,
               private tableRenderer: TableRenderer,
               private sumCalculator: TableSumCalculator,
-              public cellLabelSetter: WorkingTimeCellLabelSetter,
+              public cellLabelSetter: WorkingNormCellLabelSetter,
               public paginationStrategy: YearPaginationStrategy,
-              private dataCollector: WorkingTimeTableDataCollector,
+              private dataCollector: WorkingNormTableDataCollector,
               private paginationService: PaginationService,
-              private workingTimeService: WorkingTimeService,
+              private workingNormService: WorkingNormService,
               private notificationsService: NotificationsService) { }
 
   ngOnInit() {
     this.paginatorSub = this.paginationService.onValueChange
-      .subscribe(months => this.workingTimeService
+      .subscribe(months => this.workingNormService
         .getAllDto(months[0].isoString, months[months.length - 1].isoString)
         .subscribe(dtos => {
           this.shifts = dtos.map(dto => dto.parent);
@@ -85,21 +85,21 @@ export class WorkingTimeTableComponent implements OnInit, OnDestroy {
     config.data = selectionData;
     config.hasBackdrop = true;
 
-    this.dialog.open(WorkingTimeDialogComponent, config)
-      .afterClosed().subscribe(workingTime => {
+    this.dialog.open(WorkingNormDialogComponent, config)
+      .afterClosed().subscribe(workingNorm => {
         this.rowClearSelection.clearSelection();
-        if (workingTime) {
-          if (workingTime.id) {
-            this.workingTimeService.update(workingTime)
+        if (workingNorm) {
+          if (workingNorm.id) {
+            this.workingNormService.update(workingNorm)
               .subscribe(res => {
-                this.updateCellData(selectionData.rowData, workingTime);
+                this.updateCellData(selectionData.rowData, workingNorm);
                 this.tableRenderer.renderRow(selectionData.rowData.id);
               })
           } else {
-            this.workingTimeService.create(workingTime)
+            this.workingNormService.create(workingNorm)
               .subscribe(res => {
-                workingTime.id = res;
-                this.updateCellData(selectionData.rowData, workingTime);
+                workingNorm.id = res;
+                this.updateCellData(selectionData.rowData, workingNorm);
                 this.tableRenderer.renderRow(selectionData.rowData.id);
               });
           }
@@ -107,7 +107,7 @@ export class WorkingTimeTableComponent implements OnInit, OnDestroy {
     });
   }
 
-  private updateCellData(rowData: RowData, workingTime: WorkingTime) {
+  private updateCellData(rowData: RowData, workingNorm: WorkingNorm) {
     let cellData = rowData.cellData;
     let newCellData = [];
     for (let cellIdx = 0; cellIdx < cellData.length; cellIdx++) {
@@ -115,18 +115,18 @@ export class WorkingTimeTableComponent implements OnInit, OnDestroy {
       let cell = Object.assign({}, cellData[cellIdx]);
       newCellData[cellIdx] = cell;
 
-      if (cell.date === workingTime.date) {
-        newCellData[cellIdx].value = workingTime;
+      if (cell.date === workingNorm.date) {
+        newCellData[cellIdx].value = workingNorm;
       }
     }
     rowData.cellData = newCellData;
   }
 
-  onWorkingTimeGenerated(generationUnits: ShiftGenerationUnit[]) {
+  onWorkingNormGenerated(generationUnits: ShiftGenerationUnit[]) {
     let dtos = generationUnits.map(unit => toGenerationDto(unit));
 
     from(dtos).pipe(
-      concatMap(generationDto => this.workingTimeService.generate(generationDto))
+      concatMap(generationDto => this.workingNormService.generate(generationDto))
     ).subscribe(res => this.notificationsService.success('Generated', res));
   }
 }

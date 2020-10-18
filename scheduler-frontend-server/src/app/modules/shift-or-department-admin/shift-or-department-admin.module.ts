@@ -7,7 +7,7 @@ import { ScheduleTabBarComponent } from "./schedule/components/schedule-tab-bar/
 import { ReportFormComponent } from "./schedule/components/reports/components/report-form/report-form.component";
 import { ScheduleTableComponent } from "./schedule/components/calendar/schedule-table-component/schedule-table.component";
 import { ShiftCompositionTableComponent } from "./schedule/components/shift-composition/components/shift-composition-table/shift-composition-table.component";
-import { WorkingTimeTableComponent } from "./schedule/components/working-time/components/working-time-table/working-time-table.component";
+import { WorkingNormTableComponent } from "./schedule/components/working-time/components/working-time-table/working-norm-table.component";
 
 const routes: Routes = [
   {
@@ -34,8 +34,8 @@ const routes: Routes = [
             component: ShiftCompositionTableComponent
           },
           {
-            path: 'working_time',
-            component: WorkingTimeTableComponent
+            path: 'working_norm',
+            component: WorkingNormTableComponent
           },
           {
             path: 'statistics',
