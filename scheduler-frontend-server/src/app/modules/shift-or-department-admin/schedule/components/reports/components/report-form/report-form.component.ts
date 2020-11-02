@@ -7,6 +7,7 @@ import { ReportService } from "../../../../../../../services/generators/report/r
 import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { SummationColumn } from "../../../../../../../model/summation-column";
 import { SummationColumnDtoService } from "../../../../../../../services/http/summation-column-dto.service";
+import { SCHEDULE_REPORT, TIME_SHEET_REPORT } from "../../../../../../../services/generators/report/model/report-types";
 
 @Component({
   selector: 'app-report-form',
@@ -14,6 +15,9 @@ import { SummationColumnDtoService } from "../../../../../../../services/http/su
   styleUrls: ['./report-form.component.css']
 })
 export class ReportFormComponent implements OnInit {
+
+  reportTypes = [SCHEDULE_REPORT, TIME_SHEET_REPORT];
+  reportType: string;
 
   decorationDataForm: FormGroup;
   date: Moment;
@@ -27,8 +31,17 @@ export class ReportFormComponent implements OnInit {
 
   ngOnInit() {
     this.summationColumnDtoService.getAll()
-      .subscribe(dtos =>this.summationColumns = dtos
-        .map(value => value.parent));
+      .subscribe(dtos => {
+        this.summationColumns = dtos.map(value => value.parent);
+        this.summationColumns.push({
+          id: -1,
+          name: 'Норма'
+        } as SummationColumn);
+        this.summationColumns.push({
+          id: -2,
+          name: 'Норма явок'
+        } as SummationColumn);
+      });
 
     this.date = moment.utc();
 
@@ -76,13 +89,9 @@ export class ReportFormComponent implements OnInit {
   }
 
   generateReport() {
-    const reportName = `report-${this.date.format("MM-YYYY")}.xlsx`;
-    this.selectedSummationColumns.push(<SummationColumn>{
-      name: 'Норма явок'
-    });
-
+    const reportName = `${this.reportType}-report-${this.date.format("MM-YYYY")}.xlsx`;
     this.reportService
-      .generateReport(this.date, this.decorationDataForm.value, this.selectedSummationColumns)
+      .generateReport(this.reportType, this.date, this.decorationDataForm.value, this.selectedSummationColumns)
       .subscribe(buffer => fileSaver.saveAs(new Blob([buffer]), reportName));
   }
 }

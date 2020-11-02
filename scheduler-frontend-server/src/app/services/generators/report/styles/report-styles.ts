@@ -4,6 +4,12 @@ export const topMediumBorders: Partial<Borders> = {
   top: {style: "medium"}
 };
 
+export const topMediumLeftRightDottedBorders: Partial<Borders> = {
+  top: {style: "medium"},
+  left: {style: "dotted"},
+  right: {style: "dotted"}
+};
+
 export const topMediumLeftRightThinBorders: Partial<Borders> = {
   top: {style: 'medium'},
   left: {style: "thin"},
@@ -34,8 +40,25 @@ export const leftRightMediumTopBottomThinBorders: Partial<Borders> = {
   bottom: {style:'thin'}
 };
 
+export const leftRightBottomMediumTopThinBorders: Partial<Borders> = {
+  top: {style:'thin'},
+  left: {style: "medium"},
+  right: {style: "medium"},
+  bottom: {style:'medium'}
+};
+
 export const bottomThinBorders: Partial<Borders> = {
   bottom: {style: 'thin'}
+};
+
+export const bottomMediumBorders: Partial<Borders> = {
+  bottom: {style: 'medium'}
+};
+
+export const bottomMediumLeftRightDottedBorders: Partial<Borders> = {
+  bottom: {style: 'medium'},
+  left: {style: "dotted"},
+  right: {style: "dotted"}
 };
 
 export const thinBorders: Partial<Borders> = {
@@ -50,6 +73,41 @@ export const dottedBorders: Partial<Borders> = {
   left: {style:'dotted'},
   bottom: {style:'dotted'},
   right: {style:'dotted'}
+};
+
+export const leftRightTopDottedBottomThinBorders: Partial<Borders> = {
+  top: {style:'dotted'},
+  left: {style:'dotted'},
+  bottom: {style:'thin'},
+  right: {style:'dotted'}
+};
+
+export const leftRightThinTopBottomDottedBorders: Partial<Borders> = {
+  top: {style:'dotted'},
+  left: {style:'thin'},
+  bottom: {style:'dotted'},
+  right: {style:'thin'}
+};
+
+export const leftRightBottomThinTopDottedBorders: Partial<Borders> = {
+  top: {style:'dotted'},
+  left: {style:'thin'},
+  bottom: {style:'thin'},
+  right: {style:'thin'}
+};
+
+export const leftRightMediumTopBottomDottedBorders: Partial<Borders> = {
+  top: {style:'dotted'},
+  left: {style:'medium'},
+  bottom: {style:'dotted'},
+  right: {style:'medium'}
+};
+
+export const leftRightMediumTopDottedBottomThinBorders: Partial<Borders> = {
+  top: {style:'dotted'},
+  left: {style:'medium'},
+  bottom: {style:'thin'},
+  right: {style:'medium'}
 };
 
 export const leftRightThinBottomMediumBorders: Partial<Borders> = {
@@ -100,9 +158,20 @@ export const holidayFill: Fill = {
   fgColor: {argb:'FF99CC'}
 };
 
+export const arialCyrSize8 = {
+  name: 'Arial Cyr',
+  size: 8
+};
+
 export const arialCyrSize10 = {
   name: 'Arial Cyr',
   size: 10
+};
+
+export const arialCyrBoldSize10 = {
+  name: 'Arial Cyr',
+  size: 10,
+  bold: true
 };
 
 export const arialCyrSize12 = {

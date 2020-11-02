@@ -1,4 +1,3 @@
-import { ReportGenerator } from "./report-generator";
 import * as FileSaver from "file-saver";
 import { CellData } from "../../../lib/ngx-schedule-table/model/data/cell-data";
 import { ReportRowData } from "./model/report-row-data";
@@ -8,6 +7,7 @@ import { ScheduleTablePaginationStrategy } from "../../../shared/paginators/pagi
 import * as moment from 'moment';
 import { DecorationData } from "./model/decoration-data";
 import { CalendarDay } from "../../../lib/ngx-schedule-table/model/calendar-day";
+import { ReportGenerator } from "./report-generator";
 
 describe("Test report generator", () => {
   const blobType: string = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
@@ -16,14 +16,27 @@ describe("Test report generator", () => {
     const generator = new ReportGenerator();
     const daysInMonth = new ScheduleTablePaginationStrategy(null)
       .calcDaysInMonth(moment('2020-02-02'), getMockSpecCalDates());
-    generator.generate(daysInMonth, getMockSchedulerRowData(daysInMonth),
-      getMockSummationColumns(), getMockDecorationData())
+    generator.generate(null, null, getMockSchedulerRowData(daysInMonth), daysInMonth,
+      getMockSummationColumns(), getMockDecorationData(), null)
       .then(buffer => {
         let blob = new Blob([buffer], {type: blobType});
         FileSaver.saveAs(blob, 'test.xlsx');
       })
       .catch(reason => console.error(reason));
     });
+
+  it('sheet', () => {
+    const generator = new ReportGenerator();
+    const daysInMonth = new ScheduleTablePaginationStrategy(null)
+      .calcDaysInMonth(moment('2020-02-02'), getMockSpecCalDates());
+    generator.generate(null, null, getMockTimeSheetRowData(daysInMonth), daysInMonth,
+      getMockSummationColumns(), getMockDecorationData(), null)
+      .then(buffer => {
+        let blob = new Blob([buffer], {type: blobType});
+        FileSaver.saveAs(blob, 'test.xlsx');
+      })
+      .catch(reason => console.error(reason));
+  });
 });
 
 function getMockSchedulerRowData(daysInMonth: CalendarDay[]): ReportRowData[] {
@@ -36,6 +49,35 @@ function getMockSchedulerRowData(daysInMonth: CalendarDay[]): ReportRowData[] {
     data.cellData = [];
     for (let i = 0; i < daysInMonth.length; i++) {
       const cell = <CellData> {value: 8.25};
+      data.cellData.push(cell);
+    }
+    data.summationResults = [
+      {
+        summationColumnId: 20,
+        value: 22,
+        type: ''
+      },
+      {
+        summationColumnId: 20,
+        value: 22,
+        type: ''
+      }];
+    result.push(data);
+  }
+
+  return result;
+}
+
+function getMockTimeSheetRowData(daysInMonth: CalendarDay[]): ReportRowData[] {
+  let result = [];
+
+  for (let idx = 0; idx < 50; idx++) {
+    let data = new ReportRowData();
+    data.name = 'Secondname F.F.';
+    data.position = 'Position';
+    data.cellData = [];
+    for (let i = 0; i < daysInMonth.length; i++) {
+      const cell = <CellData> {value: ['D', 11]};
       data.cellData.push(cell);
     }
     data.summationResults = [

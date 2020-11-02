@@ -2,6 +2,16 @@
 
   <mat-step [stepControl]="decorationDataForm">
     <ng-template matStepLabel>Date and caption</ng-template>
+
+    <mat-form-field>
+      <mat-select [(ngModel)]="reportType"
+                  placeholder="Report type">
+        <mat-option *ngFor="let type of reportTypes"
+                    [value]="type">
+          {{type}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
     <!--Year and month-->
     <mat-form-field>
       <input matInput
