@@ -71,10 +71,16 @@ public class DayType implements HasId, HasEnterpriseId {
     private List<PatternUnit> units = new ArrayList<>();
 
     @JsonIgnore
-    @OneToMany( mappedBy = "dayTypeId",
+    @OneToMany( mappedBy = "actualDayTypeId",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL)
+    private List<WorkDay> actualWorkDays = new ArrayList<>();
+
+    @JsonIgnore
+    @OneToMany( mappedBy = "scheduledDayTypeId",
                 fetch = FetchType.LAZY,
                 cascade = CascadeType.ALL)
-    private List<WorkDay> workDays = new ArrayList<>();
+    private List<WorkDay> scheduledWorkDays = new ArrayList<>();
 
     @JsonIgnore
     @OneToMany( mappedBy = "dayType",

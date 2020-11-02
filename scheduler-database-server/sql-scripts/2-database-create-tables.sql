@@ -187,14 +187,15 @@ CREATE TABLE IF NOT EXISTS shift_composition (
 );
 
 CREATE TABLE IF NOT EXISTS work_schedule (
-  id                  SERIAL,
-  employee_id         INTEGER     NOT NULL,
-  day_type_id         INTEGER,
-  date                DATE        NOT NULL,
-  start_time          INTEGER     CHECK ( 0 <= start_time and start_time <= 1440 ),
-  end_time            INTEGER     CHECK ( 0 <= end_time and end_time <= 1440 ),
-  break_start_time    INTEGER     CHECK ( 0 <= break_start_time and break_start_time <= 1440),
-  break_end_time      INTEGER     CHECK ( 0 <= break_end_time and break_end_time <= 1440),
+  id                    SERIAL,
+  employee_id           INTEGER     NOT NULL,
+  actual_day_type_id    INTEGER,
+  scheduled_day_type_id INTEGER,
+  date                  DATE        NOT NULL,
+  start_time            INTEGER     CHECK ( 0 <= start_time and start_time <= 1440 ),
+  end_time              INTEGER     CHECK ( 0 <= end_time and end_time <= 1440 ),
+  break_start_time      INTEGER     CHECK ( 0 <= break_start_time and break_start_time <= 1440),
+  break_end_time        INTEGER     CHECK ( 0 <= break_end_time and break_end_time <= 1440),
 
   CHECK ( start_time < end_time AND break_start_time < break_end_time
     AND start_time < break_start_time AND end_time > break_end_time
@@ -202,11 +203,12 @@ CREATE TABLE IF NOT EXISTS work_schedule (
   UNIQUE (employee_id, date),
 
   PRIMARY KEY (id),
-  FOREIGN KEY (employee_id)   REFERENCES employees(id) ON DELETE CASCADE,
-  FOREIGN KEY (day_type_id)   REFERENCES day_types(id) ON DELETE SET NULL
+  FOREIGN KEY (employee_id) REFERENCES employees(id) ON DELETE CASCADE,
+  FOREIGN KEY (actual_day_type_id) REFERENCES day_types(id) ON DELETE SET NULL,
+  FOREIGN KEY (scheduled_day_type_id) REFERENCES day_types(id) ON DELETE SET NULL
 );
 
-CREATE TABLE IF NOT EXISTS working_time (
+CREATE TABLE IF NOT EXISTS working_norms (
   id            SERIAL,
   department_id INTEGER       NOT NULL,
   shift_id      INTEGER       NOT NULL,
@@ -233,46 +235,6 @@ CREATE TABLE IF NOT EXISTS special_calendar_dates (
   PRIMARY KEY (id),
   FOREIGN KEY (enterprise_id) REFERENCES enterprises(id) ON DELETE CASCADE
 );
-
--- CREATE TABLE IF NOT EXISTS holidays (
---   id            SERIAL,
---   enterprise_id INTEGER       NOT NULL,
---   date          DATE          NOT NULL,
---   name          VARCHAR (255) NOT NULL,
---
---   UNIQUE (enterprise_id, date),
---
---   PRIMARY KEY (id),
---   FOREIGN KEY (enterprise_id) REFERENCES enterprises(id) ON DELETE CASCADE
--- );
---
--- CREATE TABLE IF NOT EXISTS extra_weekends (
---   id            SERIAL,
---   enterprise_id INTEGER       NOT NULL,
---   holiday_id    INTEGER,
---   date          DATE          NOT NULL,
---
---   UNIQUE (holiday_id),
---   UNIQUE (enterprise_id, date),
---
---   PRIMARY KEY (id),
---   FOREIGN KEY (enterprise_id) REFERENCES enterprises(id)  ON DELETE CASCADE,
---   FOREIGN KEY (holiday_id)    REFERENCES holidays(id)     ON DELETE CASCADE
--- );
---
--- CREATE TABLE IF NOT EXISTS extra_work_days (
---   id                SERIAL,
---   enterprise_id     INTEGER   NOT NULL,
---   extra_weekend_id  INTEGER,
---   date              DATE      NOT NULL,
---
---   UNIQUE (extra_weekend_id),
---   UNIQUE (enterprise_id, date),
---
---   PRIMARY KEY (id),
---   FOREIGN KEY (enterprise_id)     REFERENCES enterprises(id)    ON DELETE CASCADE,
---   FOREIGN KEY (extra_weekend_id)  REFERENCES extra_weekends(id) ON DELETE CASCADE
--- );
 
 -- Security
 

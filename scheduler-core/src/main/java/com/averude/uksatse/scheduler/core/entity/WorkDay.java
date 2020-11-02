@@ -3,6 +3,7 @@ package com.averude.uksatse.scheduler.core.entity;
 import com.averude.uksatse.scheduler.core.entity.interfaces.HasDate;
 import com.averude.uksatse.scheduler.core.entity.interfaces.HasDayTypeIdAndTime;
 import com.averude.uksatse.scheduler.core.entity.interfaces.HasId;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -42,8 +43,12 @@ public class WorkDay implements HasId, HasDayTypeIdAndTime, HasDate {
     private Long employeeId;
 
     @Positive(message = "{workDay.daytype.negative}")
-    @Column(name = "day_type_id")
-    private Long dayTypeId;
+    @Column(name = "actual_day_type_id")
+    private Long actualDayTypeId;
+
+    @Positive(message = "{workDay.daytype.negative}")
+    @Column(name = "scheduled_day_type_id")
+    private Long scheduledDayTypeId;
 
     @Column(name = "start_time")
     private Integer startTime;
@@ -67,27 +72,33 @@ public class WorkDay implements HasId, HasDayTypeIdAndTime, HasDate {
     }
 
     public WorkDay(Long employeeId,
-                   Long dayTypeId,
+                   Long scheduledDayTypeId,
                    LocalDate date) {
         this.employeeId = employeeId;
-        this.dayTypeId = dayTypeId;
+        this.scheduledDayTypeId = scheduledDayTypeId;
         this.date = date;
     }
 
     public WorkDay(Long employeeId,
-                   Long dayTypeId,
+                   Long scheduledDayTypeId,
                    Integer startTime,
                    Integer breakStartTime,
                    Integer breakEndTime,
                    Integer endTime,
                    LocalDate date) {
         this.employeeId = employeeId;
-        this.dayTypeId = dayTypeId;
+        this.scheduledDayTypeId = scheduledDayTypeId;
         this.startTime = startTime;
         this.breakStartTime = breakStartTime;
         this.breakEndTime = breakEndTime;
         this.endTime = endTime;
         this.date = date;
+    }
+
+    @JsonIgnore
+    @Override
+    public Long getDayTypeId() {
+        return actualDayTypeId != null ? actualDayTypeId : scheduledDayTypeId;
     }
 
     @Override
@@ -96,7 +107,8 @@ public class WorkDay implements HasId, HasDayTypeIdAndTime, HasDate {
         if (o == null || getClass() != o.getClass()) return false;
         WorkDay workDay = (WorkDay) o;
         return employeeId.equals(workDay.employeeId) &&
-                dayTypeId.equals(workDay.dayTypeId) &&
+                actualDayTypeId.equals(workDay.actualDayTypeId) &&
+                scheduledDayTypeId.equals(workDay.scheduledDayTypeId) &&
                 Objects.equals(startTime, workDay.startTime) &&
                 Objects.equals(breakStartTime, workDay.breakStartTime) &&
                 Objects.equals(breakEndTime, workDay.breakEndTime) &&
@@ -106,7 +118,7 @@ public class WorkDay implements HasId, HasDayTypeIdAndTime, HasDate {
 
     @Override
     public int hashCode() {
-        return Objects.hash(employeeId, dayTypeId, startTime, breakStartTime, breakEndTime, endTime, date);
+        return Objects.hash(employeeId, actualDayTypeId, scheduledDayTypeId, startTime, breakStartTime, breakEndTime, endTime, date);
     }
 
     @Override
@@ -114,7 +126,8 @@ public class WorkDay implements HasId, HasDayTypeIdAndTime, HasDate {
         return new StringJoiner(", ", WorkDay.class.getSimpleName() + "{", "}")
                 .add("id=" + id)
                 .add("employeeId=" + employeeId)
-                .add("dayTypeId=" + dayTypeId)
+                .add("actualDayTypeId=" + actualDayTypeId)
+                .add("scheduledDayTypeId=" + scheduledDayTypeId)
                 .add("date=" + date)
                 .add("startTime=" + startTime)
                 .add("endTime=" + endTime)
