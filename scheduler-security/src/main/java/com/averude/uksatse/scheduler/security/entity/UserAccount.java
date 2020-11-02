@@ -1,16 +1,17 @@
 package com.averude.uksatse.scheduler.security.entity;
 
 import lombok.Data;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.StringJoiner;
 
 @Data
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Entity(name = "user_accounts")
 @Inheritance(strategy = InheritanceType.JOINED)
 public class UserAccount implements Serializable {
