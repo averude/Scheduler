@@ -7,7 +7,7 @@ import { timeout } from "rxjs/operators";
 export class TimeoutInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     if (req.url.indexOf("/api/v1/schedule/generate") < 0) {
-      return next.handle(req).pipe(timeout(5000));
+      return next.handle(req).pipe(timeout(10000));
     } else {
       return next.handle(req);
     }

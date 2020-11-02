@@ -24,3 +24,15 @@ export function toGenerationDto(shiftGenerationUnit: ShiftGenerationUnit): Gener
     to: shiftGenerationUnit.to.format("YYYY-MM-DD")
   }
 }
+
+export const DATE_FORMAT = {
+  parse: {
+    dateInput: 'DD/MM/YYYY',
+  },
+  display: {
+    dateInput: 'DD/MM/YYYY',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY',
+  },
+};

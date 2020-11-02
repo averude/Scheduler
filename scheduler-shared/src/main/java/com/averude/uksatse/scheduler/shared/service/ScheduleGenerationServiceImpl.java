@@ -119,8 +119,8 @@ public class ScheduleGenerationServiceImpl implements ScheduleGenerationService 
             // Filtering values for interval
             var intervalSpecialCalendarDates = new ArrayList<SpecialCalendarDate>();
             for (int i = lastSpecialDateIndex; i < specialCalendarDates.size(); i++) {
-                SpecialCalendarDate specialCalendarDate = specialCalendarDates.get(i);
-                LocalDate date = specialCalendarDate.getDate();
+                var specialCalendarDate = specialCalendarDates.get(i);
+                var date = specialCalendarDate.getDate();
                 if (!(date.isBefore(interval.getFrom()) && date.isAfter(interval.getTo()))) {
                     intervalSpecialCalendarDates.add(specialCalendarDate);
                     lastSpecialDateIndex = i;

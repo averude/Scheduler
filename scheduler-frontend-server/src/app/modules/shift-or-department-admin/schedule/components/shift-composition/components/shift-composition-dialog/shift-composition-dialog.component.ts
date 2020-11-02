@@ -5,7 +5,8 @@ import { FormBuilder, Validators } from "@angular/forms";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { Employee } from "../../../../../../../model/employee";
 import { Shift } from "../../../../../../../model/shift";
-import { getEmployeeShortName } from "../../../../../../../shared/utils/utils";
+import { DATE_FORMAT, getEmployeeShortName } from "../../../../../../../shared/utils/utils";
+import { MAT_DATE_FORMATS } from "@angular/material/core";
 
 @Component({
   selector: 'app-shift-composition-dialog',
@@ -13,6 +14,12 @@ import { getEmployeeShortName } from "../../../../../../../shared/utils/utils";
   styleUrls: [
     '../../../../../../../shared/common/dialog.common.css',
     './shift-composition-dialog.component.css'
+  ],
+  providers: [
+    {
+    provide: MAT_DATE_FORMATS,
+    useValue: DATE_FORMAT
+    }
   ]
 })
 export class ShiftCompositionDialogComponent extends DialogBaseComponent<ShiftComposition> {

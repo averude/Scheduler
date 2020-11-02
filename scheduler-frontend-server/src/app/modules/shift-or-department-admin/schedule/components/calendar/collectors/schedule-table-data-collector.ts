@@ -134,7 +134,8 @@ export class ScheduleTableDataCollector {
     return moment(date).isBetween(composition.from, composition.to, 'date', '[]')
   }
 
-  private getWorkingNorm(employeeCompositions: ShiftComposition[], workingNorms: WorkingNorm[]): number {
+  private getWorkingNorm(employeeCompositions: ShiftComposition[],
+                         workingNorms: WorkingNorm[]): number {
     if (employeeCompositions && employeeCompositions[0]) {
       let shiftId = employeeCompositions[0][0].shiftId;
       let shiftWorkingNorm = workingNorms.find(value => value.shiftId === shiftId);

@@ -2,11 +2,14 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { MatTableDataSource } from "@angular/material/table";
 import { SelectionModel } from "@angular/cdk/collections";
+import { MAT_DATE_FORMATS } from "@angular/material/core";
+import { DATE_FORMAT } from "../util/utils";
 
 @Component({
   selector: 'app-avr-entity-generation-dialog',
   templateUrl: './avr-entity-generation-dialog.component.html',
-  styleUrls: ['./avr-entity-generation-dialog.component.css']
+  styleUrls: ['./avr-entity-generation-dialog.component.css'],
+  providers: [{provide: MAT_DATE_FORMATS, useValue: DATE_FORMAT}]
 })
 export class AvrEntityGenerationDialogComponent implements OnInit {
 

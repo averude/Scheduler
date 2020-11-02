@@ -25,7 +25,6 @@ import { FormsModule } from "@angular/forms";
     MonthNameImpurePipe,
     PatternUnitsStringPipe,
     YearPaginatorComponent,
-    // MonthYearPaginatorComponent,
     SimplePaginatorComponent,
   ],
   exports: [
@@ -33,7 +32,6 @@ import { FormsModule } from "@angular/forms";
     MonthNameImpurePipe,
     PatternUnitsStringPipe,
     YearPaginatorComponent,
-    // MonthYearPaginatorComponent,
     SimplePaginatorComponent,
     MatDatepickerModule
   ],

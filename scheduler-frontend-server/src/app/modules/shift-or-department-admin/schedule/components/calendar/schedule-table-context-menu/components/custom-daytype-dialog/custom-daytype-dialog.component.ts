@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { PatternUnit } from "../../../../../../../../model/pattern-unit";
-import { timeValidationPattern } from "../../../../../../../../shared/utils/time-converter";
+import { timeValidationPattern } from "../../../../../../../../shared/utils/utils";
 import { DepartmentDayType } from "../../../../../../../../model/department-day-type";
 
 @Component({

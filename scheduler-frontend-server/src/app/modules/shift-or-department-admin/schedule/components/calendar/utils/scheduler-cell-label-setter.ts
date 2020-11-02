@@ -3,7 +3,7 @@ import { TableCellComponent } from "../../../../../../lib/ngx-schedule-table/tab
 import { binarySearch } from "../../../../../../shared/utils/collection-utils";
 import { DayType } from "../../../../../../model/day-type";
 import { WorkDay } from "../../../../../../model/workday";
-import { calculateWorkHoursByWorkDay } from "../../../../../../shared/utils/time-converter";
+import { calculateWorkHoursByWorkDay, getWorkDayDayTypeId } from "../../../../../../shared/utils/utils";
 import { DayTypeService } from "../../../../../../services/http/day-type.service";
 import { Injectable } from "@angular/core";
 
@@ -24,10 +24,11 @@ export class SchedulerCellLabelSetter implements CellLabelSetter {
         return;
       }
       if (cell.value) {
-        if (cell.cellState === 1 || !cell.value.dayTypeId || !this.dayTypes) {
-          this.setHoursWithColor(cell);
+        let dayTypeId = getWorkDayDayTypeId(cell.value);
+        if (cell.cellState === 1 || !dayTypeId || !this.dayTypes) {
+          this.setHoursWithColor(cell, dayTypeId);
         } else {
-          this.setLabelWithColor(cell);
+          this.setLabelWithColor(cell, dayTypeId);
         }
       } else {
         cell.label = '-';
@@ -35,19 +36,19 @@ export class SchedulerCellLabelSetter implements CellLabelSetter {
     }
   }
 
-  private setHoursWithColor(cell: TableCellComponent) {
+  private setHoursWithColor(cell: TableCellComponent, dayTypeId: number) {
     cell.label = this.calcHours(cell.value);
     if (this.dayTypes) {
-      let dayType = binarySearch(this.dayTypes, cell.value.dayTypeId);
+      let dayType = binarySearch(this.dayTypes, dayTypeId);
       if (dayType) {
         cell.labelColor = dayType.dayTypeGroup.color;
       }
     }
   }
 
-  private setLabelWithColor(cell: TableCellComponent) {
+  private setLabelWithColor(cell: TableCellComponent, dayTypeId: number) {
     if (this.dayTypes) {
-      let dayType = binarySearch(this.dayTypes, cell.value.dayTypeId);
+      let dayType = binarySearch(this.dayTypes, dayTypeId);
       if (dayType) {
         cell.labelColor = dayType.dayTypeGroup.color;
 

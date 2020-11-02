@@ -59,7 +59,8 @@ export class LoginComponent implements OnInit{
       }, err => {
         this.loading = false;
         this.bad_credentials = true;
-        this.loginForm.reset();
+        this.loginForm.patchValue({password: null})
+        // this.loginForm.reset();
       });
   }
 

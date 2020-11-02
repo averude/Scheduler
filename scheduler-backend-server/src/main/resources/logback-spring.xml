@@ -3,16 +3,16 @@
 
     <property name="LOGS" value="/logs" />
 
-    <appender name="GELF" class="de.siegmar.logbackgelf.GelfUdpAppender">
-        <graylogHost>${GRAYLOG_HOST}</graylogHost>
-        <graylogPort>${GRAYLOG_GELF_PORT}</graylogPort>
-    </appender>
+    <!--<appender name="GELF" class="de.siegmar.logbackgelf.GelfUdpAppender">-->
+        <!--<graylogHost>${GRAYLOG_HOST}</graylogHost>-->
+        <!--<graylogPort>${GRAYLOG_GELF_PORT}</graylogPort>-->
+    <!--</appender>-->
 
     <appender name="ErrorFile"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOGS}/scheduler-backend-server-errors.log</file>
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-            <level>ERROR</level>
+            <level>INFO</level>
         </filter>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <Pattern>%d %p %C{1.} [%t] - %m%n</Pattern>
@@ -29,13 +29,13 @@
         </rollingPolicy>
     </appender>
 
-    <root level="error">
+    <root level="info">
         <appender-ref ref="ErrorFile" />
-        <appender-ref ref="GELF"/>
+        <!--<appender-ref ref="GELF"/>-->
     </root>
 
-    <logger name="com.averude.uksatse.scheduler" level="debug" additivity="false">
-        <appender-ref ref="GELF"/>
-    </logger>
+    <!--<logger name="com.averude.uksatse.scheduler" level="debug" additivity="false">-->
+        <!--<appender-ref ref="GELF"/>-->
+    <!--</logger>-->
 
 </configuration>

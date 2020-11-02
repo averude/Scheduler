@@ -24,7 +24,8 @@ public class WorkDaysHoursCalculationStrategy implements CalculationStrategy {
 
     @Override
     public long calculate(Stream<Map.Entry<WorkDayWrapper, Integer>> entryStream, SummationColumn column) {
-        return entryStream.mapToLong(entry -> getWorkDayLength(entry.getKey().getWorkDay(), column) * entry.getValue())
+        return entryStream.mapToLong(entry ->
+                getWorkDayLength(entry.getKey().getWorkDay(), column) * entry.getValue())
                 .sum();
     }
 

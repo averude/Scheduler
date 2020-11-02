@@ -36,6 +36,13 @@
             <version>0.1.0-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>com.averude.uksatse</groupId>
+            <artifactId>scheduler-test-kit</artifactId>
+            <version>0.1.0-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
 </project>

@@ -30,7 +30,7 @@ public class WorkDayWrapper {
 
     @Override
     public int hashCode() {
-        return Objects.hash(workDay.getDayTypeId(), workDay.getStartTime(), workDay.getEndTime(),
+        return Objects.hash(workDay.getActualDayTypeId(), workDay.getScheduledDayTypeId(), workDay.getStartTime(), workDay.getEndTime(),
                 workDay.getBreakStartTime(), workDay.getBreakEndTime(), specialDateType);
     }
 

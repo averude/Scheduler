@@ -29,6 +29,7 @@ export class ScheduleTableContextMenuComponent implements OnInit, OnDestroy {
 
   patternDtos:         BasicDto<ShiftPattern, PatternUnit>[]   = [];
   departmentDayTypes:  DepartmentDayType[] = [];
+  serviceDayTypes:     DepartmentDayType[] = [];
 
   private selectionEndSub: Subscription;
 
@@ -48,9 +49,11 @@ export class ScheduleTableContextMenuComponent implements OnInit, OnDestroy {
       this.dayTypeService.getAll()]
     ).subscribe(values => {
       this.patternDtos = values[0];
-      this.departmentDayTypes = values[1].concat(values[2]
+      this.departmentDayTypes = values[1];
+
+      this.serviceDayTypes = values[2]
         .filter(dayType => dayType.usePreviousValue)
-        .map(dayType => ({dayType: dayType, dayTypeId: dayType.id} as DepartmentDayType)));
+        .map(dayType => ({dayType: dayType, dayTypeId: dayType.id} as DepartmentDayType));
       this.cd.markForCheck();
     });
 

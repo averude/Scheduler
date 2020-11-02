@@ -20,7 +20,7 @@ import java.util.StringJoiner;
 @Setter
 @Entity
 @Table(
-        name = "working_norm",
+        name = "working_norms",
         uniqueConstraints = {
                 @UniqueConstraint(
                         name = "working_norm_unique_constraint",

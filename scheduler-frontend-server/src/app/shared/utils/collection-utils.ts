@@ -63,6 +63,10 @@ export function sortByPattern<T1, T2>(arr: T1[],
       }
     }
   }
+
+  if (pattern.length < arr.length) {
+    arr.splice(pattern.length);
+  }
 }
 
 export function sortByCompositions<T extends IdEntity>(dtos: BasicDto<T, any>[],

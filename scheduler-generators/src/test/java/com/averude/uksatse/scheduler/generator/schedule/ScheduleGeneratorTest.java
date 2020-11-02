@@ -37,7 +37,7 @@ public class ScheduleGeneratorTest {
                 Collections.emptyList(), Arrays.asList(extraWeekend, extraWorkDay));
 
         assertEquals(workDays.size(), 31);
-        assertEquals(workDays.get(9).getDayTypeId(), shiftPattern.getExtraWorkDayDepDayType().getDayTypeId());
-        assertEquals(workDays.get(4).getDayTypeId(), shiftPattern.getExtraWeekendDepDayType().getDayTypeId());
+        assertEquals(workDays.get(9).getScheduledDayTypeId(), shiftPattern.getExtraWorkDayDepDayType().getDayTypeId());
+        assertEquals(workDays.get(4).getScheduledDayTypeId(), shiftPattern.getExtraWeekendDepDayType().getDayTypeId());
     }
 }

@@ -57,6 +57,19 @@ export class ScheduleGenerationService {
       );
   }
 
+  removeServiceDays(data: SelectionData) {
+    if (data) {
+      const serviceCells = data.selectedCells
+        .filter(cell => cell.value.actualDayTypeId);
+      if (serviceCells.length > 0) {
+        serviceCells.forEach(cell => cell.value.actualDayTypeId = undefined);
+        this.scheduleGeneratedHandler(data.rowData, data.selectedCells);
+      } else {
+        this.errorHandler('There are no service days');
+      }
+    }
+  }
+
   private get scheduleGeneratedHandler(): (rowData, selectedCells) => void {
     return (rowData, selectedCells) => {
 
