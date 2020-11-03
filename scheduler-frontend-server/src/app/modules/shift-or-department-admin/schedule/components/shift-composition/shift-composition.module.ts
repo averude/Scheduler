@@ -3,7 +3,6 @@ import { CommonModule } from "@angular/common";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { SharedModule } from "../../../../../shared/shared.module";
 import { MatCheckboxModule } from "@angular/material/checkbox";
-import { MAT_DATE_FORMATS } from "@angular/material/core";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatDialogModule } from "@angular/material/dialog";
 import { MatFormFieldModule } from "@angular/material/form-field";
@@ -14,18 +13,6 @@ import { MatTableModule } from "@angular/material/table";
 import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MatMomentDateModule } from "@angular/material-moment-adapter";
 import { ShiftCompositionTableComponent } from './components/shift-composition-table/shift-composition-table.component';
 import { ShiftCompositionDialogComponent } from './components/shift-composition-dialog/shift-composition-dialog.component';
-
-export const MONTH_FORMAT = {
-  parse: {
-    dateInput: 'DD/MM/YYYY',
-  },
-  display: {
-    dateInput: 'DD/MM/YYYY',
-    monthYearLabel: 'MMM YYYY',
-    dateA11yLabel: 'LL',
-    monthYearA11yLabel: 'MMMM YYYY',
-  },
-};
 
 @NgModule({
     imports: [
@@ -51,10 +38,6 @@ export const MONTH_FORMAT = {
     {
       provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS,
       useValue: { useUtc: true }
-    },
-    {
-      provide: MAT_DATE_FORMATS,
-      useValue: MONTH_FORMAT
     }
   ]
 })

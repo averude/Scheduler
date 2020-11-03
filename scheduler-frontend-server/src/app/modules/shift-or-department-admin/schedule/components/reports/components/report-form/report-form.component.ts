@@ -8,6 +8,7 @@ import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { SummationColumn } from "../../../../../../../model/summation-column";
 import { SummationColumnDtoService } from "../../../../../../../services/http/summation-column-dto.service";
 import { SCHEDULE_REPORT, TIME_SHEET_REPORT } from "../../../../../../../services/generators/report/model/report-types";
+import { StatisticsColumnCompositor } from "../../../../../../../shared/compositor/statistics-column-compositor";
 
 @Component({
   selector: 'app-report-form',
@@ -26,6 +27,7 @@ export class ReportFormComponent implements OnInit {
   selectedSummationColumns: SummationColumn[] = [];
 
   constructor(private fb: FormBuilder,
+              private statisticsColumnCompositor: StatisticsColumnCompositor,
               private reportService: ReportService,
               private summationColumnDtoService: SummationColumnDtoService) { }
 
@@ -33,14 +35,7 @@ export class ReportFormComponent implements OnInit {
     this.summationColumnDtoService.getAll()
       .subscribe(dtos => {
         this.summationColumns = dtos.map(value => value.parent);
-        this.summationColumns.push({
-          id: -1,
-          name: 'Норма'
-        } as SummationColumn);
-        this.summationColumns.push({
-          id: -2,
-          name: 'Норма явок'
-        } as SummationColumn);
+        this.statisticsColumnCompositor.composeColumns(this.summationColumns);
       });
 
     this.date = moment.utc();

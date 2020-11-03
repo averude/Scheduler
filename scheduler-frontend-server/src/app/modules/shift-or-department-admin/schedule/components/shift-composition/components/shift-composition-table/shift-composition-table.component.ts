@@ -20,7 +20,7 @@ import { PaginationService } from "../../../../../../../lib/ngx-schedule-table/s
   providers: [PaginationService]
 })
 export class ShiftCompositionTableComponent extends PageableTableBaseComponent<ShiftComposition> {
-  displayedColumns = ['select', 'shift', 'employee', 'from', 'to', 'substitution', 'control'];
+  displayedColumns = ['select', 'shift', 'employee', 'date_range', 'substitution', 'control'];
 
   employees:  Employee[]  = [];
   shifts:     Shift[]     = [];

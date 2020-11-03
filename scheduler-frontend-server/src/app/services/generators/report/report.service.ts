@@ -10,21 +10,18 @@ import { Moment } from "moment";
 import { DecorationData } from "./model/decoration-data";
 import { Buffer } from "exceljs";
 import { ShiftCompositionService } from "../../http/shift-composition.service";
-import { HOURS_SUM, SummationColumn } from "../../../model/summation-column";
+import { SummationColumn } from "../../../model/summation-column";
 import { WorkingNormService } from "../../http/working-norm.service";
 import { ReportServiceConfig } from "./config/report-service-config";
 import { ReportGenerator } from "./report-generator";
-import { sortByPattern, uniqById } from "../../../shared/utils/collection-utils";
-import { SummationDto, SummationResult } from "../../../model/dto/summation-dto";
-import { ShiftComposition } from "../../../model/shift-composition";
-import { WorkingNorm } from "../../../model/working-norm";
-import { roundToTwo } from "../../../shared/utils/utils";
+import { StatisticsColumnCompositor } from "../../../shared/compositor/statistics-column-compositor";
 
 @Injectable()
 export class ReportService {
 
   constructor(private paginationStrategy: ScheduleTablePaginationStrategy,
               private reportGenerator: ReportGenerator,
+              private statisticsColumnCompositor: StatisticsColumnCompositor,
               private config: ReportServiceConfig,
               private specialCalendarDateService: SpecialCalendarDateService,
               private scheduleService: ScheduleService,
@@ -64,7 +61,7 @@ export class ReportService {
       return forkJoin(observables)
         .pipe(flatMap(values => {
           const daysInMonth = this.paginationStrategy.calcDaysInMonth(date, values[0]);
-          this.foo(values[2], summationColumns, values[5], values[4]);
+          this.statisticsColumnCompositor.composeResults(values[2], summationColumns, values[5], values[4]);
 
           const reportRowData = reportDataCollector
               .collect(daysInMonth, values[3], values[1], values[2], values[5]);
@@ -72,29 +69,6 @@ export class ReportService {
               .generate(reportCreator, reportDecorator, reportRowData, daysInMonth, summationColumns, decorationData, reportMarkup);
           })
         );
-    }
-  }
-
-  private foo(summationDtos: SummationDto[],
-              summationColumns: SummationColumn[],
-              shiftCompositions: ShiftComposition[],
-              workingNorms: WorkingNorm[]) {
-    let mainShiftCompositions = uniqById(shiftCompositions
-      .filter(value => !value.substitution), value => value.employeeId);
-
-    for (let i = 0; i < summationDtos.length; i++) {
-      try {
-        const dto = summationDtos[i];
-        const shiftId = mainShiftCompositions.find(value => value.employeeId === dto.parent.id).shiftId;
-        const norm = workingNorms.find(value => value.shiftId === shiftId);
-        dto.collection.push({summationColumnId: -1, value: norm.hours} as SummationResult);
-        dto.collection.push({summationColumnId: -2, value: norm.days} as SummationResult);
-
-        sortByPattern(dto.collection, summationColumns, (result, column) => {
-          if (result.type === HOURS_SUM) result.value = roundToTwo(result.value / 60);
-          return result.summationColumnId == column.id;
-        });
-      } finally {}
     }
   }
 }
