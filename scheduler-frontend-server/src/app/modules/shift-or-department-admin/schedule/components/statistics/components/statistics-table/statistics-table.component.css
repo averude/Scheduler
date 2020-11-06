@@ -78,6 +78,10 @@ tr:hover {
   min-width: 150px;
 }
 
+.norm-column {
+  background-color: lightyellow;
+}
+
 .th-sum {
   border: 1px solid #e5e9f0;
 }

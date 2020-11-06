@@ -40,16 +40,39 @@
 
   <mat-step [stepControl]="decorationDataForm">
     <ng-template matStepLabel>Summation columns</ng-template>
-    <mat-form-field>
-      <mat-select [(ngModel)]="selectedSummationColumns"
-                  placeholder="Summation columns"
-                  multiple>
-        <mat-option *ngFor="let column of summationColumns"
-                    [value]="column">
-          {{column.name}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+
+    <mat-grid-list [cols]="3" [rowHeight]="'1:1'">
+      <mat-grid-tile style="background-color: white; overflow: scroll">
+        <mat-selection-list #leftList
+                            [multiple]="false">
+          <mat-list-option *ngFor="let sumCol of summationColumns"
+                           [value]="sumCol">
+            {{sumCol.name}}
+          </mat-list-option>
+        </mat-selection-list>
+      </mat-grid-tile>
+
+      <mat-grid-tile>
+        <div>
+          <button mat-button style="display: block"
+                  [disabled]="!leftList.selectedOptions.selected[0]?.value"
+                  (click)="moveToSelected(leftList.selectedOptions.selected[0]?.value)">-></button>
+          <button mat-button style="display: block"
+                  [disabled]="!rightList.selectedOptions.selected[0]?.value"
+                  (click)="moveToList(rightList.selectedOptions.selected[0]?.value)"><-</button>
+        </div>
+      </mat-grid-tile>
+
+      <mat-grid-tile style="background-color: white; overflow: scroll">
+        <mat-selection-list #rightList
+                            [multiple]="false">
+          <mat-list-option *ngFor="let selCol of selectedSummationColumns"
+                           [value]="selCol">
+            {{selCol.name}}
+          </mat-list-option>
+        </mat-selection-list>
+      </mat-grid-tile>
+    </mat-grid-list>
 
     <div>
       <button mat-button

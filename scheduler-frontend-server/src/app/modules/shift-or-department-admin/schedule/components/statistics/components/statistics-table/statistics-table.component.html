@@ -8,6 +8,7 @@
       <tr>
         <th class="table-sticky-header th-null">Name</th>
         <th class="table-sticky-header th-sum"
+            [class.norm-column]="column.id < 0"
             *ngFor="let column of summationColumns">
           {{column.name}}
         </th>

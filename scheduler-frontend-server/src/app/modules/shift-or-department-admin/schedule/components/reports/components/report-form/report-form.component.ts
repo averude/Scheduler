@@ -26,6 +26,8 @@ export class ReportFormComponent implements OnInit {
   summationColumns: SummationColumn[] = [];
   selectedSummationColumns: SummationColumn[] = [];
 
+  normCols: SummationColumn[] = [];
+
   constructor(private fb: FormBuilder,
               private statisticsColumnCompositor: StatisticsColumnCompositor,
               private reportService: ReportService,
@@ -35,6 +37,8 @@ export class ReportFormComponent implements OnInit {
     this.summationColumnDtoService.getAll()
       .subscribe(dtos => {
         this.summationColumns = dtos.map(value => value.parent);
+
+        this.statisticsColumnCompositor.composeColumns(this.normCols);
         this.statisticsColumnCompositor.composeColumns(this.summationColumns);
       });
 
@@ -71,6 +75,22 @@ export class ReportFormComponent implements OnInit {
 
   removeDocumentCreator(index: number) {
     this.documentCreators.removeAt(index);
+  }
+
+  moveToSelected(selected) {
+    if (selected) {
+      let index = this.summationColumns.findIndex(value => value === selected);
+      this.summationColumns.splice(index, 1);
+      this.selectedSummationColumns.push(selected);
+    }
+  }
+
+  moveToList(selected) {
+    if (selected) {
+      let index = this.selectedSummationColumns.findIndex(value => value === selected);
+      this.selectedSummationColumns.splice(index, 1);
+      this.summationColumns.push(selected);
+    }
   }
 
   chosenMonthHandler(selectedDate: Moment, datepicker: MatDatepicker<Moment>) {

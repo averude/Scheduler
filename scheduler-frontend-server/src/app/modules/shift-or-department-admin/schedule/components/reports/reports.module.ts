@@ -15,6 +15,8 @@ import { MAT_DATE_FORMATS } from "@angular/material/core";
 import { MONTH_YEAR_DATE_FORMAT } from "../../../../../shared/utils/utils";
 import { ReportServiceConfig } from "../../../../../services/generators/report/config/report-service-config";
 import { ReportGenerator } from "../../../../../services/generators/report/report-generator";
+import { MatListModule } from "@angular/material/list";
+import { MatGridListModule } from "@angular/material/grid-list";
 
 @NgModule({
   imports: [
@@ -28,7 +30,9 @@ import { ReportGenerator } from "../../../../../services/generators/report/repor
     MatSelectModule,
     MatStepperModule,
     MatButtonModule,
-    MatCardModule
+    MatCardModule,
+    MatListModule,
+    MatGridListModule
   ],
   declarations: [
     ReportFormComponent

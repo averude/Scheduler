@@ -81,6 +81,11 @@ services:
     image: scheduler-frontend-server
     hostname: scheduler-frontend-server
     restart: always
+    logging:
+      driver: gelf
+      options:
+        gelf-address: "udp://${GRAYLOG_HOST}:${GRAYLOG_GELF_PORT}"
+        tag: "nginx"
     volumes:
       - ${FRONTEND_VOLUME_PATH}:/usr/share/nginx/html
     ports:
