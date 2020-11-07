@@ -3,37 +3,43 @@
   <mat-step [stepControl]="decorationDataForm">
     <ng-template matStepLabel>Date and caption</ng-template>
 
-    <mat-form-field>
-      <mat-select [(ngModel)]="reportType"
-                  placeholder="Report type">
-        <mat-option *ngFor="let type of reportTypes"
-                    [value]="type">
-          {{type}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-    <!--Year and month-->
-    <mat-form-field>
-      <input matInput
-             [(ngModel)]="date"
-             [matDatepicker]="picker"
-             placeholder="Month and year">
-      <mat-datepicker-toggle matSuffix
-                             [for]="picker"></mat-datepicker-toggle>
-      <mat-datepicker #picker
-                      startView="year"
-                      (monthSelected)="chosenMonthHandler($event, picker)">
-      </mat-datepicker>
-    </mat-form-field>
+    <div class="first-step-container">
+      <div class="type-and-date-container">
+        <mat-form-field class="report-type">
+          <mat-select [(ngModel)]="reportType"
+                      placeholder="Report type">
+            <mat-option *ngFor="let type of reportTypes"
+                        [value]="type">
+              {{type}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
 
-    <mat-form-field [formGroup]="decorationDataForm">
-      <input matInput
-             formControlName="schedAndServiceName"
-             placeholder="Schedule and service name"/>
-    </mat-form-field>
+        <!--Year and month-->
+        <mat-form-field class="report-date">
+          <input matInput
+                 [(ngModel)]="date"
+                 [matDatepicker]="picker"
+                 placeholder="Month and year">
+          <mat-datepicker-toggle matSuffix
+                                 [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker
+                          startView="year"
+                          (monthSelected)="chosenMonthHandler($event, picker)">
+          </mat-datepicker>
+        </mat-form-field>
+      </div>
 
-    <div>
-      <button mat-button
+      <mat-form-field class="report-caption"
+                      [formGroup]="decorationDataForm">
+        <input matInput
+               formControlName="schedAndServiceName"
+               placeholder="Schedule and service name"/>
+      </mat-form-field>
+    </div>
+
+    <div class="stepper-footer">
+      <button mat-raised-button
               matStepperNext>Next</button>
     </div>
   </mat-step>
@@ -41,8 +47,9 @@
   <mat-step [stepControl]="decorationDataForm">
     <ng-template matStepLabel>Summation columns</ng-template>
 
-    <mat-grid-list [cols]="3" [rowHeight]="'1:1'">
-      <mat-grid-tile style="background-color: white; overflow: scroll">
+    <div class="summation-column-select-container">
+      <div class="summation-column-selection-list">
+        <p class="summation-column-list-label">Summation columns</p>
         <mat-selection-list #leftList
                             [multiple]="false">
           <mat-list-option *ngFor="let sumCol of summationColumns"
@@ -50,20 +57,19 @@
             {{sumCol.name}}
           </mat-list-option>
         </mat-selection-list>
-      </mat-grid-tile>
+      </div>
 
-      <mat-grid-tile>
-        <div>
-          <button mat-button style="display: block"
-                  [disabled]="!leftList.selectedOptions.selected[0]?.value"
-                  (click)="moveToSelected(leftList.selectedOptions.selected[0]?.value)">-></button>
-          <button mat-button style="display: block"
-                  [disabled]="!rightList.selectedOptions.selected[0]?.value"
-                  (click)="moveToList(rightList.selectedOptions.selected[0]?.value)"><-</button>
-        </div>
-      </mat-grid-tile>
+      <div class="summation-column-select-buttons">
+        <button mat-button style="display: block"
+                [disabled]="!leftList.selectedOptions.selected[0]?.value"
+                (click)="moveToSelected(leftList.selectedOptions.selected[0]?.value)">-></button>
+        <button mat-button style="display: block"
+                [disabled]="!rightList.selectedOptions.selected[0]?.value"
+                (click)="moveToList(rightList.selectedOptions.selected[0]?.value)"><-</button>
+      </div>
 
-      <mat-grid-tile style="background-color: white; overflow: scroll">
+      <div class="summation-column-selection-list">
+        <p class="summation-column-list-label">Selected summation columns</p>
         <mat-selection-list #rightList
                             [multiple]="false">
           <mat-list-option *ngFor="let selCol of selectedSummationColumns"
@@ -71,47 +77,55 @@
             {{selCol.name}}
           </mat-list-option>
         </mat-selection-list>
-      </mat-grid-tile>
-    </mat-grid-list>
+      </div>
+    </div>
 
-    <div>
-      <button mat-button
+    <div class="stepper-footer">
+      <button mat-raised-button
               matStepperPrevious>Back</button>
-      <button mat-button
+      <button mat-raised-button
               matStepperNext>Next</button>
     </div>
   </mat-step>
 
   <mat-step [formGroup]="decorationDataForm" [stepControl]="decorationDataForm">
     <ng-template matStepLabel>Agreed and approved persons</ng-template>
-    <mat-form-field>
-      <input matInput
-             formControlName="agreedPosition"
-             placeholder="Agreed position"/>
-    </mat-form-field>
 
-    <mat-form-field>
-      <input matInput
-             formControlName="agreedPerson"
-             placeholder="Agreed person"/>
-    </mat-form-field>
+    <div class="third-step-container">
+      <div class="person-block">
+        <mat-form-field>
+          <input matInput
+                 formControlName="agreedPosition"
+                 placeholder="Agreed position"/>
+        </mat-form-field>
 
-    <mat-form-field>
-      <input matInput
-             formControlName="approvedPosition"
-             placeholder="Approved position"/>
-    </mat-form-field>
+        <mat-form-field>
+          <input matInput
+                 formControlName="agreedPerson"
+                 placeholder="Agreed person"/>
+        </mat-form-field>
+      </div>
 
-    <mat-form-field>
-      <input matInput
-             formControlName="approvedPerson"
-             placeholder="Approved person"/>
-    </mat-form-field>
+      <div class="person-block">
+        <mat-form-field>
+          <input matInput
+                 formControlName="approvedPosition"
+                 placeholder="Approved position"/>
+        </mat-form-field>
 
-    <div>
-      <button mat-button
+        <mat-form-field>
+          <input matInput
+                 formControlName="approvedPerson"
+                 placeholder="Approved person"/>
+        </mat-form-field>
+      </div>
+    </div>
+
+
+    <div class="stepper-footer">
+      <button mat-raised-button
               matStepperPrevious>Back</button>
-      <button mat-button
+      <button mat-raised-button
               matStepperNext>Next</button>
     </div>
   </mat-step>
@@ -141,10 +155,10 @@
       </div>
     </ng-container>
 
-    <div>
-      <button mat-button
+    <div class="stepper-footer">
+      <button mat-raised-button
               matStepperPrevious>Back</button>
-      <button mat-button
+      <button mat-raised-button color="primary"
               matStepperNext
               (click)="generateReport()">Generate</button>
     </div>

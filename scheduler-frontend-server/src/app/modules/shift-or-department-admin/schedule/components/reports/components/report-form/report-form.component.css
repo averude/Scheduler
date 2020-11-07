@@ -1,6 +1,78 @@
 .mat-stepper-horizontal {
+  border-radius: 20px;
+  padding: 10px;
   margin-top: 5%;
   margin-left: 15%;
   margin-right: 15%;
   background-color: #f8fafc;
+}
+
+.first-step-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 0 10%;
+}
+
+.type-and-date-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.report-type {
+  width: 100%;
+}
+
+.report-date {
+  width: 8em;
+}
+
+.report-caption {
+  width: 100%;
+}
+
+.stepper-footer {
+  margin-top: 15px;
+}
+
+.summation-column-select-container {
+  display: flex;
+  justify-content: space-between;
+  max-height: 23em;
+}
+
+.summation-column-select-buttons {
+  margin: auto;
+  height: max-content;
+}
+
+.summation-column-selection-list {
+  overflow: scroll;
+  width: 40%;
+}
+
+.mat-selection-list {
+  background-color: white;
+  height: 100%;
+}
+
+.summation-column-list-label {
+  text-align: center;
+  color: darkblue;
+}
+
+.mat-raised-button {
+  margin: 5px;
+}
+
+.third-step-container {
+  display: flex;
+  flex-direction: row;
+  margin: 0 10%;
+}
+
+.person-block {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 }
