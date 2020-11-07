@@ -6,11 +6,6 @@
   </ng-template>
 
   <ng-template contextMenuItem
-               (execute)="scheduleGenerationService.removeServiceDays($event.item)">
-    Remove service days
-  </ng-template>
-
-  <ng-template contextMenuItem
                [divider]="true"></ng-template>
 
   <context-menu #singleDaySubMenu>
@@ -26,6 +21,11 @@
   </ng-template>
 
   <context-menu #serviceDaySubMenu>
+    <ng-template contextMenuItem
+                 (execute)="scheduleGenerationService.removeServiceDays($event.item)">
+      Remove service days
+    </ng-template>
+
     <ng-template *ngFor="let departmentDayType of serviceDayTypes"
                  contextMenuItem
                  (execute)="scheduleGenerationService.generateScheduleByDepartmentDayType(departmentDayType, $event.item)">

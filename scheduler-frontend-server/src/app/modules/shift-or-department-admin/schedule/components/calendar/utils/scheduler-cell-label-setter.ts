@@ -3,7 +3,7 @@ import { TableCellComponent } from "../../../../../../lib/ngx-schedule-table/tab
 import { binarySearch } from "../../../../../../shared/utils/collection-utils";
 import { DayType } from "../../../../../../model/day-type";
 import { WorkDay } from "../../../../../../model/workday";
-import { calculateWorkHoursByWorkDay, getWorkDayDayTypeId } from "../../../../../../shared/utils/utils";
+import { calculateHoursByHasTime, getWorkDayDayTypeId } from "../../../../../../shared/utils/utils";
 import { DayTypeService } from "../../../../../../services/http/day-type.service";
 import { Injectable } from "@angular/core";
 
@@ -62,6 +62,6 @@ export class SchedulerCellLabelSetter implements CellLabelSetter {
   }
 
   private calcHours(workDay: WorkDay): number {
-    return calculateWorkHoursByWorkDay(workDay);
+    return calculateHoursByHasTime(workDay);
   }
 }

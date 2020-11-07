@@ -3,7 +3,7 @@ import { WorkDay } from "../../../../model/workday";
 import { DayType } from "../../../../model/day-type";
 import { CellData } from "../../../../lib/ngx-schedule-table/model/data/cell-data";
 import { TIME_SHEET_REPORT } from "../model/report-types";
-import { calculateWorkHoursByWorkDay, getCellValue, getCellValueExt } from "../../../../shared/utils/utils";
+import { calculateHoursByHasTime, getCellValue, getCellValueExt } from "../../../../shared/utils/utils";
 
 export class TimeSheetReportDataCollector extends AbstractReportDataCollector {
 
@@ -17,7 +17,7 @@ export class TimeSheetReportDataCollector extends AbstractReportDataCollector {
       val[0] = getCellValueExt(workDay, dayTypes, (workDay) => workDay.actualDayTypeId);
       val[1] = getCellValueExt(workDay, dayTypes, (workDay) => workDay.scheduledDayTypeId);
     } else {
-      val[0] = calculateWorkHoursByWorkDay(workDay);
+      val[0] = calculateHoursByHasTime(workDay);
       val[1] = getCellValue(workDay, dayTypes);
       if (val[0] == 0) val[0] = '';
     }

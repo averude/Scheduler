@@ -1,5 +1,5 @@
 import { RowGroupData } from "../../lib/ngx-schedule-table/model/data/row-group-data";
-import { calculateWorkHoursByWorkDay, roundToTwo } from "../../shared/utils/utils";
+import { calculateHoursByHasTime, roundToTwo } from "../../shared/utils/utils";
 import { Injectable } from "@angular/core"
 import { RowData } from "../../lib/ngx-schedule-table/model/data/row-data";
 
@@ -34,7 +34,7 @@ export class TableSumCalculator {
     if (!row) return;
 
     row.sum = row.cellData
-      .map(cell => calculateWorkHoursByWorkDay(cell.value))
+      .map(cell => calculateHoursByHasTime(cell.value))
       .reduce((prev, curr) => prev + curr, 0);
 
     row.diff = roundToTwo(row.workingNorm - row.sum);

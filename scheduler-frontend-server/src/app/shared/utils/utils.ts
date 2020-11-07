@@ -4,6 +4,7 @@ import { Employee } from "../../model/employee";
 import { WorkDay } from "../../model/workday";
 import { DayType } from "../../model/day-type";
 import { binarySearch } from "./collection-utils";
+import { HasDayTypeIdAndTime } from "../../model/interface/has-day-type-id-and-time";
 
 export const MONTH_YEAR_DATE_FORMAT = {
   parse: {
@@ -66,6 +67,14 @@ export function getCellValue(workDay: WorkDay, dayTypes: DayType[]) {
   return getCellValueExt(workDay, dayTypes, getWorkDayDayTypeId);
 }
 
+export function compareHasTime(a: HasDayTypeIdAndTime,
+                               b: HasDayTypeIdAndTime): boolean {
+  return a.startTime === b.startTime
+    && a.endTime === b.endTime
+    && a.breakStartTime === b.breakStartTime
+    && a.breakEndTime === b.breakEndTime;
+}
+
 export function convertTimeStringToMin(time: string): number {
   if (time) {
     let timeParts = time.split(':');
@@ -98,9 +107,18 @@ export function calculateWorkHoursByTimeStrings(startTime: string,
   }
 }
 
-export function calculateWorkHoursByWorkDay(workDay: WorkDay): number {
-  if (!workDay) return 0;
-  return calculateWorkHoursByTime(workDay.startTime, workDay.endTime, workDay.breakStartTime, workDay.breakEndTime);
+export function calculateHoursByHasTimeString(hasDayTypeIdAndTime: HasDayTypeIdAndTime): number {
+  if (!hasDayTypeIdAndTime) return 0;
+
+  return calculateWorkHoursByTimeStrings(hasDayTypeIdAndTime.startTime,
+    hasDayTypeIdAndTime.endTime,
+    hasDayTypeIdAndTime.breakStartTime,
+    hasDayTypeIdAndTime.breakEndTime);
+}
+
+export function calculateHoursByHasTime(hasDayTypeIdAndTime: HasDayTypeIdAndTime): number {
+  if (!hasDayTypeIdAndTime) return 0;
+  return calculateWorkHoursByTime(hasDayTypeIdAndTime.startTime, hasDayTypeIdAndTime.endTime, hasDayTypeIdAndTime.breakStartTime, hasDayTypeIdAndTime.breakEndTime);
 }
 
 export function calculateWorkHoursByTime(startTime: number,
@@ -127,5 +145,5 @@ export function getCellValueExt(workDay: WorkDay,
     }
   }
 
-  return calculateWorkHoursByWorkDay(workDay);
+  return calculateHoursByHasTime(workDay);
 }

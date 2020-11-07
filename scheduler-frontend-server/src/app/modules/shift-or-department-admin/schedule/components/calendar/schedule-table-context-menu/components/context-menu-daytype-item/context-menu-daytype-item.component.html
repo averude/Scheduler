@@ -1,7 +1,7 @@
 <div class="context-menu-item">
   <div class="menu-daytype-label-box"
        [style.background-color]="departmentDayType?.dayType?.dayTypeGroup?.color">
-    <p>{{departmentDayType.dayType.label}}</p>
+    <p>{{getLabel()}}</p>
   </div>
   <div class="menu-daytype-name">
     {{departmentDayType.dayType.name}}

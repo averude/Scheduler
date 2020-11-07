@@ -15,6 +15,7 @@ import { ShiftPatternDtoService } from "../../../../../../../../services/http/sh
 import { DepartmentDayTypeService } from "../../../../../../../../services/http/department-day-type.service";
 import { ShiftPattern } from "../../../../../../../../model/shift-pattern";
 import { DayTypeService } from "../../../../../../../../services/http/day-type.service";
+import { compareHasTime } from "../../../../../../../../shared/utils/utils";
 
 @Component({
   selector: 'app-schedule-table-context-menu',
@@ -89,12 +90,14 @@ export class ScheduleTableContextMenuComponent implements OnInit, OnDestroy {
 
   getDepDayType(unit: PatternUnit): DepartmentDayType {
     let departmentDayType = this.departmentDayTypes.find(depDayType => depDayType.dayType.id === unit.dayTypeId);
-    if (departmentDayType) {
-      departmentDayType.startTime       = unit.startTime;
-      departmentDayType.endTime         = unit.endTime;
-      departmentDayType.breakStartTime  = unit.breakStartTime;
-      departmentDayType.breakEndTime    = unit.breakEndTime;
-      return departmentDayType;
+    if (departmentDayType && !compareHasTime(unit, departmentDayType)) {
+      const newDepDayType = new DepartmentDayType();
+      newDepDayType.dayType = departmentDayType.dayType;
+      newDepDayType.startTime       = unit.startTime;
+      newDepDayType.endTime         = unit.endTime;
+      newDepDayType.breakStartTime  = unit.breakStartTime;
+      newDepDayType.breakEndTime    = unit.breakEndTime;
+      return newDepDayType;
     }
   }
 
