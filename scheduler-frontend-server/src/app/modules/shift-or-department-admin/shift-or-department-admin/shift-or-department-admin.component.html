@@ -16,12 +16,12 @@
       </div>
     </ng-template>
 
-    <ng-template toolBarItemDef>
+    <ng-template toolBarItemDef *ngIf="isAdmin">
       <img src="assets/img/cal_icon.png"
            routerLink="schedule/calendar">
     </ng-template>
 
-    <ng-template toolBarItemDef>
+    <ng-template toolBarItemDef *ngIf="isAdmin">
       <img src="assets/img/set_icon.png"
            routerLink="management">
     </ng-template>

@@ -1,10 +1,11 @@
 <app-schedules-table [groupable]="false"
                      [rowData]="rowData"
-                     [selectionDisabled]="false"
+                     [selectionDisabled]="!isAdmin"
                      [multipleSelect]="false"
                      [cellLabelSetter]="cellLabelSetter">
 
-  <ng-template table-top-item>
+  <ng-template table-top-item
+               *ngIf="isAdmin">
     <avr-entity-generation name="Generate working norm"
                            [units]="generationUnits"
                            (onEntityGenerated)="onWorkingNormGenerated($event)"></avr-entity-generation>

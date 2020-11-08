@@ -17,6 +17,19 @@
   </mat-form-field>
 
   <mat-form-field>
+    <mat-select placeholder="Role"
+                formControlName="role">
+      <mat-option [value]="'ADMIN'">
+        {{'ADMIN'}}
+      </mat-option>
+      <mat-option [value]="'USER'">
+        {{'USER'}}
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="isControlInvalid('role')">{{getErrorMessage()}}</mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
     <mat-select placeholder="Department"
                 [compareWith]="compareNums"
                 formControlName="departmentId">

@@ -3,7 +3,7 @@ package com.averude.uksatse.scheduler.controllers.interfaces;
 import com.averude.uksatse.scheduler.core.dto.CountDTO;
 import com.averude.uksatse.scheduler.core.dto.SummationDTO;
 import com.averude.uksatse.scheduler.security.annotations.IsDepartmentAdmin;
-import com.averude.uksatse.scheduler.security.annotations.IsDepartmentOrShiftAdmin;
+import com.averude.uksatse.scheduler.security.annotations.IsDepartmentOrShiftUser;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +19,7 @@ public interface StatisticsController {
     @RequestMapping(method = RequestMethod.GET, value = "/positions/employees")
     Iterable<CountDTO> getNumberOfEmployeesInPositionsByDepartmentId(Authentication authentication) throws Exception;
 
-    @IsDepartmentOrShiftAdmin
+    @IsDepartmentOrShiftUser
     @RequestMapping(method = RequestMethod.GET,
             value = "/summation_columns/dates")
     List<SummationDTO> getSummationDtoByDepartmentIdAndDate(Authentication authentication,

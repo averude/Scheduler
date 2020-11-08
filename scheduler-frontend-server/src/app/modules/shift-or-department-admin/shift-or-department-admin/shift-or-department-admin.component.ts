@@ -10,8 +10,8 @@ import { AuthService } from "../../../services/http/auth.service";
 })
 export class ShiftOrDepartmentAdminComponent implements OnInit {
 
-  roles: string[];
-
+  isAdmin:  boolean;
+  roles:    string[];
   department: Department;
 
   constructor(private authService: AuthService,
@@ -20,6 +20,7 @@ export class ShiftOrDepartmentAdminComponent implements OnInit {
   ngOnInit(): void {
     this.departmentService.getCurrent()
       .subscribe(department => this.department = department);
+    this.isAdmin = this.authService.isAdmin();
     this.roles = this.authService.currentUserValue.roles;
   }
 

@@ -37,6 +37,11 @@
       <td mat-cell *matCellDef="let userAccount">{{getDepartmentById(userAccount.departmentId)?.name}}</td>
     </ng-container>
 
+    <ng-container matColumnDef="role">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Role</th>
+      <td mat-cell *matCellDef="let userAccount">{{userAccount.role}}</td>
+    </ng-container>
+
     <ng-container matColumnDef="locked">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Locked</th>
       <td mat-cell *matCellDef="let userAccount">{{userAccount.locked}}</td>

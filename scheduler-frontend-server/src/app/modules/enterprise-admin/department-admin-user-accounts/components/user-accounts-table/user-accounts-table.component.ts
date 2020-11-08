@@ -16,7 +16,7 @@ import { DepartmentService } from "../../../../../services/http/department.servi
 export class UserAccountsTableComponent extends TableBaseComponent<UserAccount> {
 
   displayedColumns = ['select', 'username',
-    'department', 'locked', 'enabled', 'control'];
+    'department', 'role', 'locked', 'enabled', 'control'];
 
   departments: Department[] = [];
 

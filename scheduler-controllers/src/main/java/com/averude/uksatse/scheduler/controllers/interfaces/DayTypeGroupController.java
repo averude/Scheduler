@@ -1,7 +1,7 @@
 package com.averude.uksatse.scheduler.controllers.interfaces;
 
 import com.averude.uksatse.scheduler.core.entity.DayTypeGroup;
-import com.averude.uksatse.scheduler.security.annotations.IsAnyAdmin;
+import com.averude.uksatse.scheduler.security.annotations.IsAnyUser;
 import com.averude.uksatse.scheduler.security.annotations.IsGlobalAdmin;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -16,7 +16,7 @@ import java.util.Optional;
 @RequestMapping("/admin/day_type_groups")
 public interface DayTypeGroupController extends ICrudController<DayTypeGroup> {
 
-    @IsAnyAdmin
+    @IsAnyUser
     @RequestMapping(method = RequestMethod.GET)
     Iterable<DayTypeGroup> getAll();
 

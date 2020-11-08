@@ -2,7 +2,7 @@ package com.averude.uksatse.scheduler.controllers.interfaces;
 
 import com.averude.uksatse.scheduler.core.entity.ExtraWeekend;
 import com.averude.uksatse.scheduler.core.entity.ExtraWorkDay;
-import com.averude.uksatse.scheduler.security.annotations.IsAnyAdmin;
+import com.averude.uksatse.scheduler.security.annotations.IsAnyUser;
 import com.averude.uksatse.scheduler.security.annotations.IsEnterpriseAdmin;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +17,7 @@ import java.util.Optional;
 public interface ExtraWeekendController
         extends ICrudController<ExtraWeekend>, IByAuthAndDateController<ExtraWeekend> {
 
-    @IsAnyAdmin
+    @IsAnyUser
     @RequestMapping(method = RequestMethod.GET, value = "/dates")
     List<ExtraWeekend> getAllByAuth(Authentication authentication,
                                     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)

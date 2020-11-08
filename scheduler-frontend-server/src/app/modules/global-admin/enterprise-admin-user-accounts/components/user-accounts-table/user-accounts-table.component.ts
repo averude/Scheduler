@@ -16,7 +16,7 @@ import { Enterprise } from "../../../../../model/enterprise";
 export class UserAccountsTableComponent extends TableBaseComponent<UserAccount> {
 
   displayedColumns = ['select', 'username',
-    'enterprise', 'locked', 'enabled', 'control'];
+    'enterprise', 'role', 'locked', 'enabled', 'control'];
 
   enterprises: Enterprise[] = [];
 

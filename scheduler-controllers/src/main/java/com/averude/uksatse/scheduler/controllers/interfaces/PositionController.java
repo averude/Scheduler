@@ -2,7 +2,7 @@ package com.averude.uksatse.scheduler.controllers.interfaces;
 
 import com.averude.uksatse.scheduler.core.entity.Position;
 import com.averude.uksatse.scheduler.security.annotations.IsDepartmentAdmin;
-import com.averude.uksatse.scheduler.security.annotations.IsDepartmentOrShiftAdmin;
+import com.averude.uksatse.scheduler.security.annotations.IsDepartmentOrShiftUser;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,7 +16,7 @@ import java.util.Optional;
 @RequestMapping("/admin/positions")
 public interface PositionController extends ICrudController<Position>, IByAuthController<Position> {
 
-    @IsDepartmentOrShiftAdmin
+    @IsDepartmentOrShiftUser
     @RequestMapping(method = RequestMethod.GET)
     List<Position> getAllByAuth(Authentication authentication);
 

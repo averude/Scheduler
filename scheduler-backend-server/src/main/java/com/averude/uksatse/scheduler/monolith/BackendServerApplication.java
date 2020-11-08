@@ -28,14 +28,14 @@ import org.springframework.web.filter.CorsFilter;
 })
 @EnableJpaRepositories("com.averude.uksatse.scheduler.shared.repository")
 public class BackendServerApplication {
-    public static void main(String[] args) {
-        SpringApplication.run(BackendServerApplication.class, args);
-    }
-
     @Bean
     public FilterRegistrationBean customCorsFilter() {
         FilterRegistrationBean bean = new FilterRegistrationBean<CorsFilter>(new CustomCorsFilter());
         bean.setOrder(Ordered.HIGHEST_PRECEDENCE);
         return bean;
+    }
+
+    public static void main(String[] args) {
+        SpringApplication.run(BackendServerApplication.class, args);
     }
 }

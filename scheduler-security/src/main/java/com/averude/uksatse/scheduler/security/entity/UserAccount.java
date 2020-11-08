@@ -20,6 +20,9 @@ public class UserAccount implements Serializable {
     @NotNull
     private String password;
     @NotNull
+    private String role;
+
+    @NotNull
     private boolean locked = false;
     @NotNull
     private boolean enabled = true;

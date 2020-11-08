@@ -4,6 +4,8 @@
   </div>
   <div>
     <div class="table-top-buttons"
+         *ngIf="topItems.length == 0"></div>
+    <div class="table-top-buttons"
          *ngFor="let template of topItems" >
       <ng-container [ngTemplateOutlet]="template"></ng-container>
     </div>

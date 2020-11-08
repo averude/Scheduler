@@ -9,6 +9,6 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-@PreAuthorize("hasAuthority('SHIFT_ADMIN')")
+@PreAuthorize("hasAuthority('SHIFT_ADMIN') and hasRole('ADMIN')")
 public @interface IsShiftAdmin {
 }

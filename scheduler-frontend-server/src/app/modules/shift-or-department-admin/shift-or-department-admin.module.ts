@@ -17,7 +17,7 @@ const routes: Routes = [
       {
         path: 'management',
         canActivate: [RoleGuard],
-        data: {roles: ['DEPARTMENT_ADMIN']},
+        data: {roles: ['DEPARTMENT_ADMIN'], perm: 'ROLE_ADMIN'},
         loadChildren: () => import('./management/management.module')
           .then(mod => mod.ManagementModule)
       },

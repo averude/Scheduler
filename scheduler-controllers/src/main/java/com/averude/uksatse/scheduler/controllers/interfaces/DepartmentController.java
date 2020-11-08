@@ -1,7 +1,7 @@
 package com.averude.uksatse.scheduler.controllers.interfaces;
 
 import com.averude.uksatse.scheduler.core.entity.structure.Department;
-import com.averude.uksatse.scheduler.security.annotations.IsDepartmentOrShiftAdmin;
+import com.averude.uksatse.scheduler.security.annotations.IsDepartmentOrShiftUser;
 import com.averude.uksatse.scheduler.security.annotations.IsEnterpriseAdmin;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -19,7 +19,7 @@ public interface DepartmentController extends ICrudController<Department>, IByAu
     @RequestMapping(method = RequestMethod.GET)
     List<Department> getAllByAuth(Authentication authentication);
 
-    @IsDepartmentOrShiftAdmin
+    @IsDepartmentOrShiftUser
     @RequestMapping(method = RequestMethod.GET, value = "/current")
     Optional<Department> getCurrent(Authentication authentication);
 

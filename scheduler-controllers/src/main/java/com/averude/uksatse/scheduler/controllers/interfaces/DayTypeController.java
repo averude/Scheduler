@@ -1,7 +1,7 @@
 package com.averude.uksatse.scheduler.controllers.interfaces;
 
 import com.averude.uksatse.scheduler.core.entity.DayType;
-import com.averude.uksatse.scheduler.security.annotations.IsAnyAdmin;
+import com.averude.uksatse.scheduler.security.annotations.IsAnyUser;
 import com.averude.uksatse.scheduler.security.annotations.IsEnterpriseAdmin;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -16,7 +16,7 @@ import java.util.Optional;
 @RequestMapping("/admin/day_types")
 public interface DayTypeController {
 
-    @IsAnyAdmin
+    @IsAnyUser
     @RequestMapping(method = RequestMethod.GET)
     List<DayType> getAllByAuth(Authentication authentication);
 

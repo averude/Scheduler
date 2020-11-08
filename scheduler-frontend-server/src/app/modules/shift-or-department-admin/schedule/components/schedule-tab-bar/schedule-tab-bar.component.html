@@ -14,7 +14,7 @@
         <span class="link-name">Statistics</span>
       </a>
     </li>
-    <li>
+    <li *ngIf="isAdmin">
       <a routerLink="compositions"
          routerLinkActive="active">
         <span class="icon-nav-site"></span>

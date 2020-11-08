@@ -5,6 +5,7 @@ import com.averude.uksatse.scheduler.core.dto.GenerationDTO;
 import com.averude.uksatse.scheduler.core.entity.Employee;
 import com.averude.uksatse.scheduler.core.entity.WorkDay;
 import com.averude.uksatse.scheduler.security.annotations.IsDepartmentOrShiftAdmin;
+import com.averude.uksatse.scheduler.security.annotations.IsDepartmentOrShiftUser;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -27,7 +28,7 @@ public interface ScheduleController {
     @RequestMapping(method = RequestMethod.PUT)
     ResponseEntity<?> update(@Valid @RequestBody Iterable<WorkDay> schedule);
 
-    @IsDepartmentOrShiftAdmin
+    @IsDepartmentOrShiftUser
     @RequestMapping(method = RequestMethod.GET,
                     value = "/dates")
     List<BasicDto<Employee, WorkDay>> getAllByAuthAndDate(Authentication authentication,

@@ -45,6 +45,7 @@ public class AuthServerJpaTest {
         var userAccount = new DepartmentAdminUserAccount();
         userAccount.setUsername("testuser");
         userAccount.setPassword("testpass");
+        userAccount.setRole("ADMIN");
         userAccount.setDepartmentId(department.getId());
         entityManager.persist(userAccount);
 

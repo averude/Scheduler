@@ -19,6 +19,7 @@ import { ShiftGenerationUnit } from "../../../../../../../model/ui/shift-generat
 import { getGenerationUnits, toGenerationDto } from "../../../../../../../lib/avr-entity-generation/util/utils";
 import { concatMap } from "rxjs/operators";
 import { TableSumCalculator } from "../../../../../../../services/calculators/table-sum-calculator.service";
+import { AuthService } from "../../../../../../../services/http/auth.service";
 
 @Component({
   selector: 'app-working-norm-table',
@@ -27,6 +28,7 @@ import { TableSumCalculator } from "../../../../../../../services/calculators/ta
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WorkingNormTableComponent implements OnInit, OnDestroy {
+  isAdmin: boolean = false;
 
   rowData:  RowData[] = [];
   private shifts:   Shift[]   = [];
@@ -37,7 +39,8 @@ export class WorkingNormTableComponent implements OnInit, OnDestroy {
   private selectionEndSub:  Subscription;
   private rowRenderSub: Subscription;
 
-  constructor(private cd: ChangeDetectorRef,
+  constructor(private authService: AuthService,
+              private cd: ChangeDetectorRef,
               private dialog: MatDialog,
               private rowClearSelection: ClearSelectionService,
               private selectionEndService: SelectionEndService,
@@ -51,6 +54,8 @@ export class WorkingNormTableComponent implements OnInit, OnDestroy {
               private notificationsService: NotificationsService) { }
 
   ngOnInit() {
+    this.isAdmin = this.authService.isAdmin();
+
     this.paginatorSub = this.paginationService.onValueChange
       .subscribe(months => this.workingNormService
         .getAllDto(months[0].isoString, months[months.length - 1].isoString)
@@ -62,12 +67,14 @@ export class WorkingNormTableComponent implements OnInit, OnDestroy {
           this.cd.markForCheck();
         }));
 
-    this.selectionEndSub = this.selectionEndService.onSelectionEnd
-      .subscribe(selectionData => {
-        if (selectionData.selectedCells && selectionData.selectedCells.length > 0) {
-          this.openDialog(selectionData);
-        }
-      });
+    if (this.isAdmin) {
+      this.selectionEndSub = this.selectionEndService.onSelectionEnd
+        .subscribe(selectionData => {
+          if (selectionData.selectedCells && selectionData.selectedCells.length > 0) {
+            this.openDialog(selectionData);
+          }
+        });
+    }
 
     this.rowRenderSub = this.tableRenderer.onRenderRow
       .subscribe(rowId => this.sumCalculator.calculateHoursNormSum(this.rowData, rowId));

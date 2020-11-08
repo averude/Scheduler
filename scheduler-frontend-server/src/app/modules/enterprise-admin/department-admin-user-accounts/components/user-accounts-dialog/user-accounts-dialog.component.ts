@@ -32,6 +32,7 @@ export class UserAccountsDialogComponent extends DialogBaseComponent<UserAccount
                           Validators.minLength(3),
                           Validators.maxLength(128)]],
       departmentId: [null,  [Validators.required]],
+      role:         [null,  [Validators.required]],
       locked:       [false, [Validators.required]],
       enabled:      [true,  [Validators.required]]
     });

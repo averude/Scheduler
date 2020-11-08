@@ -5,7 +5,7 @@ import com.averude.uksatse.scheduler.core.dto.GenerationDTO;
 import com.averude.uksatse.scheduler.core.entity.WorkingNorm;
 import com.averude.uksatse.scheduler.core.entity.structure.Shift;
 import com.averude.uksatse.scheduler.security.annotations.IsDepartmentAdmin;
-import com.averude.uksatse.scheduler.security.annotations.IsDepartmentOrShiftAdmin;
+import com.averude.uksatse.scheduler.security.annotations.IsDepartmentOrShiftUser;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -20,7 +20,7 @@ import java.util.Optional;
 public interface WorkingNormController
         extends ICrudController<WorkingNorm>, IByAuthAndDateController<WorkingNorm> {
 
-    @IsDepartmentOrShiftAdmin
+    @IsDepartmentOrShiftUser
     @RequestMapping(method = RequestMethod.GET, value = "/dto/dates")
     List<BasicDto<Shift, WorkingNorm>> getAllDtoByAuth(Authentication authentication,
                                                        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
@@ -30,7 +30,7 @@ public interface WorkingNormController
                                                        @RequestParam(value = "to")
                                                                LocalDate to);
 
-    @IsDepartmentOrShiftAdmin
+    @IsDepartmentOrShiftUser
     @RequestMapping(method = RequestMethod.GET, value = "/dates")
     List<WorkingNorm> getAllByAuth(Authentication authentication,
                                    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)

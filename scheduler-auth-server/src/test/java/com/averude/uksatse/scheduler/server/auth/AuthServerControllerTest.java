@@ -79,11 +79,13 @@ public class AuthServerControllerTest {
         var globalAdmin = new GlobalAdminUserAccount();
         globalAdmin.setIsGlobalAdmin(true);
         globalAdmin.setUsername("global");
+        globalAdmin.setRole("ADMIN");
         globalAdmin.setPassword(passwordEncoder.encode("1234"));
         userAccountRepository.save(globalAdmin);
 
         var departmentAdmin = new DepartmentAdminUserAccount();
         departmentAdmin.setUsername("depadmin");
+        departmentAdmin.setRole("ADMIN");
         departmentAdmin.setPassword(passwordEncoder.encode("1234"));
         departmentAdmin.setDepartmentId(department.getId());
 
@@ -91,6 +93,7 @@ public class AuthServerControllerTest {
 
         var shiftAdmin = new ShiftAdminUserAccount();
         shiftAdmin.setUsername("shadmin");
+        shiftAdmin.setRole("ADMIN");
         shiftAdmin.setPassword(passwordEncoder.encode("1234"));
         shiftAdmin.setShiftId(1L);
 

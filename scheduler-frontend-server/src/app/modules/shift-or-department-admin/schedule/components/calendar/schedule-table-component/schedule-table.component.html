@@ -1,12 +1,14 @@
 <app-schedules-table [showSumColumns]="true"
                      [multipleSelect]="true"
                      [rowGroupData]="rowGroupData"
-                     [cellLabelSetter]="cellLabelSetter">
+                     [cellLabelSetter]="cellLabelSetter"
+                     [selectionDisabled]="!isAdmin">
 
   <ng-template table-top-item>
     <app-show-hours-control></app-show-hours-control>
   </ng-template>
-  <ng-template table-top-item>
+  <ng-template table-top-item
+               *ngIf="isAdmin">
     <avr-entity-generation name="Generate schedule"
                            [units]="units"
                            (onEntityGenerated)="onScheduleGenerate($event)"></avr-entity-generation>
@@ -69,4 +71,4 @@
   </ng-container>
 </app-schedules-table>
 
-<app-schedule-table-context-menu></app-schedule-table-context-menu>
+<app-schedule-table-context-menu *ngIf="isAdmin"></app-schedule-table-context-menu>

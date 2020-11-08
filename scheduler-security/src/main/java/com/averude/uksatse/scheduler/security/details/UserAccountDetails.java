@@ -8,7 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.Collections;
+import java.util.List;
 import java.util.StringJoiner;
 
 @AllArgsConstructor
@@ -16,11 +16,11 @@ import java.util.StringJoiner;
 @Setter
 public class UserAccountDetails implements UserDetails {
     private UserAccount userAccount;
-    private GrantedAuthority grantedAuthority;
+    private List<GrantedAuthority> grantedAuthorities;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton(grantedAuthority);
+        return grantedAuthorities;
     }
 
     @Override
@@ -57,7 +57,7 @@ public class UserAccountDetails implements UserDetails {
     public String toString() {
         return new StringJoiner(", ", UserAccountDetails.class.getSimpleName() + "[", "]")
                 .add("username=" + userAccount.getUsername())
-                .add("authority=" + grantedAuthority.getAuthority())
+                .add("authorities=" + grantedAuthorities)
                 .toString();
     }
 }

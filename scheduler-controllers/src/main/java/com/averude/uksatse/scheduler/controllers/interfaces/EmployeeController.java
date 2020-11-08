@@ -2,6 +2,7 @@ package com.averude.uksatse.scheduler.controllers.interfaces;
 
 import com.averude.uksatse.scheduler.core.entity.Employee;
 import com.averude.uksatse.scheduler.security.annotations.IsDepartmentAdmin;
+import com.averude.uksatse.scheduler.security.annotations.IsDepartmentUser;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,7 +17,7 @@ import java.util.Optional;
 @RequestMapping("/admin/employees")
 public interface EmployeeController extends ICrudController<Employee> {
 
-    @IsDepartmentAdmin
+    @IsDepartmentUser
     @RequestMapping(method = RequestMethod.GET)
     List<Employee> getAllByAuth(Authentication authentication);
 

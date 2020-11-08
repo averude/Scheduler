@@ -7,6 +7,7 @@
               [element]="elementRef"
               (onSelectionEnds)="onSelectionEnd($event.event, $event.selectedCells)">
   <td class="cell"
+      [class.selection-enabled]="!selectionDisabled"
       *ngFor="let cell of rowData.cellData"
       selectableCell
       [data]="cell"

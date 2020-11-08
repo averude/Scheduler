@@ -1,8 +1,11 @@
 .cell {
-  cursor: cell;
   padding: 0px;
   border: 1px solid #e5e9f0;
   vertical-align: top;
+}
+
+.selection-enabled {
+  cursor: cell;
 }
 
 .disabled {

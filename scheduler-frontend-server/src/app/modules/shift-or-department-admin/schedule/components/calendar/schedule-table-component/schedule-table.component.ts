@@ -15,6 +15,7 @@ import { NotificationsService } from "angular2-notifications";
 import { concatMap } from "rxjs/operators";
 import { TableRenderer } from "../../../../../../lib/ngx-schedule-table/service/table-renderer.service";
 import { TableSumCalculator } from "../../../../../../services/calculators/table-sum-calculator.service";
+import { AuthService } from "../../../../../../services/http/auth.service";
 
 @Component({
   selector: 'app-schedule-table-component',
@@ -23,6 +24,7 @@ import { TableSumCalculator } from "../../../../../../services/calculators/table
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ScheduleTableComponent implements OnInit, OnDestroy {
+  isAdmin: boolean = false;
 
   units: ShiftGenerationUnit[];
 
@@ -31,7 +33,8 @@ export class ScheduleTableComponent implements OnInit, OnDestroy {
   private paginatorSub: Subscription;
   private rowRenderSub: Subscription;
 
-  constructor(private cd: ChangeDetectorRef,
+  constructor(private authService: AuthService,
+              private cd: ChangeDetectorRef,
               public  cellLabelSetter: SchedulerCellLabelSetter,
               public  paginationStrategy: ScheduleTablePaginationStrategy,
               private paginationService: PaginationService,
@@ -47,6 +50,7 @@ export class ScheduleTableComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.uploadData();
+    this.isAdmin = this.authService.isAdmin();
 
     this.rowRenderSub = this.tableRenderer.onRenderRow
       .subscribe(rowId => this.sumCalculator.calculateWorkHoursSum(this.rowGroupData, rowId));

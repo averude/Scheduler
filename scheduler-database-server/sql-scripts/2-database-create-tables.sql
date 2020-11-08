@@ -241,6 +241,7 @@ CREATE TABLE IF NOT EXISTS special_calendar_dates (
 CREATE TABLE IF NOT EXISTS user_accounts (
   username        VARCHAR(64)     NOT NULL,
   password        VARCHAR(64)     NOT NULL,
+  role            VARCHAR(64)     NOT NULL    DEFAULT 'USER',
   locked          BOOLEAN         NOT NULL    DEFAULT FALSE,
   enabled         BOOLEAN         NOT NULL    DEFAULT TRUE,
 

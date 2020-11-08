@@ -13,7 +13,7 @@ export class RoleGuard implements CanActivate {
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
     const currentUser = this.authService.currentUserValue;
     if (currentUser) {
-      if (next.data.roles && !this.checkRoles(next.data.roles, currentUser.roles)) {
+      if (next.data.roles && !(this.checkRoles(next.data.roles, currentUser.roles) && this.hasPerm(currentUser, next.data))) {
         this.router.navigate(['login']);
         return false;
       }
@@ -25,5 +25,12 @@ export class RoleGuard implements CanActivate {
 
   private checkRoles(expectedRoles: string[], userRoles: string[]): boolean {
     return expectedRoles.some(role => userRoles.indexOf(role) >= 0);
+  }
+
+  private hasPerm(user, data) {
+    if (data.perm) {
+      return user.roles.includes(data.perm);
+    }
+    return true;
   }
 }

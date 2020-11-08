@@ -47,6 +47,10 @@ export class AuthService {
     return !!(this.currentUserValue && this.currentUserValue.access_token);
   }
 
+  public isAdmin(): boolean {
+    return this.currentUserValue.roles.includes('ROLE_ADMIN');
+  }
+
   public logout() {
     this.cache.clear();
     sessionStorage.removeItem("currentUser");

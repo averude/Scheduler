@@ -2,7 +2,7 @@ package com.averude.uksatse.scheduler.controllers.interfaces;
 
 import com.averude.uksatse.scheduler.core.entity.ShiftComposition;
 import com.averude.uksatse.scheduler.security.annotations.IsDepartmentAdmin;
-import com.averude.uksatse.scheduler.security.annotations.IsDepartmentOrShiftAdmin;
+import com.averude.uksatse.scheduler.security.annotations.IsDepartmentOrShiftUser;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -17,7 +17,7 @@ import java.util.Optional;
 public interface ShiftCompositionController
         extends ICrudController<ShiftComposition>, IByAuthAndDateController<ShiftComposition> {
 
-    @IsDepartmentOrShiftAdmin
+    @IsDepartmentOrShiftUser
     @RequestMapping(method = RequestMethod.GET, value = "/dates")
     List<ShiftComposition> getAllByAuth(Authentication authentication,
                                         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)

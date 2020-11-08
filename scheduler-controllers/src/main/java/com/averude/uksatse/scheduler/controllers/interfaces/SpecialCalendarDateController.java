@@ -1,7 +1,7 @@
 package com.averude.uksatse.scheduler.controllers.interfaces;
 
 import com.averude.uksatse.scheduler.core.entity.SpecialCalendarDate;
-import com.averude.uksatse.scheduler.security.annotations.IsAnyAdmin;
+import com.averude.uksatse.scheduler.security.annotations.IsAnyUser;
 import com.averude.uksatse.scheduler.security.annotations.IsEnterpriseAdmin;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +15,7 @@ import java.util.Optional;
 @RequestMapping("/admin/special_calendar_dates")
 public interface SpecialCalendarDateController
         extends ICrudController<SpecialCalendarDate>, IByAuthAndDateController<SpecialCalendarDate> {
-    @IsAnyAdmin
+    @IsAnyUser
     @RequestMapping(method = RequestMethod.GET,
             value = "/dates")
     List<SpecialCalendarDate> getAllByAuth(Authentication authentication,

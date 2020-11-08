@@ -4,7 +4,7 @@ import com.averude.uksatse.scheduler.core.dto.BasicDto;
 import com.averude.uksatse.scheduler.core.entity.PatternUnit;
 import com.averude.uksatse.scheduler.core.entity.ShiftPattern;
 import com.averude.uksatse.scheduler.security.annotations.IsDepartmentAdmin;
-import com.averude.uksatse.scheduler.security.annotations.IsDepartmentOrShiftAdmin;
+import com.averude.uksatse.scheduler.security.annotations.IsDepartmentOrShiftUser;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,7 +18,7 @@ import java.util.Optional;
 @RequestMapping("/admin/patterns")
 public interface ShiftPatternController extends ICrudController<ShiftPattern> {
 
-    @IsDepartmentOrShiftAdmin
+    @IsDepartmentOrShiftUser
     @RequestMapping(method = RequestMethod.GET, value = "/dto")
     List<BasicDto<ShiftPattern, PatternUnit>> getAllDtoByAuth(Authentication authentication);
 

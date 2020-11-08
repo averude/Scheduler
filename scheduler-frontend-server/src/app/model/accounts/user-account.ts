@@ -1,6 +1,7 @@
 export class UserAccount {
   id:           number;
   username:     string;
+  role:         string;
   locked:       boolean;
   enabled:      boolean;
 }

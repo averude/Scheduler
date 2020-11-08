@@ -7,6 +7,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
+
 import static com.averude.uksatse.scheduler.security.authority.Authorities.DEPARTMENT_ADMIN;
 
 @Component
@@ -14,7 +16,8 @@ public class DepartmentAdminUserDetailsCreator implements UserDetailsCreator {
     @Override
     public <T extends UserAccount> UserDetails create(T t) {
         var departmentAdminUserAccount = (DepartmentAdminUserAccount) t;
-        return new UserAccountDetails(departmentAdminUserAccount, new SimpleGrantedAuthority(DEPARTMENT_ADMIN));
+        return new UserAccountDetails(departmentAdminUserAccount, Arrays.asList(new SimpleGrantedAuthority(DEPARTMENT_ADMIN),
+                new SimpleGrantedAuthority("ROLE_" + departmentAdminUserAccount.getRole())));
     }
 
     @Override
