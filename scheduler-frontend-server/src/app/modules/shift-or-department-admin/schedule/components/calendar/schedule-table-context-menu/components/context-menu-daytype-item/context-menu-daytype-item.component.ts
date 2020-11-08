@@ -21,8 +21,10 @@ export class ContextMenuDaytypeItemComponent implements OnInit {
   }
 
   getLabel() {
-    if (this.departmentDayType.dayType && this.departmentDayType.dayType.label && this.departmentDayType.dayType.label.length > 0) {
-      return this.departmentDayType.dayType.label
+    if (this.departmentDayType && this.departmentDayType.dayType
+      && this.departmentDayType.dayType.label
+      && this.departmentDayType.dayType.label.length > 0) {
+      return this.departmentDayType.dayType.label;
     } else {
       return calculateHoursByHasTimeString(this.departmentDayType);
     }

@@ -99,6 +99,7 @@ export class ScheduleTableContextMenuComponent implements OnInit, OnDestroy {
       newDepDayType.breakEndTime    = unit.breakEndTime;
       return newDepDayType;
     }
+    return departmentDayType;
   }
 
   ngOnDestroy(): void {
