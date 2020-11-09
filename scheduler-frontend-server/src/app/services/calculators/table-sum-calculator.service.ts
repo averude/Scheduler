@@ -37,7 +37,7 @@ export class TableSumCalculator {
       .map(cell => calculateHoursByHasTime(cell.value))
       .reduce((prev, curr) => prev + curr, 0);
 
-    row.diff = roundToTwo(row.workingNorm - row.sum);
+    row.diff = roundToTwo(row.sum - row.workingNorm);
   }
 
   private calcNormHoursSum(row: any) {
