@@ -6,9 +6,6 @@
   width: 20%;
   min-width: 130px;
   background-color: #444d58;
-  position: fixed;
-  height: 100%;
-  overflow: auto;
 }
 
 .sidebar-list-element {
@@ -16,8 +13,9 @@
 }
 
 .sidebar-content-box {
-  margin: 0 20%;
   width: 80%;
+  overflow: scroll;
+  height: 100%;
 }
 
 .sidebar-button {
@@ -46,4 +44,10 @@
 
 .sidebar-button:focus {
   outline: 0;
+}
+
+.sidebar-container {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
 }

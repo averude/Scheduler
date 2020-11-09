@@ -1,45 +1,11 @@
-<ul class="sidebar">
-  <!--<li class="sidebar-list-element">-->
-    <!--<button class="sidebar-button"-->
-            <!--routerLink="departments"-->
-            <!--routerLinkActive="active">Departments</button>-->
-  <!--</li>-->
-  <!--<li class="sidebar-list-element">-->
-    <!--<button class="sidebar-button"-->
-            <!--routerLink="day_types"-->
-            <!--routerLinkActive="active">Day types</button>-->
-  <!--</li>-->
-  <!--<li class="sidebar-list-element">-->
-    <!--<button class="sidebar-button"-->
-            <!--routerLink="department_admin_user_accounts"-->
-            <!--routerLinkActive="active">Department Accounts</button>-->
-  <!--</li>-->
-  <!--<li class="sidebar-list-element">-->
-    <!--<button class="sidebar-button"-->
-            <!--routerLink="holidays"-->
-            <!--routerLinkActive="active">Holidays</button>-->
-  <!--</li>-->
-  <!--<li class="sidebar-list-element">-->
-    <!--<button class="sidebar-button"-->
-            <!--routerLink="extraweekends"-->
-            <!--routerLinkActive="active">Extra weekends</button>-->
-  <!--</li>-->
-  <!--<li class="sidebar-list-element">-->
-    <!--<button class="sidebar-button"-->
-            <!--routerLink="extraworkdays"-->
-            <!--routerLinkActive="active">Extra work days</button>-->
-  <!--</li>-->
-  <!--<li class="sidebar-list-element">-->
-    <!--<button class="sidebar-button"-->
-            <!--routerLink="summation_columns"-->
-            <!--routerLinkActive="active">Summation Columns</button>-->
-  <!--</li>-->
-  <li class="sidebar-list-element"
-      *ngFor="let sideBarItem of sideBarItems">
-    <ng-container [ngTemplateOutlet]="sideBarItem"></ng-container>
-  </li>
-</ul>
-<div class="sidebar-content-box">
-  <ng-container [ngTemplateOutlet]="sideBarContent"></ng-container>
-  <!--<router-outlet></router-outlet>-->
+<div class="sidebar-container">
+  <ul class="sidebar">
+    <li class="sidebar-list-element"
+        *ngFor="let sideBarItem of sideBarItems">
+      <ng-container [ngTemplateOutlet]="sideBarItem"></ng-container>
+    </li>
+  </ul>
+  <div class="sidebar-content-box">
+    <ng-container [ngTemplateOutlet]="sideBarContent"></ng-container>
+  </div>
 </div>
