@@ -65,5 +65,5 @@
 .content-box {
   position: relative;
   overflow: scroll;
-  height: calc(100% - 73px);
+  height: calc(100% - 90px);
 }
