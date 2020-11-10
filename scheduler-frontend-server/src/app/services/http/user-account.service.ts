@@ -21,23 +21,26 @@ export class UserAccountService implements IByAuthService<UserAccount>, CUDServi
   }
 
   create(userAccount: UserAccount): Observable<any> {
-    return this.http.post<number>(
+    return this.http.post(
       `${this.config.baseUrl}/uaa/users/enterprise_admins`,
-      userAccount
+      userAccount,
+      {responseType: 'text'}
     );
   }
 
   createEnterpriseAdmin(userAccount: EnterpriseAdminUserAccount): Observable<any> {
-    return this.http.post<string>(
+    return this.http.post(
       `${this.config.baseUrl}/uaa/users/enterprise_admins`,
-      userAccount
+      userAccount,
+      {responseType: 'text'}
     );
   }
 
   createDepartmentAdmin(userAccount: DepartmentAdminUserAccount): Observable<any> {
-    return this.http.post<string>(
+    return this.http.post(
       `${this.config.baseUrl}/uaa/users/department_admins`,
-      userAccount
+      userAccount,
+      {responseType: 'text'}
     );
   }
 
