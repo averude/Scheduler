@@ -10,4 +10,5 @@ export class SummationResult {
   summationColumnId:  number;
   type:               string;
   value:              number;
+  converted:          boolean = false;
 }

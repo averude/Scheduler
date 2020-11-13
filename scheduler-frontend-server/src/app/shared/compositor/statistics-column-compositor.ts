@@ -14,18 +14,21 @@ export class StatisticsColumnCompositor {
                  shiftCompositions: ShiftComposition[],
                  workingNorms: WorkingNorm[]) {
     let mainShiftCompositions = uniqById(shiftCompositions
-      .filter(value => !value.substitution), value => value.employeeId);
+      .filter(value => !value.substitution), value => value.employee.id);
 
     summationDtos.forEach(dto => {
       try {
-        const shiftId = mainShiftCompositions.find(value => value.employeeId === dto.parent.id).shiftId;
+        const shiftId = mainShiftCompositions.find(value => value.employee.id === dto.parent.id).shiftId;
         const norm = workingNorms.find(value => value.shiftId === shiftId);
-        dto.collection.push({summationColumnId: -1, value: norm.hours} as SummationResult);
-        dto.collection.push({summationColumnId: -2, value: norm.days} as SummationResult);
+        dto.collection.push({summationColumnId: -1, value: norm ? norm.hours : 0} as SummationResult);
+        dto.collection.push({summationColumnId: -2, value: norm ? norm.days : 0} as SummationResult);
 
         sortByPattern(dto.collection, summationColumns, (sumRes, sumCol) => {
           const result = sumRes.summationColumnId == sumCol.id;
-          if (result && sumRes.type === HOURS_SUM) sumRes.value = roundToTwo(sumRes.value / 60);
+          if (result && sumRes.type === HOURS_SUM && !sumRes.converted) {
+            sumRes.value = roundToTwo(sumRes.value / 60);
+            sumRes.converted = true;
+          }
           return result;
         });
       } finally {}
