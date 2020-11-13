@@ -7,7 +7,10 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface ScheduleRepository extends JpaRepository<WorkDay, Long> {
-    List<WorkDay> findAllByEmployeeIdAndDateBetweenOrderByDateAsc(long employeeId, LocalDate from, LocalDate to);
+    List<WorkDay> findAllByDepartmentIdAndEmployeeIdAndDateBetweenOrderByDateAsc(long departmentId,
+                                                                                 long employeeId,
+                                                                                 LocalDate from,
+                                                                                 LocalDate to);
 
     List<WorkDay> findAllByEmployeeIdInAndDateBetweenOrderByDateAsc(List<Long> employeeIds, LocalDate from, LocalDate to);
 

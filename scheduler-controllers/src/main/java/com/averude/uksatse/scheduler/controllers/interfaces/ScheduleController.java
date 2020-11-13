@@ -22,11 +22,13 @@ import java.util.List;
 public interface ScheduleController {
     @IsDepartmentOrShiftAdmin
     @RequestMapping(method = RequestMethod.POST)
-    ResponseEntity<Iterable<WorkDay>> create(@Valid @RequestBody Iterable<WorkDay> schedule);
+    ResponseEntity<Iterable<WorkDay>> create(@RequestBody Iterable<WorkDay> schedule,
+                                             Authentication authentication);
 
     @IsDepartmentOrShiftAdmin
     @RequestMapping(method = RequestMethod.PUT)
-    ResponseEntity<?> update(@Valid @RequestBody Iterable<WorkDay> schedule);
+    ResponseEntity<?> update(@RequestBody Iterable<WorkDay> schedule,
+                             Authentication authentication);
 
     @IsDepartmentOrShiftUser
     @RequestMapping(method = RequestMethod.GET,

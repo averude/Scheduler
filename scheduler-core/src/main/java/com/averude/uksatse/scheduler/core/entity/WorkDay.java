@@ -2,6 +2,7 @@ package com.averude.uksatse.scheduler.core.entity;
 
 import com.averude.uksatse.scheduler.core.entity.interfaces.HasDate;
 import com.averude.uksatse.scheduler.core.entity.interfaces.HasDayTypeIdAndTime;
+import com.averude.uksatse.scheduler.core.entity.interfaces.HasDepartmentId;
 import com.averude.uksatse.scheduler.core.entity.interfaces.HasId;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
@@ -29,12 +30,17 @@ import java.util.StringJoiner;
                         columnNames = {"employee_id", "date"})
         }
 )
-public class WorkDay implements HasId, HasDayTypeIdAndTime, HasDate {
+public class WorkDay implements HasId, HasDepartmentId, HasDayTypeIdAndTime, HasDate {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Positive(message = "{entity.id.negative}")
     private Long id;
+
+    @JsonIgnore
+    @NotNull
+    @Column(name = "department_id")
+    private Long departmentId;
 
     @NotNull(message = "{workDay.employee.null}")
     @Positive(message = "{workDay.employee.negative}")
@@ -106,7 +112,8 @@ public class WorkDay implements HasId, HasDayTypeIdAndTime, HasDate {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         WorkDay workDay = (WorkDay) o;
-        return employeeId.equals(workDay.employeeId) &&
+        return departmentId.equals(workDay.departmentId) &&
+                employeeId.equals(workDay.employeeId) &&
                 actualDayTypeId.equals(workDay.actualDayTypeId) &&
                 scheduledDayTypeId.equals(workDay.scheduledDayTypeId) &&
                 Objects.equals(startTime, workDay.startTime) &&
@@ -118,13 +125,14 @@ public class WorkDay implements HasId, HasDayTypeIdAndTime, HasDate {
 
     @Override
     public int hashCode() {
-        return Objects.hash(employeeId, actualDayTypeId, scheduledDayTypeId, startTime, breakStartTime, breakEndTime, endTime, date);
+        return Objects.hash(departmentId, employeeId, actualDayTypeId, scheduledDayTypeId, startTime, breakStartTime, breakEndTime, endTime, date);
     }
 
     @Override
     public String toString() {
         return new StringJoiner(", ", WorkDay.class.getSimpleName() + "{", "}")
                 .add("id=" + id)
+                .add("departmentId=" + departmentId)
                 .add("employeeId=" + employeeId)
                 .add("actualDayTypeId=" + actualDayTypeId)
                 .add("scheduledDayTypeId=" + scheduledDayTypeId)

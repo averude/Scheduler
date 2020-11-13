@@ -1,7 +1,6 @@
 package com.averude.uksatse.scheduler.core.entity.structure;
 
 import com.averude.uksatse.scheduler.core.entity.DayType;
-import com.averude.uksatse.scheduler.core.entity.Holiday;
 import com.averude.uksatse.scheduler.core.entity.interfaces.HasId;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
@@ -47,13 +46,6 @@ public class Enterprise implements HasId {
                 cascade = CascadeType.ALL,
                 fetch = FetchType.LAZY)
     private List<@NotNull @Valid DayType> dayTypes = new LinkedList<>();
-
-
-    @JsonIgnore
-    @OneToMany( mappedBy = "enterpriseId",
-            cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY)
-    private List<@NotNull @Valid Holiday> holidays = new ArrayList<>();
 
     @Override
     public boolean equals(Object o) {

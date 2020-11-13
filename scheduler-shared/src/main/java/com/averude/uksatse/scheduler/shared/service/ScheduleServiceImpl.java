@@ -40,8 +40,7 @@ public class ScheduleServiceImpl
                                                                              LocalDate to) {
         return employeeRepository.findAllByDepartmentId(departmentId)
                 .stream()
-                .map(employee -> new BasicDto<>(employee,
-                        scheduleRepository.findAllByEmployeeIdAndDateBetweenOrderByDateAsc(employee.getId(), from, to)))
+                .map(employee -> getEmployeeWorkDayBasicDto(employee, from, to))
                 .collect(Collectors.toList());
     }
 
@@ -52,9 +51,15 @@ public class ScheduleServiceImpl
                                                                         LocalDate to) {
         return shiftCompositionRepository.findAllByShiftIdAndToGreaterThanEqualAndFromLessThanEqual(shiftId, from, to)
                 .stream()
-                .map(shiftSchedule -> new BasicDto<>(
-                        employeeRepository.findById(shiftSchedule.getEmployeeId()).orElseThrow(),
-                        scheduleRepository.findAllByEmployeeIdAndDateBetweenOrderByDateAsc(shiftSchedule.getEmployeeId(), from, to)))
+                .map(shiftSchedule -> {
+                    var employee = employeeRepository.findById(shiftSchedule.getEmployee().getId()).orElseThrow();
+                    return getEmployeeWorkDayBasicDto(employee, from, to);
+                })
                 .collect(Collectors.toList());
+    }
+
+    private BasicDto<Employee, WorkDay> getEmployeeWorkDayBasicDto(Employee employee, LocalDate from, LocalDate to) {
+        return new BasicDto<>(employee, scheduleRepository
+                .findAllByDepartmentIdAndEmployeeIdAndDateBetweenOrderByDateAsc(employee.getDepartmentId(), employee.getId(), from, to));
     }
 }

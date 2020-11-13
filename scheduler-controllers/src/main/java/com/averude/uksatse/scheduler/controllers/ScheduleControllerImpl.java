@@ -7,6 +7,7 @@ import com.averude.uksatse.scheduler.core.entity.Employee;
 import com.averude.uksatse.scheduler.core.entity.WorkDay;
 import com.averude.uksatse.scheduler.security.entity.DepartmentAdminUserAccount;
 import com.averude.uksatse.scheduler.security.entity.ShiftAdminUserAccount;
+import com.averude.uksatse.scheduler.security.modifier.entity.DepartmentIdEntityModifier;
 import com.averude.uksatse.scheduler.shared.service.ScheduleGenerationService;
 import com.averude.uksatse.scheduler.shared.service.ScheduleService;
 import lombok.extern.slf4j.Slf4j;
@@ -25,23 +26,30 @@ public class ScheduleControllerImpl implements ScheduleController {
 
     private final ScheduleService           scheduleService;
     private final ScheduleGenerationService scheduleGenerationService;
+    private final DepartmentIdEntityModifier<WorkDay> entityModifier;
 
     @Autowired
     public ScheduleControllerImpl(ScheduleService scheduleService,
+                                  DepartmentIdEntityModifier<WorkDay> entityModifier,
                                   ScheduleGenerationService scheduleGenerationService) {
         this.scheduleService = scheduleService;
+        this.entityModifier = entityModifier;
         this.scheduleGenerationService = scheduleGenerationService;
     }
 
     @Override
-    public ResponseEntity<Iterable<WorkDay>> create(Iterable<WorkDay> schedule){
+    public ResponseEntity<Iterable<WorkDay>> create(Iterable<WorkDay> schedule,
+                                                    Authentication authentication){
+        schedule.forEach(workDay -> entityModifier.modify(workDay, authentication));
         scheduleService.saveAll(schedule);
         log.debug("Schedule created. Sending response.");
         return ResponseEntity.ok(schedule);
     }
 
     @Override
-    public ResponseEntity<?> update(Iterable<WorkDay> schedule) {
+    public ResponseEntity<?> update(Iterable<WorkDay> schedule,
+                                    Authentication authentication) {
+        schedule.forEach(workDay -> entityModifier.modify(workDay, authentication));
         scheduleService.saveAll(schedule);
         log.debug("Schedule updated. Sending response.");
         return ResponseEntity.ok("WorkDays was successfully updated");

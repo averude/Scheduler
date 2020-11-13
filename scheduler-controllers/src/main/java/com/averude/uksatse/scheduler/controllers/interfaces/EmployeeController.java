@@ -10,12 +10,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
 @RequestMapping("/admin/employees")
-public interface EmployeeController extends ICrudController<Employee> {
+public interface EmployeeController
+        extends ICrudController<Employee>, IByAuthController<Employee> {
 
     @IsDepartmentUser
     @RequestMapping(method = RequestMethod.GET)
@@ -27,11 +27,11 @@ public interface EmployeeController extends ICrudController<Employee> {
 
     @IsDepartmentAdmin
     @RequestMapping(method = RequestMethod.POST)
-    ResponseEntity<Long> post(@Valid @RequestBody Employee employee, Authentication authentication);
+    ResponseEntity<Long> post(@RequestBody Employee employee, Authentication authentication);
 
     @IsDepartmentAdmin
     @RequestMapping(method = RequestMethod.PUT)
-    ResponseEntity<?> put(@Valid @RequestBody Employee employee, Authentication authentication);
+    ResponseEntity<?> put(@RequestBody Employee employee, Authentication authentication);
 
     @IsDepartmentAdmin
     @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")

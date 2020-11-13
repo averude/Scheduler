@@ -1,5 +1,6 @@
 package com.averude.uksatse.scheduler.core.entity;
 
+import com.averude.uksatse.scheduler.core.entity.interfaces.HasDepartmentId;
 import com.averude.uksatse.scheduler.core.entity.interfaces.HasId;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
@@ -34,12 +35,17 @@ import java.util.StringJoiner;
                         })
         }
 )
-public class Employee implements HasId {
+public class Employee implements HasId, HasDepartmentId {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Positive(message = "{entity.id.negative}")
     private Long id;
+
+    @JsonIgnore
+    @NotNull
+    @Column(name = "department_id")
+    private Long departmentId;
 
     @NotNull(message = "{employee.firstname.null}")
     @Size(   max = 20,
@@ -68,7 +74,7 @@ public class Employee implements HasId {
     private Position position;
 
     @JsonIgnore
-    @OneToMany( mappedBy = "employeeId",
+    @OneToMany( mappedBy = "employee",
                 cascade = CascadeType.ALL)
     private List<@NotNull @Valid ShiftComposition> shiftsList;
 
@@ -96,6 +102,7 @@ public class Employee implements HasId {
         if (o == null || getClass() != o.getClass()) return false;
         Employee employee = (Employee) o;
         return Objects.equals(id, employee.id) &&
+                Objects.equals(departmentId, employee.departmentId) &&
                 Objects.equals(firstName, employee.firstName) &&
                 Objects.equals(patronymic, employee.patronymic) &&
                 Objects.equals(secondName, employee.secondName) &&
@@ -111,6 +118,7 @@ public class Employee implements HasId {
     public String toString() {
         return new StringJoiner(", ", Employee.class.getSimpleName() + "{", "}")
                 .add("id=" + id)
+                .add("departmentId=" + departmentId)
                 .add("firstName='" + firstName + "'")
                 .add("patronymic='" + patronymic + "'")
                 .add("secondName='" + secondName + "'")
