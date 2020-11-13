@@ -1,5 +1,6 @@
 package com.averude.uksatse.scheduler.generator.schedule;
 
+import com.averude.uksatse.scheduler.core.entity.Employee;
 import com.averude.uksatse.scheduler.core.entity.ShiftPattern;
 import com.averude.uksatse.scheduler.core.entity.SpecialCalendarDate;
 import com.averude.uksatse.scheduler.core.entity.WorkDay;
@@ -56,7 +57,7 @@ public class ScheduleGeneratorImpl implements ScheduleGenerator {
                 getValue(schedule, date, indices, 1)
                         .ifPresentOrElse(
                                 (workDay) -> updateWorkDay(workDay, unit),
-                                () -> schedule.add(createWorkDay(interval.getEmployeeId(), unit, date)));
+                                () -> schedule.add(createWorkDay(interval.getEmployee(), unit, date)));
             }
         }
         return schedule;
@@ -74,11 +75,12 @@ public class ScheduleGeneratorImpl implements ScheduleGenerator {
         workDay.setBreakEndTime(unit.getBreakEndTime());
     }
 
-    private WorkDay createWorkDay(Long employeeId,
+    private WorkDay createWorkDay(Employee employee,
                                   HasDayTypeIdAndTime unit,
                                   LocalDate date) {
         var workDay = new WorkDay();
-        workDay.setEmployeeId(employeeId);
+        workDay.setDepartmentId(employee.getDepartmentId());
+        workDay.setEmployeeId(employee.getId());
         workDay.setDate(date);
         updateWorkDay(workDay, unit);
         log.trace("Creating workday {}", workDay);

@@ -1,5 +1,6 @@
 package com.averude.uksatse.scheduler.generator.schedule;
 
+import com.averude.uksatse.scheduler.core.entity.Employee;
 import com.averude.uksatse.scheduler.generator.model.ScheduleGenerationInterval;
 import com.averude.uksatse.scheduler.testing.DepartmentDayTypeGenerator;
 import com.averude.uksatse.scheduler.testing.ShiftPatternGenerator;
@@ -28,7 +29,7 @@ public class ScheduleGeneratorTest {
         var extraWeekendDate = "2020-01-05";
         var extraWorkDayDate = "2020-01-10";
 
-        var interval = new ScheduleGenerationInterval(from, to, 0L);
+        var interval = createInterval(from, to);
 
         var extraWeekend = specialCalendarDateGenerator.generate(extraWeekendDate, EXTRA_WEEKEND);
         var extraWorkDay = specialCalendarDateGenerator.generate(extraWorkDayDate, EXTRA_WORK_DAY);
@@ -39,5 +40,13 @@ public class ScheduleGeneratorTest {
         assertEquals(workDays.size(), 31);
         assertEquals(workDays.get(9).getScheduledDayTypeId(), shiftPattern.getExtraWorkDayDepDayType().getDayTypeId());
         assertEquals(workDays.get(4).getScheduledDayTypeId(), shiftPattern.getExtraWeekendDepDayType().getDayTypeId());
+    }
+
+    private ScheduleGenerationInterval createInterval(LocalDate from, LocalDate to) {
+        var employee = new Employee();
+        employee.setId(1L);
+        var scheduleGenerationInterval = new ScheduleGenerationInterval(from, to, 0L);
+        scheduleGenerationInterval.setEmployee(employee);
+        return scheduleGenerationInterval;
     }
 }

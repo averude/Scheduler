@@ -1,5 +1,6 @@
 package com.averude.uksatse.scheduler.generator.model;
 
+import com.averude.uksatse.scheduler.core.entity.Employee;
 import com.averude.uksatse.scheduler.core.entity.interfaces.HasDateDuration;
 import lombok.Data;
 
@@ -11,7 +12,7 @@ public class ScheduleGenerationInterval implements HasDateDuration {
 
     private LocalDate from;
     private LocalDate to;
-    private long employeeId;
+    private Employee employee;
     private long offset;
 
     public ScheduleGenerationInterval() {

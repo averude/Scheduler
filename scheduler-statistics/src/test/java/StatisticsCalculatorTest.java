@@ -74,7 +74,7 @@ public class StatisticsCalculatorTest {
         var extraWeekendDate = "2020-01-05";
         var extraWorkDayDate = "2020-01-10";
 
-        var interval = new ScheduleGenerationInterval(from, to, 0L);
+        var interval = createInterval(from, to);
 
         var extraWeekend = specialCalendarDateGenerator.generate(extraWeekendDate, EXTRA_WEEKEND);
         var extraWorkDay = specialCalendarDateGenerator.generate(extraWorkDayDate, EXTRA_WORK_DAY);
@@ -82,6 +82,14 @@ public class StatisticsCalculatorTest {
         var shiftPattern = shiftPatternGenerator.generateShiftPattern(departmentDayTypes);
         return scheduleGenerator.generate(interval, shiftPattern,
                 Collections.emptyList(), Arrays.asList(extraWeekend, extraWorkDay));
+    }
+
+    private ScheduleGenerationInterval createInterval(LocalDate from, LocalDate to) {
+        var employee = new Employee();
+        employee.setId(1L);
+        var scheduleGenerationInterval = new ScheduleGenerationInterval(from, to, 0L);
+        scheduleGenerationInterval.setEmployee(employee);
+        return scheduleGenerationInterval;
     }
 
     private interface TriFunction<T1, T2, T3, R> {
