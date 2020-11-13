@@ -155,6 +155,7 @@ CREATE TABLE IF NOT EXISTS shifts (
 
 CREATE TABLE IF NOT EXISTS employees (
   id            SERIAL,
+  department_id INTEGER       NOT NULL,
   position_id   INTEGER       NOT NULL,
   first_name    VARCHAR (64)  NOT NULL,
   second_name   VARCHAR (64)  NOT NULL,
@@ -163,7 +164,8 @@ CREATE TABLE IF NOT EXISTS employees (
   UNIQUE (first_name, second_name, patronymic, position_id),
 
   PRIMARY KEY (id),
-  FOREIGN KEY (position_id)   REFERENCES positions(id) ON DELETE CASCADE
+  FOREIGN KEY (department_id) REFERENCES departments(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (position_id)   REFERENCES positions(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS shift_composition (
@@ -188,6 +190,7 @@ CREATE TABLE IF NOT EXISTS shift_composition (
 
 CREATE TABLE IF NOT EXISTS work_schedule (
   id                    SERIAL,
+  department_id         INTEGER     NOT NULL,
   employee_id           INTEGER     NOT NULL,
   actual_day_type_id    INTEGER,
   scheduled_day_type_id INTEGER,
@@ -200,13 +203,14 @@ CREATE TABLE IF NOT EXISTS work_schedule (
   CHECK ( start_time < end_time AND break_start_time < break_end_time
     AND start_time < break_start_time AND end_time > break_end_time
     AND (end_time - start_time) > (break_end_time - break_start_time) ),
-  UNIQUE (employee_id, date),
+  UNIQUE (employee_id, department_id, date),
 
-  PRIMARY KEY (id),
-  FOREIGN KEY (employee_id) REFERENCES employees(id) ON DELETE CASCADE,
+  PRIMARY KEY (id, department_id),
+  FOREIGN KEY (department_id) REFERENCES departments(id), --ON DELETE CASCADE,-- ON UPDATE CASCADE,
+  FOREIGN KEY (employee_id) REFERENCES employees(id) ON DELETE CASCADE ON UPDATE CASCADE,
   FOREIGN KEY (actual_day_type_id) REFERENCES day_types(id) ON DELETE SET NULL,
   FOREIGN KEY (scheduled_day_type_id) REFERENCES day_types(id) ON DELETE SET NULL
-);
+) PARTITION BY LIST (department_id);
 
 CREATE TABLE IF NOT EXISTS working_norms (
   id            SERIAL,
