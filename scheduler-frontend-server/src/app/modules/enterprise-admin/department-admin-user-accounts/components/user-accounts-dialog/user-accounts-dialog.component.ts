@@ -43,6 +43,7 @@ export class UserAccountsDialogComponent extends DialogBaseComponent<UserAccount
       username:     userAccount.username,
       password:     null,
       departmentId: userAccount.departmentId,
+      role:         userAccount.role,
       locked:       userAccount.locked,
       enabled:      userAccount.enabled
     });
