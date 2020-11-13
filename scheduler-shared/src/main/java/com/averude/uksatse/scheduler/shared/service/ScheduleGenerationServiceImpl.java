@@ -94,7 +94,7 @@ public class ScheduleGenerationServiceImpl implements ScheduleGenerationService 
 
             var employeeCompositions = shiftCompositionRepository
                     .findAllByEmployeeIdAndSubstitutionAndToGreaterThanEqualAndFromLessThanEqual(
-                            composition.getEmployeeId(),
+                            composition.getEmployee().getId(),
                             !composition.getSubstitution(),
                             from, to);
 
@@ -141,7 +141,7 @@ public class ScheduleGenerationServiceImpl implements ScheduleGenerationService 
                                                       ShiftPattern pattern,
                                                       List<SpecialCalendarDate> specialCalendarDates) {
         var intervalSchedule = scheduleRepository
-                .findAllByEmployeeIdAndDateBetweenOrderByDateAsc(interval.getEmployeeId(), interval.getFrom(), interval.getTo());
+                .findAllByDepartmentIdAndEmployeeIdAndDateBetweenOrderByDateAsc(interval.getEmployee().getDepartmentId(), interval.getEmployee().getId(), interval.getFrom(), interval.getTo());
         return scheduleGenerator.generate(interval, pattern, intervalSchedule, specialCalendarDates);
     }
 }

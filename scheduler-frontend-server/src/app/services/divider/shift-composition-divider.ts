@@ -9,11 +9,11 @@ export class ShiftCompositionDivider {
     let compositionsMap = new Map<number, any[]>();
 
     for (let composition of shiftCompositions) {
-      let value = compositionsMap.get(composition.employeeId);
+      let value = compositionsMap.get(composition.employee.id);
       if (value) {
         value.push(composition);
       } else {
-        compositionsMap.set(composition.employeeId, [composition]);
+        compositionsMap.set(composition.employee.id, [composition]);
       }
     }
 
@@ -89,7 +89,7 @@ export class ShiftCompositionDivider {
                             mainShiftComposition: ShiftComposition): ShiftComposition {
     let composition = new ShiftComposition();
     composition.shiftId       = mainShiftComposition.shiftId;
-    composition.employeeId    = mainShiftComposition.employeeId;
+    composition.employee      = mainShiftComposition.employee;
     composition.substitution  = mainShiftComposition.substitution;
     composition.from          = from;
     composition.to            = to;

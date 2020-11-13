@@ -39,7 +39,7 @@ export class ShiftCompositionDialogComponent extends DialogBaseComponent<ShiftCo
     this.dialogForm = this.fb.group({
       id:           [],
       shiftId:      [null, Validators.required],
-      employeeId:   [null, Validators.required],
+      employee:     [null, Validators.required],
       from:         [null, Validators.required],
       to:           [null, Validators.required],
       substitution: [true, Validators.required]
@@ -50,7 +50,7 @@ export class ShiftCompositionDialogComponent extends DialogBaseComponent<ShiftCo
     this.dialogForm.setValue({
       id:           shiftSchedule.id,
       shiftId:      shiftSchedule.shiftId,
-      employeeId:   shiftSchedule.employeeId,
+      employee:     shiftSchedule.employee,
       from:         shiftSchedule.from,
       to:           shiftSchedule.to,
       substitution: shiftSchedule.substitution,

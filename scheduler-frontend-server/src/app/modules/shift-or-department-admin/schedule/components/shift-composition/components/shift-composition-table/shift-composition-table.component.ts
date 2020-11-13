@@ -51,8 +51,8 @@ export class ShiftCompositionTableComponent extends PageableTableBaseComponent<S
     this.openAddOrEditDialog(shiftSchedule, data, ShiftCompositionDialogComponent);
   }
 
-  getEmployeeShortName(employeeId: number): string {
-    return getEmployeeShortName(this.employees.find(employee => employee.id === employeeId));
+  getEmployeeShortName(employee: Employee): string {
+    return getEmployeeShortName(employee);
   }
 
   getShift(shiftId: number): Shift {

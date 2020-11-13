@@ -89,7 +89,7 @@ export class ScheduleTableDataCollector {
                             workingNorm: number,
                             isEnabled: boolean,
                             dayIndex: number) {
-    let employeeId  = composition.employeeId;
+    let employeeId  = composition.employee.id;
     let rowData     = rowGroup.rowData[employeeId];
 
     if (!rowData) {

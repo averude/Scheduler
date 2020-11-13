@@ -75,8 +75,8 @@ export function sortByCompositions<T extends IdEntity>(dtos: BasicDto<T, any>[],
     compositions
       .filter(value => !value.substitution)
       .sort((a, b) => a.shiftId - b.shiftId),
-    (element => element.employeeId)
+    (element => element.employee.id)
   );
   sortByPattern(dtos, employeeMainShiftCompositions,
-    ((arrayElement, patternElement) => arrayElement.parent.id === patternElement.employeeId));
+    ((arrayElement, patternElement) => arrayElement.parent.id === patternElement.employee.id));
 }

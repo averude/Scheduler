@@ -36,7 +36,7 @@ public interface ShiftCompositionRepository extends JpaRepository<ShiftCompositi
     @Query("select e " +
             "from ShiftComposition se " +
             "left join Employee e " +
-            "on se.employeeId = e.id " +
+            "on se.employee = e " +
             "where se.shiftId = ?1 "+
             "order by se.shiftId , e.secondName, e.firstName, e.patronymic")
     List<Employee> findAllEmployeesByShiftId(Long shiftId);
@@ -44,7 +44,7 @@ public interface ShiftCompositionRepository extends JpaRepository<ShiftCompositi
     @Query("select e " +
             "from ShiftComposition se " +
             "left join Employee e " +
-            "on se.employeeId = e.id " +
+            "on se.employee = e " +
             "where se.shiftId = ?1 and ?2 <= se.to and ?3 >= se.from " +
             "order by se.shiftId , e.secondName, e.firstName, e.patronymic")
     List<Employee> findEmployeesByShiftIdAndDatesBetween(Long shiftId,

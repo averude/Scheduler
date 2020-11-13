@@ -58,7 +58,7 @@ public class ShiftCompositionGenerator {
                 shiftComposition.setId((long) (shift_idx + emp_idx + 1));
                 shiftComposition.setSubstitution(isSubstitution);
                 shiftComposition.setShiftId(shift.getId());
-                shiftComposition.setEmployeeId(employee.getId());
+                shiftComposition.setEmployee(employee);
                 shiftComposition.setFrom(from);
                 shiftComposition.setTo(to);
                 shiftCompositions.add(shiftComposition);
@@ -74,7 +74,9 @@ public class ShiftCompositionGenerator {
         composition.setFrom(compFrom);
         composition.setTo(compTo);
         composition.setSubstitution(isSubstitution);
-        composition.setEmployeeId(1L);
+        var employee = new Employee();
+        employee.setId(1L);
+        composition.setEmployee(employee);
         return composition;
     }
 

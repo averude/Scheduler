@@ -4,13 +4,13 @@
   <mat-form-field>
     <mat-select placeholder="Employee"
                 [compareWith]="compareNums"
-                formControlName="employeeId">
+                formControlName="employee">
       <mat-option *ngFor="let employee of employees"
-                  [value]="employee?.id">
+                  [value]="employee">
         {{getEmployeeShortName(employee)}}
       </mat-option>
     </mat-select>
-    <mat-error *ngIf="isControlInvalid('employeeId')">{{getErrorMessage()}}</mat-error>
+    <mat-error *ngIf="isControlInvalid('employee')">{{getErrorMessage()}}</mat-error>
   </mat-form-field>
 
   <mat-form-field>

@@ -33,8 +33,9 @@ public class ShiftComposition implements HasId, HasDateDuration {
     private Long shiftId;
 
     @NotNull
-    @Column(name = "employee_id")
-    private Long employeeId;
+    @ManyToOne
+    @JoinColumn(name = "employee_id")
+    private Employee employee;
 
     @NotNull
     @Type(type = "numeric_boolean")
@@ -51,7 +52,7 @@ public class ShiftComposition implements HasId, HasDateDuration {
 
     public ShiftComposition(Shift shift, Employee employee) {
         this.shiftId = shift.getId();
-        this.employeeId = employee.getId();
+        this.employee = employee;
     }
 
     @Override
@@ -60,7 +61,7 @@ public class ShiftComposition implements HasId, HasDateDuration {
         if (o == null || getClass() != o.getClass()) return false;
         ShiftComposition that = (ShiftComposition) o;
         return shiftId.equals(that.shiftId) &&
-                employeeId.equals(that.employeeId) &&
+                employee.equals(that.employee) &&
                 substitution.equals(that.substitution) &&
                 from.equals(that.from) &&
                 to.equals(that.to);
@@ -68,15 +69,15 @@ public class ShiftComposition implements HasId, HasDateDuration {
 
     @Override
     public int hashCode() {
-        return Objects.hash(shiftId, employeeId, substitution, from, to);
+        return Objects.hash(shiftId, employee, substitution, from, to);
     }
 
     @Override
     public String toString() {
-        return new StringJoiner(", ", ShiftComposition.class.getSimpleName() + "{", "}")
+        return new StringJoiner(", ", ShiftComposition.class.getSimpleName() + "[", "]")
                 .add("id=" + id)
                 .add("shiftId=" + shiftId)
-                .add("employeeId=" + employeeId)
+                .add("employee=" + employee)
                 .add("substitution=" + substitution)
                 .add("from=" + from)
                 .add("to=" + to)

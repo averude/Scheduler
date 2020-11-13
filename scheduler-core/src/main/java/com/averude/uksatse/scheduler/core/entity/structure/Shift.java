@@ -75,7 +75,7 @@ public class Shift implements HasId, HasDepartmentId {
         employee.getShiftsList().remove(shiftComposition);
         employees.remove(shiftComposition);
         shiftComposition.setShiftId(null);
-        shiftComposition.setEmployeeId(null);
+        shiftComposition.setEmployee(null);
     }
 
     @Override
