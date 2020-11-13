@@ -16,7 +16,7 @@ export class DepartmentDialogComponent extends DialogBaseComponent<Department> {
               private authService: AuthService,
               private dialogRef: MatDialogRef<DepartmentDialogComponent>,
               @Inject(MAT_DIALOG_DATA) data) {
-    super(data.enterprise, dialogRef);
+    super(data.department, dialogRef);
   }
 
   initTheForm() {
