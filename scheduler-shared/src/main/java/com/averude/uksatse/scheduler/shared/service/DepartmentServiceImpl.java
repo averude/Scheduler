@@ -42,9 +42,13 @@ public class DepartmentServiceImpl
 
     @Override
     public <S extends Department> S save(@Valid S department) {
-        var savedDepartment = super.save(department);
-        partitionManager.createPartition(savedDepartment.getId());
-        return savedDepartment;
+        if (department.getId() == null) {
+            var savedDepartment = super.save(department);
+            partitionManager.createPartition(savedDepartment.getId());
+            return savedDepartment;
+        } else {
+            return super.save(department);
+        }
     }
 
     @Override
@@ -55,7 +59,6 @@ public class DepartmentServiceImpl
 
     @Override
     public void delete(Department department) {
-        partitionManager.removePartition(department.getId());
-        super.delete(department);
+        deleteById(department.getId());
     }
 }
