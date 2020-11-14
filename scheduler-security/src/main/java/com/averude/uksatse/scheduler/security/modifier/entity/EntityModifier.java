@@ -6,6 +6,8 @@ import org.springframework.security.core.Authentication;
 public interface EntityModifier<T> {
     void modify(T t, Authentication authentication);
 
+    void modifyAll(Iterable<T> iterable, Authentication authentication);
+
     default UserAccount convertToUserAccount(Authentication authentication) {
         return (UserAccount) authentication.getPrincipal();
     }

@@ -16,4 +16,13 @@ public class EnterpriseIdEntityModifier<T extends HasEnterpriseId> implements En
         if (enterpriseId == null) throw new NullOrgLevelIdException();
         hasEnterpriseId.setEnterpriseId(enterpriseId);
     }
+
+    @Override
+    public void modifyAll(Iterable<T> iterable, Authentication authentication) {
+        var userAccount = (EnterpriseAdminUserAccount) convertToUserAccount(authentication);
+        Long enterpriseId = userAccount.getEnterpriseId();
+
+        if (enterpriseId == null) throw new NullOrgLevelIdException();
+        iterable.forEach(hasEnterpriseId -> hasEnterpriseId.setEnterpriseId(enterpriseId));
+    }
 }

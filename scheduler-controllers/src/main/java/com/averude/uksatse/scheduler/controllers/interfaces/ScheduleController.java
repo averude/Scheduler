@@ -16,18 +16,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
 
 @RequestMapping("/schedule")
 public interface ScheduleController {
     @IsDepartmentOrShiftAdmin
     @RequestMapping(method = RequestMethod.POST)
-    ResponseEntity<Iterable<WorkDay>> create(@RequestBody Iterable<WorkDay> schedule,
+    ResponseEntity<Iterable<WorkDay>> create(@RequestBody Collection<WorkDay> schedule,
                                              Authentication authentication);
 
     @IsDepartmentOrShiftAdmin
     @RequestMapping(method = RequestMethod.PUT)
-    ResponseEntity<?> update(@RequestBody Iterable<WorkDay> schedule,
+    ResponseEntity<?> update(@RequestBody Collection<WorkDay> schedule,
                              Authentication authentication);
 
     @IsDepartmentOrShiftUser

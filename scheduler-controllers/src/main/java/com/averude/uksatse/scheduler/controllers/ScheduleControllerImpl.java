@@ -10,48 +10,41 @@ import com.averude.uksatse.scheduler.security.entity.ShiftAdminUserAccount;
 import com.averude.uksatse.scheduler.security.modifier.entity.DepartmentIdEntityModifier;
 import com.averude.uksatse.scheduler.shared.service.ScheduleGenerationService;
 import com.averude.uksatse.scheduler.shared.service.ScheduleService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
 
 @Slf4j
 @RestController
+@RequiredArgsConstructor
 public class ScheduleControllerImpl implements ScheduleController {
 
     private final ScheduleService           scheduleService;
     private final ScheduleGenerationService scheduleGenerationService;
     private final DepartmentIdEntityModifier<WorkDay> entityModifier;
 
-    @Autowired
-    public ScheduleControllerImpl(ScheduleService scheduleService,
-                                  DepartmentIdEntityModifier<WorkDay> entityModifier,
-                                  ScheduleGenerationService scheduleGenerationService) {
-        this.scheduleService = scheduleService;
-        this.entityModifier = entityModifier;
-        this.scheduleGenerationService = scheduleGenerationService;
-    }
-
     @Override
-    public ResponseEntity<Iterable<WorkDay>> create(Iterable<WorkDay> schedule,
+    public ResponseEntity<Iterable<WorkDay>> create(Collection<WorkDay> schedule,
                                                     Authentication authentication){
-        schedule.forEach(workDay -> entityModifier.modify(workDay, authentication));
+        entityModifier.modifyAll(schedule, authentication);
         scheduleService.saveAll(schedule);
-        log.debug("Schedule created. Sending response.");
+        log.debug("User:{} - {} work days created.", authentication.getPrincipal(), schedule.size());
         return ResponseEntity.ok(schedule);
     }
 
     @Override
-    public ResponseEntity<?> update(Iterable<WorkDay> schedule,
+    public ResponseEntity<?> update(Collection<WorkDay> schedule,
                                     Authentication authentication) {
-        schedule.forEach(workDay -> entityModifier.modify(workDay, authentication));
+        entityModifier.modifyAll(schedule, authentication);
         scheduleService.saveAll(schedule);
-        log.debug("Schedule updated. Sending response.");
+        log.debug("User:{} - {} work days updated.", authentication.getPrincipal(), schedule.size());
         return ResponseEntity.ok("WorkDays was successfully updated");
     }
 
@@ -62,7 +55,7 @@ public class ScheduleControllerImpl implements ScheduleController {
 
         var userAccount = authentication.getPrincipal();
 
-        log.debug("Received GET request from user={} with params: from={}, to={}", userAccount, from, to);
+        log.debug("User:{} - Getting work schedule from:{} to:{}", userAccount, from, to);
 
         if (userAccount instanceof DepartmentAdminUserAccount) {
             var account = (DepartmentAdminUserAccount) userAccount;

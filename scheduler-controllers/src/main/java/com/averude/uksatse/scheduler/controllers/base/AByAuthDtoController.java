@@ -31,26 +31,26 @@ public abstract class AByAuthDtoController<E extends HasId, C extends Serializab
     }
 
     public List<BasicDto<E, C>> getAllDtoByAuth(@NonNull Authentication authentication) {
-        logger.debug("User:{} - Getting all DTOs.", authentication.getDetails());
+        logger.debug("User:{} - Getting all DTOs.", authentication.getPrincipal());
         return dtoMethodResolver.findAll(authentication, service,  null, null);
     }
 
     public List<BasicDto<E, C>> getAllDtoByAuthAndDate(@NonNull Authentication authentication,
                                                        @NonNull LocalDate from,
                                                        @NonNull LocalDate to) {
-        logger.debug("User:{} - Getting all DTOs from:{} to:{}.", authentication.getDetails(), from, to);
+        logger.debug("User:{} - Getting all DTOs from:{} to:{}.", authentication.getPrincipal(), from, to);
         return dtoMethodResolver.findAll(authentication, service, from, to);
     }
 
     public BasicDto<E, C> postDto(BasicDto<E, C> dto, Authentication authentication) {
         if (dtoModifier != null) dtoModifier.modify(dto, authentication);
-        logger.debug("User:{} - Posting DTO:{}.", authentication.getDetails(), dto);
+        logger.debug("User:{} - Posting DTO:{}.", authentication.getPrincipal(), dto);
         return service.saveDto(dto);
     }
 
     public BasicDto<E, C> putDto(BasicDto<E, C> dto, Authentication authentication) {
         if (dtoModifier != null) dtoModifier.modify(dto, authentication);
-        logger.debug("User:{} - Putting DTO:{}.", authentication.getDetails(), dto);
+        logger.debug("User:{} - Putting DTO:{}.", authentication.getPrincipal(), dto);
         return service.saveDto(dto);
     }
 }
