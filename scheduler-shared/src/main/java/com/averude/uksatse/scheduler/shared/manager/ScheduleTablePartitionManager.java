@@ -17,16 +17,20 @@ public class ScheduleTablePartitionManager implements TablePartitionManager<Long
 
     @Override
     public void createPartition(@NonNull Long departmentId) {
+        var sqlStatement = getCreateSQLStatement(departmentId);
         log.info("Creating partition of '{}' table for department id:{}...", TABLE_NAME, departmentId);
-        jdbcTemplate.execute(getCreateSQLStatement(departmentId));
+        log.debug("Executing SQL statement:'{}'", sqlStatement);
+        jdbcTemplate.execute(sqlStatement);
         log.info("Partition of '{}' table for department id:{} was successfully created.", TABLE_NAME, departmentId);
     }
 
     @Override
     public void removePartition(@NonNull Long departmentId) {
         try {
-            log.info("Dropping partition of '{}' table for department id:{}...", TABLE_NAME, departmentId);
-            jdbcTemplate.execute(getDropSQLStatement(departmentId));
+            var sqlStatement = getDropSQLStatement(departmentId);
+            log.info("Dropping partition of '{}' table for department id:{}.", TABLE_NAME, departmentId);
+            log.debug("Executing SQL statement:'{}'", sqlStatement);
+            jdbcTemplate.execute(sqlStatement);
             log.info("Partition of '{}' table for department id:{} was successfully dropped.", TABLE_NAME, departmentId);
         } catch (Exception e) {
             log.error("Cannot remove partition: " + e.getLocalizedMessage());
