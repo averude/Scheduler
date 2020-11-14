@@ -1,8 +1,8 @@
 package com.averude.uksatse.scheduler.controllers.base;
 
 import com.averude.uksatse.scheduler.controllers.interfaces.ICrudController;
-import com.averude.uksatse.scheduler.core.entity.interfaces.HasId;
-import com.averude.uksatse.scheduler.core.service.IService;
+import com.averude.uksatse.scheduler.core.interfaces.entity.HasId;
+import com.averude.uksatse.scheduler.core.interfaces.service.IService;
 import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

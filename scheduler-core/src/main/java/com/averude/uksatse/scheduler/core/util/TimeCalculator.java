@@ -1,7 +1,7 @@
 package com.averude.uksatse.scheduler.core.util;
 
-import com.averude.uksatse.scheduler.core.entity.interfaces.HasTime;
-import com.averude.uksatse.scheduler.core.entity.interfaces.HasTimeDuration;
+import com.averude.uksatse.scheduler.core.interfaces.entity.HasTime;
+import com.averude.uksatse.scheduler.core.interfaces.entity.HasTimeDuration;
 
 import java.time.LocalDate;
 import java.util.List;

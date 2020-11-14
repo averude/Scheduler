@@ -1,8 +1,8 @@
 package com.averude.uksatse.scheduler.server.auth.service;
 
-import com.averude.uksatse.scheduler.core.service.IByDepartmentIdService;
-import com.averude.uksatse.scheduler.core.service.IByEnterpriseIdService;
-import com.averude.uksatse.scheduler.core.service.IService;
+import com.averude.uksatse.scheduler.core.interfaces.service.IByDepartmentIdService;
+import com.averude.uksatse.scheduler.core.interfaces.service.IByEnterpriseIdService;
+import com.averude.uksatse.scheduler.core.interfaces.service.IService;
 import com.averude.uksatse.scheduler.security.entity.UserAccount;
 import org.springframework.security.core.userdetails.UserDetailsService;
 

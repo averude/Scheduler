@@ -1,6 +1,6 @@
 package com.averude.uksatse.scheduler.security.state.entity;
 
-import com.averude.uksatse.scheduler.core.service.IService;
+import com.averude.uksatse.scheduler.core.interfaces.service.IService;
 import com.averude.uksatse.scheduler.security.entity.GlobalAdminUserAccount;
 import com.averude.uksatse.scheduler.security.exception.NoRequiredServiceException;
 import org.springframework.stereotype.Component;

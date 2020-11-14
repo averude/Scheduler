@@ -1,6 +1,6 @@
 package com.averude.uksatse.scheduler.security.modifier.entity;
 
-import com.averude.uksatse.scheduler.core.entity.interfaces.HasEnterpriseId;
+import com.averude.uksatse.scheduler.core.interfaces.entity.HasEnterpriseId;
 import com.averude.uksatse.scheduler.security.entity.EnterpriseAdminUserAccount;
 import com.averude.uksatse.scheduler.security.exception.NullOrgLevelIdException;
 import org.springframework.security.core.Authentication;

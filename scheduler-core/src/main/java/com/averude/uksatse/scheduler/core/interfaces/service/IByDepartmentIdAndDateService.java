@@ -1,4 +1,4 @@
-package com.averude.uksatse.scheduler.core.service;
+package com.averude.uksatse.scheduler.core.interfaces.service;
 
 import com.averude.uksatse.scheduler.core.validation.CheckDateParameters;
 

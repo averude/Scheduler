@@ -2,7 +2,7 @@ package com.averude.uksatse.scheduler.generator.utils;
 
 import com.averude.uksatse.scheduler.core.entity.Employee;
 import com.averude.uksatse.scheduler.core.entity.ShiftComposition;
-import com.averude.uksatse.scheduler.core.entity.interfaces.HasDateDuration;
+import com.averude.uksatse.scheduler.core.interfaces.entity.HasDateDuration;
 import com.averude.uksatse.scheduler.core.util.OffsetCalculator;
 import com.averude.uksatse.scheduler.generator.model.ScheduleGenerationInterval;
 import lombok.extern.slf4j.Slf4j;

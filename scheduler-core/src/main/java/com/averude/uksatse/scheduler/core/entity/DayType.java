@@ -1,7 +1,7 @@
 package com.averude.uksatse.scheduler.core.entity;
 
-import com.averude.uksatse.scheduler.core.entity.interfaces.HasEnterpriseId;
-import com.averude.uksatse.scheduler.core.entity.interfaces.HasId;
+import com.averude.uksatse.scheduler.core.interfaces.entity.HasEnterpriseId;
+import com.averude.uksatse.scheduler.core.interfaces.entity.HasId;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

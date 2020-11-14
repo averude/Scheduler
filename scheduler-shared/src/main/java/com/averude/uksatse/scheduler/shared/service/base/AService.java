@@ -1,6 +1,6 @@
 package com.averude.uksatse.scheduler.shared.service.base;
 
-import com.averude.uksatse.scheduler.core.service.IService;
+import com.averude.uksatse.scheduler.core.interfaces.service.IService;
 import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
 

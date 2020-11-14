@@ -1,8 +1,8 @@
 package com.averude.uksatse.scheduler.core.entity;
 
 import com.averude.uksatse.scheduler.core.converters.ListStringConverter;
-import com.averude.uksatse.scheduler.core.entity.interfaces.HasEnterpriseId;
-import com.averude.uksatse.scheduler.core.entity.interfaces.HasId;
+import com.averude.uksatse.scheduler.core.interfaces.entity.HasEnterpriseId;
+import com.averude.uksatse.scheduler.core.interfaces.entity.HasId;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,7 +1,7 @@
 package com.averude.uksatse.scheduler.core.util;
 
-import com.averude.uksatse.scheduler.core.entity.interfaces.HasTime;
-import com.averude.uksatse.scheduler.core.entity.interfaces.HasTimeDuration;
+import com.averude.uksatse.scheduler.core.interfaces.entity.HasTime;
+import com.averude.uksatse.scheduler.core.interfaces.entity.HasTimeDuration;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;

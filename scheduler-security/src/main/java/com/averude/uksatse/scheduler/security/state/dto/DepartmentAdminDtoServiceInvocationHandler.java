@@ -1,9 +1,9 @@
 package com.averude.uksatse.scheduler.security.state.dto;
 
 import com.averude.uksatse.scheduler.core.dto.BasicDto;
-import com.averude.uksatse.scheduler.core.service.IByDepartmentIdAndDateDtoService;
-import com.averude.uksatse.scheduler.core.service.IByDepartmentIdDtoService;
-import com.averude.uksatse.scheduler.core.service.IService;
+import com.averude.uksatse.scheduler.core.interfaces.service.IByDepartmentIdAndDateDtoService;
+import com.averude.uksatse.scheduler.core.interfaces.service.IByDepartmentIdDtoService;
+import com.averude.uksatse.scheduler.core.interfaces.service.IService;
 import com.averude.uksatse.scheduler.security.entity.DepartmentAdminUserAccount;
 import com.averude.uksatse.scheduler.security.exception.NoRequiredServiceException;
 import com.averude.uksatse.scheduler.security.exception.NullOrgLevelIdException;

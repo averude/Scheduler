@@ -2,8 +2,8 @@ package com.averude.uksatse.scheduler.controllers.base;
 
 import com.averude.uksatse.scheduler.controllers.interfaces.IByAuthAndDateController;
 import com.averude.uksatse.scheduler.controllers.interfaces.IByAuthController;
-import com.averude.uksatse.scheduler.core.entity.interfaces.HasId;
-import com.averude.uksatse.scheduler.core.service.IService;
+import com.averude.uksatse.scheduler.core.interfaces.entity.HasId;
+import com.averude.uksatse.scheduler.core.interfaces.service.IService;
 import com.averude.uksatse.scheduler.security.modifier.entity.EntityModifier;
 import com.averude.uksatse.scheduler.security.state.entity.IByAuthMethodResolver;
 import lombok.NonNull;

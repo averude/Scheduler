@@ -1,7 +1,7 @@
 package com.averude.uksatse.scheduler.shared.service.base;
 
-import com.averude.uksatse.scheduler.core.service.IByDepartmentIdService;
-import com.averude.uksatse.scheduler.core.service.IByShiftIdService;
+import com.averude.uksatse.scheduler.core.interfaces.service.IByDepartmentIdService;
+import com.averude.uksatse.scheduler.core.interfaces.service.IByShiftIdService;
 import com.averude.uksatse.scheduler.shared.repository.ShiftRepository;
 import com.averude.uksatse.scheduler.shared.repository.interfaces.IByDepartmentIdRepository;
 import org.springframework.transaction.annotation.Transactional;

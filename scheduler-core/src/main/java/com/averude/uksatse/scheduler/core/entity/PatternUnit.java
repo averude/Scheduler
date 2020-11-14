@@ -1,7 +1,7 @@
 package com.averude.uksatse.scheduler.core.entity;
 
-import com.averude.uksatse.scheduler.core.entity.interfaces.HasDayTypeIdAndTime;
-import com.averude.uksatse.scheduler.core.entity.interfaces.HasId;
+import com.averude.uksatse.scheduler.core.interfaces.entity.HasDayTypeIdAndTime;
+import com.averude.uksatse.scheduler.core.interfaces.entity.HasId;
 import com.averude.uksatse.scheduler.core.json.deserializer.StringToIntTimeDeserializer;
 import com.averude.uksatse.scheduler.core.json.serializer.IntToStringTimeSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;

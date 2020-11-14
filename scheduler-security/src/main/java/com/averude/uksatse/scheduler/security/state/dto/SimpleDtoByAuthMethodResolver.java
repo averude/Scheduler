@@ -1,7 +1,7 @@
 package com.averude.uksatse.scheduler.security.state.dto;
 
 import com.averude.uksatse.scheduler.core.dto.BasicDto;
-import com.averude.uksatse.scheduler.core.service.IService;
+import com.averude.uksatse.scheduler.core.interfaces.service.IService;
 import com.averude.uksatse.scheduler.security.exception.NoServiceInvocationHandlerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

@@ -1,8 +1,8 @@
 package com.averude.uksatse.scheduler.controllers.base;
 
 import com.averude.uksatse.scheduler.core.dto.BasicDto;
-import com.averude.uksatse.scheduler.core.entity.interfaces.HasId;
-import com.averude.uksatse.scheduler.core.service.IDtoService;
+import com.averude.uksatse.scheduler.core.interfaces.entity.HasId;
+import com.averude.uksatse.scheduler.core.interfaces.service.IDtoService;
 import com.averude.uksatse.scheduler.security.modifier.dto.DtoModifier;
 import com.averude.uksatse.scheduler.security.state.dto.IByAuthDtoMethodResolver;
 import lombok.NonNull;

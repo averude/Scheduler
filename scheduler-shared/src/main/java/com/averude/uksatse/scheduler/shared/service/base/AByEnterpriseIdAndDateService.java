@@ -1,8 +1,8 @@
 package com.averude.uksatse.scheduler.shared.service.base;
 
-import com.averude.uksatse.scheduler.core.service.IByDepartmentIdAndDateService;
-import com.averude.uksatse.scheduler.core.service.IByEnterpriseIdAndDateService;
-import com.averude.uksatse.scheduler.core.service.IByShiftIdAndDateService;
+import com.averude.uksatse.scheduler.core.interfaces.service.IByDepartmentIdAndDateService;
+import com.averude.uksatse.scheduler.core.interfaces.service.IByEnterpriseIdAndDateService;
+import com.averude.uksatse.scheduler.core.interfaces.service.IByShiftIdAndDateService;
 import com.averude.uksatse.scheduler.shared.repository.DepartmentRepository;
 import com.averude.uksatse.scheduler.shared.repository.ShiftRepository;
 import com.averude.uksatse.scheduler.shared.repository.interfaces.IByEnterpriseIdAndDateRepository;

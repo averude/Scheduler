@@ -1,9 +1,9 @@
 package com.averude.uksatse.scheduler.security.state.entity;
 
-import com.averude.uksatse.scheduler.core.service.IByEnterpriseIdAndDateService;
-import com.averude.uksatse.scheduler.core.service.IByEnterpriseIdService;
-import com.averude.uksatse.scheduler.core.service.IByShiftIdAndDateService;
-import com.averude.uksatse.scheduler.core.service.IByShiftIdService;
+import com.averude.uksatse.scheduler.core.interfaces.service.IByEnterpriseIdAndDateService;
+import com.averude.uksatse.scheduler.core.interfaces.service.IByEnterpriseIdService;
+import com.averude.uksatse.scheduler.core.interfaces.service.IByShiftIdAndDateService;
+import com.averude.uksatse.scheduler.core.interfaces.service.IByShiftIdService;
 import com.averude.uksatse.scheduler.security.entity.ShiftAdminUserAccount;
 import com.averude.uksatse.scheduler.security.exception.NoRequiredServiceException;
 import com.averude.uksatse.scheduler.security.exception.NullOrgLevelIdException;

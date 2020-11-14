@@ -1,7 +1,7 @@
 package com.averude.uksatse.scheduler.generator.model;
 
 import com.averude.uksatse.scheduler.core.entity.Employee;
-import com.averude.uksatse.scheduler.core.entity.interfaces.HasDateDuration;
+import com.averude.uksatse.scheduler.core.interfaces.entity.HasDateDuration;
 import lombok.Data;
 
 import java.time.LocalDate;
