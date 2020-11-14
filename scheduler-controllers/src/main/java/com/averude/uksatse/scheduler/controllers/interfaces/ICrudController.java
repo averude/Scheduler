@@ -12,5 +12,5 @@ public interface ICrudController<T> {
 
     ResponseEntity<?> put(T entity, Authentication authentication);
 
-    ResponseEntity<?> delete(Long id);
+    ResponseEntity<?> delete(Long id, Authentication authentication);
 }

@@ -41,24 +41,28 @@ public abstract class AByAuthController<T extends HasId>
     }
 
     public List<T> getAllByAuth(@NonNull Authentication authentication) {
+        logger.debug("User:{} - Getting all entities.", authentication.getPrincipal());
         return methodResolver.findAll(authentication, service, null, null);
     }
 
     public List<T> getAllByAuth(@NonNull Authentication authentication,
                                 @NonNull LocalDate from,
                                 @NonNull LocalDate to) {
+        logger.debug("User:{} - Getting all entities from:{} to:{}.", authentication.getPrincipal(), from, to);
         return methodResolver.findAll(authentication, service, from, to);
     }
 
     @Override
     public ResponseEntity<Long> post(T entity, Authentication authentication) {
         if (entityModifier != null) entityModifier.modify(entity, authentication);
+        logger.debug("User:{} - Posting entity:{}.", authentication.getPrincipal(), entity);
         return super.post(entity, authentication);
     }
 
     @Override
     public ResponseEntity<?> put(T entity, Authentication authentication) {
         if (entityModifier != null) entityModifier.modify(entity, authentication);
+        logger.debug("User:{} - Putting entity:{}.", authentication.getPrincipal(), entity);
         return super.put(entity, authentication);
     }
 }

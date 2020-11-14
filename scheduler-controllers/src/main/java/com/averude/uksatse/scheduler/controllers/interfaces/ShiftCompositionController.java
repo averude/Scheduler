@@ -41,5 +41,5 @@ public interface ShiftCompositionController
 
     @IsDepartmentAdmin
     @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
-    ResponseEntity<?> delete(@PathVariable Long id);
+    ResponseEntity<?> delete(@PathVariable Long id, Authentication authentication);
 }

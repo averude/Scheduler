@@ -31,12 +31,12 @@ public abstract class ACrudController<T extends HasId> implements ICrudControlle
     }
 
     public List<T> getAll() {
-        logger.trace("Getting all entities...");
+        logger.debug("Getting all entities.");
         return service.findAll();
     }
 
     public Optional<T> get(Long id) {
-        logger.trace("Getting entity by id: {}...", id);
+        logger.debug("Getting entity by id:{}.", id);
         return service.findById(id);
     }
 
@@ -45,21 +45,23 @@ public abstract class ACrudController<T extends HasId> implements ICrudControlle
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/{id}")
                 .buildAndExpand(entity.getId()).toUri();
-        logger.info("Created entity: {}...", entity.toString());
+        logger.debug("User:{} - Created entity:{}.", authentication.getPrincipal(), entity);
         return ResponseEntity.created(location).body(entity.getId());
     }
 
     public ResponseEntity<?> put(T entity, Authentication authentication) {
         service.save(entity);
-        logger.info("Updated entity: {}...", entity.toString());
+        logger.debug("User:{} - Updated entity:{}.", authentication.getPrincipal(), entity);
         return ResponseEntity.ok("Entity with ID:" + entity.getId() +
                 " was successfully updated");
     }
 
-    public ResponseEntity<?> delete(Long id) {
-        service.deleteById(id);
-        logger.info("Removed entity with id: {}...", id);
-        return new ResponseEntity<>("Entity with ID:" + id +
-                " was successfully deleted", HttpStatus.NO_CONTENT);
+    public ResponseEntity<?> delete(Long id, Authentication authentication) {
+        return service.findById(id).map(entity -> {
+            service.delete(entity);
+            logger.debug("User:{} - Removed entity:{}.", authentication.getPrincipal(), entity);
+            return new ResponseEntity<>("Entity with ID:" + id +
+                    " was successfully deleted", HttpStatus.NO_CONTENT);
+        }).orElseThrow();
     }
 }

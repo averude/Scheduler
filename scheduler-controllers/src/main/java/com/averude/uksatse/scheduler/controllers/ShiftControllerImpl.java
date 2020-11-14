@@ -47,7 +47,7 @@ public class ShiftControllerImpl
     }
 
     @Override
-    public ResponseEntity<?> delete(Long id) {
-        return super.delete(id);
+    public ResponseEntity<?> delete(Long id, Authentication authentication) {
+        return super.delete(id, authentication);
     }
 }

@@ -40,5 +40,5 @@ public interface SpecialCalendarDateController
 
     @IsEnterpriseAdmin
     @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
-    ResponseEntity<?> delete(@PathVariable Long id);
+    ResponseEntity<?> delete(@PathVariable Long id, Authentication authentication);
 }

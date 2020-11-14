@@ -34,5 +34,5 @@ public interface PositionController extends ICrudController<Position>, IByAuthCo
 
     @IsDepartmentAdmin
     @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
-    ResponseEntity<?> delete(@PathVariable Long id);
+    ResponseEntity<?> delete(@PathVariable Long id, Authentication authentication);
 }

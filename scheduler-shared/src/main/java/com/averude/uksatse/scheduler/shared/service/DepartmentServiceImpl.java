@@ -59,6 +59,7 @@ public class DepartmentServiceImpl
 
     @Override
     public void delete(Department department) {
-        deleteById(department.getId());
+        partitionManager.removePartition(department.getId());
+        super.delete(department);
     }
 }

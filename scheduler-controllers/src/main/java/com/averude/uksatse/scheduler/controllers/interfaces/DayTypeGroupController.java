@@ -34,5 +34,5 @@ public interface DayTypeGroupController extends ICrudController<DayTypeGroup> {
 
     @IsGlobalAdmin
     @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
-    ResponseEntity<?> delete(@PathVariable Long id);
+    ResponseEntity<?> delete(@PathVariable Long id, Authentication authentication);
 }
