@@ -1,12 +1,14 @@
 version: '3.7'
 services:
 
-  scheduler-database-server:
+  database-server:
+    environment:
+      POSTGRES_PASSWORD: scheduler
     build:
-      context: ./scheduler-database-server
+      context: ./database-server
       dockerfile: Dockerfile
-    image: scheduler-database-server
-    hostname: scheduler-database-server
+    image: database-server
+    hostname: database-server
     restart: always
     logging:
       driver: gelf
@@ -18,7 +20,7 @@ services:
     ports:
       - 5432:5432
 
-  scheduler-auth-server:
+  auth-server:
     environment:
       GRAYLOG_HOST: $GRAYLOG_HOST
       GRAYLOG_GELF_PORT: $GRAYLOG_GELF_PORT
@@ -29,27 +31,30 @@ services:
       DB_USERNAME: $DB_USERNAME
       DB_PASSWD: $DB_PASSWD
     build:
-      context: ./scheduler-auth-server
+      context: ./auth-server
       dockerfile: Dockerfile
-    image: scheduler-auth-server
-    hostname: scheduler-auth-server
+    image: auth-server
+    hostname: auth-server
     restart: always
     volumes:
       - ${LOG_VOLUME_PATH}:/logs
     ports:
       - 5000:5000
 
-  scheduler-gateway-server:
+  gateway-server:
+    environment:
+      GRAYLOG_HOST: $GRAYLOG_HOST
+      GRAYLOG_GELF_PORT: $GRAYLOG_GELF_PORT
     build:
-      context: ./scheduler-gateway-server
+      context: ./gateway-server
       dockerfile: Dockerfile
-    image: scheduler-gateway-server
-    hostname: scheduler-gateway-server
+    image: gateway-server
+    hostname: gateway-server
     restart: always
     ports:
       - 4000:4000
 
-  scheduler-backend-server:
+  backend-server:
     environment:
       GRAYLOG_HOST: $GRAYLOG_HOST
       GRAYLOG_GELF_PORT: $GRAYLOG_GELF_PORT
@@ -62,24 +67,24 @@ services:
       DB_USERNAME: $DB_USERNAME
       DB_PASSWD: $DB_PASSWD
     build:
-      context: ./scheduler-backend-server
+      context: ./backend-server
       dockerfile: Dockerfile
-    image: scheduler-backend-server
-    hostname: scheduler-backend-server
+    image: backend-server
+    hostname: backend-server
     restart: always
     volumes:
       - ${LOG_VOLUME_PATH}:/logs
     depends_on:
-      - scheduler-auth-server
+      - auth-server
     ports:
       - 8080:8080
 
-  scheduler-frontend-server:
+  frontend-server:
     build:
-      context: ./scheduler-frontend-server
+      context: ./frontend-server
       dockerfile: Dockerfile
-    image: scheduler-frontend-server
-    hostname: scheduler-frontend-server
+    image: frontend-server
+    hostname: frontend-server
     restart: always
     logging:
       driver: gelf

@@ -25,16 +25,16 @@
     </properties>
 
     <modules>
-        <module>scheduler-core</module>
-        <module>scheduler-shared</module>
-        <module>scheduler-generators</module>
-        <module>scheduler-gateway-server</module>
-        <module>scheduler-auth-server</module>
-        <module>scheduler-backend-server</module>
-        <module>scheduler-statistics</module>
-        <module>scheduler-security</module>
-        <module>scheduler-controllers</module>
-        <module>scheduler-test-kit</module>
+        <module>core</module>
+        <module>shared</module>
+        <module>generators</module>
+        <module>gateway-server</module>
+        <module>auth-server</module>
+        <module>backend-server</module>
+        <module>statistics</module>
+        <module>security</module>
+        <module>controllers</module>
+        <module>test-kit</module>
     </modules>
 
     <dependencyManagement>
