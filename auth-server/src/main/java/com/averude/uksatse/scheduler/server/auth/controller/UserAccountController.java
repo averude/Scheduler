@@ -27,19 +27,19 @@ public interface UserAccountController {
 
     @IsDepartmentAdmin
     @RequestMapping(value = "/users/shift_admins", method = RequestMethod.POST)
-    ResponseEntity<String> createNewShiftUser(@Valid @RequestBody ShiftAdminUserAccount user);
+    ResponseEntity<String> createNewShiftUser(@Valid @RequestBody ShiftAdminUserAccount user, Authentication authentication);
 
     @IsEnterpriseAdmin
     @RequestMapping(value = "/users/department_admins", method = RequestMethod.POST)
-    ResponseEntity<String> createNewDepartmentUser(@Valid @RequestBody DepartmentAdminUserAccount user);
+    ResponseEntity<String> createNewDepartmentUser(@Valid @RequestBody DepartmentAdminUserAccount user, Authentication authentication);
 
     @IsGlobalAdmin
     @RequestMapping(value = "/users/enterprise_admins", method = RequestMethod.POST)
-    ResponseEntity<String> createNewEnterpriseUser(@Valid @RequestBody EnterpriseAdminUserAccount user);
+    ResponseEntity<String> createNewEnterpriseUser(@Valid @RequestBody EnterpriseAdminUserAccount user, Authentication authentication);
 
     @RequestMapping(value = "/users", method = RequestMethod.PUT)
-    ResponseEntity<?> updateUser(@Valid @RequestBody UserAccount user);
+    ResponseEntity<?> updateUser(@Valid @RequestBody UserAccount user, Authentication authentication);
 
-    @RequestMapping(value = "/users/{username}", method = RequestMethod.DELETE)
-    ResponseEntity<?> deleteUser(@PathVariable String username);
+    @RequestMapping(value = "/users/{accountId}", method = RequestMethod.DELETE)
+    ResponseEntity<?> deleteUser(@PathVariable Long accountId, Authentication authentication);
 }

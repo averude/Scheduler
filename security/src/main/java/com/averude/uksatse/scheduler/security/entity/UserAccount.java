@@ -16,6 +16,9 @@ import java.util.StringJoiner;
 @Inheritance(strategy = InheritanceType.JOINED)
 public class UserAccount implements Serializable {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @NotNull
     private String username;
     @NotNull
     private String password;

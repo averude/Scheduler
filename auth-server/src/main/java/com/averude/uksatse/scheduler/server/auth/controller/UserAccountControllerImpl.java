@@ -3,6 +3,7 @@ package com.averude.uksatse.scheduler.server.auth.controller;
 import com.averude.uksatse.scheduler.security.details.UserAccountDetails;
 import com.averude.uksatse.scheduler.security.entity.*;
 import com.averude.uksatse.scheduler.server.auth.service.UserAccountDetailsService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,7 @@ import java.net.URI;
 import java.security.Principal;
 import java.util.List;
 
+@Slf4j
 @RestController
 public class UserAccountControllerImpl implements UserAccountController {
 
@@ -36,6 +38,7 @@ public class UserAccountControllerImpl implements UserAccountController {
     @Override
     public List<UserAccount> getAllByAuth(Authentication authentication) throws Exception {
         var userAccount = ((UserAccountDetails) authentication.getPrincipal()).getUserAccount();
+        log.debug("User:{} - Getting list of user accounts.", userAccount);
 
         if (userAccount instanceof GlobalAdminUserAccount) {
             return userAccountDetailsService.findAll();
@@ -48,21 +51,25 @@ public class UserAccountControllerImpl implements UserAccountController {
 
 
     @Override
-    public ResponseEntity<String> createNewShiftUser(@Valid @RequestBody ShiftAdminUserAccount user) {
-        return createNewUser(user);
+    public ResponseEntity<String> createNewShiftUser(@Valid @RequestBody ShiftAdminUserAccount user,
+                                                     Authentication authentication) {
+        return createNewUser(user, authentication);
     }
 
     @Override
-    public ResponseEntity<String> createNewDepartmentUser(@Valid @RequestBody DepartmentAdminUserAccount user) {
-        return createNewUser(user);
+    public ResponseEntity<String> createNewDepartmentUser(@Valid @RequestBody DepartmentAdminUserAccount user,
+                                                          Authentication authentication) {
+        return createNewUser(user, authentication);
     }
 
     @Override
-    public ResponseEntity<String> createNewEnterpriseUser(@Valid @RequestBody EnterpriseAdminUserAccount user) {
-        return createNewUser(user);
+    public ResponseEntity<String> createNewEnterpriseUser(@Valid @RequestBody EnterpriseAdminUserAccount user,
+                                                          Authentication authentication) {
+        return createNewUser(user, authentication);
     }
 
-    private ResponseEntity<String> createNewUser(UserAccount user) {
+    private ResponseEntity<String> createNewUser(UserAccount user, Authentication authentication) {
+        log.debug("User:{} - Creating new user account:{}", authentication.getPrincipal(), user);
         userAccountDetailsService.save(user);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/{username}")
@@ -72,16 +79,20 @@ public class UserAccountControllerImpl implements UserAccountController {
     }
 
     @Override
-    public ResponseEntity<?> updateUser(@Valid @RequestBody UserAccount user) {
+    public ResponseEntity<?> updateUser(@Valid @RequestBody UserAccount user, Authentication authentication) {
+        log.debug("User:{} - Updating user account:{}", authentication.getPrincipal(), user);
         userAccountDetailsService.save(user);
         return ResponseEntity.ok("User " + user.getUsername() +
                 " was successfully updated");
     }
 
     @Override
-    public ResponseEntity<?> deleteUser(@PathVariable String username) {
-        userAccountDetailsService.deleteById(username);
-        return new ResponseEntity<>("User " + username +
-                " was successfully deleted", HttpStatus.NO_CONTENT);
+    public ResponseEntity<?> deleteUser(@PathVariable Long accountId, Authentication authentication) {
+        return userAccountDetailsService.findById(accountId).map(userAccount -> {
+            log.debug("User:{} - Deleting user account:{}", authentication.getPrincipal(), userAccount);
+            userAccountDetailsService.delete(userAccount);
+            return new ResponseEntity<>("User " + userAccount.getUsername() +
+                    " was successfully deleted", HttpStatus.NO_CONTENT);
+        }).orElseThrow();
     }
 }

@@ -7,7 +7,7 @@ import com.averude.uksatse.scheduler.security.entity.UserAccount;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 public interface UserAccountDetailsService extends UserDetailsService,
-        IByEnterpriseIdService<UserAccount, String>,
-        IByDepartmentIdService<UserAccount, String>,
-        IService<UserAccount, String> {
+        IByEnterpriseIdService<UserAccount, Long>,
+        IByDepartmentIdService<UserAccount, Long>,
+        IService<UserAccount, Long> {
 }

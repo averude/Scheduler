@@ -20,7 +20,7 @@ import java.util.Map;
 @Slf4j
 @Service
 public class UserAccountDetailsServiceImpl
-        extends AService<UserAccount, String>
+        extends AService<UserAccount, Long>
         implements UserAccountDetailsService {
 
     private final PasswordEncoder encoder;
@@ -51,8 +51,8 @@ public class UserAccountDetailsServiceImpl
 
     @Override
     @Transactional
-    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        return userAccountRepository.findById(s)
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userAccountRepository.findByUsername(username)
                 .map(userAccount -> {
                     var userDetailsCreator = detailsCreatorMap.get(userAccount.getClass());
                     if (userDetailsCreator != null) {
@@ -66,7 +66,6 @@ public class UserAccountDetailsServiceImpl
     @Transactional
     public UserAccount save(UserAccount user) {
         encodePassword(user);
-        log.info("User {} created/updated in the database", user.getUsername());
         return super.save(user);
     }
 

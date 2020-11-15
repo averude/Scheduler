@@ -243,46 +243,51 @@ CREATE TABLE IF NOT EXISTS special_calendar_dates (
 -- Security
 
 CREATE TABLE IF NOT EXISTS user_accounts (
+  id              SERIAL,
   username        VARCHAR(64)     NOT NULL,
   password        VARCHAR(64)     NOT NULL,
   role            VARCHAR(64)     NOT NULL    DEFAULT 'USER',
   locked          BOOLEAN         NOT NULL    DEFAULT FALSE,
   enabled         BOOLEAN         NOT NULL    DEFAULT TRUE,
 
-  PRIMARY KEY (username)
+  PRIMARY KEY (id)
 );
 
 CREATE TABLE IF NOT EXISTS shift_admin_user_accounts (
-  username        VARCHAR(64)     NOT NULL,
+  id              SERIAL,
+--   username        VARCHAR(64)     NOT NULL,
   shift_id        INTEGER         NOT NULL,
 
-  PRIMARY KEY (username),
-  FOREIGN KEY (username)    REFERENCES user_accounts(username) ON DELETE CASCADE,
-  FOREIGN KEY (shift_id)    REFERENCES shifts(id)              ON DELETE CASCADE
+  PRIMARY KEY (id),
+  FOREIGN KEY (id)        REFERENCES user_accounts(id) ON DELETE CASCADE,
+  FOREIGN KEY (shift_id)  REFERENCES shifts(id)        ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS department_admin_user_accounts (
-  username        VARCHAR(64)     NOT NULL,
+  id              SERIAL,
+--   username        VARCHAR(64)     NOT NULL,
   department_id   INTEGER         NOT NULL,
 
-  PRIMARY KEY (username),
-  FOREIGN KEY (username)        REFERENCES user_accounts(username)  ON DELETE CASCADE,
-  FOREIGN KEY (department_id)   REFERENCES departments(id)          ON DELETE CASCADE
+  PRIMARY KEY (id),
+  FOREIGN KEY (id)            REFERENCES user_accounts(id)  ON DELETE CASCADE,
+  FOREIGN KEY (department_id) REFERENCES departments(id)    ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS enterprise_admin_user_accounts (
-  username        VARCHAR(64)     NOT NULL,
+  id              SERIAL,
+--   username        VARCHAR(64)     NOT NULL,
   enterprise_id   INTEGER         NOT NULL,
 
-  PRIMARY KEY (username),
-  FOREIGN KEY (username)        REFERENCES user_accounts(username)  ON DELETE CASCADE,
-  FOREIGN KEY (enterprise_id)   REFERENCES enterprises(id)          ON DELETE CASCADE
+  PRIMARY KEY (id),
+  FOREIGN KEY (id)            REFERENCES user_accounts(id)  ON DELETE CASCADE,
+  FOREIGN KEY (enterprise_id) REFERENCES enterprises(id)    ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS global_admin_user_accounts (
-  username        VARCHAR(64)     NOT NULL,
+  id              SERIAL,
+--   username        VARCHAR(64)     NOT NULL,
   is_global_admin BOOLEAN         NOT NULL,
 
-  PRIMARY KEY (username),
-  FOREIGN KEY (username)        REFERENCES user_accounts(username)  ON DELETE CASCADE
+  PRIMARY KEY (id),
+  FOREIGN KEY (id)            REFERENCES user_accounts(id)  ON DELETE CASCADE
 );
