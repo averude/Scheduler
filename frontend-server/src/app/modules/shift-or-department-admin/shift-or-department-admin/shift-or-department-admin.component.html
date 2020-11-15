@@ -10,18 +10,18 @@
           <a>{{department?.name || '-'}}</a>
         </div>
         <div id="department-position" >
-          <a *ngIf="isDepartmentLevel">Department administrator</a>
-          <a *ngIf="isShiftLevel">Shift administrator</a>
+          <a *ngIf="userAccessRights.isDepartmentLevel">Department administrator</a>
+          <a *ngIf="userAccessRights.isShiftLevel">Shift administrator</a>
         </div>
       </div>
     </ng-template>
 
-    <ng-template toolBarItemDef *ngIf="isAdmin">
+    <ng-template toolBarItemDef *ngIf="userAccessRights.isAdmin && userAccessRights.isDepartmentLevel">
       <img src="assets/img/cal_icon.png"
            routerLink="schedule/calendar">
     </ng-template>
 
-    <ng-template toolBarItemDef *ngIf="isAdmin && isDepartmentLevel">
+    <ng-template toolBarItemDef *ngIf="userAccessRights.isAdmin && userAccessRights.isDepartmentLevel">
       <img src="assets/img/set_icon.png"
            routerLink="management">
     </ng-template>

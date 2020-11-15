@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from "../../../../../services/http/auth.service";
+import { UserAccessRights } from "../../../../../model/user";
 
 @Component({
   selector: 'app-schedule-tab-bar',
@@ -8,12 +9,12 @@ import { AuthService } from "../../../../../services/http/auth.service";
     '../../../../../shared/common/toolbar.common.css']
 })
 export class ScheduleTabBarComponent implements OnInit {
-  isAdmin: boolean;
+  userAccessRights: UserAccessRights;
 
   constructor(private authService: AuthService) { }
 
   ngOnInit() {
-    this.isAdmin = this.authService.isAdmin();
+    this.userAccessRights = this.authService.currentUserValue.accessRights;
   }
 
 }

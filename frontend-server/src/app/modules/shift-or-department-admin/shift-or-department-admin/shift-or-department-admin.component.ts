@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Department } from '../../../model/department';
 import { DepartmentService } from '../../../services/http/department.service';
 import { AuthService } from "../../../services/http/auth.service";
+import { UserAccessRights } from "../../../model/user";
 
 @Component({
   selector: 'app-shift-or-department-admin',
@@ -10,23 +11,16 @@ import { AuthService } from "../../../services/http/auth.service";
 })
 export class ShiftOrDepartmentAdminComponent implements OnInit {
 
-  isAdmin:            boolean;
-  isDepartmentLevel:  boolean;
-  isShiftLevel:       boolean;
-
-  roles:    string[];
+  userAccessRights: UserAccessRights;
   department: Department;
 
   constructor(private authService: AuthService,
               private departmentService: DepartmentService) {}
 
   ngOnInit(): void {
+    this.userAccessRights = this.authService.currentUserValue.accessRights;
     this.departmentService.getCurrent()
       .subscribe(department => this.department = department);
-    this.isAdmin = this.authService.isAdmin();
-    this.roles = this.authService.currentUserValue.roles;
-    this.isDepartmentLevel = this.roles.includes('DEPARTMENT_ADMIN');
-    this.isShiftLevel = this.roles.includes('SHIFT_ADMIN');
   }
 
   logout() {

@@ -14,14 +14,14 @@
         <span class="link-name">Statistics</span>
       </a>
     </li>
-    <li *ngIf="isAdmin">
+    <li *ngIf="userAccessRights.isAdmin && userAccessRights.isDepartmentLevel">
       <a routerLink="compositions"
          routerLinkActive="active">
         <span class="icon-nav-site"></span>
         <span class="link-name">Shift compositions</span>
       </a>
     </li>
-    <li>
+    <li *ngIf="userAccessRights.isAdmin && userAccessRights.isDepartmentLevel">
       <a routerLink="working_norm"
          routerLinkActive="active">
         <span class="icon-nav-site"></span>
