@@ -10,7 +10,7 @@ import { AuthService } from "../../../services/http/auth.service";
 })
 export class ShiftOrDepartmentAdminComponent implements OnInit {
 
-  isAdmin:  boolean;
+  isAdmin:            boolean;
   isDepartmentLevel:  boolean;
   isShiftLevel:       boolean;
 
