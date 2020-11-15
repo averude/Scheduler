@@ -11,6 +11,9 @@ import { AuthService } from "../../../services/http/auth.service";
 export class ShiftOrDepartmentAdminComponent implements OnInit {
 
   isAdmin:  boolean;
+  isDepartmentLevel:  boolean;
+  isShiftLevel:       boolean;
+
   roles:    string[];
   department: Department;
 
@@ -22,6 +25,8 @@ export class ShiftOrDepartmentAdminComponent implements OnInit {
       .subscribe(department => this.department = department);
     this.isAdmin = this.authService.isAdmin();
     this.roles = this.authService.currentUserValue.roles;
+    this.isDepartmentLevel = this.roles.includes('DEPARTMENT_ADMIN');
+    this.isShiftLevel = this.roles.includes('SHIFT_ADMIN');
   }
 
   logout() {
