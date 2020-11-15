@@ -41,19 +41,6 @@ services:
     ports:
       - 5000:5000
 
-  gateway-server:
-    environment:
-      GRAYLOG_HOST: $GRAYLOG_HOST
-      GRAYLOG_GELF_PORT: $GRAYLOG_GELF_PORT
-    build:
-      context: ./gateway-server
-      dockerfile: Dockerfile
-    image: gateway-server
-    hostname: gateway-server
-    restart: always
-    ports:
-      - 4000:4000
-
   backend-server:
     environment:
       GRAYLOG_HOST: $GRAYLOG_HOST
@@ -94,4 +81,5 @@ services:
     volumes:
       - ${FRONTEND_VOLUME_PATH}:/usr/share/nginx/html
     ports:
+      - 4000:4000
       - 80:80 #50680

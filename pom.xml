@@ -28,7 +28,6 @@
         <module>core</module>
         <module>shared</module>
         <module>generators</module>
-        <module>gateway-server</module>
         <module>auth-server</module>
         <module>backend-server</module>
         <module>statistics</module>
