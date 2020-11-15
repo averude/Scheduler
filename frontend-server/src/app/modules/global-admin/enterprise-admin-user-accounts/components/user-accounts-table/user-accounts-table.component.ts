@@ -39,7 +39,6 @@ export class UserAccountsTableComponent extends TableBaseComponent<UserAccount> 
     this.openAddOrEditDialog(userAccount, data, UserAccountsDialogComponent);
   }
 
-
   removeEntity(entity: UserAccount): void {
     this.crudService.delete(entity.username).subscribe(res => {
       this.removeRow(entity);

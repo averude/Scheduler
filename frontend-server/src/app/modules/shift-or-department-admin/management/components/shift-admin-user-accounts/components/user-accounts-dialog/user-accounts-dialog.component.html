@@ -1,0 +1,55 @@
+<h2 matDialogTitle>{{operation}}</h2>
+<mat-dialog-content [formGroup]="dialogForm">
+
+  <mat-form-field>
+    <input matInput
+           placeholder="User name"
+           formControlName="username">
+    <mat-error *ngIf="isControlInvalid('username')">{{getErrorMessage()}}</mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput
+           type="password"
+           placeholder="Password"
+           formControlName="password">
+    <mat-error *ngIf="isControlInvalid('password')">{{getErrorMessage()}}</mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-select placeholder="Role"
+                formControlName="role">
+      <mat-option [value]="'ADMIN'">
+        {{'ADMIN'}}
+      </mat-option>
+      <mat-option [value]="'USER'">
+        {{'USER'}}
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="isControlInvalid('role')">{{getErrorMessage()}}</mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-select placeholder="Shift"
+                [compareWith]="compareNums"
+                formControlName="shiftId">
+      <mat-option *ngFor="let shift of shifts"
+                  [value]="shift.id">
+        {{shift.name}}
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="isControlInvalid('shiftId')">{{getErrorMessage()}}</mat-error>
+  </mat-form-field>
+
+  <mat-checkbox class="dialog-checkbox"
+                formControlName="locked">Locked</mat-checkbox>
+  <mat-checkbox class="dialog-checkbox"
+                formControlName="enabled">Enabled</mat-checkbox>
+
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button class="mat-raised-button" (click)="close()">Close</button>
+  <button class="mat-raised-button mat-primary" type="submit" (click)="submit()">Save</button>
+</mat-dialog-actions>
+

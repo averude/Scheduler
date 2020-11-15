@@ -1,4 +1,9 @@
-import { DepartmentAdminUserAccount, EnterpriseAdminUserAccount, UserAccount } from "../../model/accounts/user-account";
+import {
+  DepartmentAdminUserAccount,
+  EnterpriseAdminUserAccount,
+  ShiftAdminUserAccount,
+  UserAccount
+} from "../../model/accounts/user-account";
 import { Observable } from "rxjs";
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
@@ -39,6 +44,14 @@ export class UserAccountService implements IByAuthService<UserAccount>, CUDServi
   createDepartmentAdmin(userAccount: DepartmentAdminUserAccount): Observable<any> {
     return this.http.post(
       `${this.config.baseUrl}/uaa/users/department_admins`,
+      userAccount,
+      {responseType: 'text'}
+    );
+  }
+
+  createShiftAdmin(userAccount: ShiftAdminUserAccount): Observable<any> {
+    return this.http.post(
+      `${this.config.baseUrl}/uaa/users/shift_admins`,
       userAccount,
       {responseType: 'text'}
     );

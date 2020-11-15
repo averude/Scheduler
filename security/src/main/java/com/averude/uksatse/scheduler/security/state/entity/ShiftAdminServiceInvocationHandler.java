@@ -1,7 +1,5 @@
 package com.averude.uksatse.scheduler.security.state.entity;
 
-import com.averude.uksatse.scheduler.core.interfaces.service.IByEnterpriseIdAndDateService;
-import com.averude.uksatse.scheduler.core.interfaces.service.IByEnterpriseIdService;
 import com.averude.uksatse.scheduler.core.interfaces.service.IByShiftIdAndDateService;
 import com.averude.uksatse.scheduler.core.interfaces.service.IByShiftIdService;
 import com.averude.uksatse.scheduler.security.entity.ShiftAdminUserAccount;
@@ -27,9 +25,9 @@ public class ShiftAdminServiceInvocationHandler implements ServiceInvocationHand
 
         if (shiftId == null) throw new NullOrgLevelIdException();
 
-        if (service instanceof IByEnterpriseIdService && (from == null) && (to == null)) {
+        if (service instanceof IByShiftIdService && (from == null) && (to == null)) {
             return ((IByShiftIdService<T, ID>) service).findAllByShiftId(shiftId);
-        } else if (service instanceof IByEnterpriseIdAndDateService && (from != null) && (to != null)) {
+        } else if (service instanceof IByShiftIdAndDateService && (from != null) && (to != null)) {
             return ((IByShiftIdAndDateService<T, ID>) service).findAllByShiftIdAndDateBetween(shiftId, from, to);
         } else {
             String errorMessage = getErrorMessage(service);

@@ -6,12 +6,17 @@ import { PatternsTableComponent } from "./components/patterns/components/pattern
 import { ShiftsTableComponent } from "./components/shifts/components/shifts-table/shifts-table.component";
 import { ManagementComponent } from "./management/management.component";
 import { DepartmentDayTypesTableComponent } from "./components/department-day-types/components/department-day-types-table/department-day-types-table.component";
+import { UserAccountsTableComponent } from "./components/shift-admin-user-accounts/components/user-accounts-table/user-accounts-table.component";
 
 const routes: Routes = [
   {
     path: '',
     component: ManagementComponent,
     children: [
+      {
+        path: 'shift_admin_user_accounts',
+        component: UserAccountsTableComponent
+      },
       {
         path: 'employees',
         component: EmployeesTableComponent

@@ -1,4 +1,6 @@
-export class UserAccount {
+import { IdEntity } from "../interface/id-entity";
+
+export class UserAccount implements IdEntity{
   id:           number;
   username:     string;
   role:         string;

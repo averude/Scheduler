@@ -1,39 +1,38 @@
-import { Component } from '@angular/core';
-import { TableBaseComponent } from "../../../../../shared/abstract-components/table-base/table-base.component";
-import { UserAccount } from "../../../../../model/accounts/user-account";
-import { UserAccountService } from "../../../../../services/http/user-account.service";
+import { TableBaseComponent } from "../../../../../../../shared/abstract-components/table-base/table-base.component";
+import { UserAccount } from "../../../../../../../model/accounts/user-account";
+import { Shift } from "../../../../../../../model/shift";
 import { MatDialog } from "@angular/material/dialog";
+import { UserAccountService } from "../../../../../../../services/http/user-account.service";
 import { NotificationsService } from "angular2-notifications";
+import { ShiftService } from "../../../../../../../services/http/shift.service";
+import { Component } from "@angular/core";
 import { UserAccountsDialogComponent } from "../user-accounts-dialog/user-accounts-dialog.component";
-import { Department } from "../../../../../model/department";
-import { DepartmentService } from "../../../../../services/http/department.service";
 
 @Component({
   selector: 'app-user-accounts-table',
   templateUrl: './user-accounts-table.component.html',
-  styleUrls: ['../../../../../shared/common/table.common.css', './user-accounts-table.component.css']
+  styleUrls: ['../../../../../../../shared/common/table.common.css', './user-accounts-table.component.css']
 })
 export class UserAccountsTableComponent extends TableBaseComponent<UserAccount> {
 
-  displayedColumns = ['select', 'username',
-    'department', 'role', 'locked', 'enabled', 'control'];
+  displayedColumns = ['select', 'username', 'shift', 'role', 'locked', 'enabled', 'control'];
 
-  departments: Department[] = [];
+  shifts: Shift[] = [];
 
   constructor(dialog: MatDialog,
               userAccountService: UserAccountService,
               notificationsService: NotificationsService,
-              private departmentService: DepartmentService) {
+              private shiftService: ShiftService) {
     super(dialog, userAccountService, notificationsService);
 
-    this.departmentService.getAll()
-      .subscribe(departments => this.departments = departments);
+    this.shiftService.getAll()
+      .subscribe(shifts => this.shifts = shifts);
   }
 
   openDialog(userAccount: UserAccount) {
     const data = {
       userAccount:  userAccount,
-      departments:  this.departments
+      shifts:  this.shifts
     };
 
     this.openAddOrEditDialog(userAccount, data, UserAccountsDialogComponent);
@@ -45,7 +44,7 @@ export class UserAccountsTableComponent extends TableBaseComponent<UserAccount> 
       if (!value) {
         return;
       }
-      const observable = (<UserAccountService>this.crudService).createDepartmentAdmin(value);
+      const observable = (<UserAccountService>this.crudService).createShiftAdmin(value);
       if (value.id) {
         observable.subscribe(this.onUpdated(value, oldValue));
       } else {
@@ -64,7 +63,7 @@ export class UserAccountsTableComponent extends TableBaseComponent<UserAccount> 
     });
   }
 
-  getDepartmentById(id: number): Department {
-    return this.departments.find(value => value.id === id);
+  getShiftById(id: number): Shift {
+    return this.shifts.find(value => value.id === id);
   }
 }
