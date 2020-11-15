@@ -3,7 +3,7 @@ services:
 
   database-server:
     environment:
-      POSTGRES_PASSWORD: scheduler
+      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
     build:
       context: ./database-server
       dockerfile: Dockerfile
