@@ -65,7 +65,7 @@ public class DayType implements HasId, HasEnterpriseId {
     private Boolean usePreviousValue = false;
 
     @JsonIgnore
-    @OneToMany( mappedBy = "dayTypeId",
+    @OneToMany( mappedBy = "dayType",
                 fetch = FetchType.LAZY,
                 cascade = CascadeType.ALL)
     private List<PatternUnit> units = new ArrayList<>();
@@ -101,12 +101,12 @@ public class DayType implements HasId, HasEnterpriseId {
     }
 
     public void addPatternUnit(PatternUnit unit) {
-        unit.setDayTypeId(this.getId());
+        unit.setDayType(this);
         units.add(unit);
     }
 
     public void removePatternUnit(PatternUnit unit) {
-        unit.setDayTypeId(null);
+        unit.setDayType(null);
         units.remove(unit);
     }
 

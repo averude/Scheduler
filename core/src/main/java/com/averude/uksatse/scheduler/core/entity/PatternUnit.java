@@ -1,6 +1,6 @@
 package com.averude.uksatse.scheduler.core.entity;
 
-import com.averude.uksatse.scheduler.core.interfaces.entity.HasDayTypeIdAndTime;
+import com.averude.uksatse.scheduler.core.interfaces.entity.HasDayTypeAndTime;
 import com.averude.uksatse.scheduler.core.interfaces.entity.HasId;
 import com.averude.uksatse.scheduler.core.json.deserializer.StringToIntTimeDeserializer;
 import com.averude.uksatse.scheduler.core.json.serializer.IntToStringTimeSerializer;
@@ -31,7 +31,7 @@ import java.util.StringJoiner;
                 )
         }
 )
-public class PatternUnit implements HasId, HasDayTypeIdAndTime {
+public class PatternUnit implements HasId, HasDayTypeAndTime {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -51,10 +51,9 @@ public class PatternUnit implements HasId, HasDayTypeIdAndTime {
     private Long orderId;
 
     @NotNull(message = "{unit.daytype.null}")
-    @Positive(message = "{unit.daytype.negative}")
-    @Column(name = "day_type_id",
-            nullable = false)
-    private Long dayTypeId;
+    @ManyToOne
+    @JoinColumn(name = "day_type_id")
+    private DayType dayType;
 
     @JsonSerialize(using = IntToStringTimeSerializer.class)
     @JsonDeserialize(using = StringToIntTimeDeserializer.class)
@@ -76,14 +75,14 @@ public class PatternUnit implements HasId, HasDayTypeIdAndTime {
     @Column(name = "end_time")
     private Integer endTime;
 
-    public PatternUnit(Long patternId, Long orderId, Long dayTypeId) {
+    public PatternUnit(Long patternId, Long orderId, DayType dayType) {
         this.patternId = patternId;
         this.orderId = orderId;
-        this.dayTypeId = dayTypeId;
+        this.dayType = dayType;
     }
 
-    public PatternUnit(HasDayTypeIdAndTime hasDayTypeIdAndTime) {
-        this.dayTypeId      = hasDayTypeIdAndTime.getDayTypeId();
+    public PatternUnit(HasDayTypeAndTime hasDayTypeIdAndTime) {
+        this.dayType        = hasDayTypeIdAndTime.getDayType();
         this.startTime      = hasDayTypeIdAndTime.getStartTime();
         this.endTime        = hasDayTypeIdAndTime.getEndTime();
         this.breakStartTime = hasDayTypeIdAndTime.getBreakStartTime();
@@ -97,7 +96,7 @@ public class PatternUnit implements HasId, HasDayTypeIdAndTime {
         PatternUnit unit = (PatternUnit) o;
         return patternId.equals(unit.patternId) &&
                 orderId.equals(unit.orderId) &&
-                dayTypeId.equals(unit.dayTypeId) &&
+                dayType.equals(unit.dayType) &&
                 Objects.equals(startTime, unit.startTime) &&
                 Objects.equals(breakStartTime, unit.breakStartTime) &&
                 Objects.equals(breakEndTime, unit.breakEndTime) &&
@@ -106,7 +105,7 @@ public class PatternUnit implements HasId, HasDayTypeIdAndTime {
 
     @Override
     public int hashCode() {
-        return Objects.hash(patternId, orderId, dayTypeId,
+        return Objects.hash(patternId, orderId, dayType,
                 startTime, breakStartTime, breakEndTime, endTime);
     }
 
@@ -116,7 +115,7 @@ public class PatternUnit implements HasId, HasDayTypeIdAndTime {
                 .add("id=" + id)
                 .add("patternId=" + patternId)
                 .add("orderId=" + orderId)
-                .add("dayTypeId=" + dayTypeId)
+                .add("dayType=" + dayType)
                 .add("startTime=" + startTime)
                 .add("breakStartTime=" + breakStartTime)
                 .add("breakEndTime=" + breakEndTime)

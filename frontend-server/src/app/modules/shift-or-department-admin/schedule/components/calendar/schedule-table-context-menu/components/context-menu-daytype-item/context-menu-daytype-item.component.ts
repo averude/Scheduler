@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { DepartmentDayType } from "../../../../../../../../model/department-day-type";
 import { calculateHoursByHasTimeString } from "../../../../../../../../shared/utils/utils";
+import { HasDayTypeAndTime } from "../../../../../../../../model/interface/has-day-type-and-time";
 
 @Component({
   selector: 'app-context-menu-daytype-item',
@@ -9,7 +9,7 @@ import { calculateHoursByHasTimeString } from "../../../../../../../../shared/ut
 })
 export class ContextMenuDaytypeItemComponent implements OnInit {
 
-  @Input() departmentDayType: DepartmentDayType;
+  @Input() hasDayTypeAndTime: HasDayTypeAndTime;
 
   constructor() { }
 
@@ -17,16 +17,16 @@ export class ContextMenuDaytypeItemComponent implements OnInit {
   }
 
   showTimeValues(): boolean {
-    return !!(this.departmentDayType.startTime && this.departmentDayType.endTime);
+    return !!(this.hasDayTypeAndTime.startTime && this.hasDayTypeAndTime.endTime);
   }
 
   getLabel() {
-    if (this.departmentDayType && this.departmentDayType.dayType
-      && this.departmentDayType.dayType.label
-      && this.departmentDayType.dayType.label.length > 0) {
-      return this.departmentDayType.dayType.label;
+    if (this.hasDayTypeAndTime && this.hasDayTypeAndTime.dayType
+      && this.hasDayTypeAndTime.dayType.label
+      && this.hasDayTypeAndTime.dayType.label.length > 0) {
+      return this.hasDayTypeAndTime.dayType.label;
     } else {
-      return calculateHoursByHasTimeString(this.departmentDayType);
+      return calculateHoursByHasTimeString(this.hasDayTypeAndTime);
     }
   }
 }

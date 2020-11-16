@@ -1,8 +1,8 @@
 import { IdEntity } from "./interface/id-entity";
 import { DayType } from "./day-type";
-import { HasDayTypeIdAndTime } from "./interface/has-day-type-id-and-time";
+import { HasDayTypeAndTime } from "./interface/has-day-type-and-time";
 
-export class DepartmentDayType implements IdEntity, HasDayTypeIdAndTime {
+export class DepartmentDayType implements IdEntity, HasDayTypeAndTime {
   id:               number;
   dayType:          DayType;
   startTime:        string;

@@ -12,7 +12,7 @@
     <ng-template *ngFor="let departmentDayType of departmentDayTypes"
                  contextMenuItem
                  (execute)="scheduleGenerationService.generateScheduleByDepartmentDayType(departmentDayType, $event.item)">
-      <app-context-menu-daytype-item [departmentDayType]="departmentDayType">
+      <app-context-menu-daytype-item [hasDayTypeAndTime]="departmentDayType">
       </app-context-menu-daytype-item>
     </ng-template>
   </context-menu>
@@ -29,7 +29,7 @@
     <ng-template *ngFor="let departmentDayType of serviceDayTypes"
                  contextMenuItem
                  (execute)="scheduleGenerationService.generateScheduleByDepartmentDayType(departmentDayType, $event.item)">
-      <app-context-menu-daytype-item [departmentDayType]="departmentDayType">
+      <app-context-menu-daytype-item [hasDayTypeAndTime]="departmentDayType">
       </app-context-menu-daytype-item>
     </ng-template>
   </context-menu>
@@ -45,7 +45,7 @@
       <ng-container *ngFor="let unit of dto.collection; index as i">
         <ng-template contextMenuItem
                      (execute)="scheduleGenerationService.generateSchedule(dto, $event.item, i)">
-          <app-context-menu-daytype-item [departmentDayType]="getDepDayType(unit)">
+          <app-context-menu-daytype-item [hasDayTypeAndTime]="unit">
           </app-context-menu-daytype-item>
         </ng-template>
       </ng-container>

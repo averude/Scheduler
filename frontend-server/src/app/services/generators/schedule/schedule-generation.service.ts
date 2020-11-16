@@ -10,7 +10,7 @@ import { DepartmentDayType } from "../../../model/department-day-type";
 import { BasicDto } from "../../../model/dto/basic-dto";
 import { ShiftPattern } from "../../../model/shift-pattern";
 import { RowData } from "../../../lib/ngx-schedule-table/model/data/row-data";
-import { HasDayTypeIdAndTime } from "../../../model/interface/has-day-type-id-and-time";
+import { HasDayTypeAndTime } from "../../../model/interface/has-day-type-and-time";
 
 @Injectable()
 export class ScheduleGenerationService {
@@ -33,7 +33,7 @@ export class ScheduleGenerationService {
     );
   }
 
-  generateScheduleByUnit(unit: HasDayTypeIdAndTime,
+  generateScheduleByUnit(unit: HasDayTypeAndTime,
                          data: SelectionData) {
     this.scheduleGenerator
       .generateScheduleByUnit(

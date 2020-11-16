@@ -5,7 +5,7 @@ import com.averude.uksatse.scheduler.core.entity.ShiftPattern;
 import com.averude.uksatse.scheduler.core.entity.SpecialCalendarDate;
 import com.averude.uksatse.scheduler.core.entity.WorkDay;
 import com.averude.uksatse.scheduler.core.interfaces.entity.HasDate;
-import com.averude.uksatse.scheduler.core.interfaces.entity.HasDayTypeIdAndTime;
+import com.averude.uksatse.scheduler.core.interfaces.entity.HasDayTypeAndTime;
 import com.averude.uksatse.scheduler.generator.model.ScheduleGenerationInterval;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -64,11 +64,11 @@ public class ScheduleGeneratorImpl implements ScheduleGenerator {
     }
 
     private void updateWorkDay(WorkDay workDay,
-                               HasDayTypeIdAndTime unit) {
+                               HasDayTypeAndTime unit) {
         if (workDay.getId() != null) {
             log.trace("Updating workday {} by unit {}", workDay, unit);
         }
-        workDay.setScheduledDayTypeId(unit.getDayTypeId());
+        workDay.setScheduledDayTypeId(unit.getDayType().getId());
         workDay.setStartTime(unit.getStartTime());
         workDay.setEndTime(unit.getEndTime());
         workDay.setBreakStartTime(unit.getBreakStartTime());
@@ -76,7 +76,7 @@ public class ScheduleGeneratorImpl implements ScheduleGenerator {
     }
 
     private WorkDay createWorkDay(Employee employee,
-                                  HasDayTypeIdAndTime unit,
+                                  HasDayTypeAndTime unit,
                                   LocalDate date) {
         var workDay = new WorkDay();
         workDay.setDepartmentId(employee.getDepartmentId());
@@ -99,8 +99,8 @@ public class ScheduleGeneratorImpl implements ScheduleGenerator {
                 });
     }
 
-    private HasDayTypeIdAndTime getDepartmentDayType(ShiftPattern pattern,
-                                                     SpecialCalendarDate specialDate) {
+    private HasDayTypeAndTime getDepartmentDayType(ShiftPattern pattern,
+                                                   SpecialCalendarDate specialDate) {
         switch (specialDate.getDateType()) {
             case HOLIDAY            : return pattern.getHolidayDepDayType();
             case EXTRA_WEEKEND      : return pattern.getExtraWeekendDepDayType();

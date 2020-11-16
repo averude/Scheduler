@@ -1,7 +1,7 @@
 import { IdEntity } from "./interface/id-entity";
-import { HasDayTypeIdAndTime } from "./interface/has-day-type-id-and-time";
+import { HasTime } from "./interface/has-time";
 
-export class WorkDay implements IdEntity, HasDayTypeIdAndTime {
+export class WorkDay implements IdEntity, HasTime {
   id:                 number;
   employeeId:         number;
   scheduledDayTypeId: number;
@@ -11,9 +11,4 @@ export class WorkDay implements IdEntity, HasDayTypeIdAndTime {
   breakEndTime:       number;
   endTime:            number;
   date:               string;
-
-  get dayTypeId() {
-    console.log("ERROR");
-    return null;
-  }
 }

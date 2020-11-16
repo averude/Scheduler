@@ -4,7 +4,7 @@ import { Employee } from "../../model/employee";
 import { WorkDay } from "../../model/workday";
 import { DayType } from "../../model/day-type";
 import { binarySearch } from "./collection-utils";
-import { HasDayTypeIdAndTime } from "../../model/interface/has-day-type-id-and-time";
+import { HasTime } from "../../model/interface/has-time";
 
 export const MONTH_YEAR_DATE_FORMAT = {
   parse: {
@@ -67,8 +67,8 @@ export function getCellValue(workDay: WorkDay, dayTypes: DayType[]) {
   return getCellValueExt(workDay, dayTypes, getWorkDayDayTypeId);
 }
 
-export function compareHasTime(a: HasDayTypeIdAndTime,
-                               b: HasDayTypeIdAndTime): boolean {
+export function compareHasTime(a: HasTime,
+                               b: HasTime): boolean {
   return a.startTime === b.startTime
     && a.endTime === b.endTime
     && a.breakStartTime === b.breakStartTime
@@ -107,18 +107,18 @@ export function calculateWorkHoursByTimeStrings(startTime: string,
   }
 }
 
-export function calculateHoursByHasTimeString(hasDayTypeIdAndTime: HasDayTypeIdAndTime): number {
-  if (!hasDayTypeIdAndTime) return 0;
+export function calculateHoursByHasTimeString(hasTime: HasTime): number {
+  if (!hasTime) return 0;
 
-  return calculateWorkHoursByTimeStrings(hasDayTypeIdAndTime.startTime,
-    hasDayTypeIdAndTime.endTime,
-    hasDayTypeIdAndTime.breakStartTime,
-    hasDayTypeIdAndTime.breakEndTime);
+  return calculateWorkHoursByTimeStrings(hasTime.startTime,
+    hasTime.endTime,
+    hasTime.breakStartTime,
+    hasTime.breakEndTime);
 }
 
-export function calculateHoursByHasTime(hasDayTypeIdAndTime: HasDayTypeIdAndTime): number {
-  if (!hasDayTypeIdAndTime) return 0;
-  return calculateWorkHoursByTime(hasDayTypeIdAndTime.startTime, hasDayTypeIdAndTime.endTime, hasDayTypeIdAndTime.breakStartTime, hasDayTypeIdAndTime.breakEndTime);
+export function calculateHoursByHasTime(hasTime: HasTime): number {
+  if (!hasTime) return 0;
+  return calculateWorkHoursByTime(hasTime.startTime, hasTime.endTime, hasTime.breakStartTime, hasTime.breakEndTime);
 }
 
 export function calculateWorkHoursByTime(startTime: number,

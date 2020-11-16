@@ -1,11 +1,11 @@
 import { WorkDay } from "../../../model/workday";
 import { CellData } from "../../../lib/ngx-schedule-table/model/data/cell-data";
 import { convertTimeStringToMin } from "../../../shared/utils/utils";
-import { HasDayTypeIdAndTime } from "../../../model/interface/has-day-type-id-and-time";
+import { HasDayTypeAndTime } from "../../../model/interface/has-day-type-and-time";
 
 export function createOrUpdateCell(usePreviousValue: boolean,
                                    employeeId: number,
-                                   unit: HasDayTypeIdAndTime,
+                                   unit: HasDayTypeAndTime,
                                    cell: CellData) {
   if (cell.value) {
     updateWorkDayInCell(usePreviousValue, cell, unit);
@@ -16,7 +16,7 @@ export function createOrUpdateCell(usePreviousValue: boolean,
 
 function createWorkDayInCell(employeeId: number,
                              cell: CellData,
-                             unit: HasDayTypeIdAndTime) {
+                             unit: HasDayTypeAndTime) {
   cell.value                    = new WorkDay();
   cell.value.employeeId         = employeeId;
   cell.value.startTime          = convertTimeStringToMin(unit.startTime);
@@ -24,19 +24,19 @@ function createWorkDayInCell(employeeId: number,
   cell.value.breakStartTime     = convertTimeStringToMin(unit.breakStartTime);
   cell.value.breakEndTime       = convertTimeStringToMin(unit.breakEndTime);
   cell.value.date               = cell.date.isoString;
-  cell.value.scheduledDayTypeId = unit.dayTypeId;
+  cell.value.scheduledDayTypeId = unit.dayType.id;
 }
 
 function updateWorkDayInCell(usePreviousValue: boolean,
                              cell: CellData,
-                             unit: HasDayTypeIdAndTime) {
+                             unit: HasDayTypeAndTime) {
   if (!usePreviousValue) {
     cell.value.startTime      = convertTimeStringToMin(unit.startTime);
     cell.value.endTime        = convertTimeStringToMin(unit.endTime);
     cell.value.breakStartTime = convertTimeStringToMin(unit.breakStartTime);
     cell.value.breakEndTime   = convertTimeStringToMin(unit.breakEndTime);
-    cell.value.scheduledDayTypeId = unit.dayTypeId;
+    cell.value.scheduledDayTypeId = unit.dayType.id;
   } else {
-    cell.value.actualDayTypeId = unit.dayTypeId;
+    cell.value.actualDayTypeId = unit.dayType.id;
   }
 }

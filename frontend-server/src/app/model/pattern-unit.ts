@@ -1,11 +1,12 @@
 import { IdEntity } from "./interface/id-entity";
-import { HasDayTypeIdAndTime } from "./interface/has-day-type-id-and-time";
+import { DayType } from "./day-type";
+import { HasDayTypeAndTime } from "./interface/has-day-type-and-time";
 
-export class PatternUnit implements IdEntity, HasDayTypeIdAndTime {
+export class PatternUnit implements IdEntity, HasDayTypeAndTime {
   id:             number;
   patternId:      number;
   orderId:        number;
-  dayTypeId:      number;
+  dayType:        DayType;
   startTime:      string;
   breakStartTime: string;
   breakEndTime:   string;

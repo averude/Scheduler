@@ -1,6 +1,6 @@
 package com.averude.uksatse.scheduler.core.entity;
 
-import com.averude.uksatse.scheduler.core.interfaces.entity.HasDayTypeIdAndTime;
+import com.averude.uksatse.scheduler.core.interfaces.entity.HasDayTypeAndTime;
 import com.averude.uksatse.scheduler.core.interfaces.entity.HasDepartmentId;
 import com.averude.uksatse.scheduler.core.interfaces.entity.HasId;
 import com.averude.uksatse.scheduler.core.json.deserializer.StringToIntTimeDeserializer;
@@ -34,7 +34,7 @@ import java.util.StringJoiner;
                 )
         }
 )
-public class DepartmentDayType implements HasId, HasDayTypeIdAndTime, HasDepartmentId {
+public class DepartmentDayType implements HasId, HasDayTypeAndTime, HasDepartmentId {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -94,11 +94,6 @@ public class DepartmentDayType implements HasId, HasDayTypeIdAndTime, HasDepartm
                 Objects.equals(breakStartTime, that.breakStartTime) &&
                 Objects.equals(breakEndTime, that.breakEndTime) &&
                 Objects.equals(endTime, that.endTime);
-    }
-
-    @Override
-    public Long getDayTypeId() {
-        return dayType.getId();
     }
 
     @Override

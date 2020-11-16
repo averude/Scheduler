@@ -4,7 +4,7 @@ import { createOrUpdateCell } from "./schedule-generation-utils";
 import { RowData } from "../../../lib/ngx-schedule-table/model/data/row-data";
 import { CellData } from "../../../lib/ngx-schedule-table/model/data/cell-data";
 import { DepartmentDayType } from "../../../model/department-day-type";
-import { HasDayTypeIdAndTime } from "../../../model/interface/has-day-type-id-and-time";
+import { HasDayTypeAndTime } from "../../../model/interface/has-day-type-and-time";
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +24,7 @@ export class ScheduleGenerator {
 
   generateScheduleByUnit(rowData: RowData,
                          cells: CellData[],
-                         unit: HasDayTypeIdAndTime,
+                         unit: HasDayTypeAndTime,
                          onSave: (rowData: RowData, selectedCells: CellData[]) => void,
                          onError: (message: string) => void) {
 
@@ -41,7 +41,7 @@ export class ScheduleGenerator {
 
   private generate(rowData: RowData,
                    cells: CellData[],
-                   units: HasDayTypeIdAndTime[],
+                   units: HasDayTypeAndTime[],
                    offset: number,
                    usePreviousValue: boolean,
                    onSave: (rowData: RowData, selectedCells: CellData[]) => void,

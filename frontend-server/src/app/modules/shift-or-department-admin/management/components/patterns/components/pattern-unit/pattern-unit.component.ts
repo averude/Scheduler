@@ -19,16 +19,14 @@ export class PatternUnitComponent implements OnInit {
 
   color: string = 'transparent';
 
-  usePreviousValue: boolean = false;
-
   constructor() { }
 
   ngOnInit() {
-    let depDayType = this.departmentDayTypes
-      .find(depDayType => depDayType.dayType.id === this.unit.dayTypeId);
+    this.color = this.unit.dayType.dayTypeGroup.color;
+    const depDayType = this.departmentDayTypes
+      .find(depDayType => depDayType.dayType.id === this.unit.dayType.id);
     if (depDayType) {
       this.selectedDepartmentDayType = depDayType;
-      this.color = depDayType.dayType.dayTypeGroup.color;
     }
   }
 
@@ -44,12 +42,11 @@ export class PatternUnitComponent implements OnInit {
   }
 
   private fillInTheUnit(type: DepartmentDayType) {
-    this.unit.dayTypeId       = type.dayType.id;
+    this.unit.dayType         = type.dayType;
     this.unit.startTime       = type.startTime;
     this.unit.endTime         = type.endTime;
     this.unit.breakStartTime  = type.breakStartTime;
     this.unit.breakEndTime    = type.breakEndTime;
-    this.usePreviousValue     = type.dayType.usePreviousValue;
     this.color                = type.dayType.dayTypeGroup.color;
   }
 
