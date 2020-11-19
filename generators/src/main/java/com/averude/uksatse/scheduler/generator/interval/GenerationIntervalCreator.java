@@ -1,4 +1,4 @@
-package com.averude.uksatse.scheduler.generator.utils;
+package com.averude.uksatse.scheduler.generator.interval;
 
 import com.averude.uksatse.scheduler.core.interfaces.entity.EntityComposition;
 import com.averude.uksatse.scheduler.core.interfaces.entity.HasDateDuration;

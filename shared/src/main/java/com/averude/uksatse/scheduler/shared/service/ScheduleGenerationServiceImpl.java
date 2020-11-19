@@ -2,9 +2,9 @@ package com.averude.uksatse.scheduler.shared.service;
 
 import com.averude.uksatse.scheduler.core.entity.*;
 import com.averude.uksatse.scheduler.core.entity.structure.Shift;
+import com.averude.uksatse.scheduler.generator.interval.GenerationIntervalCreator;
 import com.averude.uksatse.scheduler.generator.model.GenerationInterval;
 import com.averude.uksatse.scheduler.generator.schedule.ScheduleGenerator;
-import com.averude.uksatse.scheduler.generator.utils.GenerationIntervalCreator;
 import com.averude.uksatse.scheduler.shared.repository.ScheduleRepository;
 import com.averude.uksatse.scheduler.shared.repository.ShiftCompositionRepository;
 import com.averude.uksatse.scheduler.shared.repository.ShiftRepository;
