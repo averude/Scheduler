@@ -1,19 +1,16 @@
 package com.averude.uksatse.scheduler.shared.service;
 
-import com.averude.uksatse.scheduler.core.entity.ShiftComposition;
-import com.averude.uksatse.scheduler.core.entity.ShiftPattern;
-import com.averude.uksatse.scheduler.core.entity.SpecialCalendarDate;
-import com.averude.uksatse.scheduler.core.entity.WorkDay;
+import com.averude.uksatse.scheduler.core.entity.*;
 import com.averude.uksatse.scheduler.core.entity.structure.Shift;
-import com.averude.uksatse.scheduler.generator.model.ScheduleGenerationInterval;
+import com.averude.uksatse.scheduler.generator.model.GenerationInterval;
 import com.averude.uksatse.scheduler.generator.schedule.ScheduleGenerator;
-import com.averude.uksatse.scheduler.generator.utils.ScheduleGenerationIntervalCreator;
+import com.averude.uksatse.scheduler.generator.utils.GenerationIntervalCreator;
 import com.averude.uksatse.scheduler.shared.repository.ScheduleRepository;
 import com.averude.uksatse.scheduler.shared.repository.ShiftCompositionRepository;
 import com.averude.uksatse.scheduler.shared.repository.ShiftRepository;
 import com.averude.uksatse.scheduler.shared.repository.SpecialCalendarDateRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +20,7 @@ import java.util.List;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class ScheduleGenerationServiceImpl implements ScheduleGenerationService {
 
     private final ShiftRepository                   shiftRepository;
@@ -30,23 +28,7 @@ public class ScheduleGenerationServiceImpl implements ScheduleGenerationService 
     private final ScheduleRepository                scheduleRepository;
     private final SpecialCalendarDateRepository     specialCalendarDateRepository;
     private final ScheduleGenerator                 scheduleGenerator;
-    private final ScheduleGenerationIntervalCreator intervalCreator;
-
-    @Autowired
-    public ScheduleGenerationServiceImpl(ShiftRepository shiftRepository,
-                                         ShiftCompositionRepository shiftCompositionRepository,
-                                         ScheduleRepository scheduleRepository,
-                                         SpecialCalendarDateRepository specialCalendarDateRepository,
-                                         ScheduleGenerator scheduleGenerator,
-                                         ScheduleGenerationIntervalCreator intervalCreator) {
-        this.shiftRepository = shiftRepository;
-        this.shiftCompositionRepository = shiftCompositionRepository;
-        this.scheduleRepository = scheduleRepository;
-        this.specialCalendarDateRepository = specialCalendarDateRepository;
-        this.scheduleGenerator = scheduleGenerator;
-        this.intervalCreator = intervalCreator;
-    }
-
+    private final GenerationIntervalCreator<Employee> intervalCreator;
 
     @Override
     @Transactional
@@ -100,7 +82,7 @@ public class ScheduleGenerationServiceImpl implements ScheduleGenerationService 
 
             var shiftPattern = shift.getShiftPattern();
             var unitsSize = shiftPattern.getSequence().size();
-            var intervals = intervalCreator.getIntervalsForComposition(composition, employeeCompositions, from, to, offset, unitsSize);
+            var intervals = intervalCreator.getIntervalsForComposition(composition, employeeCompositions, composition::getSubstitution,from, to, offset, unitsSize);
             var workDays = generateWorkDaysForIntervals(shiftPattern, specialCalendarDates, intervals);
             result.addAll(workDays);
         }
@@ -110,7 +92,7 @@ public class ScheduleGenerationServiceImpl implements ScheduleGenerationService 
 
     private List<WorkDay> generateWorkDaysForIntervals(ShiftPattern shiftPattern,
                                                        List<SpecialCalendarDate> specialCalendarDates,
-                                                       List<ScheduleGenerationInterval> intervals) {
+                                                       List<GenerationInterval<Employee>> intervals) {
         var result = new ArrayList<WorkDay>();
 
         int lastSpecialDateIndex = 0;
@@ -137,11 +119,11 @@ public class ScheduleGenerationServiceImpl implements ScheduleGenerationService 
         return result;
     }
 
-    private List<WorkDay> generateWorkDaysForInterval(ScheduleGenerationInterval interval,
+    private List<WorkDay> generateWorkDaysForInterval(GenerationInterval<Employee> interval,
                                                       ShiftPattern pattern,
                                                       List<SpecialCalendarDate> specialCalendarDates) {
         var intervalSchedule = scheduleRepository
-                .findAllByDepartmentIdAndEmployeeIdAndDateBetweenOrderByDateAsc(interval.getEmployee().getDepartmentId(), interval.getEmployee().getId(), interval.getFrom(), interval.getTo());
+                .findAllByDepartmentIdAndEmployeeIdAndDateBetweenOrderByDateAsc(interval.getObject().getDepartmentId(), interval.getObject().getId(), interval.getFrom(), interval.getTo());
         return scheduleGenerator.generate(interval, pattern, intervalSchedule, specialCalendarDates);
     }
 }

@@ -1,6 +1,5 @@
 package com.averude.uksatse.scheduler.generator.model;
 
-import com.averude.uksatse.scheduler.core.entity.Employee;
 import com.averude.uksatse.scheduler.core.interfaces.entity.HasDateDuration;
 import lombok.Data;
 
@@ -8,17 +7,17 @@ import java.time.LocalDate;
 import java.util.stream.Stream;
 
 @Data
-public class ScheduleGenerationInterval implements HasDateDuration {
+public class GenerationInterval<T> implements HasDateDuration {
 
     private LocalDate from;
     private LocalDate to;
-    private Employee employee;
+    private T object;
     private long offset;
 
-    public ScheduleGenerationInterval() {
+    public GenerationInterval() {
     }
 
-    public ScheduleGenerationInterval(LocalDate from, LocalDate to, long offset) {
+    public GenerationInterval(LocalDate from, LocalDate to, long offset) {
         this.from = from;
         this.to = to;
         this.offset = offset;

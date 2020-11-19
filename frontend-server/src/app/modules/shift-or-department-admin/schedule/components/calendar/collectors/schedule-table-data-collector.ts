@@ -136,10 +136,17 @@ export class ScheduleTableDataCollector {
 
   private getWorkingNorm(employeeCompositions: ShiftComposition[],
                          workingNorms: WorkingNorm[]): number {
+    console.log(employeeCompositions);
     if (employeeCompositions && employeeCompositions[0]) {
-      let shiftId = employeeCompositions[0][0].shiftId;
-      let shiftWorkingNorm = workingNorms.find(value => value.shiftId === shiftId);
-      return shiftWorkingNorm ? shiftWorkingNorm.hours : 0;
+      if (employeeCompositions[0][0]) {
+        let shiftId = employeeCompositions[0][0].shiftId;
+        let shiftWorkingNorm = workingNorms.find(value => value.shiftId === shiftId);
+        return shiftWorkingNorm ? shiftWorkingNorm.hours : 0;
+      } else {
+        let shiftId = employeeCompositions[1][0].shiftId;
+        let shiftWorkingNorm = workingNorms.find(value => value.shiftId === shiftId);
+        return shiftWorkingNorm ? shiftWorkingNorm.hours : 0;
+      }
     } else return 0;
   }
 }

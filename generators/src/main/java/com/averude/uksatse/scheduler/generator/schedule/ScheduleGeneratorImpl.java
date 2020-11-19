@@ -6,7 +6,7 @@ import com.averude.uksatse.scheduler.core.entity.SpecialCalendarDate;
 import com.averude.uksatse.scheduler.core.entity.WorkDay;
 import com.averude.uksatse.scheduler.core.interfaces.entity.HasDate;
 import com.averude.uksatse.scheduler.core.interfaces.entity.HasDayTypeAndTime;
-import com.averude.uksatse.scheduler.generator.model.ScheduleGenerationInterval;
+import com.averude.uksatse.scheduler.generator.model.GenerationInterval;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -23,7 +23,7 @@ import static com.averude.uksatse.scheduler.core.entity.SpecialCalendarDateType.
 public class ScheduleGeneratorImpl implements ScheduleGenerator {
 
     @Override
-    public List<WorkDay> generate(ScheduleGenerationInterval interval,
+    public List<WorkDay> generate(GenerationInterval<Employee> interval,
                                   ShiftPattern pattern,
                                   List<WorkDay> existingSchedule,
                                   List<SpecialCalendarDate> specialCalendarDates) {
@@ -57,7 +57,7 @@ public class ScheduleGeneratorImpl implements ScheduleGenerator {
                 getValue(schedule, date, indices, 1)
                         .ifPresentOrElse(
                                 (workDay) -> updateWorkDay(workDay, unit),
-                                () -> schedule.add(createWorkDay(interval.getEmployee(), unit, date)));
+                                () -> schedule.add(createWorkDay(interval.getObject(), unit, date)));
             }
         }
         return schedule;
