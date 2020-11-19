@@ -21,12 +21,12 @@ public class GenerationIntervalCreator<T> {
     private final OffsetCalculator offsetCalculator;
 
     public List<GenerationInterval<T>> getIntervalsForComposition(EntityComposition<?, T> composition,
-                                                               List<? extends HasDateDuration> employeeCompositions,
-                                                               BooleanSupplier compositionDivider,
-                                                               LocalDate from,
-                                                               LocalDate to,
-                                                               int offset,
-                                                               int unitsSize) {
+                                                                  List<? extends HasDateDuration> employeeCompositions,
+                                                                  BooleanSupplier compositionDivider,
+                                                                  LocalDate from,
+                                                                  LocalDate to,
+                                                                  int offset,
+                                                                  int unitsSize) {
         var result = new ArrayList<GenerationInterval<T>>();
         log.debug("Creating intervals from={} to={} for composition {}.", from, to, composition);
 
