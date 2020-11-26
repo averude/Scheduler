@@ -1,7 +1,7 @@
 package com.averude.uksatse.scheduler.testing;
 
 import com.averude.uksatse.scheduler.core.entity.Employee;
-import com.averude.uksatse.scheduler.core.entity.ShiftComposition;
+import com.averude.uksatse.scheduler.core.entity.MainShiftComposition;
 import com.averude.uksatse.scheduler.core.entity.structure.Shift;
 
 import java.time.LocalDate;
@@ -27,22 +27,22 @@ public class ShiftCompositionGenerator {
         this.employeeGenerator = employeeGenerator;
     }
 
-    public List<ShiftComposition> generateShiftCompositionsList(LocalDate from,
-                                                                LocalDate to,
-                                                                int maxNumOfEmployeesInShift,
-                                                                boolean isSubstitution) {
+    public List<MainShiftComposition> generateShiftCompositionsList(LocalDate from,
+                                                                    LocalDate to,
+                                                                    int maxNumOfEmployeesInShift,
+                                                                    boolean isSubstitution) {
         var shifts = shiftGenerator.generateShiftsList(4);
         var employees = employeeGenerator.generateEmployeesList(6);
         return generateShiftCompositionsList(from, to, shifts, employees, maxNumOfEmployeesInShift, isSubstitution);
     }
 
-    public List<ShiftComposition> generateShiftCompositionsList(LocalDate from,
-                                                                LocalDate to,
-                                                                List<Shift> shifts,
-                                                                List<Employee> employees,
-                                                                int maxNumOfEmployeesInShift,
-                                                                boolean isSubstitution) {
-        var shiftCompositions = new ArrayList<ShiftComposition>();
+    public List<MainShiftComposition> generateShiftCompositionsList(LocalDate from,
+                                                                    LocalDate to,
+                                                                    List<Shift> shifts,
+                                                                    List<Employee> employees,
+                                                                    int maxNumOfEmployeesInShift,
+                                                                    boolean isSubstitution) {
+        var shiftCompositions = new ArrayList<MainShiftComposition>();
 
         shifts_loop:
         for (int shift_idx = 0, emp_idx = 0; shift_idx < shifts.size(); shift_idx++) {
@@ -54,9 +54,8 @@ public class ShiftCompositionGenerator {
                 if (emp_idx >= employees.size()) break shifts_loop;
 
                 var employee = employees.get(emp_idx);
-                var shiftComposition = new ShiftComposition();
+                var shiftComposition = new MainShiftComposition();
                 shiftComposition.setId((long) (shift_idx + emp_idx + 1));
-                shiftComposition.setSubstitution(isSubstitution);
                 shiftComposition.setShiftId(shift.getId());
                 shiftComposition.setEmployee(employee);
                 shiftComposition.setFrom(from);
@@ -67,31 +66,30 @@ public class ShiftCompositionGenerator {
         return shiftCompositions;
     }
 
-    public ShiftComposition getComposition(LocalDate compFrom,
-                                           LocalDate compTo,
-                                           boolean isSubstitution) {
-        var composition = new ShiftComposition();
+    public MainShiftComposition getComposition(LocalDate compFrom,
+                                               LocalDate compTo,
+                                               boolean isSubstitution) {
+        var composition = new MainShiftComposition();
         composition.setFrom(compFrom);
         composition.setTo(compTo);
-        composition.setSubstitution(isSubstitution);
         var employee = new Employee();
         employee.setId(1L);
         composition.setEmployee(employee);
         return composition;
     }
 
-    public ShiftComposition getComposition(String dateFrom,
-                                           String dateTo,
-                                           boolean isSubstitution,
-                                           long shiftId) {
+    public MainShiftComposition getComposition(String dateFrom,
+                                               String dateTo,
+                                               boolean isSubstitution,
+                                               long shiftId) {
         return getComposition(LocalDate.parse(dateFrom), LocalDate.parse(dateTo), isSubstitution, shiftId);
     }
 
-    public ShiftComposition getComposition(LocalDate from,
-                                           LocalDate to,
-                                           boolean isSubstitution,
-                                           long shiftId) {
-        ShiftComposition composition = getComposition(from, to, isSubstitution);
+    public MainShiftComposition getComposition(LocalDate from,
+                                               LocalDate to,
+                                               boolean isSubstitution,
+                                               long shiftId) {
+        MainShiftComposition composition = getComposition(from, to, isSubstitution);
         composition.setShiftId(shiftId);
         return composition;
     }

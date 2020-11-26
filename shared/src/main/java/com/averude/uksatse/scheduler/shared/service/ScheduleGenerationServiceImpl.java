@@ -2,13 +2,11 @@ package com.averude.uksatse.scheduler.shared.service;
 
 import com.averude.uksatse.scheduler.core.entity.*;
 import com.averude.uksatse.scheduler.core.entity.structure.Shift;
+import com.averude.uksatse.scheduler.core.interfaces.entity.EntityComposition;
 import com.averude.uksatse.scheduler.generator.interval.GenerationIntervalCreator;
 import com.averude.uksatse.scheduler.generator.model.GenerationInterval;
 import com.averude.uksatse.scheduler.generator.schedule.ScheduleGenerator;
-import com.averude.uksatse.scheduler.shared.repository.ScheduleRepository;
-import com.averude.uksatse.scheduler.shared.repository.ShiftCompositionRepository;
-import com.averude.uksatse.scheduler.shared.repository.ShiftRepository;
-import com.averude.uksatse.scheduler.shared.repository.SpecialCalendarDateRepository;
+import com.averude.uksatse.scheduler.shared.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -16,7 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -24,11 +24,12 @@ import java.util.List;
 public class ScheduleGenerationServiceImpl implements ScheduleGenerationService {
 
     private final ShiftRepository                   shiftRepository;
-    private final ShiftCompositionRepository        shiftCompositionRepository;
     private final ScheduleRepository                scheduleRepository;
     private final SpecialCalendarDateRepository     specialCalendarDateRepository;
     private final ScheduleGenerator                 scheduleGenerator;
     private final GenerationIntervalCreator<Employee> intervalCreator;
+    private final MainShiftCompositionRepository    mainShiftCompositionRepository;
+    private final SubstitutionShiftCompositionRepository substitutionShiftCompositionRepository;
 
     @Override
     @Transactional
@@ -48,43 +49,46 @@ public class ScheduleGenerationServiceImpl implements ScheduleGenerationService 
 
         var specialCalendarDates = specialCalendarDateRepository
                 .findAllByDepartmentIdAndDateBetween(shift.getDepartmentId(), from, to);
-        var compositions = shiftCompositionRepository
+
+        var mainCompositions = mainShiftCompositionRepository
+                .findAllByShiftIdAndToGreaterThanEqualAndFromLessThanEqual(shiftId, from, to);
+        var otherShiftsSubstitutionCompositions = substitutionShiftCompositionRepository
+                .findAllByEmployeeIdInAndToGreaterThanEqualAndFromLessThanEqual(getEmployeeIds(mainCompositions), from, to);
+        var substitutionCompositions = substitutionShiftCompositionRepository
                 .findAllByShiftIdAndToGreaterThanEqualAndFromLessThanEqual(shiftId, from, to);
 
-        log.debug("Data for generation:\r\n" +
-                "Shift: {}\r\n" +
-                "Compositions: {}\r\n" +
-                "Special Calendar Days: {}", shift, compositions, specialCalendarDates);
-
-        var workDays = generateSchedule(from, to, offset, shift, compositions, specialCalendarDates);
+        var workDays = generateWorkDays(shift, mainCompositions, otherShiftsSubstitutionCompositions, substitutionCompositions, from, to, offset, specialCalendarDates);
 
         log.debug("Saving generated schedule to database...");
         scheduleRepository.saveAll(workDays);
     }
 
-    private List<WorkDay> generateSchedule(LocalDate from,
+    private List<WorkDay> generateWorkDays(Shift shift,
+                                           List<? extends EntityComposition<?, Employee>> mainShiftCompositions,
+                                           List<? extends EntityComposition<?, Employee>> otherShiftsCompositions,
+                                           List<? extends EntityComposition<?, Employee>> substitutionShiftCompositions,
+                                           LocalDate from,
                                            LocalDate to,
                                            int offset,
-                                           Shift shift,
-                                           List<ShiftComposition> compositions,
                                            List<SpecialCalendarDate> specialCalendarDates) {
         var result = new ArrayList<WorkDay>();
+        var shiftPattern = shift.getShiftPattern();
+        var unitsSize = shiftPattern.getSequence().size();
 
-        for (var composition : compositions) {
+        for (var mainComposition : mainShiftCompositions) {
+            var employee = mainComposition.getSideB();
+            var employeeOtherShiftsCompositions = otherShiftsCompositions.stream()
+                    .filter(value -> value.getSideB().getId().equals(employee.getId()))
+                    .collect(Collectors.toList());
+            var intervals = intervalCreator.getIntervalsForMainShift(from, to, employeeOtherShiftsCompositions, employee, unitsSize, offset);
+            var days = generateWorkDaysForIntervals(shiftPattern, specialCalendarDates, intervals);
+            result.addAll(days);
+        }
 
-            log.debug("Generating schedule for composition {}. ", composition);
-
-            var employeeCompositions = shiftCompositionRepository
-                    .findAllByEmployeeIdAndSubstitutionAndToGreaterThanEqualAndFromLessThanEqual(
-                            composition.getEmployee().getId(),
-                            !composition.getSubstitution(),
-                            from, to);
-
-            var shiftPattern = shift.getShiftPattern();
-            var unitsSize = shiftPattern.getSequence().size();
-            var intervals = intervalCreator.getIntervalsForComposition(composition, employeeCompositions, composition::getSubstitution,from, to, offset, unitsSize);
-            var workDays = generateWorkDaysForIntervals(shiftPattern, specialCalendarDates, intervals);
-            result.addAll(workDays);
+        for (var substitutionComposition : substitutionShiftCompositions) {
+            var interval = intervalCreator.getIntervalForSubstitutionShift(from, to, substitutionComposition, unitsSize, offset);
+            var days = generateWorkDaysForIntervals(shiftPattern, specialCalendarDates, Collections.singletonList(interval));
+            result.addAll(days);
         }
 
         return result;
@@ -125,5 +129,12 @@ public class ScheduleGenerationServiceImpl implements ScheduleGenerationService 
         var intervalSchedule = scheduleRepository
                 .findAllByDepartmentIdAndEmployeeIdAndDateBetweenOrderByDateAsc(interval.getObject().getDepartmentId(), interval.getObject().getId(), interval.getFrom(), interval.getTo());
         return scheduleGenerator.generate(interval, pattern, intervalSchedule, specialCalendarDates);
+    }
+
+    private List<Long> getEmployeeIds(List<MainShiftComposition> mainCompositions) {
+        return mainCompositions.stream()
+                .map(composition -> composition.getEmployee().getId())
+                .distinct()
+                .collect(Collectors.toList());
     }
 }

@@ -1,6 +1,6 @@
 package com.averude.uksatse.scheduler.controllers.interfaces;
 
-import com.averude.uksatse.scheduler.core.entity.ShiftComposition;
+import com.averude.uksatse.scheduler.core.entity.MainShiftComposition;
 import com.averude.uksatse.scheduler.security.annotations.IsDepartmentAdmin;
 import com.averude.uksatse.scheduler.security.annotations.IsDepartmentOrShiftUser;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -13,31 +13,31 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-@RequestMapping("/admin/shift_compositions")
-public interface ShiftCompositionController
-        extends ICrudController<ShiftComposition>, IByAuthAndDateController<ShiftComposition> {
+@RequestMapping("/admin/main_shift_compositions")
+public interface MainShiftCompositionController
+        extends ICrudController<MainShiftComposition>, IByAuthAndDateController<MainShiftComposition> {
 
     @IsDepartmentOrShiftUser
     @RequestMapping(method = RequestMethod.GET, value = "/dates")
-    List<ShiftComposition> getAllByAuth(Authentication authentication,
-                                        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-                                        @RequestParam(value = "from")
+    List<MainShiftComposition> getAllByAuth(Authentication authentication,
+                                            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                            @RequestParam(value = "from")
                                                 LocalDate from,
-                                        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-                                        @RequestParam(value = "to")
+                                            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                            @RequestParam(value = "to")
                                                 LocalDate to);
 
     @IsDepartmentAdmin
     @RequestMapping(method = RequestMethod.GET, value = "/{id}")
-    Optional<ShiftComposition> get(@PathVariable Long id);
+    Optional<MainShiftComposition> get(@PathVariable Long id);
 
     @IsDepartmentAdmin
     @RequestMapping(method = RequestMethod.POST)
-    ResponseEntity<Long> post(@Valid @RequestBody ShiftComposition entity, Authentication authentication);
+    ResponseEntity<Long> post(@Valid @RequestBody MainShiftComposition entity, Authentication authentication);
 
     @IsDepartmentAdmin
     @RequestMapping(method = RequestMethod.PUT)
-    ResponseEntity<?> put(@Valid @RequestBody ShiftComposition entity, Authentication authentication);
+    ResponseEntity<?> put(@Valid @RequestBody MainShiftComposition entity, Authentication authentication);
 
     @IsDepartmentAdmin
     @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")

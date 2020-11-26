@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.BooleanSupplier;
 
 @Slf4j
 @Component
@@ -20,30 +19,11 @@ public class GenerationIntervalCreator<T> {
 
     private final OffsetCalculator offsetCalculator;
 
-    public List<GenerationInterval<T>> getIntervalsForComposition(EntityComposition<?, T> composition,
-                                                                  List<? extends HasDateDuration> employeeCompositions,
-                                                                  BooleanSupplier compositionDivider,
-                                                                  LocalDate from,
-                                                                  LocalDate to,
-                                                                  int offset,
-                                                                  int unitsSize) {
-        var result = new ArrayList<GenerationInterval<T>>();
-        log.debug("Creating intervals from={} to={} for composition {}.", from, to, composition);
-
-        if (compositionDivider.getAsBoolean()) {
-            result.add(getIntervalForSubstitutionShift(from, to, composition, unitsSize, offset));
-        } else {
-            result.addAll(getIntervalsForMainShift(from, to, employeeCompositions, composition.getSideB(), unitsSize, offset));
-        }
-
-        return result;
-    }
-
-    private GenerationInterval<T> getIntervalForSubstitutionShift(LocalDate from,
-                                                                  LocalDate to,
-                                                                  EntityComposition<?, T> composition,
-                                                                  int unitsSize,
-                                                                  int offset) {
+    public GenerationInterval<T> getIntervalForSubstitutionShift(LocalDate from,
+                                                                 LocalDate to,
+                                                                 EntityComposition<?, T> composition,
+                                                                 int unitsSize,
+                                                                 int offset) {
         log.debug("Creating interval for substitution shift");
         var interval        = new GenerationInterval<T>();
         var intervalStart   = from.isAfter(composition.getFrom()) ? from : composition.getFrom();
@@ -58,28 +38,28 @@ public class GenerationIntervalCreator<T> {
         return interval;
     }
 
-    private List<GenerationInterval<T>> getIntervalsForMainShift(LocalDate from,
-                                                                 LocalDate to,
-                                                                 List<? extends HasDateDuration> compositions,
-                                                                 T object,
-                                                                 int unitsSize,
-                                                                 int offset) {
+    public List<GenerationInterval<T>> getIntervalsForMainShift(LocalDate from,
+                                                                LocalDate to,
+                                                                List<? extends HasDateDuration> substitutionCompositions,
+                                                                T object,
+                                                                int unitsSize,
+                                                                int offset) {
         log.debug("Creating interval for main shift");
-        log.debug("Substitution compositions: {}", compositions);
+        log.debug("Substitution compositions: {}", substitutionCompositions);
         var result = new ArrayList<GenerationInterval<T>>();
 
         LocalDate intervalStart = from;
 
-        for (int i = 0; i <= compositions.size(); i++) {
+        for (int i = 0; i <= substitutionCompositions.size(); i++) {
             var interval = new GenerationInterval<T>();
 
-            if (i >= compositions.size()) {
+            if (i >= substitutionCompositions.size()) {
                 setValuesToInterval(interval, from, intervalStart, to, object, unitsSize, offset);
                 result.add(interval);
                 break;
             }
 
-            var composition = compositions.get(i);
+            var composition = substitutionCompositions.get(i);
 
             if (intervalStart.isAfter(composition.getFrom())) {
                 if (composition.getTo().isBefore(to)) {

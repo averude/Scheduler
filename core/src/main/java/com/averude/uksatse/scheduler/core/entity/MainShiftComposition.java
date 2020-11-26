@@ -8,7 +8,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -23,7 +22,7 @@ import java.util.StringJoiner;
 @Setter
 @Entity()
 @Table(name = "shift_composition")
-public class ShiftComposition implements HasId, HasDateDuration, EntityComposition<Long, Employee> {
+public class MainShiftComposition implements HasId, HasDateDuration, EntityComposition<Long, Employee> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Positive(message = "{entity.id.negative}")
@@ -39,11 +38,6 @@ public class ShiftComposition implements HasId, HasDateDuration, EntityCompositi
     private Employee employee;
 
     @NotNull
-    @Type(type = "numeric_boolean")
-    @Column(nullable = false)
-    private Boolean substitution;
-
-    @NotNull
     @Column(name = "from_date")
     private LocalDate from;
 
@@ -51,7 +45,7 @@ public class ShiftComposition implements HasId, HasDateDuration, EntityCompositi
     @Column(name = "to_date")
     private LocalDate to;
 
-    public ShiftComposition(Shift shift, Employee employee) {
+    public MainShiftComposition(Shift shift, Employee employee) {
         this.shiftId = shift.getId();
         this.employee = employee;
     }
@@ -80,26 +74,24 @@ public class ShiftComposition implements HasId, HasDateDuration, EntityCompositi
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ShiftComposition that = (ShiftComposition) o;
+        MainShiftComposition that = (MainShiftComposition) o;
         return shiftId.equals(that.shiftId) &&
                 employee.equals(that.employee) &&
-                substitution.equals(that.substitution) &&
                 from.equals(that.from) &&
                 to.equals(that.to);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(shiftId, employee, substitution, from, to);
+        return Objects.hash(shiftId, employee, from, to);
     }
 
     @Override
     public String toString() {
-        return new StringJoiner(", ", ShiftComposition.class.getSimpleName() + "[", "]")
+        return new StringJoiner(", ", MainShiftComposition.class.getSimpleName() + "[", "]")
                 .add("id=" + id)
                 .add("shiftId=" + shiftId)
                 .add("employee=" + employee)
-                .add("substitution=" + substitution)
                 .add("from=" + from)
                 .add("to=" + to)
                 .toString();

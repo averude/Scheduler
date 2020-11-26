@@ -1,7 +1,7 @@
 package com.averude.uksatse.scheduler.core.entity.structure;
 
 import com.averude.uksatse.scheduler.core.entity.Employee;
-import com.averude.uksatse.scheduler.core.entity.ShiftComposition;
+import com.averude.uksatse.scheduler.core.entity.MainShiftComposition;
 import com.averude.uksatse.scheduler.core.entity.ShiftPattern;
 import com.averude.uksatse.scheduler.core.interfaces.entity.HasDepartmentId;
 import com.averude.uksatse.scheduler.core.interfaces.entity.HasId;
@@ -62,20 +62,20 @@ public class Shift implements HasId, HasDepartmentId {
     @OneToMany( mappedBy = "shiftId",
                 cascade = CascadeType.ALL,
                 fetch = FetchType.LAZY)
-    private List<@NotNull @Valid ShiftComposition> employees = new ArrayList<>();
+    private List<@NotNull @Valid MainShiftComposition> employees = new ArrayList<>();
 
     public void addEmployee(Employee employee){
-        ShiftComposition shiftComposition = new ShiftComposition(this, employee);
-        employees.add(shiftComposition);
-        employee.getShiftsList().add(shiftComposition);
+        MainShiftComposition mainShiftComposition = new MainShiftComposition(this, employee);
+        employees.add(mainShiftComposition);
+        employee.getMainShiftsList().add(mainShiftComposition);
     }
 
     public void removeEmployee(Employee employee){
-        ShiftComposition shiftComposition = new ShiftComposition(this, employee);
-        employee.getShiftsList().remove(shiftComposition);
-        employees.remove(shiftComposition);
-        shiftComposition.setShiftId(null);
-        shiftComposition.setEmployee(null);
+        MainShiftComposition mainShiftComposition = new MainShiftComposition(this, employee);
+        employee.getMainShiftsList().remove(mainShiftComposition);
+        employees.remove(mainShiftComposition);
+        mainShiftComposition.setShiftId(null);
+        mainShiftComposition.setEmployee(null);
     }
 
     @Override

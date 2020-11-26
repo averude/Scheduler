@@ -18,7 +18,7 @@ export class ShiftCompositionService
   constructor(authService: AuthService,
               http: HttpClient,
               private config: RestConfig) {
-    super(`${config.baseUrl}/admin/shift_compositions`, http);
+    super(`${config.baseUrl}/admin/main_shift_compositions`, http);
   }
 
   getAll(from?: string, to?: string): Observable<ShiftComposition[]> {
