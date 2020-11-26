@@ -1,9 +1,9 @@
 package com.averude.uksatse.scheduler.core.entity;
 
 import com.averude.uksatse.scheduler.core.interfaces.entity.EntityComposition;
-import com.averude.uksatse.scheduler.core.interfaces.entity.HasDateDuration;
 import com.averude.uksatse.scheduler.core.interfaces.entity.HasId;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,11 +11,12 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
+@Data
 @Setter
 @Getter
 @Entity
-@Table(name = "substitution_shift_composition")
-public class SubstitutionShiftComposition implements HasId, HasDateDuration, EntityComposition<Long, Employee> {
+@Table(name = "substitution_shift_compositions")
+public class SubstitutionShiftComposition implements HasId, EntityComposition<Long, Employee> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
