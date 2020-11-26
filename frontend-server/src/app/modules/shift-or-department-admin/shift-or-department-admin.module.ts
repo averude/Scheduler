@@ -6,7 +6,7 @@ import { StatisticsTableComponent } from "./schedule/components/statistics/compo
 import { ScheduleTabBarComponent } from "./schedule/components/schedule-tab-bar/schedule-tab-bar.component";
 import { ReportFormComponent } from "./schedule/components/reports/components/report-form/report-form.component";
 import { ScheduleTableComponent } from "./schedule/components/calendar/schedule-table-component/schedule-table.component";
-import { ShiftCompositionTableComponent } from "./schedule/components/shift-composition/components/shift-composition-table/shift-composition-table.component";
+import { MainShiftCompositionTableComponent } from "./schedule/components/shift-composition/components/main-shift-composition-table/main-shift-composition-table.component";
 import { WorkingNormTableComponent } from "./schedule/components/working-time/components/working-time-table/working-norm-table.component";
 
 const routes: Routes = [
@@ -31,7 +31,7 @@ const routes: Routes = [
           },
           {
             path: 'compositions',
-            component: ShiftCompositionTableComponent
+            component: MainShiftCompositionTableComponent
           },
           {
             path: 'working_norm',

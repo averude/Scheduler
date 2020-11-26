@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { DialogBaseComponent } from "../../../../../../../shared/abstract-components/dialog-base/dialog-base.component";
-import { ShiftComposition } from "../../../../../../../model/shift-composition";
+import { MainShiftComposition } from "../../../../../../../model/main-shift-composition";
 import { FormBuilder, Validators } from "@angular/forms";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { Employee } from "../../../../../../../model/employee";
@@ -9,11 +9,11 @@ import { DATE_FORMAT, getEmployeeShortName } from "../../../../../../../shared/u
 import { MAT_DATE_FORMATS } from "@angular/material/core";
 
 @Component({
-  selector: 'app-shift-composition-dialog',
-  templateUrl: './shift-composition-dialog.component.html',
+  selector: 'app-main-shift-composition-dialog',
+  templateUrl: './main-shift-composition-dialog.component.html',
   styleUrls: [
     '../../../../../../../shared/common/dialog.common.css',
-    './shift-composition-dialog.component.css'
+    './main-shift-composition-dialog.component.css'
   ],
   providers: [
     {
@@ -22,13 +22,13 @@ import { MAT_DATE_FORMATS } from "@angular/material/core";
     }
   ]
 })
-export class ShiftCompositionDialogComponent extends DialogBaseComponent<ShiftComposition> {
+export class MainShiftCompositionDialogComponent extends DialogBaseComponent<MainShiftComposition> {
 
   employees:  Employee[];
   shifts:     Shift[];
 
   constructor(private fb: FormBuilder,
-              private dialogRef: MatDialogRef<ShiftComposition>,
+              private dialogRef: MatDialogRef<MainShiftComposition>,
               @Inject(MAT_DIALOG_DATA) data) {
     super(data.shiftSchedule, dialogRef);
     this.employees = data.employees;
@@ -41,19 +41,17 @@ export class ShiftCompositionDialogComponent extends DialogBaseComponent<ShiftCo
       shiftId:      [null, Validators.required],
       employee:     [null, Validators.required],
       from:         [null, Validators.required],
-      to:           [null, Validators.required],
-      substitution: [true, Validators.required]
+      to:           [null, Validators.required]
     });
   }
 
-  fillInTheForm(shiftSchedule: ShiftComposition) {
+  fillInTheForm(shiftSchedule: MainShiftComposition) {
     this.dialogForm.setValue({
       id:           shiftSchedule.id,
       shiftId:      shiftSchedule.shiftId,
       employee:     shiftSchedule.employee,
       from:         shiftSchedule.from,
       to:           shiftSchedule.to,
-      substitution: shiftSchedule.substitution,
     })
   }
 

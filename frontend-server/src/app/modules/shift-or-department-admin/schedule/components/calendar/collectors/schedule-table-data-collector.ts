@@ -4,7 +4,7 @@ import { WorkingNorm } from "../../../../../../model/working-norm";
 import { BasicDto } from "../../../../../../model/dto/basic-dto";
 import { Employee } from "../../../../../../model/employee";
 import { WorkDay } from "../../../../../../model/workday";
-import { ShiftComposition } from "../../../../../../model/shift-composition";
+import { MainShiftComposition } from "../../../../../../model/main-shift-composition";
 import { SchedulerRowData } from "../model/scheduler-row-data";
 import { getEmployeeShortName } from "../../../../../../shared/utils/utils";
 import { CalendarDay } from "../../../../../../lib/ngx-schedule-table/model/calendar-day";
@@ -19,7 +19,7 @@ export class ScheduleTableDataCollector {
 
   getTableData(dates: CalendarDay[],
                shifts: Shift[],
-               compositions: ShiftComposition[],
+               compositions: MainShiftComposition[],
                schedule: BasicDto<Employee, WorkDay>[],
                workingNorms: WorkingNorm[]): RowGroupData[] {
     let groupData: RowGroupData[] = [];
@@ -82,7 +82,7 @@ export class ScheduleTableDataCollector {
   }
 
   private insertDataInGroup(rowGroup: RowGroupData,
-                            composition: ShiftComposition,
+                            composition: MainShiftComposition,
                             date: CalendarDay,
                             employee: Employee,
                             workDay: WorkDay,
@@ -116,7 +116,7 @@ export class ScheduleTableDataCollector {
                           workDay: WorkDay,
                           workingNorm: number,
                           groupData: RowGroupData[],
-                          compositions: ShiftComposition[][],
+                          compositions: MainShiftComposition[][],
                           compositionIndex: number,
                           dayIndex: number) {
     for (let subCompositions of compositions) {
@@ -130,13 +130,12 @@ export class ScheduleTableDataCollector {
     }
   }
 
-  private isInComposition(date: string, composition: ShiftComposition): boolean {
+  private isInComposition(date: string, composition: MainShiftComposition): boolean {
     return moment(date).isBetween(composition.from, composition.to, 'date', '[]')
   }
 
-  private getWorkingNorm(employeeCompositions: ShiftComposition[],
+  private getWorkingNorm(employeeCompositions: MainShiftComposition[],
                          workingNorms: WorkingNorm[]): number {
-    console.log(employeeCompositions);
     if (employeeCompositions && employeeCompositions[0]) {
       if (employeeCompositions[0][0]) {
         let shiftId = employeeCompositions[0][0].shiftId;

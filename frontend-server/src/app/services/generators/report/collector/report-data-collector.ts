@@ -4,7 +4,7 @@ import { BasicDto } from "../../../../model/dto/basic-dto";
 import { Employee } from "../../../../model/employee";
 import { WorkDay } from "../../../../model/workday";
 import { SummationDto } from "../../../../model/dto/summation-dto";
-import { ShiftComposition } from "../../../../model/shift-composition";
+import { MainShiftComposition } from "../../../../model/main-shift-composition";
 import { ReportRowData } from "../model/report-row-data";
 
 export interface ReportDataCollector {
@@ -12,7 +12,7 @@ export interface ReportDataCollector {
           dayTypes: DayType[],
           schedule: BasicDto<Employee, WorkDay>[],
           summations: SummationDto[],
-          compositions: ShiftComposition[]): ReportRowData[];
+          compositions: MainShiftComposition[]): ReportRowData[];
 
   REPORT_TYPE: string;
 }

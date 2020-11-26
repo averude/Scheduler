@@ -11,8 +11,8 @@ import { MatSelectModule } from "@angular/material/select";
 import { MatSortModule } from "@angular/material/sort";
 import { MatTableModule } from "@angular/material/table";
 import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MatMomentDateModule } from "@angular/material-moment-adapter";
-import { ShiftCompositionTableComponent } from './components/shift-composition-table/shift-composition-table.component';
-import { ShiftCompositionDialogComponent } from './components/shift-composition-dialog/shift-composition-dialog.component';
+import { MainShiftCompositionTableComponent } from './components/main-shift-composition-table/main-shift-composition-table.component';
+import { MainShiftCompositionDialogComponent } from './components/shift-composition-dialog/main-shift-composition-dialog.component';
 
 @NgModule({
     imports: [
@@ -31,8 +31,8 @@ import { ShiftCompositionDialogComponent } from './components/shift-composition-
       ReactiveFormsModule
     ],
   declarations: [
-    ShiftCompositionTableComponent,
-    ShiftCompositionDialogComponent
+    MainShiftCompositionTableComponent,
+    MainShiftCompositionDialogComponent
   ],
   providers: [
     {
@@ -41,5 +41,5 @@ import { ShiftCompositionDialogComponent } from './components/shift-composition-
     }
   ]
 })
-export class ShiftCompositionModule {
+export class MainShiftCompositionModule {
 }

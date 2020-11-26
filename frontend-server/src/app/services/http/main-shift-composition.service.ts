@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { ShiftComposition } from "../../model/shift-composition";
+import { MainShiftComposition } from "../../model/main-shift-composition";
 import { RestConfig } from "../../rest.config";
 import { HttpClient } from "@angular/common/http";
 import { AuthService } from "./auth.service";
@@ -12,8 +12,8 @@ import * as moment from 'moment';
 @Injectable({
   providedIn: "root"
 })
-export class ShiftCompositionService
-  extends ACrudService<ShiftComposition> implements CUDService<ShiftComposition> {
+export class MainShiftCompositionService
+  extends ACrudService<MainShiftComposition> implements CUDService<MainShiftComposition> {
 
   constructor(authService: AuthService,
               http: HttpClient,
@@ -21,7 +21,7 @@ export class ShiftCompositionService
     super(`${config.baseUrl}/admin/main_shift_compositions`, http);
   }
 
-  getAll(from?: string, to?: string): Observable<ShiftComposition[]> {
+  getAll(from?: string, to?: string): Observable<MainShiftComposition[]> {
     return super.getAll(from, to)
       .pipe(tap(compositions => compositions.forEach(composition => {
         composition.from  = moment(composition.from);

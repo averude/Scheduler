@@ -10,7 +10,7 @@ import { Shift } from "../../../../../../../model/shift";
 import { ShiftService } from "../../../../../../../services/http/shift.service";
 import { Employee } from "../../../../../../../model/employee";
 import { getEmployeeShortName } from "../../../../../../../shared/utils/utils";
-import { ShiftCompositionService } from "../../../../../../../services/http/shift-composition.service";
+import { MainShiftCompositionService } from "../../../../../../../services/http/main-shift-composition.service";
 import { StatisticsColumnCompositor } from "../../../../../../../shared/compositor/statistics-column-compositor";
 import { WorkingNormService } from "../../../../../../../services/http/working-norm.service";
 import { sortByCompositions } from "../../../../../../../shared/utils/collection-utils";
@@ -35,7 +35,7 @@ export class StatisticsTableComponent implements OnInit, OnDestroy {
               private summationColumnDtoService: SummationColumnDtoService,
               private statisticsService: StatisticsService,
               private workingNormService: WorkingNormService,
-              private shiftCompositionService: ShiftCompositionService) { }
+              private shiftCompositionService: MainShiftCompositionService) { }
 
   ngOnInit() {
     forkJoin([

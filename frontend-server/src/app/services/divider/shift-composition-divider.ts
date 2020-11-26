@@ -1,11 +1,11 @@
 import { Injectable } from "@angular/core";
-import { ShiftComposition } from "../../model/shift-composition";
+import { MainShiftComposition } from "../../model/main-shift-composition";
 import { Moment } from "moment";
 
 @Injectable()
 export class ShiftCompositionDivider {
 
-  divideMainCompositionsByEmployee(shiftCompositions: ShiftComposition[]): Map<number, any[]> {
+  divideMainCompositionsByEmployee(shiftCompositions: MainShiftComposition[]): Map<number, any[]> {
     let compositionsMap = new Map<number, any[]>();
 
     for (let composition of shiftCompositions) {
@@ -41,8 +41,8 @@ export class ShiftCompositionDivider {
     return compositionsMap;
   }
 
-  divide(mainShiftComposition: ShiftComposition,
-         substitutionShiftCompositions: ShiftComposition[]) {
+  divide(mainShiftComposition: MainShiftComposition,
+         substitutionShiftCompositions: MainShiftComposition[]) {
     let result = [];
 
     let from  = mainShiftComposition.from;
@@ -86,8 +86,8 @@ export class ShiftCompositionDivider {
 
   private createComposition(from: Moment,
                             to: Moment,
-                            mainShiftComposition: ShiftComposition): ShiftComposition {
-    let composition = new ShiftComposition();
+                            mainShiftComposition: MainShiftComposition): MainShiftComposition {
+    let composition = new MainShiftComposition();
     composition.shiftId       = mainShiftComposition.shiftId;
     composition.employee      = mainShiftComposition.employee;
     composition.substitution  = mainShiftComposition.substitution;

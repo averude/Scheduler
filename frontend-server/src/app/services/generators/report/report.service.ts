@@ -9,7 +9,7 @@ import { flatMap, map } from "rxjs/operators";
 import { Moment } from "moment";
 import { DecorationData } from "./model/decoration-data";
 import { Buffer } from "exceljs";
-import { ShiftCompositionService } from "../../http/shift-composition.service";
+import { MainShiftCompositionService } from "../../http/main-shift-composition.service";
 import { SummationColumn } from "../../../model/summation-column";
 import { WorkingNormService } from "../../http/working-norm.service";
 import { ReportServiceConfig } from "./config/report-service-config";
@@ -27,7 +27,7 @@ export class ReportService {
               private scheduleService: ScheduleService,
               private dayTypeService: DayTypeService,
               private statisticsService: StatisticsService,
-              private shiftCompositionService: ShiftCompositionService,
+              private shiftCompositionService: MainShiftCompositionService,
               private workingNormService: WorkingNormService){}
 
   generateReport(reportType: string,

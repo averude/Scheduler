@@ -1,5 +1,5 @@
 import { ShiftCompositionDivider } from "./shift-composition-divider";
-import { ShiftComposition } from "../../model/shift-composition";
+import { MainShiftComposition } from "../../model/main-shift-composition";
 import * as moment from 'moment';
 import { Employee } from "../../model/employee";
 
@@ -16,7 +16,7 @@ describe('Test shift composition divider', () => {
 });
 
 function getMainComposition() {
-  let mainShiftComposition = new ShiftComposition();
+  let mainShiftComposition = new MainShiftComposition();
   mainShiftComposition.employee = <Employee> {id: 1};
   mainShiftComposition.shiftId = 3;
   mainShiftComposition.substitution = false;
@@ -26,14 +26,14 @@ function getMainComposition() {
 }
 
 function getSubstitutionCompositions() {
-  let interval = new ShiftComposition();
+  let interval = new MainShiftComposition();
   interval.employee = <Employee> {id: 1};
   interval.shiftId = 1;
   interval.substitution = true;
   interval.from = moment("2020-06-04");
   interval.to   = moment("2020-06-09");
 
-  let interval2 = new ShiftComposition();
+  let interval2 = new MainShiftComposition();
   interval2.employee = <Employee> {id: 1};
   interval2.shiftId = 2;
   interval2.substitution = true;

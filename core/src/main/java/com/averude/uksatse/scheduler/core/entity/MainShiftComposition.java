@@ -4,6 +4,7 @@ import com.averude.uksatse.scheduler.core.entity.structure.Shift;
 import com.averude.uksatse.scheduler.core.interfaces.entity.EntityComposition;
 import com.averude.uksatse.scheduler.core.interfaces.entity.HasDateDuration;
 import com.averude.uksatse.scheduler.core.interfaces.entity.HasId;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -51,11 +52,13 @@ public class MainShiftComposition implements HasId, HasDateDuration, EntityCompo
     }
 
     @Override
+    @JsonIgnore
     public Long getSideA() {
         return shiftId;
     }
 
     @Override
+    @JsonIgnore
     public Employee getSideB() {
         return employee;
     }

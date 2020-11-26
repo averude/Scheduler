@@ -7,7 +7,7 @@ import { StatisticsModule } from "./schedule/components/statistics/statistics.mo
 import { ScheduleTabBarComponent } from './schedule/components/schedule-tab-bar/schedule-tab-bar.component';
 import { ReportsModule } from "./schedule/components/reports/reports.module";
 import { CalendarModule } from "./schedule/components/calendar/calendar.module";
-import { ShiftCompositionModule } from "./schedule/components/shift-composition/shift-composition.module";
+import { MainShiftCompositionModule } from "./schedule/components/shift-composition/main-shift-composition.module";
 import { RemoveDialogModule } from "../../shared/abstract-components/remove-dialog/remove-dialog.module";
 import { WorkingNormModule } from "./schedule/components/working-time/working-norm.module";
 import { NgxMaskModule } from "ngx-mask";
@@ -18,7 +18,7 @@ import { AvrTopBarModule } from "../../lib/avr-top-bar/avr-top-bar.module";
     CommonModule,
     AvrTopBarModule,
     CalendarModule,
-    ShiftCompositionModule,
+    MainShiftCompositionModule,
     WorkingNormModule,
     RemoveDialogModule,
     StatisticsModule,

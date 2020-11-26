@@ -7,7 +7,7 @@ import { DayType } from "../../../../model/day-type";
 import { CellData } from "../../../../lib/ngx-schedule-table/model/data/cell-data";
 import { SummationDto } from "../../../../model/dto/summation-dto";
 import { CalendarDay } from "../../../../lib/ngx-schedule-table/model/calendar-day";
-import { ShiftComposition } from "../../../../model/shift-composition";
+import { MainShiftComposition } from "../../../../model/main-shift-composition";
 import { sortByCompositions } from "../../../../shared/utils/collection-utils";
 import { ReportDataCollector } from "./report-data-collector";
 
@@ -22,7 +22,7 @@ export abstract class AbstractReportDataCollector implements ReportDataCollector
           dayTypes: DayType[],
           schedule: BasicDto<Employee, WorkDay>[],
           summations: SummationDto[],
-          compositions: ShiftComposition[]): ReportRowData[] {
+          compositions: MainShiftComposition[]): ReportRowData[] {
     if (!compositions) {
       return;
     }

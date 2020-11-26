@@ -1,6 +1,6 @@
 import { SummationDto, SummationResult } from "../../model/dto/summation-dto";
 import { HOURS_SUM, SummationColumn } from "../../model/summation-column";
-import { ShiftComposition } from "../../model/shift-composition";
+import { MainShiftComposition } from "../../model/main-shift-composition";
 import { WorkingNorm } from "../../model/working-norm";
 import { sortByPattern, uniqById } from "../utils/collection-utils";
 import { roundToTwo } from "../utils/utils";
@@ -11,7 +11,7 @@ export class StatisticsColumnCompositor {
 
   composeResults(summationDtos: SummationDto[],
                  summationColumns: SummationColumn[],
-                 shiftCompositions: ShiftComposition[],
+                 shiftCompositions: MainShiftComposition[],
                  workingNorms: WorkingNorm[]) {
     let mainShiftCompositions = uniqById(shiftCompositions
       .filter(value => !value.substitution), value => value.employee.id);

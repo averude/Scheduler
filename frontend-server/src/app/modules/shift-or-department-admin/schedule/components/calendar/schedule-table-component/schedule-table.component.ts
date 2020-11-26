@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, } from '@angular/core';
 import { PaginationService } from "../../../../../../lib/ngx-schedule-table/service/pagination.service";
 import { ShiftService } from "../../../../../../services/http/shift.service";
-import { ShiftCompositionService } from "../../../../../../services/http/shift-composition.service";
+import { MainShiftCompositionService } from "../../../../../../services/http/main-shift-composition.service";
 import { ScheduleService } from "../../../../../../services/http/schedule.service";
 import { WorkingNormService } from "../../../../../../services/http/working-norm.service";
 import { forkJoin, from, Subscription } from "rxjs";
@@ -41,7 +41,7 @@ export class ScheduleTableComponent implements OnInit, OnDestroy {
               private tableRenderer: TableRenderer,
               private sumCalculator: TableSumCalculator,
               private shiftService: ShiftService,
-              private shiftCompositionService: ShiftCompositionService,
+              private shiftCompositionService: MainShiftCompositionService,
               private scheduleService: ScheduleService,
               private workingNormService: WorkingNormService,
               private scheduleTableDataCollector: ScheduleTableDataCollector,
