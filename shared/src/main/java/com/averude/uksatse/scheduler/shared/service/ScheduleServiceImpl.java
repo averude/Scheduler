@@ -4,8 +4,8 @@ import com.averude.uksatse.scheduler.core.dto.BasicDto;
 import com.averude.uksatse.scheduler.core.entity.Employee;
 import com.averude.uksatse.scheduler.core.entity.WorkDay;
 import com.averude.uksatse.scheduler.shared.repository.EmployeeRepository;
+import com.averude.uksatse.scheduler.shared.repository.MainShiftCompositionRepository;
 import com.averude.uksatse.scheduler.shared.repository.ScheduleRepository;
-import com.averude.uksatse.scheduler.shared.repository.ShiftCompositionRepository;
 import com.averude.uksatse.scheduler.shared.service.base.AService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,16 +20,16 @@ public class ScheduleServiceImpl
         extends AService<WorkDay, Long> implements ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
-    private final ShiftCompositionRepository shiftCompositionRepository;
+    private final MainShiftCompositionRepository mainShiftCompositionRepository;
     private final EmployeeRepository employeeRepository;
 
     @Autowired
     public ScheduleServiceImpl(ScheduleRepository scheduleRepository,
-                               ShiftCompositionRepository shiftCompositionRepository,
+                               MainShiftCompositionRepository mainShiftCompositionRepository,
                                EmployeeRepository employeeRepository) {
         super(scheduleRepository);
         this.scheduleRepository = scheduleRepository;
-        this.shiftCompositionRepository = shiftCompositionRepository;
+        this.mainShiftCompositionRepository = mainShiftCompositionRepository;
         this.employeeRepository = employeeRepository;
     }
 
@@ -49,7 +49,7 @@ public class ScheduleServiceImpl
     public List<BasicDto<Employee, WorkDay>> findAllDtoByShiftIdAndDate(Long shiftId,
                                                                         LocalDate from,
                                                                         LocalDate to) {
-        return shiftCompositionRepository.findAllByShiftIdAndToGreaterThanEqualAndFromLessThanEqual(shiftId, from, to)
+        return mainShiftCompositionRepository.findAllByShiftIdAndToGreaterThanEqualAndFromLessThanEqual(shiftId, from, to)
                 .stream()
                 .map(shiftSchedule -> {
                     var employee = employeeRepository.findById(shiftSchedule.getEmployee().getId()).orElseThrow();

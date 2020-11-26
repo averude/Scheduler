@@ -34,9 +34,9 @@ public class ScheduleControllerImpl implements ScheduleController {
     public ResponseEntity<Iterable<WorkDay>> create(Collection<WorkDay> schedule,
                                                     Authentication authentication){
         entityModifier.modifyAll(schedule, authentication);
-        scheduleService.saveAll(schedule);
+        var workDays = scheduleService.saveAll(schedule);
         log.debug("User:{} - {} work days created.", authentication.getPrincipal(), schedule.size());
-        return ResponseEntity.ok(schedule);
+        return ResponseEntity.ok(workDays);
     }
 
     @Override

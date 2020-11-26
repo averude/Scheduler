@@ -65,9 +65,6 @@ public class ScheduleGeneratorImpl implements ScheduleGenerator {
 
     private void updateWorkDay(WorkDay workDay,
                                HasDayTypeAndTime unit) {
-        if (workDay.getId() != null) {
-            log.trace("Updating workday {} by unit {}", workDay, unit);
-        }
         workDay.setScheduledDayTypeId(unit.getDayType().getId());
         workDay.setStartTime(unit.getStartTime());
         workDay.setEndTime(unit.getEndTime());

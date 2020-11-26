@@ -5,14 +5,12 @@ import com.averude.uksatse.scheduler.core.interfaces.entity.HasDayTypeIdAndTime;
 import com.averude.uksatse.scheduler.core.interfaces.entity.HasDepartmentId;
 import com.averude.uksatse.scheduler.core.interfaces.entity.HasId;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
 import java.util.StringJoiner;
@@ -30,14 +28,23 @@ import java.util.StringJoiner;
                         columnNames = {"employee_id", "date"})
         }
 )
+@IdClass(WorkDay.PK.class)
 public class WorkDay implements HasId, HasDepartmentId, HasDayTypeIdAndTime, HasDate {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Positive(message = "{entity.id.negative}")
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "work_day_sequence"
+    )
+    @SequenceGenerator(
+            name = "work_day_sequence",
+            sequenceName = "work_schedule_id_seq",
+            allocationSize = 1
+    )
     private Long id;
 
     @JsonIgnore
+    @Id
     @NotNull
     @Column(name = "department_id")
     private Long departmentId;
@@ -142,5 +149,13 @@ public class WorkDay implements HasId, HasDepartmentId, HasDayTypeIdAndTime, Has
                 .add("breakStartTime=" + breakStartTime)
                 .add("breakEndTime=" + breakEndTime)
                 .toString();
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class PK implements Serializable {
+        private Long id;
+        private Long departmentId;
     }
 }
