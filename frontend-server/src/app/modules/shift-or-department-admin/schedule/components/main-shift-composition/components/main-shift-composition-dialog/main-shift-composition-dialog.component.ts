@@ -17,8 +17,8 @@ import { MAT_DATE_FORMATS } from "@angular/material/core";
   ],
   providers: [
     {
-    provide: MAT_DATE_FORMATS,
-    useValue: DATE_FORMAT
+      provide: MAT_DATE_FORMATS,
+      useValue: DATE_FORMAT
     }
   ]
 })

@@ -3,7 +3,7 @@
 
   <mat-form-field>
     <mat-select placeholder="Employee"
-                [compareWith]="compareNums"
+                [compareWith]="compareIdEntities"
                 formControlName="employee">
       <mat-option *ngFor="let employee of employees"
                   [value]="employee">

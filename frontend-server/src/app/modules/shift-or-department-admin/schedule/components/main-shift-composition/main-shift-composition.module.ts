@@ -12,7 +12,7 @@ import { MatSortModule } from "@angular/material/sort";
 import { MatTableModule } from "@angular/material/table";
 import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MatMomentDateModule } from "@angular/material-moment-adapter";
 import { MainShiftCompositionTableComponent } from './components/main-shift-composition-table/main-shift-composition-table.component';
-import { MainShiftCompositionDialogComponent } from './components/shift-composition-dialog/main-shift-composition-dialog.component';
+import { MainShiftCompositionDialogComponent } from './components/main-shift-composition-dialog/main-shift-composition-dialog.component';
 
 @NgModule({
     imports: [

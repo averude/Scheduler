@@ -14,7 +14,7 @@ export abstract class PageableTableBaseComponent<T extends IdEntity> extends Tab
 
   private sub: Subscription;
 
-  protected constructor(private datePaginationService: PaginationService,
+  protected constructor(protected datePaginationService: PaginationService,
                         matDialog: MatDialog,
                         protected pageableByDateCrudService: IByAuthService<T> & CUDService<T>,
                         notification: NotificationsService) {

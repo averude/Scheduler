@@ -1,11 +1,26 @@
 import { Moment } from "moment";
 import { Employee } from "./employee";
+import { IdEntity } from "./interface/id-entity";
 
-export class MainShiftComposition {
-  id:           number;
-  employee:     Employee;
-  shiftId:      number;
-  substitution: boolean;
-  from:         Moment;
-  to:           Moment;
+export interface HasDuration {
+  from: any;
+  to:   any;
+}
+
+export class MainShiftComposition implements IdEntity, HasDuration {
+  id:                   number;
+  shiftId:              number;
+  employee:             Employee;
+  substitution:         boolean;
+  from:                 Moment;
+  to:                   Moment;
+}
+
+export class SubstitutionShiftComposition implements IdEntity, HasDuration {
+  id:                   number;
+  shiftId:              number;
+  employee:             Employee;
+  mainShiftComposition: MainShiftComposition;
+  from:                 Moment;
+  to:                   Moment;
 }

@@ -16,6 +16,7 @@ import { concatMap } from "rxjs/operators";
 import { TableRenderer } from "../../../../../../lib/ngx-schedule-table/service/table-renderer.service";
 import { TableSumCalculator } from "../../../../../../services/calculators/table-sum-calculator.service";
 import { AuthService } from "../../../../../../services/http/auth.service";
+import { SubstitutionShiftCompositionService } from "../../../../../../services/http/substitution-shift-composition.service";
 
 @Component({
   selector: 'app-schedule-table-component',
@@ -41,7 +42,8 @@ export class ScheduleTableComponent implements OnInit, OnDestroy {
               private tableRenderer: TableRenderer,
               private sumCalculator: TableSumCalculator,
               private shiftService: ShiftService,
-              private shiftCompositionService: MainShiftCompositionService,
+              private mainShiftCompositionService: MainShiftCompositionService,
+              private substitutionShiftCompositionService: SubstitutionShiftCompositionService,
               private scheduleService: ScheduleService,
               private workingNormService: WorkingNormService,
               private scheduleTableDataCollector: ScheduleTableDataCollector,
@@ -68,9 +70,13 @@ export class ScheduleTableComponent implements OnInit, OnDestroy {
         this.units = getGenerationUnits(shifts);
         this.paginatorSub = this.paginationService.onValueChange.subscribe(daysInMonth => {
           forkJoin([
-            this.shiftCompositionService.getAll(
+            this.mainShiftCompositionService.getAll(
               daysInMonth[0].isoString,
               daysInMonth[daysInMonth.length - 1].isoString),
+            this.substitutionShiftCompositionService
+              .getAll(
+                daysInMonth[0].isoString,
+                daysInMonth[daysInMonth.length - 1].isoString),
             this.scheduleService.getAllByDate(
               daysInMonth[0].isoString,
               daysInMonth[daysInMonth.length - 1].isoString),
@@ -78,7 +84,7 @@ export class ScheduleTableComponent implements OnInit, OnDestroy {
               daysInMonth[0].isoString,
               daysInMonth[daysInMonth.length - 1].isoString)
           ]).subscribe((values: any[][]) => {
-            this.rowGroupData = this.scheduleTableDataCollector.getTableData(daysInMonth, shifts, values[0], values[1], values[2]);
+            this.rowGroupData = this.scheduleTableDataCollector.getTableData(daysInMonth, shifts, values[0], values[1], values[2], values[3]);
             this.sumCalculator.calculateWorkHoursSum(this.rowGroupData);
             this.cd.markForCheck();
           })

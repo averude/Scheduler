@@ -29,4 +29,11 @@ public interface SubstitutionShiftCompositionRepository extends JpaRepository<Su
     List<SubstitutionShiftComposition> findAllByDepartmentIdAndDatesBetween(Long departmentId,
                                                                             LocalDate from,
                                                                             LocalDate to);
+
+    @Query("select ssc " +
+            "from SubstitutionShiftComposition ssc " +
+            "left join MainShiftComposition msc " +
+            "on ssc.mainShiftComposition = msc " +
+            "where ?2 <= ssc.to and ?3 >= ssc.from and (ssc.shiftId = ?1 or msc.shiftId = ?1)")
+    List<SubstitutionShiftComposition> findAllByShiftIdAndDatesBetween(Long shiftId, LocalDate from, LocalDate to);
 }

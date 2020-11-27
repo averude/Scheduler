@@ -1,48 +1,50 @@
 import { Injectable } from "@angular/core";
-import { MainShiftComposition } from "../../model/main-shift-composition";
+import { MainShiftComposition, SubstitutionShiftComposition } from "../../model/main-shift-composition";
 import { Moment } from "moment";
 
 @Injectable()
 export class ShiftCompositionDivider {
 
-  divideMainCompositionsByEmployee(shiftCompositions: MainShiftComposition[]): Map<number, any[]> {
+  divideMainCompositionsByEmployee(mainShiftCompositions: MainShiftComposition[],
+                                   substitutionCompositions: SubstitutionShiftComposition[]): Map<number, any[]> {
     let compositionsMap = new Map<number, any[]>();
 
-    for (let composition of shiftCompositions) {
-      let value = compositionsMap.get(composition.employee.id);
-      if (value) {
-        value.push(composition);
-      } else {
-        compositionsMap.set(composition.employee.id, [composition]);
-      }
-    }
+    this.fillMap(compositionsMap, mainShiftCompositions, 0);
+    this.fillMap(compositionsMap, substitutionCompositions, 1);
 
-    compositionsMap.forEach((employeeCompositions, employeeId, map) => {
-      let result: any[] = [[],[]];
-
-      for (let composition of employeeCompositions) {
-        if (composition.substitution) {
-          result[1].push(composition);
-        } else {
-          result[0].push(composition);
-        }
-      }
-
-      for (let i = 0; i < result[0].length; i++) {
-        let mainComposition = result[0][i];
-        result[0].splice(i, 1);
-        let subCompositions = this.divide(mainComposition, result[1]);
-        result[0] = result[0].concat(subCompositions);
-      }
-
-      map.set(employeeId, result);
-    });
-
+    compositionsMap.forEach((employeeCompositions) => this.divideValues(employeeCompositions));
     return compositionsMap;
   }
 
+  private fillMap(compositionsMap: Map<number, any[]>,
+              compositions: any[],
+              valArrIdx: number) {
+    for (let composition of compositions) {
+      let value = compositionsMap.get(composition.employee.id);
+      if (value && value[valArrIdx]) {
+        value[valArrIdx].push(composition);
+      } else {
+        let newVal = [[],[]];
+        newVal[valArrIdx] = [composition];
+        compositionsMap.set(composition.employee.id, newVal);
+      }
+    }
+  }
+
+  private divideValues(employeeCompositions: any[][]) {
+    // if (employeeCompositions[1] && employeeCompositions[1].length > 0) {
+    //
+    // }
+    for (let i = 0; i < employeeCompositions[0].length; i++) {
+      let mainComposition = employeeCompositions[0][i];
+      employeeCompositions[0].splice(i, 1);
+      let subCompositions = this.divide(mainComposition, employeeCompositions[1]);
+      employeeCompositions[0] = employeeCompositions[0].concat(subCompositions);
+    }
+  }
+
   divide(mainShiftComposition: MainShiftComposition,
-         substitutionShiftCompositions: MainShiftComposition[]) {
+         substitutionShiftCompositions: SubstitutionShiftComposition[]) {
     let result = [];
 
     let from  = mainShiftComposition.from;

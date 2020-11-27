@@ -4,7 +4,7 @@ import { MainShiftComposition } from "../../../../../../../model/main-shift-comp
 import { MatDialog } from "@angular/material/dialog";
 import { NotificationsService } from "angular2-notifications";
 import { MainShiftCompositionService } from "../../../../../../../services/http/main-shift-composition.service";
-import { MainShiftCompositionDialogComponent } from "../shift-composition-dialog/main-shift-composition-dialog.component";
+import { MainShiftCompositionDialogComponent } from "../main-shift-composition-dialog/main-shift-composition-dialog.component";
 import { EmployeeService } from "../../../../../../../services/http/employee.service";
 import { ShiftService } from "../../../../../../../services/http/shift.service";
 import { Employee } from "../../../../../../../model/employee";
@@ -27,12 +27,11 @@ export class MainShiftCompositionTableComponent extends PageableTableBaseCompone
 
   constructor(datePaginationService: PaginationService,
               dialog: MatDialog,
-              shiftScheduleService: MainShiftCompositionService,
+              mainShiftCompositionService: MainShiftCompositionService,
               private employeeService: EmployeeService,
               private shiftService: ShiftService,
-              private shiftCompositionService: MainShiftCompositionService,
               notificationsService: NotificationsService) {
-    super(datePaginationService, dialog, shiftScheduleService, notificationsService);
+    super(datePaginationService, dialog, mainShiftCompositionService, notificationsService);
   }
 
   ngOnInit(): void {
@@ -41,14 +40,14 @@ export class MainShiftCompositionTableComponent extends PageableTableBaseCompone
     this.shiftService.getAll().subscribe(shifts => this.shifts = shifts);
   }
 
-  openDialog(shiftSchedule: MainShiftComposition) {
+  openDialog(mainShiftComposition: MainShiftComposition) {
     const data = {
-      shiftSchedule: shiftSchedule,
+      shiftSchedule: mainShiftComposition,
       shifts: this.shifts,
       employees: this.employees
     };
 
-    this.openAddOrEditDialog(shiftSchedule, data, MainShiftCompositionDialogComponent);
+    this.openAddOrEditDialog(mainShiftComposition, data, MainShiftCompositionDialogComponent);
   }
 
   getEmployeeShortName(employee: Employee): string {

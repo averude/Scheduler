@@ -4,7 +4,7 @@ import { WorkingNorm } from "../../../../../../model/working-norm";
 import { BasicDto } from "../../../../../../model/dto/basic-dto";
 import { Employee } from "../../../../../../model/employee";
 import { WorkDay } from "../../../../../../model/workday";
-import { MainShiftComposition } from "../../../../../../model/main-shift-composition";
+import { MainShiftComposition, SubstitutionShiftComposition } from "../../../../../../model/main-shift-composition";
 import { SchedulerRowData } from "../model/scheduler-row-data";
 import { getEmployeeShortName } from "../../../../../../shared/utils/utils";
 import { CalendarDay } from "../../../../../../lib/ngx-schedule-table/model/calendar-day";
@@ -19,12 +19,13 @@ export class ScheduleTableDataCollector {
 
   getTableData(dates: CalendarDay[],
                shifts: Shift[],
-               compositions: MainShiftComposition[],
+               mainCompositions: MainShiftComposition[],
+               substitutionCompositions: SubstitutionShiftComposition[],
                schedule: BasicDto<Employee, WorkDay>[],
                workingNorms: WorkingNorm[]): RowGroupData[] {
     let groupData: RowGroupData[] = [];
 
-    let compositionsMap = this.divider.divideMainCompositionsByEmployee(compositions);
+    const compositionsMap = this.divider.divideMainCompositionsByEmployee(mainCompositions, substitutionCompositions);
 
     for (let shift of shifts) {
       groupData[shift.id] = {
@@ -89,6 +90,10 @@ export class ScheduleTableDataCollector {
                             workingNorm: number,
                             isEnabled: boolean,
                             dayIndex: number) {
+    if (!rowGroup) {
+      return;
+    }
+
     let employeeId  = composition.employee.id;
     let rowData     = rowGroup.rowData[employeeId];
 
@@ -134,18 +139,27 @@ export class ScheduleTableDataCollector {
     return moment(date).isBetween(composition.from, composition.to, 'date', '[]')
   }
 
-  private getWorkingNorm(employeeCompositions: MainShiftComposition[],
+  private getWorkingNorm(employeeCompositions: any[][],
                          workingNorms: WorkingNorm[]): number {
+    let result = 0;
     if (employeeCompositions && employeeCompositions[0]) {
-      if (employeeCompositions[0][0]) {
-        let shiftId = employeeCompositions[0][0].shiftId;
+
+      let mainShiftComposition          = employeeCompositions[0][0];
+      let substitutionShiftComposition  = employeeCompositions[1][0];
+
+      if (mainShiftComposition) {
+        let shiftId = mainShiftComposition.shiftId;
         let shiftWorkingNorm = workingNorms.find(value => value.shiftId === shiftId);
-        return shiftWorkingNorm ? shiftWorkingNorm.hours : 0;
-      } else {
-        let shiftId = employeeCompositions[1][0].shiftId;
-        let shiftWorkingNorm = workingNorms.find(value => value.shiftId === shiftId);
-        return shiftWorkingNorm ? shiftWorkingNorm.hours : 0;
+        result = shiftWorkingNorm ? shiftWorkingNorm.hours : 0;
+      } else if (substitutionShiftComposition) {
+        let mainShiftComposition = substitutionShiftComposition.mainShiftComposition;
+        if (mainShiftComposition) {
+          let shiftId = mainShiftComposition.shiftId;
+          let shiftWorkingNorm = workingNorms.find(value => value.shiftId === shiftId);
+          result = shiftWorkingNorm ? shiftWorkingNorm.hours : 0;
+        }
       }
-    } else return 0;
+    }
+    return result;
   }
 }
