@@ -16,7 +16,7 @@ public class GlobalAdminUserAccount extends UserAccount {
 
     @Override
     public String toString() {
-        return new StringJoiner(", ", ShiftAdminUserAccount.class.getSimpleName() + "[", "]")
+        return new StringJoiner(", ", GlobalAdminUserAccount.class.getSimpleName() + "[", "]")
                 .add("username=" + super.getUsername())
                 .toString();
     }

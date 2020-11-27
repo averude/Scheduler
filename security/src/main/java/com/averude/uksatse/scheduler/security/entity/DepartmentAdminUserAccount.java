@@ -16,7 +16,7 @@ public class DepartmentAdminUserAccount extends UserAccount {
 
     @Override
     public String toString() {
-        return new StringJoiner(", ", ShiftAdminUserAccount.class.getSimpleName() + "[", "]")
+        return new StringJoiner(", ", DepartmentAdminUserAccount.class.getSimpleName() + "[", "]")
                 .add("username=" + super.getUsername())
                 .add("departmentId=" + departmentId)
                 .toString();
