@@ -55,7 +55,7 @@ export class UserAccountsTableComponent extends TableBaseComponent<UserAccount> 
   }
 
   removeEntity(entity: UserAccount): void {
-    this.crudService.delete(entity.username).subscribe(res => {
+    this.crudService.delete(entity.id).subscribe(res => {
       this.removeRow(entity);
       this.notification.success(
         'Deleted',

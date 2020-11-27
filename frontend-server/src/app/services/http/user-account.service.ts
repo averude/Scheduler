@@ -65,11 +65,10 @@ export class UserAccountService implements IByAuthService<UserAccount>, CUDServi
     );
   }
 
-  delete(id: string): Observable<any> {
+  delete(id: number): Observable<any> {
     return this.http.delete(
       `${this.config.baseUrl}/uaa/users/${id}`,
       {responseType: 'text'}
     );
   }
-
 }

@@ -135,15 +135,21 @@ export class TimeSheetReportCreator implements ReportCreator {
 
       const cellData = rowData.cellData;
       for (let cell_data_idx = 0; cell_data_idx < cellData.length; cell_data_idx++, col_idx++) {
+        const values = cellData[cell_data_idx].value;
+
         const actWorkDayCell = rows[0].getCell(col_idx);
-        actWorkDayCell.value = cellData[cell_data_idx].value[0];
+        if (values) {
+          actWorkDayCell.value = values[0];
+        }
         actWorkDayCell.numFmt = '0.00';
         actWorkDayCell.style.font = arialCyrSize10;
         actWorkDayCell.style.alignment = centerMiddleAlign;
         actWorkDayCell.style.border = dottedBorders;
 
         const schdWorkDayCell = rows[1].getCell(col_idx);
-        schdWorkDayCell.value = cellData[cell_data_idx].value[1];
+        if (values) {
+          schdWorkDayCell.value = values[1];
+        }
         schdWorkDayCell.numFmt = '0.00';
         schdWorkDayCell.style.font = arialCyrSize10;
         schdWorkDayCell.style.alignment = centerMiddleAlign;
