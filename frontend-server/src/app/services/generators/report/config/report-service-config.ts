@@ -10,6 +10,7 @@ import { ScheduleReportCreator } from "../creator/schedule-report-creator";
 import { TimeSheetReportCreator } from "../creator/time-sheet-report-creator";
 import { ReportMarkup } from "../model/report-markup";
 import { SCHEDULE_REPORT, TIME_SHEET_REPORT } from "../model/report-types";
+import { CellFiller } from "../core/cell-filler";
 
 @Injectable()
 export class ReportServiceConfig {
@@ -18,6 +19,8 @@ export class ReportServiceConfig {
   private _creatorsMap:   Map<string, ReportCreator>;
   private _decoratorsMap: Map<string, ReportDecorator>;
   private _markupsMap:    Map<string, ReportMarkup>;
+
+  constructor(private cellFiller: CellFiller){}
 
   get collectors(): Map<string, ReportDataCollector> {
     if (!this._collectorsMap) {
@@ -44,8 +47,8 @@ export class ReportServiceConfig {
   get creators(): Map<string, ReportCreator> {
     if (!this._creatorsMap) {
       this._creatorsMap = new Map<string, ReportCreator>();
-      const scheduleReportCreator = new ScheduleReportCreator();
-      const timeSheetReportCreator = new TimeSheetReportCreator();
+      const scheduleReportCreator = new ScheduleReportCreator(this.cellFiller);
+      const timeSheetReportCreator = new TimeSheetReportCreator(this.cellFiller);
       this._creatorsMap.set(scheduleReportCreator.REPORT_TYPE, scheduleReportCreator);
       this._creatorsMap.set(timeSheetReportCreator.REPORT_TYPE, timeSheetReportCreator);
     }

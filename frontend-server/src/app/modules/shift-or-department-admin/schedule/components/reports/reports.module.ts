@@ -16,6 +16,7 @@ import { MONTH_YEAR_DATE_FORMAT } from "../../../../../shared/utils/utils";
 import { ReportServiceConfig } from "../../../../../services/generators/report/config/report-service-config";
 import { ReportGenerator } from "../../../../../services/generators/report/report-generator";
 import { MatListModule } from "@angular/material/list";
+import { CellFiller } from "../../../../../services/generators/report/core/cell-filler";
 
 @NgModule({
   imports: [
@@ -37,6 +38,7 @@ import { MatListModule } from "@angular/material/list";
   ],
   providers: [
     MatMomentDateModule,
+    CellFiller,
     ReportServiceConfig,
     ReportService,
     ReportGenerator,

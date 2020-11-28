@@ -6,14 +6,11 @@ import {
   arialCyrSize8,
   centerAlignVertRotation,
   centerMiddleAlign,
-  dottedBorders,
   holidayFill,
   leftRightBottomMediumBorders,
   leftRightMediumBorders,
-  leftRightMediumTopBottomThinBorders,
   leftRightThinBottomMediumBorders,
   mediumBorders,
-  scheduleDataFont,
   topLeftRightMediumBorders,
   topMediumBorders,
   topMediumLeftRightThinBorders,
@@ -21,28 +18,21 @@ import {
 } from "../styles/report-styles";
 import { CalendarDay } from "../../../../lib/ngx-schedule-table/model/calendar-day";
 import { ReportCreator } from "./report-creator";
-import { ReportMarkup } from "../model/report-markup";
 import { SCHEDULE_REPORT } from "../model/report-types";
+import { CellFiller } from "../core/cell-filler";
+import { ScheduleReportStyles } from "../styles/schedule-report-styles";
+import { AReportCreator } from "./a-report-creator";
 
-export class ScheduleReportCreator implements ReportCreator {
+export class ScheduleReportCreator extends AReportCreator implements ReportCreator {
+  ROW_STEP: number = 1;
+  COLS_BEFORE_DATA: number = 3;
   REPORT_TYPE: string = SCHEDULE_REPORT;
 
-  create(sheet: Worksheet,
-         data: ReportRowData[],
-         calendarDays: CalendarDay[],
-         summationColumns: SummationColumn[],
-         reportMarkup: ReportMarkup) {
-    this.styleColumns(sheet, reportMarkup.col_start_num,
-      calendarDays.length, summationColumns.length);
-    this.createHeader(sheet, data, summationColumns,
-      reportMarkup.col_start_num, reportMarkup.row_start_num,
-      reportMarkup.header_height, calendarDays);
-    this.createDataSection(sheet, data, calendarDays,
-      reportMarkup.col_start_num,
-      reportMarkup.row_start_num + reportMarkup.header_height + 1);
+  constructor(cellFiller: CellFiller) {
+    super(cellFiller);
   }
 
-  private styleColumns(sheet: Worksheet,
+  styleColumns(sheet: Worksheet,
                colStartNum: number,
                daysInMonth: number,
                summationColumnsCount: number) {
@@ -71,7 +61,7 @@ export class ScheduleReportCreator implements ReportCreator {
     }
   }
 
-  private createHeader(sheet: Worksheet,
+  createHeader(sheet: Worksheet,
                data: ReportRowData[],
                summationColumns: SummationColumn[],
                colStartNum: number,
@@ -139,65 +129,33 @@ export class ScheduleReportCreator implements ReportCreator {
     rows.forEach(row => row.commit());
   }
 
-  private createDataSection(sheet: Worksheet,
-                    data: ReportRowData[],
-                    calendarDays: CalendarDay[],
-                    colStartNum: number,
-                    rowStartNum: number) {
-    let row_idx = rowStartNum;
-    for (let row_data_idx = 0; row_data_idx <= data.length; row_idx++, row_data_idx++) {
-      const row = sheet.getRow(row_idx);
+  fillData(rows: Row[],
+           rowData: ReportRowData,
+           calendarDays: CalendarDay[],
+           colStartNum: number,
+           row_data_idx: number) {
+    let col_idx = colStartNum;
 
-      if (row_data_idx == data.length) {
-        let firstReportRow = data[data.length - 1];
-        let table_cols_num = colStartNum + 3 + firstReportRow.cellData.length + firstReportRow.summationResults.length;
-        for (let idx = colStartNum; idx < table_cols_num; idx++) {
-          row.getCell(idx).style.border = topMediumBorders;
-        }
-        break;
-      }
+    this.cellFiller.fill(rows, col_idx++, row_data_idx + 1, ScheduleReportStyles.idCellStyle);
+    this.cellFiller.fill(rows, col_idx++, rowData.name, ScheduleReportStyles.nameCellStyle);
+    this.cellFiller.fill(rows, col_idx++, rowData.position, ScheduleReportStyles.positionCellStyle);
 
-      const rowData = data[row_data_idx];
+    rowData.cellData.forEach((data, index) => {
+      const calendarDay = calendarDays[index];
 
-      let col_idx = colStartNum;
-      const idCell = row.getCell(col_idx++);
-      idCell.value = row_data_idx + 1;
-      idCell.style.font = scheduleDataFont;
-      idCell.style.border = leftRightMediumTopBottomThinBorders;
+      this.cellFiller.fill(rows, col_idx++, data.value, ScheduleReportStyles.scheduleCellStyle,
+        (cell) => {
+          if (calendarDay.weekend) {
+            cell.style = ScheduleReportStyles.weekendScheduleCellStyle;
+          } else if (calendarDay.holiday) {
+            cell.style = ScheduleReportStyles.holidayScheduleCellStyle;
+          }
+        })
+    });
 
-      const nameCell = row.getCell(col_idx++);
-      nameCell.value = rowData.name;
-      nameCell.style.font = scheduleDataFont;
-      nameCell.style.border = leftRightMediumTopBottomThinBorders;
-
-      const positionCell = row.getCell(col_idx++);
-      positionCell.value = rowData.position;
-      positionCell.style.font = scheduleDataFont;
-      positionCell.style.border = leftRightMediumTopBottomThinBorders;
-
-      const cellData = rowData.cellData;
-      for (let cell_data_idx = 0; cell_data_idx < cellData.length; cell_data_idx++, col_idx++) {
-        const workDayCell = row.getCell(col_idx);
-        const calendarDay = calendarDays[cell_data_idx];
-        workDayCell.value = cellData[cell_data_idx].value;
-        workDayCell.numFmt = '0.00';
-        workDayCell.style.font = scheduleDataFont;
-        workDayCell.style.alignment = centerMiddleAlign;
-        workDayCell.style.border = dottedBorders;
-        this.setFill(calendarDay, workDayCell);
-      }
-
-      const summationResults = rowData.summationResults;
-      for (let sum_res_idx = 0; sum_res_idx < summationResults.length; sum_res_idx++, col_idx++) {
-        const sumResCell = row.getCell(col_idx);
-        sumResCell.value = summationResults[sum_res_idx].value;
-        sumResCell.style.font = scheduleDataFont;
-        sumResCell.style.alignment = centerMiddleAlign;
-        sumResCell.style.border = leftRightMediumTopBottomThinBorders;
-      }
-
-      row.commit();
-    }
+    rowData.summationResults
+      .forEach(summationResult => this.cellFiller
+        .fill(rows, col_idx++, summationResult.value, ScheduleReportStyles.sumCellStyle));
   }
 
   private setFill(date: CalendarDay, cell: Cell) {

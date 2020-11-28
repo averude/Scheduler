@@ -4,47 +4,60 @@ import { CalendarDay } from "../../../../lib/ngx-schedule-table/model/calendar-d
 import { SummationColumn } from "../../../../model/summation-column";
 import { ReportRowData } from "../model/report-row-data";
 import {
-  arialCyrBoldSize10,
   arialCyrSize10,
   arialCyrSize8,
   bottomMediumLeftRightDottedBorders,
   centerAlignVertRotation,
   centerMiddleAlign,
-  dottedBorders,
-  leftRightMediumTopBottomDottedBorders,
-  leftRightMediumTopDottedBottomThinBorders,
-  leftRightTopDottedBottomThinBorders,
   mediumBorders,
-  rightAlign,
-  scheduleDataFont,
-  topMediumBorders,
   topMediumLeftRightDottedBorders
 } from "../styles/report-styles";
-import { ReportMarkup } from "../model/report-markup";
 import { TIME_SHEET_REPORT } from "../model/report-types";
+import { CellFiller } from "../core/cell-filler";
+import { TimeSheetStyles } from "../styles/time-sheet-styles";
+import { AReportCreator } from "./a-report-creator";
 
-export class TimeSheetReportCreator implements ReportCreator {
+export class TimeSheetReportCreator extends AReportCreator implements ReportCreator {
+  ROW_STEP: number = 2;
+  COLS_BEFORE_DATA: number = 2;
   REPORT_TYPE: string = TIME_SHEET_REPORT;
 
-  create(sheet: Worksheet,
-         data: ReportRowData[],
-         calendarDays: CalendarDay[],
-         summationColumns: SummationColumn[],
-         reportMarkup: ReportMarkup) {
-    this.styleColumns(sheet, reportMarkup.col_start_num, calendarDays.length, summationColumns.length);
-    this.createHeader(sheet, data, summationColumns,
-        reportMarkup.col_start_num, reportMarkup.row_start_num, reportMarkup.header_height, calendarDays);
-    this.createDataSection(sheet, data, calendarDays, reportMarkup.col_start_num,
-        reportMarkup.row_start_num + reportMarkup.header_height + 1);
+  constructor(cellFiller: CellFiller) {
+    super(cellFiller);
   }
 
-  private createHeader(sheet: Worksheet,
+  styleColumns(sheet: Worksheet,
+               colStartNum: number,
+               daysInMonth: number,
+               summationColumnsCount: number): void {
+    let col_idx = colStartNum;
+    let idCol = sheet.getColumn(col_idx++);
+    idCol.key = 'id';
+    idCol.width = 3;
+
+    let nameCol = sheet.getColumn(col_idx++);
+    nameCol.key = 'name';
+    nameCol.width = 20;
+
+    for (let day_idx = 1; day_idx <= daysInMonth; col_idx++, day_idx++) {
+      let col = sheet.getColumn(col_idx);
+      col.key = `day_${day_idx}`;
+      col.width = 6;
+    }
+
+    for (let sum_col_idx = 0; sum_col_idx < summationColumnsCount; sum_col_idx++, col_idx++) {
+      let col = sheet.getColumn(col_idx);
+      col.key = `sum_col_${col_idx}`;
+    }
+  }
+
+  createHeader(sheet: Worksheet,
                data: ReportRowData[],
                summationColumns: SummationColumn[],
                colStartNum: number,
                rowStartNum: number,
                headerHeight: number,
-               calendarDays: CalendarDay[]): void {
+               calendarDays: CalendarDay[]) {
     let col_idx = colStartNum;
 
     const rows: Row[] = [];
@@ -91,112 +104,20 @@ export class TimeSheetReportCreator implements ReportCreator {
     rows.forEach(row => row.commit());
   }
 
-  private createDataSection(sheet: Worksheet,
-                    data: ReportRowData[],
-                    calendarDays: CalendarDay[],
-                    colStartNum: number,
-                    rowStartNum: number): void {
-    const row_step = 2;
-    let row_idx = rowStartNum;
-    for (let row_data_idx = 0; row_data_idx <= data.length; row_idx+=row_step, row_data_idx++) {
-      const rows = [sheet.getRow(row_idx), sheet.getRow(row_idx + 1)];
-
-      if (row_data_idx == data.length) {
-        let firstReportRow = data[data.length - 1];
-        let table_cols_num = colStartNum + 2 + firstReportRow.cellData.length + firstReportRow.summationResults.length;
-        for (let idx = colStartNum; idx < table_cols_num; idx++) {
-          rows[0].getCell(idx).style.border = topMediumBorders;
-        }
-        break;
-      }
-
-      const rowData = data[row_data_idx];
-
-      let col_idx = colStartNum;
-      const idCell = rows[0].getCell(col_idx);
-      idCell.value = row_data_idx + 1;
-      idCell.style.font = scheduleDataFont;
-      idCell.style.border = leftRightMediumTopBottomDottedBorders;
-
-      const idCell2 = rows[1].getCell(col_idx++);
-      idCell2.style.font = scheduleDataFont;
-      idCell2.style.border = leftRightMediumTopDottedBottomThinBorders;
-
-      const nameCell = rows[0].getCell(col_idx);
-      nameCell.value = rowData.name;
-      nameCell.style.font = arialCyrBoldSize10;
-      nameCell.style.border = leftRightMediumTopBottomDottedBorders;
-
-      const positionCell = rows[1].getCell(col_idx++);
-      positionCell.value = rowData.position;
-      positionCell.style.font = scheduleDataFont;
-      positionCell.style.border = leftRightMediumTopDottedBottomThinBorders;
-      positionCell.style.alignment = rightAlign;
-
-      const cellData = rowData.cellData;
-      for (let cell_data_idx = 0; cell_data_idx < cellData.length; cell_data_idx++, col_idx++) {
-        const values = cellData[cell_data_idx].value;
-
-        const actWorkDayCell = rows[0].getCell(col_idx);
-        if (values) {
-          actWorkDayCell.value = values[0];
-        }
-        actWorkDayCell.numFmt = '0.00';
-        actWorkDayCell.style.font = arialCyrSize10;
-        actWorkDayCell.style.alignment = centerMiddleAlign;
-        actWorkDayCell.style.border = dottedBorders;
-
-        const schdWorkDayCell = rows[1].getCell(col_idx);
-        if (values) {
-          schdWorkDayCell.value = values[1];
-        }
-        schdWorkDayCell.numFmt = '0.00';
-        schdWorkDayCell.style.font = arialCyrSize10;
-        schdWorkDayCell.style.alignment = centerMiddleAlign;
-        schdWorkDayCell.style.border = leftRightTopDottedBottomThinBorders;
-      }
-
-      const summationResults = rowData.summationResults;
-      for (let sum_res_idx = 0; sum_res_idx < summationResults.length; sum_res_idx++, col_idx++) {
-        for (let row_h_idx = 0; row_h_idx < rows.length; row_h_idx++) {
-          const sumResCell = rows[row_h_idx].getCell(col_idx);
-          sumResCell.value = summationResults[sum_res_idx].value;
-          sumResCell.style.font = scheduleDataFont;
-          sumResCell.style.alignment = centerMiddleAlign;
-          if (row_h_idx == 1) {
-            sumResCell.style.border = leftRightMediumTopDottedBottomThinBorders;
-          } else {
-            sumResCell.style.border = leftRightMediumTopBottomDottedBorders;
-          }
-        }
-      }
-
-      rows.filter(row => row.commit());
-    }
-  }
-
-  private styleColumns(sheet: Worksheet,
-               colStartNum: number,
-               daysInMonth: number,
-               summationColumnsCount: number): void {
+  fillData(rows:         Row[],
+           rowData:      ReportRowData,
+           calendarDays: CalendarDay[],
+           colStartNum:  number,
+           row_data_idx: number) {
     let col_idx = colStartNum;
-    let idCol = sheet.getColumn(col_idx++);
-    idCol.key = 'id';
-    idCol.width = 3;
 
-    let nameCol = sheet.getColumn(col_idx++);
-    nameCol.key = 'name';
-    nameCol.width = 20;
-
-    for (let day_idx = 1; day_idx <= daysInMonth; col_idx++, day_idx++) {
-      let col = sheet.getColumn(col_idx);
-      col.key = `day_${day_idx}`;
-      col.width = 6;
-    }
-
-    for (let sum_col_idx = 0; sum_col_idx < summationColumnsCount; sum_col_idx++, col_idx++) {
-      let col = sheet.getColumn(col_idx);
-      col.key = `sum_col_${col_idx}`;
-    }
+    this.cellFiller.fill(rows, col_idx++, [row_data_idx + 1, null], [TimeSheetStyles.idCellStyle, TimeSheetStyles.lastIdCellStyle]);
+    this.cellFiller.fill(rows, col_idx++, [rowData.name, rowData.position], [TimeSheetStyles.nameCellStyle, TimeSheetStyles.positionCellStyle]);
+    rowData.cellData
+      .forEach(cell => this.cellFiller
+        .fill(rows, col_idx++, cell.value, [TimeSheetStyles.dataCellStyle, TimeSheetStyles.lastDataCellStyle]));
+    rowData.summationResults
+      .forEach(result => this.cellFiller
+        .fill(rows, col_idx++, result.value, [TimeSheetStyles.sumCellStyle, TimeSheetStyles.lastSumCellStyle]));
   }
 }
