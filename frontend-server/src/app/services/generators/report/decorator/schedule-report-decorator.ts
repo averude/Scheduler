@@ -13,17 +13,19 @@ import { ReportDecorator } from "./report-decorator";
 import { ReportMarkup } from "../model/report-markup";
 import { SCHEDULE_REPORT } from "../model/report-types";
 import { ReportRowData } from "../model/report-row-data";
+import { CalendarDay } from "../../../../lib/ngx-schedule-table/model/calendar-day";
 
 export class ScheduleReportDecorator implements ReportDecorator {
   REPORT_TYPE: string = SCHEDULE_REPORT;
 
   decorate(sheet: Worksheet,
            data: ReportRowData[],
+           calendarDates: CalendarDay[],
            decorationData: DecorationData,
            reportMarkup: ReportMarkup) {
     const creator_row_start = reportMarkup.row_start_num + reportMarkup.header_height
       + data.length + reportMarkup.table_creator_interval;
-    const days_in_month = data[0].cellData.length;
+    const days_in_month = calendarDates.length;
 
     this.decorateTop(sheet, decorationData, days_in_month);
     this.decorateBottom(sheet, decorationData, creator_row_start);

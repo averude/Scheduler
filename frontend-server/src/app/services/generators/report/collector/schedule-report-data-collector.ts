@@ -1,55 +1,76 @@
 import { AbstractReportDataCollector } from "./abstract-report-data-collector";
 import { WorkDay } from "../../../../model/workday";
 import { DayType } from "../../../../model/day-type";
-import { CellData } from "../../../../lib/ngx-schedule-table/model/data/cell-data";
-import { getCellValue } from "../../../../shared/utils/utils";
+import { getCellValue, getEmployeeShortName } from "../../../../shared/utils/utils";
 import { SCHEDULE_REPORT } from "../model/report-types";
 import { ReportCellData } from "../model/report-cell-data";
-import { ReportRowData } from "../model/report-row-data";
 import { ScheduleReportStyles } from "../styles/schedule-report-styles";
 import { CalendarDay } from "../../../../lib/ngx-schedule-table/model/calendar-day";
+import { Employee } from "../../../../model/employee";
+import { SummationResult } from "../../../../model/dto/summation-dto";
 
-export class ScheduleReportDataCollector extends AbstractReportDataCollector{
+export class ScheduleReportDataCollector extends AbstractReportDataCollector {
 
   REPORT_TYPE: string = SCHEDULE_REPORT;
 
-  fillCellWithValue(cell: CellData,
+  fillCellWithValue(cell: ReportCellData,
                     workDay: WorkDay,
                     dayTypes: DayType[]): void {
     cell.value = getCellValue(workDay, dayTypes);
   }
 
-  getReportCellData(rowData: ReportRowData, row_data_idx: number): ReportCellData[] {
-    const cellData: ReportCellData[] = [];
-
+  setRowFirstCells(cellData: ReportCellData[],
+                   dtoParent: Employee,
+                   rowIndex: number) {
     cellData.push({
-      value: row_data_idx + 1,
+      value: rowIndex + 1,
       style: ScheduleReportStyles.idCellStyle
     });
 
     cellData.push({
-      value: rowData.name,
+      value: getEmployeeShortName(dtoParent),
       style: ScheduleReportStyles.nameCellStyle
     });
 
     cellData.push({
-      value: rowData.position,
+      value: dtoParent.position.shortName,
       style: ScheduleReportStyles.positionCellStyle
     });
+  }
 
-    rowData.cellData.forEach(cell =>
-      cellData.push({
-        value: cell.value,
-        style: this.getStyle(cell.date)
-      }));
+  setRowDataCells(cellData: ReportCellData[],
+                  workDays: WorkDay[],
+                  dates: CalendarDay[],
+                  dayTypes: DayType[],
+                  rowIndex: number) {
+    if (!workDays || !dates || dates.length == 0) {
+      return;
+    }
 
-    rowData.summationResults.forEach(cell =>
+    for (let date_idx = 0, sched_idx = 0; date_idx < dates.length; date_idx++) {
+      const date = dates[date_idx];
+      const workDay = workDays[sched_idx];
+
+      const cell = <ReportCellData>{};
+      cell.style = this.getStyle(date);
+
+      if (workDay && date.isoString === workDay.date) {
+        this.fillCellWithValue(cell, workDay, dayTypes);
+        sched_idx++;
+      }
+
+      cellData.push(cell);
+    }
+  }
+
+  setRowSumDataCells(cellData: ReportCellData[],
+                     summations: SummationResult[],
+                     rowIndex: number) {
+    summations.forEach(sum =>
       cellData.push({
-        value: cell.value,
+        value: sum.value,
         style: ScheduleReportStyles.sumCellStyle
       }));
-
-    return cellData;
   }
 
   private getStyle(day: CalendarDay) {

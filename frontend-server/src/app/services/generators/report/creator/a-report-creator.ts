@@ -85,7 +85,8 @@ export abstract class AReportCreator implements ReportCreator {
             colStartNum: number,
             columns_before_data: number) {
     let firstReportRow = data[data.length - 1];
-    let table_cols_num = colStartNum + columns_before_data + firstReportRow.cellData.length + firstReportRow.summationResults.length;
+    // let table_cols_num = colStartNum + columns_before_data + firstReportRow.cellData.length + firstReportRow.summationResults.length;
+    let table_cols_num = colStartNum + firstReportRow.reportCellData.length;
     for (let idx = colStartNum; idx < table_cols_num; idx++) {
       rows[0].getCell(idx).style.border = topMediumBorders;
     }

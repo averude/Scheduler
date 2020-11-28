@@ -2,10 +2,8 @@ import { BasicDto } from "../../../../model/dto/basic-dto";
 import { Employee } from "../../../../model/employee";
 import { WorkDay } from "../../../../model/workday";
 import { ReportRowData } from "../model/report-row-data";
-import { getEmployeeShortName } from "../../../../shared/utils/utils";
 import { DayType } from "../../../../model/day-type";
-import { CellData } from "../../../../lib/ngx-schedule-table/model/data/cell-data";
-import { SummationDto } from "../../../../model/dto/summation-dto";
+import { SummationDto, SummationResult } from "../../../../model/dto/summation-dto";
 import { CalendarDay } from "../../../../lib/ngx-schedule-table/model/calendar-day";
 import { MainShiftComposition } from "../../../../model/main-shift-composition";
 import { sortByCompositions } from "../../../../shared/utils/collection-utils";
@@ -29,16 +27,52 @@ export abstract class AbstractReportDataCollector implements ReportDataCollector
 
     sortByCompositions(schedule, compositions);
 
+    return this.getReportRowData(schedule, dates, dayTypes, summations);
+  }
+
+  private getReportRowData(schedule: BasicDto<Employee, WorkDay>[],
+                           dates: CalendarDay[],
+                           dayTypes: DayType[],
+                           summations: SummationDto[]) {
     return schedule.map((dto, index) => {
       const reportRowData = new ReportRowData();
-      reportRowData.name = getEmployeeShortName(dto.parent);
-      reportRowData.position = dto.parent.position.shortName;
-      reportRowData.cellData = this.getCellData(dto.collection, dates, dayTypes);
-      reportRowData.summationResults = this.getSummationResults(summations, dto);
-      reportRowData.reportCellData = this.getReportCellData(reportRowData, index);
+      reportRowData.reportCellData = this
+        .collectRowReportCellData(dto, dates, dayTypes, this.getSummationResults(summations, dto), index);
       return reportRowData;
-    })
+    });
   }
+
+  private collectRowReportCellData(dto: BasicDto<Employee, WorkDay>,
+                                   dates,
+                                   dayTypes,
+                                   summations: SummationResult[],
+                                   index) {
+    const result: ReportCellData[] = [];
+
+    this.setRowFirstCells(result, dto.parent, index);
+    this.setRowDataCells(result, dto.collection, dates, dayTypes, index);
+    this.setRowSumDataCells(result, summations, index);
+
+    return result;
+  }
+
+  abstract setRowFirstCells(cellData: ReportCellData[],
+                            dtoParent: Employee,
+                            rowIndex: number);
+
+  abstract setRowDataCells(cellData: ReportCellData[],
+                           workDays: WorkDay[],
+                           dates: CalendarDay[],
+                           dayTypes: DayType[],
+                           rowIndex: number);
+
+  abstract setRowSumDataCells(cellData: ReportCellData[],
+                              summations: SummationResult[],
+                              rowIndex: number);
+
+  abstract fillCellWithValue(cell: ReportCellData,
+                             workDay: WorkDay,
+                             dayTypes: DayType[]): void;
 
   private getSummationResults(summations: SummationDto[],
                               dto: BasicDto<Employee, WorkDay>) {
@@ -46,33 +80,4 @@ export abstract class AbstractReportDataCollector implements ReportDataCollector
       .find(sum => sum.parent.id === dto.parent.id)
       .collection;
   }
-
-  private getCellData(workDays: WorkDay[],
-                      dates: CalendarDay[],
-                      dayTypes: DayType[]): CellData[] {
-    const result = [];
-    if (!workDays || !dates || dates.length == 0) {
-      return result;
-    }
-
-    for (let date_idx = 0, sched_idx = 0; date_idx < dates.length; date_idx++) {
-      const date = dates[date_idx];
-      const cell = <CellData>{date: date};
-      const workDay = workDays[sched_idx];
-
-      if (workDay && date.isoString === workDay.date) {
-        this.fillCellWithValue(cell, workDay, dayTypes);
-        sched_idx++;
-      }
-      result.push(cell);
-    }
-
-    return result;
-  }
-
-  abstract fillCellWithValue(cell: CellData,
-                             workDay: WorkDay,
-                             dayTypes: DayType[]): void;
-
-  abstract getReportCellData(rowData: ReportRowData, row_data_idx: number): ReportCellData[];
 }

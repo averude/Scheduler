@@ -1,18 +1,24 @@
 import { AbstractReportDataCollector } from "./abstract-report-data-collector";
 import { WorkDay } from "../../../../model/workday";
 import { DayType } from "../../../../model/day-type";
-import { CellData } from "../../../../lib/ngx-schedule-table/model/data/cell-data";
 import { TIME_SHEET_REPORT } from "../model/report-types";
-import { calculateHoursByHasTime, getCellValue, getCellValueExt } from "../../../../shared/utils/utils";
-import { ReportRowData } from "../model/report-row-data";
+import {
+  calculateHoursByHasTime,
+  getCellValue,
+  getCellValueExt,
+  getEmployeeShortName
+} from "../../../../shared/utils/utils";
 import { ReportCellData } from "../model/report-cell-data";
 import { TimeSheetStyles } from "../styles/time-sheet-styles";
+import { SummationResult } from "../../../../model/dto/summation-dto";
+import { Employee } from "../../../../model/employee";
+import { CalendarDay } from "../../../../lib/ngx-schedule-table/model/calendar-day";
 
 export class TimeSheetReportDataCollector extends AbstractReportDataCollector {
 
   REPORT_TYPE: string = TIME_SHEET_REPORT;
 
-  fillCellWithValue(cell: CellData,
+  fillCellWithValue(cell: ReportCellData,
                     workDay: WorkDay,
                     dayTypes: DayType[]): void {
     const val = [];
@@ -27,31 +33,80 @@ export class TimeSheetReportDataCollector extends AbstractReportDataCollector {
     cell.value = val;
   }
 
-  getReportCellData(rowData: ReportRowData, row_data_idx: number): ReportCellData[] {
-    const cellData: ReportCellData[] = [];
-
+  setRowFirstCells(cellData: ReportCellData[],
+                   dtoParent: Employee,
+                   rowIndex: number) {
     cellData.push({
-      value: [row_data_idx + 1, null],
+      value: [rowIndex + 1, null],
       style: [TimeSheetStyles.idCellStyle, TimeSheetStyles.lastIdCellStyle]
     });
 
     cellData.push({
-      value: [rowData.name, rowData.position],
+      value: [getEmployeeShortName(dtoParent), dtoParent.position.shortName],
       style: [TimeSheetStyles.nameCellStyle, TimeSheetStyles.positionCellStyle]
     });
+  }
 
-    rowData.cellData.forEach(cell =>
-      cellData.push({
-        value: cell.value,
-        style: [TimeSheetStyles.dataCellStyle, TimeSheetStyles.lastDataCellStyle]
-      }));
+  setRowDataCells(cellData: ReportCellData[],
+                  workDays: WorkDay[],
+                  dates: CalendarDay[],
+                  dayTypes: DayType[],
+                  rowIndex: number) {
+    if (!workDays || !dates || dates.length == 0) {
+      return;
+    }
 
-    rowData.summationResults.forEach(cell =>
+    for (let date_idx = 0, sched_idx = 0; date_idx < dates.length; date_idx++) {
+      const date = dates[date_idx];
+      const workDay = workDays[sched_idx];
+
+      const cell = <ReportCellData>{};
+      cell.style = [TimeSheetStyles.dataCellStyle, TimeSheetStyles.lastDataCellStyle];
+
+      if (workDay && date.isoString === workDay.date) {
+        this.fillCellWithValue(cell, workDay, dayTypes);
+        sched_idx++;
+      }
+
+      cellData.push(cell);
+    }
+  }
+
+  setRowSumDataCells(cellData: ReportCellData[],
+                     summations: SummationResult[],
+                     rowIndex: number) {
+    summations.forEach(cell =>
       cellData.push({
         value: cell.value,
         style: [TimeSheetStyles.sumCellStyle, TimeSheetStyles.lastSumCellStyle]
       }));
-
-    return cellData;
   }
+  //
+  // getReportCellData(rowData: ReportRowData, row_data_idx: number): ReportCellData[] {
+  //   const cellData: ReportCellData[] = [];
+  //
+  //   cellData.push({
+  //     value: [row_data_idx + 1, null],
+  //     style: [TimeSheetStyles.idCellStyle, TimeSheetStyles.lastIdCellStyle]
+  //   });
+  //
+  //   cellData.push({
+  //     value: [rowData.name, rowData.position],
+  //     style: [TimeSheetStyles.nameCellStyle, TimeSheetStyles.positionCellStyle]
+  //   });
+  //
+  //   rowData.cellData.forEach(cell =>
+  //     cellData.push({
+  //       value: cell.value,
+  //       style: [TimeSheetStyles.dataCellStyle, TimeSheetStyles.lastDataCellStyle]
+  //     }));
+  //
+  //   rowData.summationResults.forEach(cell =>
+  //     cellData.push({
+  //       value: cell.value,
+  //       style: [TimeSheetStyles.sumCellStyle, TimeSheetStyles.lastSumCellStyle]
+  //     }));
+  //
+  //   return cellData;
+  // }
 }
