@@ -2,16 +2,52 @@ import { Style } from "exceljs";
 import {
   arialCyrBoldSize10,
   arialCyrSize10,
+  arialCyrSize8,
+  bottomMediumLeftRightDottedBorders,
   centerAlign,
+  centerAlignVertRotation,
+  centerMiddleAlign,
   dottedBorders,
   leftRightMediumTopBottomDottedBorders,
   leftRightMediumTopDottedBottomThinBorders,
   leftRightTopDottedBottomThinBorders,
+  mediumBorders,
   rightAlign,
-  scheduleDataFont
+  scheduleDataFont,
+  topMediumLeftRightDottedBorders
 } from "./report-styles";
 
 export class TimeSheetStyles {
+
+  static idHeaderCellStyle: Partial<Style> = {
+    font: arialCyrSize10,
+    border: mediumBorders,
+    alignment: centerMiddleAlign
+  };
+
+  static nameHeaderCellStyle: Partial<Style> = {
+    font: arialCyrSize10,
+    border: mediumBorders,
+    alignment: centerMiddleAlign
+  };
+
+  static dataHeaderCellStyle: Partial<Style>[] = [
+    {
+      border: topMediumLeftRightDottedBorders
+    },
+    {
+      alignment: centerMiddleAlign,
+      font: arialCyrSize10,
+      border: bottomMediumLeftRightDottedBorders
+    }
+  ];
+
+  static sumHeaderCellStyle: Partial<Style> = {
+    font: arialCyrSize8,
+    border: mediumBorders,
+    alignment: centerAlignVertRotation
+  };
+
   static idCellStyle: Partial<Style> = {
     font: scheduleDataFont,
     border: leftRightMediumTopBottomDottedBorders

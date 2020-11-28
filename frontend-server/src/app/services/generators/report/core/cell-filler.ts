@@ -8,7 +8,7 @@ export class CellFiller {
               col_idx: number,
               values: any | any[],
               cells_styles: Partial<Style> | Partial<Style>[],
-              afterCellProcessed?: (cell: Cell) => void) {
+              afterCellProcessed?: (cell: Cell, row_index?: number) => void) {
     const data    = [].concat(values);
     const rows    = [].concat(rs);
     const styles  = [].concat(cells_styles);
@@ -39,7 +39,7 @@ export class CellFiller {
       }
 
       if (afterCellProcessed) {
-        afterCellProcessed(cell);
+        afterCellProcessed(cell, row_idx);
       }
     }
   }

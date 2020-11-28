@@ -28,11 +28,43 @@ export abstract class AReportCreator implements ReportCreator {
                         summationColumnsCount: number,
                         reportMarkup: ReportMarkup);
 
-  abstract createHeader(sheet: Worksheet,
-                        data: ReportRowData[],
-                        summationColumns: SummationColumn[],
-                        calendarDays: CalendarDay[],
-                        reportMarkup: ReportMarkup)
+  createHeader(sheet: Worksheet,
+               data: ReportRowData[],
+               summationColumns: SummationColumn[],
+               calendarDays: CalendarDay[],
+               reportMarkup: ReportMarkup) {
+    const last_header_row_number = reportMarkup.row_start_num + reportMarkup.header_height;
+    let col_idx = reportMarkup.col_start_num;
+
+    const rows = this.getRows(reportMarkup.row_start_num, reportMarkup.header_height + 1, sheet);
+
+    this.setHeaderRowsHeight(rows);
+
+    this.setBeforeDateHeaderCells(rows, col_idx, last_header_row_number, sheet, reportMarkup);
+    this.setDateHeaderCells(rows, col_idx += reportMarkup.cols_before_data, calendarDays);
+    this.setSumHeaderCells(rows, col_idx += calendarDays.length, summationColumns, last_header_row_number, sheet, reportMarkup)
+
+    rows.forEach(row => row.commit());
+  }
+
+  abstract setHeaderRowsHeight(rows: Row[]);
+
+  abstract setBeforeDateHeaderCells(rows: Row[],
+                                    col_idx: number,
+                                    last_header_row_number: number,
+                                    sheet: Worksheet,
+                                    reportMarkup: ReportMarkup);
+
+  abstract setDateHeaderCells(rows: Row[],
+                              col_idx: number,
+                              calendarDays: CalendarDay[]);
+
+  abstract setSumHeaderCells(rows: Row[],
+                             col_idx: number,
+                             summationColumns: SummationColumn[],
+                             last_header_row_number: number,
+                             sheet: Worksheet,
+                             reportMarkup: ReportMarkup);
 
   createDataSection(sheet: Worksheet,
                     data: ReportRowData[],
