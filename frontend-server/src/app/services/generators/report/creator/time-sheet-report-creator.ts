@@ -14,7 +14,6 @@ import {
 } from "../styles/report-styles";
 import { TIME_SHEET_REPORT } from "../model/report-types";
 import { CellFiller } from "../core/cell-filler";
-import { TimeSheetStyles } from "../styles/time-sheet-styles";
 import { AReportCreator } from "./a-report-creator";
 
 export class TimeSheetReportCreator extends AReportCreator implements ReportCreator {
@@ -102,22 +101,5 @@ export class TimeSheetReportCreator extends AReportCreator implements ReportCrea
     }
 
     rows.forEach(row => row.commit());
-  }
-
-  fillData(rows:         Row[],
-           rowData:      ReportRowData,
-           calendarDays: CalendarDay[],
-           colStartNum:  number,
-           row_data_idx: number) {
-    let col_idx = colStartNum;
-
-    this.cellFiller.fill(rows, col_idx++, [row_data_idx + 1, null], [TimeSheetStyles.idCellStyle, TimeSheetStyles.lastIdCellStyle]);
-    this.cellFiller.fill(rows, col_idx++, [rowData.name, rowData.position], [TimeSheetStyles.nameCellStyle, TimeSheetStyles.positionCellStyle]);
-    rowData.cellData
-      .forEach(cell => this.cellFiller
-        .fill(rows, col_idx++, cell.value, [TimeSheetStyles.dataCellStyle, TimeSheetStyles.lastDataCellStyle]));
-    rowData.summationResults
-      .forEach(result => this.cellFiller
-        .fill(rows, col_idx++, result.value, [TimeSheetStyles.sumCellStyle, TimeSheetStyles.lastSumCellStyle]));
   }
 }

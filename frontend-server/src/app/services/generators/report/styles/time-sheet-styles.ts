@@ -2,6 +2,7 @@ import { Style } from "exceljs";
 import {
   arialCyrBoldSize10,
   arialCyrSize10,
+  centerAlign,
   dottedBorders,
   leftRightMediumTopBottomDottedBorders,
   leftRightMediumTopDottedBottomThinBorders,
@@ -34,21 +35,25 @@ export class TimeSheetStyles {
 
   static dataCellStyle: Partial<Style> = {
     font: arialCyrSize10,
-    border: dottedBorders
+    border: dottedBorders,
+    alignment: centerAlign
   };
 
   static lastDataCellStyle: Partial<Style> = {
     font: arialCyrSize10,
-    border: leftRightTopDottedBottomThinBorders
+    border: leftRightTopDottedBottomThinBorders,
+    alignment: centerAlign
   };
 
   static sumCellStyle: Partial<Style> = {
     font: scheduleDataFont,
-    border: leftRightMediumTopBottomDottedBorders
+    border: leftRightMediumTopBottomDottedBorders,
+    alignment: centerAlign
   };
 
   static lastSumCellStyle: Partial<Style> = {
     font: scheduleDataFont,
-    border: leftRightMediumTopDottedBottomThinBorders
+    border: leftRightMediumTopDottedBottomThinBorders,
+    alignment: centerAlign
   };
 }

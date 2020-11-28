@@ -59,17 +59,16 @@ export abstract class AReportCreator implements ReportCreator {
       }
 
       const rowData = data[row_data_idx];
-      this.fillData(rows, rowData, calendarDays, colStartNum, row_data_idx);
+      let col_idx = colStartNum;
+
+      if (rowData && rowData.reportCellData) {
+        rowData.reportCellData.forEach(cell =>
+          this.cellFiller.fill(rows, col_idx++, cell.value, cell.style));
+      }
 
       rows.forEach(row => row.commit());
     }
   }
-
-  abstract fillData(rows:         Row[],
-                    rowData:      ReportRowData,
-                    calendarDays: CalendarDay[],
-                    colStartNum:  number,
-                    row_data_idx: number);
 
   getRows(row_idx: number,
           row_step: number,

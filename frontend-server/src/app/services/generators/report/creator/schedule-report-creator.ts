@@ -20,7 +20,6 @@ import { CalendarDay } from "../../../../lib/ngx-schedule-table/model/calendar-d
 import { ReportCreator } from "./report-creator";
 import { SCHEDULE_REPORT } from "../model/report-types";
 import { CellFiller } from "../core/cell-filler";
-import { ScheduleReportStyles } from "../styles/schedule-report-styles";
 import { AReportCreator } from "./a-report-creator";
 
 export class ScheduleReportCreator extends AReportCreator implements ReportCreator {
@@ -127,35 +126,6 @@ export class ScheduleReportCreator extends AReportCreator implements ReportCreat
     }
 
     rows.forEach(row => row.commit());
-  }
-
-  fillData(rows: Row[],
-           rowData: ReportRowData,
-           calendarDays: CalendarDay[],
-           colStartNum: number,
-           row_data_idx: number) {
-    let col_idx = colStartNum;
-
-    this.cellFiller.fill(rows, col_idx++, row_data_idx + 1, ScheduleReportStyles.idCellStyle);
-    this.cellFiller.fill(rows, col_idx++, rowData.name, ScheduleReportStyles.nameCellStyle);
-    this.cellFiller.fill(rows, col_idx++, rowData.position, ScheduleReportStyles.positionCellStyle);
-
-    rowData.cellData.forEach((data, index) => {
-      const calendarDay = calendarDays[index];
-
-      this.cellFiller.fill(rows, col_idx++, data.value, ScheduleReportStyles.scheduleCellStyle,
-        (cell) => {
-          if (calendarDay.weekend) {
-            cell.style = ScheduleReportStyles.weekendScheduleCellStyle;
-          } else if (calendarDay.holiday) {
-            cell.style = ScheduleReportStyles.holidayScheduleCellStyle;
-          }
-        })
-    });
-
-    rowData.summationResults
-      .forEach(summationResult => this.cellFiller
-        .fill(rows, col_idx++, summationResult.value, ScheduleReportStyles.sumCellStyle));
   }
 
   private setFill(date: CalendarDay, cell: Cell) {

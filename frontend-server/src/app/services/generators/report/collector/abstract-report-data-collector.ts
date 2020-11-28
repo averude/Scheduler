@@ -10,7 +10,7 @@ import { CalendarDay } from "../../../../lib/ngx-schedule-table/model/calendar-d
 import { MainShiftComposition } from "../../../../model/main-shift-composition";
 import { sortByCompositions } from "../../../../shared/utils/collection-utils";
 import { ReportDataCollector } from "./report-data-collector";
-
+import { ReportCellData } from "../model/report-cell-data";
 
 export abstract class AbstractReportDataCollector implements ReportDataCollector {
 
@@ -29,12 +29,13 @@ export abstract class AbstractReportDataCollector implements ReportDataCollector
 
     sortByCompositions(schedule, compositions);
 
-    return schedule.map(dto => {
+    return schedule.map((dto, index) => {
       const reportRowData = new ReportRowData();
       reportRowData.name = getEmployeeShortName(dto.parent);
       reportRowData.position = dto.parent.position.shortName;
       reportRowData.cellData = this.getCellData(dto.collection, dates, dayTypes);
       reportRowData.summationResults = this.getSummationResults(summations, dto);
+      reportRowData.reportCellData = this.getReportCellData(reportRowData, index);
       return reportRowData;
     })
   }
@@ -72,4 +73,6 @@ export abstract class AbstractReportDataCollector implements ReportDataCollector
   abstract fillCellWithValue(cell: CellData,
                              workDay: WorkDay,
                              dayTypes: DayType[]): void;
+
+  abstract getReportCellData(rowData: ReportRowData, row_data_idx: number): ReportCellData[];
 }

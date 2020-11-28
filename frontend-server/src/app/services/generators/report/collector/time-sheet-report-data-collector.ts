@@ -4,6 +4,9 @@ import { DayType } from "../../../../model/day-type";
 import { CellData } from "../../../../lib/ngx-schedule-table/model/data/cell-data";
 import { TIME_SHEET_REPORT } from "../model/report-types";
 import { calculateHoursByHasTime, getCellValue, getCellValueExt } from "../../../../shared/utils/utils";
+import { ReportRowData } from "../model/report-row-data";
+import { ReportCellData } from "../model/report-cell-data";
+import { TimeSheetStyles } from "../styles/time-sheet-styles";
 
 export class TimeSheetReportDataCollector extends AbstractReportDataCollector {
 
@@ -22,5 +25,33 @@ export class TimeSheetReportDataCollector extends AbstractReportDataCollector {
       if (val[0] == 0) val[0] = '';
     }
     cell.value = val;
+  }
+
+  getReportCellData(rowData: ReportRowData, row_data_idx: number): ReportCellData[] {
+    const cellData: ReportCellData[] = [];
+
+    cellData.push({
+      value: [row_data_idx + 1, null],
+      style: [TimeSheetStyles.idCellStyle, TimeSheetStyles.lastIdCellStyle]
+    });
+
+    cellData.push({
+      value: [rowData.name, rowData.position],
+      style: [TimeSheetStyles.nameCellStyle, TimeSheetStyles.positionCellStyle]
+    });
+
+    rowData.cellData.forEach(cell =>
+      cellData.push({
+        value: cell.value,
+        style: [TimeSheetStyles.dataCellStyle, TimeSheetStyles.lastDataCellStyle]
+      }));
+
+    rowData.summationResults.forEach(cell =>
+      cellData.push({
+        value: cell.value,
+        style: [TimeSheetStyles.sumCellStyle, TimeSheetStyles.lastSumCellStyle]
+      }));
+
+    return cellData;
   }
 }
