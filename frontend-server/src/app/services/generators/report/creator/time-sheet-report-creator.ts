@@ -17,8 +17,6 @@ import { CellFiller } from "../core/cell-filler";
 import { AReportCreator } from "./a-report-creator";
 
 export class TimeSheetReportCreator extends AReportCreator implements ReportCreator {
-  ROW_STEP: number = 2;
-  COLS_BEFORE_DATA: number = 2;
   REPORT_TYPE: string = TIME_SHEET_REPORT;
 
   constructor(cellFiller: CellFiller) {

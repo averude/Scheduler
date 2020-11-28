@@ -4,4 +4,6 @@ export class ReportMarkup {
   header_height: number;
   table_creator_interval: number;
   creator_row_start: number;
+  row_step: number;
+  cols_before_data: number;
 }

@@ -8,8 +8,6 @@ import { ReportMarkup } from "../model/report-markup";
 import { ReportCreator } from "./report-creator";
 
 export abstract class AReportCreator implements ReportCreator {
-  abstract ROW_STEP: number;
-  abstract COLS_BEFORE_DATA: number;
   abstract REPORT_TYPE: string;
 
   constructor(protected cellFiller: CellFiller) {
@@ -26,7 +24,7 @@ export abstract class AReportCreator implements ReportCreator {
     this.createDataSection(sheet, data, calendarDays,
       reportMarkup.col_start_num,
       reportMarkup.row_start_num + reportMarkup.header_height + 1,
-      this.ROW_STEP, this.COLS_BEFORE_DATA);
+      reportMarkup.row_step, reportMarkup.cols_before_data);
   }
 
   abstract styleColumns(sheet: Worksheet,

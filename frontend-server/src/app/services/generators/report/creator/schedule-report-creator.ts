@@ -23,8 +23,6 @@ import { CellFiller } from "../core/cell-filler";
 import { AReportCreator } from "./a-report-creator";
 
 export class ScheduleReportCreator extends AReportCreator implements ReportCreator {
-  ROW_STEP: number = 1;
-  COLS_BEFORE_DATA: number = 3;
   REPORT_TYPE: string = SCHEDULE_REPORT;
 
   constructor(cellFiller: CellFiller) {

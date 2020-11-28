@@ -63,13 +63,17 @@ export class ReportServiceConfig {
         col_start_num: 2,
         header_height: 2,
         table_creator_interval: 4,
+        row_step: 1,
+        cols_before_data: 3
       } as ReportMarkup;
       this._markupsMap.set(SCHEDULE_REPORT, scheduleReportMarkup);
       const timeSheetReportMarkup = {
         row_start_num: 6,
         col_start_num: 2,
         header_height: 1,
-        table_creator_interval: 3
+        table_creator_interval: 3,
+        row_step: 2,
+        cols_before_data: 2
       } as ReportMarkup;
       this._markupsMap.set(TIME_SHEET_REPORT, timeSheetReportMarkup);
     }
