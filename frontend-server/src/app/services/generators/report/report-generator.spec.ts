@@ -55,12 +55,14 @@ function getMockSchedulerRowData(daysInMonth: CalendarDay[]): ReportRowData[] {
       {
         summationColumnId: 20,
         value: 22,
-        type: ''
+        type: '',
+        converted: false
       },
       {
         summationColumnId: 20,
         value: 22,
-        type: ''
+        type: '',
+        converted: false
       }];
     result.push(data);
   }
@@ -84,12 +86,14 @@ function getMockTimeSheetRowData(daysInMonth: CalendarDay[]): ReportRowData[] {
       {
         summationColumnId: 20,
         value: 22,
-        type: ''
+        type: '',
+        converted: false
       },
       {
         summationColumnId: 20,
         value: 22,
-        type: ''
+        type: '',
+        converted: false
       }];
     result.push(data);
   }
