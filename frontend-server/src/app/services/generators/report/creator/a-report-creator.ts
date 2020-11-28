@@ -18,48 +18,38 @@ export abstract class AReportCreator implements ReportCreator {
          calendarDays: CalendarDay[],
          summationColumns: SummationColumn[],
          reportMarkup: ReportMarkup) {
-    this.styleColumns(sheet, reportMarkup.col_start_num,
-      calendarDays.length, summationColumns.length);
-    this.createHeader(sheet, data, summationColumns,
-      reportMarkup.col_start_num, reportMarkup.row_start_num,
-      reportMarkup.header_height, calendarDays);
-    this.createDataSection(sheet, data, calendarDays,
-      reportMarkup.col_start_num,
-      reportMarkup.row_start_num + reportMarkup.header_height + 1,
-      reportMarkup.row_step, reportMarkup.cols_before_data);
+    this.styleColumns(sheet, calendarDays.length, summationColumns.length, reportMarkup);
+    this.createHeader(sheet, data, summationColumns, calendarDays, reportMarkup);
+    this.createDataSection(sheet, data, calendarDays,reportMarkup);
   }
 
   abstract styleColumns(sheet: Worksheet,
-                        colStartNum: number,
                         daysInMonth: number,
-                        summationColumnsCount: number);
+                        summationColumnsCount: number,
+                        reportMarkup: ReportMarkup);
 
   abstract createHeader(sheet: Worksheet,
                         data: ReportRowData[],
                         summationColumns: SummationColumn[],
-                        colStartNum: number,
-                        rowStartNum: number,
-                        headerHeight: number,
-                        calendarDays: CalendarDay[])
+                        calendarDays: CalendarDay[],
+                        reportMarkup: ReportMarkup)
 
   createDataSection(sheet: Worksheet,
                     data: ReportRowData[],
                     calendarDays: CalendarDay[],
-                    colStartNum: number,
-                    rowStartNum: number,
-                    row_step: number,
-                    colsBeforeData: number): void {
-    let row_idx = rowStartNum;
-    for (let row_data_idx = 0; row_data_idx <= data.length; row_idx+=row_step, row_data_idx++) {
-      const rows = this.getRows(row_idx, row_step, sheet);
+                    reportMarkup: ReportMarkup): void {
+    let row_idx = reportMarkup.row_start_num + reportMarkup.header_height + 1;
+
+    for (let row_data_idx = 0; row_data_idx <= data.length; row_idx+=reportMarkup.row_step, row_data_idx++) {
+      const rows = this.getRows(row_idx, reportMarkup.row_step, sheet);
 
       if (row_data_idx == data.length) {
-        this.underline(rows, data, colStartNum, colsBeforeData);
+        this.underline(rows, data, reportMarkup.col_start_num, reportMarkup.cols_before_data);
         break;
       }
 
       const rowData = data[row_data_idx];
-      let col_idx = colStartNum;
+      let col_idx = reportMarkup.col_start_num;
 
       if (rowData && rowData.reportCellData) {
         rowData.reportCellData.forEach(cell =>

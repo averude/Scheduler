@@ -21,6 +21,7 @@ import { ReportCreator } from "./report-creator";
 import { SCHEDULE_REPORT } from "../model/report-types";
 import { CellFiller } from "../core/cell-filler";
 import { AReportCreator } from "./a-report-creator";
+import { ReportMarkup } from "../model/report-markup";
 
 export class ScheduleReportCreator extends AReportCreator implements ReportCreator {
   REPORT_TYPE: string = SCHEDULE_REPORT;
@@ -30,10 +31,10 @@ export class ScheduleReportCreator extends AReportCreator implements ReportCreat
   }
 
   styleColumns(sheet: Worksheet,
-               colStartNum: number,
                daysInMonth: number,
-               summationColumnsCount: number) {
-    let col_idx = colStartNum;
+               summationColumnsCount: number,
+               reportMarkup: ReportMarkup) {
+    let col_idx = reportMarkup.col_start_num;
     let idCol = sheet.getColumn(col_idx++);
     idCol.key = 'id';
     idCol.width = 3;
@@ -61,27 +62,26 @@ export class ScheduleReportCreator extends AReportCreator implements ReportCreat
   createHeader(sheet: Worksheet,
                data: ReportRowData[],
                summationColumns: SummationColumn[],
-               colStartNum: number,
-               rowStartNum: number,
-               headerHeight: number,
-               calendarDays: CalendarDay[]) {
-    let col_idx = colStartNum;
+               calendarDays: CalendarDay[],
+               reportMarkup: ReportMarkup) {
+    let last_header_row_number = reportMarkup.row_start_num + reportMarkup.header_height;
+    let col_idx = reportMarkup.col_start_num;
 
     const rows: Row[] = [];
-    for (let i = rowStartNum; i <= rowStartNum + headerHeight; i++) {
+    for (let i = reportMarkup.row_start_num; i <= last_header_row_number; i++) {
       rows.push(sheet.getRow(i));
     }
 
     rows[1].height = 35;
 
-    sheet.mergeCells(rowStartNum, col_idx, rowStartNum + headerHeight, col_idx);
+    sheet.mergeCells(reportMarkup.row_start_num, col_idx, last_header_row_number, col_idx);
     const idCell = rows[0].getCell(col_idx++);
     idCell.value = '№';
     idCell.style.font = arialCyrSize10;
     idCell.style.border = mediumBorders;
     idCell.style.alignment = centerMiddleAlign;
 
-    sheet.mergeCells(rowStartNum, col_idx, rowStartNum + headerHeight, col_idx);
+    sheet.mergeCells(reportMarkup.row_start_num, col_idx, last_header_row_number, col_idx);
     const nameCell = rows[0].getCell(col_idx++);
     nameCell.value = 'П.І.Б.';
     nameCell.style.font = arialCyrSize10;
@@ -114,7 +114,7 @@ export class ScheduleReportCreator extends AReportCreator implements ReportCreat
     }
 
     for (let sum_col_idx = 0; sum_col_idx < summationColumns.length; sum_col_idx++, col_idx++) {
-      sheet.mergeCells(rowStartNum, col_idx, rowStartNum + headerHeight, col_idx);
+      sheet.mergeCells(reportMarkup.row_start_num, col_idx, last_header_row_number, col_idx);
       const summationColumn = summationColumns[sum_col_idx];
       const sumColCell = rows[0].getCell(col_idx);
       sumColCell.value = summationColumn.name;
