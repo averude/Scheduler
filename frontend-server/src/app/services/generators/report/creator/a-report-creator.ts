@@ -20,7 +20,9 @@ export abstract class AReportCreator implements ReportCreator {
          reportMarkup: ReportMarkup) {
     this.styleColumns(sheet, reportMarkup.col_start_num,
       calendarDays.length, summationColumns.length);
-    this.createHeader(sheet, data, summationColumns, reportMarkup.col_start_num, reportMarkup.row_start_num, reportMarkup.header_height, calendarDays);
+    this.createHeader(sheet, data, summationColumns,
+      reportMarkup.col_start_num, reportMarkup.row_start_num,
+      reportMarkup.header_height, calendarDays);
     this.createDataSection(sheet, data, calendarDays,
       reportMarkup.col_start_num,
       reportMarkup.row_start_num + reportMarkup.header_height + 1,
@@ -83,7 +85,6 @@ export abstract class AReportCreator implements ReportCreator {
             colStartNum: number,
             columns_before_data: number) {
     let firstReportRow = data[data.length - 1];
-    // let table_cols_num = colStartNum + columns_before_data + firstReportRow.cellData.length + firstReportRow.summationResults.length;
     let table_cols_num = colStartNum + firstReportRow.reportCellData.length;
     for (let idx = colStartNum; idx < table_cols_num; idx++) {
       rows[0].getCell(idx).style.border = topMediumBorders;
