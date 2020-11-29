@@ -16,24 +16,9 @@ export abstract class AReportCreator implements ReportCreator {
          headerCells: ReportHeaderCell[],
          data: ReportRowData[],
          reportMarkup: ReportMarkup) {
-    this.styleColumns(sheet, headerCells, reportMarkup);
     this.createHeader(sheet, headerCells, reportMarkup);
     this.createDataSection(sheet, data, reportMarkup);
   }
-
-  styleColumns(sheet: Worksheet,
-               headerCells: ReportHeaderCell[],
-               reportMarkup: ReportMarkup) {
-    let col_idx = reportMarkup.col_start_num;
-
-    headerCells.forEach((headerCell, index) => {
-      const column = sheet.getColumn(col_idx++);
-      column.key = `column_${index}`;
-      if (headerCell.width) {
-        column.width = headerCell.width;
-      }
-    });
-  };
 
   createHeader(sheet: Worksheet,
                headerCells: ReportHeaderCell[],
@@ -45,7 +30,13 @@ export abstract class AReportCreator implements ReportCreator {
 
     this.setHeaderRowsHeight(rows);
 
-    headerCells.forEach(headerCell => {
+    headerCells.forEach((headerCell, index) => {
+      const column = sheet.getColumn(col_idx);
+      column.key = `column_${index}`;
+      if (headerCell.width) {
+        column.width = headerCell.width;
+      }
+
       if (headerCell.merge) {
         this.cellFiller.fillWithMerge(sheet, reportMarkup.row_start_num, last_header_row_number,
           rows, col_idx++, headerCell.value, headerCell.style);
