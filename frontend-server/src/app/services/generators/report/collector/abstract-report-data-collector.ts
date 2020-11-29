@@ -71,10 +71,6 @@ export abstract class AbstractReportDataCollector implements ReportDataCollector
                               summations: SummationResult[],
                               rowIndex: number);
 
-  abstract fillCellWithValue(cell: ReportCellData,
-                             workDay: WorkDay,
-                             dayTypes: DayType[]): void;
-
   abstract getHeaders(calendarDays: CalendarDay[],
                       summationColumns: SummationColumn[]): ReportHeaderCell[];
 

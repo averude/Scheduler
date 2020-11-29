@@ -10,14 +10,14 @@ import { SummationColumn } from "../../../../model/summation-column";
 import { ReportHeaderCell } from "../model/report-cell-data";
 
 export interface ReportDataCollector {
+  getHeaders(calendarDays: CalendarDay[],
+             summationColumns: SummationColumn[]): ReportHeaderCell[];
+
   collect(dates: CalendarDay[],
           dayTypes: DayType[],
           schedule: BasicDto<Employee, WorkDay>[],
           summations: SummationDto[],
           compositions: MainShiftComposition[]): ReportRowData[];
-
-  getHeaders(calendarDays: CalendarDay[],
-             summationColumns: SummationColumn[]): ReportHeaderCell[];
 
   REPORT_TYPE: string;
 }
