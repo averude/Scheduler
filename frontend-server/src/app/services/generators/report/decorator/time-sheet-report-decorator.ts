@@ -1,4 +1,3 @@
-import { ReportDecorator } from "./report-decorator";
 import { Worksheet } from "exceljs";
 import { DecorationData } from "../model/decoration-data";
 import {
@@ -10,58 +9,11 @@ import {
   leftAlign,
   rightAlign
 } from "../styles/report-styles";
-import { ReportMarkup } from "../model/report-markup";
 import { TIME_SHEET_REPORT } from "../model/report-types";
-import { ReportRowData } from "../model/report-row-data";
-import { CalendarDay } from "../../../../lib/ngx-schedule-table/model/calendar-day";
+import { AReportDecorator } from "./a-report-decorator";
 
-export class TimeSheetReportDecorator implements ReportDecorator {
+export class TimeSheetReportDecorator extends AReportDecorator {
   REPORT_TYPE: string = TIME_SHEET_REPORT;
-
-  decorate(sheet: Worksheet,
-           data: ReportRowData[],
-           calendarDates: CalendarDay[],
-           decorationData: DecorationData,
-           reportMarkup: ReportMarkup) {
-    const creator_row_start = reportMarkup.row_start_num + reportMarkup.header_height
-      + (data.length * 2) + reportMarkup.table_creator_interval;
-    const days_in_month = calendarDates.length;
-
-    this.decorateTop(sheet, decorationData, days_in_month);
-    this.decorateBottom(sheet, decorationData, creator_row_start);
-  }
-
-  decorateBottom(sheet: Worksheet,
-                 decorationData: DecorationData,
-                 start_row_num: number): void {
-    let row_num = start_row_num;
-    decorationData.documentCreators.forEach(creator => {
-      if (creator.name && creator.position) {
-        let col_start_num = 5;
-
-        const position_merge_col_start = col_start_num;
-        const position_merge_col_end = col_start_num + 13;
-        const underscore_col_start = position_merge_col_end + 1;
-        const underscore_col_end = underscore_col_start + 4;
-
-        sheet.mergeCells(row_num, position_merge_col_start, row_num, position_merge_col_end);
-        let positionCell = sheet.getCell(row_num, col_start_num);
-        positionCell.value = creator.position;
-        positionCell.style.font = arialCyrSize12;
-        positionCell.style.alignment = rightAlign;
-
-        for (let col_num = underscore_col_start; col_num <= underscore_col_end; col_num++) {
-          sheet.getCell(row_num, col_num).style.border = bottomThinBorders;
-        }
-
-        let nameCell = sheet.getCell(row_num, underscore_col_end + 1);
-        nameCell.value = creator.name;
-        nameCell.style.font = arialCyrSize12;
-
-        row_num += 3;
-      }
-    });
-  }
 
   decorateTop(sheet: Worksheet,
               decorationData: DecorationData,
@@ -111,5 +63,37 @@ export class TimeSheetReportDecorator implements ReportDecorator {
     sheet.getRow(5).height = 4;
 
     sheet.getColumn(1).width = 1;
+  }
+
+  decorateBottom(sheet: Worksheet,
+                 decorationData: DecorationData,
+                 start_row_num: number): void {
+    let row_num = start_row_num;
+    decorationData.documentCreators.forEach(creator => {
+      if (creator.name && creator.position) {
+        let col_start_num = 5;
+
+        const position_merge_col_start = col_start_num;
+        const position_merge_col_end = col_start_num + 13;
+        const underscore_col_start = position_merge_col_end + 1;
+        const underscore_col_end = underscore_col_start + 4;
+
+        sheet.mergeCells(row_num, position_merge_col_start, row_num, position_merge_col_end);
+        let positionCell = sheet.getCell(row_num, col_start_num);
+        positionCell.value = creator.position;
+        positionCell.style.font = arialCyrSize12;
+        positionCell.style.alignment = rightAlign;
+
+        for (let col_num = underscore_col_start; col_num <= underscore_col_end; col_num++) {
+          sheet.getCell(row_num, col_num).style.border = bottomThinBorders;
+        }
+
+        let nameCell = sheet.getCell(row_num, underscore_col_end + 1);
+        nameCell.value = creator.name;
+        nameCell.style.font = arialCyrSize12;
+
+        row_num += 3;
+      }
+    });
   }
 }

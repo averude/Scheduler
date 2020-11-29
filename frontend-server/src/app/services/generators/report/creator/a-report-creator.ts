@@ -59,7 +59,7 @@ export abstract class AReportCreator implements ReportCreator {
       const rows = this.getRows(row_idx, reportMarkup.row_step, sheet);
 
       if (row_data_idx == data.length) {
-        this.underline(rows, data, reportMarkup.col_start_num, reportMarkup.cols_before_data);
+        this.underline(rows, data, reportMarkup.col_start_num);
         break;
       }
 
@@ -87,8 +87,7 @@ export abstract class AReportCreator implements ReportCreator {
 
   underline(rows: Row[],
             data: ReportRowData[],
-            colStartNum: number,
-            columns_before_data: number) {
+            colStartNum: number) {
     let firstReportRow = data[data.length - 1];
     let table_cols_num = colStartNum + firstReportRow.reportCellData.length;
     for (let idx = colStartNum; idx < table_cols_num; idx++) {
