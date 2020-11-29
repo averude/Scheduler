@@ -54,7 +54,18 @@ export class ReportFormComponent implements OnInit {
       schedAndServiceName:  [null, [Validators.required]],
       documentCreators:     this.fb.array([
         this.createDocumentCreator()
-      ])
+      ]),
+      agreed:               this.createSection('Погоджено'),
+      approved:             this.createSection('ЗАТВЕРДЖУЮ'),
+    });
+  }
+
+  private createSection(label: string) {
+    return this.fb.group({
+      label:              [label],
+      position:           [],
+      person:             [],
+      year:               [this.date.year()],
     });
   }
 

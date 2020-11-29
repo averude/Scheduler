@@ -6,4 +6,5 @@ export class ReportMarkup {
   creator_row_start: number;
   row_step: number;
   cols_before_data: number;
+  report_label?: string;
 }

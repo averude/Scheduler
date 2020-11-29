@@ -26,8 +26,8 @@ export class ReportGenerator {
     const workbook = new ExcelJS.Workbook();
     const sheet = workbook.addWorksheet('Schedule');
 
-    reportCreator.create(sheet, headerCells, data, reportMarkup);
     reportDecorator.decorate(sheet, reportMarkup, data, calendarDays, decorationData);
+    reportCreator.create(sheet, headerCells, data, reportMarkup);
 
     return workbook.xlsx.writeBuffer();
   }

@@ -8,26 +8,6 @@ import { ReportMarkup } from "../model/report-markup";
 export class TimeSheetReportDecorator extends AReportDecorator {
   REPORT_TYPE: string = TIME_SHEET_REPORT;
 
-  decorateTop(sheet: Worksheet,
-              reportMarkup: ReportMarkup,
-              decorationData: DecorationData,
-              daysInMonth: number): void {
-    if (!sheet || !decorationData || !daysInMonth || daysInMonth <= 0 || daysInMonth > 31) {
-      return;
-    }
-
-    const start_row_num = 2;
-    const start_col_num = 3;
-
-    this.decorateTableLabelSection(sheet, decorationData, 'ТАБЕЛЬ', start_row_num, start_col_num, daysInMonth);
-
-    sheet.getRow(1).height = 4;
-    sheet.getRow(3).height = 4;
-    sheet.getRow(5).height = 4;
-
-    sheet.getColumn(1).width = 1;
-  }
-
   decorateBottom(sheet: Worksheet,
                  reportMarkup: ReportMarkup,
                  decorationData: DecorationData,

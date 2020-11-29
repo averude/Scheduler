@@ -30,10 +30,39 @@ export abstract class AReportDecorator implements ReportDecorator {
     this.decorateBottom(sheet, reportMarkup, decorationData, creator_row_start);
   }
 
-  abstract decorateTop(sheet: Worksheet,
-                       reportMarkup: ReportMarkup,
-                       decorationData: DecorationData,
-                       daysInMonth: number): void;
+  decorateTop(sheet: Worksheet,
+              reportMarkup: ReportMarkup,
+              decorationData: DecorationData,
+              daysInMonth: number): void {
+    if (!sheet || !decorationData || !daysInMonth || daysInMonth <= 0 || daysInMonth > 31) {
+      return;
+    }
+
+    const range_between_agreed_and_approved = daysInMonth - 3;
+    const approved_col_labels_num = reportMarkup.col_start_num + 1 + range_between_agreed_and_approved;
+
+    let extra = 0;
+    if (this.validate(decorationData.agreed) || this.validate(decorationData.approved)) {
+      extra = 6;
+      this.decorateHeaderSection(sheet, decorationData.agreed, reportMarkup.row_start_num, reportMarkup.col_start_num + 1, 1);
+      this.decorateHeaderSection(sheet, decorationData.approved, reportMarkup.row_start_num, approved_col_labels_num, 5);
+    }
+    this.decorateTableLabelSection(sheet, decorationData, reportMarkup.report_label, reportMarkup.row_start_num + extra, reportMarkup.col_start_num, daysInMonth);
+
+    sheet.getRow(1).height = 4;
+    sheet.getColumn(1).width = 1;
+
+    if (decorationData.agreed.person && decorationData.approved) {
+      sheet.getRow(6).height = 4;
+      sheet.getRow(9).height = 4;
+      sheet.getRow(11).height = 4;
+    } else {
+      sheet.getRow(3).height = 4;
+      sheet.getRow(5).height = 4;
+    }
+
+    reportMarkup.row_start_num += extra + 4;
+  }
 
   abstract decorateBottom(sheet: Worksheet,
                           reportMarkup: ReportMarkup,
@@ -108,5 +137,9 @@ export abstract class AReportDecorator implements ReportDecorator {
     yearCell.value = decorationData.year + 'р.';
     yearCell.style.font = arialCyrSize14;
     yearCell.style.alignment = leftAlign;
+  }
+
+  private validate(sectionData: HeaderSectionData): boolean {
+    return !!sectionData.person && !!sectionData.position;
   }
 }

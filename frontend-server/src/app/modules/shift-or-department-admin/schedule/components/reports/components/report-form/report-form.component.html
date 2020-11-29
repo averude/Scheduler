@@ -92,30 +92,30 @@
     <ng-template matStepLabel>Agreed and approved persons</ng-template>
 
     <div class="third-step-container">
-      <div class="person-block">
+      <div class="person-block" formGroupName="agreed">
         <mat-form-field>
           <input matInput
-                 formControlName="agreedPosition"
+                 formControlName="position"
                  placeholder="Agreed position"/>
         </mat-form-field>
 
         <mat-form-field>
           <input matInput
-                 formControlName="agreedPerson"
+                 formControlName="person"
                  placeholder="Agreed person"/>
         </mat-form-field>
       </div>
 
-      <div class="person-block">
+      <div class="person-block" formGroupName="approved">
         <mat-form-field>
           <input matInput
-                 formControlName="approvedPosition"
+                 formControlName="position"
                  placeholder="Approved position"/>
         </mat-form-field>
 
         <mat-form-field>
           <input matInput
-                 formControlName="approvedPerson"
+                 formControlName="person"
                  placeholder="Approved person"/>
         </mat-form-field>
       </div>

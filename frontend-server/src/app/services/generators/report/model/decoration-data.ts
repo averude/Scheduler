@@ -7,6 +7,8 @@ export class DecorationData {
   approvedPerson: string;
   schedAndServiceName: string;
   documentCreators: DocumentCreator[];
+  agreed?: HeaderSectionData;
+  approved?: HeaderSectionData;
 }
 
 export class DocumentCreator {

@@ -8,43 +8,6 @@ import { ReportMarkup } from "../model/report-markup";
 export class ScheduleReportDecorator extends AReportDecorator {
   REPORT_TYPE: string = SCHEDULE_REPORT;
 
-  decorateTop(sheet: Worksheet,
-              reportMarkup: ReportMarkup,
-              decorationData: DecorationData,
-              daysInMonth: number): void {
-    if (!sheet || !decorationData || !daysInMonth || daysInMonth <= 0 || daysInMonth > 31) {
-      return;
-    }
-
-    const start_row_num = 2;
-    const start_col_num = 3;
-    const range_between_agreed_and_approved = daysInMonth - 3;
-
-    const approved_col_labels_num = start_col_num + range_between_agreed_and_approved;
-
-    this.decorateHeaderSection(sheet, {
-      label: 'Погоджено',
-      position: decorationData.agreedPosition,
-      person: decorationData.agreedPerson,
-      year: decorationData.year
-    }, start_row_num, start_col_num, 1);
-
-    this.decorateHeaderSection(sheet, {
-      label: 'ЗАТВЕРДЖУЮ',
-      position: decorationData.approvedPosition,
-      person: decorationData.approvedPerson,
-      year: decorationData.year
-    }, start_row_num, approved_col_labels_num, 5);
-
-    this.decorateTableLabelSection(sheet, decorationData, 'ГРАФІК', start_row_num + 6, start_col_num, daysInMonth);
-
-    sheet.getRow(1).height = 4;
-    sheet.getRow(6).height = 4;
-    sheet.getRow(9).height = 4;
-    sheet.getRow(11).height = 4;
-    sheet.getColumn(1).width = 1;
-  }
-
   decorateBottom(sheet: Worksheet,
                  reportMarkup: ReportMarkup,
                  decorationData: DecorationData,
