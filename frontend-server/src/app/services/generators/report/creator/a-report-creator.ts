@@ -1,11 +1,10 @@
 import { Row, Worksheet } from "exceljs";
 import { ReportRowData } from "../model/report-row-data";
-import { CalendarDay } from "../../../../lib/ngx-schedule-table/model/calendar-day";
 import { CellFiller } from "../core/cell-filler";
 import { topMediumBorders } from "../styles/report-styles";
-import { SummationColumn } from "../../../../model/summation-column";
 import { ReportMarkup } from "../model/report-markup";
 import { ReportCreator } from "./report-creator";
+import { ReportHeaderCell } from "../model/report-cell-data";
 
 export abstract class AReportCreator implements ReportCreator {
   abstract REPORT_TYPE: string;
@@ -14,24 +13,30 @@ export abstract class AReportCreator implements ReportCreator {
   }
 
   create(sheet: Worksheet,
+         headerCells: ReportHeaderCell[],
          data: ReportRowData[],
-         calendarDays: CalendarDay[],
-         summationColumns: SummationColumn[],
          reportMarkup: ReportMarkup) {
-    this.styleColumns(sheet, calendarDays.length, summationColumns.length, reportMarkup);
-    this.createHeader(sheet, data, summationColumns, calendarDays, reportMarkup);
-    this.createDataSection(sheet, data, calendarDays,reportMarkup);
+    this.styleColumns(sheet, headerCells, reportMarkup);
+    this.createHeader(sheet, headerCells, reportMarkup);
+    this.createDataSection(sheet, data, reportMarkup);
   }
 
-  abstract styleColumns(sheet: Worksheet,
-                        daysInMonth: number,
-                        summationColumnsCount: number,
-                        reportMarkup: ReportMarkup);
+  styleColumns(sheet: Worksheet,
+               headerCells: ReportHeaderCell[],
+               reportMarkup: ReportMarkup) {
+    let col_idx = reportMarkup.col_start_num;
+
+    headerCells.forEach((headerCell, index) => {
+      const column = sheet.getColumn(col_idx++);
+      column.key = `column_${index}`;
+      if (headerCell.width) {
+        column.width = headerCell.width;
+      }
+    });
+  };
 
   createHeader(sheet: Worksheet,
-               data: ReportRowData[],
-               summationColumns: SummationColumn[],
-               calendarDays: CalendarDay[],
+               headerCells: ReportHeaderCell[],
                reportMarkup: ReportMarkup) {
     const last_header_row_number = reportMarkup.row_start_num + reportMarkup.header_height;
     let col_idx = reportMarkup.col_start_num;
@@ -40,35 +45,22 @@ export abstract class AReportCreator implements ReportCreator {
 
     this.setHeaderRowsHeight(rows);
 
-    this.setBeforeDateHeaderCells(rows, col_idx, last_header_row_number, sheet, reportMarkup);
-    this.setDateHeaderCells(rows, col_idx += reportMarkup.cols_before_data, calendarDays);
-    this.setSumHeaderCells(rows, col_idx += calendarDays.length, summationColumns, last_header_row_number, sheet, reportMarkup)
+    headerCells.forEach(headerCell => {
+      if (headerCell.merge) {
+        this.cellFiller.fillWithMerge(sheet, reportMarkup.row_start_num, last_header_row_number,
+          rows, col_idx++, headerCell.value, headerCell.style);
+      } else {
+        this.cellFiller.fill(rows, col_idx++, headerCell.value, headerCell.style);
+      }
+    });
 
     rows.forEach(row => row.commit());
   }
 
   abstract setHeaderRowsHeight(rows: Row[]);
 
-  abstract setBeforeDateHeaderCells(rows: Row[],
-                                    col_idx: number,
-                                    last_header_row_number: number,
-                                    sheet: Worksheet,
-                                    reportMarkup: ReportMarkup);
-
-  abstract setDateHeaderCells(rows: Row[],
-                              col_idx: number,
-                              calendarDays: CalendarDay[]);
-
-  abstract setSumHeaderCells(rows: Row[],
-                             col_idx: number,
-                             summationColumns: SummationColumn[],
-                             last_header_row_number: number,
-                             sheet: Worksheet,
-                             reportMarkup: ReportMarkup);
-
   createDataSection(sheet: Worksheet,
                     data: ReportRowData[],
-                    calendarDays: CalendarDay[],
                     reportMarkup: ReportMarkup): void {
     let row_idx = reportMarkup.row_start_num + reportMarkup.header_height + 1;
 

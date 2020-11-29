@@ -5,3 +5,8 @@ export interface ReportCellData {
   style: Partial<Style> | Partial<Style>[];
   afterCellProcessed?: (cell) => void;
 }
+
+export interface ReportHeaderCell extends ReportCellData {
+  merge: boolean;
+  width?: number;
+}

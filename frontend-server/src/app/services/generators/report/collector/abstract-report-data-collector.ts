@@ -8,7 +8,8 @@ import { CalendarDay } from "../../../../lib/ngx-schedule-table/model/calendar-d
 import { MainShiftComposition } from "../../../../model/main-shift-composition";
 import { sortByCompositions } from "../../../../shared/utils/collection-utils";
 import { ReportDataCollector } from "./report-data-collector";
-import { ReportCellData } from "../model/report-cell-data";
+import { ReportCellData, ReportHeaderCell } from "../model/report-cell-data";
+import { SummationColumn } from "../../../../model/summation-column";
 
 export abstract class AbstractReportDataCollector implements ReportDataCollector {
 
@@ -73,6 +74,9 @@ export abstract class AbstractReportDataCollector implements ReportDataCollector
   abstract fillCellWithValue(cell: ReportCellData,
                              workDay: WorkDay,
                              dayTypes: DayType[]): void;
+
+  abstract getHeaders(calendarDays: CalendarDay[],
+                      summationColumns: SummationColumn[]): ReportHeaderCell[];
 
   private getSummationResults(summations: SummationDto[],
                               dto: BasicDto<Employee, WorkDay>) {

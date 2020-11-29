@@ -3,11 +3,12 @@ import { WorkDay } from "../../../../model/workday";
 import { DayType } from "../../../../model/day-type";
 import { getCellValue, getEmployeeShortName } from "../../../../shared/utils/utils";
 import { SCHEDULE_REPORT } from "../model/report-types";
-import { ReportCellData } from "../model/report-cell-data";
+import { ReportCellData, ReportHeaderCell } from "../model/report-cell-data";
 import { ScheduleReportStyles } from "../styles/schedule-report-styles";
 import { CalendarDay } from "../../../../lib/ngx-schedule-table/model/calendar-day";
 import { Employee } from "../../../../model/employee";
 import { SummationResult } from "../../../../model/dto/summation-dto";
+import { SummationColumn } from "../../../../model/summation-column";
 
 export class ScheduleReportDataCollector extends AbstractReportDataCollector {
 
@@ -79,6 +80,55 @@ export class ScheduleReportDataCollector extends AbstractReportDataCollector {
       result = ScheduleReportStyles.weekendScheduleCellStyle;
     } else if (day.holiday) {
       result = ScheduleReportStyles.holidayScheduleCellStyle;
+    }
+    return result;
+  }
+
+  public getHeaders(calendarDays: CalendarDay[],
+                    summationColumns: SummationColumn[]): ReportHeaderCell[] {
+    const headers: ReportHeaderCell[] = [].concat([
+      {
+        value: '№',
+        style: ScheduleReportStyles.idHeaderCellStyle,
+        merge: true,
+        width: 3
+      },
+      {
+        value: 'П.І.Б.',
+        style: ScheduleReportStyles.nameHeaderCellStyle,
+        merge: true,
+        width: 20
+      },
+      {
+        value: [null, 'Посада', null],
+        style: ScheduleReportStyles.positionHeaderCellStyle,
+        merge: false,
+        width: 8
+      },
+    ]);
+
+    calendarDays.forEach(day => headers.push({
+      value: [null, null, day.dayOfMonth],
+      style: this.getHeaderStyle(day),
+      merge: false,
+      width: 5
+    }));
+
+    summationColumns.map(column => headers.push({
+      value: column.name,
+      style: ScheduleReportStyles.sumHeaderCellStyle,
+      merge: true
+    }));
+
+    return headers;
+  }
+
+  private getHeaderStyle(day: CalendarDay) {
+    let result = ScheduleReportStyles.scheduleHeaderCellStyle;
+    if (day.weekend) {
+      result = ScheduleReportStyles.weekendScheduleHeaderCellStyle;
+    } else if (day.holiday) {
+      result = ScheduleReportStyles.holidayScheduleHeaderCellStyle;
     }
     return result;
   }

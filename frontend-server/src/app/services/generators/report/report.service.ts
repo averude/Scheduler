@@ -65,10 +65,10 @@ export class ReportService {
 
           const reportRowData = reportDataCollector
               .collect(daysInMonth, values[3], values[1], values[2], values[5]);
-            return this.reportGenerator
-              .generate(reportCreator, reportDecorator, reportRowData, daysInMonth, summationColumns, decorationData, reportMarkup);
-          })
-        );
+          const reportHeaderCells = reportDataCollector.getHeaders(daysInMonth, summationColumns);
+          return this.reportGenerator
+              .generate(reportCreator, reportDecorator, reportHeaderCells, reportRowData, daysInMonth, decorationData, reportMarkup);
+        }));
     }
   }
 }

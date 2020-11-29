@@ -20,6 +20,10 @@ import {
 
 export class ScheduleReportStyles {
 
+  static monthDateCaption: Partial<Style> = {
+    font: arialCyrSize10
+  };
+
   static idHeaderCellStyle: Partial<Style> = {
     font: arialCyrSize10,
     border: mediumBorders,
@@ -59,15 +63,33 @@ export class ScheduleReportStyles {
     }
   ];
 
-  static holidayScheduleHeaderCellStyle: Partial<Style> = {
-    border: topMediumLeftRightThinBorders,
-    fill: holidayFill
-  };
+  static holidayScheduleHeaderCellStyle: Partial<Style>[] = [
+    {
+      border: topMediumBorders
+    },
+    {
+      border: topMediumLeftRightThinBorders,
+      fill: holidayFill
+    },
+    {
+      font: arialCyrSize10,
+      border: leftRightThinBottomMediumBorders
+    }
+  ];
 
-  static weekendScheduleHeaderCellStyle: Partial<Style> = {
-    border: topMediumLeftRightThinBorders,
-    fill: weekendFill
-  };
+  static weekendScheduleHeaderCellStyle: Partial<Style>[] = [
+    {
+      border: topMediumBorders
+    },
+    {
+      border: topMediumLeftRightThinBorders,
+      fill: weekendFill
+    },
+    {
+      font: arialCyrSize10,
+      border: leftRightThinBottomMediumBorders
+    }
+  ];
 
   static sumHeaderCellStyle: Partial<Style> = {
     font: arialCyrSize8,

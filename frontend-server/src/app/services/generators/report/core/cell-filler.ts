@@ -1,8 +1,20 @@
-import { Cell, Row, Style } from "exceljs";
+import { Cell, Row, Style, Worksheet } from "exceljs";
 import { Injectable } from "@angular/core";
 
 @Injectable()
 export class CellFiller {
+
+  public fillWithMerge(sheet: Worksheet,
+                       merge_from_row: number,
+                       merge_to_row: number,
+                       rs: Row | Row[],
+                       col_idx: number,
+                       values: any | any[],
+                       cells_styles: Partial<Style> | Partial<Style>[],
+                       afterCellProcessed?: (cell: Cell, row_index?: number) => void) {
+    sheet.mergeCells(merge_from_row, col_idx, merge_to_row, col_idx);
+    this.fill(rs, col_idx, values, cells_styles, afterCellProcessed);
+  }
 
   public fill(rs: Row | Row[],
               col_idx: number,

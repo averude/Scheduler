@@ -16,8 +16,7 @@ describe("Test report generator", () => {
     const generator = new ReportGenerator();
     const daysInMonth = new ScheduleTablePaginationStrategy(null)
       .calcDaysInMonth(moment('2020-02-02'), getMockSpecCalDates());
-    generator.generate(null, null, getMockSchedulerRowData(daysInMonth), daysInMonth,
-      getMockSummationColumns(), getMockDecorationData(), null)
+    generator.generate(null, null, undefined, getMockSchedulerRowData(daysInMonth), daysInMonth, getMockDecorationData(), null)
       .then(buffer => {
         let blob = new Blob([buffer], {type: blobType});
         FileSaver.saveAs(blob, 'test.xlsx');
@@ -29,8 +28,7 @@ describe("Test report generator", () => {
     const generator = new ReportGenerator();
     const daysInMonth = new ScheduleTablePaginationStrategy(null)
       .calcDaysInMonth(moment('2020-02-02'), getMockSpecCalDates());
-    generator.generate(null, null, getMockTimeSheetRowData(daysInMonth), daysInMonth,
-      getMockSummationColumns(), getMockDecorationData(), null)
+    generator.generate(null, null, undefined, getMockTimeSheetRowData(daysInMonth), daysInMonth, getMockDecorationData(), null)
       .then(buffer => {
         let blob = new Blob([buffer], {type: blobType});
         FileSaver.saveAs(blob, 'test.xlsx');

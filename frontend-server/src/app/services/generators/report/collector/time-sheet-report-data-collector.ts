@@ -8,11 +8,12 @@ import {
   getCellValueExt,
   getEmployeeShortName
 } from "../../../../shared/utils/utils";
-import { ReportCellData } from "../model/report-cell-data";
+import { ReportCellData, ReportHeaderCell } from "../model/report-cell-data";
 import { TimeSheetStyles } from "../styles/time-sheet-styles";
 import { SummationResult } from "../../../../model/dto/summation-dto";
 import { Employee } from "../../../../model/employee";
 import { CalendarDay } from "../../../../lib/ngx-schedule-table/model/calendar-day";
+import { SummationColumn } from "../../../../model/summation-column";
 
 export class TimeSheetReportDataCollector extends AbstractReportDataCollector {
 
@@ -81,32 +82,37 @@ export class TimeSheetReportDataCollector extends AbstractReportDataCollector {
         style: [TimeSheetStyles.sumCellStyle, TimeSheetStyles.lastSumCellStyle]
       }));
   }
-  //
-  // getReportCellData(rowData: ReportRowData, row_data_idx: number): ReportCellData[] {
-  //   const cellData: ReportCellData[] = [];
-  //
-  //   cellData.push({
-  //     value: [row_data_idx + 1, null],
-  //     style: [TimeSheetStyles.idCellStyle, TimeSheetStyles.lastIdCellStyle]
-  //   });
-  //
-  //   cellData.push({
-  //     value: [rowData.name, rowData.position],
-  //     style: [TimeSheetStyles.nameCellStyle, TimeSheetStyles.positionCellStyle]
-  //   });
-  //
-  //   rowData.cellData.forEach(cell =>
-  //     cellData.push({
-  //       value: cell.value,
-  //       style: [TimeSheetStyles.dataCellStyle, TimeSheetStyles.lastDataCellStyle]
-  //     }));
-  //
-  //   rowData.summationResults.forEach(cell =>
-  //     cellData.push({
-  //       value: cell.value,
-  //       style: [TimeSheetStyles.sumCellStyle, TimeSheetStyles.lastSumCellStyle]
-  //     }));
-  //
-  //   return cellData;
-  // }
+
+  getHeaders(calendarDays: CalendarDay[],
+             summationColumns: SummationColumn[]): ReportHeaderCell[] {
+    const headers: ReportHeaderCell[] = [].concat([
+      {
+        value: '№',
+        style: TimeSheetStyles.idHeaderCellStyle,
+        merge: true,
+        width: 3
+      },
+      {
+        value: 'П.І.Б.',
+        style: TimeSheetStyles.nameHeaderCellStyle,
+        merge: true,
+        width: 20
+      },
+    ]);
+
+    calendarDays.forEach(day => headers.push({
+      value: [null, day.dayOfMonth],
+      style: TimeSheetStyles.dataHeaderCellStyle,
+      merge: false,
+      width: 6
+    }));
+
+    summationColumns.forEach(column => headers.push({
+      value: column.name,
+      style: TimeSheetStyles.sumHeaderCellStyle,
+      merge: true
+    }));
+
+    return headers;
+  }
 }
