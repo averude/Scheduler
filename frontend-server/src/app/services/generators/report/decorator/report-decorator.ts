@@ -8,8 +8,8 @@ export interface ReportDecorator {
   REPORT_TYPE: string;
 
   decorate(sheet: Worksheet,
+           reportMarkup: ReportMarkup,
            data: ReportRowData[],
            calendarDates: CalendarDay[],
-           decorationData: DecorationData,
-           reportMarkup: ReportMarkup);
+           decorationData: DecorationData);
 }

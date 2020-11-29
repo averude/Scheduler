@@ -13,3 +13,10 @@ export class DocumentCreator {
   position: string;
   name: string;
 }
+
+export interface HeaderSectionData {
+  label: string;
+  position: string;
+  person: string;
+  year: number
+}
