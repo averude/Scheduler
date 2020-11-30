@@ -13,7 +13,7 @@ export interface ReportDataCollector {
   getHeaders(calendarDays: CalendarDay[],
              summationColumns: SummationColumn[]): ReportHeaderCell[];
 
-  collect(dates: CalendarDay[],
+  collect(calendarDays: CalendarDay[],
           dayTypes: DayType[],
           schedule: BasicDto<Employee, WorkDay>[],
           summations: SummationDto[],

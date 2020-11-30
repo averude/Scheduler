@@ -59,23 +59,23 @@ export class ReportServiceConfig {
     if (!this._markupsMap) {
       this._markupsMap = new Map<string, ReportMarkup>();
       const scheduleReportMarkup = {
-        col_start_num: 2,
-        row_start_num: 2,
-        header_height: 2,
+        sheet_row_start_num: 2,
+        sheet_col_start_num: 2,
+        table_header_height: 2,
         table_creator_interval: 4,
-        row_step: 1,
-        cols_before_data: 3,
-        report_label: 'ГРАФІК'
+        table_data_row_step: 1,
+        table_cols_before_data: 3,
+        table_report_label: 'ГРАФІК'
       } as ReportMarkup;
       this._markupsMap.set(SCHEDULE_REPORT, scheduleReportMarkup);
       const timeSheetReportMarkup = {
-        col_start_num: 2,
-        row_start_num: 2,
-        header_height: 1,
+        sheet_row_start_num: 2,
+        sheet_col_start_num: 2,
+        table_header_height: 1,
         table_creator_interval: 3,
-        row_step: 2,
-        cols_before_data: 2,
-        report_label: 'ТАБЕЛЬ'
+        table_data_row_step: 2,
+        table_cols_before_data: 2,
+        table_report_label: 'ТАБЕЛЬ'
       } as ReportMarkup;
       this._markupsMap.set(TIME_SHEET_REPORT, timeSheetReportMarkup);
     }

@@ -23,10 +23,10 @@ export abstract class AReportCreator implements ReportCreator {
   createHeader(sheet: Worksheet,
                headerCells: ReportHeaderCell[],
                reportMarkup: ReportMarkup) {
-    const last_header_row_number = reportMarkup.row_start_num + reportMarkup.header_height;
-    let col_idx = reportMarkup.col_start_num;
+    const last_header_row_number = reportMarkup.table_row_start_num + reportMarkup.table_header_height;
+    let col_idx = reportMarkup.sheet_col_start_num;
 
-    const rows = this.getRows(reportMarkup.row_start_num, reportMarkup.header_height + 1, sheet);
+    const rows = this.getRows(reportMarkup.table_row_start_num, reportMarkup.table_header_height + 1, sheet);
 
     this.setHeaderRowsHeight(rows);
 
@@ -38,7 +38,7 @@ export abstract class AReportCreator implements ReportCreator {
       }
 
       if (headerCell.merge) {
-        this.cellFiller.fillWithMerge(sheet, reportMarkup.row_start_num, last_header_row_number,
+        this.cellFiller.fillWithMerge(sheet, reportMarkup.table_row_start_num, last_header_row_number,
           rows, col_idx++, headerCell.value, headerCell.style);
       } else {
         this.cellFiller.fill(rows, col_idx++, headerCell.value, headerCell.style);
@@ -53,18 +53,18 @@ export abstract class AReportCreator implements ReportCreator {
   createDataSection(sheet: Worksheet,
                     data: ReportRowData[],
                     reportMarkup: ReportMarkup): void {
-    let row_idx = reportMarkup.row_start_num + reportMarkup.header_height + 1;
+    let row_idx = reportMarkup.table_row_start_num + reportMarkup.table_header_height + 1;
 
-    for (let row_data_idx = 0; row_data_idx <= data.length; row_idx+=reportMarkup.row_step, row_data_idx++) {
-      const rows = this.getRows(row_idx, reportMarkup.row_step, sheet);
+    for (let row_data_idx = 0; row_data_idx <= data.length; row_idx+=reportMarkup.table_data_row_step, row_data_idx++) {
+      const rows = this.getRows(row_idx, reportMarkup.table_data_row_step, sheet);
 
       if (row_data_idx == data.length) {
-        this.underline(rows, data, reportMarkup.col_start_num);
+        this.underline(rows, data, reportMarkup.sheet_col_start_num);
         break;
       }
 
       const rowData = data[row_data_idx];
-      let col_idx = reportMarkup.col_start_num;
+      let col_idx = reportMarkup.sheet_col_start_num;
 
       if (rowData && rowData.reportCellData) {
         rowData.reportCellData.forEach(cell =>

@@ -15,6 +15,7 @@ import { WorkingNormService } from "../../http/working-norm.service";
 import { ReportServiceConfig } from "./config/report-service-config";
 import { ReportGenerator } from "./report-generator";
 import { StatisticsColumnCompositor } from "../../../shared/compositor/statistics-column-compositor";
+import { ReportData } from "./model/report-row-data";
 
 @Injectable()
 export class ReportService {
@@ -66,8 +67,15 @@ export class ReportService {
           const reportRowData = reportDataCollector
               .collect(daysInMonth, values[3], values[1], values[2], values[5]);
           const reportHeaderCells = reportDataCollector.getHeaders(daysInMonth, summationColumns);
+
+          const reportData = new ReportData();
+          reportData.headerData = reportHeaderCells;
+          reportData.tableData = reportRowData;
+          reportData.reportMarkup = reportMarkup;
+          reportData.decorationData = decorationData;
+
           return this.reportGenerator
-              .generate(reportCreator, reportDecorator, reportHeaderCells, reportRowData, daysInMonth, decorationData, reportMarkup);
+              .generate(reportCreator, reportDecorator, reportData);
         }));
     }
   }
