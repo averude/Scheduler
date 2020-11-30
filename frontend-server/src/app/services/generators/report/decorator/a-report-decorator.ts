@@ -1,5 +1,5 @@
 import { Worksheet } from "exceljs";
-import { ReportRowData } from "../model/report-row-data";
+import { ReportData } from "../model/report-row-data";
 import { DecorationData, HeaderSectionData } from "../model/decoration-data";
 import { ReportMarkup } from "../model/report-markup";
 import { ReportDecorator } from "./report-decorator";
@@ -17,15 +17,15 @@ export abstract class AReportDecorator implements ReportDecorator {
   abstract REPORT_TYPE: string;
 
   decorate(sheet: Worksheet,
-           reportMarkup: ReportMarkup,
-           data: ReportRowData[],
-           decorationData: DecorationData) {
-    const numOfColumns = data[0].reportCellData.length;
+           reportData: ReportData) {
+    const reportMarkup    = reportData.reportMarkup;
+    const numOfColumns    = reportData.headerData.length;
+    const decorationData  = reportData.decorationData;
 
     this.decorateTop(sheet, reportMarkup, decorationData, numOfColumns);
 
     const creator_row_start = reportMarkup.table_row_start_num + reportMarkup.table_header_height
-      + (data.length * reportMarkup.table_data_row_step) + reportMarkup.table_creator_interval;
+      + (reportData.tableData.length * reportMarkup.table_data_row_step) + reportMarkup.table_creator_interval;
 
     this.decorateBottom(sheet, reportMarkup, decorationData, creator_row_start);
   }

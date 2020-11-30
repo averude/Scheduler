@@ -15,7 +15,6 @@ import { WorkingNormService } from "../../http/working-norm.service";
 import { ReportServiceConfig } from "./config/report-service-config";
 import { ReportGenerator } from "./report-generator";
 import { StatisticsColumnCompositor } from "../../../shared/compositor/statistics-column-compositor";
-import { ReportData } from "./model/report-row-data";
 
 @Injectable()
 export class ReportService {
@@ -46,9 +45,8 @@ export class ReportService {
     const reportDataCollector = this.config.collectors.get(reportType);
     const reportDecorator     = this.config.decorators.get(reportType);
     const reportCreator       = this.config.creators.get(reportType);
-    const reportMarkup        = this.config.markups.get(reportType);
 
-    if (reportDataCollector && reportCreator && reportDecorator && reportMarkup) {
+    if (reportDataCollector && reportCreator && reportDecorator) {
 
       const observables: Observable<any>[] = [
         this.specialCalendarDateService.getAll(from, to),
@@ -64,14 +62,7 @@ export class ReportService {
           const daysInMonth = this.paginationStrategy.calcDaysInMonth(date, values[0]);
           this.statisticsColumnCompositor.composeResults(values[2], summationColumns, values[5], values[4]);
 
-          const reportRowData = reportDataCollector
-              .collect(daysInMonth, values[3], values[1], values[2], values[5]);
-          const reportHeaderCells = reportDataCollector.getHeaders(daysInMonth, summationColumns);
-
-          const reportData = new ReportData();
-          reportData.headerData = reportHeaderCells;
-          reportData.tableData = reportRowData;
-          reportData.reportMarkup = reportMarkup;
+          const reportData = reportDataCollector.collect(daysInMonth, values[3], values[1], values[2], summationColumns, values[5]);
           reportData.decorationData = decorationData;
 
           return this.reportGenerator

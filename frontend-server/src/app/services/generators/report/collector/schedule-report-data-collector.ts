@@ -9,6 +9,9 @@ import { CalendarDay } from "../../../../lib/ngx-schedule-table/model/calendar-d
 import { Employee } from "../../../../model/employee";
 import { SummationResult } from "../../../../model/dto/summation-dto";
 import { SummationColumn } from "../../../../model/summation-column";
+import { ReportData } from "../model/report-row-data";
+import { ReportMarkup } from "../model/report-markup";
+import { BasicDto } from "../../../../model/dto/basic-dto";
 
 export class ScheduleReportDataCollector extends AbstractReportDataCollector {
 
@@ -18,70 +21,6 @@ export class ScheduleReportDataCollector extends AbstractReportDataCollector {
                     workDay: WorkDay,
                     dayTypes: DayType[]): void {
     cell.value = getCellValue(workDay, dayTypes);
-  }
-
-  setRowFirstCells(cellData: ReportCellData[],
-                   dtoParent: Employee,
-                   rowIndex: number) {
-    cellData.push({
-      value: rowIndex + 1,
-      style: ScheduleReportStyles.idCellStyle
-    });
-
-    cellData.push({
-      value: getEmployeeShortName(dtoParent),
-      style: ScheduleReportStyles.nameCellStyle
-    });
-
-    cellData.push({
-      value: dtoParent.position.shortName,
-      style: ScheduleReportStyles.positionCellStyle
-    });
-  }
-
-  setRowDataCells(cellData: ReportCellData[],
-                  workDays: WorkDay[],
-                  dates: CalendarDay[],
-                  dayTypes: DayType[],
-                  rowIndex: number) {
-    if (!workDays || !dates || dates.length == 0) {
-      return;
-    }
-
-    for (let date_idx = 0, sched_idx = 0; date_idx < dates.length; date_idx++) {
-      const date = dates[date_idx];
-      const workDay = workDays[sched_idx];
-
-      const cell = <ReportCellData>{};
-      cell.style = this.getStyle(date);
-
-      if (workDay && date.isoString === workDay.date) {
-        this.fillCellWithValue(cell, workDay, dayTypes);
-        sched_idx++;
-      }
-
-      cellData.push(cell);
-    }
-  }
-
-  setRowSumDataCells(cellData: ReportCellData[],
-                     summations: SummationResult[],
-                     rowIndex: number) {
-    summations.forEach(sum =>
-      cellData.push({
-        value: sum.value,
-        style: ScheduleReportStyles.sumCellStyle
-      }));
-  }
-
-  private getStyle(day: CalendarDay) {
-    let result = ScheduleReportStyles.scheduleCellStyle;
-    if (day.weekend) {
-      result = ScheduleReportStyles.weekendScheduleCellStyle;
-    } else if (day.holiday) {
-      result = ScheduleReportStyles.holidayScheduleCellStyle;
-    }
-    return result;
   }
 
   public getHeaders(calendarDays: CalendarDay[],
@@ -123,12 +62,83 @@ export class ScheduleReportDataCollector extends AbstractReportDataCollector {
     return headers;
   }
 
+  collectRowCellData(dto: BasicDto<Employee, WorkDay>,
+                     calendarDays: CalendarDay[],
+                     dayTypes: DayType[],
+                     summations: SummationResult[],
+                     index: number): ReportCellData[] {
+    if (!calendarDays || calendarDays.length <= 0) {
+      return;
+    }
+
+    const result: ReportCellData[] = [].concat([
+      {
+        value: index + 1,
+        style: ScheduleReportStyles.idCellStyle
+      },
+      {
+        value: getEmployeeShortName(dto.parent),
+        style: ScheduleReportStyles.nameCellStyle
+      },
+      {
+        value: dto.parent.position.shortName,
+        style: ScheduleReportStyles.positionCellStyle
+      }
+    ]);
+
+    const workDays = dto.collection;
+    for (let date_idx = 0, sched_idx = 0; date_idx < calendarDays.length; date_idx++) {
+      const date = calendarDays[date_idx];
+      const workDay = workDays[sched_idx];
+
+      const cell = <ReportCellData>{};
+      cell.style = this.getStyle(date);
+
+      if (workDay && date.isoString === workDay.date) {
+        this.fillCellWithValue(cell, workDay, dayTypes);
+        sched_idx++;
+      }
+
+      result.push(cell);
+    }
+
+    summations.forEach(sum =>
+      result.push({
+        value: sum.value,
+        style: ScheduleReportStyles.sumCellStyle
+      }));
+
+    return result;
+  }
+
+  afterDataInsert(data: ReportData) {
+    data.reportMarkup = {
+      sheet_row_start_num: 2,
+      sheet_col_start_num: 2,
+      table_header_height: 2,
+      table_creator_interval: 4,
+      table_data_row_step: 1,
+      table_cols_before_data: 3,
+      table_report_label: 'ГРАФІК'
+    } as ReportMarkup;
+  }
+
   private getHeaderStyle(day: CalendarDay) {
     let result = ScheduleReportStyles.scheduleHeaderCellStyle;
     if (day.weekend) {
       result = ScheduleReportStyles.weekendScheduleHeaderCellStyle;
     } else if (day.holiday) {
       result = ScheduleReportStyles.holidayScheduleHeaderCellStyle;
+    }
+    return result;
+  }
+
+  private getStyle(day: CalendarDay) {
+    let result = ScheduleReportStyles.scheduleCellStyle;
+    if (day.weekend) {
+      result = ScheduleReportStyles.weekendScheduleCellStyle;
+    } else if (day.holiday) {
+      result = ScheduleReportStyles.holidayScheduleCellStyle;
     }
     return result;
   }

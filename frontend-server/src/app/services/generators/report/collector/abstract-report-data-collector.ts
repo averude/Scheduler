@@ -1,7 +1,7 @@
 import { BasicDto } from "../../../../model/dto/basic-dto";
 import { Employee } from "../../../../model/employee";
 import { WorkDay } from "../../../../model/workday";
-import { ReportRowData } from "../model/report-row-data";
+import { ReportData, ReportRowData } from "../model/report-row-data";
 import { DayType } from "../../../../model/day-type";
 import { SummationDto, SummationResult } from "../../../../model/dto/summation-dto";
 import { CalendarDay } from "../../../../lib/ngx-schedule-table/model/calendar-day";
@@ -17,18 +17,24 @@ export abstract class AbstractReportDataCollector implements ReportDataCollector
 
   constructor() {}
 
-  collect(dates: CalendarDay[],
+  collect(calendarDays: CalendarDay[],
           dayTypes: DayType[],
           schedule: BasicDto<Employee, WorkDay>[],
           summations: SummationDto[],
-          compositions: MainShiftComposition[]): ReportRowData[] {
+          summationColumns: SummationColumn[],
+          compositions: MainShiftComposition[]): ReportData {
     if (!compositions) {
       return;
     }
 
     sortByCompositions(schedule, compositions);
 
-    return this.getReportRowData(schedule, dates, dayTypes, summations);
+    const reportData = new ReportData();
+    reportData.tableData = this.getReportRowData(schedule, calendarDays, dayTypes, summations);
+    reportData.headerData = this.getHeaders(calendarDays, summationColumns);
+    this.afterDataInsert(reportData);
+
+    return reportData;
   }
 
   private getReportRowData(schedule: BasicDto<Employee, WorkDay>[],
@@ -38,41 +44,10 @@ export abstract class AbstractReportDataCollector implements ReportDataCollector
     return schedule.map((dto, index) => {
       const reportRowData = new ReportRowData();
       reportRowData.reportCellData = this
-        .collectRowReportCellData(dto, dates, dayTypes, this.getSummationResults(summations, dto), index);
+        .collectRowCellData(dto, dates, dayTypes, this.getSummationResults(summations, dto), index);
       return reportRowData;
     });
   }
-
-  private collectRowReportCellData(dto: BasicDto<Employee, WorkDay>,
-                                   dates,
-                                   dayTypes,
-                                   summations: SummationResult[],
-                                   index) {
-    const result: ReportCellData[] = [];
-
-    this.setRowFirstCells(result, dto.parent, index);
-    this.setRowDataCells(result, dto.collection, dates, dayTypes, index);
-    this.setRowSumDataCells(result, summations, index);
-
-    return result;
-  }
-
-  abstract setRowFirstCells(cellData: ReportCellData[],
-                            dtoParent: Employee,
-                            rowIndex: number);
-
-  abstract setRowDataCells(cellData: ReportCellData[],
-                           workDays: WorkDay[],
-                           dates: CalendarDay[],
-                           dayTypes: DayType[],
-                           rowIndex: number);
-
-  abstract setRowSumDataCells(cellData: ReportCellData[],
-                              summations: SummationResult[],
-                              rowIndex: number);
-
-  abstract getHeaders(calendarDays: CalendarDay[],
-                      summationColumns: SummationColumn[]): ReportHeaderCell[];
 
   private getSummationResults(summations: SummationDto[],
                               dto: BasicDto<Employee, WorkDay>) {
@@ -80,4 +55,16 @@ export abstract class AbstractReportDataCollector implements ReportDataCollector
       .find(sum => sum.parent.id === dto.parent.id)
       .collection;
   }
+
+
+  abstract getHeaders(calendarDays: CalendarDay[],
+                      summationColumns: SummationColumn[]): ReportHeaderCell[];
+
+  abstract collectRowCellData(dto: BasicDto<Employee, WorkDay>,
+                              calendarDays: CalendarDay[],
+                              dayTypes: DayType[],
+                              summations: SummationResult[],
+                              index: number): ReportCellData[];
+
+  abstract afterDataInsert(data: ReportData);
 }

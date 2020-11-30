@@ -14,6 +14,9 @@ import { SummationResult } from "../../../../model/dto/summation-dto";
 import { Employee } from "../../../../model/employee";
 import { CalendarDay } from "../../../../lib/ngx-schedule-table/model/calendar-day";
 import { SummationColumn } from "../../../../model/summation-column";
+import { ReportData } from "../model/report-row-data";
+import { ReportMarkup } from "../model/report-markup";
+import { BasicDto } from "../../../../model/dto/basic-dto";
 
 export class TimeSheetReportDataCollector extends AbstractReportDataCollector {
 
@@ -34,31 +37,30 @@ export class TimeSheetReportDataCollector extends AbstractReportDataCollector {
     cell.value = val;
   }
 
-  setRowFirstCells(cellData: ReportCellData[],
-                   dtoParent: Employee,
-                   rowIndex: number) {
-    cellData.push({
-      value: [rowIndex + 1, null],
-      style: [TimeSheetStyles.idCellStyle, TimeSheetStyles.lastIdCellStyle]
-    });
 
-    cellData.push({
-      value: [getEmployeeShortName(dtoParent), dtoParent.position.shortName],
-      style: [TimeSheetStyles.nameCellStyle, TimeSheetStyles.positionCellStyle]
-    });
-  }
-
-  setRowDataCells(cellData: ReportCellData[],
-                  workDays: WorkDay[],
-                  dates: CalendarDay[],
-                  dayTypes: DayType[],
-                  rowIndex: number) {
-    if (!workDays || !dates || dates.length == 0) {
+  collectRowCellData(dto: BasicDto<Employee, WorkDay>,
+                     calendarDays: CalendarDay[],
+                     dayTypes: DayType[],
+                     summations: SummationResult[],
+                     index: number): ReportCellData[] {
+    if (!calendarDays || calendarDays.length <= 0) {
       return;
     }
 
-    for (let date_idx = 0, sched_idx = 0; date_idx < dates.length; date_idx++) {
-      const date = dates[date_idx];
+    const result: ReportCellData[] = [].concat([
+      {
+        value: [index + 1, null],
+        style: [TimeSheetStyles.idCellStyle, TimeSheetStyles.lastIdCellStyle]
+      },
+      {
+        value: [getEmployeeShortName(dto.parent), dto.parent.position.shortName],
+        style: [TimeSheetStyles.nameCellStyle, TimeSheetStyles.positionCellStyle]
+      }
+    ]);
+
+    const workDays = dto.collection;
+    for (let date_idx = 0, sched_idx = 0; date_idx < calendarDays.length; date_idx++) {
+      const date = calendarDays[date_idx];
       const workDay = workDays[sched_idx];
 
       const cell = <ReportCellData>{};
@@ -69,18 +71,16 @@ export class TimeSheetReportDataCollector extends AbstractReportDataCollector {
         sched_idx++;
       }
 
-      cellData.push(cell);
+      result.push(cell);
     }
-  }
 
-  setRowSumDataCells(cellData: ReportCellData[],
-                     summations: SummationResult[],
-                     rowIndex: number) {
     summations.forEach(cell =>
-      cellData.push({
+      result.push({
         value: cell.value,
         style: [TimeSheetStyles.sumCellStyle, TimeSheetStyles.lastSumCellStyle]
       }));
+
+    return result;
   }
 
   getHeaders(calendarDays: CalendarDay[],
@@ -114,5 +114,17 @@ export class TimeSheetReportDataCollector extends AbstractReportDataCollector {
     }));
 
     return headers;
+  }
+
+  afterDataInsert(data: ReportData) {
+    data.reportMarkup = {
+      sheet_row_start_num: 2,
+      sheet_col_start_num: 2,
+      table_header_height: 1,
+      table_creator_interval: 3,
+      table_data_row_step: 2,
+      table_cols_before_data: 2,
+      table_report_label: 'ТАБЕЛЬ'
+    } as ReportMarkup;
   }
 }

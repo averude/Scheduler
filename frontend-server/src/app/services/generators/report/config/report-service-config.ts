@@ -8,8 +8,6 @@ import { ScheduleReportDecorator } from "../decorator/schedule-report-decorator"
 import { TimeSheetReportDecorator } from "../decorator/time-sheet-report-decorator";
 import { ScheduleReportCreator } from "../creator/schedule-report-creator";
 import { TimeSheetReportCreator } from "../creator/time-sheet-report-creator";
-import { ReportMarkup } from "../model/report-markup";
-import { SCHEDULE_REPORT, TIME_SHEET_REPORT } from "../model/report-types";
 import { CellFiller } from "../core/cell-filler";
 
 @Injectable()
@@ -18,7 +16,6 @@ export class ReportServiceConfig {
   private _collectorsMap: Map<string, ReportDataCollector>;
   private _creatorsMap:   Map<string, ReportCreator>;
   private _decoratorsMap: Map<string, ReportDecorator>;
-  private _markupsMap:    Map<string, ReportMarkup>;
 
   constructor(private cellFiller: CellFiller){}
 
@@ -54,32 +51,4 @@ export class ReportServiceConfig {
     }
     return this._creatorsMap;
   }
-
-  get markups(): Map<string, ReportMarkup> {
-    if (!this._markupsMap) {
-      this._markupsMap = new Map<string, ReportMarkup>();
-      const scheduleReportMarkup = {
-        sheet_row_start_num: 2,
-        sheet_col_start_num: 2,
-        table_header_height: 2,
-        table_creator_interval: 4,
-        table_data_row_step: 1,
-        table_cols_before_data: 3,
-        table_report_label: 'ГРАФІК'
-      } as ReportMarkup;
-      this._markupsMap.set(SCHEDULE_REPORT, scheduleReportMarkup);
-      const timeSheetReportMarkup = {
-        sheet_row_start_num: 2,
-        sheet_col_start_num: 2,
-        table_header_height: 1,
-        table_creator_interval: 3,
-        table_data_row_step: 2,
-        table_cols_before_data: 2,
-        table_report_label: 'ТАБЕЛЬ'
-      } as ReportMarkup;
-      this._markupsMap.set(TIME_SHEET_REPORT, timeSheetReportMarkup);
-    }
-    return this._markupsMap;
-  }
-
 }

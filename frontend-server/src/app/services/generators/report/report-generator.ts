@@ -18,8 +18,8 @@ export class ReportGenerator {
     const workbook = new ExcelJS.Workbook();
     const sheet = workbook.addWorksheet('Schedule');
 
-    reportDecorator.decorate(sheet, reportData.reportMarkup, reportData.tableData, reportData.decorationData);
-    reportCreator.create(sheet, reportData.headerData, reportData.tableData, reportData.reportMarkup);
+    reportDecorator.decorate(sheet, reportData);
+    reportCreator.create(sheet, reportData);
 
     return workbook.xlsx.writeBuffer();
   }

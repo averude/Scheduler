@@ -1,5 +1,5 @@
 import { Row, Worksheet } from "exceljs";
-import { ReportRowData } from "../model/report-row-data";
+import { ReportData, ReportRowData } from "../model/report-row-data";
 import { CellFiller } from "../core/cell-filler";
 import { topMediumBorders } from "../styles/report-styles";
 import { ReportMarkup } from "../model/report-markup";
@@ -13,11 +13,9 @@ export abstract class AReportCreator implements ReportCreator {
   }
 
   create(sheet: Worksheet,
-         headerCells: ReportHeaderCell[],
-         data: ReportRowData[],
-         reportMarkup: ReportMarkup) {
-    this.createHeader(sheet, headerCells, reportMarkup);
-    this.createDataSection(sheet, data, reportMarkup);
+         reportData: ReportData) {
+    this.createHeader(sheet, reportData.headerData, reportData.reportMarkup);
+    this.createDataSection(sheet, reportData.tableData, reportData.reportMarkup);
   }
 
   createHeader(sheet: Worksheet,
