@@ -1,7 +1,6 @@
 import { Worksheet } from "exceljs";
 import { ReportData } from "../model/report-row-data";
 import { DecorationData, HeaderSectionData } from "../model/decoration-data";
-import { ReportMarkup } from "../model/report-markup";
 import { ReportDecorator } from "./report-decorator";
 import {
   arialCyrBoldSize16,
@@ -22,18 +21,20 @@ export abstract class AReportDecorator implements ReportDecorator {
     const numOfColumns    = reportData.headerData.length;
     const decorationData  = reportData.decorationData;
 
-    this.decorateTop(sheet, reportMarkup, decorationData, numOfColumns);
+    this.decorateTop(sheet, reportData);
 
     const creator_row_start = reportMarkup.table_row_start_num + reportMarkup.table_header_height
       + (reportData.tableData.length * reportMarkup.table_data_row_step) + reportMarkup.table_creator_interval;
 
-    this.decorateBottom(sheet, reportMarkup, decorationData, creator_row_start);
+    this.decorateBottom(sheet, reportData, creator_row_start);
   }
 
   decorateTop(sheet: Worksheet,
-              reportMarkup: ReportMarkup,
-              decorationData: DecorationData,
-              numberOfColumns?: number): void {
+              reportData: ReportData): void {
+    const numberOfColumns = reportData.headerData.length;
+    const reportMarkup    = reportData.reportMarkup;
+    const decorationData  = reportData.decorationData;
+
     if (!sheet || !decorationData || !numberOfColumns || numberOfColumns <= 0 ) {
       return;
     }
@@ -66,9 +67,11 @@ export abstract class AReportDecorator implements ReportDecorator {
   }
 
   decorateBottom(sheet: Worksheet,
-                 reportMarkup: ReportMarkup,
-                 decorationData: DecorationData,
+                 reportData: ReportData,
                  start_row_num: number): void {
+    const reportMarkup    = reportData.reportMarkup;
+    const decorationData  = reportData.decorationData;
+
     if (!decorationData || !decorationData.documentCreators) {
       return;
     }
