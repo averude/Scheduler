@@ -39,8 +39,8 @@ export abstract class AReportDecorator implements ReportDecorator {
       return;
     }
 
-    const approvedColInterval = 3;
-    const approved_col_start_num = reportMarkup.sheet_col_start_num + numberOfColumns - approvedColInterval - 1;
+    const approvedColInterval = 4;
+    const approved_col_start_num = reportMarkup.sheet_col_start_num + numberOfColumns - approvedColInterval - 2;
 
     let extra = 0;
     if (this.validate(decorationData.agreed) || this.validate(decorationData.approved)) {
