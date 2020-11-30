@@ -111,7 +111,7 @@ export abstract class AReportDecorator implements ReportDecorator {
                         start_row_num,
                         start_col_num,
                         col_interval: number) {
-    if (sectionData) {
+    if (sectionData && sectionData.position && sectionData.person) {
       const labelCell = sheet.getRow(start_row_num).getCell(start_col_num);
       labelCell.value = sectionData.label;
       labelCell.style.font = arialCyrSize12;
