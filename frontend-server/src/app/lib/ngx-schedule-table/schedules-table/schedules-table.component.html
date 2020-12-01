@@ -22,12 +22,14 @@
     <tbody *ngFor="let group of rowGroupData"
            app-table-row-group
            [selectionDisabled]="selectionDisabled"
+           [editableRowGroup]="editableRowGroup"
            [multipleSelect]="multipleSelect"
            [datedCellDef]="datedCellDef"
            [beforeDateColumns]="beforeDateColumns"
            [afterDateColumns]="afterDateColumns"
            [groupData]="group"
-           [cellLabelSetter]="cellLabelSetter">
+           [cellLabelSetter]="cellLabelSetter"
+           [onAddRowClick]="onAddRowClick">
     </tbody>
   </ng-container>
   <ng-container>

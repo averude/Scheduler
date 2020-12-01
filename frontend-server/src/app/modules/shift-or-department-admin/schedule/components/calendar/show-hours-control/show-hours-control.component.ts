@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { CellStateService } from "../../../../../../lib/ngx-schedule-table/service/cell-state.service";
+import { TableStateService } from "../../../../../../lib/ngx-schedule-table/service/table-state.service";
 import { Subscription } from "rxjs";
 
 @Component({
@@ -13,10 +13,10 @@ export class ShowHoursControlComponent implements OnInit, OnDestroy {
 
   private stateSub: Subscription;
 
-  constructor(private cellStateService: CellStateService) { }
+  constructor(private cellStateService: TableStateService) { }
 
   ngOnInit() {
-    this.stateSub = this.cellStateService.isShown.subscribe(status => this.isShown = status);
+    this.stateSub = this.cellStateService.isCellShown.subscribe(status => this.isShown = status);
   }
 
   ngOnDestroy(): void {
@@ -24,7 +24,7 @@ export class ShowHoursControlComponent implements OnInit, OnDestroy {
   }
 
   changeState() {
-    this.cellStateService.nextStatus(this.isShown == 0 ? 1 : 0);
+    this.cellStateService.nextCellStatus(this.isShown == 0 ? 1 : 0);
   }
 
 }

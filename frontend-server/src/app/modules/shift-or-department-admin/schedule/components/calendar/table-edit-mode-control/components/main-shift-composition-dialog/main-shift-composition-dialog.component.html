@@ -1,0 +1,48 @@
+<h2 matDialogTitle>{{operation}}</h2>
+<mat-dialog-content [formGroup]="dialogForm">
+
+  <mat-form-field>
+    <input matInput
+           [matDatepicker]="from_date_picker"
+           placeholder="Choose a date"
+           formControlName="from">
+    <mat-datepicker-toggle matSuffix [for]="from_date_picker"></mat-datepicker-toggle>
+    <mat-datepicker #from_date_picker
+                    startView="multi-year"></mat-datepicker>
+    <mat-error *ngIf="isControlInvalid('from')">{{getErrorMessage()}}</mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput
+           [matDatepicker]="to_date_picker"
+           placeholder="Choose a date"
+           formControlName="to">
+    <mat-datepicker-toggle matSuffix [for]="to_date_picker"></mat-datepicker-toggle>
+    <mat-datepicker #to_date_picker
+                    startView="multi-year"></mat-datepicker>
+    <mat-error *ngIf="isControlInvalid('to')">{{getErrorMessage()}}</mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-select placeholder="Employee"
+                [compareWith]="compareIdEntities"
+                formControlName="employee">
+      <mat-option *ngFor="let employee of employees"
+                  [value]="employee">
+        {{getEmployeeShortName(employee)}}
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="isControlInvalid('employee')">{{getErrorMessage()}}</mat-error>
+  </mat-form-field>
+
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button class="mat-raised-button"
+          (click)="close()">Close</button>
+  <button class="mat-raised-button mat-primary"
+          type="submit"
+          [disabled]="dialogForm.invalid"
+          (click)="submit()">Save</button>
+</mat-dialog-actions>
+

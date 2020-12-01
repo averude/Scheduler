@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  EventEmitter,
   Input,
   OnDestroy,
   OnInit,
@@ -13,6 +14,8 @@ import { AfterDateColumnDef, BeforeDateColumnDef } from "../directives/column";
 import { DatedCellDef } from "../directives/cell";
 import { Subscription } from "rxjs";
 import { CellLabelSetter } from "../utils/cell-label-setter";
+import { TableRenderer } from "../service/table-renderer.service";
+import { filter } from "rxjs/operators";
 
 @Component({
   selector: '[app-table-row-group]',
@@ -24,7 +27,8 @@ export class TableRowGroupComponent implements OnInit, OnDestroy {
   numberOfColumns:  number;
 
   @Input() selectionDisabled: boolean;
-  @Input() multipleSelect: boolean;
+  @Input() multipleSelect:    boolean;
+  @Input() editableRowGroup:  boolean;
 
   @Input() datedCellDef:      DatedCellDef;
   @Input() beforeDateColumns: QueryList<BeforeDateColumnDef>;
@@ -34,11 +38,15 @@ export class TableRowGroupComponent implements OnInit, OnDestroy {
 
   @Input() cellLabelSetter:   CellLabelSetter;
 
+  @Input() onAddRowClick:     EventEmitter<RowGroupData>;
+
   private paginatorSub: Subscription;
+  private rowGroupRenderSub: Subscription;
 
   isHidden: boolean = false;
 
   constructor(private paginatorService: PaginationService,
+              private tableRenderer: TableRenderer,
               private cd: ChangeDetectorRef) {}
 
   ngOnInit() {
@@ -46,9 +54,25 @@ export class TableRowGroupComponent implements OnInit, OnDestroy {
       .subscribe(daysInMonth => {
         this.numberOfColumns = 1 + daysInMonth.length + this.afterDateColumns.length;
       });
+
+    this.rowGroupRenderSub = this.tableRenderer.onRenderRowGroup
+      .pipe(filter(groupId => this.groupData.groupId === groupId))
+      .subscribe((groupId) => this.renderRows());
+  }
+
+  addRowToGroup() {
+    if (this.onAddRowClick) {
+      this.onAddRowClick.emit(this.groupData);
+    }
   }
 
   ngOnDestroy(): void {
     this.paginatorSub.unsubscribe();
+  }
+
+  renderRows() {
+    if (this.groupData) {
+      this.cd.markForCheck();
+    }
   }
 }

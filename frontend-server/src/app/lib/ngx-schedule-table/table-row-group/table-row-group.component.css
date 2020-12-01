@@ -15,7 +15,17 @@
 }
 
 .row {
+  height: 51px;
+}
+
+.add-row-button {
   height: 32px;
+  text-align: center;
+  background-color: rgba(47, 253, 134, 0.08);
+}
+
+.add-row-button:hover {
+  background-color: rgba(142, 234, 142, 0.25);
 }
 
 .hide-button {

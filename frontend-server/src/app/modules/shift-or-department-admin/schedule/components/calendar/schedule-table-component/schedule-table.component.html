@@ -2,7 +2,8 @@
                      [multipleSelect]="true"
                      [rowGroupData]="rowGroupData"
                      [cellLabelSetter]="cellLabelSetter"
-                     [selectionDisabled]="!isAdmin">
+                     [selectionDisabled]="!isAdmin"
+                     (onAddRowClick)="tableDataCollector.open($event)">
 
   <ng-template table-top-item>
     <app-show-hours-control></app-show-hours-control>
@@ -12,6 +13,9 @@
     <avr-entity-generation name="Generate schedule"
                            [units]="units"
                            (onEntityGenerated)="onScheduleGenerate($event)"></avr-entity-generation>
+  </ng-template>
+  <ng-template table-top-item>
+    <app-table-edit-mode-control></app-table-edit-mode-control>
   </ng-template>
 
   <ng-template paginatorDef>

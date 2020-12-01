@@ -8,7 +8,7 @@ import { SelectableRowDirective } from "./directives/selectable-row.directive";
 import { TableRowGroupComponent } from "./table-row-group/table-row-group.component";
 import { TableRenderer } from "./service/table-renderer.service";
 import { ClearSelectionService } from "./service/clear-selection.service";
-import { CellStateService } from "./service/cell-state.service";
+import { TableStateService } from "./service/table-state.service";
 import { PaginationService } from "./service/pagination.service";
 import { SelectionEndService } from "./service/selection-end.service";
 import { TableTopItemDirective } from './directives/table-top-item.directive';
@@ -57,7 +57,7 @@ import { TableCellComponent } from "./table-cell/table-cell.component";
     TableRenderer,
     ClearSelectionService,
     SelectionEndService,
-    CellStateService
+    TableStateService
   ]
 })
 export class ScheduleTableModule {

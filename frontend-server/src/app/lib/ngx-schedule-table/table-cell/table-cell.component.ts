@@ -8,7 +8,7 @@ import {
   OnInit,
   SimpleChanges
 } from '@angular/core';
-import { CellStateService } from "../service/cell-state.service";
+import { TableStateService } from "../service/table-state.service";
 import { CellData } from "../model/data/cell-data";
 import { CellLabelSetter } from "../utils/cell-label-setter";
 import { Subscription } from "rxjs";
@@ -45,11 +45,11 @@ export class TableCellComponent implements OnInit, OnChanges, OnDestroy {
   private cellStateSub: Subscription;
 
   constructor(private cd: ChangeDetectorRef,
-              private cellStateService: CellStateService) {
+              private cellStateService: TableStateService) {
   }
 
   ngOnInit() {
-    this.cellStateSub = this.cellStateService.isShown.subscribe(state => {
+    this.cellStateSub = this.cellStateService.isCellShown.subscribe(state => {
       this.cellState = state;
       if (this.value) {
         this.refreshLabel();

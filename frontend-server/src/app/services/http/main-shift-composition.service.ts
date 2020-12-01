@@ -24,8 +24,8 @@ export class MainShiftCompositionService
   getAll(from?: string, to?: string): Observable<MainShiftComposition[]> {
     return super.getAll(from, to)
       .pipe(tap(compositions => compositions.forEach(composition => {
-        composition.from  = moment(composition.from);
-        composition.to    = moment(composition.to);
+        composition.from  = moment.utc(composition.from);
+        composition.to    = moment.utc(composition.to);
       })));
   }
 }

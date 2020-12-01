@@ -3,9 +3,11 @@ import {
   Component,
   ContentChild,
   ContentChildren,
+  EventEmitter,
   Input,
   OnDestroy,
   OnInit,
+  Output,
   QueryList,
   TemplateRef
 } from "@angular/core";
@@ -16,6 +18,8 @@ import { PaginatorDef } from "../directives/paginator";
 import { DatedCellDef, HeaderDateCellDef } from "../directives/cell";
 import { RowData } from "../model/data/row-data";
 import { CellLabelSetter, SimpleCellLabelSetter } from "../utils/cell-label-setter";
+import { TableStateService } from "../service/table-state.service";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: 'app-schedules-table',
@@ -29,6 +33,7 @@ export class SchedulesTableComponent implements OnInit, OnDestroy {
   @Input() multipleSelect     = true;
 
   @Input() showSumColumns:    boolean;
+  @Input() editableRowGroup:  boolean = false;
 
   @ContentChild(PaginatorDef, { read: TemplateRef })
   paginator: TemplateRef<any>;
@@ -53,15 +58,23 @@ export class SchedulesTableComponent implements OnInit, OnDestroy {
 
   @Input() cellLabelSetter: CellLabelSetter;
 
-  constructor() {
+  @Output() onAddRowClick: EventEmitter<RowGroupData> = new EventEmitter();
+
+  private tableStateSub: Subscription;
+
+  constructor(private tableStateService: TableStateService) {
   }
 
   ngOnInit() {
     if (!this.cellLabelSetter) {
       this.cellLabelSetter = new SimpleCellLabelSetter();
     }
+
+    this.tableStateSub = this.tableStateService.editableGroupsState
+      .subscribe(editableRowGroup => this.editableRowGroup = editableRowGroup);
   }
 
   ngOnDestroy(): void {
+    if (this.tableStateSub) this.tableStateSub.unsubscribe();
   }
 }

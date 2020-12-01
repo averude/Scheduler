@@ -16,6 +16,9 @@ import { AvrEntityGenerationModule } from "../../../../../lib/avr-entity-generat
 import { ScheduleTableDataCollector } from "./collectors/schedule-table-data-collector";
 import { ShiftCompositionDivider } from "../../../../../services/divider/shift-composition-divider";
 import { TableSumCalculator } from "../../../../../services/calculators/table-sum-calculator.service";
+import { TableEditModeControl } from "./table-edit-mode-control/table-edit-mode-control.module";
+import { RowDataCollector } from "./table-edit-mode-control/row-data-collector";
+import { TableDataCollector } from "./collectors/table-data-collector.service";
 
 @NgModule({
   imports: [
@@ -27,7 +30,8 @@ import { TableSumCalculator } from "../../../../../services/calculators/table-su
     MatFormFieldModule,
     MatInputModule,
     ScheduleTableContextMenuModule,
-    ScheduleTableModule
+    ScheduleTableModule,
+    TableEditModeControl
   ],
   declarations: [
     ShowHoursControlComponent,
@@ -39,7 +43,9 @@ import { TableSumCalculator } from "../../../../../services/calculators/table-su
     SchedulerCellLabelSetter,
     ShiftCompositionDivider,
     ScheduleTableDataCollector,
-    TableSumCalculator
+    TableSumCalculator,
+    RowDataCollector,
+    TableDataCollector
   ]
 })
 export class CalendarModule {}
