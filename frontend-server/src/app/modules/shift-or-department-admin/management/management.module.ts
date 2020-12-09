@@ -13,6 +13,8 @@ import { WorkingNormModule } from "../schedule/components/working-time/working-n
 import { DepartmentDayTypesModule } from "./components/department-day-types/department-day-types.module";
 import { AvrSideBarModule } from "../../../lib/avr-side-bar/avr-side-bar.module";
 import { ShiftAdminUserAccountsModule } from "./components/shift-admin-user-accounts/shift-admin-user-accounts.module";
+import { MainShiftCompositionModule } from "./components/main-shift-composition/main-shift-composition.module";
+import { SubstitutionShiftCompositionModule } from "./components/substitution-shift-composition/substitution-shift-composition.module";
 
 @NgModule({
   imports: [
@@ -26,6 +28,8 @@ import { ShiftAdminUserAccountsModule } from "./components/shift-admin-user-acco
     ShiftAdminUserAccountsModule,
     PatternsModule,
     WorkingNormModule,
+    MainShiftCompositionModule,
+    SubstitutionShiftCompositionModule,
     MatSidenavModule,
     ManagementRoutingModule,
     RemoveDialogModule

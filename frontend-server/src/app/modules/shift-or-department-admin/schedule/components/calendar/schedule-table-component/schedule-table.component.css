@@ -5,7 +5,7 @@
   cursor: pointer;
 }
 
-.td-name:hover .name{
+.editable:hover .name{
   color: blueviolet;
 }
 

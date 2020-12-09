@@ -7,6 +7,8 @@ import { ShiftsTableComponent } from "./components/shifts/components/shifts-tabl
 import { ManagementComponent } from "./management/management.component";
 import { DepartmentDayTypesTableComponent } from "./components/department-day-types/components/department-day-types-table/department-day-types-table.component";
 import { UserAccountsTableComponent } from "./components/shift-admin-user-accounts/components/user-accounts-table/user-accounts-table.component";
+import { MainShiftCompositionTableComponent } from "./components/main-shift-composition/components/main-shift-composition-table/main-shift-composition-table.component";
+import { SubstitutionShiftCompositionTableComponent } from "./components/substitution-shift-composition/components/substitution-shift-composition-table/substitution-shift-composition-table.component";
 
 const routes: Routes = [
   {
@@ -36,6 +38,14 @@ const routes: Routes = [
       {
         path: 'shifts',
         component: ShiftsTableComponent
+      },
+      {
+        path: 'main_compositions',
+        component: MainShiftCompositionTableComponent
+      },
+      {
+        path: 'substitution_compositions',
+        component: SubstitutionShiftCompositionTableComponent
       }
     ]
   }

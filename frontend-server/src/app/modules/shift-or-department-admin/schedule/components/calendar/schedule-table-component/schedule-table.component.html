@@ -14,7 +14,8 @@
                            [units]="units"
                            (onEntityGenerated)="onScheduleGenerate($event)"></avr-entity-generation>
   </ng-template>
-  <ng-template table-top-item>
+  <ng-template table-top-item
+               *ngIf="isAdmin">
     <app-table-edit-mode-control></app-table-edit-mode-control>
   </ng-template>
 
@@ -35,8 +36,9 @@
     <th class="table-sticky-header th-null"
         *headerCellDef></th>
     <td class="td-name"
+        [class.editable]="isAdmin"
         *cellDef="let rowData"
-        (click)="dataSource.editRow(rowData)">
+        (click)="isAdmin && dataSource.editRow(rowData)">
       <div class="name"
            [class.highlighted]="rowData.isSubstitution">
         {{utility.getEmployeeName(rowData.employee)}}
