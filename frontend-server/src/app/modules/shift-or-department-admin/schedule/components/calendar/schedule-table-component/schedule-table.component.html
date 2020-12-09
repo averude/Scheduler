@@ -3,7 +3,7 @@
                      [rowGroupData]="tableData"
                      [cellLabelSetter]="cellLabelSetter"
                      [selectionDisabled]="!isAdmin"
-                     (onAddRowClick)="dataSource.newRow($event)">
+                     (onAddRowClick)="isAdmin && dataSource.newRow($event)">
 
   <ng-template table-top-item>
     <app-show-hours-control></app-show-hours-control>
