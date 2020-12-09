@@ -32,9 +32,6 @@ export class ShiftCompositionDivider {
   }
 
   private divideValues(employeeCompositions: any[][]) {
-    // if (employeeCompositions[1] && employeeCompositions[1].length > 0) {
-    //
-    // }
     for (let i = 0; i < employeeCompositions[0].length; i++) {
       let mainComposition = employeeCompositions[0][i];
       employeeCompositions[0].splice(i, 1);
@@ -44,7 +41,7 @@ export class ShiftCompositionDivider {
   }
 
   divide(mainShiftComposition: MainShiftComposition,
-         substitutionShiftCompositions: SubstitutionShiftComposition[]) {
+         substitutionShiftCompositions: SubstitutionShiftComposition[]): MainShiftComposition[] {
     let result = [];
 
     let from  = mainShiftComposition.from;
@@ -92,7 +89,6 @@ export class ShiftCompositionDivider {
     let composition = new MainShiftComposition();
     composition.shiftId       = mainShiftComposition.shiftId;
     composition.employee      = mainShiftComposition.employee;
-    composition.substitution  = mainShiftComposition.substitution;
     composition.from          = from;
     composition.to            = to;
     return composition;

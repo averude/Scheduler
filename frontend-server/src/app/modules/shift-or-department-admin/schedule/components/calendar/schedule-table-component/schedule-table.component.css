@@ -2,6 +2,11 @@
   border: 1px solid #e5e9f0;
   height: 32px;
   padding-left: 40px;
+  cursor: pointer;
+}
+
+.td-name:hover .name{
+  color: blueviolet;
 }
 
 .name {

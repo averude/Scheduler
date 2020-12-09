@@ -17,7 +17,7 @@ export class TableSumCalculator {
   private calculateRowGroupSum(rowGroupData: RowGroupData[], fn: (row) => void, rowId?: number) {
     if (rowGroupData) {
       rowGroupData.forEach(group => {
-        let rows = group.rowData;
+        let rows = group.rows;
         this.calculateRowSum(rows, fn, rowId);
       });
     }

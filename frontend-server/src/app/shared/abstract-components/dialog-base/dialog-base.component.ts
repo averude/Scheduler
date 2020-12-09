@@ -10,7 +10,7 @@ export abstract class DialogBaseComponent<T> implements OnInit {
   dialogForm: FormGroup;
 
   protected constructor(private entity: T,
-                        private dialog: MatDialogRef<any>) {
+                        protected dialog: MatDialogRef<any>) {
     if (this.entity) {
       this.operation = 'Edit';
     } else {

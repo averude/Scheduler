@@ -13,12 +13,14 @@ import { ScheduleTablePaginationStrategy } from "../../../../../shared/paginator
 import { MonthYearPaginatorModule } from "../../../../../shared/paginators/month-year-paginator/month-year-paginator.module";
 import { SchedulerCellLabelSetter } from "./utils/scheduler-cell-label-setter";
 import { AvrEntityGenerationModule } from "../../../../../lib/avr-entity-generation/avr-entity-generation.module";
-import { ScheduleTableDataCollector } from "./collectors/schedule-table-data-collector";
 import { ShiftCompositionDivider } from "../../../../../services/divider/shift-composition-divider";
 import { TableSumCalculator } from "../../../../../services/calculators/table-sum-calculator.service";
 import { TableEditModeControl } from "./table-edit-mode-control/table-edit-mode-control.module";
 import { RowDataCollector } from "./table-edit-mode-control/row-data-collector";
-import { TableDataCollector } from "./collectors/table-data-collector.service";
+import { SchedulerUtility } from "./utils/scheduler-utility";
+import { TableTreeDataCollector } from "./collectors/table-tree-data-collector";
+import { TableDataSource } from "./collectors/table-data-source";
+import { CellEnabledSetter } from "./collectors/cell-enabled-setter";
 
 @NgModule({
   imports: [
@@ -42,10 +44,12 @@ import { TableDataCollector } from "./collectors/table-data-collector.service";
     ScheduleTablePaginationStrategy,
     SchedulerCellLabelSetter,
     ShiftCompositionDivider,
-    ScheduleTableDataCollector,
     TableSumCalculator,
     RowDataCollector,
-    TableDataCollector
+    TableTreeDataCollector,
+    CellEnabledSetter,
+    TableDataSource,
+    SchedulerUtility
   ]
 })
 export class CalendarModule {}

@@ -8,6 +8,8 @@ import { MainShiftComposition } from "../../../../../../../../model/main-shift-c
 import { Employee } from "../../../../../../../../model/employee";
 import { Shift } from "../../../../../../../../model/shift";
 import { MAT_MOMENT_DATE_ADAPTER_OPTIONS } from "@angular/material-moment-adapter";
+import { CalendarDay } from "../../../../../../../../lib/ngx-schedule-table/model/calendar-day";
+import * as moment from "moment";
 
 @Component({
   selector: 'app-main-shift-composition-dialog',
@@ -29,9 +31,12 @@ import { MAT_MOMENT_DATE_ADAPTER_OPTIONS } from "@angular/material-moment-adapte
 })
 export class MainShiftCompositionDialogComponent extends DialogBaseComponent<MainShiftComposition> {
 
-  shiftId:    number;
-  employees:  Employee[];
-  shifts:     Shift[];
+  command:      string;
+
+  shiftId:      number;
+  employees:    Employee[];
+  shifts:       Shift[];
+  calendarDays: CalendarDay[];
 
   constructor(private fb: FormBuilder,
               private dialogRef: MatDialogRef<MainShiftComposition>,
@@ -40,6 +45,7 @@ export class MainShiftCompositionDialogComponent extends DialogBaseComponent<Mai
     this.shiftId = data.shiftId;
     this.employees = data.employees;
     this.shifts = data.shifts;
+    this.calendarDays = data.calendarDays;
   }
 
   initTheForm() {
@@ -47,8 +53,8 @@ export class MainShiftCompositionDialogComponent extends DialogBaseComponent<Mai
       id:           [],
       shiftId:      [this.shiftId, Validators.required],
       employee:     [null, Validators.required],
-      from:         [null, Validators.required],
-      to:           [null, Validators.required]
+      from:         [moment.utc(this.calendarDays[0].isoString), Validators.required],
+      to:           [moment.utc(this.calendarDays[this.calendarDays.length - 1].isoString), Validators.required]
     });
   }
 
@@ -64,5 +70,16 @@ export class MainShiftCompositionDialogComponent extends DialogBaseComponent<Mai
 
   getEmployeeShortName(employee): string {
     return getEmployeeShortName(employee);
+  }
+
+  closeDialog(command) {
+    if (this.dialogForm.invalid) {
+      return;
+    }
+
+    this.dialog.close({
+      command: command,
+      data: this.dialogForm.value
+    });
   }
 }

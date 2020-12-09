@@ -56,8 +56,8 @@ export class TableRowGroupComponent implements OnInit, OnDestroy {
       });
 
     this.rowGroupRenderSub = this.tableRenderer.onRenderRowGroup
-      .pipe(filter(groupId => this.groupData.groupId === groupId))
-      .subscribe((groupId) => this.renderRows());
+      .pipe(filter(id => this.groupData.id === id))
+      .subscribe((id) => this.renderRows());
   }
 
   addRowToGroup() {

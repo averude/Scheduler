@@ -1,34 +1,45 @@
 .group-label-row {
   height: 32px;
+  background-color: #f8fafc;
+  border:  1px solid #e5e9f0;
+  cursor: pointer;
+}
+
+.group-label-container {
+  display: flex;
+  width: 100%;
+  height: 100%;
 }
 
 .group-label {
   font-family: 'MuseoSansMedium';
   letter-spacing: .02em;
-  background-color: #f8fafc;
   text-align: left;
   font-size: 13px;
   padding-left: 23px;
-  cursor: pointer;
   color: #637286;
-  border:  1px solid #e5e9f0;
+  flex-direction: row;
+  align-items: baseline;
+  width: 100%;
+}
+
+.group-control {
+  width: 60px;
+}
+
+.group-add-row-button {
+  color: black;
+}
+
+.group-add-row-button:hover {
+  color: limegreen;
 }
 
 .row {
   height: 51px;
 }
 
-.add-row-button {
-  height: 32px;
-  text-align: center;
-  background-color: rgba(47, 253, 134, 0.08);
-}
-
-.add-row-button:hover {
-  background-color: rgba(142, 234, 142, 0.25);
-}
-
-.hide-button {
+.group-hide-button {
   border: none;
   background-color: transparent;
 }

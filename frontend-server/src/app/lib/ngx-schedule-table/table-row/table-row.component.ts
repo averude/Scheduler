@@ -32,7 +32,7 @@ import { CellLabelSetter } from "../utils/cell-label-setter";
 export class TableRowComponent implements OnInit, OnDestroy {
 
   @Input() selectionDisabled: boolean;
-  @Input() multipleSelect: boolean;
+  @Input() multipleSelect:    boolean;
 
   @Input() datedCellDef:      DatedCellDef;
   @Input() beforeDateColumns: QueryList<BeforeDateColumnDef>;
@@ -90,6 +90,7 @@ export class TableRowComponent implements OnInit, OnDestroy {
     if (!this.rowData || !this.dates) {
       return;
     }
+
     this.cd.markForCheck();
   }
 }

@@ -12,7 +12,8 @@ import { concatMap } from "rxjs/operators";
 import { TableRenderer } from "../../../../../../lib/ngx-schedule-table/service/table-renderer.service";
 import { TableSumCalculator } from "../../../../../../services/calculators/table-sum-calculator.service";
 import { AuthService } from "../../../../../../services/http/auth.service";
-import { TableDataCollector } from "../collectors/table-data-collector.service";
+import { TableDataSource } from "../collectors/table-data-source";
+import { SchedulerUtility } from "../utils/scheduler-utility";
 
 @Component({
   selector: 'app-schedule-table-component',
@@ -25,9 +26,9 @@ export class ScheduleTableComponent implements OnInit, OnDestroy {
 
   units: ShiftGenerationUnit[];
 
-  rowGroupData: RowGroupData[];
+  tableData: RowGroupData[];
 
-  private tableDataSub: Subscription;
+  private dataSourceSub: Subscription;
   private rowRenderSub: Subscription;
 
   constructor(private authService: AuthService,
@@ -38,26 +39,27 @@ export class ScheduleTableComponent implements OnInit, OnDestroy {
               private tableRenderer: TableRenderer,
               private sumCalculator: TableSumCalculator,
               private scheduleService: ScheduleService,
-              private tableDataCollector: TableDataCollector,
+              public dataSource: TableDataSource,
+              public utility: SchedulerUtility,
               private notificationsService: NotificationsService) {}
 
   ngOnInit() {
-    this.tableDataSub = this.tableDataCollector.tableData
-      .subscribe(data => {
-        this.rowGroupData = data;
+    this.dataSourceSub = this.dataSource.tableData
+      .subscribe(tableData => {
+        this.tableData = tableData;
         this.cd.markForCheck();
       });
 
     this.isAdmin = this.authService.isAdmin();
 
     this.rowRenderSub = this.tableRenderer.onRenderRow
-      .subscribe(rowId => this.sumCalculator.calculateWorkHoursSum(this.rowGroupData, rowId));
+      .subscribe(rowId => this.sumCalculator.calculateWorkHoursSum(this.tableData, rowId));
   }
 
   ngOnDestroy(): void {
     this.paginationService.clearStoredValue();
     if (this.rowRenderSub) this.rowRenderSub.unsubscribe();
-    if (this.tableDataSub) this.tableDataSub.unsubscribe();
+    if (this.dataSourceSub) this.dataSourceSub.unsubscribe();
   }
 
   onScheduleGenerate(generationUnits: ShiftGenerationUnit[]) {

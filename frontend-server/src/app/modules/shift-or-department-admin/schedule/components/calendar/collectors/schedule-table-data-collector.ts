@@ -6,13 +6,12 @@ import { Employee } from "../../../../../../model/employee";
 import { WorkDay } from "../../../../../../model/workday";
 import { MainShiftComposition, SubstitutionShiftComposition } from "../../../../../../model/main-shift-composition";
 import { SchedulerRowData } from "../model/scheduler-row-data";
-import { getEmployeeShortName } from "../../../../../../shared/utils/utils";
 import { CalendarDay } from "../../../../../../lib/ngx-schedule-table/model/calendar-day";
-import { Injectable } from "@angular/core";
 import { ShiftCompositionDivider } from "../../../../../../services/divider/shift-composition-divider";
 import * as moment from "moment";
 
-@Injectable()
+// @Injectable()
+// Deprecated
 export class ScheduleTableDataCollector {
 
   constructor(private divider: ShiftCompositionDivider) {}
@@ -76,7 +75,7 @@ export class ScheduleTableDataCollector {
       }
     }
 
-    groupData.forEach(value => value.rowData = value.rowData.filter(v => v));
+    groupData.forEach(value => value.rows = value.rows.filter(v => v));
     groupData = groupData.filter(value => value);
 
     return groupData;
@@ -95,20 +94,22 @@ export class ScheduleTableDataCollector {
     }
 
     let employeeId  = composition.employee.id;
-    let rowData     = rowGroup.rowData[employeeId];
+    let rowData     = rowGroup.rows[employeeId];
 
     if (!rowData) {
-      rowGroup.rowData[employeeId] = {
+      rowGroup.rows[employeeId] = {
+        parent:         rowGroup,
         id:             employeeId,
-        name:           getEmployeeShortName(employee),
-        position:       employee.position.shortName,
-        isSubstitution: composition.substitution,
+        employee:       employee,
+        composition:    composition,
+        extraData:      [rowGroup.id, employee],
+        isSubstitution: false,
         workingNorm:    workingNorm,
         cellData:       []
       } as SchedulerRowData;
     }
 
-    rowGroup.rowData[employeeId].cellData[dayIndex] = {
+    rowGroup.rows[employeeId].cellData[dayIndex] = {
       date: date,
       value: workDay,
       enabled: isEnabled,

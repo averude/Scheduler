@@ -6,7 +6,21 @@ export function binarySearch<T extends IdEntity>(arr: T[], id: number): T {
   return bs(arr, 'id', id);
 }
 
-function bs(arr: any[], field, value) {
+export function bs(arr: any[], field, value) {
+  const index = binarySearchIndex(arr, field, value);
+  if (index => 0) {
+    return arr[index];
+  }
+  return undefined;
+}
+
+export function binarySearchIndex(arr: any[], field, value): number {
+  if (!arr || !field || !value) {
+    return;
+  }
+
+  let result = -1;
+
   let start = 0;
   let end = arr.length - 1;
 
@@ -14,7 +28,8 @@ function bs(arr: any[], field, value) {
     let mid = Math.floor((start + end) / 2);
 
     if (arr[mid][field] === value) {
-      return arr[mid];
+      result = mid;
+      break;
     }
     if (value < arr[mid][field]) {
       end = mid - 1;
@@ -22,7 +37,50 @@ function bs(arr: any[], field, value) {
       start = mid + 1;
     }
   }
-  return undefined;
+
+  return result;
+}
+
+export function binarySearchInsertIndex(arr: any[],
+                                        field,
+                                        value,
+                                        start_index?: number,
+                                        end_index?:number): number {
+  if (!arr || !field || !value) {
+    return;
+  }
+
+  if (arr.length === 0) {
+    return 0;
+  }
+
+  let start = 0;
+  let end = arr.length - 1;
+
+  if (start_index >= 0 && end_index > start_index && end_index < arr.length) {
+    start = start_index;
+    end = end_index;
+  }
+
+  let mid = Math.floor((start + end) / 2);
+
+  while (start <= end) {
+    mid = Math.floor((start + end) / 2);
+
+    if (arr[mid][field] === value) {
+      return -1;
+    }
+
+    if (value < arr[mid][field]) {
+      end = mid - 1;
+    } else {
+      start = mid + 1;
+    }
+  }
+
+  let result = arr[mid][field] > value ? mid : mid + 1;
+
+  return result;
 }
 
 export function uniqById<T>(arr: T[],
@@ -73,7 +131,6 @@ export function sortByCompositions<T extends IdEntity>(dtos: BasicDto<T, any>[],
                                                        compositions: MainShiftComposition[]) {
   const employeeMainShiftCompositions = uniqById(
     compositions
-      .filter(value => !value.substitution)
       .sort((a, b) => a.shiftId - b.shiftId),
     (element => element.employee.id)
   );

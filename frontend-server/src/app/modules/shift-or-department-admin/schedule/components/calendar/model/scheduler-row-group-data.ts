@@ -2,7 +2,7 @@ import { RowGroupData } from "../../../../../../lib/ngx-schedule-table/model/dat
 import { RowData } from "../../../../../../lib/ngx-schedule-table/model/data/row-data";
 
 export class SchedulerRowGroupData implements RowGroupData {
-  groupId: number;
-  groupName: string;
-  rowData: RowData[];
+  id: number;
+  name: string;
+  rows: RowData[];
 }

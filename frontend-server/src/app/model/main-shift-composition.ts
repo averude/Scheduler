@@ -11,7 +11,6 @@ export class MainShiftComposition implements IdEntity, HasDuration {
   id:                   number;
   shiftId:              number;
   employee:             Employee;
-  substitution:         boolean;
   from:                 Moment;
   to:                   Moment;
 }

@@ -1,29 +1,28 @@
-<ng-container *ngIf="(groupData?.rowData && groupData?.rowData.length > 0) || editableRowGroup">
+<ng-container *ngIf="(groupData?.rows && groupData?.rows.length > 0) || editableRowGroup">
   <tr class="group-label-row">
-    <td class="group-label"
-        [attr.colspan]="numberOfColumns"
-        (click)="isHidden = !isHidden">
-      {{(isHidden ? "▶" : "▼") + ' ' + groupData.groupName}}
+    <td [attr.colspan]="numberOfColumns">
+      <div class="group-label-container">
+        <div class="group-label"
+             (click)="isHidden = !isHidden">{{(isHidden ? "▶" : "▼") + ' ' + groupData.name}}</div>
+        <div class="group-control">
+          <div class="group-add-row-button"
+               *ngIf="editableRowGroup"
+               (click)="addRowToGroup()">ADD</div>
+        </div>
+      </div>
     </td>
   </tr>
   <tr [hidden]="isHidden"
       class="row"
-      *ngFor="let row of groupData.rowData"
+      *ngFor="let row of groupData.rows"
       app-table-row
       [selectionDisabled]="selectionDisabled"
       [multipleSelect]="multipleSelect"
       [datedCellDef]="datedCellDef"
       [beforeDateColumns]="beforeDateColumns"
       [afterDateColumns]="afterDateColumns"
-      [rowGroupId]="groupData.groupId"
+      [rowGroupId]="groupData.id"
       [rowData]="row"
       [cellLabelSetter]="cellLabelSetter">
   </tr>
-  <ng-container *ngIf="editableRowGroup && !isHidden">
-    <tr class="add-row-button">
-      <td [attr.colspan]="numberOfColumns"
-          (click)="addRowToGroup()">+</td>
-    </tr>
-  </ng-container>
 </ng-container>
-

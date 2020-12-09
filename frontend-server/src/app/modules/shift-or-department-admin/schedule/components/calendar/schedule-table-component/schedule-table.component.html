@@ -1,9 +1,9 @@
 <app-schedules-table [showSumColumns]="true"
                      [multipleSelect]="true"
-                     [rowGroupData]="rowGroupData"
+                     [rowGroupData]="tableData"
                      [cellLabelSetter]="cellLabelSetter"
                      [selectionDisabled]="!isAdmin"
-                     (onAddRowClick)="tableDataCollector.open($event)">
+                     (onAddRowClick)="dataSource.newRow($event)">
 
   <ng-template table-top-item>
     <app-show-hours-control></app-show-hours-control>
@@ -35,13 +35,14 @@
     <th class="table-sticky-header th-null"
         *headerCellDef></th>
     <td class="td-name"
-        *cellDef="let rowData">
+        *cellDef="let rowData"
+        (click)="dataSource.editRow(rowData)">
       <div class="name"
            [class.highlighted]="rowData.isSubstitution">
-        {{rowData.name}}
+        {{utility.getEmployeeName(rowData.employee)}}
       </div>
       <div class="info">
-        {{rowData.position}}
+        {{rowData.employee.position.shortName}}
       </div>
     </td>
   </ng-container>

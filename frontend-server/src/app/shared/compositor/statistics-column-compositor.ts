@@ -13,8 +13,7 @@ export class StatisticsColumnCompositor {
                  summationColumns: SummationColumn[],
                  shiftCompositions: MainShiftComposition[],
                  workingNorms: WorkingNorm[]) {
-    let mainShiftCompositions = uniqById(shiftCompositions
-      .filter(value => !value.substitution), value => value.employee.id);
+    let mainShiftCompositions = uniqById(shiftCompositions, value => value.employee.id);
 
     summationDtos.forEach(dto => {
       try {

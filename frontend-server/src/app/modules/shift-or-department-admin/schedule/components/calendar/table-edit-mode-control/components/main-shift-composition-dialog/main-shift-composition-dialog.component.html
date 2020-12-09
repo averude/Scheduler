@@ -38,11 +38,17 @@
 </mat-dialog-content>
 
 <mat-dialog-actions>
-  <button class="mat-raised-button"
-          (click)="close()">Close</button>
-  <button class="mat-raised-button mat-primary"
-          type="submit"
-          [disabled]="dialogForm.invalid"
-          (click)="submit()">Save</button>
+  <div class="buttons-container">
+    <button class="mat-raised-button"
+            (click)="close()">Close</button>
+    <button *ngIf="operation === 'Edit'"
+            class="mat-raised-button mat-warn"
+            type="submit"
+            (click)="closeDialog('delete')">Delete</button>
+    <button class="mat-raised-button mat-primary"
+            type="submit"
+            [disabled]="dialogForm.invalid"
+            (click)="closeDialog('save')">Save</button>
+  </div>
 </mat-dialog-actions>
 
