@@ -177,7 +177,6 @@ CREATE TABLE IF NOT EXISTS main_shift_compositions (
 
   EXCLUDE USING GIST (
     employee_id WITH =,
-    shift_id WITH =,
     daterange(from_date, to_date, '[]') WITH &&
   ),
   CHECK ( from_date <= to_date ),
@@ -195,6 +194,10 @@ CREATE TABLE IF NOT EXISTS substitution_shift_compositions (
   from_date             DATE          NOT NULL,
   to_date               DATE          NOT NULL,
 
+  EXCLUDE USING GIST (
+    employee_id WITH =,
+    daterange(from_date, to_date, '[]') WITH &&
+  ),
   CHECK ( from_date <= to_date ),
 
   PRIMARY KEY (id),
