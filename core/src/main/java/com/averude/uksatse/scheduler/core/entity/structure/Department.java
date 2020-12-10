@@ -55,25 +55,25 @@ public class Department implements HasId, HasEnterpriseId {
 
     @JsonIgnore
     @OneToMany( mappedBy = "departmentId",
-                cascade = CascadeType.ALL,
+                cascade = {CascadeType.PERSIST, CascadeType.MERGE},
                 fetch = FetchType.LAZY)
     private List<@NotNull @Valid Position> positions;
 
     @JsonIgnore
     @OneToMany( mappedBy = "departmentId",
-                cascade = CascadeType.ALL,
+                cascade = {CascadeType.PERSIST, CascadeType.MERGE},
                 fetch = FetchType.LAZY)
     private List<@NotNull @Valid ShiftPattern> patterns;
 
     @JsonIgnore
     @OneToMany( mappedBy = "departmentId",
-                cascade = CascadeType.ALL,
+                cascade = {CascadeType.PERSIST, CascadeType.MERGE},
                 fetch = FetchType.LAZY)
     private List<@NotNull @Valid Shift> shifts;
 
     @JsonIgnore
     @OneToMany( mappedBy = "departmentId",
-                cascade = CascadeType.ALL,
+                cascade = {CascadeType.PERSIST, CascadeType.MERGE},
                 fetch = FetchType.LAZY)
     private List<@NotNull @Valid WorkingNorm> workingNorms;
 

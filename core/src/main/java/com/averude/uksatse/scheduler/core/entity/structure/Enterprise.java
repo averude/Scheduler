@@ -37,13 +37,13 @@ public class Enterprise implements HasId {
 
     @JsonIgnore
     @OneToMany( mappedBy = "enterpriseId",
-                cascade = CascadeType.ALL,
+                cascade = {CascadeType.PERSIST, CascadeType.MERGE},
                 fetch = FetchType.LAZY)
     private List<Department> departments = new ArrayList<>();
 
     @JsonIgnore
     @OneToMany( mappedBy = "enterpriseId",
-                cascade = CascadeType.ALL,
+                cascade = {CascadeType.PERSIST, CascadeType.MERGE},
                 fetch = FetchType.LAZY)
     private List<@NotNull @Valid DayType> dayTypes = new LinkedList<>();
 
