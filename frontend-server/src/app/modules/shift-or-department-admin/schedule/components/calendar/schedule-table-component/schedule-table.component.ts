@@ -14,6 +14,7 @@ import { TableSumCalculator } from "../../../../../../services/calculators/table
 import { AuthService } from "../../../../../../services/http/auth.service";
 import { TableDataSource } from "../collectors/table-data-source";
 import { SchedulerUtility } from "../utils/scheduler-utility";
+import { UserAccessRights } from "../../../../../../model/user";
 
 @Component({
   selector: 'app-schedule-table-component',
@@ -22,7 +23,7 @@ import { SchedulerUtility } from "../utils/scheduler-utility";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ScheduleTableComponent implements OnInit, OnDestroy {
-  isAdmin: boolean = false;
+  accessRights: UserAccessRights;
 
   units: ShiftGenerationUnit[];
 
@@ -50,7 +51,7 @@ export class ScheduleTableComponent implements OnInit, OnDestroy {
         this.cd.markForCheck();
       });
 
-    this.isAdmin = this.authService.isAdmin();
+    this.accessRights = this.authService.currentUserValue.accessRights;
 
     this.rowRenderSub = this.tableRenderer.onRenderRow
       .subscribe(rowId => this.sumCalculator.calculateWorkHoursSum(this.tableData, rowId));

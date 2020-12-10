@@ -16,7 +16,7 @@
       class="row"
       *ngFor="let row of groupData.rows"
       app-table-row
-      [selectionDisabled]="selectionDisabled"
+      [selectionEnabled]="selectionEnabled"
       [multipleSelect]="multipleSelect"
       [datedCellDef]="datedCellDef"
       [beforeDateColumns]="beforeDateColumns"

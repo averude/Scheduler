@@ -26,7 +26,7 @@ import { filter } from "rxjs/operators";
 export class TableRowGroupComponent implements OnInit, OnDestroy {
   numberOfColumns:  number;
 
-  @Input() selectionDisabled: boolean;
+  @Input() selectionEnabled:  boolean;
   @Input() multipleSelect:    boolean;
   @Input() editableRowGroup:  boolean;
 

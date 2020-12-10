@@ -30,13 +30,13 @@ import { CellEnabledSetter } from "./cell-enabled-setter";
 @Injectable()
 export class TableDataSource {
 
-  private shifts: Shift[];
-  private employees: Employee[];
-  private mainCompositions: MainShiftComposition[];
+  private shifts:                   Shift[];
+  private employees:                Employee[];
+  private mainCompositions:         MainShiftComposition[];
   private substitutionCompositions: SubstitutionShiftComposition[];
-  private scheduleDto: BasicDto<Employee, WorkDay>[];
-  private workingNorms: WorkingNorm[];
-  private calendarDays: CalendarDay[];
+  private scheduleDto:              BasicDto<Employee, WorkDay>[];
+  private workingNorms:             WorkingNorm[];
+  private calendarDays:             CalendarDay[];
 
   constructor(private dialog: MatDialog,
               private authService: AuthService,
@@ -217,19 +217,11 @@ export class TableDataSource {
       row.composition = value;
 
       this.cellEnabledSetter.setRowEnabledCells(row, this.substitutionCompositions);
-      this.reassignCells(row);
 
       this.sumCalculator.calculateWorkHoursSum([group]);
 
       this.tableRenderer.renderRow(row.id);
       this.notificationsService.success('Updated');
     }
-  }
-
-  private reassignCells(row) {
-    const oldCells = row.cellData;
-    const newCells = [];
-    oldCells.forEach(cell => newCells.push(Object.assign({}, cell)));
-    row.cellData = newCells;
   }
 }

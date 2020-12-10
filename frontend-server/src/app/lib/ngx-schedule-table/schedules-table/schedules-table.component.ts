@@ -29,7 +29,7 @@ import { Subscription } from "rxjs";
 })
 export class SchedulesTableComponent implements OnInit, OnDestroy {
   @Input() groupable: boolean = true;
-  @Input() selectionDisabled  = false;
+  @Input() selectionEnabled   = false;
   @Input() multipleSelect     = true;
 
   @Input() showSumColumns:    boolean;

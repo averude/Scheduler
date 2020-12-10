@@ -19,7 +19,7 @@ export class SchedulerCellLabelSetter implements CellLabelSetter {
 
   setLabel(cell: TableCellComponent): void {
     if (cell) {
-      if (!cell.enabled) {
+      if (!cell.cellData.enabled) {
         cell.label = 'X';
         return;
       }

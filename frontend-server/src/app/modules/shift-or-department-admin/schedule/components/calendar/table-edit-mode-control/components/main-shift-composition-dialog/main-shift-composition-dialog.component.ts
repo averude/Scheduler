@@ -32,6 +32,7 @@ import * as moment from "moment";
 export class MainShiftCompositionDialogComponent extends DialogBaseComponent<MainShiftComposition> {
 
   command:      string;
+  isEdit:       boolean;
 
   shiftId:      number;
   employees:    Employee[];
@@ -46,6 +47,7 @@ export class MainShiftCompositionDialogComponent extends DialogBaseComponent<Mai
     this.employees = data.employees;
     this.shifts = data.shifts;
     this.calendarDays = data.calendarDays;
+    this.isEdit = this.operation === 'Edit';
   }
 
   initTheForm() {

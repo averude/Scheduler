@@ -21,7 +21,7 @@
   <ng-container *ngIf="groupable">
     <tbody *ngFor="let group of rowGroupData"
            app-table-row-group
-           [selectionDisabled]="selectionDisabled"
+           [selectionEnabled]="selectionEnabled"
            [editableRowGroup]="editableRowGroup"
            [multipleSelect]="multipleSelect"
            [datedCellDef]="datedCellDef"
@@ -36,7 +36,7 @@
     <tr class="row"
         *ngFor="let row of rowData"
         app-table-row
-        [selectionDisabled]="selectionDisabled"
+        [selectionEnabled]="selectionEnabled"
         [multipleSelect]="multipleSelect"
         [datedCellDef]="datedCellDef"
         [beforeDateColumns]="beforeDateColumns"

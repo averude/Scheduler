@@ -2,20 +2,20 @@
                      [multipleSelect]="true"
                      [rowGroupData]="tableData"
                      [cellLabelSetter]="cellLabelSetter"
-                     [selectionDisabled]="!isAdmin"
-                     (onAddRowClick)="isAdmin && dataSource.newRow($event)">
+                     [selectionEnabled]="accessRights.isAdmin"
+                     (onAddRowClick)="accessRights.isDepartmentLevel && dataSource.newRow($event)">
 
   <ng-template table-top-item>
     <app-show-hours-control></app-show-hours-control>
   </ng-template>
   <ng-template table-top-item
-               *ngIf="isAdmin">
+               *ngIf="accessRights.isAdmin">
     <avr-entity-generation name="Generate schedule"
                            [units]="units"
                            (onEntityGenerated)="onScheduleGenerate($event)"></avr-entity-generation>
   </ng-template>
   <ng-template table-top-item
-               *ngIf="isAdmin">
+               *ngIf="accessRights.isDepartmentLevel">
     <app-table-edit-mode-control></app-table-edit-mode-control>
   </ng-template>
 
@@ -36,9 +36,9 @@
     <th class="table-sticky-header th-null"
         *headerCellDef></th>
     <td class="td-name"
-        [class.editable]="isAdmin"
+        [class.editable]="accessRights.isDepartmentLevel"
         *cellDef="let rowData"
-        (click)="isAdmin && dataSource.editRow(rowData)">
+        (click)="accessRights.isDepartmentLevel && dataSource.editRow(rowData)">
       <div class="name"
            [class.highlighted]="rowData.isSubstitution">
         {{utility.getEmployeeName(rowData.employee)}}
@@ -78,4 +78,4 @@
   </ng-container>
 </app-schedules-table>
 
-<app-schedule-table-context-menu *ngIf="isAdmin"></app-schedule-table-context-menu>
+<app-schedule-table-context-menu *ngIf="accessRights.isAdmin"></app-schedule-table-context-menu>
