@@ -3,11 +3,11 @@
               [ngTemplateOutletContext]="{$implicit: rowData}"></ng-container>
 
 <ng-container selectableRow
-              [disabled]="selectionDisabled || !multipleSelect"
+              [disabled]="!selectionEnabled || !multipleSelect"
               [element]="elementRef"
               (onSelectionEnds)="onSelectionEnd($event.event, $event.selectedCells)">
   <td class="cell"
-      [class.selection-enabled]="!selectionDisabled"
+      [class.selection-enabled]="selectionEnabled"
       *ngFor="let cell of rowData.cellData"
       selectableCell
       [data]="cell"
@@ -16,9 +16,8 @@
       app-table-cell
       [cellLabelSetter]="cellLabelSetter"
       [cellData]="cell"
-      [enabled]="cell.enabled"
       [value]="cell.value"
-      [selectionEnabled]="cell.enabled && !selectionDisabled"
+      [selectionEnabled]="cell.enabled && selectionEnabled"
       [class.weekend]="cell.date.weekend"
       [class.holiday]="cell.date.holiday"
       [class.disabled]="!cell.enabled">

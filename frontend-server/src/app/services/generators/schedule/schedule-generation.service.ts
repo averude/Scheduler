@@ -109,21 +109,58 @@ export class ScheduleGenerationService {
   }
 
   private updateCellData(rowData: RowData, schedule: WorkDay[]) {
-    let cellData = rowData.cellData;
-    let newCellData = [];
-    for (let cellIdx = 0, schedIdx = 0; cellIdx < cellData.length; cellIdx++) {
+    if (!schedule || schedule.length === 0) {
+      return;
+    }
 
-      let cell = Object.assign({}, cellData[cellIdx]);
-      newCellData[cellIdx] = cell;
+    const cellData = rowData.cellData;
+    const cellIndexes = this.getCellStartIndex(schedule);
 
-      if (schedIdx < schedule.length) {
-        let value = schedule[schedIdx];
+    if (cellIndexes.start < 0 || cellIndexes.end < 0) {
+      return;
+    }
+
+    for (let cellIdx = cellIndexes.start, scheduleIdx = 0; cellIdx <= cellIndexes.end; cellIdx++) {
+
+      let cell = cellData[cellIdx];
+
+      if (scheduleIdx < schedule.length) {
+        let value = schedule[scheduleIdx];
         if (cell.date.isoString == value.date) {
-          schedIdx++;
-          newCellData[cellIdx].value = value;
+          scheduleIdx++;
+          cellData[cellIdx].value = value;
         }
       }
     }
-    rowData.cellData = newCellData;
+  }
+
+  private getCellStartIndex(schedule: WorkDay[]) {
+    const result = {
+      start:  -1,
+      end:    -1
+    };
+
+    if (schedule && schedule.length > 0) {
+      result.start  = this.getDayCellIndex(schedule[0]);
+      result.end    = this.getDayCellIndex(schedule[schedule.length - 1]);
+    }
+
+    return result;
+  }
+
+  private getDayCellIndex(workDay: WorkDay) {
+    let result = -1;
+
+    if (!workDay) {
+      return result;
+    }
+
+    const dayString = workDay.date.split('-')[2];
+    const dayNumber = Number.parseInt(dayString);
+    if (dayNumber > 0 && dayNumber <= 31) {
+      result = dayNumber - 1;
+    }
+
+    return result;
   }
 }

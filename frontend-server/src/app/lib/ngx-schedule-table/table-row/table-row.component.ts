@@ -8,6 +8,7 @@ import {
   OnInit,
   QueryList,
   ViewChild,
+  ViewChildren,
 } from '@angular/core';
 import { TableRenderer } from "../service/table-renderer.service";
 import { Subscription } from "rxjs";
@@ -22,6 +23,7 @@ import { SelectionEndService } from "../service/selection-end.service";
 import { AfterDateColumnDef, BeforeDateColumnDef } from "../directives/column";
 import { DatedCellDef } from "../directives/cell";
 import { CellLabelSetter } from "../utils/cell-label-setter";
+import { TableCellComponent } from "../table-cell/table-cell.component";
 
 @Component({
   selector: '[app-table-row]',
@@ -31,7 +33,7 @@ import { CellLabelSetter } from "../utils/cell-label-setter";
 })
 export class TableRowComponent implements OnInit, OnDestroy {
 
-  @Input() selectionDisabled: boolean;
+  @Input() selectionEnabled:  boolean;
   @Input() multipleSelect:    boolean;
 
   @Input() datedCellDef:      DatedCellDef;
@@ -47,6 +49,9 @@ export class TableRowComponent implements OnInit, OnDestroy {
 
   @ViewChild(SelectableRowDirective, { static: true })
   selectableRowDirective: SelectableRowDirective;
+
+  @ViewChildren(TableCellComponent)
+  rowCells: QueryList<TableCellComponent>;
 
   private rowRenderSub:     Subscription;
   private rowClearSub:      Subscription;
@@ -91,6 +96,7 @@ export class TableRowComponent implements OnInit, OnDestroy {
       return;
     }
 
+    this.rowCells.forEach(cell => cell.refreshLabel());
     this.cd.markForCheck();
   }
 }
