@@ -17,7 +17,6 @@ spring:
     password: ${DB_PASSWD}
     driver-class-name: ${DB_DRIVER_CLASS_NAME}
   jpa:
-    show-sql: true
     open-in-view: false
   jackson:
     date-format: "yyyy-MM-dd"

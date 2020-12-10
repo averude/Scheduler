@@ -13,6 +13,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 import java.util.StringJoiner;
 
@@ -44,6 +45,12 @@ public class MainShiftComposition implements HasId, EntityComposition<Long, Empl
     @NotNull
     @Column(name = "to_date")
     private LocalDate to;
+
+    @JsonIgnore
+    @OneToMany( mappedBy = "mainShiftComposition",
+                cascade = {CascadeType.PERSIST, CascadeType.MERGE},
+                fetch = FetchType.LAZY)
+    private List<SubstitutionShiftComposition> substitutionShiftCompositions;
 
     public MainShiftComposition(Shift shift, Employee employee) {
         this.shiftId = shift.getId();
