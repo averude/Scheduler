@@ -37,7 +37,6 @@ export class TableCellComponent implements OnInit, OnChanges, OnDestroy {
   @Input() cellLabelSetter: CellLabelSetter;
 
   @Input() labelColor = "transparent";
-  @Input() enabled: boolean = true;
 
   cellState: number;
   label: string | number = '-';
@@ -73,6 +72,7 @@ export class TableCellComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   refreshLabel() {
+    this.labelColor = "transparent";
     this.cellLabelSetter.setLabel(this);
     this.cd.markForCheck();
   }
