@@ -1,23 +1,9 @@
-<app-schedules-table [showSumColumns]="true"
+<app-schedules-table [showSumColumns]="accessRights.isAdmin"
                      [multipleSelect]="true"
                      [rowGroupData]="tableData"
                      [cellLabelSetter]="cellLabelSetter"
                      [selectionEnabled]="accessRights.isAdmin"
-                     (onAddRowClick)="accessRights.isDepartmentLevel && dataSource.newRow($event)">
-
-  <ng-template table-top-item>
-    <app-show-hours-control></app-show-hours-control>
-  </ng-template>
-  <ng-template table-top-item
-               *ngIf="accessRights.isAdmin">
-    <avr-entity-generation name="Generate schedule"
-                           [units]="units"
-                           (onEntityGenerated)="onScheduleGenerate($event)"></avr-entity-generation>
-  </ng-template>
-  <ng-template table-top-item
-               *ngIf="accessRights.isDepartmentLevel">
-    <app-table-edit-mode-control></app-table-edit-mode-control>
-  </ng-template>
+                     (onAddRowClick)="accessRights.isDepartmentLevel && isEditable && dataSource.newRow($event)">
 
   <ng-template paginatorDef>
     <app-month-year-paginator [paginationStrategy]="paginationStrategy"></app-month-year-paginator>
@@ -34,11 +20,13 @@
 
   <ng-container beforeDateColumnDef>
     <th class="table-sticky-header th-null"
-        *headerCellDef></th>
+        *headerCellDef>
+      <app-schedule-table-configuration-menu></app-schedule-table-configuration-menu>
+    </th>
     <td class="td-name"
-        [class.editable]="accessRights.isDepartmentLevel"
         *cellDef="let rowData"
-        (click)="accessRights.isDepartmentLevel && dataSource.editRow(rowData)">
+        [class.editable]="isRowEditable(rowData)"
+        (click)="isRowEditable(rowData) && dataSource.editRow(rowData)">
       <div class="name"
            [class.highlighted]="rowData.isSubstitution">
         {{utility.getEmployeeName(rowData.employee)}}

@@ -1,20 +1,18 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, } from '@angular/core';
 import { PaginationService } from "../../../../../../lib/ngx-schedule-table/service/pagination.service";
 import { ScheduleService } from "../../../../../../services/http/schedule.service";
-import { from, Subscription } from "rxjs";
+import { Subscription } from "rxjs";
 import { ScheduleTablePaginationStrategy } from "../../../../../../shared/paginators/pagination-strategy/schedule-table-pagination-strategy";
 import { RowGroupData } from "../../../../../../lib/ngx-schedule-table/model/data/row-group-data";
 import { SchedulerCellLabelSetter } from "../utils/scheduler-cell-label-setter";
-import { ShiftGenerationUnit } from "../../../../../../model/ui/shift-generation-unit";
-import { toGenerationDto } from "../../../../../../lib/avr-entity-generation/util/utils";
-import { NotificationsService } from "angular2-notifications";
-import { concatMap } from "rxjs/operators";
 import { TableRenderer } from "../../../../../../lib/ngx-schedule-table/service/table-renderer.service";
 import { TableSumCalculator } from "../../../../../../services/calculators/table-sum-calculator.service";
 import { AuthService } from "../../../../../../services/http/auth.service";
 import { TableDataSource } from "../collectors/table-data-source";
 import { SchedulerUtility } from "../utils/scheduler-utility";
 import { UserAccessRights } from "../../../../../../model/user";
+import { TableStateService } from "../../../../../../lib/ngx-schedule-table/service/table-state.service";
+import { Row } from "../model/table-data";
 
 @Component({
   selector: 'app-schedule-table-component',
@@ -24,13 +22,13 @@ import { UserAccessRights } from "../../../../../../model/user";
 })
 export class ScheduleTableComponent implements OnInit, OnDestroy {
   accessRights: UserAccessRights;
-
-  units: ShiftGenerationUnit[];
+  isEditable:   boolean;
 
   tableData: RowGroupData[];
 
-  private dataSourceSub: Subscription;
-  private rowRenderSub: Subscription;
+  private dataSourceSub:    Subscription;
+  private rowRenderSub:     Subscription;
+  private editableStateSub: Subscription;
 
   constructor(private authService: AuthService,
               private cd: ChangeDetectorRef,
@@ -40,9 +38,9 @@ export class ScheduleTableComponent implements OnInit, OnDestroy {
               private tableRenderer: TableRenderer,
               private sumCalculator: TableSumCalculator,
               private scheduleService: ScheduleService,
+              private state: TableStateService,
               public dataSource: TableDataSource,
-              public utility: SchedulerUtility,
-              private notificationsService: NotificationsService) {}
+              public utility: SchedulerUtility) {}
 
   ngOnInit() {
     this.dataSourceSub = this.dataSource.tableData
@@ -50,6 +48,9 @@ export class ScheduleTableComponent implements OnInit, OnDestroy {
         this.tableData = tableData;
         this.cd.markForCheck();
       });
+
+    this.editableStateSub = this.state.editableGroupsState
+      .subscribe(isEditable => this.isEditable = isEditable);
 
     this.accessRights = this.authService.currentUserValue.accessRights;
 
@@ -61,13 +62,10 @@ export class ScheduleTableComponent implements OnInit, OnDestroy {
     this.paginationService.clearStoredValue();
     if (this.rowRenderSub) this.rowRenderSub.unsubscribe();
     if (this.dataSourceSub) this.dataSourceSub.unsubscribe();
+    if (this.editableStateSub) this.editableStateSub.unsubscribe();
   }
 
-  onScheduleGenerate(generationUnits: ShiftGenerationUnit[]) {
-    let dtos = generationUnits.map(unit => toGenerationDto(unit));
-
-    from(dtos).pipe(
-      concatMap(generationDto => this.scheduleService.generate(generationDto))
-    ).subscribe(res => this.notificationsService.success('Generated', res));
+  isRowEditable(rowData: Row): boolean {
+    return this.accessRights.isDepartmentLevel && this.isEditable && !rowData.isSubstitution;
   }
 }
