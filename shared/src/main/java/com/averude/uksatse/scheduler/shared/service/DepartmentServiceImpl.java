@@ -21,8 +21,8 @@ public class DepartmentServiceImpl
     private final TablePartitionManager<Long> partitionManager;
 
     @Autowired
-    DepartmentServiceImpl(DepartmentRepository departmentRepository,
-                          ScheduleTablePartitionManager partitionManager){
+    public DepartmentServiceImpl(DepartmentRepository departmentRepository,
+                                 ScheduleTablePartitionManager partitionManager){
         super(departmentRepository);
         this.departmentRepository = departmentRepository;
         this.partitionManager = partitionManager;
