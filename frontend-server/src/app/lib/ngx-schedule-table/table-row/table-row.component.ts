@@ -35,6 +35,7 @@ export class TableRowComponent implements OnInit, OnDestroy {
 
   @Input() selectionEnabled:  boolean;
   @Input() multipleSelect:    boolean;
+  @Input() showSumColumns:    boolean;
 
   @Input() datedCellDef:      DatedCellDef;
   @Input() beforeDateColumns: QueryList<BeforeDateColumnDef>;

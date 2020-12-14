@@ -10,6 +10,8 @@ import { AfterDateColumnDef, BeforeDateColumnDef } from "../directives/column";
 })
 export class TableHeaderComponent implements OnInit, OnDestroy {
 
+  @Input() showSumColumns: boolean;
+
   @Input() beforeDateColumns: QueryList<BeforeDateColumnDef>;
   @Input() afterDateColumns: QueryList<AfterDateColumnDef>;
 

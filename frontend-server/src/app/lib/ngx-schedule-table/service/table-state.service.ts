@@ -3,10 +3,20 @@ import { BehaviorSubject, Observable } from "rxjs";
 
 @Injectable()
 export class TableStateService {
+
+  private showSumColumnsSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   private cellStateSubject: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   private editableGroupsSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   constructor() { }
+
+  showSumColumns(show: boolean) {
+    this.showSumColumnsSubject.next(show);
+  }
+
+  get isSumColumnShown(): Observable<boolean> {
+    return this.showSumColumnsSubject.asObservable();
+  }
 
   nextCellStatus(status: number) {
     this.cellStateSubject.next(status);

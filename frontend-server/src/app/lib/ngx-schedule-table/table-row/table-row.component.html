@@ -24,6 +24,8 @@
   </td>
 </ng-container>
 
-<ng-container *ngFor="let column of afterDateColumns"
-              [ngTemplateOutlet]="column.cellDef"
-              [ngTemplateOutletContext]="{$implicit: rowData}"></ng-container>
+<ng-container *ngIf="showSumColumns">
+  <ng-container *ngFor="let column of afterDateColumns"
+                [ngTemplateOutlet]="column.cellDef"
+                [ngTemplateOutletContext]="{$implicit: rowData}"></ng-container>
+</ng-container>

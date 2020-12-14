@@ -4,6 +4,8 @@
   <ng-container *ngFor="let date of dates"
                 [ngTemplateOutlet]="headerDateCellDef"
                 [ngTemplateOutletContext]="{$implicit: date}"></ng-container>
-  <ng-container *ngFor="let column of afterDateColumns"
-                [ngTemplateOutlet]="column.headerCell"></ng-container>
+  <ng-container *ngIf="showSumColumns">
+    <ng-container *ngFor="let column of afterDateColumns"
+                  [ngTemplateOutlet]="column.headerCell"></ng-container>
+  </ng-container>
 </tr>
