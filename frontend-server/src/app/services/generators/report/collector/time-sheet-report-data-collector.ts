@@ -64,7 +64,7 @@ export class TimeSheetReportDataCollector extends AbstractReportDataCollector {
       const workDay = workDays[sched_idx];
 
       const cell = <ReportCellData>{};
-      cell.style = [TimeSheetStyles.dataCellStyle, TimeSheetStyles.lastDataCellStyle];
+      cell.style = this.getStyle(date);
 
       if (workDay && date.isoString === workDay.date) {
         this.fillCellWithValue(cell, workDay, dayTypes);
@@ -102,7 +102,7 @@ export class TimeSheetReportDataCollector extends AbstractReportDataCollector {
 
     calendarDays.forEach(day => headers.push({
       value: [null, day.dayOfMonth],
-      style: TimeSheetStyles.dataHeaderCellStyle,
+      style: this.getHeaderStyle(day),
       merge: false,
       width: 6
     }));
@@ -126,5 +126,25 @@ export class TimeSheetReportDataCollector extends AbstractReportDataCollector {
       table_cols_before_data: 2,
       table_report_label: 'ТАБЕЛЬ'
     } as ReportMarkup;
+  }
+
+  private getHeaderStyle(day: CalendarDay) {
+    let result = TimeSheetStyles.dataHeaderCellStyle;
+    if (day.weekend) {
+      result = TimeSheetStyles.weekendDataHeaderCellStyle;
+    } else if (day.holiday) {
+      result = TimeSheetStyles.holidayDataHeaderCellStyle;
+    }
+    return result;
+  }
+
+  private getStyle(day: CalendarDay) {
+    let result = TimeSheetStyles.dataCellStyle;
+    if (day.weekend) {
+      result = TimeSheetStyles.weekendDataCellStyle;
+    } else if (day.holiday) {
+      result = TimeSheetStyles.holidayDataCellStyle;
+    }
+    return result;
   }
 }
