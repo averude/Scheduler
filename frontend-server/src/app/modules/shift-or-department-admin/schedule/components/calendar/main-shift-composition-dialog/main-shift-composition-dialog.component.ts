@@ -2,20 +2,20 @@ import { Component, Inject } from '@angular/core';
 import { FormBuilder, Validators } from "@angular/forms";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { MAT_DATE_FORMATS } from "@angular/material/core";
-import { DATE_FORMAT, getEmployeeShortName } from "../../../../../../../../shared/utils/utils";
-import { DialogBaseComponent } from "../../../../../../../../shared/abstract-components/dialog-base/dialog-base.component";
-import { MainShiftComposition } from "../../../../../../../../model/main-shift-composition";
-import { Employee } from "../../../../../../../../model/employee";
-import { Shift } from "../../../../../../../../model/shift";
+import { DATE_FORMAT, getEmployeeShortName } from "../../../../../../shared/utils/utils";
+import { DialogBaseComponent } from "../../../../../../shared/abstract-components/dialog-base/dialog-base.component";
+import { MainShiftComposition } from "../../../../../../model/main-shift-composition";
+import { Employee } from "../../../../../../model/employee";
+import { Shift } from "../../../../../../model/shift";
 import { MAT_MOMENT_DATE_ADAPTER_OPTIONS } from "@angular/material-moment-adapter";
-import { CalendarDay } from "../../../../../../../../lib/ngx-schedule-table/model/calendar-day";
+import { CalendarDay } from "../../../../../../lib/ngx-schedule-table/model/calendar-day";
 import * as moment from "moment";
 
 @Component({
   selector: 'app-main-shift-composition-dialog',
   templateUrl: './main-shift-composition-dialog.component.html',
   styleUrls: [
-    '../../../../../../../../shared/common/dialog.common.css',
+    '../../../../../../shared/common/dialog.common.css',
     './main-shift-composition-dialog.component.css'
   ],
   providers: [

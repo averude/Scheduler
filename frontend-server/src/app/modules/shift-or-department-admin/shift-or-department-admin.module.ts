@@ -5,7 +5,7 @@ import { RoleGuard } from '../../guards/role-guard.service';
 import { StatisticsTableComponent } from "./schedule/components/statistics/components/statistics-table/statistics-table.component";
 import { ScheduleTabBarComponent } from "./schedule/components/schedule-tab-bar/schedule-tab-bar.component";
 import { ReportFormComponent } from "./schedule/components/reports/components/report-form/report-form.component";
-import { ScheduleTableComponent } from "./schedule/components/calendar/schedule-table-component/schedule-table.component";
+import { ScheduleTableComponent } from "./schedule/components/calendar/schedule-table/schedule-table.component";
 import { WorkingNormTableComponent } from "./schedule/components/working-time/components/working-time-table/working-norm-table.component";
 
 const routes: Routes = [

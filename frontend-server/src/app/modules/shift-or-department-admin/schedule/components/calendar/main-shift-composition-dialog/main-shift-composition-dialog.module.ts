@@ -1,5 +1,5 @@
 import { NgModule } from "@angular/core";
-import { MainShiftCompositionDialogComponent } from "./components/main-shift-composition-dialog/main-shift-composition-dialog.component";
+import { MainShiftCompositionDialogComponent } from "./main-shift-composition-dialog.component";
 import { CommonModule } from "@angular/common";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { SharedModule } from "../../../../../../shared/shared.module";
@@ -12,7 +12,6 @@ import { MatSelectModule } from "@angular/material/select";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatMomentDateModule } from "@angular/material-moment-adapter";
-import { TableEditModeControlComponent } from './components/table-edit-mode-control/table-edit-mode-control.component';
 
 @NgModule({
   imports: [
@@ -31,12 +30,7 @@ import { TableEditModeControlComponent } from './components/table-edit-mode-cont
     ReactiveFormsModule
   ],
   declarations: [
-    MainShiftCompositionDialogComponent,
-    TableEditModeControlComponent
-  ],
-  exports: [
-    TableEditModeControlComponent
+    MainShiftCompositionDialogComponent
   ]
 })
-export class TableEditModeControl {
-}
+export class MainShiftCompositionDialogModule {}
