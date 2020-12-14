@@ -12,7 +12,7 @@ import { TableSumCalculator } from "../../../../../../services/calculators/table
 import { Shift } from "../../../../../../model/shift";
 import { RowGroupData } from "../../../../../../lib/ngx-schedule-table/model/data/row-group-data";
 import { MatDialog } from "@angular/material/dialog";
-import { MainShiftCompositionDialogComponent } from "../table-edit-mode-control/components/main-shift-composition-dialog/main-shift-composition-dialog.component";
+import { MainShiftCompositionDialogComponent } from "../main-shift-composition-dialog/main-shift-composition-dialog.component";
 import { MainShiftComposition, SubstitutionShiftComposition } from "../../../../../../model/main-shift-composition";
 import { BasicDto } from "../../../../../../model/dto/basic-dto";
 import { Employee } from "../../../../../../model/employee";
@@ -20,7 +20,6 @@ import { WorkDay } from "../../../../../../model/workday";
 import { CalendarDay } from "../../../../../../lib/ngx-schedule-table/model/calendar-day";
 import { NotificationsService } from "angular2-notifications";
 import { TableRenderer } from "../../../../../../lib/ngx-schedule-table/service/table-renderer.service";
-import { RowDataCollector } from "../table-edit-mode-control/row-data-collector";
 import { Row, RowGroup } from "../model/table-data";
 import { AuthService } from "../../../../../../services/http/auth.service";
 import { WorkingNorm } from "../../../../../../model/working-norm";
@@ -30,7 +29,8 @@ import { CellEnabledSetter } from "./cell-enabled-setter";
 @Injectable()
 export class TableDataSource {
 
-  private shifts:                   Shift[];
+  public  shifts:                   Shift[];
+
   private employees:                Employee[];
   private mainCompositions:         MainShiftComposition[];
   private substitutionCompositions: SubstitutionShiftComposition[];
@@ -43,7 +43,6 @@ export class TableDataSource {
               private cellEnabledSetter: CellEnabledSetter,
               private treeDataCollector: TableTreeDataCollector,
               private tableRenderer: TableRenderer,
-              private rowDataCollector: RowDataCollector,
               private sumCalculator: TableSumCalculator,
               private paginationService: PaginationService,
               private employeeService: EmployeeService,

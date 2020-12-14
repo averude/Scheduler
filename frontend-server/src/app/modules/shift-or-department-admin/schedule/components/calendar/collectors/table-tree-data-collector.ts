@@ -108,7 +108,7 @@ export class TableTreeDataCollector {
     row.id = schedule.parent.id;
     row.employee = schedule.parent;
     row.composition = composition;
-    // row.isSubstitution = !!((composition as SubstitutionShiftComposition).mainShiftComposition);
+    row.isSubstitution = !!((composition as SubstitutionShiftComposition).mainShiftComposition);
     row.workingNorm = norm;
     row.cellData = calendarDays.map(day => {
       let result;
