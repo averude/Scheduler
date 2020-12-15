@@ -1,8 +1,8 @@
-import { WorkingNormRowData } from "../model/working-norm-row-data";
-import { WorkingNorm } from "../../../../../../../model/working-norm";
-import { CellData } from "../../../../../../../lib/ngx-schedule-table/model/data/cell-data";
-import { BasicDto } from "../../../../../../../model/dto/basic-dto";
-import { Shift } from "../../../../../../../model/shift";
+import { WorkingNormRowData } from "../../../model/ui/working-norm-table/working-norm-row-data";
+import { WorkingNorm } from "../../../model/working-norm";
+import { CellData } from "../../../lib/ngx-schedule-table/model/data/cell-data";
+import { BasicDto } from "../../../model/dto/basic-dto";
+import { Shift } from "../../../model/shift";
 import { Injectable } from "@angular/core";
 
 @Injectable()

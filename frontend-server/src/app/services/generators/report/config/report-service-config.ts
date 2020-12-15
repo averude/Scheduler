@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
-import { ReportDataCollector } from "../collector/report-data-collector";
-import { ScheduleReportDataCollector } from "../collector/schedule-report-data-collector";
-import { TimeSheetReportDataCollector } from "../collector/time-sheet-report-data-collector";
+import { ReportDataCollector } from "../../../collectors/report/report-data-collector";
+import { ScheduleReportDataCollector } from "../../../collectors/report/schedule-report-data-collector";
+import { TimeSheetReportDataCollector } from "../../../collectors/report/time-sheet-report-data-collector";
 import { ReportDecorator } from "../decorator/report-decorator";
 import { ReportCreator } from "../creator/report-creator";
 import { ScheduleReportDecorator } from "../decorator/schedule-report-decorator";

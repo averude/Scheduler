@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { from, Subscription } from "rxjs";
 import { TableStateService } from "../../../../../../lib/ngx-schedule-table/service/table-state.service";
-import { TableDataSource } from "../collectors/table-data-source";
+import { TableDataSource } from "../../../../../../services/collectors/schedule/table-data-source";
 import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
 import { AvrEntityGenerationDialogComponent } from "../../../../../../lib/avr-entity-generation/avr-entity-generation-dialog/avr-entity-generation-dialog.component";
 import { getGenerationUnits, toGenerationDto } from "../../../../../../lib/avr-entity-generation/util/utils";

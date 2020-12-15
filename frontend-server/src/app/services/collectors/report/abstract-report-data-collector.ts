@@ -1,15 +1,15 @@
-import { BasicDto } from "../../../../model/dto/basic-dto";
-import { Employee } from "../../../../model/employee";
-import { WorkDay } from "../../../../model/workday";
-import { ReportData, ReportRowData } from "../model/report-row-data";
-import { DayType } from "../../../../model/day-type";
-import { SummationDto, SummationResult } from "../../../../model/dto/summation-dto";
-import { CalendarDay } from "../../../../lib/ngx-schedule-table/model/calendar-day";
-import { MainShiftComposition } from "../../../../model/main-shift-composition";
-import { sortByCompositions } from "../../../../shared/utils/collection-utils";
+import { BasicDto } from "../../../model/dto/basic-dto";
+import { Employee } from "../../../model/employee";
+import { WorkDay } from "../../../model/workday";
+import { ReportData, ReportRowData } from "../../generators/report/model/report-row-data";
+import { DayType } from "../../../model/day-type";
+import { SummationDto, SummationResult } from "../../../model/dto/summation-dto";
+import { CalendarDay } from "../../../lib/ngx-schedule-table/model/calendar-day";
+import { MainShiftComposition } from "../../../model/main-shift-composition";
+import { sortByCompositions } from "../../../shared/utils/collection-utils";
 import { ReportDataCollector } from "./report-data-collector";
-import { ReportCellData, ReportHeaderCell } from "../model/report-cell-data";
-import { SummationColumn } from "../../../../model/summation-column";
+import { ReportCellData, ReportHeaderCell } from "../../generators/report/model/report-cell-data";
+import { SummationColumn } from "../../../model/summation-column";
 
 export abstract class AbstractReportDataCollector implements ReportDataCollector {
 

@@ -4,7 +4,7 @@ import { PaginationService } from "../../../../../../../lib/ngx-schedule-table/s
 import { from, Subscription } from "rxjs";
 import { WorkingNormService } from "../../../../../../../services/http/working-norm.service";
 import { RowData } from "../../../../../../../lib/ngx-schedule-table/model/data/row-data";
-import { WorkingNormTableDataCollector } from "../collectors/working-norm-table-data-collector.service";
+import { WorkingNormTableDataCollector } from "../../../../../../../services/collectors/working-norm/working-norm-table-data-collector.service";
 import { WorkingNormCellLabelSetter } from "../utils/working-norm-cell-label-setter.service";
 import { ClearSelectionService } from "../../../../../../../lib/ngx-schedule-table/service/clear-selection.service";
 import { SelectionEndService } from "../../../../../../../lib/ngx-schedule-table/service/selection-end.service";

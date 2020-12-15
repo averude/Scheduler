@@ -5,7 +5,7 @@ import { SharedModule } from "../../../../../shared/shared.module";
 import { ScheduleTableModule } from "../../../../../lib/ngx-schedule-table/schedule-table.module";
 import { MonthYearPaginatorModule } from "../../../../../shared/paginators/month-year-paginator/month-year-paginator.module";
 import { YearPaginationStrategy } from "../../../../../shared/paginators/pagination-strategy/year-pagination-strategy";
-import { WorkingNormTableDataCollector } from "./components/collectors/working-norm-table-data-collector.service";
+import { WorkingNormTableDataCollector } from "../../../../../services/collectors/working-norm/working-norm-table-data-collector.service";
 import { WorkingNormCellLabelSetter } from "./components/utils/working-norm-cell-label-setter.service";
 import { WorkingNormTableComponent } from "./components/working-time-table/working-norm-table.component";
 import { WorkingNormDialogComponent } from './components/working-time-dialog/working-norm-dialog.component';

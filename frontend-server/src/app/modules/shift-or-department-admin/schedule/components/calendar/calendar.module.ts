@@ -15,9 +15,9 @@ import { ShiftCompositionDivider } from "../../../../../services/divider/shift-c
 import { TableSumCalculator } from "../../../../../services/calculators/table-sum-calculator.service";
 import { MainShiftCompositionDialogModule } from "./main-shift-composition-dialog/main-shift-composition-dialog.module";
 import { SchedulerUtility } from "./utils/scheduler-utility";
-import { TableTreeDataCollector } from "./collectors/table-tree-data-collector";
-import { TableDataSource } from "./collectors/table-data-source";
-import { CellEnabledSetter } from "./collectors/cell-enabled-setter";
+import { TableTreeDataCollector } from "../../../../../services/collectors/schedule/table-tree-data-collector";
+import { TableDataSource } from "../../../../../services/collectors/schedule/table-data-source";
+import { CellEnabledSetter } from "../../../../../services/collectors/schedule/cell-enabled-setter";
 import { ScheduleTableConfigurationMenuModule } from "./schedule-table-configuration-menu/schedule-table-configuration-menu.module";
 
 @NgModule({

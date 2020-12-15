@@ -1,10 +1,10 @@
-import { MainShiftComposition, SubstitutionShiftComposition } from "../../../../../../model/main-shift-composition";
-import { Employee } from "../../../../../../model/employee";
+import { MainShiftComposition, SubstitutionShiftComposition } from "../../main-shift-composition";
+import { Employee } from "../../employee";
 import { Moment } from "moment";
-import { CellData } from "../../../../../../lib/ngx-schedule-table/model/data/cell-data";
-import { RowData } from "../../../../../../lib/ngx-schedule-table/model/data/row-data";
-import { RowGroupData } from "../../../../../../lib/ngx-schedule-table/model/data/row-group-data";
-import { binarySearchIndex, binarySearchInsertIndex, bs } from "../../../../../../shared/utils/collection-utils";
+import { CellData } from "../../../lib/ngx-schedule-table/model/data/cell-data";
+import { RowData } from "../../../lib/ngx-schedule-table/model/data/row-data";
+import { RowGroupData } from "../../../lib/ngx-schedule-table/model/data/row-group-data";
+import { binarySearchIndex, binarySearchInsertIndex, bs } from "../../../shared/utils/collection-utils";
 
 export class TableData {
   groups: RowGroup[];

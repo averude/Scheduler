@@ -1,22 +1,22 @@
 import { AbstractReportDataCollector } from "./abstract-report-data-collector";
-import { WorkDay } from "../../../../model/workday";
-import { DayType } from "../../../../model/day-type";
-import { TIME_SHEET_REPORT } from "../model/report-types";
+import { WorkDay } from "../../../model/workday";
+import { DayType } from "../../../model/day-type";
+import { TIME_SHEET_REPORT } from "../../generators/report/model/report-types";
 import {
   calculateHoursByHasTime,
   getCellValue,
   getCellValueExt,
   getEmployeeShortName
-} from "../../../../shared/utils/utils";
-import { ReportCellData, ReportHeaderCell } from "../model/report-cell-data";
-import { TimeSheetStyles } from "../styles/time-sheet-styles";
-import { SummationResult } from "../../../../model/dto/summation-dto";
-import { Employee } from "../../../../model/employee";
-import { CalendarDay } from "../../../../lib/ngx-schedule-table/model/calendar-day";
-import { SummationColumn } from "../../../../model/summation-column";
-import { ReportData } from "../model/report-row-data";
-import { ReportMarkup } from "../model/report-markup";
-import { BasicDto } from "../../../../model/dto/basic-dto";
+} from "../../../shared/utils/utils";
+import { ReportCellData, ReportHeaderCell } from "../../generators/report/model/report-cell-data";
+import { TimeSheetStyles } from "../../generators/report/styles/time-sheet-styles";
+import { SummationResult } from "../../../model/dto/summation-dto";
+import { Employee } from "../../../model/employee";
+import { CalendarDay } from "../../../lib/ngx-schedule-table/model/calendar-day";
+import { SummationColumn } from "../../../model/summation-column";
+import { ReportData } from "../../generators/report/model/report-row-data";
+import { ReportMarkup } from "../../generators/report/model/report-markup";
+import { BasicDto } from "../../../model/dto/basic-dto";
 
 export class TimeSheetReportDataCollector extends AbstractReportDataCollector {
 

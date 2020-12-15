@@ -8,11 +8,11 @@ import { SchedulerCellLabelSetter } from "../utils/scheduler-cell-label-setter";
 import { TableRenderer } from "../../../../../../lib/ngx-schedule-table/service/table-renderer.service";
 import { TableSumCalculator } from "../../../../../../services/calculators/table-sum-calculator.service";
 import { AuthService } from "../../../../../../services/http/auth.service";
-import { TableDataSource } from "../collectors/table-data-source";
+import { TableDataSource } from "../../../../../../services/collectors/schedule/table-data-source";
 import { SchedulerUtility } from "../utils/scheduler-utility";
 import { UserAccessRights } from "../../../../../../model/user";
 import { TableStateService } from "../../../../../../lib/ngx-schedule-table/service/table-state.service";
-import { Row } from "../model/table-data";
+import { Row } from "../../../../../../model/ui/schedule-table/table-data";
 
 @Component({
   selector: 'app-schedule-table-component',

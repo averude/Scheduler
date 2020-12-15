@@ -1,7 +1,7 @@
-import { ShiftCompositionDivider } from "../../../../../../services/divider/shift-composition-divider";
-import { Row, TableData } from "../model/table-data";
-import { MainShiftComposition, SubstitutionShiftComposition } from "../../../../../../model/main-shift-composition";
-import { CellData } from "../../../../../../lib/ngx-schedule-table/model/data/cell-data";
+import { ShiftCompositionDivider } from "../../divider/shift-composition-divider";
+import { Row, TableData } from "../../../model/ui/schedule-table/table-data";
+import { MainShiftComposition, SubstitutionShiftComposition } from "../../../model/main-shift-composition";
+import { CellData } from "../../../lib/ngx-schedule-table/model/data/cell-data";
 import { Moment } from "moment";
 import { Injectable } from "@angular/core";
 

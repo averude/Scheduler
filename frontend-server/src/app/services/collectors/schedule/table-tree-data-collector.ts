@@ -1,12 +1,12 @@
 import { Injectable } from "@angular/core";
-import { Shift } from "../../../../../../model/shift";
-import { MainShiftComposition, SubstitutionShiftComposition } from "../../../../../../model/main-shift-composition";
-import { CalendarDay } from "../../../../../../lib/ngx-schedule-table/model/calendar-day";
-import { BasicDto } from "../../../../../../model/dto/basic-dto";
-import { Employee } from "../../../../../../model/employee";
-import { WorkDay } from "../../../../../../model/workday";
-import { WorkingNorm } from "../../../../../../model/working-norm";
-import { Cell, Row, RowGroup, TableData } from "../model/table-data";
+import { Shift } from "../../../model/shift";
+import { MainShiftComposition, SubstitutionShiftComposition } from "../../../model/main-shift-composition";
+import { CalendarDay } from "../../../lib/ngx-schedule-table/model/calendar-day";
+import { BasicDto } from "../../../model/dto/basic-dto";
+import { Employee } from "../../../model/employee";
+import { WorkDay } from "../../../model/workday";
+import { WorkingNorm } from "../../../model/working-norm";
+import { Cell, Row, RowGroup, TableData } from "../../../model/ui/schedule-table/table-data";
 import * as moment from "moment";
 import { CellEnabledSetter } from "./cell-enabled-setter";
 
