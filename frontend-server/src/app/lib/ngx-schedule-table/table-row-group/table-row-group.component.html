@@ -3,7 +3,9 @@
     <td [attr.colspan]="numberOfColumns">
       <div class="group-label-container">
         <div class="group-label"
-             (click)="isHidden = !isHidden">{{(isHidden ? "▶" : "▼") + ' ' + groupData.name}}</div>
+             (click)="isHidden = !isHidden">
+          {{(isHidden ? "▸" : "▾") + ' ' + groupData.name}}
+        </div>
         <div class="group-control">
           <div class="group-add-row-button"
                *ngIf="editableRowGroup"

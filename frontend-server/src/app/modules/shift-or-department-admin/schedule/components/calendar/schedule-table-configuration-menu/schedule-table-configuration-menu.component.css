@@ -1,12 +1,12 @@
 .menu-button {
   display: block;
   height: 2em;
+  width: 40px;
   background-color: transparent;
   border: none;
   user-select: none;
   outline: none;
   cursor: pointer;
-  margin: 0 30px;
   padding: 0 8px;
 }
 
