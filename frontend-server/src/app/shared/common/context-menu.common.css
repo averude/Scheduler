@@ -1,16 +1,17 @@
 .ngx-contextmenu .dropdown-menu {
-  border-radius: 10px;
   background-color: #ffffff;
-  padding: 0;
+  padding: 5px 0;
   overflow-y: scroll;
-  width: 300px;
+  width: 100%;
   max-height: 400px;
   box-shadow: 0 5px 10px rgba(154,160,185,.35), 0 15px 40px rgba(166,173,201,.5);
+  user-select: none;
+  outline: none;
 }
 .ngx-contextmenu li {
+  padding: 0 5px;
   display: block;
-  padding: 10px 0;
-  border-bottom: 1px solid #dbe6f0;
+  /*border-bottom: 1px solid #dbe6f0;*/
 }
 .ngx-contextmenu li:hover {
   background-color: #f0f6fb;
@@ -18,13 +19,16 @@
 .ngx-contextmenu li:first-child {
   border-top:none;
 }
+.ngx-contextmenu li:last-child {
+  border-bottom:none;
+}
 .ngx-contextmenu a {
   font-family: 'MuseoSansRegular', 'Roboto', sans-serif;
   letter-spacing: .03em;
-  font-size: 18px;
-  color: #74819c;
+  font-size: 16px;
+  color: #414858;
   display: block;
-  padding-left: 10px;
+  padding: 10px 5px;
   text-decoration: none;
 }
 .ngx-contextmenu a:hover {

@@ -7,6 +7,17 @@
   white-space: nowrap;
 }
 .hasSubMenu:before {
-  content: "\25B6";
+  content: "\25b8";
   float: right;
+  padding-left: 10px;
+}
+
+.divider {
+  height: 7px;
+  cursor: auto;
+  border: none;
+}
+
+.divider:hover{
+  background-color: transparent;
 }

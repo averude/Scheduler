@@ -1,20 +1,17 @@
 .menu-button {
+  display: block;
   height: 2em;
   background-color: transparent;
   border: none;
   user-select: none;
+  outline: none;
   cursor: pointer;
-  display: block;
   margin: 0 30px;
   padding: 0 8px;
 }
 
-.menu-button:hover {
-  color: blue;
-}
-
 .config-icon {
-  padding-top: 4px;
+  padding-top: 5px;
   height: 16px;
   width: 16px;
 }
