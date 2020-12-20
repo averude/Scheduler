@@ -31,6 +31,16 @@ import java.util.StringJoiner;
                 )
         }
 )
+@NamedEntityGraph(
+        name = "graph.PatternUnit.dayType",
+        attributeNodes = @NamedAttributeNode(value = "dayType", subgraph = "dayType"),
+        subgraphs = {
+                @NamedSubgraph(
+                        name = "dayType",
+                        attributeNodes = @NamedAttributeNode("dayTypeGroup")
+                )
+        }
+)
 public class PatternUnit implements HasId, HasDayTypeAndTime {
 
     @Id

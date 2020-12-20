@@ -16,6 +16,32 @@ import java.time.LocalDate;
 @Getter
 @Entity
 @Table(name = "substitution_shift_compositions")
+@NamedEntityGraph(
+        name = "graph.SubstitutionShiftComposition",
+        attributeNodes = {
+                @NamedAttributeNode(
+                        value = "employee",
+                        subgraph = "graph.SubstitutionShiftComposition.Employee.position"
+                ),
+                @NamedAttributeNode(
+                        value = "mainShiftComposition",
+                        subgraph = "graph.SubstitutionShiftComposition.MainShiftComposition.employee"
+                )
+        },
+        subgraphs = {
+                @NamedSubgraph(
+                        name = "graph.SubstitutionShiftComposition.MainShiftComposition.employee",
+                        attributeNodes = @NamedAttributeNode(
+                                value = "employee",
+                                subgraph = "graph.SubstitutionShiftComposition.Employee.position"
+                        )
+                ),
+                @NamedSubgraph(
+                        name = "graph.SubstitutionShiftComposition.Employee.position",
+                        attributeNodes = @NamedAttributeNode("position")
+                )
+        }
+)
 public class SubstitutionShiftComposition implements HasId, EntityComposition<Long, Employee> {
 
     @Id

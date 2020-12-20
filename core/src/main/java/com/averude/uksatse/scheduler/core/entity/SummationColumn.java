@@ -20,6 +20,10 @@ import java.util.StringJoiner;
 @Setter
 @Entity
 @Table(name = "summation_columns")
+@NamedEntityGraph(
+        name = "graph.SummationColumn.dayTypeRanges",
+        attributeNodes = @NamedAttributeNode("dayTypeRanges")
+)
 public class SummationColumn implements HasId, HasEnterpriseId {
 
     @Id
@@ -41,7 +45,7 @@ public class SummationColumn implements HasId, HasEnterpriseId {
     @NotNull
     private String name;
 
-    @OneToMany( fetch = FetchType.EAGER,
+    @OneToMany( fetch = FetchType.LAZY,
                 cascade = CascadeType.ALL,
                 mappedBy = "summationColumnId")
     private Set<SummationColumnDayTypeRange> dayTypeRanges;

@@ -35,6 +35,10 @@ import java.util.StringJoiner;
                         })
         }
 )
+@NamedEntityGraph(
+        name = "graph.Employee.position",
+        attributeNodes = @NamedAttributeNode("position")
+)
 public class Employee implements HasId, HasDepartmentId {
 
     @Id
@@ -70,6 +74,7 @@ public class Employee implements HasId, HasDepartmentId {
     @NotNull(message = "{employee.position.null}")
     @ManyToOne
     @JoinColumn(name = "position_id",
+                referencedColumnName = "id",
                 nullable = false)
     private Position position;
 

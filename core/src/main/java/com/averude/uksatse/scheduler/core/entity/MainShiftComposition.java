@@ -23,6 +23,17 @@ import java.util.StringJoiner;
 @Setter
 @Entity()
 @Table(name = "main_shift_compositions")
+@NamedEntityGraph(
+        name = "graph.MainShiftComposition.employee",
+        attributeNodes = @NamedAttributeNode(
+                value = "employee",
+                subgraph = "graph.MainShiftComposition.Employee.position"
+        ),
+        subgraphs = @NamedSubgraph(
+                name = "graph.MainShiftComposition.Employee.position",
+                attributeNodes = @NamedAttributeNode("position")
+        )
+)
 public class MainShiftComposition implements HasId, EntityComposition<Long, Employee> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

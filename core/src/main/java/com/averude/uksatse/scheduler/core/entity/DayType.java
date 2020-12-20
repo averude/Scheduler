@@ -31,6 +31,10 @@ import java.util.StringJoiner;
                 )
         }
 )
+@NamedEntityGraph(
+        name = "graph.DayType.dayTypeGroup",
+        attributeNodes = @NamedAttributeNode("dayTypeGroup")
+)
 public class DayType implements HasId, HasEnterpriseId {
 
     @Id
@@ -98,16 +102,6 @@ public class DayType implements HasId, HasEnterpriseId {
                    String label) {
         this.name = name;
         this.label = label;
-    }
-
-    public void addPatternUnit(PatternUnit unit) {
-        unit.setDayType(this);
-        units.add(unit);
-    }
-
-    public void removePatternUnit(PatternUnit unit) {
-        unit.setDayType(null);
-        units.remove(unit);
     }
 
     @Override

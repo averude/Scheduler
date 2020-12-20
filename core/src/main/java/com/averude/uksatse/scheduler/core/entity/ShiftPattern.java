@@ -26,8 +26,33 @@ import java.util.StringJoiner;
         name = "shift_patterns",
         uniqueConstraints = {
                 @UniqueConstraint(
-                        name = "shift_paterns_unique_constraint",
+                        name = "shift_patterns_unique_constraint",
                         columnNames = {"department_id", "name"}
+                )
+        }
+)
+@NamedEntityGraph(
+        name = "graph.ShiftPattern.departmentDayTypes",
+        attributeNodes = {
+                @NamedAttributeNode(
+                        value = "holidayDepDayType",
+                        subgraph = "graph.ShiftPattern.DepartmentDayType.dayType"),
+                @NamedAttributeNode(
+                        value = "extraWeekendDepDayType",
+                        subgraph = "graph.ShiftPattern.DepartmentDayType.dayType"),
+                @NamedAttributeNode(
+                        value = "extraWorkDayDepDayType",
+                        subgraph = "graph.ShiftPattern.DepartmentDayType.dayType"),
+        },
+        subgraphs = {
+                @NamedSubgraph(
+                        name = "graph.ShiftPattern.DepartmentDayType.dayType",
+                        attributeNodes = @NamedAttributeNode(
+                                value = "dayType",
+                                subgraph = "graph.ShiftPattern.DepartmentDayType.DayType.dayTypeGroup")),
+                @NamedSubgraph(
+                        name = "graph.ShiftPattern.DepartmentDayType.DayType.dayTypeGroup",
+                        attributeNodes = @NamedAttributeNode("dayTypeGroup")
                 )
         }
 )

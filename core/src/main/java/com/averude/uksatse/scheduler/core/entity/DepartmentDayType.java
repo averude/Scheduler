@@ -34,6 +34,17 @@ import java.util.StringJoiner;
                 )
         }
 )
+@NamedEntityGraph(
+        name = "graph.DepartmentDayType.dayType",
+        attributeNodes = @NamedAttributeNode(
+                value = "dayType",
+                subgraph = "graph.DepartmentDayType.DayType.dayTypeGroup"
+        ),
+        subgraphs = @NamedSubgraph(
+                name = "graph.DepartmentDayType.DayType.dayTypeGroup",
+                attributeNodes = @NamedAttributeNode("dayTypeGroup")
+        )
+)
 public class DepartmentDayType implements HasId, HasDayTypeAndTime, HasDepartmentId {
 
     @Id
