@@ -32,7 +32,7 @@ export class WorkingNormDialogComponent extends DialogBaseComponent<WorkingNorm>
     this.dialogForm = this.fb.group({
       id:           [],
       shiftId:      [this.selectionData.rowData.id],
-      date:         [this.selectionData.selectedCells[0].date],
+      date:         [this.selectionData.selectedCells[0].date.isoString],
       hours:        [null, [Validators.required]],
       days:         [null, [Validators.required]]
     });

@@ -7,7 +7,6 @@ import { DialogBaseComponent } from "../../../../../../shared/abstract-component
 import { MainShiftComposition } from "../../../../../../model/main-shift-composition";
 import { Employee } from "../../../../../../model/employee";
 import { Shift } from "../../../../../../model/shift";
-import { MAT_MOMENT_DATE_ADAPTER_OPTIONS } from "@angular/material-moment-adapter";
 import { CalendarDay } from "../../../../../../lib/ngx-schedule-table/model/calendar-day";
 import * as moment from "moment";
 
@@ -19,10 +18,6 @@ import * as moment from "moment";
     './main-shift-composition-dialog.component.css'
   ],
   providers: [
-    {
-      provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS,
-      useValue: { useUtc: true }
-    },
     {
       provide: MAT_DATE_FORMATS,
       useValue: DATE_FORMAT

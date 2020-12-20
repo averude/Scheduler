@@ -11,7 +11,7 @@ import { MatDialogModule } from "@angular/material/dialog";
 import { MatSelectModule } from "@angular/material/select";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatDatepickerModule } from "@angular/material/datepicker";
-import { MatMomentDateModule } from "@angular/material-moment-adapter";
+import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MatMomentDateModule } from "@angular/material-moment-adapter";
 
 @NgModule({
   imports: [
@@ -31,6 +31,12 @@ import { MatMomentDateModule } from "@angular/material-moment-adapter";
   ],
   declarations: [
     MainShiftCompositionDialogComponent
+  ],
+  providers: [
+    {
+      provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS,
+      useValue: { useUtc: true }
+    }
   ]
 })
 export class MainShiftCompositionDialogModule {}

@@ -11,6 +11,7 @@ import { RemoveDialogModule } from "../../shared/abstract-components/remove-dial
 import { WorkingNormModule } from "./schedule/components/working-time/working-norm.module";
 import { NgxMaskModule } from "ngx-mask";
 import { AvrTopBarModule } from "../../lib/avr-top-bar/avr-top-bar.module";
+import { CellCollector } from "../../services/collectors/cell-collector";
 
 @NgModule({
   imports: [
@@ -30,5 +31,6 @@ import { AvrTopBarModule } from "../../lib/avr-top-bar/avr-top-bar.module";
     ScheduleTabBarComponent
   ],
   exports: [],
+  providers: [CellCollector]
 })
 export class ShiftOrDepartmentModule {}

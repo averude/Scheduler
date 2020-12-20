@@ -122,7 +122,7 @@ export class WorkingNormTableComponent implements OnInit, OnDestroy {
       let cell = Object.assign({}, cellData[cellIdx]);
       newCellData[cellIdx] = cell;
 
-      if (cell.date === workingNorm.date) {
+      if (cell.date.isoString === workingNorm.date) {
         newCellData[cellIdx].value = workingNorm;
       }
     }

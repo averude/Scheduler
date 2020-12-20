@@ -9,11 +9,13 @@ import { WorkingNorm } from "../../../model/working-norm";
 import { Cell, Row, RowGroup, TableData } from "../../../model/ui/schedule-table/table-data";
 import * as moment from "moment";
 import { CellEnabledSetter } from "./cell-enabled-setter";
+import { CellCollector } from "../cell-collector";
 
 @Injectable()
 export class TableTreeDataCollector {
 
-  constructor(private cellEnabledSetter: CellEnabledSetter) {
+  constructor(private cellEnabledSetter: CellEnabledSetter,
+              private cellCollector: CellCollector) {
   }
 
   createTree(shifts: Shift[],
@@ -110,30 +112,9 @@ export class TableTreeDataCollector {
     row.composition = composition;
     row.isSubstitution = !!((composition as SubstitutionShiftComposition).mainShiftComposition);
     row.workingNorm = norm;
-    row.cellData = calendarDays.map(day => {
-      let result;
-
-      const workDay = workDays[scheduleIndex];
-      if (workDay && day.isoString === workDay.date) {
-        scheduleIndex++;
-        result = this.createCell(row, day, workDay);
-      } else {
-        result = this.createCell(row, day, null);
-      }
-
-      return result;
-    });
+    const cellData = this.cellCollector.collect<WorkDay, Cell>(calendarDays, workDays, false);
+    cellData.forEach(cell => cell.row = row);
+    row.cellData = cellData;
     return row;
-  }
-
-  private createCell(row: Row,
-                     day: CalendarDay,
-                     workDay: WorkDay): Cell {
-    const cell = {} as Cell;
-    cell.row = row;
-    cell.value = workDay;
-    cell.date = day;
-    cell.enabled = false;
-    return cell;
   }
 }

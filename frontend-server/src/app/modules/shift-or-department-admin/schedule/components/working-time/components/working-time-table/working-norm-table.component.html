@@ -2,7 +2,8 @@
                      [rowData]="rowData"
                      [selectionEnabled]="!isAdmin"
                      [multipleSelect]="false"
-                     [cellLabelSetter]="cellLabelSetter">
+                     [cellLabelSetter]="cellLabelSetter"
+                     [showSumColumns]="true">
 
   <ng-template table-top-item
                *ngIf="isAdmin">
