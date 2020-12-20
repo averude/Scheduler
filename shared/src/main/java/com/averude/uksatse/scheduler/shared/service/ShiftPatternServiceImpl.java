@@ -18,7 +18,7 @@ public class ShiftPatternServiceImpl
 
     private final ShiftPatternRepository shiftPatternRepository;
     private final PatternUnitRepository patternUnitRepository;
-    private BasicDtoSavingUtil basicDtoSavingUtil;
+    private final BasicDtoSavingUtil    basicDtoSavingUtil;
 
     @Autowired
     public ShiftPatternServiceImpl(ShiftPatternRepository shiftPatternRepository,

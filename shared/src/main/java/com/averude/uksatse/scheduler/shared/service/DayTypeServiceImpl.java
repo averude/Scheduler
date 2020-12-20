@@ -7,6 +7,9 @@ import com.averude.uksatse.scheduler.shared.repository.ShiftRepository;
 import com.averude.uksatse.scheduler.shared.service.base.AByEnterpriseIdService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 public class DayTypeServiceImpl
@@ -24,5 +27,11 @@ public class DayTypeServiceImpl
         this.departmentRepository = departmentRepository;
         this.shiftRepository = shiftRepository;
         this.dayTypeRepository = dayTypeRepository;
+    }
+
+    @Override
+    @Transactional
+    public List<DayType> findAllByDepartmentId(Long departmentId) {
+        return dayTypeRepository.findAllByDepartmentId(departmentId);
     }
 }

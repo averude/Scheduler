@@ -48,16 +48,6 @@ public class DayTypeGroup implements HasId {
                 cascade = CascadeType.ALL)
     private List<DayType> dayTypes = new LinkedList<>();
 
-    public void addDayType(DayType dayType) {
-        dayType.setDayTypeGroup(this);
-        dayTypes.add(dayType);
-    }
-
-    public void removeDayType(DayType dayType) {
-        dayType.setDayTypeGroup(null);
-        dayTypes.remove(dayType);
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

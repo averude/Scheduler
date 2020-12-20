@@ -1,6 +1,5 @@
 package com.averude.uksatse.scheduler.core.entity.structure;
 
-import com.averude.uksatse.scheduler.core.entity.Employee;
 import com.averude.uksatse.scheduler.core.entity.MainShiftComposition;
 import com.averude.uksatse.scheduler.core.entity.ShiftPattern;
 import com.averude.uksatse.scheduler.core.interfaces.entity.HasDepartmentId;
@@ -63,20 +62,6 @@ public class Shift implements HasId, HasDepartmentId {
                 cascade = CascadeType.ALL,
                 fetch = FetchType.LAZY)
     private List<@NotNull @Valid MainShiftComposition> employees = new ArrayList<>();
-
-    public void addEmployee(Employee employee){
-        MainShiftComposition mainShiftComposition = new MainShiftComposition(this, employee);
-        employees.add(mainShiftComposition);
-        employee.getMainShiftsList().add(mainShiftComposition);
-    }
-
-    public void removeEmployee(Employee employee){
-        MainShiftComposition mainShiftComposition = new MainShiftComposition(this, employee);
-        employee.getMainShiftsList().remove(mainShiftComposition);
-        employees.remove(mainShiftComposition);
-        mainShiftComposition.setShiftId(null);
-        mainShiftComposition.setEmployee(null);
-    }
 
     @Override
     public boolean equals(Object o) {

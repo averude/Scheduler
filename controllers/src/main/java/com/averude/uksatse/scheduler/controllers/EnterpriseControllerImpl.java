@@ -5,7 +5,6 @@ import com.averude.uksatse.scheduler.controllers.interfaces.EnterpriseController
 import com.averude.uksatse.scheduler.core.entity.structure.Enterprise;
 import com.averude.uksatse.scheduler.security.entity.EnterpriseAdminUserAccount;
 import com.averude.uksatse.scheduler.security.state.entity.SimpleByAuthMethodResolver;
-import com.averude.uksatse.scheduler.security.util.UserAccountExtractor;
 import com.averude.uksatse.scheduler.shared.service.EnterpriseService;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,15 +20,12 @@ public class EnterpriseControllerImpl
         extends AByAuthController<Enterprise> implements EnterpriseController {
 
     private final EnterpriseService enterpriseService;
-    private final UserAccountExtractor accountExtractor;
 
     @Autowired
     public EnterpriseControllerImpl(EnterpriseService enterpriseService,
-                                    SimpleByAuthMethodResolver authStrategy,
-                                    UserAccountExtractor accountExtractor) {
+                                    SimpleByAuthMethodResolver authStrategy) {
         super(enterpriseService, authStrategy, LoggerFactory.getLogger(EnterpriseController.class));
         this.enterpriseService = enterpriseService;
-        this.accountExtractor = accountExtractor;
     }
 
     @Override

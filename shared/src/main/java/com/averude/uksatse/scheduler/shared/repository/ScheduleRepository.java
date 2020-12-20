@@ -2,6 +2,7 @@ package com.averude.uksatse.scheduler.shared.repository;
 
 import com.averude.uksatse.scheduler.core.entity.WorkDay;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -15,4 +16,21 @@ public interface ScheduleRepository extends JpaRepository<WorkDay, Long> {
     List<WorkDay> findAllByEmployeeIdInAndDateBetweenOrderByDateAsc(List<Long> employeeIds, LocalDate from, LocalDate to);
 
     void deleteAllByEmployeeIdAndDateBetween(Long employeeId, LocalDate from, LocalDate to);
+
+    @Query("select wd " +
+            "from WorkDay wd " +
+            "where wd.departmentId = ?1 and wd.employeeId in ?2 and wd.date between ?3 and ?4 " +
+            "order by wd.employeeId asc, wd.date asc")
+    List<WorkDay> findAllByEmployeeIdsAndDateBetween(Long departmentId,
+                                                     List<Long> employeeIds,
+                                                     LocalDate from,
+                                                     LocalDate to);
+
+    @Query("select wd " +
+            "from WorkDay wd " +
+            "where wd.departmentId = ?1 and wd.date between ?2 and ?3 " +
+            "order by wd.employeeId asc, wd.date asc")
+    List<WorkDay> findAllByDepartmentIdAndDateBetween(Long departmentId,
+                                                      LocalDate from,
+                                                      LocalDate to);
 }
