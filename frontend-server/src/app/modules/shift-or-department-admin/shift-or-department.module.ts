@@ -12,6 +12,7 @@ import { WorkingNormModule } from "./schedule/components/working-time/working-no
 import { NgxMaskModule } from "ngx-mask";
 import { AvrTopBarModule } from "../../lib/avr-top-bar/avr-top-bar.module";
 import { CellCollector } from "../../services/collectors/cell-collector";
+import { CellUpdater } from "../../services/collectors/cell-updater";
 
 @NgModule({
   imports: [
@@ -31,6 +32,9 @@ import { CellCollector } from "../../services/collectors/cell-collector";
     ScheduleTabBarComponent
   ],
   exports: [],
-  providers: [CellCollector]
+  providers: [
+    CellCollector,
+    CellUpdater
+  ]
 })
 export class ShiftOrDepartmentModule {}

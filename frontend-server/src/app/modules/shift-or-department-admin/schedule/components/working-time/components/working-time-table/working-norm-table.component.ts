@@ -12,7 +12,6 @@ import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
 import { Shift } from "../../../../../../../model/shift";
 import { WorkingNormDialogComponent } from "../working-time-dialog/working-norm-dialog.component";
 import { SelectionData } from "../../../../../../../lib/ngx-schedule-table/model/selection-data";
-import { WorkingNorm } from "../../../../../../../model/working-norm";
 import { TableRenderer } from "../../../../../../../lib/ngx-schedule-table/service/table-renderer.service";
 import { NotificationsService } from "angular2-notifications";
 import { ShiftGenerationUnit } from "../../../../../../../model/ui/shift-generation-unit";
@@ -22,6 +21,7 @@ import { TableSumCalculator } from "../../../../../../../services/calculators/ta
 import { AuthService } from "../../../../../../../services/http/auth.service";
 import { ShiftPatternService } from "../../../../../../../services/http/shift-pattern.service";
 import { ShiftPattern } from "../../../../../../../model/shift-pattern";
+import { CellUpdater } from "../../../../../../../services/collectors/cell-updater";
 
 @Component({
   selector: 'app-working-norm-table',
@@ -45,6 +45,7 @@ export class WorkingNormTableComponent implements OnInit, OnDestroy {
   constructor(private authService: AuthService,
               private cd: ChangeDetectorRef,
               private dialog: MatDialog,
+              private cellUpdater: CellUpdater,
               private rowClearSelection: ClearSelectionService,
               private selectionEndService: SelectionEndService,
               private tableRenderer: TableRenderer,
@@ -106,34 +107,19 @@ export class WorkingNormTableComponent implements OnInit, OnDestroy {
           if (workingNorm.id) {
             this.workingNormService.update(workingNorm)
               .subscribe(res => {
-                this.updateCellData(selectionData.rowData, workingNorm);
+                this.cellUpdater.updateCellData(selectionData.rowData.cellData, workingNorm);
                 this.tableRenderer.renderRow(selectionData.rowData.id);
               })
           } else {
             this.workingNormService.create(workingNorm)
               .subscribe(res => {
                 workingNorm.id = res;
-                this.updateCellData(selectionData.rowData, workingNorm);
+                this.cellUpdater.updateCellData(selectionData.rowData.cellData, workingNorm);
                 this.tableRenderer.renderRow(selectionData.rowData.id);
               });
           }
         }
     });
-  }
-
-  private updateCellData(rowData: RowData, workingNorm: WorkingNorm) {
-    let cellData = rowData.cellData;
-    let newCellData = [];
-    for (let cellIdx = 0; cellIdx < cellData.length; cellIdx++) {
-
-      let cell = Object.assign({}, cellData[cellIdx]);
-      newCellData[cellIdx] = cell;
-
-      if (cell.date.isoString === workingNorm.date) {
-        newCellData[cellIdx].value = workingNorm;
-      }
-    }
-    rowData.cellData = newCellData;
   }
 
   onWorkingNormGenerated(generationUnits: ShiftGenerationUnit[]) {
