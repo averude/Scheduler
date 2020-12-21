@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -63,7 +64,7 @@ public class ScheduleServiceImpl
         var substitutionCompositionsStream = employeeRepository.getAllEmployeesBySubstitutionShiftIdAndDateBetween(shiftId, from, to).stream();
 
         var dtos = Stream.concat(mainCompositionsStream, substitutionCompositionsStream)
-                .sorted((a, b) -> (int) (b.getId() - a.getId()))
+                .sorted(Comparator.comparingLong(Employee::getId))
                 .distinct()
                 .map(employee -> new BasicDto<>(employee, new ArrayList<WorkDay>()))
                 .collect(Collectors.toList());
