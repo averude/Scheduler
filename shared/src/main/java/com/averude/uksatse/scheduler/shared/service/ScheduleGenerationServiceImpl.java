@@ -1,7 +1,6 @@
 package com.averude.uksatse.scheduler.shared.service;
 
 import com.averude.uksatse.scheduler.core.entity.*;
-import com.averude.uksatse.scheduler.core.entity.structure.Shift;
 import com.averude.uksatse.scheduler.core.interfaces.entity.EntityComposition;
 import com.averude.uksatse.scheduler.generator.interval.GenerationIntervalCreator;
 import com.averude.uksatse.scheduler.generator.model.GenerationInterval;
@@ -24,6 +23,7 @@ import java.util.stream.Collectors;
 public class ScheduleGenerationServiceImpl implements ScheduleGenerationService {
 
     private final ShiftRepository                   shiftRepository;
+    private final ShiftPatternRepository            shiftPatternRepository;
     private final ScheduleRepository                scheduleRepository;
     private final SpecialCalendarDateRepository     specialCalendarDateRepository;
     private final ScheduleGenerator                 scheduleGenerator;
@@ -40,9 +40,9 @@ public class ScheduleGenerationServiceImpl implements ScheduleGenerationService 
         log.debug("Starting schedule generation for shift id={} from={} to={} with offset={}", shiftId, from, to, offset);
 
         var shift = shiftRepository.findById(shiftId).orElseThrow();
-        if (shift.getShiftPattern() == null
-                || shift.getShiftPattern().getSequence() == null
-                || shift.getShiftPattern().getSequence().isEmpty()) {
+        var shiftPattern = shiftPatternRepository.getShiftPatternById(shift.getShiftPatternId()).orElseThrow();
+
+        if (shiftPattern.getSequence() == null || shiftPattern.getSequence().isEmpty()) {
             log.error("Shift hasn't pattern to generate the schedule.");
             throw new RuntimeException();
         }
@@ -57,13 +57,13 @@ public class ScheduleGenerationServiceImpl implements ScheduleGenerationService 
         var substitutionCompositions = substitutionShiftCompositionRepository
                 .findAllByShiftIdAndToGreaterThanEqualAndFromLessThanEqual(shiftId, from, to);
 
-        var workDays = generateWorkDays(shift, mainCompositions, otherShiftsSubstitutionCompositions, substitutionCompositions, from, to, offset, specialCalendarDates);
+        var workDays = generateWorkDays(shiftPattern, mainCompositions, otherShiftsSubstitutionCompositions, substitutionCompositions, from, to, offset, specialCalendarDates);
 
         log.debug("Saving generated schedule to database...");
         scheduleRepository.saveAll(workDays);
     }
 
-    private List<WorkDay> generateWorkDays(Shift shift,
+    private List<WorkDay> generateWorkDays(ShiftPattern shiftPattern,
                                            List<? extends EntityComposition<?, Employee>> mainShiftCompositions,
                                            List<? extends EntityComposition<?, Employee>> otherShiftsCompositions,
                                            List<? extends EntityComposition<?, Employee>> substitutionShiftCompositions,
@@ -72,7 +72,6 @@ public class ScheduleGenerationServiceImpl implements ScheduleGenerationService 
                                            int offset,
                                            List<SpecialCalendarDate> specialCalendarDates) {
         var result = new ArrayList<WorkDay>();
-        var shiftPattern = shift.getShiftPattern();
         var unitsSize = shiftPattern.getSequence().size();
 
         for (var mainComposition : mainShiftCompositions) {

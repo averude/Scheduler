@@ -4,6 +4,7 @@ import com.averude.uksatse.scheduler.core.dto.BasicDto;
 import com.averude.uksatse.scheduler.core.entity.WorkingNorm;
 import com.averude.uksatse.scheduler.core.entity.structure.Shift;
 import com.averude.uksatse.scheduler.generator.timenorm.WorkingNormGenerator;
+import com.averude.uksatse.scheduler.shared.repository.ShiftPatternRepository;
 import com.averude.uksatse.scheduler.shared.repository.ShiftRepository;
 import com.averude.uksatse.scheduler.shared.repository.SpecialCalendarDateRepository;
 import com.averude.uksatse.scheduler.shared.repository.WorkingNormRepository;
@@ -23,21 +24,24 @@ import java.util.stream.Collectors;
 public class WorkingNormServiceImpl
         extends AByDepartmentIdAndDateService<WorkingNorm, Long> implements WorkingNormService {
 
-    private final WorkingNormRepository workingNormRepository;
+    private final WorkingNormRepository     workingNormRepository;
     private final ShiftRepository           shiftRepository;
-    private final WorkingNormGenerator workingNormGenerator;
+    private final ShiftPatternRepository    shiftPatternRepository;
+    private final WorkingNormGenerator      workingNormGenerator;
 
     private final SpecialCalendarDateRepository specialCalendarDateRepository;
 
     @Autowired
-    public WorkingNormServiceImpl(WorkingNormRepository workingNormRepository,
+    public WorkingNormServiceImpl(WorkingNormRepository     workingNormRepository,
                                   ShiftRepository           shiftRepository,
-                                  WorkingNormGenerator workingNormGenerator,
+                                  ShiftPatternRepository    shiftPatternRepository,
+                                  WorkingNormGenerator      workingNormGenerator,
                                   SpecialCalendarDateRepository specialCalendarDateRepository) {
         super(workingNormRepository, shiftRepository);
-        this.workingNormRepository = workingNormRepository;
+        this.workingNormRepository  = workingNormRepository;
         this.shiftRepository        = shiftRepository;
-        this.workingNormGenerator = workingNormGenerator;
+        this.workingNormGenerator   = workingNormGenerator;
+        this.shiftPatternRepository = shiftPatternRepository;
         this.specialCalendarDateRepository = specialCalendarDateRepository;
     }
 
@@ -63,11 +67,12 @@ public class WorkingNormServiceImpl
         shiftRepository.findById(shiftId)
                 .filter(shift -> shift.getDepartmentId().equals(departmentId)) // make sure that shift is from required department
                 .ifPresent(shift -> {
+                    var shiftPattern = shiftPatternRepository.getShiftPatternById(shift.getShiftPatternId()).orElseThrow();
                     var specialCalendarDates = specialCalendarDateRepository.findAllByDepartmentIdAndDateBetween(departmentId, from, to);
 
                     log.debug("Generating working norm for shift {} and period between {} and {}", shift, from, to);
                     var workingNormList = workingNormGenerator
-                            .calculateWorkingNormForShift(offset, shift, from, to, specialCalendarDates);
+                            .calculateWorkingNormForShift(offset, shift, shiftPattern, from, to, specialCalendarDates);
 
                     log.debug("Removing old working norm...");
                     workingNormRepository.deleteAllByShiftIdAndDateBetween(shiftId, from, to);

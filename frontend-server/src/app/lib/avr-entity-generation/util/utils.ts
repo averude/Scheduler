@@ -5,7 +5,7 @@ import { ShiftGenerationUnit } from "../../../model/ui/shift-generation-unit";
 
 export function getGenerationUnits(shifts: Shift[]) {
   return shifts
-    .filter(shift => shift.shiftPattern)
+    .filter(shift => shift.shiftPatternId)
     .map(shift => {
       return {
         shift: shift,

@@ -31,31 +31,61 @@ import java.util.StringJoiner;
                 )
         }
 )
-@NamedEntityGraph(
-        name = "graph.ShiftPattern.departmentDayTypes",
-        attributeNodes = {
-                @NamedAttributeNode(
-                        value = "holidayDepDayType",
-                        subgraph = "graph.ShiftPattern.DepartmentDayType.dayType"),
-                @NamedAttributeNode(
-                        value = "extraWeekendDepDayType",
-                        subgraph = "graph.ShiftPattern.DepartmentDayType.dayType"),
-                @NamedAttributeNode(
-                        value = "extraWorkDayDepDayType",
-                        subgraph = "graph.ShiftPattern.DepartmentDayType.dayType"),
-        },
-        subgraphs = {
-                @NamedSubgraph(
-                        name = "graph.ShiftPattern.DepartmentDayType.dayType",
-                        attributeNodes = @NamedAttributeNode(
-                                value = "dayType",
-                                subgraph = "graph.ShiftPattern.DepartmentDayType.DayType.dayTypeGroup")),
-                @NamedSubgraph(
-                        name = "graph.ShiftPattern.DepartmentDayType.DayType.dayTypeGroup",
-                        attributeNodes = @NamedAttributeNode("dayTypeGroup")
-                )
-        }
-)
+@NamedEntityGraphs({
+        @NamedEntityGraph(
+                name = "graph.ShiftPattern.sequence",
+                attributeNodes = {
+                        @NamedAttributeNode(
+                                value = "sequence",
+                                subgraph = "graph.ShiftPattern.HasDayType.dayType"),
+                        @NamedAttributeNode(
+                                value = "holidayDepDayType",
+                                subgraph = "graph.ShiftPattern.HasDayType.dayType"),
+                        @NamedAttributeNode(
+                                value = "extraWeekendDepDayType",
+                                subgraph = "graph.ShiftPattern.HasDayType.dayType"),
+                        @NamedAttributeNode(
+                                value = "extraWorkDayDepDayType",
+                                subgraph = "graph.ShiftPattern.HasDayType.dayType"),
+                },
+                subgraphs = {
+                        @NamedSubgraph(
+                                name = "graph.ShiftPattern.HasDayType.dayType",
+                                attributeNodes = @NamedAttributeNode(
+                                        value = "dayType",
+                                        subgraph = "graph.ShiftPattern.HasDayType.DayType.dayTypeGroup")),
+                        @NamedSubgraph(
+                                name = "graph.ShiftPattern.HasDayType.DayType.dayTypeGroup",
+                                attributeNodes = @NamedAttributeNode("dayTypeGroup")
+                        )
+                }
+        ),
+        @NamedEntityGraph(
+                name = "graph.ShiftPattern.departmentDayTypes",
+                attributeNodes = {
+                        @NamedAttributeNode(
+                                value = "holidayDepDayType",
+                                subgraph = "graph.ShiftPattern.HasDayType.dayType"),
+                        @NamedAttributeNode(
+                                value = "extraWeekendDepDayType",
+                                subgraph = "graph.ShiftPattern.HasDayType.dayType"),
+                        @NamedAttributeNode(
+                                value = "extraWorkDayDepDayType",
+                                subgraph = "graph.ShiftPattern.HasDayType.dayType"),
+                },
+                subgraphs = {
+                        @NamedSubgraph(
+                                name = "graph.ShiftPattern.HasDayType.dayType",
+                                attributeNodes = @NamedAttributeNode(
+                                        value = "dayType",
+                                        subgraph = "graph.ShiftPattern.HasDayType.DayType.dayTypeGroup")),
+                        @NamedSubgraph(
+                                name = "graph.ShiftPattern.HasDayType.DayType.dayTypeGroup",
+                                attributeNodes = @NamedAttributeNode("dayTypeGroup")
+                        )
+                }
+        )
+})
 public class ShiftPattern implements HasId, HasDepartmentId {
 
     @Id
@@ -97,7 +127,7 @@ public class ShiftPattern implements HasId, HasDepartmentId {
     private List<PatternUnit> sequence;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "shiftPattern")
+    @OneToMany(mappedBy = "shiftPatternId")
     private List<Shift> shifts;
 
     @Override

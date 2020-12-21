@@ -64,7 +64,7 @@ public class ShiftGenerator {
     public Shift createShift(long id, ShiftPattern pattern) {
         var shift = new Shift();
         shift.setId(id);
-        shift.setShiftPattern(pattern);
+        shift.setShiftPatternId(pattern.getId());
         shift.setName("Shift_" + id);
         return shift;
     }

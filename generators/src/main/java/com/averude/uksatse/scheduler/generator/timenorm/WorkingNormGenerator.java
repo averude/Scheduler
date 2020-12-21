@@ -32,10 +32,10 @@ public class WorkingNormGenerator {
 
     public List<WorkingNorm> calculateWorkingNormForShift(int offset,
                                                           Shift shift,
+                                                          ShiftPattern shiftPattern,
                                                           LocalDate from,
                                                           LocalDate to,
                                                           List<SpecialCalendarDate> specialCalendarDates) {
-        var shiftPattern    = shift.getShiftPattern();
         var units           = shiftPattern.getSequence();
 
         var dayTypeIndexes = new int[]{0};

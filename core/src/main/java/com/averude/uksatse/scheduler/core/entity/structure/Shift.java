@@ -1,7 +1,6 @@
 package com.averude.uksatse.scheduler.core.entity.structure;
 
 import com.averude.uksatse.scheduler.core.entity.MainShiftComposition;
-import com.averude.uksatse.scheduler.core.entity.ShiftPattern;
 import com.averude.uksatse.scheduler.core.interfaces.entity.HasDepartmentId;
 import com.averude.uksatse.scheduler.core.interfaces.entity.HasId;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -53,9 +52,8 @@ public class Shift implements HasId, HasDepartmentId {
             nullable = false)
     private Long departmentId;
 
-    @JoinColumn(name = "pattern_id")
-    @ManyToOne
-    private ShiftPattern shiftPattern;
+    @Column(name = "pattern_id")
+    private Long shiftPatternId;
 
     @JsonIgnore
     @OneToMany( mappedBy = "shiftId",
@@ -83,7 +81,7 @@ public class Shift implements HasId, HasDepartmentId {
                 .add("id=" + id)
                 .add("name='" + name + "'")
                 .add("departmentId=" + departmentId)
-                .add("shiftPattern=" + shiftPattern)
+                .add("shiftPatternId=" + shiftPatternId)
                 .toString();
     }
 }

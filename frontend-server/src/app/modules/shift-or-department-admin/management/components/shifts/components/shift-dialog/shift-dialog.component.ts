@@ -26,19 +26,19 @@ export class ShiftDialogComponent extends DialogBaseComponent<Shift> {
 
   initTheForm() {
     this.dialogForm = this.fb.group({
-      id:           [],
-      name:         ['',    [Validators.required,
-                      Validators.minLength(3),
-                      Validators.maxLength(64)]],
-      shiftPattern: []
+      id:             [],
+      name:           ['',    [Validators.required,
+                        Validators.minLength(3),
+                        Validators.maxLength(64)]],
+      shiftPatternId: []
     })
   }
 
   fillInTheForm(shift: Shift) {
     this.dialogForm.setValue({
-      id:           shift.id,
-      name:         shift.name,
-      shiftPattern: shift.shiftPattern
+      id:             shift.id,
+      name:           shift.name,
+      shiftPatternId: shift.shiftPatternId
     })
   }
 }

@@ -33,4 +33,8 @@ export class TableStateService {
   get editableGroupsState(): Observable<boolean> {
     return this.editableGroupsSubject.asObservable();
   }
+
+  resetEditableState() {
+    this.editableGroupsSubject.next(false);
+  }
 }

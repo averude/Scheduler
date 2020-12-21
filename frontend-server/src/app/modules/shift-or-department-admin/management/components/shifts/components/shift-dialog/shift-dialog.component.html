@@ -11,13 +11,13 @@
   <mat-form-field>
     <mat-select placeholder="Shift Pattern"
                 [compareWith]="compareIdEntities"
-                formControlName="shiftPattern">
+                formControlName="shiftPatternId">
       <mat-option *ngFor="let pattern of patterns"
-                  [value]="pattern">
+                  [value]="pattern.id">
         {{pattern.name}}
       </mat-option>
     </mat-select>
-    <mat-error *ngIf="isControlInvalid('shiftPattern')">{{getErrorMessage()}}</mat-error>
+    <mat-error *ngIf="isControlInvalid('shiftPatternId')">{{getErrorMessage()}}</mat-error>
   </mat-form-field>
 
 </mat-dialog-content>

@@ -20,6 +20,8 @@ import { getGenerationUnits, toGenerationDto } from "../../../../../../../lib/av
 import { concatMap } from "rxjs/operators";
 import { TableSumCalculator } from "../../../../../../../services/calculators/table-sum-calculator.service";
 import { AuthService } from "../../../../../../../services/http/auth.service";
+import { ShiftPatternService } from "../../../../../../../services/http/shift-pattern.service";
+import { ShiftPattern } from "../../../../../../../model/shift-pattern";
 
 @Component({
   selector: 'app-working-norm-table',
@@ -32,6 +34,7 @@ export class WorkingNormTableComponent implements OnInit, OnDestroy {
 
   rowData:  RowData[] = [];
   private shifts:   Shift[]   = [];
+  private shiftPatterns: ShiftPattern[] = [];
 
   generationUnits: ShiftGenerationUnit[] = [];
 
@@ -50,11 +53,15 @@ export class WorkingNormTableComponent implements OnInit, OnDestroy {
               public paginationStrategy: YearPaginationStrategy,
               private dataCollector: WorkingNormTableDataCollector,
               private paginationService: PaginationService,
+              private shiftPatternService: ShiftPatternService,
               private workingNormService: WorkingNormService,
               private notificationsService: NotificationsService) { }
 
   ngOnInit() {
     this.isAdmin = this.authService.isAdmin();
+
+    this.shiftPatternService.getAll()
+      .subscribe(shiftPatterns => this.shiftPatterns = shiftPatterns);
 
     this.paginatorSub = this.paginationService.onValueChange
       .subscribe(months => this.workingNormService
@@ -62,7 +69,7 @@ export class WorkingNormTableComponent implements OnInit, OnDestroy {
         .subscribe(dtos => {
           this.shifts = dtos.map(dto => dto.parent);
           this.generationUnits = getGenerationUnits(this.shifts);
-          this.rowData = this.dataCollector.getRowData(months, dtos);
+          this.rowData = this.dataCollector.getRowData(months, dtos, this.shiftPatterns);
           this.sumCalculator.calculateHoursNormSum(this.rowData);
           this.cd.markForCheck();
         }));

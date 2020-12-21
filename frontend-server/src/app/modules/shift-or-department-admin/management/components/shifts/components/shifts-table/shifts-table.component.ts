@@ -29,7 +29,7 @@ export class ShiftsTableComponent extends TableBaseComponent<Shift> implements O
     super.ngOnInit();
     this.dataSource.filterPredicate = ((data, filter) => {
       return data.name.toLowerCase().includes(filter) ||
-        data.shiftPattern.name.toLowerCase().includes(filter)
+        this.getPatternName(data.shiftPatternId).toLowerCase().includes(filter)
     });
     this.shiftPatternService.getAll()
       .subscribe(patterns => this.patterns = patterns);

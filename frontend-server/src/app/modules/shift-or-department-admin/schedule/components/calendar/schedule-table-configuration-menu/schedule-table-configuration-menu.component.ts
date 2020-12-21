@@ -24,8 +24,8 @@ export class ScheduleTableConfigurationMenuComponent implements OnInit, OnDestro
   cellsState: number = 0;
 
   editableRowGroups: boolean = false;
-  private cellStateSub:     Subscription;
 
+  private cellStateSub:     Subscription;
   private editableStateSub: Subscription;
 
   constructor(private dialog: MatDialog,
@@ -47,7 +47,10 @@ export class ScheduleTableConfigurationMenuComponent implements OnInit, OnDestro
 
   ngOnDestroy(): void {
     if (this.cellStateSub) this.cellStateSub.unsubscribe();
-    if (this.editableStateSub) this.editableStateSub.unsubscribe();
+    if (this.editableStateSub) {
+      this.tableStateService.resetEditableState();
+      this.editableStateSub.unsubscribe();
+    }
   }
 
   changeCellState() {
