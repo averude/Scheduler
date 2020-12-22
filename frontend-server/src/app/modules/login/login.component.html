@@ -1,7 +1,7 @@
 <div class="full-bg fullscreen">
   <div class="fullscreen"></div>
 </div>
-<div>
+<form>
   <div class="root-panel"
        (keyup.enter)="submit()">
 
@@ -9,7 +9,7 @@
 
     <div *ngIf="bad_credentials"
          class="login-panel-bad-credentials">
-      Логин или пароль не совпадают.<br />Попробуйте еще раз
+      Wrong login or password<br />Try again
     </div>
 
     <div class="inputs-panel"
@@ -17,17 +17,17 @@
       <mat-form-field class="login-panel-input">
         <input matInput
                type="text"
-               placeholder="Логин"
+               placeholder="Login"
                formControlName="username"/>
-        <mat-error *ngIf="isControlInvalid('username')">Логин не может быть пустым</mat-error>
+        <mat-error *ngIf="isControlInvalid('username')">Login cannot be empty</mat-error>
       </mat-form-field>
 
       <mat-form-field class="login-panel-input">
         <input matInput
                type="password"
-               placeholder="Пароль"
+               placeholder="Password"
                formControlName="password"/>
-        <mat-error *ngIf="isControlInvalid('password')">Пароль не может быть пустым</mat-error>
+        <mat-error *ngIf="isControlInvalid('password')">Password cannot be empty</mat-error>
       </mat-form-field>
     </div>
 
@@ -38,9 +38,9 @@
               class="login-panel-button"
               [disabled]="loginForm.invalid"
               type="submit"
-              (click)="submit()">Войти</button>
+              (click)="submit()">Login</button>
       <div *ngIf="loading"
            class="login-panel-button-preloader-image"></div>
     </div>
   </div>
-</div>
+</form>
