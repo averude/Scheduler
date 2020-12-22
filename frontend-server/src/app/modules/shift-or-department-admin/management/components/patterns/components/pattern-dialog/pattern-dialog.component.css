@@ -1,3 +1,7 @@
+::ng-deep mat-tab-body {
+  flex-basis: auto !important;
+}
+
 .patterns-general-panel {
   margin-top: 20px;
 }
