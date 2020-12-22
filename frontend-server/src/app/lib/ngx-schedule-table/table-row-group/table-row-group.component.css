@@ -29,6 +29,7 @@
 
 .group-add-row-button {
   color: black;
+  cursor: pointer;
 }
 
 .group-add-row-button:hover {
