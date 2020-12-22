@@ -12,7 +12,6 @@ import { TableSumCalculator } from "../../calculators/table-sum-calculator.servi
 import { Shift } from "../../../model/shift";
 import { RowGroupData } from "../../../lib/ngx-schedule-table/model/data/row-group-data";
 import { MatDialog } from "@angular/material/dialog";
-import { MainShiftCompositionDialogComponent } from "../../../modules/shift-or-department-admin/schedule/components/calendar/main-shift-composition-dialog/main-shift-composition-dialog.component";
 import { MainShiftComposition, SubstitutionShiftComposition } from "../../../model/main-shift-composition";
 import { BasicDto } from "../../../model/dto/basic-dto";
 import { Employee } from "../../../model/employee";
@@ -25,6 +24,8 @@ import { AuthService } from "../../http/auth.service";
 import { WorkingNorm } from "../../../model/working-norm";
 import { TableTreeDataCollector } from "./table-tree-data-collector";
 import { CellEnabledSetter } from "./cell-enabled-setter";
+import { AddMainShiftCompositionDialogComponent } from "../../../modules/shift-or-department-admin/schedule/components/calendar/scheduler-table-shift-composition-dialog/add-main-shift-composition-dialog/add-main-shift-composition-dialog.component";
+import { EditShiftCompositionDialogComponent } from "../../../modules/shift-or-department-admin/schedule/components/calendar/scheduler-table-shift-composition-dialog/edit-shift-composition-dialog/edit-shift-composition-dialog.component";
 
 @Injectable()
 export class TableDataSource {
@@ -109,7 +110,17 @@ export class TableDataSource {
       calendarDays: this.calendarDays
     };
 
-    this.openDialog(data, rowGroup);
+    this.dialog.open(AddMainShiftCompositionDialogComponent, {data: data})
+      .afterClosed()
+      .subscribe((mainShiftCompositions: MainShiftComposition[]) => {
+        if (!mainShiftCompositions) {
+          return;
+        }
+
+        mainShiftCompositions
+          .forEach(composition =>
+            this.createOrUpdateComposition(composition, rowGroup));
+      })
   }
 
   editRow(row: Row) {
@@ -130,7 +141,7 @@ export class TableDataSource {
   }
 
   private openDialog(data, rowGroup: RowGroup) {
-    this.dialog.open(MainShiftCompositionDialogComponent, {data: data})
+    this.dialog.open(EditShiftCompositionDialogComponent, {data: data})
       .afterClosed()
       .subscribe((dialogData) => {
         if (!dialogData) {
@@ -204,7 +215,7 @@ export class TableDataSource {
       this.sumCalculator.calculateWorkHoursSum([group]);
 
       this.tableRenderer.renderRowGroup(group.id);
-      this.notificationsService.success(id);
+      this.notificationsService.success('Created');
     }
   }
 

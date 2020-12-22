@@ -1,5 +1,4 @@
 import { NgModule } from "@angular/core";
-import { MainShiftCompositionDialogComponent } from "./main-shift-composition-dialog.component";
 import { CommonModule } from "@angular/common";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { SharedModule } from "../../../../../../shared/shared.module";
@@ -12,6 +11,8 @@ import { MatSelectModule } from "@angular/material/select";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MatMomentDateModule } from "@angular/material-moment-adapter";
+import { AddMainShiftCompositionDialogComponent } from './add-main-shift-composition-dialog/add-main-shift-composition-dialog.component';
+import { EditShiftCompositionDialogComponent } from './edit-shift-composition-dialog/edit-shift-composition-dialog.component';
 
 @NgModule({
   imports: [
@@ -30,7 +31,8 @@ import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MatMomentDateModule } from "@angular/m
     ReactiveFormsModule
   ],
   declarations: [
-    MainShiftCompositionDialogComponent
+    AddMainShiftCompositionDialogComponent,
+    EditShiftCompositionDialogComponent
   ],
   providers: [
     {
@@ -39,4 +41,4 @@ import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MatMomentDateModule } from "@angular/m
     }
   ]
 })
-export class MainShiftCompositionDialogModule {}
+export class SchedulerTableShiftCompositionDialogModule {}
