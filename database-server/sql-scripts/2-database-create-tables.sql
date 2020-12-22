@@ -23,8 +23,8 @@ CREATE TABLE IF NOT EXISTS departments (
 CREATE TABLE IF NOT EXISTS positions (
   id            SERIAL,
   department_id INTEGER       NOT NULL,
-  name          VARCHAR (128) NOT NULL,
-  short_name    VARCHAR (20),
+  name          VARCHAR (256) NOT NULL,
+  short_name    VARCHAR (64),
 
   UNIQUE (department_id, name),
 

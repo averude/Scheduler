@@ -38,13 +38,13 @@ public class Position implements HasId, HasDepartmentId {
     private Long id;
 
     @NotNull(message = "{position.name.null}")
-    @Size(  max = 128,
+    @Size(  max = 256,
             min = 3,
             message = "{position.name.size}")
     @Column(nullable = false)
     private String name;
 
-    @Size(  max = 20,
+    @Size(  max = 64,
             min = 1,
             message = "{position.name.size}")
     @Column(name = "short_name")
@@ -64,7 +64,7 @@ public class Position implements HasId, HasDepartmentId {
     private Set<@NotNull @Valid Employee> employees;
 
     public Position(@NotNull(message = "{position.name.null}")
-                    @Size(max = 64,
+                    @Size(max = 256,
                           min = 3,
                           message = "{position.name.size}")
                     String name) {

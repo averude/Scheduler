@@ -24,10 +24,9 @@ export class PositionDialogComponent extends DialogBaseComponent<Position>{
       id:           [],
       name:         ['', [Validators.required,
                           Validators.minLength(3),
-                          Validators.maxLength(64)]],
+                          Validators.maxLength(256)]],
       shortName:    [null,[Validators.minLength(1),
-                           Validators.maxLength(20)]],
-      // departmentId: [this.authService.departmentId, [Validators.required]]
+                           Validators.maxLength(64)]],
     });
   }
 
@@ -36,7 +35,6 @@ export class PositionDialogComponent extends DialogBaseComponent<Position>{
       id:           position.id,
       name:         position.name,
       shortName:    position.shortName,
-      // departmentId: position.departmentId
     })
   }
 }
