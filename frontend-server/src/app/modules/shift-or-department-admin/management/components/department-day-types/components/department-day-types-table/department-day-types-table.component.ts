@@ -29,7 +29,8 @@ export class DepartmentDayTypesTableComponent extends TableBaseComponent<Departm
   ngOnInit() {
     super.ngOnInit();
     this.dayTypeService.getAll()
-      .subscribe(dayTypes => this.dayTypes = dayTypes);
+      .subscribe(dayTypes => this.dayTypes = dayTypes
+        .filter(dayType => !dayType.usePreviousValue));
   }
 
   openDialog(departmentDayType: DepartmentDayType) {
