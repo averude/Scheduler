@@ -87,6 +87,7 @@ CREATE TABLE IF NOT EXISTS department_day_types (
   id                  SERIAL,
   department_id       INTEGER       NOT NULL,
   day_type_id         INTEGER       NOT NULL,
+  name                VARCHAR(128)  NOT NULL,
   start_time          INTEGER       CHECK ( 0 <= start_time and start_time <= 1440 ),
   end_time            INTEGER       CHECK ( 0 <= end_time and end_time <= 1440 ),
   break_start_time    INTEGER       CHECK ( 0 <= break_start_time and break_start_time <= 1440 ),
@@ -95,7 +96,7 @@ CREATE TABLE IF NOT EXISTS department_day_types (
   CHECK ( start_time < end_time AND break_start_time < break_end_time
     AND start_time < break_start_time AND end_time > break_end_time
     AND (end_time - start_time) > (break_end_time - break_start_time) ),
-  UNIQUE (department_id, day_type_id),
+  UNIQUE (department_id, day_type_id, name),
 
   PRIMARY KEY (id),
   FOREIGN KEY (department_id) REFERENCES departments(id)  ON DELETE CASCADE,

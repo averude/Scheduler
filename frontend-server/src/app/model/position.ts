@@ -1,8 +1,8 @@
 import { IdEntity } from "./interface/id-entity";
+import { HasName } from "./interface/has-name";
 
-export class Position implements IdEntity {
+export class Position implements IdEntity, HasName {
   id: number;
-  // departmentId: number;
   name: string;
   shortName: string;
 }

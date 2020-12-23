@@ -17,7 +17,7 @@ export class DepartmentDayTypesTableComponent extends TableBaseComponent<Departm
 
   dayTypes:     DayType[]     = [];
 
-  displayedColumns = ['select', 'name', 'label', 'work_time', 'break_time', 'control'];
+  displayedColumns = ['select', 'name', 'parent_name', 'label', 'work_time', 'break_time', 'control'];
 
   constructor(dialog: MatDialog,
               departmentDayTypeService: DepartmentDayTypeService,

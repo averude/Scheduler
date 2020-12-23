@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { calculateHoursByHasTimeString } from "../../../../../../../../shared/utils/utils";
 import { HasDayTypeAndTime } from "../../../../../../../../model/interface/has-day-type-and-time";
+import { HasName } from "../../../../../../../../model/interface/has-name";
 
 @Component({
   selector: 'app-context-menu-daytype-item',
@@ -9,7 +10,7 @@ import { HasDayTypeAndTime } from "../../../../../../../../model/interface/has-d
 })
 export class ContextMenuDaytypeItemComponent implements OnInit {
 
-  @Input() hasDayTypeAndTime: HasDayTypeAndTime;
+  @Input() hasDayTypeAndTime: HasDayTypeAndTime & HasName;
 
   constructor() { }
 
@@ -30,4 +31,3 @@ export class ContextMenuDaytypeItemComponent implements OnInit {
     }
   }
 }
-

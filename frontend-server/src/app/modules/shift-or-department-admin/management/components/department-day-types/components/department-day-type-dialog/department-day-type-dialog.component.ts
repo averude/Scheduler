@@ -26,7 +26,9 @@ export class DepartmentDayTypeDialogComponent extends DialogBaseComponent<Depart
   initTheForm() {
     this.dialogForm = this.fb.group({
       id:               [],
-      // departmentId:     [this.authService.departmentId],
+      name:             [null,  [ Validators.required,
+                                  Validators.minLength(1),
+                                  Validators.maxLength(128)]],
       dayType:          [null,  [Validators.required]],
       startTime:        [null,  [Validators.pattern(timeValidationPattern)]],
       endTime:          [null,  [Validators.pattern(timeValidationPattern)]],
@@ -38,12 +40,20 @@ export class DepartmentDayTypeDialogComponent extends DialogBaseComponent<Depart
   fillInTheForm(departmentDayType: DepartmentDayType) {
     this.dialogForm.setValue({
       id:               departmentDayType.id,
-      // departmentId:     departmentDayType.departmentId,
+      name:             departmentDayType.name,
       dayType:          departmentDayType.dayType,
       startTime:        departmentDayType.startTime,
       endTime:          departmentDayType.endTime,
       breakStartTime:   departmentDayType.breakStartTime,
       breakEndTime:     departmentDayType.breakEndTime
     });
+  }
+
+  onDayTypeChange(event) {
+    const dayType: DayType = event.value;
+
+    if (dayType && dayType.name && this.dialogForm.get('name').invalid) {
+      this.dialogForm.patchValue({name: dayType.name});
+    }
   }
 }

@@ -18,12 +18,12 @@ export class CustomDaytypeDialogComponent implements OnInit {
   constructor(private fb: FormBuilder,
               private dialogRef: MatDialogRef<CustomDaytypeDialogComponent>,
               @Inject(MAT_DIALOG_DATA) data) {
-    this.departmentDayTypes = data.filter(depDayType => !depDayType.dayType.usePreviousValue);
+    this.departmentDayTypes = data;
   }
 
   ngOnInit() {
     this.customDayTypeForm = this.fb.group({
-      dayTypeId:        [null, Validators.required],
+      dayType:          [null, Validators.required],
       startTime:        [null, [Validators.required,
                                 Validators.pattern(timeValidationPattern)]],
       endTime:          [null, [Validators.required,
@@ -34,10 +34,10 @@ export class CustomDaytypeDialogComponent implements OnInit {
   }
 
   onDayTypeSelect(event) {
-    let departmentDayType: DepartmentDayType = event.value;
+    const departmentDayType: DepartmentDayType = event.value;
 
     this.customDayTypeForm.patchValue({
-      dayTypeId:      departmentDayType.dayType.id,
+      dayType:        departmentDayType.dayType,
       startTime:      departmentDayType.startTime,
       endTime:        departmentDayType.endTime,
       breakStartTime: departmentDayType.breakStartTime,

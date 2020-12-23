@@ -1,6 +1,7 @@
 import { IdEntity } from "./interface/id-entity";
+import { HasName } from "./interface/has-name";
 
-export class SummationColumn implements IdEntity {
+export class SummationColumn implements IdEntity, HasName {
   id:           number;
   name:         string;
   onlyHolidays: boolean;

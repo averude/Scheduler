@@ -5,7 +5,7 @@
                 (selectionChange)="onDayTypeSelect($event)">
       <mat-option *ngFor="let departmentDayType of departmentDayTypes"
                   [value]="departmentDayType">
-        {{departmentDayType.dayType.name}}
+        {{departmentDayType.name}}
       </mat-option>
     </mat-select>
   </mat-form-field>

@@ -30,7 +30,7 @@ import java.util.StringJoiner;
         uniqueConstraints = {
                 @UniqueConstraint(
                         name = "department_day_types_unique_constraint",
-                        columnNames = {"department_id", "day_type_id"}
+                        columnNames = {"department_id", "day_type_id", "name"}
                 )
         }
 )
@@ -61,6 +61,9 @@ public class DepartmentDayType implements HasId, HasDayTypeAndTime, HasDepartmen
     @ManyToOne
     @JoinColumn(name = "day_type_id", nullable = false)
     private DayType dayType;
+
+    @NotNull
+    private String name;
 
     @JsonSerialize(using = IntToStringTimeSerializer.class)
     @JsonDeserialize(using = StringToIntTimeDeserializer.class)
@@ -118,6 +121,7 @@ public class DepartmentDayType implements HasId, HasDayTypeAndTime, HasDepartmen
                 .add("id=" + id)
                 .add("departmentId=" + departmentId)
                 .add("dayType=" + dayType)
+                .add("name=" + name)
                 .add("startTime=" + startTime)
                 .add("breakStartTime=" + breakStartTime)
                 .add("breakEndTime=" + breakEndTime)

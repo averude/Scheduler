@@ -20,7 +20,7 @@
                         [(ngModel)]="dto.parent.holidayDepDayType">
               <mat-option *ngFor="let departmentDayType of departmentDayTypes"
                           [value]="departmentDayType">
-                {{departmentDayType.dayType.name}}
+                {{departmentDayType.name}}
               </mat-option>
             </mat-select>
           </mat-form-field>
@@ -31,7 +31,7 @@
                         [(ngModel)]="dto.parent.extraWeekendDepDayType">
               <mat-option *ngFor="let departmentDayType of departmentDayTypes"
                           [value]="departmentDayType">
-                {{departmentDayType.dayType.name}}
+                {{departmentDayType.name}}
               </mat-option>
             </mat-select>
           </mat-form-field>
@@ -42,7 +42,7 @@
                         [(ngModel)]="dto.parent.extraWorkDayDepDayType">
               <mat-option *ngFor="let departmentDayType of departmentDayTypes"
                           [value]="departmentDayType">
-                {{departmentDayType.dayType.name}}
+                {{departmentDayType.name}}
               </mat-option>
             </mat-select>
           </mat-form-field>

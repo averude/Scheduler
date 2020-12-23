@@ -31,6 +31,8 @@ export class ScheduleTableContextMenuComponent implements OnInit, OnDestroy {
   departmentDayTypes:  DepartmentDayType[] = [];
   serviceDayTypes:     DepartmentDayType[] = [];
 
+  noServiceDepartmentDayTypes: DepartmentDayType[] = [];
+
   private selectionEndSub: Subscription;
 
   constructor(private dialog: MatDialog,
@@ -50,10 +52,12 @@ export class ScheduleTableContextMenuComponent implements OnInit, OnDestroy {
     ).subscribe(values => {
       this.patternDtos = values[0];
       this.departmentDayTypes = values[1];
+      this.noServiceDepartmentDayTypes = values[1]
+        .filter(departmentDayType => !departmentDayType.dayType.usePreviousValue);
 
       this.serviceDayTypes = values[2]
         .filter(dayType => dayType.usePreviousValue)
-        .map(dayType => ({dayType: dayType, dayTypeId: dayType.id} as DepartmentDayType));
+        .map(dayType => ({dayType: dayType} as DepartmentDayType));
       this.cd.markForCheck();
     });
 
@@ -77,7 +81,7 @@ export class ScheduleTableContextMenuComponent implements OnInit, OnDestroy {
 
   openCustomDayDialog(data: SelectionData) {
     const config = new MatDialogConfig();
-    config.data = this.departmentDayTypes;
+    config.data = this.noServiceDepartmentDayTypes;
 
     this.dialog.open(CustomDaytypeDialogComponent, config)
       .afterClosed().subscribe(customDay => {

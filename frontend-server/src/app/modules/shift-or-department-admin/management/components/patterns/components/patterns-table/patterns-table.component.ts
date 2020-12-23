@@ -20,7 +20,7 @@ import { PatternUnit } from "../../../../../../../model/pattern-unit";
 })
 export class PatternsTableComponent extends TableBaseComponent<BasicDto<ShiftPattern, PatternUnit>> {
 
-  displayedColumns = ['select', 'name', 'onExtraWeekend', 'onHoliday', 'onExtraWorkDay', 'pattern', 'control'];
+  displayedColumns = ['select', 'name', 'onExtraWeekend', 'onHoliday', 'onExtraWorkDay', 'control'];
 
   departmentDayTypes: DepartmentDayType[];
 
