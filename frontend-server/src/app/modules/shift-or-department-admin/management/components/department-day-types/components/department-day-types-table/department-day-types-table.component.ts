@@ -15,7 +15,7 @@ import { DayTypeService } from "../../../../../../../services/http/day-type.serv
 })
 export class DepartmentDayTypesTableComponent extends TableBaseComponent<DepartmentDayType> {
 
-  dayTypes:     DayType[]     = [];
+  dayTypes: DayType[] = [];
 
   displayedColumns = ['select', 'name', 'parent_name', 'label', 'work_time', 'break_time', 'control'];
 
