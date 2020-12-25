@@ -55,6 +55,8 @@
 
   <mat-dialog-actions align="end">
     <button class="dialog-action-button" mat-dialog-close>Cancel</button>
-    <button class="dialog-action-button" (click)="submit()">Save</button>
+    <button class="dialog-action-button"
+            [disabled]="!shiftPatternDTO.parent.name"
+            (click)="submit()">Save</button>
   </mat-dialog-actions>
 </div>

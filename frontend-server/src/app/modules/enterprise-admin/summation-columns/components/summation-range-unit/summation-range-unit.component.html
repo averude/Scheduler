@@ -2,7 +2,7 @@
 
   <div class="color-container"></div>
 
-  <mat-form-field class="start-time">
+  <mat-form-field class="start-time time-field">
     <input matInput
            mask="00:00"
            [dropSpecialCharacters]="false"
@@ -10,7 +10,7 @@
            [(ngModel)]="child.from">
   </mat-form-field>
 
-  <mat-form-field class="end-time">
+  <mat-form-field class="end-time time-field">
     <input matInput
            mask="00:00"
            [dropSpecialCharacters]="false"

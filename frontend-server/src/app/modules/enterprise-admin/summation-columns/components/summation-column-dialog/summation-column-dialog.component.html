@@ -1,7 +1,6 @@
 <div>
 
-  <mat-tab-group mat-align-tabs="center"
-                 [dynamicHeight]="false">
+  <mat-tab-group mat-stretch-tabs>
 
     <mat-tab label="General">
 
@@ -19,9 +18,11 @@
             <mat-label>Summation type</mat-label>
             <mat-select [(ngModel)]="dto.parent.columnType"
                         required>
-              <mat-option *ngFor="let type of columnTypes"
-                          [value]="type">
-                {{type}}
+              <mat-option [value]="columnTypes[0]">
+                Count type
+              </mat-option>
+              <mat-option [value]="columnTypes[1]">
+                Hours type
               </mat-option>
             </mat-select>
           </mat-form-field>
@@ -30,9 +31,14 @@
             <mat-select [(ngModel)]="dto.parent.specialCalendarDateTypes"
                         placeholder="Special Date Types"
                         multiple>
-              <mat-option *ngFor="let type of dateTypes"
-                          [value]="type">
-                {{type}}
+              <mat-option [value]="dateTypes[0]">
+                Holiday type
+              </mat-option>
+              <mat-option [value]="dateTypes[0]">
+                Extra weekend type
+              </mat-option>
+              <mat-option [value]="dateTypes[0]">
+                Extra work day type
               </mat-option>
             </mat-select>
           </mat-form-field>
@@ -44,19 +50,21 @@
     <mat-tab label="Units">
 
       <ng-template matTabContent>
-        <div cdkDropList
-             class="pattern-units-panel"
+        <div class="container"
+             cdkDropList
              (cdkDropListDropped)="drop($event)">
-          <app-summation-range-unit class="pattern-unit"
+
+          <app-summation-range-unit class="unit-item"
                             *ngFor="let unit of dto.collection"
                                     [dayTypes]="dayTypes"
                                     [child]="unit"
                             (onDelete)="delete($event)"
                             cdkDrag>
-            <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
+            <div class="unit-placeholder" *cdkDragPlaceholder></div>
           </app-summation-range-unit>
-          <div class="add-button"
-               (click)="addChild()">+</div>
+
+          <div class="add-unit-button"
+               (click)="addChild()">ADD</div>
         </div>
       </ng-template>
 
@@ -64,10 +72,9 @@
 
   </mat-tab-group>
 
-  <mat-dialog-actions>
-    <button class="mat-raised-button"
-            (click)="close()">Close</button>
-    <button class="mat-raised-button mat-primary"
+  <mat-dialog-actions align="end">
+    <button class="dialog-action-button" mat-dialog-close>Close</button>
+    <button class="dialog-action-button"
             [disabled]="!dto.parent.name || !dto.parent.columnType"
             type="submit"
             (click)="submit()">Save</button>
