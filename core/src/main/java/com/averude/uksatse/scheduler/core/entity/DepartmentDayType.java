@@ -86,16 +86,8 @@ public class DepartmentDayType implements HasId, HasDayTypeAndTime, HasDepartmen
     private Integer endTime;
 
     @JsonIgnore
-    @OneToMany( mappedBy = "holidayDepDayType")
-    private List<ShiftPattern> patternsWithHolidays;
-
-    @JsonIgnore
-    @OneToMany( mappedBy = "extraWeekendDepDayType")
-    private List<ShiftPattern> patternsWithExtraWeekends;
-
-    @JsonIgnore
-    @OneToMany( mappedBy = "extraWorkDayDepDayType")
-    private List<ShiftPattern> patternsWithExtraWorkDays;
+    @OneToMany(mappedBy = "useDepartmentDayType")
+    List<ShiftPatternGenerationRule> shiftPatternGenerationRules;
 
     @Override
     public boolean equals(Object o) {

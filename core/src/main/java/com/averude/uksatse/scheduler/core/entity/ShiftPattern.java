@@ -38,42 +38,15 @@ import java.util.StringJoiner;
                         @NamedAttributeNode(
                                 value = "sequence",
                                 subgraph = "graph.ShiftPattern.HasDayType.dayType"),
-                        @NamedAttributeNode(
-                                value = "holidayDepDayType",
-                                subgraph = "graph.ShiftPattern.HasDayType.dayType"),
-                        @NamedAttributeNode(
-                                value = "extraWeekendDepDayType",
-                                subgraph = "graph.ShiftPattern.HasDayType.dayType"),
-                        @NamedAttributeNode(
-                                value = "extraWorkDayDepDayType",
-                                subgraph = "graph.ShiftPattern.HasDayType.dayType"),
                 },
                 subgraphs = {
                         @NamedSubgraph(
-                                name = "graph.ShiftPattern.HasDayType.dayType",
+                                name = "graph.ShiftPattern.Rules.departmentDayType",
                                 attributeNodes = @NamedAttributeNode(
-                                        value = "dayType",
-                                        subgraph = "graph.ShiftPattern.HasDayType.DayType.dayTypeGroup")),
-                        @NamedSubgraph(
-                                name = "graph.ShiftPattern.HasDayType.DayType.dayTypeGroup",
-                                attributeNodes = @NamedAttributeNode("dayTypeGroup")
-                        )
-                }
-        ),
-        @NamedEntityGraph(
-                name = "graph.ShiftPattern.departmentDayTypes",
-                attributeNodes = {
-                        @NamedAttributeNode(
-                                value = "holidayDepDayType",
-                                subgraph = "graph.ShiftPattern.HasDayType.dayType"),
-                        @NamedAttributeNode(
-                                value = "extraWeekendDepDayType",
-                                subgraph = "graph.ShiftPattern.HasDayType.dayType"),
-                        @NamedAttributeNode(
-                                value = "extraWorkDayDepDayType",
-                                subgraph = "graph.ShiftPattern.HasDayType.dayType"),
-                },
-                subgraphs = {
+                                        value = "useDepartmentDayType",
+                                        subgraph = "graph.ShiftPattern.HasDayType.dayType"
+                                )
+                        ),
                         @NamedSubgraph(
                                 name = "graph.ShiftPattern.HasDayType.dayType",
                                 attributeNodes = @NamedAttributeNode(
@@ -107,24 +80,19 @@ public class ShiftPattern implements HasId, HasDepartmentId {
     @Column(nullable = false)
     private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "holiday_dep_day_type_id")
-    private DepartmentDayType holidayDepDayType;
-
-    @ManyToOne
-    @JoinColumn(name = "extra_weekend_dep_day_type_id")
-    private DepartmentDayType extraWeekendDepDayType;
-
-    @ManyToOne
-    @JoinColumn(name = "extra_work_day_dep_day_type_id")
-    private DepartmentDayType extraWorkDayDepDayType;
-
     @JsonIgnore
     @OneToMany( mappedBy = "patternId",
                 fetch = FetchType.LAZY,
                 cascade = CascadeType.ALL)
     @OrderBy("orderId ASC")
     private List<PatternUnit> sequence;
+
+    @JsonIgnore
+    @OneToMany( mappedBy = "shiftPatternId",
+                fetch = FetchType.LAZY,
+                cascade = CascadeType.ALL)
+    @OrderBy("orderId ASC")
+    private List<ShiftPatternGenerationRule> shiftPatternGenerationRules;
 
     @JsonIgnore
     @OneToMany(mappedBy = "shiftPatternId")
@@ -136,15 +104,12 @@ public class ShiftPattern implements HasId, HasDepartmentId {
         if (o == null || getClass() != o.getClass()) return false;
         ShiftPattern that = (ShiftPattern) o;
         return departmentId.equals(that.departmentId) &&
-                name.equals(that.name) &&
-                Objects.equals(holidayDepDayType, that.holidayDepDayType) &&
-                Objects.equals(extraWeekendDepDayType, that.extraWeekendDepDayType) &&
-                Objects.equals(extraWorkDayDepDayType, that.extraWorkDayDepDayType);
+                name.equals(that.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(departmentId, name, holidayDepDayType, extraWeekendDepDayType, extraWorkDayDepDayType);
+        return Objects.hash(departmentId, name);
     }
 
     @Override
@@ -153,9 +118,6 @@ public class ShiftPattern implements HasId, HasDepartmentId {
                 .add("id=" + id)
                 .add("departmentId=" + departmentId)
                 .add("name='" + name + "'")
-                .add("holidayDepDayType=" + holidayDepDayType)
-                .add("extraWeekendDepDayType=" + extraWeekendDepDayType)
-                .add("extraWorkDayDepDayType=" + extraWorkDayDepDayType)
                 .toString();
     }
 }

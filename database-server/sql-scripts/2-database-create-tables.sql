@@ -141,6 +141,22 @@ CREATE TABLE IF NOT EXISTS pattern_units (
   FOREIGN KEY (day_type_id)   REFERENCES day_types(id)      ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS shift_pattern_generation_rules (
+  id      SERIAL,
+  order_id                    INTEGER     NOT NULL,
+  shift_pattern_id            INTEGER     NOT NULL,
+  on_day_type_id              INTEGER,
+  use_department_day_type_id  INTEGER     NOT NULL,
+  type                        VARCHAR(64) NOT NULL,
+
+  UNIQUE (shift_pattern_id, on_day_type_id, use_department_day_type_id, type),
+
+  PRIMARY KEY (id),
+  FOREIGN KEY (shift_pattern_id)  REFERENCES shift_patterns(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (on_day_type_id)    REFERENCES day_types(id)      ON DELETE SET NULL ON UPDATE CASCADE,
+  FOREIGN KEY (use_department_day_type_id) REFERENCES department_day_types  ON DELETE CASCADE ON UPDATE CASCADE
+);
+
 CREATE TABLE IF NOT EXISTS shifts (
   id            SERIAL,
   department_id INTEGER       NOT NULL,
