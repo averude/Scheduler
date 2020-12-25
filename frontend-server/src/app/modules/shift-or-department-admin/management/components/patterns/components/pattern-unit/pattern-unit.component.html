@@ -3,36 +3,36 @@
   <div class="color-container"
        [style.background-color]="color"></div>
 
-  <mat-form-field class="start-time">
+  <mat-form-field class="start-time time-field">
     <input matInput
            mask="00:00"
            [dropSpecialCharacters]="false"
            placeholder="start time"
-           [(ngModel)]="unit.startTime">
+           [(ngModel)]="item.startTime">
   </mat-form-field>
 
-  <mat-form-field class="end-time">
+  <mat-form-field class="end-time time-field">
     <input matInput
            mask="00:00"
            [dropSpecialCharacters]="false"
            placeholder="end time"
-           [(ngModel)]="unit.endTime">
+           [(ngModel)]="item.endTime">
   </mat-form-field>
 
-  <mat-form-field class="break-start-time">
+  <mat-form-field class="break-start-time time-field">
     <input matInput
            mask="00:00"
            [dropSpecialCharacters]="false"
            placeholder="break start"
-           [(ngModel)]="unit.breakStartTime">
+           [(ngModel)]="item.breakStartTime">
   </mat-form-field>
 
-  <mat-form-field class="break-end-time">
+  <mat-form-field class="break-end-time time-field">
     <input matInput
            mask="00:00"
            [dropSpecialCharacters]="false"
            placeholder="break end"
-           [(ngModel)]="unit.breakEndTime">
+           [(ngModel)]="item.breakEndTime">
   </mat-form-field>
 
   <mat-form-field class="day-type-container">

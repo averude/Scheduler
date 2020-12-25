@@ -1,18 +1,27 @@
 .form-box {
   display: grid;
-  grid-template-columns: 25px 80px 80px 225px 20px;
-  grid-template-rows: 50px 50px;
-  grid-column-gap: 10px;
+  grid-template-columns: 2em 5em 5em 15em 2.5em;
+  grid-template-rows: 4em 4em;
+  justify-content: space-between;
   grid-template-areas:
-    "color-block start-time break-start-time day-type control-button"
-    "color-block end-time break-end-time day-type control-button";
-  margin-right: 10px;
+    "color-block start-time       end-time        day-type control-button"
+    "color-block break-start-time break-end-time  day-type control-button";
+  min-width: 32em;
+  width: 100%;
+  background-color: #eeedfb3d;
+  border: 0.01em solid #e9e9f391;
+  border-radius: 10px;
 }
 
 .color-container {
-  width: 25px;
+  width: 2em;
   background-color: transparent;
   grid-area: color-block;
+  border-radius: 10px 0 0 10px;
+}
+
+.time-field {
+  padding-top: 0.5em;
 }
 
 .start-time {
@@ -38,13 +47,13 @@
 }
 
 .control-button-box {
-  padding-right: 10px;
+  padding-right: 1em;
   align-self: center;
   grid-area: control-button;
 }
 
 .control-button {
-  font-size: 16px;
+  font-size: 1em;
   display: block;
   background-color: transparent;
   border-style: none;

@@ -15,7 +15,10 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+
+import static com.averude.uksatse.scheduler.core.util.SpecialCalendarDateUtil.getSpecialDateMap;
 
 @Slf4j
 @Service
@@ -49,6 +52,7 @@ public class ScheduleGenerationServiceImpl implements ScheduleGenerationService 
 
         var specialCalendarDates = specialCalendarDateRepository
                 .findAllByDepartmentIdAndDateBetween(shift.getDepartmentId(), from, to);
+        var specialCalendarDatesMap = getSpecialDateMap(specialCalendarDates);
 
         var mainCompositions = mainShiftCompositionRepository
                 .findAllByShiftIdAndToGreaterThanEqualAndFromLessThanEqual(shiftId, from, to);
@@ -57,7 +61,7 @@ public class ScheduleGenerationServiceImpl implements ScheduleGenerationService 
         var substitutionCompositions = substitutionShiftCompositionRepository
                 .findAllByShiftIdAndToGreaterThanEqualAndFromLessThanEqual(shiftId, from, to);
 
-        var workDays = generateWorkDays(shiftPattern, mainCompositions, otherShiftsSubstitutionCompositions, substitutionCompositions, from, to, offset, specialCalendarDates);
+        var workDays = generateWorkDays(shiftPattern, mainCompositions, otherShiftsSubstitutionCompositions, substitutionCompositions, from, to, offset, specialCalendarDatesMap);
 
         log.debug("Saving generated schedule to database...");
         scheduleRepository.saveAll(workDays);
@@ -70,7 +74,7 @@ public class ScheduleGenerationServiceImpl implements ScheduleGenerationService 
                                            LocalDate from,
                                            LocalDate to,
                                            int offset,
-                                           List<SpecialCalendarDate> specialCalendarDates) {
+                                           Map<String, List<SpecialCalendarDate>> specialCalendarDatesMap) {
         var result = new ArrayList<WorkDay>();
         var unitsSize = shiftPattern.getSequence().size();
 
@@ -80,13 +84,13 @@ public class ScheduleGenerationServiceImpl implements ScheduleGenerationService 
                     .filter(value -> value.getSideB().getId().equals(employee.getId()))
                     .collect(Collectors.toList());
             var intervals = intervalCreator.getIntervalsForMainShift(from, to, employeeOtherShiftsCompositions, employee, unitsSize, offset);
-            var days = generateWorkDaysForIntervals(shiftPattern, specialCalendarDates, intervals);
+            var days = generateWorkDaysForIntervals(shiftPattern, intervals, specialCalendarDatesMap);
             result.addAll(days);
         }
 
         for (var substitutionComposition : substitutionShiftCompositions) {
             var interval = intervalCreator.getIntervalForSubstitutionShift(from, to, substitutionComposition, unitsSize, offset);
-            var days = generateWorkDaysForIntervals(shiftPattern, specialCalendarDates, Collections.singletonList(interval));
+            var days = generateWorkDaysForIntervals(shiftPattern, Collections.singletonList(interval), specialCalendarDatesMap);
             result.addAll(days);
         }
 
@@ -94,28 +98,13 @@ public class ScheduleGenerationServiceImpl implements ScheduleGenerationService 
     }
 
     private List<WorkDay> generateWorkDaysForIntervals(ShiftPattern shiftPattern,
-                                                       List<SpecialCalendarDate> specialCalendarDates,
-                                                       List<GenerationInterval<Employee>> intervals) {
+                                                       List<GenerationInterval<Employee>> intervals,
+                                                       Map<String, List<SpecialCalendarDate>> specialCalendarDatesMap) {
         var result = new ArrayList<WorkDay>();
 
-        int lastSpecialDateIndex = 0;
         for(var interval : intervals) {
 
-            // Filtering values for interval
-            var intervalSpecialCalendarDates = new ArrayList<SpecialCalendarDate>();
-            for (int i = lastSpecialDateIndex; i < specialCalendarDates.size(); i++) {
-                var specialCalendarDate = specialCalendarDates.get(i);
-                var date = specialCalendarDate.getDate();
-                if (!(date.isBefore(interval.getFrom()) && date.isAfter(interval.getTo()))) {
-                    intervalSpecialCalendarDates.add(specialCalendarDate);
-                    lastSpecialDateIndex = i;
-                }
-                if (date.isAfter(interval.getTo())) {
-                    break;
-                }
-            }
-
-            var workDays = generateWorkDaysForInterval(interval, shiftPattern, intervalSpecialCalendarDates);
+            var workDays = generateWorkDaysForInterval(interval, shiftPattern, specialCalendarDatesMap);
             log.trace("Generated for interval {} schedule {} ", interval, workDays);
             result.addAll(workDays);
         }
@@ -124,10 +113,10 @@ public class ScheduleGenerationServiceImpl implements ScheduleGenerationService 
 
     private List<WorkDay> generateWorkDaysForInterval(GenerationInterval<Employee> interval,
                                                       ShiftPattern pattern,
-                                                      List<SpecialCalendarDate> specialCalendarDates) {
+                                                      Map<String, List<SpecialCalendarDate>> specialCalendarDatesMap) {
         var intervalSchedule = scheduleRepository
                 .findAllByDepartmentIdAndEmployeeIdAndDateBetweenOrderByDateAsc(interval.getObject().getDepartmentId(), interval.getObject().getId(), interval.getFrom(), interval.getTo());
-        return scheduleGenerator.generate(interval, pattern, intervalSchedule, specialCalendarDates);
+        return scheduleGenerator.generate(interval, pattern, intervalSchedule, specialCalendarDatesMap);
     }
 
     private List<Long> getEmployeeIds(List<MainShiftComposition> mainCompositions) {

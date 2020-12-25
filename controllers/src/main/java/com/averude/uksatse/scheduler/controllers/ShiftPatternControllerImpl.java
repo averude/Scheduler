@@ -3,6 +3,7 @@ package com.averude.uksatse.scheduler.controllers;
 import com.averude.uksatse.scheduler.controllers.base.AByAuthDtoController;
 import com.averude.uksatse.scheduler.controllers.interfaces.ShiftPatternController;
 import com.averude.uksatse.scheduler.core.dto.BasicDto;
+import com.averude.uksatse.scheduler.core.dto.ShiftPatternDTO;
 import com.averude.uksatse.scheduler.core.entity.PatternUnit;
 import com.averude.uksatse.scheduler.core.entity.ShiftPattern;
 import com.averude.uksatse.scheduler.security.modifier.dto.DepartmentIdDtoModifier;
@@ -25,6 +26,7 @@ public class ShiftPatternControllerImpl
 
     private ShiftPatternService     shiftPatternService;
     private IByAuthMethodResolver   methodResolver;
+    private DepartmentIdDtoModifier<ShiftPattern, PatternUnit> dtoModifier;
 
     @Autowired
     ShiftPatternControllerImpl(ShiftPatternService shiftPatternService,
@@ -33,11 +35,12 @@ public class ShiftPatternControllerImpl
                                DepartmentIdDtoModifier<ShiftPattern, PatternUnit> dtoModifier) {
         super(shiftPatternService, dtoMethodResolver, dtoModifier, LoggerFactory.getLogger(ShiftPatternController.class));
         this.shiftPatternService = shiftPatternService;
+        this.dtoModifier = dtoModifier;
         this.methodResolver = methodResolver;
     }
 
     @Override
-    public List<BasicDto<ShiftPattern, PatternUnit>> getAllDtoByAuth(Authentication authentication) {
+    public List<? extends BasicDto<ShiftPattern, PatternUnit>> getAllDtoByAuth(Authentication authentication) {
         return super.getAllDtoByAuth(authentication);
     }
 
@@ -47,13 +50,17 @@ public class ShiftPatternControllerImpl
     }
 
     @Override
-    public BasicDto<ShiftPattern, PatternUnit> postDto(BasicDto<ShiftPattern, PatternUnit> dto, Authentication authentication) {
-        return super.postDto(dto, authentication);
+    public ShiftPatternDTO postDTO(ShiftPatternDTO shiftPatternDTO, Authentication authentication) {
+        if (dtoModifier != null) dtoModifier.modify(shiftPatternDTO, authentication);
+        logger.debug("User:{} - Posting DTO:{}.", authentication.getPrincipal(), shiftPatternDTO);
+        return shiftPatternService.saveDTO(shiftPatternDTO);
     }
 
     @Override
-    public BasicDto<ShiftPattern, PatternUnit> putDto(BasicDto<ShiftPattern, PatternUnit> dto, Authentication authentication) {
-        return super.putDto(dto, authentication);
+    public ShiftPatternDTO putDTO(ShiftPatternDTO shiftPatternDTO, Authentication authentication) {
+        if (dtoModifier != null) dtoModifier.modify(shiftPatternDTO, authentication);
+        logger.debug("User:{} - Posting DTO:{}.", authentication.getPrincipal(), shiftPatternDTO);
+        return shiftPatternService.saveDTO(shiftPatternDTO);
     }
 
     @Override

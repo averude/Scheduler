@@ -4,112 +4,70 @@ import com.averude.uksatse.scheduler.core.entity.Employee;
 import com.averude.uksatse.scheduler.core.entity.ShiftPattern;
 import com.averude.uksatse.scheduler.core.entity.SpecialCalendarDate;
 import com.averude.uksatse.scheduler.core.entity.WorkDay;
-import com.averude.uksatse.scheduler.core.interfaces.entity.HasDate;
-import com.averude.uksatse.scheduler.core.interfaces.entity.HasDayTypeAndTime;
 import com.averude.uksatse.scheduler.generator.model.GenerationInterval;
+import com.averude.uksatse.scheduler.generator.schedule.processor.PatternRuleProcessor;
+import com.averude.uksatse.scheduler.generator.schedule.scenario.ExistingScheduleListGenerationScenario;
+import com.averude.uksatse.scheduler.generator.schedule.scenario.GenerationScenario;
+import com.averude.uksatse.scheduler.generator.schedule.scenario.NoScheduleListGenerationScenario;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import static com.averude.uksatse.scheduler.core.entity.SpecialCalendarDateType.*;
+import java.util.Map;
 
 @Slf4j
 @Component
 public class ScheduleGeneratorImpl implements ScheduleGenerator {
 
+    private final Map<String, PatternRuleProcessor> patternRuleProcessorMap;
+    private final GenerationScenario noScheduleListGenerationScenario;
+    private final GenerationScenario hasExistingScheduleGenerationScenario;
+
+     @Autowired
+    public ScheduleGeneratorImpl(@Qualifier("patternRuleProcessorMap")
+                                 Map<String, PatternRuleProcessor> patternRuleProcessorMap) {
+        this.patternRuleProcessorMap = patternRuleProcessorMap;
+        this.noScheduleListGenerationScenario = new NoScheduleListGenerationScenario();
+        this.hasExistingScheduleGenerationScenario = new ExistingScheduleListGenerationScenario();
+    }
+
     @Override
     public List<WorkDay> generate(GenerationInterval<Employee> interval,
                                   ShiftPattern pattern,
                                   List<WorkDay> existingSchedule,
-                                  List<SpecialCalendarDate> specialCalendarDates) {
-        var schedule = new ArrayList<>(existingSchedule);
+                                  Map<String, List<SpecialCalendarDate>> specialCalendarDatesMap) {
+        WorkDay[] workDays = null;
 
-        var dates = interval.datesBetween().collect(Collectors.toList());
+        if (existingSchedule.isEmpty()) {
+            workDays = noScheduleListGenerationScenario.generate(interval, pattern.getSequence(), existingSchedule);
+        } else {
+            workDays = hasExistingScheduleGenerationScenario.generate(interval, pattern.getSequence(), existingSchedule);
+        }
 
-        int datesSize = dates.size();
-        int unitsSize = pattern.getSequence().size();
-        var offset    = interval.getOffset();
+        if (workDays == null) {
+            log.warn("Empty workdays array");
+            return Collections.emptyList();
+        }
 
-        // The first element is the special date index,
-        // the second one is the schedule index
-        int[] indices = {0, 0};
-
-        for (int i = 0; i < datesSize; i+=unitsSize) {
-            for (int j = 0; j < unitsSize; j++) {
-                int dateIndex = i + j;
-                if (dateIndex >= datesSize) {
-                    break;
+        if (patternRuleProcessorMap != null) {
+            var generationRules = pattern.getShiftPatternGenerationRules();
+            for (var rule : generationRules) {
+                var patternRuleProcessor = patternRuleProcessorMap.get(rule.getType());
+                if (patternRuleProcessor != null) {
+                    patternRuleProcessor.process(workDays, rule, specialCalendarDatesMap);
+                } else {
+                    log.warn("Unknown PatternRuleProcessor type requested");
                 }
-
-                var unitIndex = ((int) offset + j) % unitsSize;
-
-                var date = dates.get(dateIndex);
-
-                var unit = getValue(specialCalendarDates, date, indices, 0)
-                        .map(specialDate -> getDepartmentDayType(pattern, specialDate))
-                        .orElse(pattern.getSequence().get(unitIndex));
-
-                getValue(schedule, date, indices, 1)
-                        .ifPresentOrElse(
-                                (workDay) -> updateWorkDay(workDay, unit),
-                                () -> schedule.add(createWorkDay(interval.getObject(), unit, date)));
             }
+        } else {
+            log.warn("No PatternRuleProcessor map provided");
         }
-        return schedule;
-    }
 
-    private void updateWorkDay(WorkDay workDay,
-                               HasDayTypeAndTime unit) {
-        workDay.setScheduledDayTypeId(unit.getDayType().getId());
-        workDay.setStartTime(unit.getStartTime());
-        workDay.setEndTime(unit.getEndTime());
-        workDay.setBreakStartTime(unit.getBreakStartTime());
-        workDay.setBreakEndTime(unit.getBreakEndTime());
-    }
-
-    private WorkDay createWorkDay(Employee employee,
-                                  HasDayTypeAndTime unit,
-                                  LocalDate date) {
-        var workDay = new WorkDay();
-        workDay.setDepartmentId(employee.getDepartmentId());
-        workDay.setEmployeeId(employee.getId());
-        workDay.setDate(date);
-        updateWorkDay(workDay, unit);
-        log.trace("Creating workday {}", workDay);
-        return workDay;
-    }
-
-    private <T extends HasDate> Optional<T> getValue(List<T> values,
-                                                     LocalDate date,
-                                                     int[] indices,
-                                                     int indexNumber) {
-        return getValueFromList(values, indices[indexNumber])
-                .filter(value -> date.equals(value.getDate()))
-                .map(value -> {
-                    indices[indexNumber]++;
-                    return value;
-                });
-    }
-
-    private HasDayTypeAndTime getDepartmentDayType(ShiftPattern pattern,
-                                                   SpecialCalendarDate specialDate) {
-        switch (specialDate.getDateType()) {
-            case HOLIDAY            : return pattern.getHolidayDepDayType();
-            case EXTRA_WEEKEND      : return pattern.getExtraWeekendDepDayType();
-            case EXTRA_WORK_DAY     : return pattern.getExtraWorkDayDepDayType();
-            default                 : throw new RuntimeException();
-        }
-    }
-
-    private <T> Optional<T> getValueFromList(List<T> list, int index) {
-        if (index < list.size()) {
-            return Optional.ofNullable(list.get(index));
-        }
-        return Optional.empty();
+        return Arrays.asList(workDays);
     }
 }
+

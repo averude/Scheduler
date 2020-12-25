@@ -1,0 +1,60 @@
+<div class="shift-pattern-dialog-container">
+  <input matInput
+         class="pattern-name"
+         placeholder="Pattern name"
+         [(ngModel)]="shiftPatternDTO.parent.name">
+
+  <mat-tab-group mat-stretch-tabs>
+
+    <mat-tab label="Units">
+
+      <div class="container"
+           cdkDropList
+           (cdkDropListDropped)="drop($event, shiftPatternDTO.collection)">
+
+        <app-pattern-unit *ngFor="let unit of shiftPatternDTO.collection"
+                          class="unit-item"
+                          [item]="unit"
+                          [departmentDayTypes]="departmentDayTypes"
+                          (onDelete)="delete($event, shiftPatternDTO.collection)"
+                          cdkDrag>
+          <div class="unit-placeholder" *cdkDragPlaceholder></div>
+        </app-pattern-unit>
+
+        <div class="add-unit-button"
+             (click)="addPatternUnit()">ADD</div>
+
+      </div>
+
+    </mat-tab>
+
+    <mat-tab label="Rules">
+
+      <div class="container"
+           cdkDropList
+           (cdkDropListDropped)="drop($event, shiftPatternDTO.generationRules)">
+
+        <app-pattern-rule *ngFor="let rule of shiftPatternDTO.generationRules"
+                          class="unit-item"
+                          [item]="rule"
+                          [dayTypes]="dayTypes"
+                          [departmentDayTypes]="departmentDayTypes"
+                          (onDelete)="delete($event, shiftPatternDTO.generationRules)"
+                          cdkDrag>
+          <div class="unit-placeholder" *cdkDragPlaceholder></div>
+        </app-pattern-rule>
+
+        <div class="add-unit-button"
+             (click)="addPatternRule()">ADD</div>
+
+      </div>
+
+    </mat-tab>
+
+  </mat-tab-group>
+
+  <mat-dialog-actions align="end">
+    <button class="dialog-action-button" mat-dialog-close>Cancel</button>
+    <button class="dialog-action-button" (click)="submit()">Save</button>
+  </mat-dialog-actions>
+</div>

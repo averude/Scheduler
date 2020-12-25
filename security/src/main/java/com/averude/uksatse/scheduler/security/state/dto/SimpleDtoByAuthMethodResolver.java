@@ -25,10 +25,10 @@ public class SimpleDtoByAuthMethodResolver implements IByAuthDtoMethodResolver {
     }
 
     @Override
-    public <P extends Serializable, C extends Serializable, ID> List<BasicDto<P, C>> findAll(Authentication authentication,
-                                                                                             IService<P, ID> service,
-                                                                                             LocalDate from,
-                                                                                             LocalDate to) {
+    public <P extends Serializable, C extends Serializable, ID> List<? extends BasicDto<P, C>> findAll(Authentication authentication,
+                                                                                                       IService<P, ID> service,
+                                                                                                       LocalDate from,
+                                                                                                       LocalDate to) {
         var userAccount = authentication.getPrincipal();
 
         var serviceInvocationHandler = dtoServiceInvocationHandlerMap.get(userAccount.getClass());

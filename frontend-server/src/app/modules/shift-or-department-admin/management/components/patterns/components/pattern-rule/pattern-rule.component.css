@@ -1,0 +1,53 @@
+.form-box {
+  display: grid;
+  grid-template-columns: 1.5em 15em 10em 2.5em;
+  grid-template-rows: 4em 4em;
+  justify-content: space-between;
+  grid-template-areas:
+    "color-block on-day-type             type control-button"
+    "color-block use-department-day-type type control-button";
+  min-width: 32em;
+  width: 100%;
+  background-color: #eeedfb3d;
+  border: 0.01em solid #e9e9f391;
+  border-radius: 10px;
+}
+
+.color-container {
+  width: 1.5em;
+  background-color: darkcyan;
+  grid-area: color-block;
+  border-radius: 10px 0 0 10px;
+}
+
+.on-day-type {
+  grid-area: on-day-type;
+}
+
+.use-department-day-type {
+  grid-area: use-department-day-type;
+}
+
+.type {
+  grid-area: type;
+  align-self: center;
+}
+
+.control-button-box {
+  padding-right: 1em;
+  align-self: center;
+  grid-area: control-button;
+}
+
+.control-button {
+  font-size: 1em;
+  display: block;
+  background-color: transparent;
+  border-style: none;
+  cursor: pointer;
+}
+
+.control-button:hover {
+  color: red;
+}
+

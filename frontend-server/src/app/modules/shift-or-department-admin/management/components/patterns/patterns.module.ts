@@ -12,9 +12,10 @@ import { MatSortModule } from "@angular/material/sort";
 import { MatTableModule } from "@angular/material/table";
 import { MatTabsModule } from "@angular/material/tabs";
 import { PatternsTableComponent } from './components/patterns-table/patterns-table.component';
-import { PatternDialogComponent } from './components/pattern-dialog/pattern-dialog.component';
 import { DragDropModule } from "@angular/cdk/drag-drop";
 import { NgxMaskModule } from "ngx-mask";
+import { PatternRuleComponent } from './components/pattern-rule/pattern-rule.component';
+import { ShiftPatternDialogComponent } from './components/shift-pattern-dialog/shift-pattern-dialog.component';
 
 @NgModule({
   imports: [
@@ -36,7 +37,8 @@ import { NgxMaskModule } from "ngx-mask";
   declarations: [
     PatternUnitComponent,
     PatternsTableComponent,
-    PatternDialogComponent
+    PatternRuleComponent,
+    ShiftPatternDialogComponent
   ],
   providers: []
 })

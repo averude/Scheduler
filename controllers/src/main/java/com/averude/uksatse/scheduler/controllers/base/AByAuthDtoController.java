@@ -30,14 +30,14 @@ public abstract class AByAuthDtoController<E extends HasId, C extends Serializab
         this.dtoModifier = dtoModifier;
     }
 
-    public List<BasicDto<E, C>> getAllDtoByAuth(@NonNull Authentication authentication) {
+    public List<? extends BasicDto<E, C>> getAllDtoByAuth(@NonNull Authentication authentication) {
         logger.debug("User:{} - Getting all DTOs.", authentication.getPrincipal());
         return dtoMethodResolver.findAll(authentication, service,  null, null);
     }
 
-    public List<BasicDto<E, C>> getAllDtoByAuthAndDate(@NonNull Authentication authentication,
-                                                       @NonNull LocalDate from,
-                                                       @NonNull LocalDate to) {
+    public List<? extends BasicDto<E, C>> getAllDtoByAuthAndDate(@NonNull Authentication authentication,
+                                                                 @NonNull LocalDate from,
+                                                                 @NonNull LocalDate to) {
         logger.debug("User:{} - Getting all DTOs from:{} to:{}.", authentication.getPrincipal(), from, to);
         return dtoMethodResolver.findAll(authentication, service, from, to);
     }

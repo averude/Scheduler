@@ -17,11 +17,11 @@ import java.util.stream.Collectors;
 public class BasicDtoSavingUtil {
     private static final Logger logger = LoggerFactory.getLogger(BasicDtoSavingUtil.class);
 
-    public <T extends Serializable, C extends Serializable, ID> BasicDto<T, C> saveDto(BasicDto<T, C> dto,
-                                                                                JpaRepository<T, ID> parentRepository,
-                                                                                JpaRepository<C, ID> childRepository,
-                                                                                BiConsumer<T, List<C>> onChildRemove,
-                                                                                BiConsumer<T, List<C>> onSetChildParentRelation) {
+    public <T extends Serializable, C extends Serializable, ID, DTO extends BasicDto<T, C>> DTO saveDto(DTO dto,
+                                                                                       JpaRepository<T, ID> parentRepository,
+                                                                                       JpaRepository<C, ID> childRepository,
+                                                                                       BiConsumer<T, List<C>> onChildRemove,
+                                                                                       BiConsumer<T, List<C>> onSetChildParentRelation) {
         logger.debug("Saving parent entity {} to the DB...", dto);
         T parentEntity = dto.getParent();
         List<C> childCollection = dto.getCollection();

@@ -16,10 +16,10 @@ import java.util.List;
 @Component
 public class ShiftAdminDtoServiceInvocationHandler implements DtoServiceInvocationHandler {
     @Override
-    public <P extends Serializable, C extends Serializable, ID> List<BasicDto<P, C>> invoke(Object userAccount,
-                                                                                            IService<P, ID> service,
-                                                                                            LocalDate from,
-                                                                                            LocalDate to) {
+    public <P extends Serializable, C extends Serializable, ID> List<? extends BasicDto<P, C>> invoke(Object userAccount,
+                                                                                                      IService<P, ID> service,
+                                                                                                      LocalDate from,
+                                                                                                      LocalDate to) {
         var shiftAdmin = (ShiftAdminUserAccount) userAccount;
         var shiftId = shiftAdmin.getShiftId();
 

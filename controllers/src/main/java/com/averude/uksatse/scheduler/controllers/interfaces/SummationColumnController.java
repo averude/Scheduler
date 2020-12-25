@@ -21,7 +21,7 @@ public interface SummationColumnController
 
     @IsAnyUser
     @RequestMapping(method = RequestMethod.GET, value = "/dto")
-    List<BasicDto<SummationColumn, SummationColumnDayTypeRange>> getAllDtoByAuth(Authentication authentication);
+    List<? extends BasicDto<SummationColumn, SummationColumnDayTypeRange>> getAllDtoByAuth(Authentication authentication);
 
     @IsEnterpriseAdmin
     @RequestMapping(method = RequestMethod.POST, value = "/dto")

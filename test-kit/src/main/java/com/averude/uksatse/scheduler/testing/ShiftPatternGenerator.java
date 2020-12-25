@@ -31,9 +31,6 @@ public class ShiftPatternGenerator {
         var secondUnit = new PatternUnit(weekendDayType);
 
         var pattern = new ShiftPattern();
-        pattern.setHolidayDepDayType(weekendDayType);
-        pattern.setExtraWeekendDepDayType(weekendDayType);
-        pattern.setExtraWorkDayDepDayType(workDayType);
         pattern.setSequence(Arrays.asList(firstUnit, secondUnit));
         return pattern;
     }

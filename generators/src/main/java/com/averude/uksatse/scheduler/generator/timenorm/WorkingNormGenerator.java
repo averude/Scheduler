@@ -15,8 +15,6 @@ import java.time.Period;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.averude.uksatse.scheduler.core.entity.SpecialCalendarDateType.*;
-
 @Component
 public class WorkingNormGenerator {
 
@@ -65,26 +63,9 @@ public class WorkingNormGenerator {
             return 0L;
         }
 
-        var specialCalendarDate = specialCalendarDates.get(index[0]);
-        if (specialCalendarDate != null && compareMonthAndYear(specialCalendarDate.getDate(), month)) {
-            index[0]++;
-            return getDayTypeLengthBySpecialDate(shiftPattern, specialCalendarDate);
-        }
+        // Will implement later
 
         return 0L;
-    }
-
-    private long getDayTypeLengthBySpecialDate(ShiftPattern shiftPattern,
-                                               SpecialCalendarDate specialCalendarDate) {
-        switch (specialCalendarDate.getDateType()) {
-            case HOLIDAY :        return timeCalculator
-                    .getLength(shiftPattern.getHolidayDepDayType(), null);
-            case EXTRA_WEEKEND :  return timeCalculator
-                    .getLength(shiftPattern.getExtraWeekendDepDayType(), null);
-            case EXTRA_WORK_DAY : return timeCalculator
-                    .getLength(shiftPattern.getExtraWorkDayDepDayType(), null);
-            default : throw new RuntimeException();
-        }
     }
 
     private boolean compareMonthAndYear(LocalDate date1,

@@ -67,7 +67,8 @@ export abstract class TableBaseComponent<T extends IdEntity> implements OnInit, 
 
   openAddOrEditDialog(t: T,
                       data: any,
-                      component: ComponentType<any> | TemplateRef<any>) {
+                      component: ComponentType<any> | TemplateRef<any>,
+                      decideFunction?: (value) => boolean) {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = false;
     dialogConfig.autoFocus = true;
@@ -75,15 +76,16 @@ export abstract class TableBaseComponent<T extends IdEntity> implements OnInit, 
 
     let dialogRef = this.matDialog.open(component, dialogConfig);
     dialogRef.afterClosed()
-      .subscribe(this.addOrEditDialogAfterCloseFunction(t));
+      .subscribe(this.addOrEditDialogAfterCloseFunction(t, decideFunction));
   }
 
-  addOrEditDialogAfterCloseFunction(oldValue: T): (value: any) => void {
+  addOrEditDialogAfterCloseFunction(oldValue: T,
+                                    decideFunction?: (value) => boolean): (value: any) => void {
     return value => {
       if (!value) {
         return;
       }
-      if (value.id) {
+      if (value.id || decideFunction(value)) {
         this.crudService.update(value)
           .subscribe(this.onUpdated(value, oldValue));
       } else {

@@ -7,10 +7,11 @@ import com.averude.uksatse.scheduler.core.entity.WorkDay;
 import com.averude.uksatse.scheduler.generator.model.GenerationInterval;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ScheduleGenerator {
     List<WorkDay> generate(GenerationInterval<Employee> interval,
                            ShiftPattern pattern,
                            List<WorkDay> existingSchedule,
-                           List<SpecialCalendarDate> specialCalendarDates);
+                           Map<String, List<SpecialCalendarDate>> specialCalendarDatesMap);
 }

@@ -2,13 +2,13 @@ import { Component } from '@angular/core';
 import { TableBaseComponent } from "../../../../../../../shared/abstract-components/table-base/table-base.component";
 import { MatDialog } from "@angular/material/dialog";
 import { NotificationsService } from "angular2-notifications";
-import { PatternDialogComponent } from "../pattern-dialog/pattern-dialog.component";
 import { DepartmentDayType } from "../../../../../../../model/department-day-type";
 import { DepartmentDayTypeService } from "../../../../../../../services/http/department-day-type.service";
 import { ShiftPatternDtoService } from "../../../../../../../services/http/shift-pattern-dto.service";
-import { BasicDto } from "../../../../../../../model/dto/basic-dto";
-import { ShiftPattern } from "../../../../../../../model/shift-pattern";
-import { PatternUnit } from "../../../../../../../model/pattern-unit";
+import { ShiftPatternDTO } from "../../../../../../../model/dto/shift-pattern-dto";
+import { ShiftPatternDialogComponent } from "../shift-pattern-dialog/shift-pattern-dialog.component";
+import { DayTypeService } from "../../../../../../../services/http/day-type.service";
+import { DayType } from "../../../../../../../model/day-type";
 
 @Component({
   selector: 'app-patterns-table',
@@ -18,14 +18,16 @@ import { PatternUnit } from "../../../../../../../model/pattern-unit";
     './patterns-table.component.css'
   ]
 })
-export class PatternsTableComponent extends TableBaseComponent<BasicDto<ShiftPattern, PatternUnit>> {
+export class PatternsTableComponent extends TableBaseComponent<ShiftPatternDTO> {
 
-  displayedColumns = ['select', 'name', 'onExtraWeekend', 'onHoliday', 'onExtraWorkDay', 'control'];
+  displayedColumns = ['select', 'name', 'control'];
 
+  dayTypes: DayType[];
   departmentDayTypes: DepartmentDayType[];
 
   constructor(private dialog: MatDialog,
               private notificationsService: NotificationsService,
+              private dayTypeService: DayTypeService,
               private departmentDayTypeService: DepartmentDayTypeService,
               private shiftPatternDtoService: ShiftPatternDtoService) {
     super(dialog, shiftPatternDtoService, notificationsService);
@@ -33,20 +35,25 @@ export class PatternsTableComponent extends TableBaseComponent<BasicDto<ShiftPat
 
   ngOnInit() {
     super.ngOnInit();
+
+    this.dayTypeService.getAll()
+      .subscribe(dayTypes => this.dayTypes = dayTypes);
+
     this.departmentDayTypeService.getAll()
       .subscribe(departmentDayTypes => this.departmentDayTypes = departmentDayTypes);
   }
 
-  openDialog(dto: BasicDto<ShiftPattern, PatternUnit>) {
+  openDialog(dto: ShiftPatternDTO) {
     const data = {
       dto:  dto,
+      dayTypes: this.dayTypes,
       departmentDayTypes: this.departmentDayTypes.filter(depDayType => !depDayType.dayType.usePreviousValue)
     };
 
-    this.openAddOrEditDialog(dto, data, PatternDialogComponent);
+    this.openAddOrEditDialog(dto, data, ShiftPatternDialogComponent, (value => !!value.parent.id));
   }
 
-  onCreated(value: BasicDto<ShiftPattern, PatternUnit>): (response: BasicDto<ShiftPattern, PatternUnit>) => void {
+  onCreated(value: ShiftPatternDTO): (response: ShiftPatternDTO) => void {
     return res => {
       this.addRow(res);
       this.notificationsService
@@ -56,8 +63,8 @@ export class PatternsTableComponent extends TableBaseComponent<BasicDto<ShiftPat
     }
   }
 
-  onUpdated(value: BasicDto<ShiftPattern, PatternUnit>,
-            oldValue: BasicDto<ShiftPattern, PatternUnit>): (response: BasicDto<ShiftPattern, PatternUnit>) => void {
+  onUpdated(value: ShiftPatternDTO,
+            oldValue: ShiftPatternDTO): (response: ShiftPatternDTO) => void {
     return res => {
       this.updateRow(res, oldValue);
       this.notificationsService

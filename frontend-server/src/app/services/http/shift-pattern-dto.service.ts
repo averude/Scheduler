@@ -4,16 +4,14 @@ import { HttpClient } from "@angular/common/http";
 import { RestConfig } from "../../rest.config";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { BasicDto } from "../../model/dto/basic-dto";
 import { ACrudService } from "./abstract-service/a-crud-service";
-import { ShiftPattern } from "../../model/shift-pattern";
-import { PatternUnit } from "../../model/pattern-unit";
+import { ShiftPatternDTO } from "../../model/dto/shift-pattern-dto";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ShiftPatternDtoService
-  extends ACrudService<BasicDto<ShiftPattern, PatternUnit>> implements CUDService<BasicDto<ShiftPattern, PatternUnit>> {
+  extends ACrudService<ShiftPatternDTO> implements CUDService<ShiftPatternDTO> {
 
   constructor(authService: AuthService,
               http: HttpClient,
@@ -21,12 +19,12 @@ export class ShiftPatternDtoService
     super(`${config.baseUrl}/admin/patterns/dto`, http);
   }
 
-  create(dto: BasicDto<ShiftPattern, PatternUnit>): Observable<BasicDto<ShiftPattern, PatternUnit>> {
-    return this.http.post<BasicDto<ShiftPattern, PatternUnit>>(`${this.url}`, dto);
+  create(dto: ShiftPatternDTO): Observable<ShiftPatternDTO> {
+    return this.http.post<ShiftPatternDTO>(`${this.url}`, dto);
   }
 
-  update(dto: BasicDto<ShiftPattern, PatternUnit>): Observable<BasicDto<ShiftPattern, PatternUnit>> {
-    return this.http.put<BasicDto<ShiftPattern, PatternUnit>>(`${this.url}`, dto);
+  update(dto: ShiftPatternDTO): Observable<ShiftPatternDTO> {
+    return this.http.put<ShiftPatternDTO>(`${this.url}`, dto);
   }
 
   delete(id: number): Observable<any> {

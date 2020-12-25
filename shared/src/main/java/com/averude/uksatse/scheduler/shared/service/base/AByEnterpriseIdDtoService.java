@@ -44,13 +44,13 @@ public abstract class AByEnterpriseIdDtoService<P extends Serializable, C extend
 
     @Override
     @Transactional
-    public List<BasicDto<P, C>> findAllDtoByDepartmentId(Long departmentId) {
+    public List<? extends BasicDto<P, C>> findAllDtoByDepartmentId(Long departmentId) {
         return basicDtoSavingUtil.convertToDto(findAllByDepartmentId(departmentId), this::getChildren);
     }
 
     @Override
     @Transactional
-    public List<BasicDto<P, C>> findAllDtoByShiftId(Long shiftId) {
+    public List<? extends BasicDto<P, C>> findAllDtoByShiftId(Long shiftId) {
         return basicDtoSavingUtil.convertToDto(findAllByShiftId(shiftId), this::getChildren);
     }
 

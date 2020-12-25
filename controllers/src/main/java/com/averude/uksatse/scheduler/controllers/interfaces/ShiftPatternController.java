@@ -1,6 +1,7 @@
 package com.averude.uksatse.scheduler.controllers.interfaces;
 
 import com.averude.uksatse.scheduler.core.dto.BasicDto;
+import com.averude.uksatse.scheduler.core.dto.ShiftPatternDTO;
 import com.averude.uksatse.scheduler.core.entity.PatternUnit;
 import com.averude.uksatse.scheduler.core.entity.ShiftPattern;
 import com.averude.uksatse.scheduler.security.annotations.IsDepartmentAdmin;
@@ -20,17 +21,17 @@ public interface ShiftPatternController extends ICrudController<ShiftPattern> {
 
     @IsDepartmentOrShiftUser
     @RequestMapping(method = RequestMethod.GET, value = "/dto")
-    List<BasicDto<ShiftPattern, PatternUnit>> getAllDtoByAuth(Authentication authentication);
+    List<? extends BasicDto<ShiftPattern, PatternUnit>> getAllDtoByAuth(Authentication authentication);
 
     @IsDepartmentAdmin
     @RequestMapping(method = RequestMethod.POST,
                     value = "/dto")
-    BasicDto<ShiftPattern, PatternUnit> postDto(@RequestBody BasicDto<ShiftPattern, PatternUnit> dto, Authentication authentication);
+    ShiftPatternDTO postDTO(@RequestBody ShiftPatternDTO shiftPatternDTO, Authentication authentication);
 
     @IsDepartmentAdmin
     @RequestMapping(method = RequestMethod.PUT,
                     value = "/dto")
-    BasicDto<ShiftPattern, PatternUnit> putDto(@RequestBody BasicDto<ShiftPattern, PatternUnit> dto, Authentication authentication);
+    ShiftPatternDTO putDTO(@RequestBody ShiftPatternDTO shiftPatternDTO, Authentication authentication);
 
     @IsDepartmentAdmin
     @RequestMapping(method = RequestMethod.GET)

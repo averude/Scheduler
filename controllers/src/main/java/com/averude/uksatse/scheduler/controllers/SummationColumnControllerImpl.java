@@ -30,7 +30,7 @@ public class SummationColumnControllerImpl
     }
 
     @Override
-    public List<BasicDto<SummationColumn, SummationColumnDayTypeRange>> getAllDtoByAuth(@NonNull Authentication authentication) {
+    public List<? extends BasicDto<SummationColumn, SummationColumnDayTypeRange>> getAllDtoByAuth(@NonNull Authentication authentication) {
         return super.getAllDtoByAuth(authentication);
     }
 

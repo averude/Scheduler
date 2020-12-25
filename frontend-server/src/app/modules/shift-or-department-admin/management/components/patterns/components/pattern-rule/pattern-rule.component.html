@@ -1,0 +1,43 @@
+<div class="form-box">
+  <div class="color-container"></div>
+
+  <mat-form-field class="on-day-type">
+    <mat-select placeholder="On day type"
+                [(ngModel)]="item.onDayTypeId">
+      <mat-option [value]="undefined">
+        Any
+      </mat-option>
+      <mat-option *ngFor="let dayType of dayTypes"
+                  [value]="dayType.id">
+        {{dayType.name}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field class="use-department-day-type">
+    <mat-select placeholder="Use instead"
+                [compareWith]="compareIdEntity"
+                [(ngModel)]="item.useDepartmentDayType">
+      <mat-option *ngFor="let departmentDayType of departmentDayTypes"
+                  [value]="departmentDayType">
+        {{departmentDayType.name}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field class="type">
+    <mat-select [(ngModel)]="item.type"
+                placeholder="Rule type">
+      <mat-option *ngFor="let type of types"
+                  [value]="type">
+        {{type}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <div class="control-button-box">
+    <button class="control-button"
+            (click)="delete()">X</button>
+  </div>
+</div>
+

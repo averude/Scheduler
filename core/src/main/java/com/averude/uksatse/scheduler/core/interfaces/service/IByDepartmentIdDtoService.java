@@ -6,5 +6,5 @@ import java.io.Serializable;
 import java.util.List;
 
 public interface IByDepartmentIdDtoService<T extends Serializable, C extends Serializable, ID> {
-    List<BasicDto<T, C>> findAllDtoByDepartmentId(Long departmentId);
+    List<? extends BasicDto<T, C>> findAllDtoByDepartmentId(Long departmentId);
 }

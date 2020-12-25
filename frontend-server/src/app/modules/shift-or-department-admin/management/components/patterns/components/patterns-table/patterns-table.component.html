@@ -32,28 +32,6 @@
       <td mat-cell *matCellDef="let dto">{{dto.parent.name}}</td>
     </ng-container>
 
-    <ng-container matColumnDef="onHoliday">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Day type on holiday</th>
-      <td mat-cell *matCellDef="let dto">{{dto.parent?.holidayDepDayType?.dayType.name}}</td>
-    </ng-container>
-
-    <ng-container matColumnDef="onExtraWeekend">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Day type on extra weekend</th>
-      <td mat-cell *matCellDef="let dto">{{dto.parent.extraWeekendDepDayType?.dayType.name}}</td>
-    </ng-container>
-
-    <ng-container matColumnDef="onExtraWorkDay">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Day type on extra work day</th>
-      <td mat-cell *matCellDef="let dto">{{dto.parent.extraWorkDayDepDayType?.dayType.name}}</td>
-    </ng-container>
-
-    <ng-container matColumnDef="pattern">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Pattern</th>
-      <td mat-cell *matCellDef="let dto">
-        {{dto.collection | patternUnitStringImpure}}
-      </td>
-    </ng-container>
-
     <ng-container matColumnDef="control">
       <th mat-header-cell *matHeaderCellDef>
         <button *ngIf="selection.isEmpty()"

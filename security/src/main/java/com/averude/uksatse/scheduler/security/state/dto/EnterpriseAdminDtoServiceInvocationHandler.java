@@ -15,10 +15,10 @@ import java.util.List;
 @Component
 public class EnterpriseAdminDtoServiceInvocationHandler implements DtoServiceInvocationHandler {
     @Override
-    public <P extends Serializable, C extends Serializable, ID> List<BasicDto<P, C>> invoke(Object userAccount,
-                                                                                            IService<P, ID> service,
-                                                                                            LocalDate from,
-                                                                                            LocalDate to) {
+    public <P extends Serializable, C extends Serializable, ID> List<? extends BasicDto<P, C>> invoke(Object userAccount,
+                                                                                                      IService<P, ID> service,
+                                                                                                      LocalDate from,
+                                                                                                      LocalDate to) {
         var enterpriseAdmin = (EnterpriseAdminUserAccount) userAccount;
         var enterpriseId = enterpriseAdmin.getEnterpriseId();
 

@@ -9,8 +9,8 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface IByAuthDtoMethodResolver {
-    <P extends Serializable, C extends Serializable, ID> List<BasicDto<P,C>> findAll(Authentication authentication,
-                                                                                     IService<P, ID> service,
-                                                                                     LocalDate from,
-                                                                                     LocalDate to);
+    <P extends Serializable, C extends Serializable, ID> List<? extends BasicDto<P, C>> findAll(Authentication authentication,
+                                                                                                IService<P, ID> service,
+                                                                                                LocalDate from,
+                                                                                                LocalDate to);
 }
