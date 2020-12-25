@@ -9,6 +9,7 @@ spring:
   jackson:
     date-format: "yyyy-MM-dd"
   jpa:
+    open-in-view: false
     properties:
       javax:
         persistence:
