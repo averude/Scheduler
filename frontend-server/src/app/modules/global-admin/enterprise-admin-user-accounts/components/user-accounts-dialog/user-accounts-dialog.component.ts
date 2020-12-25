@@ -28,6 +28,7 @@ export class UserAccountsDialogComponent extends DialogBaseComponent<UserAccount
       username:     ['', [Validators.required,
                           Validators.minLength(3),
                           Validators.maxLength(128)]],
+      name:         ['', Validators.maxLength(128)],
       password:     ['', [Validators.required,
                           Validators.minLength(3),
                           Validators.maxLength(128)]],
@@ -41,6 +42,7 @@ export class UserAccountsDialogComponent extends DialogBaseComponent<UserAccount
   fillInTheForm(userAccount: EnterpriseAdminUserAccount) {
     this.dialogForm.setValue({
       username:     userAccount.username,
+      name:         userAccount.name,
       password:     null,
       enterpriseId: userAccount.enterpriseId,
       locked:       userAccount.locked,

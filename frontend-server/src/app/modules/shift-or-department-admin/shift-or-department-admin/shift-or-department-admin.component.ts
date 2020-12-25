@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Department } from '../../../model/department';
 import { DepartmentService } from '../../../services/http/department.service';
 import { AuthService } from "../../../services/http/auth.service";
 import { UserAccessRights } from "../../../model/user";
+import { UserAccountService } from "../../../services/http/user-account.service";
 
 @Component({
   selector: 'app-shift-or-department-admin',
@@ -11,16 +11,25 @@ import { UserAccessRights } from "../../../model/user";
 })
 export class ShiftOrDepartmentAdminComponent implements OnInit {
 
+  userFullName: string;
   userAccessRights: UserAccessRights;
-  department: Department;
 
   constructor(private authService: AuthService,
+              private userAccountService: UserAccountService,
               private departmentService: DepartmentService) {}
 
   ngOnInit(): void {
     this.userAccessRights = this.authService.currentUserValue.accessRights;
-    this.departmentService.getCurrent()
-      .subscribe(department => this.department = department);
+
+    this.userAccountService.current()
+      .subscribe(userFullName => {
+        if (!userFullName) {
+          this.departmentService.getCurrent()
+            .subscribe(department => this.userFullName = department.name)
+        } else {
+          this.userFullName = userFullName;
+        }
+      });
   }
 
   logout() {

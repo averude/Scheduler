@@ -15,7 +15,7 @@ import { UserAccountsDialogComponent } from "../user-accounts-dialog/user-accoun
 })
 export class UserAccountsTableComponent extends TableBaseComponent<UserAccount> {
 
-  displayedColumns = ['select', 'username', 'shift', 'role', 'locked', 'enabled', 'control'];
+  displayedColumns = ['select', 'username', 'name', 'shift', 'role', 'locked', 'enabled', 'control'];
 
   shifts: Shift[] = [];
 

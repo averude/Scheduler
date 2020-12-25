@@ -25,6 +25,8 @@ public class UserAccount implements Serializable {
     @NotNull
     private String role;
 
+    private String name;
+
     @NotNull
     private boolean locked = false;
     @NotNull

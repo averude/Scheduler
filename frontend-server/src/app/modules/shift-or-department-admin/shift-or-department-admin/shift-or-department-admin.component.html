@@ -7,7 +7,7 @@
     <ng-template authorityDef>
       <div class="department">
         <div id="department-name" >
-          <a>{{department?.name || '-'}}</a>
+          <a>{{userFullName || '-'}}</a>
         </div>
         <div id="department-position" >
           <a *ngIf="userAccessRights.isDepartmentLevel">Department administrator</a>
