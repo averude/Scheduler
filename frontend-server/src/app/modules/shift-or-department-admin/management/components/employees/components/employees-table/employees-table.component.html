@@ -52,7 +52,7 @@
         <button *ngIf="selection.isEmpty()"
                 class="management-table-control-button"
                 (click)="openDialog(null)">
-          <img class="management-table-button-icon" src="assets/img/add_circle.png">
+          <img class="management-table-button-icon" src="assets/img/add.svg">
         </button>
         <button *ngIf="!selection.isEmpty()"
                 (click)="removeDialog()"
@@ -63,7 +63,7 @@
       <td mat-cell *matCellDef="let employee">
         <button class="management-table-control-button"
                 (click)="openDialog(employee)">
-          <img class="management-table-button-icon" src="assets/img/edit.png">
+          <img class="management-table-button-icon" src="assets/img/edit.svg">
         </button>
       </td>
     </ng-container>
