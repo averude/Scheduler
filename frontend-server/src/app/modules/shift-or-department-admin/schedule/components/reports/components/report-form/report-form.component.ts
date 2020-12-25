@@ -28,6 +28,8 @@ export class ReportFormComponent implements OnInit {
 
   normCols: SummationColumn[] = [];
 
+  useReportLabel: boolean;
+
   constructor(private fb: FormBuilder,
               private statisticsColumnCompositor: StatisticsColumnCompositor,
               private reportService: ReportService,
@@ -117,7 +119,7 @@ export class ReportFormComponent implements OnInit {
   generateReport() {
     const reportName = `${this.reportType}-report-${this.date.format("MM-YYYY")}.xlsx`;
     this.reportService
-      .generateReport(this.reportType, this.date, this.decorationDataForm.value, this.selectedSummationColumns)
+      .generateReport(this.reportType, this.date, this.decorationDataForm.value, this.selectedSummationColumns, this.useReportLabel)
       .subscribe(buffer => fileSaver.saveAs(new Blob([buffer]), reportName));
   }
 }

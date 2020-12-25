@@ -64,6 +64,11 @@ public class DayType implements HasId, HasEnterpriseId {
     @Column(nullable = true)
     private String label;
 
+    @Size(  max = 5,
+            message = "{daytype.label.size}")
+    @Column(name = "report_label")
+    private String reportLabel;
+
     @NotNull
     @Column(name = "use_previous_value")
     private Boolean usePreviousValue = false;
@@ -118,7 +123,7 @@ public class DayType implements HasId, HasEnterpriseId {
 
     @Override
     public int hashCode() {
-        return Objects.hash(enterpriseId, dayTypeGroup, name, label, usePreviousValue);
+        return Objects.hash(enterpriseId, dayTypeGroup, name, label, reportLabel, usePreviousValue);
     }
 
     @Override
@@ -129,6 +134,7 @@ public class DayType implements HasId, HasEnterpriseId {
                 .add("dayTypeGroup=" + dayTypeGroup)
                 .add("name='" + name + "'")
                 .add("label='" + label + "'")
+                .add("reportLabel='" + reportLabel + "'")
                 .add("usePreviousValue=" + usePreviousValue)
                 .toString();
     }

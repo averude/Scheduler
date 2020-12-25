@@ -24,14 +24,15 @@ export class TimeSheetReportDataCollector extends AbstractReportDataCollector {
 
   fillCellWithValue(cell: ReportCellData,
                     workDay: WorkDay,
-                    dayTypes: DayType[]): void {
+                    dayTypes: DayType[],
+                    useReportLabel?: boolean): void {
     const val = [];
     if (workDay.actualDayTypeId) {
-      val[0] = getCellValueExt(workDay, dayTypes, (workDay) => workDay.actualDayTypeId);
-      val[1] = getCellValueExt(workDay, dayTypes, (workDay) => workDay.scheduledDayTypeId);
+      val[0] = getCellValueExt(workDay, dayTypes, (workDay) => workDay.actualDayTypeId, useReportLabel);
+      val[1] = getCellValueExt(workDay, dayTypes, (workDay) => workDay.scheduledDayTypeId, useReportLabel);
     } else {
       val[0] = calculateHoursByHasTime(workDay);
-      val[1] = getCellValue(workDay, dayTypes);
+      val[1] = getCellValue(workDay, dayTypes, useReportLabel);
       if (val[0] == 0) val[0] = '';
     }
     cell.value = val;
@@ -42,7 +43,8 @@ export class TimeSheetReportDataCollector extends AbstractReportDataCollector {
                      calendarDays: CalendarDay[],
                      dayTypes: DayType[],
                      summations: SummationResult[],
-                     index: number): ReportCellData[] {
+                     index: number,
+                     useReportLabel?: boolean): ReportCellData[] {
     if (!calendarDays || calendarDays.length <= 0) {
       return;
     }
@@ -67,7 +69,7 @@ export class TimeSheetReportDataCollector extends AbstractReportDataCollector {
       cell.style = this.getStyle(date);
 
       if (workDay && date.isoString === workDay.date) {
-        this.fillCellWithValue(cell, workDay, dayTypes);
+        this.fillCellWithValue(cell, workDay, dayTypes, useReportLabel);
         sched_idx++;
       }
 

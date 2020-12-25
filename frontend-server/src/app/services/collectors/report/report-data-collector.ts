@@ -14,7 +14,8 @@ export interface ReportDataCollector {
           schedule: BasicDto<Employee, WorkDay>[],
           summations: SummationDto[],
           summationColumns: SummationColumn[],
-          compositions: MainShiftComposition[]): ReportData;
+          compositions: MainShiftComposition[],
+          useReportLabel?: boolean): ReportData;
 
   REPORT_TYPE: string;
 }

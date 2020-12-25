@@ -22,7 +22,8 @@ export abstract class AbstractReportDataCollector implements ReportDataCollector
           schedule: BasicDto<Employee, WorkDay>[],
           summations: SummationDto[],
           summationColumns: SummationColumn[],
-          compositions: MainShiftComposition[]): ReportData {
+          compositions: MainShiftComposition[],
+          useReportLabel?: boolean): ReportData {
     if (!compositions) {
       return;
     }
@@ -30,7 +31,7 @@ export abstract class AbstractReportDataCollector implements ReportDataCollector
     sortByCompositions(schedule, compositions);
 
     const reportData = new ReportData();
-    reportData.tableData = this.getReportRowData(schedule, calendarDays, dayTypes, summations);
+    reportData.tableData = this.getReportRowData(schedule, calendarDays, dayTypes, summations, useReportLabel);
     reportData.headerData = this.getHeaders(calendarDays, summationColumns);
     this.afterDataInsert(reportData);
 
@@ -40,11 +41,12 @@ export abstract class AbstractReportDataCollector implements ReportDataCollector
   private getReportRowData(schedule: BasicDto<Employee, WorkDay>[],
                            dates: CalendarDay[],
                            dayTypes: DayType[],
-                           summations: SummationDto[]) {
+                           summations: SummationDto[],
+                           useReportLabel?: boolean) {
     return schedule.map((dto, index) => {
       const reportRowData = new ReportRowData();
       reportRowData.reportCellData = this
-        .collectRowCellData(dto, dates, dayTypes, this.getSummationResults(summations, dto), index);
+        .collectRowCellData(dto, dates, dayTypes, this.getSummationResults(summations, dto), index, useReportLabel);
       return reportRowData;
     });
   }
@@ -64,7 +66,8 @@ export abstract class AbstractReportDataCollector implements ReportDataCollector
                               calendarDays: CalendarDay[],
                               dayTypes: DayType[],
                               summations: SummationResult[],
-                              index: number): ReportCellData[];
+                              index: number,
+                              useReportLabel?: boolean): ReportCellData[];
 
   abstract afterDataInsert(data: ReportData);
 }

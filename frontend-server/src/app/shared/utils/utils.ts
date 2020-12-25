@@ -63,8 +63,8 @@ export function getWorkDayDayTypeId(workDay: WorkDay) {
   return workDay.actualDayTypeId ? workDay.actualDayTypeId : workDay.scheduledDayTypeId;
 }
 
-export function getCellValue(workDay: WorkDay, dayTypes: DayType[]) {
-  return getCellValueExt(workDay, dayTypes, getWorkDayDayTypeId);
+export function getCellValue(workDay: WorkDay, dayTypes: DayType[], useReportLabel?: boolean) {
+  return getCellValueExt(workDay, dayTypes, getWorkDayDayTypeId, useReportLabel);
 }
 
 export function compareHasTime(a: HasTime,
@@ -136,10 +136,16 @@ export const timeValidationPattern: string = '^([01]?\\d|2[0-3]|24(?=:00?$)):([0
 
 export function getCellValueExt(workDay: WorkDay,
                                 dayTypes: DayType[],
-                                fn: (workday: WorkDay) => number) {
+                                fn: (workday: WorkDay) => number,
+                                useReportLabel?: boolean) {
   const dayTypeId = fn(workDay);
   if (dayTypes && dayTypeId) {
     const dayType = binarySearch(dayTypes, dayTypeId);
+
+    if (useReportLabel && dayType && dayType.reportLabel) {
+      return dayType.reportLabel;
+    }
+
     if (dayType && dayType.label) {
       return dayType.label;
     }

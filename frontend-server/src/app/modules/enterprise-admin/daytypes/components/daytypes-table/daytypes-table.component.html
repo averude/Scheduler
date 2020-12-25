@@ -37,6 +37,11 @@
       <td mat-cell *matCellDef="let dayType">{{dayType.label}}</td>
     </ng-container>
 
+    <ng-container matColumnDef="report_label">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Report label</th>
+      <td mat-cell *matCellDef="let dayType">{{dayType.reportLabel}}</td>
+    </ng-container>
+
     <ng-container matColumnDef="group">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Group</th>
       <td mat-cell *matCellDef="let dayType">{{dayType.dayTypeGroup.name}}</td>

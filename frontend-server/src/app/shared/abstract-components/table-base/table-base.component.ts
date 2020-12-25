@@ -85,7 +85,7 @@ export abstract class TableBaseComponent<T extends IdEntity> implements OnInit, 
       if (!value) {
         return;
       }
-      if (value.id || decideFunction(value)) {
+      if (value.id || (decideFunction && decideFunction(value))) {
         this.crudService.update(value)
           .subscribe(this.onUpdated(value, oldValue));
       } else {

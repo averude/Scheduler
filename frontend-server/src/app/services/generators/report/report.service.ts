@@ -5,7 +5,7 @@ import { ScheduleService } from "../../http/schedule.service";
 import { DayTypeService } from "../../http/day-type.service";
 import { StatisticsService } from "../../http/statistics.service";
 import { forkJoin, Observable } from "rxjs";
-import { flatMap, map } from "rxjs/operators";
+import { map, mergeMap } from "rxjs/operators";
 import { Moment } from "moment";
 import { DecorationData } from "./model/decoration-data";
 import { Buffer } from "exceljs";
@@ -33,7 +33,8 @@ export class ReportService {
   generateReport(reportType: string,
                  date: Moment,
                  decorationData: DecorationData,
-                 summationColumns?: SummationColumn[]): Observable<Buffer> {
+                 summationColumns?: SummationColumn[],
+                 useReportLabel?: boolean): Observable<Buffer> {
     if (!this.config) {
       console.error('No report configuration provided');
       return;
@@ -58,11 +59,13 @@ export class ReportService {
       ];
 
       return forkJoin(observables)
-        .pipe(flatMap(values => {
+        .pipe(mergeMap(values => {
           const daysInMonth = this.paginationStrategy.calcDaysInMonth(date, values[0]);
           this.statisticsColumnCompositor.composeResults(values[2], summationColumns, values[5], values[4]);
 
-          const reportData = reportDataCollector.collect(daysInMonth, values[3], values[1], values[2], summationColumns, values[5]);
+          const reportData = reportDataCollector.collect(daysInMonth, values[3], values[1], values[2],
+            summationColumns, values[5], useReportLabel);
+
           reportData.decorationData = decorationData;
 
           return this.reportGenerator

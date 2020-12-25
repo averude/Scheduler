@@ -16,6 +16,13 @@
   </mat-form-field>
 
   <mat-form-field>
+    <input matInput
+           placeholder="Report label"
+           formControlName="reportLabel">
+    <mat-error *ngIf="isControlInvalid('reportLabel')">{{getErrorMessage()}}</mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
     <mat-select placeholder="Group"
                 [compareWith]="compareIdEntities"
                 formControlName="dayTypeGroup">

@@ -48,6 +48,7 @@ CREATE TABLE IF NOT EXISTS day_types (
   group_id            INTEGER       NOT NULL,
   name                VARCHAR (128) NOT NULL,
   label               VARCHAR (5),
+  report_label        VARCHAR (5),
   use_previous_value  BOOLEAN       NOT NULL  DEFAULT FALSE,
   UNIQUE (enterprise_id, name),
 

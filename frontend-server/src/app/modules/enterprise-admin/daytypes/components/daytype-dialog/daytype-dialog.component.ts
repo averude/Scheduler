@@ -29,7 +29,8 @@ export class DayTypeDialogComponent extends DialogBaseComponent<DayType> {
       name:             ['',    [Validators.required,
                                  Validators.minLength(3),
                                  Validators.maxLength(64)]],
-      label:            [null,  [Validators.maxLength(3)]],
+      label:            [null,  [Validators.maxLength(5)]],
+      reportLabel:      [null,  [Validators.maxLength(5)]],
       usePreviousValue: [false]
     });
   }
@@ -40,6 +41,7 @@ export class DayTypeDialogComponent extends DialogBaseComponent<DayType> {
       dayTypeGroup:     dayType.dayTypeGroup,
       name:             dayType.name,
       label:            dayType.label,
+      reportLabel:      dayType.reportLabel,
       usePreviousValue: dayType.usePreviousValue
     });
   }

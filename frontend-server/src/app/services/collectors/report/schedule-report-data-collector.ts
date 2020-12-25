@@ -19,8 +19,9 @@ export class ScheduleReportDataCollector extends AbstractReportDataCollector {
 
   fillCellWithValue(cell: ReportCellData,
                     workDay: WorkDay,
-                    dayTypes: DayType[]): void {
-    cell.value = getCellValue(workDay, dayTypes);
+                    dayTypes: DayType[],
+                    useReportLabel?: boolean): void {
+    cell.value = getCellValue(workDay, dayTypes, useReportLabel);
   }
 
   public getHeaders(calendarDays: CalendarDay[],
@@ -66,7 +67,8 @@ export class ScheduleReportDataCollector extends AbstractReportDataCollector {
                      calendarDays: CalendarDay[],
                      dayTypes: DayType[],
                      summations: SummationResult[],
-                     index: number): ReportCellData[] {
+                     index: number,
+                     useReportLabel?: boolean): ReportCellData[] {
     if (!calendarDays || calendarDays.length <= 0) {
       return;
     }
@@ -95,7 +97,7 @@ export class ScheduleReportDataCollector extends AbstractReportDataCollector {
       cell.style = this.getStyle(date);
 
       if (workDay && date.isoString === workDay.date) {
-        this.fillCellWithValue(cell, workDay, dayTypes);
+        this.fillCellWithValue(cell, workDay, dayTypes, useReportLabel);
         sched_idx++;
       }
 

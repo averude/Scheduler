@@ -7,5 +7,6 @@ export class DayType implements IdEntity, HasName {
   dayTypeGroup:     DayTypeGroup;
   name:             string;
   label:            string;
+  reportLabel:      string;
   usePreviousValue: boolean;
 }

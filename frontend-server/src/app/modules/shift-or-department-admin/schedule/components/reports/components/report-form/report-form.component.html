@@ -3,7 +3,10 @@
   <mat-step [stepControl]="decorationDataForm">
     <ng-template matStepLabel>Date and caption</ng-template>
 
+    <mat-checkbox [(ngModel)]="useReportLabel">Use Report Labels</mat-checkbox>
+
     <div class="first-step-container">
+
       <div class="type-and-date-container">
         <mat-form-field class="report-type">
           <mat-select [(ngModel)]="reportType"

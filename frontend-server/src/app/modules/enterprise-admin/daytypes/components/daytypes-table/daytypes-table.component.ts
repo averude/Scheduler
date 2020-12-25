@@ -16,7 +16,7 @@ import { TableBaseComponent } from "../../../../../shared/abstract-components/ta
 export class DayTypesTableComponent extends TableBaseComponent<DayType> {
   dayTypeGroups: DayTypeGroup[] = [];
 
-  displayedColumns = ['select', 'name', 'label', 'group', 'use_previous_value', 'control'];
+  displayedColumns = ['select', 'name', 'label', 'report_label','group', 'use_previous_value', 'control'];
 
   constructor(dialog: MatDialog,
               dayTypeService: DayTypeService,
