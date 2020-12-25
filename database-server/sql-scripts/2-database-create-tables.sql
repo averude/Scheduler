@@ -282,16 +282,17 @@ CREATE TABLE IF NOT EXISTS user_accounts (
   id              SERIAL,
   username        VARCHAR(64)     NOT NULL,
   password        VARCHAR(64)     NOT NULL,
+  name            VARCHAR(128),
   role            VARCHAR(64)     NOT NULL    DEFAULT 'USER',
   locked          BOOLEAN         NOT NULL    DEFAULT FALSE,
   enabled         BOOLEAN         NOT NULL    DEFAULT TRUE,
 
-  PRIMARY KEY (id)
+  PRIMARY KEY (id),
+  UNIQUE (username)
 );
 
 CREATE TABLE IF NOT EXISTS shift_admin_user_accounts (
   id              SERIAL,
---   username        VARCHAR(64)     NOT NULL,
   shift_id        INTEGER         NOT NULL,
 
   PRIMARY KEY (id),
@@ -301,7 +302,6 @@ CREATE TABLE IF NOT EXISTS shift_admin_user_accounts (
 
 CREATE TABLE IF NOT EXISTS department_admin_user_accounts (
   id              SERIAL,
---   username        VARCHAR(64)     NOT NULL,
   department_id   INTEGER         NOT NULL,
 
   PRIMARY KEY (id),
@@ -311,7 +311,6 @@ CREATE TABLE IF NOT EXISTS department_admin_user_accounts (
 
 CREATE TABLE IF NOT EXISTS enterprise_admin_user_accounts (
   id              SERIAL,
---   username        VARCHAR(64)     NOT NULL,
   enterprise_id   INTEGER         NOT NULL,
 
   PRIMARY KEY (id),
@@ -321,7 +320,6 @@ CREATE TABLE IF NOT EXISTS enterprise_admin_user_accounts (
 
 CREATE TABLE IF NOT EXISTS global_admin_user_accounts (
   id              SERIAL,
---   username        VARCHAR(64)     NOT NULL,
   is_global_admin BOOLEAN         NOT NULL,
 
   PRIMARY KEY (id),
