@@ -21,10 +21,12 @@
 }
 
 .on-day-type {
+  padding-top: 0.5em;
   grid-area: on-day-type;
 }
 
 .use-department-day-type {
+  padding-top: 0.5em;
   grid-area: use-department-day-type;
 }
 
