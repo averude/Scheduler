@@ -22,6 +22,9 @@ public interface UserAccountController {
     @RequestMapping(value = "/current", method = RequestMethod.GET)
     Principal getUser(Principal principal);
 
+    @RequestMapping(value = "/current/full_name", method = RequestMethod.GET)
+    String getUserFullName(Authentication authentication);
+
     @RequestMapping(value = "/users", method = RequestMethod.GET)
     List<UserAccount> getAllByAuth(Authentication authentication) throws Exception;
 

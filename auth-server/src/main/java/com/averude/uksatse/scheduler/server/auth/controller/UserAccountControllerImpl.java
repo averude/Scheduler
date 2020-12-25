@@ -36,6 +36,11 @@ public class UserAccountControllerImpl implements UserAccountController {
     }
 
     @Override
+    public String getUserFullName(Authentication authentication) {
+        return ((UserAccountDetails) authentication.getPrincipal()).getUserAccount().getName();
+    }
+
+    @Override
     public List<UserAccount> getAllByAuth(Authentication authentication) throws Exception {
         var userAccount = ((UserAccountDetails) authentication.getPrincipal()).getUserAccount();
         log.debug("User:{} - Getting list of user accounts.", userAccount);

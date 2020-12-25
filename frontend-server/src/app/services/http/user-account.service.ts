@@ -25,6 +25,13 @@ export class UserAccountService implements IByAuthService<UserAccount>, CUDServi
     );
   }
 
+  current(): Observable<any> {
+    return this.http.get(
+      `${this.config.baseUrl}/uaa/current/full_name`,
+      {responseType: 'text'}
+      );
+  }
+
   create(userAccount: UserAccount): Observable<any> {
     return this.http.post(
       `${this.config.baseUrl}/uaa/users/enterprise_admins`,
