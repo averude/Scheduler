@@ -34,13 +34,13 @@ public interface ScheduleController {
     @IsDepartmentOrShiftUser
     @RequestMapping(method = RequestMethod.GET,
                     value = "/dates")
-    List<BasicDto<Employee, WorkDay>> getAllByAuthAndDate(Authentication authentication,
-                                                              @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-                                                              @RequestParam(value = "from")
-                                                                      LocalDate from,
-                                                              @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-                                                              @RequestParam(value = "to")
-                                                                      LocalDate to);
+    List<? extends BasicDto<Employee, WorkDay>> getAllByAuthAndDate(Authentication authentication,
+                                                  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                                  @RequestParam(value = "from")
+                                                          LocalDate from,
+                                                  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                                  @RequestParam(value = "to")
+                                                          LocalDate to);
 
     @IsDepartmentOrShiftAdmin
     @RequestMapping(method = RequestMethod.POST,

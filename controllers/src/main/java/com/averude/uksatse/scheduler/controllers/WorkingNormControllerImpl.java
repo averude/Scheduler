@@ -37,9 +37,9 @@ public class WorkingNormControllerImpl
     }
 
     @Override
-    public List<BasicDto<Shift, WorkingNorm>> getAllDtoByAuth(Authentication authentication,
-                                                              @NonNull LocalDate from,
-                                                              @NonNull LocalDate to) {
+    public List<? extends BasicDto<Shift, WorkingNorm>> getAllDtoByAuth(Authentication authentication,
+                                                                        @NonNull LocalDate from,
+                                                                        @NonNull LocalDate to) {
         var userAccount = authentication.getPrincipal();
 
         if (userAccount instanceof DepartmentAdminUserAccount) {

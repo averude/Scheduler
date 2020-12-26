@@ -47,9 +47,9 @@ public class WorkingNormServiceImpl
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
-    public List<BasicDto<Shift, WorkingNorm>> findAllDtoByDepartmentIdAndDate(Long departmentId,
-                                                                              LocalDate from,
-                                                                              LocalDate to) {
+    public List<? extends BasicDto<Shift, WorkingNorm>> findAllDtoByDepartmentIdAndDate(Long departmentId,
+                                                                                        LocalDate from,
+                                                                                        LocalDate to) {
         return shiftRepository.findAllByDepartmentId(departmentId)
                 .stream()
                 .map(shift -> new BasicDto<>(shift, workingNormRepository

@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface IByShiftIdAndDateDtoService<E extends Serializable, C extends Serializable, ID> {
     @CheckDateParameters
-    List<BasicDto<E, C>> findAllDtoByShiftIdAndDate(Long shiftId,
-                                                    LocalDate from,
-                                                    LocalDate to);
+    List<? extends BasicDto<E, C>> findAllDtoByShiftIdAndDate(Long shiftId,
+                                                              LocalDate from,
+                                                              LocalDate to);
 }

@@ -49,9 +49,9 @@ public class ScheduleControllerImpl implements ScheduleController {
     }
 
     @Override
-    public List<BasicDto<Employee, WorkDay>> getAllByAuthAndDate(Authentication authentication,
-                                                                 LocalDate from,
-                                                                 LocalDate to){
+    public List<? extends BasicDto<Employee, WorkDay>> getAllByAuthAndDate(Authentication authentication,
+                                                                           LocalDate from,
+                                                                           LocalDate to){
 
         var userAccount = authentication.getPrincipal();
 

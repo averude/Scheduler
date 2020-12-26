@@ -19,9 +19,20 @@ public interface MainShiftCompositionRepository extends JpaRepository<MainShiftC
             "from MainShiftComposition msc " +
             "left join Shift s " +
             "on msc.shiftId = s.id " +
-            "where s.departmentId = ?1 and ?2 <= msc.to and ?3 >= msc.from")
+            "where s.departmentId = ?1 and ?2 <= msc.to and ?3 >= msc.from ")
     @EntityGraph(value = "graph.MainShiftComposition.employee")
     List<MainShiftComposition> findAllByDepartmentIdAndDatesBetween(Long departmentId,
                                                                     LocalDate from,
                                                                     LocalDate to);
+
+    @Query("select msc " +
+            "from MainShiftComposition msc " +
+            "left join Shift s " +
+            "on msc.shiftId = s.id " +
+            "where s.departmentId = ?1 and ?2 <= msc.to and ?3 >= msc.from " +
+            "order by msc.employee asc, msc.shiftId asc, msc.from")
+    @EntityGraph(value = "graph.MainShiftComposition.employee")
+    List<MainShiftComposition> getAllByDepartmentIdAndDateBetweenOrdered(Long departmentId,
+                                                                         LocalDate from,
+                                                                         LocalDate to);
 }

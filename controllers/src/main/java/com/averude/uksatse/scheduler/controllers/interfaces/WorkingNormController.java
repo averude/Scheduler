@@ -22,7 +22,7 @@ public interface WorkingNormController
 
     @IsDepartmentOrShiftUser
     @RequestMapping(method = RequestMethod.GET, value = "/dto/dates")
-    List<BasicDto<Shift, WorkingNorm>> getAllDtoByAuth(Authentication authentication,
+    List<? extends BasicDto<Shift, WorkingNorm>> getAllDtoByAuth(Authentication authentication,
                                                        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
                                                        @RequestParam(value = "from")
                                                                LocalDate from,
