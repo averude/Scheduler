@@ -47,12 +47,10 @@
   </div>
 </mat-dialog-content>
 
-<mat-dialog-actions>
-  <button class="mat-raised-button"
-          mat-button
+<mat-dialog-actions align="end">
+  <button class="scheduler-dialog-action-button"
           [matDialogClose]>Close</button>
-  <button class="mat-raised-button mat-primary"
-          mat-button
+  <button class="scheduler-dialog-action-button"
           [disabled]="customDayTypeForm.invalid"
           (click)="create()">Create</button>
 </mat-dialog-actions>

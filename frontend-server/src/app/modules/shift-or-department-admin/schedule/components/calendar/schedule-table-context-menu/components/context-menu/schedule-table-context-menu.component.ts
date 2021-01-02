@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  Input,
+  OnDestroy,
+  OnInit,
+  ViewChild
+} from "@angular/core";
 import { ContextMenuComponent } from "../../../../../../../../lib/ngx-contextmenu/contextMenu.component";
 import { forkJoin, Subscription } from "rxjs";
 import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
@@ -15,6 +23,7 @@ import { ShiftPatternDtoService } from "../../../../../../../../services/http/sh
 import { DepartmentDayTypeService } from "../../../../../../../../services/http/department-day-type.service";
 import { ShiftPattern } from "../../../../../../../../model/shift-pattern";
 import { DayTypeService } from "../../../../../../../../services/http/day-type.service";
+import { TableDataSource } from "../../../../../../../../services/collectors/schedule/table-data-source";
 
 @Component({
   selector: 'app-schedule-table-context-menu',
@@ -27,6 +36,8 @@ export class ScheduleTableContextMenuComponent implements OnInit, OnDestroy {
   @ViewChild(ContextMenuComponent)
   patternMenu:  ContextMenuComponent;
 
+  @Input() isEditableGroups: boolean = false;
+
   patternDtos:         BasicDto<ShiftPattern, PatternUnit>[]   = [];
   departmentDayTypes:  DepartmentDayType[] = [];
   serviceDayTypes:     DepartmentDayType[] = [];
@@ -37,6 +48,7 @@ export class ScheduleTableContextMenuComponent implements OnInit, OnDestroy {
 
   constructor(private dialog: MatDialog,
               private cd: ChangeDetectorRef,
+              private dataSource: TableDataSource,
               private shiftPatternDtoService: ShiftPatternDtoService,
               private dayTypeService: DayTypeService,
               private departmentDayTypeService: DepartmentDayTypeService,
@@ -79,16 +91,20 @@ export class ScheduleTableContextMenuComponent implements OnInit, OnDestroy {
       });
   }
 
-  openCustomDayDialog(data: SelectionData) {
+  openCustomDayDialog(selectionData: SelectionData) {
     const config = new MatDialogConfig();
     config.data = this.noServiceDepartmentDayTypes;
 
     this.dialog.open(CustomDaytypeDialogComponent, config)
       .afterClosed().subscribe(customDay => {
         if (customDay) {
-          this.scheduleGenerationService.generateScheduleByUnit(customDay, data);
+          this.scheduleGenerationService.generateScheduleByUnit(customDay, selectionData);
         }
     });
+  }
+
+  openAddSubstitutionDialog(selectionData: SelectionData) {
+    this.dataSource.addSubstitutionDialog(selectionData);
   }
 
   ngOnDestroy(): void {

@@ -140,7 +140,7 @@ export function getCellValueExt(workDay: WorkDay,
                                 useReportLabel?: boolean) {
   const dayTypeId = fn(workDay);
   if (dayTypes && dayTypeId) {
-    const dayType = binarySearch(dayTypes, dayTypeId);
+    const dayType = binarySearch(dayTypes, (mid => mid.id - dayTypeId));
 
     if (useReportLabel && dayType && dayType.reportLabel) {
       return dayType.reportLabel;

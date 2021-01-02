@@ -1,10 +1,11 @@
-import { MainShiftComposition, SubstitutionShiftComposition } from "../../main-shift-composition";
+import { Composition } from "../../main-shift-composition";
 import { Employee } from "../../employee";
 import { Moment } from "moment";
 import { CellData } from "../../../lib/ngx-schedule-table/model/data/cell-data";
 import { RowData } from "../../../lib/ngx-schedule-table/model/data/row-data";
 import { RowGroupData } from "../../../lib/ngx-schedule-table/model/data/row-group-data";
-import { binarySearchIndex, binarySearchInsertIndex, bs } from "../../../shared/utils/collection-utils";
+import { binarySearch, binarySearchIndex, binarySearchInsertIndex } from "../../../shared/utils/collection-utils";
+import { RowInterval } from "./row-interval";
 
 export class TableData {
   groups: RowGroup[];
@@ -27,7 +28,7 @@ export class TableData {
   }
 
   findRowGroup(groupId: number): RowGroup {
-    return bs(this.groups, 'id', groupId);
+    return binarySearch(this.groups, (mid => mid.id - groupId));
   }
 
   findRow(group_id: number, row_id: number): Row {
@@ -97,9 +98,24 @@ export class RowGroup implements RowGroupData {
     }
   }
 
+  addRowOrElse(row: Row, fn: (row: RowData) => void) {
+    if (!this.rows) {
+      return;
+    }
+
+    const insertIndex = binarySearchInsertIndex(this.rows, 'id', row.id);
+    if (insertIndex >= 0) {
+      row.group = this;
+      this.rows.splice(insertIndex, 0, row);
+    } else {
+      const rowIndex = binarySearchIndex(this.rows, 'id', row.id);
+      fn(this.rows[rowIndex]);
+    }
+  }
+
   findRow(id: number): Row {
     if (this.rows) {
-      return bs(this.rows, 'id', id);
+      return <Row> binarySearch(this.rows, (mid => mid.id - id));
     }
   }
 
@@ -119,10 +135,11 @@ export interface Row extends RowData {
   group:        RowGroup;
   id:           number;
   employee:     Employee;
-  composition:  MainShiftComposition | SubstitutionShiftComposition;
+  compositions: Composition[];
   isSubstitution: boolean;
   cellData:     CellData[];
   workingNorm:  number;
+  intervals?:   RowInterval[];
 }
 
 export interface Cell extends CellData {

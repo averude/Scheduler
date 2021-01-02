@@ -66,4 +66,5 @@
   </ng-container>
 </app-schedules-table>
 
-<app-schedule-table-context-menu *ngIf="accessRights.isAdmin"></app-schedule-table-context-menu>
+<app-schedule-table-context-menu *ngIf="accessRights.isAdmin"
+                                 [isEditableGroups]="isEditable"></app-schedule-table-context-menu>

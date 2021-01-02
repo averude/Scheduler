@@ -2,16 +2,83 @@ import { IdEntity } from "../../model/interface/id-entity";
 import { BasicDto } from "../../model/dto/basic-dto";
 import { MainShiftComposition } from "../../model/main-shift-composition";
 
-export function binarySearch<T extends IdEntity>(arr: T[], id: number): T {
-  return bs(arr, 'id', id);
+export function binarySearch<T>(arr: T[],
+                                comparator_fn: (mid: T) => number): T {
+  if (!arr) {
+    return;
+  }
+
+  let result = -1;
+
+  let start = 0;
+  let end = arr.length - 1;
+
+  while (start <= end) {
+    let mid = Math.floor((start + end) / 2);
+
+    if (comparator_fn(arr[mid]) === 0) {
+      result = mid;
+      break;
+    }
+    if (comparator_fn(arr[mid]) > 0) {
+      end = mid - 1;
+    } else {
+      start = mid + 1;
+    }
+  }
+
+  return result >= 0 ? arr[result] : undefined;
 }
 
-export function bs(arr: any[], field, value) {
-  const index = binarySearchIndex(arr, field, value);
-  if (index => 0) {
-    return arr[index];
+export function binarySearchLastRepeatableIndex<T>(arr: T[],
+                                                   binary_comparator_fn: (mid: T) => number,
+                                                   linear_comparator_fn: (value: T) => number) {
+  if (!arr) {
+    return;
   }
-  return undefined;
+
+  let result = -1;
+
+  let start = 0;
+  let end = arr.length - 1;
+
+  while (start <= end) {
+    let mid = Math.floor((start + end) / 2);
+
+    if (binary_comparator_fn(arr[mid]) === 0) {
+      result = mid;
+
+      const lastIndex = lastIndexOfRepeatable(arr, linear_comparator_fn, mid);
+      if (lastIndex > mid) {
+        result = lastIndex;
+      }
+
+      break;
+    }
+    if (binary_comparator_fn(arr[mid]) > 0) {
+      end = mid - 1;
+    } else {
+      start = mid + 1;
+    }
+  }
+
+  return result;
+}
+
+export function lastIndexOfRepeatable<T>(arr: T[],
+                                         comparator_fn: (value) => number,
+                                         start_idx?: number) {
+  let result: number = start_idx;
+
+  for (let i = start_idx; i < arr.length; i++) {
+    if (comparator_fn(arr[i]) == 0) {
+      result = i;
+    } else {
+      break;
+    }
+  }
+
+  return result;
 }
 
 export function binarySearchIndex(arr: any[], field, value): number {

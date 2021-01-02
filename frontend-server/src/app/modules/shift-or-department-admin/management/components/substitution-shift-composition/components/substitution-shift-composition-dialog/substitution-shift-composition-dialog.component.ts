@@ -71,11 +71,12 @@ export class SubstitutionShiftCompositionDialogComponent extends DialogBaseCompo
   }
 
   getEmployeeAvailableShifts(): Shift[] {
-    let selectedMainShiftComposition: MainShiftComposition = this.dialogForm.value.mainShiftComposition;
-    if (selectedMainShiftComposition) {
-      return this.shifts.filter(value => value.id !== selectedMainShiftComposition.shiftId);
-    }
-    return [];
+    // let selectedMainShiftComposition: MainShiftComposition = this.dialogForm.value.mainShiftComposition;
+    // if (selectedMainShiftComposition) {
+    //   return this.shifts.filter(value => value.id !== selectedMainShiftComposition.shiftId);
+    // }
+    // return [];
+    return this.shifts;
   }
 
 }

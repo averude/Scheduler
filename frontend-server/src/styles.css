@@ -4,3 +4,26 @@
 html, body { height: 100%; }
 body { margin: 0; font-family: 'MuseoSansRegular', 'Roboto', sans-serif; }
 
+.scheduler-dialog-action-button {
+  height: 3em;
+  width: 6em;
+  margin-left: 0.8em;
+  border: none;
+  background-color: #e2e2e252;
+  border-radius: 5px;
+  outline: none;
+}
+
+.scheduler-dialog-action-button:disabled {
+  cursor: not-allowed;
+}
+
+.scheduler-dialog-action-button:first-child {
+  margin-left: 0;
+}
+
+.scheduler-dialog-action-button:enabled:hover {
+  background-color: #ADAEB3;
+  color: white;
+  cursor: pointer;
+}

@@ -7,7 +7,7 @@ export interface HasDuration {
   to:   any;
 }
 
-export class MainShiftComposition implements IdEntity, HasDuration {
+export interface Composition extends HasDuration {
   id:                   number;
   shiftId:              number;
   employee:             Employee;
@@ -15,11 +15,28 @@ export class MainShiftComposition implements IdEntity, HasDuration {
   to:                   Moment;
 }
 
-export class SubstitutionShiftComposition implements IdEntity, HasDuration {
+export class MainShiftComposition implements IdEntity, Composition {
+  id:                   number;
+  shiftId:              number;
+  employee:             Employee;
+  from:                 Moment;
+  to:                   Moment;
+}
+
+export class SubstitutionShiftComposition implements IdEntity, Composition {
   id:                   number;
   shiftId:              number;
   employee:             Employee;
   mainShiftComposition: MainShiftComposition;
   from:                 Moment;
   to:                   Moment;
+}
+
+export function equals(a: Composition, b: Composition) {
+  return a && b &&
+    a.id === b.id &&
+    a.shiftId === b.shiftId &&
+    a.employee.id === b.employee.id &&
+    a.from.isSame(b.from) &&
+    a.to.isSame(b.to);
 }

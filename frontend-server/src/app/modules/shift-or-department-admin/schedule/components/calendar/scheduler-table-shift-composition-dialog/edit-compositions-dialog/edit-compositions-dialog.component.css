@@ -1,0 +1,51 @@
+.employee-name {
+  text-align: center;
+  font-size: 1.5em;
+  margin-bottom: 1em;
+}
+
+.compositions-container {
+  overflow: scroll;
+  max-height: 90em;
+}
+
+.composition-form {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 5em;
+  min-width: 32em;
+  background-color: #eeedfb3d;
+  border: 0.01em solid #e9e9f391;
+  border-radius: 10px;
+  margin-bottom: 1em;
+}
+
+.composition-form:last-child {
+  margin-bottom: 0;
+}
+
+.composition-input {
+  margin-top: 1em;
+}
+
+.composition-input:first-child {
+  margin-left: 1em;
+}
+
+.remove-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  background-color: #fb34346e;
+  height: 100%;
+  width: 2em;
+  cursor: pointer;
+}
+
+.remove-button:hover {
+  color: white;
+  background-color: #FB3434;
+}

@@ -1,0 +1,44 @@
+<div class="employee-name">Edit {{employeeName}}</div>
+
+<div class="compositions-container">
+
+  <div class="composition-form" *ngFor="let composition of compositionForms.controls; index as i">
+
+    <mat-form-field class="composition-input"
+                    [formGroup]="composition">
+      <mat-label>Date range</mat-label>
+
+      <mat-date-range-input [rangePicker]="picker">
+        <input matStartDate placeholder="Start date" formControlName="from">
+        <input matEndDate   placeholder="End date"   formControlName="to">
+      </mat-date-range-input>
+
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-date-range-picker #picker startView="multi-year"></mat-date-range-picker>
+
+    </mat-form-field>
+
+    <mat-form-field class="composition-input"
+                    [formGroup]="composition">
+      <mat-label>Employee's position</mat-label>
+      <mat-select formControlName="positionId">
+        <mat-option *ngFor="let position of positions"
+                    [value]="position.id">
+          {{position.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <div class="remove-button" (click)="removeComposition(i)">X</div>
+  </div>
+
+</div>
+
+<mat-dialog-actions align="end">
+  <button class="scheduler-dialog-action-button" mat-dialog-close>Cancel</button>
+  <button *ngIf="compositionForms.length > 1"
+          class="scheduler-dialog-action-button"
+          (click)="removeAll()">Remove all</button>
+  <button class="scheduler-dialog-action-button"
+          (click)="save()">Save</button>
+</mat-dialog-actions>

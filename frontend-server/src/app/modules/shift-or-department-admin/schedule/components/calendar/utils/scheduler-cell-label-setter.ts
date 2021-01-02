@@ -39,7 +39,7 @@ export class SchedulerCellLabelSetter implements CellLabelSetter {
   private setHoursWithColor(cell: TableCellComponent, dayTypeId: number) {
     cell.label = this.calcHours(cell.value);
     if (this.dayTypes) {
-      let dayType = binarySearch(this.dayTypes, dayTypeId);
+      let dayType = binarySearch(this.dayTypes, (mid => mid.id - dayTypeId));
       if (dayType) {
         cell.labelColor = dayType.dayTypeGroup.color;
       }
@@ -48,7 +48,7 @@ export class SchedulerCellLabelSetter implements CellLabelSetter {
 
   private setLabelWithColor(cell: TableCellComponent, dayTypeId: number) {
     if (this.dayTypes) {
-      let dayType = binarySearch(this.dayTypes, dayTypeId);
+      let dayType = binarySearch(this.dayTypes, (mid => mid.id - dayTypeId));
       if (dayType) {
         cell.labelColor = dayType.dayTypeGroup.color;
 

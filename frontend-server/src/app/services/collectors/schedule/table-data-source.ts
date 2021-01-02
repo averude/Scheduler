@@ -2,57 +2,59 @@ import { Injectable } from "@angular/core";
 import { forkJoin, Observable } from "rxjs";
 import { EmployeeService } from "../../http/employee.service";
 import { ShiftService } from "../../http/shift.service";
-import { MainShiftCompositionService } from "../../http/main-shift-composition.service";
-import { SubstitutionShiftCompositionService } from "../../http/substitution-shift-composition.service";
 import { ScheduleService } from "../../http/schedule.service";
 import { WorkingNormService } from "../../http/working-norm.service";
 import { PaginationService } from "../../../lib/ngx-schedule-table/service/pagination.service";
-import { flatMap, map } from "rxjs/operators";
+import { map, mergeMap } from "rxjs/operators";
 import { TableSumCalculator } from "../../calculators/table-sum-calculator.service";
 import { Shift } from "../../../model/shift";
+import { Position } from "../../../model/position";
 import { RowGroupData } from "../../../lib/ngx-schedule-table/model/data/row-group-data";
 import { MatDialog } from "@angular/material/dialog";
-import { MainShiftComposition, SubstitutionShiftComposition } from "../../../model/main-shift-composition";
-import { BasicDto } from "../../../model/dto/basic-dto";
+import { Composition, MainShiftComposition } from "../../../model/main-shift-composition";
 import { Employee } from "../../../model/employee";
-import { WorkDay } from "../../../model/workday";
 import { CalendarDay } from "../../../lib/ngx-schedule-table/model/calendar-day";
-import { NotificationsService } from "angular2-notifications";
-import { TableRenderer } from "../../../lib/ngx-schedule-table/service/table-renderer.service";
 import { Row, RowGroup } from "../../../model/ui/schedule-table/table-data";
 import { AuthService } from "../../http/auth.service";
 import { WorkingNorm } from "../../../model/working-norm";
-import { TableTreeDataCollector } from "./table-tree-data-collector";
-import { CellEnabledSetter } from "./cell-enabled-setter";
 import { AddMainShiftCompositionDialogComponent } from "../../../modules/shift-or-department-admin/schedule/components/calendar/scheduler-table-shift-composition-dialog/add-main-shift-composition-dialog/add-main-shift-composition-dialog.component";
-import { EditShiftCompositionDialogComponent } from "../../../modules/shift-or-department-admin/schedule/components/calendar/scheduler-table-shift-composition-dialog/edit-shift-composition-dialog/edit-shift-composition-dialog.component";
+import { TableDataCollector } from "./table-data-collector.service";
+import { EmployeeScheduleDTO } from "../../../model/dto/employee-schedule-dto";
+import { CellEnabledSetter } from "./cell-enabled-setter";
+import { TableCompositionHandler } from "./table-composition-handler";
+import { EditCompositionsDialogComponent } from "../../../modules/shift-or-department-admin/schedule/components/calendar/scheduler-table-shift-composition-dialog/edit-compositions-dialog/edit-compositions-dialog.component";
+import { getEmployeeShortName } from "../../../shared/utils/utils";
+import { PositionService } from "../../http/position.service";
+import { SelectionData } from "../../../lib/ngx-schedule-table/model/selection-data";
+import { AddSubstitutionCompositionDialogComponent } from "../../../modules/shift-or-department-admin/schedule/components/calendar/scheduler-table-shift-composition-dialog/add-substitution-composition-dialog/add-substitution-composition-dialog.component";
+import { CompositionDivider } from "../../divider/composition-divider.service";
+import { convertCompositionToInterval } from "../../../model/ui/schedule-table/row-interval";
+import { binarySearch } from "../../../shared/utils/collection-utils";
 
 @Injectable()
 export class TableDataSource {
 
   public  shifts:                   Shift[];
+  public  positions:                Position[];
 
   private employees:                Employee[];
-  private mainCompositions:         MainShiftComposition[];
-  private substitutionCompositions: SubstitutionShiftComposition[];
-  private scheduleDto:              BasicDto<Employee, WorkDay>[];
+  private scheduleDto:              EmployeeScheduleDTO[];
   private workingNorms:             WorkingNorm[];
   private calendarDays:             CalendarDay[];
 
   constructor(private dialog: MatDialog,
-              private authService: AuthService,
+              private tableCompositionHandler: TableCompositionHandler,
+              private tableDataCollector: TableDataCollector,
+              private divider: CompositionDivider,
               private cellEnabledSetter: CellEnabledSetter,
-              private treeDataCollector: TableTreeDataCollector,
-              private tableRenderer: TableRenderer,
+              private authService: AuthService,
               private sumCalculator: TableSumCalculator,
               private paginationService: PaginationService,
               private employeeService: EmployeeService,
               private shiftService: ShiftService,
-              private mainShiftCompositionService: MainShiftCompositionService,
-              private substitutionShiftCompositionService: SubstitutionShiftCompositionService,
+              private positionService: PositionService,
               private scheduleService: ScheduleService,
-              private workingNormService: WorkingNormService,
-              private notificationsService: NotificationsService) {
+              private workingNormService: WorkingNormService) {
   }
 
   get tableData(): Observable<RowGroupData[]> {
@@ -62,18 +64,13 @@ export class TableDataSource {
 
     this.shiftService.getAll().subscribe(shifts => this.shifts = shifts);
 
+    this.positionService.getAll().subscribe(positions => this.positions = positions);
+
     return this.paginationService.onValueChange
       .pipe(
-        flatMap(daysInMonth => {
+        mergeMap(daysInMonth => {
           this.calendarDays = daysInMonth;
           return forkJoin([
-            this.mainShiftCompositionService.getAll(
-              daysInMonth[0].isoString,
-              daysInMonth[daysInMonth.length - 1].isoString),
-            this.substitutionShiftCompositionService
-              .getAll(
-                daysInMonth[0].isoString,
-                daysInMonth[daysInMonth.length - 1].isoString),
             this.scheduleService.getAllByDate(
               daysInMonth[0].isoString,
               daysInMonth[daysInMonth.length - 1].isoString),
@@ -81,12 +78,26 @@ export class TableDataSource {
               daysInMonth[0].isoString,
               daysInMonth[daysInMonth.length - 1].isoString)
           ]).pipe(map(values => {
-            this.mainCompositions = values[0];
-            this.substitutionCompositions = values[1];
-            this.scheduleDto = values[2];
-            this.workingNorms = values[3];
+            this.scheduleDto = values[0];
+            this.workingNorms = values[1];
 
-            const rowGroupData = this.treeDataCollector.createTree(this.shifts, values[0], values[1], daysInMonth, this.scheduleDto, values[3]).groups;
+            const data = this.tableDataCollector.collect(this.shifts, daysInMonth, this.scheduleDto, this.workingNorms);
+
+            data.groups.forEach(group =>
+              group.rows.forEach((row: Row) => {
+
+                if (row.isSubstitution) {
+                  row.intervals = row.compositions.map(composition => convertCompositionToInterval(composition));
+                } else {
+                  const dto = binarySearch(this.scheduleDto, (mid => mid.parent.id - row.id));
+                  row.intervals = this.divider.getRowIntervalsByArr(row.compositions, dto.substitutionShiftCompositions);
+                }
+
+                this.cellEnabledSetter.processRow(row, data.from, data.to);
+
+              }));
+
+            const rowGroupData = data.groups;
 
             this.sumCalculator.calculateWorkHoursSum(rowGroupData);
             return rowGroupData;
@@ -96,17 +107,11 @@ export class TableDataSource {
   }
 
   newRow(rowGroup: RowGroup) {
-    const employeeIds = this.mainCompositions
-      .filter(value => value.shiftId === rowGroup.id)
-      .map(value => value.employee.id);
-
-    const notInShiftEmployees = this.employees
-      .filter(value => !employeeIds.includes(value.id));
-
     const data = {
       shiftId:      rowGroup.id,
       shifts:       this.shifts,
-      employees:    notInShiftEmployees,
+      employees:    this.employees,
+      positions:    this.positions,
       calendarDays: this.calendarDays
     };
 
@@ -119,8 +124,10 @@ export class TableDataSource {
 
         mainShiftCompositions
           .forEach(composition =>
-            this.createOrUpdateComposition(composition, rowGroup));
-      })
+            this.tableCompositionHandler
+              .createOrUpdateComposition([composition], rowGroup, null, null,
+                this.scheduleDto, this.workingNorms, this.calendarDays, false));
+      });
   }
 
   editRow(row: Row) {
@@ -130,34 +137,36 @@ export class TableDataSource {
 
     const groupData = row.group;
     const data = {
-      shiftSchedule:  row.composition,
-      shiftId:        groupData.id,
-      shifts:         this.shifts,
-      employees:      this.employees,
-      calendarDays:   this.calendarDays
+      compositions:   row.compositions,
+      positions:      this.positions,
+      calendarDays:   this.calendarDays,
+      employeeName:   getEmployeeShortName(row.employee)
     };
 
-    this.openDialog(data, groupData);
+    this.openDialog(data, groupData, row);
   }
 
-  private openDialog(data, rowGroup: RowGroup) {
-    this.dialog.open(EditShiftCompositionDialogComponent, {data: data})
+  private openDialog(data, rowGroup: RowGroup, row: Row) {
+    this.dialog.open(EditCompositionsDialogComponent, {data: data})
       .afterClosed()
       .subscribe((dialogData) => {
         if (!dialogData) {
           return;
         }
 
-        const composition: MainShiftComposition = dialogData.data;
+        const compositions: Composition[] = dialogData.data;
         switch (dialogData.command) {
 
           case 'save' : {
-            this.createOrUpdateComposition(composition, rowGroup);
+            this.tableCompositionHandler
+              .createOrUpdateComposition(compositions, rowGroup, row, null,
+                this.scheduleDto, this.workingNorms, this.calendarDays, row.isSubstitution);
             break;
           }
 
           case 'delete' : {
-            this.removeComposition(composition, rowGroup);
+            this.tableCompositionHandler
+              .removeComposition(rowGroup, row, this.scheduleDto, compositions);
             break;
           }
 
@@ -168,70 +177,27 @@ export class TableDataSource {
       });
   }
 
-  private createOrUpdateComposition(composition: MainShiftComposition,
-                                    rowGroup: RowGroup) {
-    if (composition) {
-      if (composition.id) {
-        this.mainShiftCompositionService.update(composition)
-          .subscribe((res) => {
-            this.updateRow(composition, rowGroup);
-          });
-      } else {
-        this.mainShiftCompositionService.create(composition)
-          .subscribe((id) => {
-            this.createRow(composition, rowGroup, id);
-          });
-      }
-    }
-  }
+  addSubstitutionDialog(selectionData: SelectionData) {
+    const mainCompositionRow = <Row> selectionData.rowData;
 
-  private removeComposition(value: MainShiftComposition, groupData: RowGroup) {
-    if (value.id) {
-      this.mainShiftCompositionService.delete(value.id)
-        .subscribe(res => {
-          groupData.removeRow(value.employee.id);
-          const idx = this.mainCompositions.findIndex(val => val.id === value.id);
-          this.mainCompositions.splice(idx, 1);
+    const data = {
+      from: selectionData.selectedCells[0].date.isoString,
+      to:   selectionData.selectedCells[selectionData.selectedCells.length - 1].date.isoString,
+      shifts:     this.shifts,
+      positions:  this.positions,
+      employee:   mainCompositionRow.employee,
+      mainShiftComposition: mainCompositionRow.compositions[0]
+    };
 
-          this.tableRenderer.renderRowGroup(groupData.id);
-          this.notificationsService.success(res);
-        });
-    }
-  }
-
-  private createRow(value: MainShiftComposition,
-                    group: RowGroup,
-                    id: number) {
-    if (this.scheduleDto && this.calendarDays) {
-      value.id = id;
-      const dto = this.scheduleDto.find(dto => dto.parent.id === value.employee.id);
-      const hoursNorm = this.workingNorms.find(norm => norm.shiftId === group.id)?.hours;
-
-      this.mainCompositions.push(value);
-      const row = this.treeDataCollector.createRow(null, value, this.calendarDays, dto, hoursNorm);
-
-      group.addRow(row);
-      this.cellEnabledSetter.setRowEnabledCells(row);
-      this.sumCalculator.calculateWorkHoursSum([group]);
-
-      this.tableRenderer.renderRowGroup(group.id);
-      this.notificationsService.success('Created');
-    }
-  }
-
-  private updateRow(value: MainShiftComposition, group: RowGroup) {
-    const index = this.mainCompositions.findIndex(val => val.id === value.id);
-    if (index >= 0) {
-      this.mainCompositions.splice(index, 1, value);
-      const row = group.findRow(value.employee.id);
-      row.composition = value;
-
-      this.cellEnabledSetter.setRowEnabledCells(row, this.substitutionCompositions);
-
-      this.sumCalculator.calculateWorkHoursSum([group]);
-
-      this.tableRenderer.renderRow(row.id);
-      this.notificationsService.success('Updated');
-    }
+    this.dialog.open(AddSubstitutionCompositionDialogComponent, {data: data})
+      .afterClosed()
+      .subscribe(value => {
+        if (value) {
+          const group = mainCompositionRow.group.table.findRowGroup(value.shiftId);
+          this.tableCompositionHandler
+            .createOrUpdateComposition([value], group, null, mainCompositionRow,
+              this.scheduleDto, this.workingNorms, this.calendarDays, true);
+        }
+      });
   }
 }

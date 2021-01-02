@@ -4,8 +4,9 @@ import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { RestConfig } from '../../rest.config';
 import { GenerationDto } from "../../model/dto/generation-dto";
-import { BasicDto } from "../../model/dto/basic-dto";
-import { Employee } from "../../model/employee";
+import { EmployeeScheduleDTO } from "../../model/dto/employee-schedule-dto";
+import { tap } from "rxjs/operators";
+import * as moment from "moment";
 
 @Injectable({
   providedIn: 'root'
@@ -16,10 +17,17 @@ export class ScheduleService {
               private config: RestConfig) { }
 
   getAllByDate(from: string,
-               to: string): Observable<BasicDto<Employee, WorkDay>[]> {
-    return this.http.get<BasicDto<Employee, WorkDay>[]>(
+               to: string): Observable<EmployeeScheduleDTO[]> {
+    return this.http.get<EmployeeScheduleDTO[]>(
       `${this.config.baseUrl}/schedule/dates?from=${from}&to=${to}`
-    );
+    ).pipe(tap(dtos => dtos.forEach(dto => {
+      const callbackfn = composition => {
+        composition.from = moment.utc(composition.from);
+        composition.to = moment.utc(composition.to);
+      };
+      dto.mainShiftCompositions.forEach(callbackfn);
+      dto.substitutionShiftCompositions.forEach(callbackfn);
+    })));
   }
 
   create(schedule: WorkDay[]): Observable<any> {

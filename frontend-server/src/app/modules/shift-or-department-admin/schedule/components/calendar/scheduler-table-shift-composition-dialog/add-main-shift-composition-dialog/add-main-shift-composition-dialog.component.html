@@ -28,11 +28,11 @@
 
 </mat-dialog-content>
 
-<mat-dialog-actions>
+<mat-dialog-actions align="end">
   <div class="buttons-container">
-    <button class="mat-raised-button"
+    <button class="scheduler-dialog-action-button"
             (click)="close()">Close</button>
-    <button class="mat-raised-button mat-primary"
+    <button class="scheduler-dialog-action-button"
             type="submit"
             [disabled]="dialogForm.invalid"
             (click)="submit()">Save</button>

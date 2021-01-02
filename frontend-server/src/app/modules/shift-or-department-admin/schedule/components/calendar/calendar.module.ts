@@ -11,14 +11,17 @@ import { ScheduleGenerationService } from "../../../../../services/generators/sc
 import { ScheduleTablePaginationStrategy } from "../../../../../shared/paginators/pagination-strategy/schedule-table-pagination-strategy";
 import { MonthYearPaginatorModule } from "../../../../../shared/paginators/month-year-paginator/month-year-paginator.module";
 import { SchedulerCellLabelSetter } from "./utils/scheduler-cell-label-setter";
-import { ShiftCompositionDivider } from "../../../../../services/divider/shift-composition-divider";
+import { CompositionDivider } from "../../../../../services/divider/composition-divider.service";
 import { TableSumCalculator } from "../../../../../services/calculators/table-sum-calculator.service";
 import { SchedulerTableShiftCompositionDialogModule } from "./scheduler-table-shift-composition-dialog/scheduler-table-shift-composition-dialog.module";
 import { SchedulerUtility } from "./utils/scheduler-utility";
-import { TableTreeDataCollector } from "../../../../../services/collectors/schedule/table-tree-data-collector";
 import { TableDataSource } from "../../../../../services/collectors/schedule/table-data-source";
 import { CellEnabledSetter } from "../../../../../services/collectors/schedule/cell-enabled-setter";
 import { ScheduleTableConfigurationMenuModule } from "./schedule-table-configuration-menu/schedule-table-configuration-menu.module";
+import { TableDataCollector } from "../../../../../services/collectors/schedule/table-data-collector.service";
+import { TableRowProcessor } from "../../../../../services/collectors/schedule/table-row-processor.service";
+import { TableCompositionHandler } from "../../../../../services/collectors/schedule/table-composition-handler";
+import { TableRowRemover } from "../../../../../services/collectors/schedule/table-row-remover";
 
 @NgModule({
   imports: [
@@ -40,11 +43,14 @@ import { ScheduleTableConfigurationMenuModule } from "./schedule-table-configura
     ScheduleGenerationService,
     ScheduleTablePaginationStrategy,
     SchedulerCellLabelSetter,
-    ShiftCompositionDivider,
+    CompositionDivider,
     TableSumCalculator,
-    TableTreeDataCollector,
+    TableDataCollector,
+    TableRowProcessor,
+    TableRowRemover,
     CellEnabledSetter,
     TableDataSource,
+    TableCompositionHandler,
     SchedulerUtility
   ]
 })

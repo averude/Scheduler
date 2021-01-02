@@ -46,8 +46,8 @@ export class AddMainShiftCompositionDialogComponent extends DialogBaseComponent<
     this.dialogForm = this.fb.group({
       id:           [],
       shiftId:      [this.shiftId, Validators.required],
-      employees:    [null,  Validators.required,
-                            Validators.minLength(1)],
+      employees:    [null,  [Validators.required,
+                             Validators.minLength(1)]],
       from:         [moment.utc(this.calendarDays[0].isoString), Validators.required],
       to:           [moment.utc(this.calendarDays[this.calendarDays.length - 1].isoString), Validators.required]
     })

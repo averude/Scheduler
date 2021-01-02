@@ -1,3 +1,8 @@
+.generation-container {
+  overflow: scroll;
+  max-height: 80vh;
+}
+
 .mat-column-shift {
   width: 200px;
 }

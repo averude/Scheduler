@@ -1,58 +1,68 @@
 <context-menu (close)="clearSelection()">
 
-  <ng-template contextMenuItem
-               (execute)="openCustomDayDialog($event.item)">
-    Custom day
-  </ng-template>
-
-  <ng-template contextMenuItem
-               [divider]="true"></ng-template>
-
-  <context-menu #singleDaySubMenu>
-    <ng-template *ngFor="let departmentDayType of departmentDayTypes"
-                 contextMenuItem
-                 (execute)="scheduleGenerationService.generateScheduleByDepartmentDayType(departmentDayType, $event.item)">
-      <app-context-menu-daytype-item [hasDayTypeAndTime]="departmentDayType">
-      </app-context-menu-daytype-item>
+  <ng-container *ngIf="isEditableGroups">
+    <ng-template contextMenuItem (execute)="openAddSubstitutionDialog($event.item)">
+      Substitution
     </ng-template>
-  </context-menu>
-  <ng-template contextMenuItem [subMenu]="singleDaySubMenu">
-    Single day
-  </ng-template>
+  </ng-container>
 
-  <context-menu #serviceDaySubMenu>
+  <ng-container *ngIf="!isEditableGroups">
+
     <ng-template contextMenuItem
-                 (execute)="scheduleGenerationService.removeServiceDays($event.item)">
-      Remove service days
+                 (execute)="openCustomDayDialog($event.item)">
+      Custom day
     </ng-template>
 
-    <ng-template *ngFor="let departmentDayType of serviceDayTypes"
-                 contextMenuItem
-                 (execute)="scheduleGenerationService.generateScheduleByDepartmentDayType(departmentDayType, $event.item)">
-      <app-context-menu-daytype-item [hasDayTypeAndTime]="departmentDayType">
-      </app-context-menu-daytype-item>
-    </ng-template>
-  </context-menu>
-  <ng-template contextMenuItem [subMenu]="serviceDaySubMenu">
-    Service day
-  </ng-template>
+    <ng-template contextMenuItem
+                 [divider]="true"></ng-template>
 
-  <ng-template contextMenuItem
-               [divider]="true"></ng-template>
-
-  <ng-container *ngFor="let dto of patternDtos">
-    <context-menu #patternsSubMenu>
-      <ng-container *ngFor="let unit of dto.collection; index as i">
-        <ng-template contextMenuItem
-                     (execute)="scheduleGenerationService.generateSchedule(dto, $event.item, i)">
-          <app-context-menu-daytype-item [hasDayTypeAndTime]="unit">
-          </app-context-menu-daytype-item>
-        </ng-template>
-      </ng-container>
+    <context-menu #singleDaySubMenu>
+      <ng-template *ngFor="let departmentDayType of departmentDayTypes"
+                   contextMenuItem
+                   (execute)="scheduleGenerationService.generateScheduleByDepartmentDayType(departmentDayType, $event.item)">
+        <app-context-menu-daytype-item [hasDayTypeAndTime]="departmentDayType">
+        </app-context-menu-daytype-item>
+      </ng-template>
     </context-menu>
-    <ng-template contextMenuItem [subMenu]="patternsSubMenu">
-      {{dto.parent.name}}
+    <ng-template contextMenuItem [subMenu]="singleDaySubMenu">
+      Single day
     </ng-template>
+
+    <context-menu #serviceDaySubMenu>
+      <ng-template contextMenuItem
+                   (execute)="scheduleGenerationService.removeServiceDays($event.item)">
+        Remove service days
+      </ng-template>
+
+      <ng-template *ngFor="let departmentDayType of serviceDayTypes"
+                   contextMenuItem
+                   (execute)="scheduleGenerationService.generateScheduleByDepartmentDayType(departmentDayType, $event.item)">
+        <app-context-menu-daytype-item [hasDayTypeAndTime]="departmentDayType">
+        </app-context-menu-daytype-item>
+      </ng-template>
+    </context-menu>
+    <ng-template contextMenuItem [subMenu]="serviceDaySubMenu">
+      Service day
+    </ng-template>
+
+    <ng-template contextMenuItem
+                 [divider]="true"></ng-template>
+
+    <ng-container *ngFor="let dto of patternDtos">
+      <context-menu #patternsSubMenu>
+        <ng-container *ngFor="let unit of dto.collection; index as i">
+          <ng-template contextMenuItem
+                       (execute)="scheduleGenerationService.generateSchedule(dto, $event.item, i)">
+            <app-context-menu-daytype-item [hasDayTypeAndTime]="unit">
+            </app-context-menu-daytype-item>
+          </ng-template>
+        </ng-container>
+      </context-menu>
+      <ng-template contextMenuItem [subMenu]="patternsSubMenu">
+        {{dto.parent.name}}
+      </ng-template>
+    </ng-container>
+
   </ng-container>
 
 </context-menu>

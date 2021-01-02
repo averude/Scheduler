@@ -14,7 +14,7 @@ import { DATE_FORMAT } from "../util/utils";
 export class AvrEntityGenerationDialogComponent implements OnInit {
 
   dataSource = new MatTableDataSource<any>();
-  displayedColumns = ['select', 'shift', 'offset', 'dateFrom', 'dateTo'];
+  displayedColumns = ['select', 'shift', 'offset', 'dateRange'];
   selection = new SelectionModel<any>(true, []);
 
   constructor(private dialogRef: MatDialogRef<any>,

@@ -44,22 +44,6 @@
   background-color: #ADAEB3;
 }
 
-.dialog-action-button {
-  height: 3em;
-  width: 6em;
-  margin-left: 0.8em;
-  border: none;
-  background-color: #e2e2e252;
-  border-radius: 5px;
-  cursor: pointer;
-  outline: none;
-}
-
-.dialog-action-button:hover {
-  background-color: #ADAEB3;
-  color: white;
-}
-
 .cdk-drag-preview {
   font-size: 1.7vh;
   box-sizing: border-box;

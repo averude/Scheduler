@@ -1,0 +1,36 @@
+<div [formGroup]="substitutionCompositionForm">
+
+  <mat-form-field>
+    <mat-date-range-input [rangePicker]="picker">
+      <input matStartDate placeholder="From"  formControlName="from">
+      <input matEndDate   placeholder="To"    formControlName="to">
+    </mat-date-range-input>
+
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-date-range-picker #picker></mat-date-range-picker>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-select placeholder="Shift" formControlName="shiftId">
+      <mat-option *ngFor="let shift of shifts"
+                  [value]="shift.id">
+        {{shift.name}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-select placeholder="Position" formControlName="positionId">
+      <mat-option *ngFor="let position of positions"
+                  [value]="position.id">
+        {{position.name}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+<mat-dialog-actions align="end">
+  <button class="scheduler-dialog-action-button" mat-dialog-close>Cancel</button>
+  <button class="scheduler-dialog-action-button"
+          [disabled]="substitutionCompositionForm.invalid"
+          (click)="save()">Save</button>
+</mat-dialog-actions>
