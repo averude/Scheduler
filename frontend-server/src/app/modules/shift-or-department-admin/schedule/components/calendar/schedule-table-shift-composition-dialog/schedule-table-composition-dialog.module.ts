@@ -43,4 +43,4 @@ import { AddSubstitutionCompositionDialogComponent } from './add-substitution-co
     }
   ]
 })
-export class SchedulerTableShiftCompositionDialogModule {}
+export class ScheduleTableCompositionDialogModule {}

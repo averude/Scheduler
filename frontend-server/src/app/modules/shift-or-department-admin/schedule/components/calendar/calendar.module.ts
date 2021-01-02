@@ -13,7 +13,7 @@ import { MonthYearPaginatorModule } from "../../../../../shared/paginators/month
 import { SchedulerCellLabelSetter } from "./utils/scheduler-cell-label-setter";
 import { CompositionDivider } from "../../../../../services/divider/composition-divider.service";
 import { TableSumCalculator } from "../../../../../services/calculators/table-sum-calculator.service";
-import { SchedulerTableShiftCompositionDialogModule } from "./scheduler-table-shift-composition-dialog/scheduler-table-shift-composition-dialog.module";
+import { ScheduleTableCompositionDialogModule } from "./schedule-table-shift-composition-dialog/schedule-table-composition-dialog.module";
 import { SchedulerUtility } from "./utils/scheduler-utility";
 import { TableDataSource } from "../../../../../services/collectors/schedule/table-data-source";
 import { CellEnabledSetter } from "../../../../../services/collectors/schedule/cell-enabled-setter";
@@ -33,7 +33,7 @@ import { TableRowRemover } from "../../../../../services/collectors/schedule/tab
     MatInputModule,
     ScheduleTableContextMenuModule,
     ScheduleTableModule,
-    SchedulerTableShiftCompositionDialogModule,
+    ScheduleTableCompositionDialogModule,
     ScheduleTableConfigurationMenuModule
   ],
   declarations: [
