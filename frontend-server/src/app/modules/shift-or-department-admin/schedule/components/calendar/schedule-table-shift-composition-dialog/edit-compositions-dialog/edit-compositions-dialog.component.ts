@@ -45,7 +45,7 @@ export class EditCompositionsDialogComponent implements OnInit {
       id:         [composition.id],
       shiftId:    [composition.shiftId],
       employee:   [composition.employee],
-      positionId: [],
+      positionId: [composition.positionId],
       from:       [composition.from],
       to:         [composition.to]
     }));

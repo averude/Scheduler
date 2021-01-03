@@ -1,5 +1,6 @@
 import { Composition } from "../../main-shift-composition";
 import { Employee } from "../../employee";
+import { Position } from "../../position";
 import { Moment } from "moment";
 import { CellData } from "../../../lib/ngx-schedule-table/model/data/cell-data";
 import { RowData } from "../../../lib/ngx-schedule-table/model/data/row-data";
@@ -135,6 +136,7 @@ export interface Row extends RowData {
   group:        RowGroup;
   id:           number;
   employee:     Employee;
+  position:     Position;
   compositions: Composition[];
   isSubstitution: boolean;
   cellData:     CellData[];

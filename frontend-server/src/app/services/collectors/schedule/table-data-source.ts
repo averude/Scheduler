@@ -81,7 +81,7 @@ export class TableDataSource {
             this.scheduleDto = values[0];
             this.workingNorms = values[1];
 
-            const data = this.tableDataCollector.collect(this.shifts, daysInMonth, this.scheduleDto, this.workingNorms);
+            const data = this.tableDataCollector.collect(this.shifts, daysInMonth, this.scheduleDto, this.positions, this.workingNorms);
 
             data.groups.forEach(group =>
               group.rows.forEach((row: Row) => {
@@ -126,7 +126,7 @@ export class TableDataSource {
           .forEach(composition =>
             this.tableCompositionHandler
               .createOrUpdateComposition([composition], rowGroup, null, null,
-                this.scheduleDto, this.workingNorms, this.calendarDays, false));
+                this.scheduleDto, this.positions, this.workingNorms, this.calendarDays, false));
       });
   }
 
@@ -160,7 +160,7 @@ export class TableDataSource {
           case 'save' : {
             this.tableCompositionHandler
               .createOrUpdateComposition(compositions, rowGroup, row, null,
-                this.scheduleDto, this.workingNorms, this.calendarDays, row.isSubstitution);
+                this.scheduleDto, this.positions, this.workingNorms, this.calendarDays, row.isSubstitution);
             break;
           }
 
@@ -196,7 +196,7 @@ export class TableDataSource {
           const group = mainCompositionRow.group.table.findRowGroup(value.shiftId);
           this.tableCompositionHandler
             .createOrUpdateComposition([value], group, null, mainCompositionRow,
-              this.scheduleDto, this.workingNorms, this.calendarDays, true);
+              this.scheduleDto, this.positions, this.workingNorms, this.calendarDays, true);
         }
       });
   }

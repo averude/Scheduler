@@ -190,6 +190,7 @@ CREATE TABLE IF NOT EXISTS main_shift_compositions (
   id            SERIAL,
   shift_id      INTEGER       NOT NULL,
   employee_id   INTEGER       NOT NULL,
+  position_id   INTEGER       NOT NULL,
   from_date     DATE          NOT NULL,
   to_date       DATE          NOT NULL,
 
@@ -201,13 +202,15 @@ CREATE TABLE IF NOT EXISTS main_shift_compositions (
 
   PRIMARY KEY (id),
   FOREIGN KEY (shift_id)      REFERENCES shifts(id)     ON UPDATE CASCADE ON DELETE CASCADE,
-  FOREIGN KEY (employee_id)   REFERENCES employees(id)  ON UPDATE CASCADE ON DELETE CASCADE
+  FOREIGN KEY (employee_id)   REFERENCES employees(id)  ON UPDATE CASCADE ON DELETE CASCADE,
+  FOREIGN KEY (position_id)   REFERENCES positions(id)  ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS substitution_shift_compositions (
   id                    SERIAL,
   shift_id              INTEGER       NOT NULL,
   employee_id           INTEGER       NOT NULL,
+  position_id           INTEGER       NOT NULL,
   shift_composition_id  INTEGER       NOT NULL,
   from_date             DATE          NOT NULL,
   to_date               DATE          NOT NULL,
@@ -221,6 +224,7 @@ CREATE TABLE IF NOT EXISTS substitution_shift_compositions (
   PRIMARY KEY (id),
   FOREIGN KEY (shift_id)      REFERENCES shifts(id)     ON UPDATE CASCADE ON DELETE CASCADE,
   FOREIGN KEY (employee_id)   REFERENCES employees(id)  ON UPDATE CASCADE ON DELETE CASCADE,
+  FOREIGN KEY (position_id)   REFERENCES positions(id)  ON UPDATE CASCADE ON DELETE CASCADE,
   FOREIGN KEY (shift_composition_id) REFERENCES main_shift_compositions(id) ON DELETE CASCADE
 );
 

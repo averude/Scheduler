@@ -6,7 +6,7 @@ import { Injectable } from "@angular/core";
 export class CellEnabledSetter {
 
   processRow(row: Row, from: Moment, to: Moment) {
-    if (!row || !row.cellData || row.cellData.length === 0 || from.isAfter(to)) {
+    if (!row || !row.cellData || !row.intervals || row.cellData.length === 0 || from.isAfter(to)) {
       return;
     }
 
@@ -25,6 +25,10 @@ export class CellEnabledSetter {
         cells[i].enabled = true;
       }
     });
+  }
+
+  process(row: Row) {
+    this.processRow(row, row.group.table.from, row.group.table.to);
   }
 
   processTable(table: TableData) {

@@ -91,8 +91,8 @@ export class TableRowRemover {
     }
   }
 
-  private removeCompositionAndInterval(row: Row,
-                                       composition: Composition) {
+  removeCompositionAndInterval(row: Row,
+                               composition: Composition) {
     const group = row.group;
     const rows = group.rows;
 

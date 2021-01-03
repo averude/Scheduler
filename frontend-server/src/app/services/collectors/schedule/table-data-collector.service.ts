@@ -1,4 +1,5 @@
 import { Shift } from "../../../model/shift";
+import { Position } from "../../../model/position";
 import { CalendarDay } from "../../../lib/ngx-schedule-table/model/calendar-day";
 import { EmployeeScheduleDTO } from "../../../model/dto/employee-schedule-dto";
 import { WorkingNorm } from "../../../model/working-norm";
@@ -18,6 +19,7 @@ export class TableDataCollector {
   collect(shifts: Shift[],
           calendarDays: CalendarDay[],
           schedule: EmployeeScheduleDTO[],
+          positions: Position[],
           workingNorms: WorkingNorm[]) {
     const table: TableData = new TableData();
 
@@ -38,20 +40,26 @@ export class TableDataCollector {
     schedule.forEach(dto => {
 
       dto.mainShiftCompositions.forEach(mainComposition => {
+        const position = binarySearch(positions, (mid => mid.id - mainComposition.positionId));
+
         const rowGroup = table.findRowGroup(mainComposition.shiftId);
         if (rowGroup) {
           const workingNorm   = this.getWorkingNorm(workingNorms, mainComposition.shiftId);
 
-          this.rowProcessor.initRowInsert(rowGroup, dto, calendarDays, mainComposition, workingNorm, false, () => false);
+          this.rowProcessor.initRowInsert(rowGroup, dto, calendarDays,
+            mainComposition, position, workingNorm, false, (row) => row?.position.id === mainComposition.positionId);
         }
       });
 
       dto.substitutionShiftCompositions.forEach(substComposition => {
+        const position = binarySearch(positions, (mid => mid.id - substComposition.positionId));
+
         const rowGroup = table.findRowGroup(substComposition.shiftId);
         if (rowGroup) {
           const workingNorm   = this.getWorkingNorm(workingNorms, substComposition.mainShiftComposition.shiftId);
 
-          this.rowProcessor.initRowInsert(rowGroup, dto, calendarDays, substComposition, workingNorm, true, () => false);
+          this.rowProcessor.initRowInsert(rowGroup, dto, calendarDays,
+            substComposition, position, workingNorm, true, (row) => row?.position.id === substComposition.positionId);
         }
       });
 

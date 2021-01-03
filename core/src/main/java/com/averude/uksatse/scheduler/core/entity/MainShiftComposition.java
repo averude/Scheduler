@@ -50,6 +50,10 @@ public class MainShiftComposition implements HasId, EntityComposition<Long, Empl
     private Employee employee;
 
     @NotNull
+    @Column(name = "position_id")
+    private Long positionId;
+
+    @NotNull
     @Column(name = "from_date")
     private LocalDate from;
 

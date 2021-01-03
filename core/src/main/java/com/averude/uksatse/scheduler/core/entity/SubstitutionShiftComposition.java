@@ -58,6 +58,10 @@ public class SubstitutionShiftComposition implements HasId, EntityComposition<Lo
     private Employee employee;
 
     @NotNull
+    @Column(name = "position_id")
+    private Long positionId;
+
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "shift_composition_id")
     private MainShiftComposition mainShiftComposition;

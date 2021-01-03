@@ -67,6 +67,5 @@ export class ScheduleTableComponent implements OnInit, OnDestroy {
 
   isRowEditable(rowData: Row): boolean {
     return this.accessRights.isDepartmentLevel && this.isEditable;
-    // && !rowData.isSubstitution;
   }
 }

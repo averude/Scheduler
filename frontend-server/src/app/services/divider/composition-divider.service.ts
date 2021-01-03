@@ -1,6 +1,8 @@
 import { Injectable } from "@angular/core";
 import { Composition } from "../../model/main-shift-composition";
-import { RowInterval } from "../../model/ui/schedule-table/row-interval";
+import { convertCompositionToInterval, RowInterval } from "../../model/ui/schedule-table/row-interval";
+import { Row } from "../../model/ui/schedule-table/table-data";
+import { EmployeeScheduleDTO } from "../../model/dto/employee-schedule-dto";
 
 @Injectable()
 export class CompositionDivider {
@@ -67,5 +69,13 @@ export class CompositionDivider {
         .forEach(value => result.push(value)));
 
     return result;
+  }
+
+  recalculate(row: Row, dto: EmployeeScheduleDTO) {
+    if (row.isSubstitution) {
+      row.intervals = row.compositions.map(value => convertCompositionToInterval(value));
+    } else {
+      row.intervals = this.getRowIntervalsByArr(row.compositions, dto.substitutionShiftCompositions);
+    }
   }
 }
