@@ -66,16 +66,26 @@ public class ShiftPatternServiceImpl
         shiftPatternRepository.save(parent);
 
         var collection = shiftPatternDTO.getCollection();
-        collection.forEach(unit -> unit.setPatternId(parent.getId()));
-        var unitsIds = basicDtoSavingUtil.getIds(collection);
-        patternUnitRepository.deleteAllByPatternIdAndIdIsNotIn(parent.getId(), unitsIds);
-        patternUnitRepository.saveAll(collection);
+        if (collection.size() > 0) {
+            collection.forEach(unit -> unit.setPatternId(parent.getId()));
+            var unitsIds = basicDtoSavingUtil.getIds(collection);
+            patternUnitRepository.deleteAllByPatternIdAndIdIsNotIn(parent.getId(), unitsIds);
+            patternUnitRepository.saveAll(collection);
+        } else {
+            patternUnitRepository.deleteAllByPatternId(parent.getId());
+        }
+
 
         var generationRules = shiftPatternDTO.getGenerationRules();
-        generationRules.forEach(rule -> rule.setShiftPatternId(parent.getId()));
-        var rulesIds = basicDtoSavingUtil.getIds(generationRules);
-        shiftPatternGenerationRuleRepository.deleteAllByShiftPatternIdAndIdIsNotIn(parent.getId(), rulesIds);
-        shiftPatternGenerationRuleRepository.saveAll(generationRules);
+        if (generationRules.size() > 0) {
+            generationRules.forEach(rule -> rule.setShiftPatternId(parent.getId()));
+            var rulesIds = basicDtoSavingUtil.getIds(generationRules);
+            shiftPatternGenerationRuleRepository.deleteAllByShiftPatternIdAndIdIsNotIn(parent.getId(), rulesIds);
+            shiftPatternGenerationRuleRepository.saveAll(generationRules);
+        } else {
+            shiftPatternGenerationRuleRepository.deleteAllByShiftPatternId(parent.getId());
+        }
+
 
         return shiftPatternDTO;
     }

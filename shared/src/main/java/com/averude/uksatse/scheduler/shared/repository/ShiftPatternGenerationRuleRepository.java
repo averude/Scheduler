@@ -9,6 +9,7 @@ import java.util.List;
 public interface ShiftPatternGenerationRuleRepository extends JpaRepository<ShiftPatternGenerationRule, Long> {
 
     void deleteAllByShiftPatternIdAndIdIsNotIn(Long shiftPatternId, List<Long> ids);
+    void deleteAllByShiftPatternId(Long shiftPatternId);
 
     @EntityGraph(value = "graph.ShiftPatternGenerationRule.useDepartmentDayType")
     List<ShiftPatternGenerationRule> findAllByShiftPatternIdOrderByOrderIdAsc(Long shiftPatternId);
