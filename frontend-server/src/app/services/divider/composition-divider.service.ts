@@ -30,8 +30,8 @@ export class CompositionDivider {
 
       let substitutionComposition = substitutionCompositions[i];
 
-      if (from.isAfter(substitutionComposition.from)) {
-        if (substitutionComposition.to.isBefore(to)) {
+      if (from.isSameOrAfter(substitutionComposition.from)) {
+        if (substitutionComposition.to.isSameOrBefore(to)) {
           if (substitutionComposition.to.isAfter(from)) {
             from = substitutionComposition.to.clone().add(1, 'day');
           }
