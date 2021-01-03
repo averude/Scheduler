@@ -115,7 +115,7 @@ export class TableCompositionHandler {
                     parentRow?: Row) {
     if (scheduleDTOs && calendarDays) {
 
-      const dto   = binarySearch(scheduleDTOs, (mid => mid.parent.id - composition.employee.id));
+      const dto   = binarySearch(scheduleDTOs, (mid => mid.parent.id - composition.employeeId));
       const norm  = binarySearch(workingNorms, (mid => mid.shiftId - group.id))?.hours || 0;
 
       if (isSubstitution) {
@@ -160,13 +160,13 @@ export class TableCompositionHandler {
     }
 
     if (scheduleDTOs && calendarDays) {
-      const dto = binarySearch(scheduleDTOs, (mid => mid.parent.id - composition.employee.id));
+      const dto = binarySearch(scheduleDTOs, (mid => mid.parent.id - composition.employeeId));
 
       if (row.position.id !== composition.positionId) {
 
         const group = row.group;
         const rowToMerge = <Row> group.rows
-          .find((value: Row) => value.id === composition.employee.id
+          .find((value: Row) => value.id === composition.employeeId
             && value.position.id === composition.positionId
             && value.isSubstitution === row.isSubstitution);
 
@@ -192,7 +192,7 @@ export class TableCompositionHandler {
 
         for (let otherGroupMainRow of rows) {
 
-          if (otherGroupMainRow.id === mainShiftComposition.employee.id && !otherGroupMainRow.isSubstitution) {
+          if (otherGroupMainRow.id === mainShiftComposition.employeeId && !otherGroupMainRow.isSubstitution) {
             otherGroupMainRow.intervals = this.divider.getRowIntervalsByArr(otherGroupMainRow.compositions, dto.substitutionShiftCompositions);
             this.cellEnabledSetter.processRow(otherGroupMainRow, group.table.from, group.table.to);
           }

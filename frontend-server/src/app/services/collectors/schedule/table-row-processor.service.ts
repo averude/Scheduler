@@ -119,7 +119,7 @@ export class TableRowProcessor {
                             isSubstitution: boolean,
                             composition: Composition) {
     return row && updateRows && !this.xor(row.isSubstitution, isSubstitution)
-      && row.group.id === composition.shiftId && row.id === composition.employee.id;
+      && row.group.id === composition.shiftId && row.id === composition.employeeId;
   }
 
   private createNewRow(group: RowGroup,

@@ -24,7 +24,7 @@ export class TableRowRemover {
     const table = groupData.table;
     const rows = groupData.rows;
 
-    const dto = binarySearch(dtos, (mid => mid.parent.id - composition.employee.id));
+    const dto = binarySearch(dtos, (mid => mid.parent.id - composition.employeeId));
 
     if (row.isSubstitution) {
       const index = dto.substitutionShiftCompositions.findIndex(value => value.id === composition.id);
@@ -53,7 +53,7 @@ export class TableRowRemover {
 
       for (let row of rows) {
 
-        if (row.id === composition.employee.id && !row.isSubstitution) {
+        if (row.id === composition.employeeId && !row.isSubstitution) {
           row.intervals = this.divider.getRowIntervalsByArr(row.compositions, substitutionShiftCompositions);
           this.cellEnabledSetter.processRow(row, table.from, table.to);
         }
@@ -77,7 +77,7 @@ export class TableRowRemover {
         const rows = <Row[]> table.findRowGroup(composition.shiftId).rows;
 
         for (let row of rows) {
-          if (row.id === composition.employee.id && row.isSubstitution) {
+          if (row.id === composition.employeeId && row.isSubstitution) {
             this.removeCompositionAndInterval(row, composition);
           }
         }

@@ -20,29 +20,11 @@ import java.time.LocalDate;
         name = "graph.SubstitutionShiftComposition",
         attributeNodes = {
                 @NamedAttributeNode(
-                        value = "employee",
-                        subgraph = "graph.SubstitutionShiftComposition.Employee.position"
-                ),
-                @NamedAttributeNode(
-                        value = "mainShiftComposition",
-                        subgraph = "graph.SubstitutionShiftComposition.MainShiftComposition.employee"
-                )
-        },
-        subgraphs = {
-                @NamedSubgraph(
-                        name = "graph.SubstitutionShiftComposition.MainShiftComposition.employee",
-                        attributeNodes = @NamedAttributeNode(
-                                value = "employee",
-                                subgraph = "graph.SubstitutionShiftComposition.Employee.position"
-                        )
-                ),
-                @NamedSubgraph(
-                        name = "graph.SubstitutionShiftComposition.Employee.position",
-                        attributeNodes = @NamedAttributeNode("position")
+                        value = "mainShiftComposition"
                 )
         }
 )
-public class SubstitutionShiftComposition implements HasId, EntityComposition<Long, Employee> {
+public class SubstitutionShiftComposition implements HasId, EntityComposition<Long, Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,9 +35,8 @@ public class SubstitutionShiftComposition implements HasId, EntityComposition<Lo
     private Long shiftId;
 
     @NotNull
-    @ManyToOne
-    @JoinColumn(name = "employee_id")
-    private Employee employee;
+    @Column(name = "employee_id")
+    private Long employeeId;
 
     @NotNull
     @Column(name = "position_id")
@@ -82,8 +63,8 @@ public class SubstitutionShiftComposition implements HasId, EntityComposition<Lo
 
     @JsonIgnore
     @Override
-    public Employee getSideB() {
-        return employee;
+    public Long getSideB() {
+        return employeeId;
     }
 
     @JsonIgnore
@@ -94,7 +75,7 @@ public class SubstitutionShiftComposition implements HasId, EntityComposition<Lo
 
     @JsonIgnore
     @Override
-    public void setSideB(Employee sideB) {
-        this.employee = sideB;
+    public void setSideB(Long sideB) {
+        this.employeeId = sideB;
     }
 }

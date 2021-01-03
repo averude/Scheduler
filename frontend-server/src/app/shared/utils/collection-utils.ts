@@ -199,8 +199,8 @@ export function sortByCompositions<T extends IdEntity>(dtos: BasicDto<T, any>[],
   const employeeMainShiftCompositions = uniqById(
     compositions
       .sort((a, b) => a.shiftId - b.shiftId),
-    (element => element.employee.id)
+    (element => element.employeeId)
   );
   sortByPattern(dtos, employeeMainShiftCompositions,
-    ((arrayElement, patternElement) => arrayElement.parent.id === patternElement.employee.id));
+    ((arrayElement, patternElement) => arrayElement.parent.id === patternElement.employeeId));
 }

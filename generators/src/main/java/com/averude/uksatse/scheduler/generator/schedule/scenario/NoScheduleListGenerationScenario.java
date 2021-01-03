@@ -1,6 +1,5 @@
 package com.averude.uksatse.scheduler.generator.schedule.scenario;
 
-import com.averude.uksatse.scheduler.core.entity.Employee;
 import com.averude.uksatse.scheduler.core.entity.PatternUnit;
 import com.averude.uksatse.scheduler.core.entity.WorkDay;
 import com.averude.uksatse.scheduler.generator.model.GenerationInterval;
@@ -12,7 +11,8 @@ import static com.averude.uksatse.scheduler.generator.utils.GenerationUtils.crea
 
 public class NoScheduleListGenerationScenario implements GenerationScenario {
 
-    public WorkDay[] generate(GenerationInterval<Employee> interval,
+    public WorkDay[] generate(GenerationInterval<Long> interval,
+                              Long departmentId,
                               List<PatternUnit> sequence,
                               List<WorkDay> schedule) {
         if (!schedule.isEmpty()) {
@@ -38,7 +38,7 @@ public class NoScheduleListGenerationScenario implements GenerationScenario {
                 var unitIndex = ((int) offset + j) % unitsSize;
                 var date = dates.get(dateIndex);
                 var unit = sequence.get(unitIndex);
-                result[dateIndex] = createWorkDay(interval.getObject(), unit, date);
+                result[dateIndex] = createWorkDay(interval.getObject(), departmentId, unit, date);
             }
         }
 

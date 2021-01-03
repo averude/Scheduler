@@ -14,6 +14,7 @@ import { MainShiftCompositionService } from "../../../../../../../services/http/
 import { switchMap } from "rxjs/operators";
 import { Subscription } from "rxjs";
 import { SubstitutionShiftCompositionDialogComponent } from "../substitution-shift-composition-dialog/substitution-shift-composition-dialog.component";
+import { binarySearch } from "../../../../../../../shared/utils/collection-utils";
 
 @Component({
   selector: 'app-substitution-shift-composition-table',
@@ -70,7 +71,8 @@ export class SubstitutionShiftCompositionTableComponent extends PageableTableBas
     this.openAddOrEditDialog(substitutionShiftComposition, data, SubstitutionShiftCompositionDialogComponent);
   }
 
-  getEmployeeShortName(employee: Employee): string {
+  getEmployeeShortName(employeeId: number): string {
+    const employee = binarySearch(this.employees, mid => mid.id - employeeId);
     return getEmployeeShortName(employee);
   }
 

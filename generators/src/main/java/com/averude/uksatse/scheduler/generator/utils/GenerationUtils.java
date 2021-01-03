@@ -1,6 +1,5 @@
 package com.averude.uksatse.scheduler.generator.utils;
 
-import com.averude.uksatse.scheduler.core.entity.Employee;
 import com.averude.uksatse.scheduler.core.entity.SpecialCalendarDate;
 import com.averude.uksatse.scheduler.core.entity.WorkDay;
 import com.averude.uksatse.scheduler.core.interfaces.entity.HasDayTypeAndTime;
@@ -21,12 +20,13 @@ public class GenerationUtils {
         workDay.setBreakEndTime(unit.getBreakEndTime());
     }
 
-    public static WorkDay createWorkDay(Employee employee,
+    public static WorkDay createWorkDay(Long employeeId,
+                                        Long departmentId,
                                         HasDayTypeAndTime unit,
                                         LocalDate date) {
         var workDay = new WorkDay();
-        workDay.setDepartmentId(employee.getDepartmentId());
-        workDay.setEmployeeId(employee.getId());
+        workDay.setDepartmentId(departmentId);
+        workDay.setEmployeeId(employeeId);
         workDay.setDate(date);
         updateWorkDay(workDay, unit);
         return workDay;

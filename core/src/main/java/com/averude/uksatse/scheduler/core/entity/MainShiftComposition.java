@@ -1,6 +1,5 @@
 package com.averude.uksatse.scheduler.core.entity;
 
-import com.averude.uksatse.scheduler.core.entity.structure.Shift;
 import com.averude.uksatse.scheduler.core.interfaces.entity.EntityComposition;
 import com.averude.uksatse.scheduler.core.interfaces.entity.HasId;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -23,18 +22,7 @@ import java.util.StringJoiner;
 @Setter
 @Entity()
 @Table(name = "main_shift_compositions")
-@NamedEntityGraph(
-        name = "graph.MainShiftComposition.employee",
-        attributeNodes = @NamedAttributeNode(
-                value = "employee",
-                subgraph = "graph.MainShiftComposition.Employee.position"
-        ),
-        subgraphs = @NamedSubgraph(
-                name = "graph.MainShiftComposition.Employee.position",
-                attributeNodes = @NamedAttributeNode("position")
-        )
-)
-public class MainShiftComposition implements HasId, EntityComposition<Long, Employee> {
+public class MainShiftComposition implements HasId, EntityComposition<Long, Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Positive(message = "{entity.id.negative}")
@@ -45,9 +33,8 @@ public class MainShiftComposition implements HasId, EntityComposition<Long, Empl
     private Long shiftId;
 
     @NotNull
-    @ManyToOne
-    @JoinColumn(name = "employee_id")
-    private Employee employee;
+    @Column(name = "employee_id")
+    private Long employeeId;
 
     @NotNull
     @Column(name = "position_id")
@@ -67,11 +54,6 @@ public class MainShiftComposition implements HasId, EntityComposition<Long, Empl
                 fetch = FetchType.LAZY)
     private List<SubstitutionShiftComposition> substitutionShiftCompositions;
 
-    public MainShiftComposition(Shift shift, Employee employee) {
-        this.shiftId = shift.getId();
-        this.employee = employee;
-    }
-
     @Override
     @JsonIgnore
     public Long getSideA() {
@@ -80,8 +62,8 @@ public class MainShiftComposition implements HasId, EntityComposition<Long, Empl
 
     @Override
     @JsonIgnore
-    public Employee getSideB() {
-        return employee;
+    public Long getSideB() {
+        return employeeId;
     }
 
     @Override
@@ -90,8 +72,8 @@ public class MainShiftComposition implements HasId, EntityComposition<Long, Empl
     }
 
     @Override
-    public void setSideB(Employee employee) {
-        this.employee = employee;
+    public void setSideB(Long employeeId) {
+        this.employeeId = employeeId;
     }
 
     @Override
@@ -100,14 +82,14 @@ public class MainShiftComposition implements HasId, EntityComposition<Long, Empl
         if (o == null || getClass() != o.getClass()) return false;
         MainShiftComposition that = (MainShiftComposition) o;
         return shiftId.equals(that.shiftId) &&
-                employee.equals(that.employee) &&
+                employeeId.equals(that.employeeId) &&
                 from.equals(that.from) &&
                 to.equals(that.to);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(shiftId, employee, from, to);
+        return Objects.hash(shiftId, employeeId, from, to);
     }
 
     @Override
@@ -115,7 +97,7 @@ public class MainShiftComposition implements HasId, EntityComposition<Long, Empl
         return new StringJoiner(", ", MainShiftComposition.class.getSimpleName() + "[", "]")
                 .add("id=" + id)
                 .add("shiftId=" + shiftId)
-                .add("employee=" + employee)
+                .add("employeeId=" + employeeId)
                 .add("from=" + from)
                 .add("to=" + to)
                 .toString();

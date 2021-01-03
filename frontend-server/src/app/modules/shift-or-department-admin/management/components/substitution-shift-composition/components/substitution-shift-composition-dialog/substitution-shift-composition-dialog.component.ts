@@ -40,7 +40,7 @@ export class SubstitutionShiftCompositionDialogComponent extends DialogBaseCompo
     this.dialogForm = this.fb.group({
       id:                   [],
       shiftId:              [null, Validators.required],
-      employee:             [null, Validators.required],
+      employeeId:           [null, Validators.required],
       mainShiftComposition: [null, Validators.required],
       from:                 [null, Validators.required],
       to:                   [null, Validators.required]
@@ -51,7 +51,7 @@ export class SubstitutionShiftCompositionDialogComponent extends DialogBaseCompo
     this.dialogForm.setValue({
       id:                   shiftSchedule.id,
       shiftId:              shiftSchedule.shiftId,
-      employee:             shiftSchedule.employee,
+      employeeId:           shiftSchedule.employeeId,
       mainShiftComposition: shiftSchedule.mainShiftComposition,
       from:                 shiftSchedule.from,
       to:                   shiftSchedule.to,
@@ -65,7 +65,7 @@ export class SubstitutionShiftCompositionDialogComponent extends DialogBaseCompo
   getEmployeeMainCompositions(): MainShiftComposition[] {
     let selectedEmployee = this.dialogForm.value.employee;
     if (selectedEmployee) {
-      return this.mainCompositions.filter(value => value.employee.id === selectedEmployee.id);
+      return this.mainCompositions.filter(value => value.employeeId === selectedEmployee.id);
     }
     return [];
   }

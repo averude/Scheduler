@@ -78,16 +78,6 @@ public class Employee implements HasId, HasDepartmentId {
                 nullable = false)
     private Position position;
 
-    @JsonIgnore
-    @OneToMany( mappedBy = "employee",
-                cascade = CascadeType.ALL)
-    private List<@NotNull @Valid MainShiftComposition> mainShiftsList;
-
-    @JsonIgnore
-    @OneToMany( mappedBy = "employee",
-            cascade = CascadeType.ALL)
-    private List<@NotNull @Valid SubstitutionShiftComposition> substitutionShiftsList;
-
     @OneToMany( mappedBy = "employeeId",
                 cascade = CascadeType.ALL,
                 fetch = FetchType.LAZY)

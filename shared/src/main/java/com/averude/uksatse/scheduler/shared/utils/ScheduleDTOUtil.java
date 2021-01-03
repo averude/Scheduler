@@ -35,11 +35,11 @@ public class ScheduleDTOUtil {
 
             lastMainCompositionIndex = sequentialFill(e, mainShiftCompositions,
                     dto.getMainShiftCompositions(), lastMainCompositionIndex,
-                    ((employee, composition) -> employee.getId() - composition.getEmployee().getId()));
+                    ((employee, composition) -> employee.getId() - composition.getEmployeeId()));
 
             lastSubstitutionCompositionIndex = sequentialFill(e, substitutionShiftCompositions,
                     dto.getSubstitutionShiftCompositions(), lastSubstitutionCompositionIndex,
-                    ((employee, composition) -> employee.getId() - composition.getEmployee().getId()));
+                    ((employee, composition) -> employee.getId() - composition.getEmployeeId()));
 
             result.add(dto);
         }

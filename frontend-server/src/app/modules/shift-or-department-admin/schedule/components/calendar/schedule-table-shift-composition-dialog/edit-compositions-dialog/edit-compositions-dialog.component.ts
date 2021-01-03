@@ -44,7 +44,7 @@ export class EditCompositionsDialogComponent implements OnInit {
     this.compositionForms.push(this.fb.group({
       id:         [composition.id],
       shiftId:    [composition.shiftId],
-      employee:   [composition.employee],
+      employeeId: [composition.employeeId],
       positionId: [composition.positionId],
       from:       [composition.from],
       to:         [composition.to]

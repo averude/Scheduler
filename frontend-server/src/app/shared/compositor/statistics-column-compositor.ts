@@ -13,11 +13,11 @@ export class StatisticsColumnCompositor {
                  summationColumns: SummationColumn[],
                  shiftCompositions: MainShiftComposition[],
                  workingNorms: WorkingNorm[]) {
-    let mainShiftCompositions = uniqById(shiftCompositions, value => value.employee.id);
+    let mainShiftCompositions = uniqById(shiftCompositions, value => value.employeeId);
 
     summationDtos.forEach(dto => {
       try {
-        const shiftId = mainShiftCompositions.find(value => value.employee.id === dto.parent.id).shiftId;
+        const shiftId = mainShiftCompositions.find(value => value.employeeId === dto.parent.id)?.shiftId;
         const norm = workingNorms.find(value => value.shiftId === shiftId);
         dto.collection.push({summationColumnId: -1, value: norm ? norm.hours : 0} as SummationResult);
         dto.collection.push({summationColumnId: -2, value: norm ? norm.days : 0} as SummationResult);

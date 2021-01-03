@@ -22,7 +22,6 @@ public interface SubstitutionShiftCompositionRepository extends JpaRepository<Su
 
     @Query("select ssc " +
             "from SubstitutionShiftComposition ssc " +
-            "left join fetch ssc.employee " +
             "left join Shift s " +
             "on ssc.shiftId = s.id " +
             "where s.departmentId = ?1 and ?2 <= ssc.to and ?3 >= ssc.from")
@@ -33,7 +32,6 @@ public interface SubstitutionShiftCompositionRepository extends JpaRepository<Su
 
     @Query("select ssc " +
             "from SubstitutionShiftComposition ssc " +
-            "left join fetch ssc.employee " +
             "left join MainShiftComposition msc " +
             "on ssc.mainShiftComposition = msc " +
             "where ?2 <= ssc.to and ?3 >= ssc.from and (ssc.shiftId = ?1 or msc.shiftId = ?1)")
@@ -47,7 +45,7 @@ public interface SubstitutionShiftCompositionRepository extends JpaRepository<Su
             "left join Shift s " +
             "on ssc.shiftId = s.id " +
             "where s.departmentId = ?1 and ?2 <= ssc.to and ?3 >= ssc.from " +
-            "order by ssc.employee asc, ssc.shiftId asc, ssc.from")
+            "order by ssc.employeeId asc, ssc.shiftId asc, ssc.from")
     @EntityGraph(value = "graph.SubstitutionShiftComposition")
     List<SubstitutionShiftComposition> getAllByDepartmentIdAndDateBetweenOrdered(Long departmentId,
                                                                                  LocalDate from,
@@ -57,7 +55,7 @@ public interface SubstitutionShiftCompositionRepository extends JpaRepository<Su
             "from SubstitutionShiftComposition as ssc " +
             "where (ssc.shiftId = ?1 or ssc.mainShiftComposition.id in ?2) " +
             "and ?3 <= ssc.to and ?4 >= ssc.from " +
-            "order by ssc.employee asc, ssc.from asc")
+            "order by ssc.employeeId asc, ssc.from asc")
     @EntityGraph(value = "graph.SubstitutionShiftComposition")
     List<SubstitutionShiftComposition> getAllByShiftIdAndMainShiftCompositionInAndDateBetweenOrdered(Long shiftId,
                                                                                                      List<Long> ids,

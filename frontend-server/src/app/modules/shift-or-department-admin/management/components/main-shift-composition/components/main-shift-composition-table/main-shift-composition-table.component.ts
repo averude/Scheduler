@@ -11,6 +11,7 @@ import { Employee } from "../../../../../../../model/employee";
 import { Shift } from "../../../../../../../model/shift";
 import { getEmployeeShortName } from "../../../../../../../shared/utils/utils";
 import { PaginationService } from "../../../../../../../lib/ngx-schedule-table/service/pagination.service";
+import { binarySearch } from "../../../../../../../shared/utils/collection-utils";
 
 @Component({
   selector: 'app-main-shift-composition-table',
@@ -50,7 +51,8 @@ export class MainShiftCompositionTableComponent extends PageableTableBaseCompone
     this.openAddOrEditDialog(mainShiftComposition, data, MainShiftCompositionDialogComponent);
   }
 
-  getEmployeeShortName(employee: Employee): string {
+  getEmployeeShortName(employeeId: number): string {
+    const employee = binarySearch(this.employees, mid => mid.id - employeeId);
     return getEmployeeShortName(employee);
   }
 

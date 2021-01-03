@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -73,18 +72,17 @@ public class ScheduleServiceImpl
         var substitutionShiftCompositions = substitutionShiftCompositionRepository
                 .getAllByShiftIdAndMainShiftCompositionInAndDateBetweenOrdered(shiftId, mainShiftCompositionIds, from, to);
 
-        // Later it will be optimized
-        var employees = Stream.concat(mainShiftCompositions.stream(), substitutionShiftCompositions.stream())
+        var employeeIds = Stream.concat(mainShiftCompositions.stream(), substitutionShiftCompositions.stream())
                 .map(EntityComposition::getSideB)
-                .sorted(Comparator.comparingLong(Employee::getId))
+                .sorted()
                 .distinct()
                 .collect(toList());
 
+        var employees = employeeRepository.findAllById(employeeIds);
+
         var departmentId = employees.get(0).getDepartmentId();
 
-
-        var ids = employees.stream().map(Employee::getId).collect(toList());
-        var schedule = scheduleRepository.findAllByEmployeeIdsAndDateBetween(departmentId, ids, from, to);
+        var schedule = scheduleRepository.findAllByEmployeeIdsAndDateBetween(departmentId, employeeIds, from, to);
 
         return scheduleDTOUtil.createEmployeeScheduleDTOList(employees, mainShiftCompositions, substitutionShiftCompositions, schedule);
     }

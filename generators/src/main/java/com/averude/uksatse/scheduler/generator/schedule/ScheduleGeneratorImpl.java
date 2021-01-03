@@ -1,6 +1,5 @@
 package com.averude.uksatse.scheduler.generator.schedule;
 
-import com.averude.uksatse.scheduler.core.entity.Employee;
 import com.averude.uksatse.scheduler.core.entity.ShiftPattern;
 import com.averude.uksatse.scheduler.core.entity.SpecialCalendarDate;
 import com.averude.uksatse.scheduler.core.entity.WorkDay;
@@ -36,16 +35,16 @@ public class ScheduleGeneratorImpl implements ScheduleGenerator {
     }
 
     @Override
-    public List<WorkDay> generate(GenerationInterval<Employee> interval,
+    public List<WorkDay> generate(GenerationInterval<Long> interval,
                                   ShiftPattern pattern,
                                   List<WorkDay> existingSchedule,
                                   Map<String, List<SpecialCalendarDate>> specialCalendarDatesMap) {
         WorkDay[] workDays = null;
 
         if (existingSchedule.isEmpty()) {
-            workDays = noScheduleListGenerationScenario.generate(interval, pattern.getSequence(), existingSchedule);
+            workDays = noScheduleListGenerationScenario.generate(interval, pattern.getDepartmentId(), pattern.getSequence(), existingSchedule);
         } else {
-            workDays = hasExistingScheduleGenerationScenario.generate(interval, pattern.getSequence(), existingSchedule);
+            workDays = hasExistingScheduleGenerationScenario.generate(interval, pattern.getDepartmentId(), pattern.getSequence(), existingSchedule);
         }
 
         if (workDays == null) {

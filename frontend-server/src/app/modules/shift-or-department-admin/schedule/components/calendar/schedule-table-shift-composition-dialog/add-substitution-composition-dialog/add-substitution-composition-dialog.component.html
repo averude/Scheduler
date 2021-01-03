@@ -1,4 +1,6 @@
-<div [formGroup]="substitutionCompositionForm">
+<h2 matDialogTitle>Add substitution</h2>
+<div class="container"
+     [formGroup]="substitutionCompositionForm">
 
   <mat-form-field>
     <mat-date-range-input [rangePicker]="picker">
@@ -28,6 +30,7 @@
     </mat-select>
   </mat-form-field>
 </div>
+
 <mat-dialog-actions align="end">
   <button class="scheduler-dialog-action-button" mat-dialog-close>Cancel</button>
   <button class="scheduler-dialog-action-button"
