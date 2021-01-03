@@ -54,15 +54,17 @@ public class GenerationIntervalCreator<T> {
             var interval = new GenerationInterval<T>();
 
             if (i >= substitutionCompositions.size()) {
-                setValuesToInterval(interval, from, intervalStart, to, object, unitsSize, offset);
-                result.add(interval);
+                if (intervalStart.isBefore(to)) {
+                    setValuesToInterval(interval, from, intervalStart, to, object, unitsSize, offset);
+                    result.add(interval);
+                }
                 break;
             }
 
             var composition = substitutionCompositions.get(i);
 
-            if (intervalStart.isAfter(composition.getFrom())) {
-                if (composition.getTo().isBefore(to)) {
+            if (intervalStart.isAfter(composition.getFrom()) || intervalStart.isEqual(composition.getFrom())) {
+                if (composition.getTo().isBefore(to) || composition.getTo().isEqual(to)) {
                     intervalStart = composition.getTo().plusDays(1); //should be tested
                     continue;
                 } else {
