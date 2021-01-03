@@ -37,7 +37,7 @@ export class MainShiftCompositionTableComponent extends PageableTableBaseCompone
 
   ngOnInit(): void {
     super.ngOnInit();
-    this.employeeService.getAll().subscribe(employees => this.employees = employees);
+    this.employeeService.getAll().subscribe(employees => this.employees = employees.sort((a, b) => a.id - b.id));
     this.shiftService.getAll().subscribe(shifts => this.shifts = shifts);
   }
 

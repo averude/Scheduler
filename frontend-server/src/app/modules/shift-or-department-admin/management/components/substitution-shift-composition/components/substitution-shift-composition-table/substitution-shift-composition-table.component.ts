@@ -45,7 +45,7 @@ export class SubstitutionShiftCompositionTableComponent extends PageableTableBas
 
   ngOnInit(): void {
     super.ngOnInit();
-    this.employeeService.getAll().subscribe(employees => this.employees = employees);
+    this.employeeService.getAll().subscribe(employees => this.employees = employees.sort((a, b) => a.id - b.id));
     this.shiftService.getAll().subscribe(shifts => this.shifts = shifts);
     this.subscription = this.datePaginationService.onValueChange
       .pipe(switchMap(value => {
