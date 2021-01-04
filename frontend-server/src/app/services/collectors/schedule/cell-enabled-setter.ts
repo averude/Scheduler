@@ -18,11 +18,13 @@ export class CellEnabledSetter {
       const begin = from.isSameOrAfter(interval.from) ? from : interval.from;
       const end   = to.isSameOrBefore(interval.to) ? to : interval.to;
 
-      let start_idx = begin.date() - 1;
-      let end_idx   = end.date();
+      if (begin.isBefore(end)) {
+        let start_idx = begin.date() - 1;
+        let end_idx   = end.date();
 
-      for (let i = start_idx; i < end_idx; i++) {
-        cells[i].enabled = true;
+        for (let i = start_idx; i < end_idx; i++) {
+          cells[i].enabled = true;
+        }
       }
     });
   }
