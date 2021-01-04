@@ -79,7 +79,7 @@ export class TableDataSource {
               daysInMonth[daysInMonth.length - 1].isoString)
           ]).pipe(map(values => {
             this.scheduleDto = values[0];
-            this.workingNorms = values[1];
+            this.workingNorms = values[1].sort((a, b) => a.shiftId - b.shiftId);
 
             const data = this.tableDataCollector.collect(this.shifts, daysInMonth, this.scheduleDto, this.positions, this.workingNorms);
 
