@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, } from '@angular/core';
 import { PaginationService } from "../../../../../../lib/ngx-schedule-table/service/pagination.service";
-import { ScheduleService } from "../../../../../../services/http/schedule.service";
 import { Subscription } from "rxjs";
 import { ScheduleTablePaginationStrategy } from "../../../../../../shared/paginators/pagination-strategy/schedule-table-pagination-strategy";
 import { RowGroupData } from "../../../../../../lib/ngx-schedule-table/model/data/row-group-data";
@@ -37,8 +36,7 @@ export class ScheduleTableComponent implements OnInit, OnDestroy {
               private paginationService: PaginationService,
               private tableRenderer: TableRenderer,
               private sumCalculator: TableSumCalculator,
-              private scheduleService: ScheduleService,
-              private state: TableStateService,
+              public state: TableStateService,
               public dataSource: TableDataSource,
               public utility: SchedulerUtility) {}
 

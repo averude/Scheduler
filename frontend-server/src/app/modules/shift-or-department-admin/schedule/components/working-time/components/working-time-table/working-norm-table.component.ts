@@ -21,7 +21,7 @@ import { TableSumCalculator } from "../../../../../../../services/calculators/ta
 import { AuthService } from "../../../../../../../services/http/auth.service";
 import { ShiftPatternService } from "../../../../../../../services/http/shift-pattern.service";
 import { ShiftPattern } from "../../../../../../../model/shift-pattern";
-import { CellUpdater } from "../../../../../../../services/collectors/cell-updater";
+import { CellUpdater, getMonthCellIndex } from "../../../../../../../services/collectors/cell-updater";
 
 @Component({
   selector: 'app-working-norm-table',
@@ -107,14 +107,14 @@ export class WorkingNormTableComponent implements OnInit, OnDestroy {
           if (workingNorm.id) {
             this.workingNormService.update(workingNorm)
               .subscribe(res => {
-                this.cellUpdater.updateCellData(selectionData.rowData.cellData, workingNorm);
+                this.cellUpdater.updateCellData(selectionData.rowData.cellData, [workingNorm], getMonthCellIndex);
                 this.tableRenderer.renderRow(selectionData.rowData.id);
-              })
+              });
           } else {
             this.workingNormService.create(workingNorm)
               .subscribe(res => {
                 workingNorm.id = res;
-                this.cellUpdater.updateCellData(selectionData.rowData.cellData, workingNorm);
+                this.cellUpdater.updateCellData(selectionData.rowData.cellData, [workingNorm], getMonthCellIndex);
                 this.tableRenderer.renderRow(selectionData.rowData.id);
               });
           }

@@ -1,4 +1,4 @@
-import { Row, RowGroup } from "../../../model/ui/schedule-table/table-data";
+import { Cell, Row, RowGroup } from "../../../model/ui/schedule-table/table-data";
 import { Position } from "../../../model/position";
 import { EmployeeScheduleDTO } from "../../../model/dto/employee-schedule-dto";
 import { CalendarDay } from "../../../lib/ngx-schedule-table/model/calendar-day";
@@ -9,6 +9,7 @@ import { CellEnabledSetter } from "./cell-enabled-setter";
 import { CompositionDivider } from "../../divider/composition-divider.service";
 import { CellCollector } from "../cell-collector";
 import { Injectable } from "@angular/core";
+import { WorkDay } from "../../../model/workday";
 
 @Injectable()
 export class TableRowProcessor {
@@ -134,7 +135,8 @@ export class TableRowProcessor {
     row.employee = dto.parent;
     row.position = position;
     row.isSubstitution = isSubstitution;
-    row.cellData = this.cellCollector.collect(calendarDays, dto.collection, false);
+    row.cellData = this.cellCollector.collect<WorkDay, Cell>(calendarDays, dto.collection, false);
+    row.cellData.forEach((cell: Cell) => cell.row = row);
     row.workingNorm = workingNorm;
     return row;
   }

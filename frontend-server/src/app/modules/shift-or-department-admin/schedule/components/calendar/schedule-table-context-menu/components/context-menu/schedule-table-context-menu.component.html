@@ -1,4 +1,6 @@
-<context-menu (close)="clearSelection()">
+<!--Selected cells menu-->
+<context-menu #tableCellMenu
+              (close)="clearSelection()">
 
   <ng-container *ngIf="isEditableGroups">
     <ng-template contextMenuItem (execute)="openAddSubstitutionDialog($event.item)">
@@ -9,14 +11,14 @@
   <ng-container *ngIf="!isEditableGroups">
 
     <ng-template contextMenuItem
-                 (execute)="openCustomDayDialog($event.item)">
-      Custom day
-    </ng-template>
-
-    <ng-template contextMenuItem
                  [divider]="true"></ng-template>
 
     <context-menu #singleDaySubMenu>
+      <ng-template contextMenuItem
+                   (execute)="openCustomDayDialog($event.item)">
+        <div class="sub-menu-item">Custom day</div>
+      </ng-template>
+
       <ng-template *ngFor="let departmentDayType of departmentDayTypes"
                    contextMenuItem
                    (execute)="scheduleGenerationService.generateScheduleByDepartmentDayType(departmentDayType, $event.item)">
@@ -31,7 +33,7 @@
     <context-menu #serviceDaySubMenu>
       <ng-template contextMenuItem
                    (execute)="scheduleGenerationService.removeServiceDays($event.item)">
-        Remove service days
+        <div class="sub-menu-item">Remove service days</div>
       </ng-template>
 
       <ng-template *ngFor="let departmentDayType of serviceDayTypes"
@@ -63,6 +65,38 @@
       </ng-template>
     </ng-container>
 
+  </ng-container>
+
+</context-menu>
+
+<!--Header cell menu-->
+<context-menu #tableHeaderMenu>
+
+
+
+  <!--<ng-template contextMenuItem>-->
+    <!--Every shift-->
+  <!--</ng-template>-->
+
+  <ng-container *ngFor="let shift of shifts">
+
+    <context-menu #singleDaySubMenu>
+      <ng-template contextMenuItem
+                   (execute)="openShiftCustomDayDialog(shift.id, $event.item)">
+        <div class="sub-menu-item">Custom day</div>
+      </ng-template>
+
+      <ng-template *ngFor="let departmentDayType of departmentDayTypes"
+                   contextMenuItem
+                   (execute)="foo(shift.id, departmentDayType, $event.item)">
+        <app-context-menu-daytype-item [hasDayTypeAndTime]="departmentDayType">
+        </app-context-menu-daytype-item>
+      </ng-template>
+    </context-menu>
+
+    <ng-template contextMenuItem [subMenu]="singleDaySubMenu">
+      {{shift.name}}
+    </ng-template>
   </ng-container>
 
 </context-menu>

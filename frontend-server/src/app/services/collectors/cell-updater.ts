@@ -7,12 +7,13 @@ import { Injectable } from "@angular/core";
 export class CellUpdater {
 
   public updateCellData(cellData: CellData[],
-                        values: HasDate[]) {
+                        values: HasDate[],
+                        fn: (value: HasDate) => number = getDayCellIndex) {
     if (!values || values.length === 0) {
       return;
     }
 
-    const cellIndexes = this.getCellStartIndex(values);
+    const cellIndexes = this.getCellStartIndex(values, fn);
 
     if (cellIndexes.start < 0 || cellIndexes.end < 0) {
       return;
@@ -32,35 +33,48 @@ export class CellUpdater {
     }
   }
 
-  private getCellStartIndex(values: HasDate[]): {start: number, end: number} {
+  private getCellStartIndex(values: HasDate[],
+                            fn: (value: HasDate) => number): {start: number, end: number} {
     const result = {
       start:  -1,
       end:    -1
     };
 
     if (values && values.length > 0) {
-      result.start  = this.getDayCellIndex(values[0]);
-      result.end    = this.getDayCellIndex(values[values.length - 1]);
+      result.start  = fn(values[0]);
+      result.end    = fn(values[values.length - 1]);
     }
 
     return result;
   }
+}
 
-  private getDayCellIndex(values: HasDate): number {
-    let result = -1;
+export function getDayCellIndex(value: HasDate) {
+  let result = -1;
 
-    if (!values) {
-      return result;
-    }
-
-    if (typeof values.date == 'string') {
-
-    }
-    const dayNumber = moment.utc(values.date).date();
-    if (dayNumber > 0 && dayNumber <= 31) {
-      result = dayNumber - 1;
-    }
-
+  if (!value) {
     return result;
   }
+
+  const dayNumber = moment.utc(value.date).date();
+  if (dayNumber > 0 && dayNumber <= 31) {
+    result = dayNumber - 1;
+  }
+
+  return result;
+}
+
+export function getMonthCellIndex(value: HasDate) {
+  let result = -1;
+
+  if (!value) {
+    return result;
+  }
+
+  const monthNumber = moment.utc(value.date).month();
+  if (monthNumber >= 0 && monthNumber <= 11) {
+    result = monthNumber;
+  }
+
+  return result;
 }

@@ -24,6 +24,11 @@ import { DepartmentDayTypeService } from "../../../../../../../../services/http/
 import { ShiftPattern } from "../../../../../../../../model/shift-pattern";
 import { DayTypeService } from "../../../../../../../../services/http/day-type.service";
 import { TableDataSource } from "../../../../../../../../services/collectors/schedule/table-data-source";
+import { Shift } from "../../../../../../../../model/shift";
+import { TableStateService } from "../../../../../../../../lib/ngx-schedule-table/service/table-state.service";
+import { RowGroup } from "../../../../../../../../model/ui/schedule-table/table-data";
+import { binarySearch } from "../../../../../../../../shared/utils/collection-utils";
+import { CalendarDay } from "../../../../../../../../lib/ngx-schedule-table/model/calendar-day";
 
 @Component({
   selector: 'app-schedule-table-context-menu',
@@ -33,10 +38,15 @@ import { TableDataSource } from "../../../../../../../../services/collectors/sch
 })
 export class ScheduleTableContextMenuComponent implements OnInit, OnDestroy {
 
-  @ViewChild(ContextMenuComponent)
-  patternMenu:  ContextMenuComponent;
+  @ViewChild('tableCellMenu')
+  tableCellMenu:  ContextMenuComponent;
+
+  @ViewChild('tableHeaderMenu')
+  tableHeaderMenu: ContextMenuComponent;
 
   @Input() isEditableGroups: boolean = false;
+  @Input() shifts: Shift[] = [];
+  @Input() groups: RowGroup[] = [];
 
   patternDtos:         BasicDto<ShiftPattern, PatternUnit>[]   = [];
   departmentDayTypes:  DepartmentDayType[] = [];
@@ -55,7 +65,10 @@ export class ScheduleTableContextMenuComponent implements OnInit, OnDestroy {
               public  scheduleGenerationService: ScheduleGenerationService,
               private rowClearSelection: ClearSelectionService,
               private selectionEndService: SelectionEndService,
+              private tableState: TableStateService,
               private contextMenuService: ContextMenuService) { }
+
+  private headerCellClickSub: Subscription;
 
   ngOnInit() {
     forkJoin([this.shiftPatternDtoService.getAll(),
@@ -80,12 +93,27 @@ export class ScheduleTableContextMenuComponent implements OnInit, OnDestroy {
         if (selectedCells && selectedCells.length > 0) {
           setTimeout(() => {
             this.contextMenuService.show.next({
-              contextMenu: this.patternMenu,
-              event: selectionData.event,
-              item: selectionData,
+              contextMenu: this.tableCellMenu,
+              event:  selectionData.event,
+              item:   selectionData,
             });
             selectionData.event.preventDefault();
             selectionData.event.stopPropagation();
+          });
+        }
+      });
+
+    this.headerCellClickSub = this.tableState.onHeaderCellClick()
+      .subscribe(value => {
+        if (value) {
+          setTimeout(() => {
+            this.contextMenuService.show.next({
+              contextMenu: this.tableHeaderMenu,
+              event:  value.event,
+              item:   value.value
+            });
+            value.event.preventDefault();
+            value.event.stopPropagation();
           });
         }
       });
@@ -109,9 +137,40 @@ export class ScheduleTableContextMenuComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.selectionEndSub.unsubscribe();
+    this.headerCellClickSub.unsubscribe();
   }
 
   clearSelection() {
     this.rowClearSelection.clearSelection();
+  }
+
+  foo(shiftId: number,
+      departmentDayType: DepartmentDayType,
+      day: CalendarDay) {
+    const rowGroup = binarySearch(this.groups, (mid => mid.id - shiftId));
+    if (rowGroup) {
+      const cells = [];
+
+      for (let row of rowGroup.rows) {
+        const cell = row.cellData[day.dayOfMonth - 1];
+        if (cell.enabled) {
+          cells.push(cell);
+        }
+      }
+
+      this.scheduleGenerationService.generateFoo(departmentDayType, cells);
+    }
+  }
+
+  openShiftCustomDayDialog(shiftId: number, day: CalendarDay) {
+    const config = new MatDialogConfig();
+    config.data = this.noServiceDepartmentDayTypes;
+
+    this.dialog.open(CustomDaytypeDialogComponent, config)
+      .afterClosed().subscribe(customDay => {
+      if (customDay) {
+        this.foo(shiftId, customDay, day);
+      }
+    });
   }
 }

@@ -13,7 +13,8 @@
     <th class="table-sticky-header month-header"
         [class.weekend]="date.weekend"
         [class.holiday]="date.holiday"
-        [class.current-day]="date.isNow">
+        [class.current-day]="date.isNow"
+        (click)="state.clickHeaderCell({value: date, event: $event})">
       {{date.dayOfMonth}}
     </th>
   </ng-template>
@@ -67,4 +68,6 @@
 </app-schedules-table>
 
 <app-schedule-table-context-menu *ngIf="accessRights.isAdmin"
+                                 [shifts]="dataSource.shifts"
+                                 [groups]="tableData"
                                  [isEditableGroups]="isEditable"></app-schedule-table-context-menu>

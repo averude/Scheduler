@@ -18,7 +18,7 @@ export class CellEnabledSetter {
       const begin = from.isSameOrAfter(interval.from) ? from : interval.from;
       const end   = to.isSameOrBefore(interval.to) ? to : interval.to;
 
-      if (begin.isBefore(end)) {
+      if (begin.isSameOrBefore(end)) {
         let start_idx = begin.date() - 1;
         let end_idx   = end.date();
 

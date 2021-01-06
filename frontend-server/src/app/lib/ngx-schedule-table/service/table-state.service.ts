@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from "rxjs";
+import { BehaviorSubject, Observable, Subject } from "rxjs";
 
 @Injectable()
 export class TableStateService {
 
-  private showSumColumnsSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  private cellStateSubject: BehaviorSubject<number> = new BehaviorSubject<number>(0);
-  private editableGroupsSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  private showSumColumnsSubject:  BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  private cellStateSubject:       BehaviorSubject<number> = new BehaviorSubject<number>(0);
+  private editableGroupsSubject:  BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+
+  private headerCellClick:        Subject<any> = new Subject();
 
   constructor() { }
 
@@ -36,5 +38,13 @@ export class TableStateService {
 
   resetEditableState() {
     this.editableGroupsSubject.next(false);
+  }
+
+  clickHeaderCell(value: any) {
+    this.headerCellClick.next(value);
+  }
+
+  onHeaderCellClick(): Observable<any> {
+    return this.headerCellClick.asObservable();
   }
 }
