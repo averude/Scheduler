@@ -10,6 +10,9 @@ import { BasicDto } from "../../../model/dto/basic-dto";
 import { ShiftPattern } from "../../../model/shift-pattern";
 import { HasDayTypeAndTime } from "../../../model/interface/has-day-type-and-time";
 import { CellUpdater } from "../../collectors/cell-updater";
+import { Cell } from "../../../model/ui/schedule-table/table-data";
+import { createOrUpdateCell } from "./schedule-generation-utils";
+import { forkJoin } from "rxjs";
 
 @Injectable()
 export class ScheduleGenerationService {
@@ -84,7 +87,7 @@ export class ScheduleGenerationService {
       if (createdSchedule.length > 0) {
         this.scheduleService.create(createdSchedule)
           .subscribe(response => {
-            this.cellUpdater.updateCellData(rowData.cellData, response)
+            this.cellUpdater.updateCellData(rowData.cellData, response);
             this.rowRenderer.renderRow(rowData.id);
             this.notificationService.success(
               'Created',
@@ -103,6 +106,30 @@ export class ScheduleGenerationService {
       }
     };
   };
+
+  generateFoo(departmentDayType: DepartmentDayType, cells: Cell[]) {
+    cells.forEach(cell => {
+      const employeeId = cell.row.id;
+      createOrUpdateCell(false, employeeId, departmentDayType, cell);
+    });
+
+    const updated = cells.filter(cell => cell.value.id);
+    const created = cells.filter(cell => !cell.value.id);
+
+    const obs = [
+      this.scheduleService.update(updated.map(value => value.value)),
+      this.scheduleService.create(created.map(value => value.value))
+    ];
+
+    forkJoin(obs).subscribe(([updatedSchedule, createdSchedule]) => {
+      updated.forEach(cell => this.rowRenderer.renderRow(cell.row.id));
+      created.forEach((cell, index) => {
+        this.rowRenderer.renderRow(cell.row.id);
+        created[index].value.id = createdSchedule[index].id;
+      });
+      this.notificationService.success("YEEESS!");
+    });
+  }
 
   private get errorHandler(): (message) => void {
     return (message) => this.notificationService.error('Error', message);
