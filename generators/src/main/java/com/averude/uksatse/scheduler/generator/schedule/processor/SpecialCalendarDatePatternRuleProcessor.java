@@ -3,6 +3,7 @@ package com.averude.uksatse.scheduler.generator.schedule.processor;
 import com.averude.uksatse.scheduler.core.entity.ShiftPatternGenerationRule;
 import com.averude.uksatse.scheduler.core.entity.SpecialCalendarDate;
 import com.averude.uksatse.scheduler.core.entity.WorkDay;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 import java.util.Map;
@@ -10,6 +11,7 @@ import java.util.Map;
 import static com.averude.uksatse.scheduler.generator.utils.GenerationUtils.getWorkDay;
 import static com.averude.uksatse.scheduler.generator.utils.GenerationUtils.updateWorkDay;
 
+@Slf4j
 public abstract class SpecialCalendarDatePatternRuleProcessor implements PatternRuleProcessor {
 
     @Override
@@ -23,6 +25,11 @@ public abstract class SpecialCalendarDatePatternRuleProcessor implements Pattern
         var startDate = workDays[0].getDate();
 
         var specialCalendarDates = specialCalendarDatesMap.get(getType());
+        if (specialCalendarDates == null) {
+            log.info("No special calendar date with type {} found", getType());
+            return;
+        }
+
         for (var specialCalendarDate : specialCalendarDates) {
             var workDay = getWorkDay(startDate, specialCalendarDate, workDays);
 
