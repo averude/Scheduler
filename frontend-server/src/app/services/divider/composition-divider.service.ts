@@ -32,7 +32,7 @@ export class CompositionDivider {
 
       if (from.isSameOrAfter(substitutionComposition.from)) {
         if (substitutionComposition.to.isSameOrBefore(to)) {
-          if (substitutionComposition.to.isAfter(from)) {
+          if (substitutionComposition.to.isSameOrAfter(from)) {
             from = substitutionComposition.to.clone().add(1, 'day');
           }
           continue;

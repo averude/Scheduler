@@ -45,7 +45,7 @@ public class GenerationUtils {
         var date = specialCalendarDate.getDate();
         var index = (int) startDate.until(date, ChronoUnit.DAYS);
 
-        if (index >= workDays.length) {
+        if (index < 0 || index >= workDays.length) {
             return null;
         }
 

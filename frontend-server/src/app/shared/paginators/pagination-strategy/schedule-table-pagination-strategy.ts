@@ -11,8 +11,7 @@ import { SpecialCalendarDate } from "../../../model/special-calendar-date";
 @Injectable()
 export class ScheduleTablePaginationStrategy implements IPaginationStrategy {
 
-  constructor(private specialCalendarDateService: SpecialCalendarDateService) {
-  }
+  constructor(private specialCalendarDateService: SpecialCalendarDateService) {}
 
   getPaginationObject(selectedDate: Moment,
                       firstDay:     Moment,
