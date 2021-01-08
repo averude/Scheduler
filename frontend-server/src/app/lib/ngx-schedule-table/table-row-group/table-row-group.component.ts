@@ -24,7 +24,7 @@ import { filter } from "rxjs/operators";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TableRowGroupComponent implements OnInit, OnDestroy {
-  numberOfColumns:  number;
+  colspan:  number;
 
   @Input() selectionEnabled:  boolean;
   @Input() multipleSelect:    boolean;
@@ -53,7 +53,7 @@ export class TableRowGroupComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.paginatorSub = this.paginatorService.onValueChange
       .subscribe(daysInMonth => {
-        this.numberOfColumns = 1 + daysInMonth.length + this.afterDateColumns.length;
+        this.colspan = this.beforeDateColumns?.length + daysInMonth.length + this.afterDateColumns?.length;
       });
 
     this.rowGroupRenderSub = this.tableRenderer.onRenderRowGroup

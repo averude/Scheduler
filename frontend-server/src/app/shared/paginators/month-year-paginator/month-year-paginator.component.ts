@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import * as moment from "moment";
 import { DurationInputArg1, DurationInputArg2, Moment } from "moment";
 import { MatDatepicker } from "@angular/material/datepicker";
@@ -15,6 +15,8 @@ import { debounceTime, switchMap } from "rxjs/operators";
 export class MonthYearPaginatorComponent implements OnInit, OnDestroy {
   @Input() paginationStrategy:  IPaginationStrategy;
   @Input() dateUnit: DurationInputArg2 = 'month';
+
+  @Output() onDateChange: EventEmitter<void> = new EventEmitter<void>();
 
   private limiter:  Subject<any> = new Subject();
   private dateStep: DurationInputArg1 = 1;
@@ -85,6 +87,8 @@ export class MonthYearPaginatorComponent implements OnInit, OnDestroy {
   }
 
   private changeDate() {
+    this.onDateChange.emit();
+
     this.initFirstAndLastDaysOfDateUnit();
     if (this.paginationStrategy) {
       let values = [this.currentDate, this.firstDayOfMonth, this.lastDayOfMonth];

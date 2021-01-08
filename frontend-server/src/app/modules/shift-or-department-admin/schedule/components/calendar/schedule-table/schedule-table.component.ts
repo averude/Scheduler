@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, } from '@angular/core';
 import { PaginationService } from "../../../../../../lib/ngx-schedule-table/service/pagination.service";
 import { Subscription } from "rxjs";
 import { ScheduleTablePaginationStrategy } from "../../../../../../shared/paginators/pagination-strategy/schedule-table-pagination-strategy";
@@ -22,6 +22,7 @@ import { Row } from "../../../../../../model/ui/schedule-table/table-data";
 export class ScheduleTableComponent implements OnInit, OnDestroy {
   accessRights: UserAccessRights;
   isEditable:   boolean;
+  proxyViewIsShown: boolean;
 
   tableData: RowGroupData[];
 
@@ -30,7 +31,6 @@ export class ScheduleTableComponent implements OnInit, OnDestroy {
   private editableStateSub: Subscription;
 
   constructor(private authService: AuthService,
-              private cd: ChangeDetectorRef,
               public  cellLabelSetter: SchedulerCellLabelSetter,
               public  paginationStrategy: ScheduleTablePaginationStrategy,
               private paginationService: PaginationService,
@@ -43,17 +43,19 @@ export class ScheduleTableComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.dataSourceSub = this.dataSource.tableData
       .subscribe(tableData => {
+        this.proxyViewIsShown = false;
         this.tableData = tableData;
-        this.cd.markForCheck();
+        this.tableRenderer.renderTable();
       });
+
 
     this.editableStateSub = this.state.editableGroupsState
       .subscribe(isEditable => this.isEditable = isEditable);
 
-    this.accessRights = this.authService.currentUserValue.accessRights;
-
     this.rowRenderSub = this.tableRenderer.onRenderRow
       .subscribe(rowId => this.sumCalculator.calculateWorkHoursSum(this.tableData, rowId));
+
+    this.accessRights = this.authService.currentUserValue.accessRights;
   }
 
   ngOnDestroy(): void {
@@ -65,5 +67,10 @@ export class ScheduleTableComponent implements OnInit, OnDestroy {
 
   isRowEditable(rowData: Row): boolean {
     return this.accessRights.isDepartmentLevel && this.isEditable;
+  }
+
+  onDateChange() {
+    this.proxyViewIsShown = true;
+    this.tableRenderer?.renderTable();
   }
 }

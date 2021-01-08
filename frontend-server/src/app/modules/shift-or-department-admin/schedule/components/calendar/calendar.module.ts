@@ -22,6 +22,7 @@ import { TableDataCollector } from "../../../../../services/collectors/schedule/
 import { TableRowProcessor } from "../../../../../services/collectors/schedule/table-row-processor.service";
 import { TableCompositionHandler } from "../../../../../services/collectors/schedule/table-composition-handler";
 import { TableRowRemover } from "../../../../../services/collectors/schedule/table-row-remover";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 
 @NgModule({
   imports: [
@@ -30,6 +31,7 @@ import { TableRowRemover } from "../../../../../services/collectors/schedule/tab
     SharedModule,
     MonthYearPaginatorModule,
     MatFormFieldModule,
+    MatProgressSpinnerModule,
     MatInputModule,
     ScheduleTableContextMenuModule,
     ScheduleTableModule,

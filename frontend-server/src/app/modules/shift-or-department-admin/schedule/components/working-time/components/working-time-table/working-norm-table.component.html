@@ -1,5 +1,6 @@
 <app-schedules-table [groupable]="false"
                      [rowData]="rowData"
+                     [proxyViewIsShown]="proxyViewIsShown"
                      [selectionEnabled]="!isAdmin"
                      [multipleSelect]="false"
                      [cellLabelSetter]="cellLabelSetter"
@@ -12,8 +13,13 @@
                            (onEntityGenerated)="onWorkingNormGenerated($event)"></avr-entity-generation>
   </ng-template>
 
+  <ng-template proxyViewDef>
+    <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+  </ng-template>
+
   <ng-template paginatorDef>
     <app-month-year-paginator [paginationStrategy]="paginationStrategy"
+                              (onDateChange)="onDateChange()"
                               [dateUnit]="'year'"></app-month-year-paginator>
   </ng-template>
 

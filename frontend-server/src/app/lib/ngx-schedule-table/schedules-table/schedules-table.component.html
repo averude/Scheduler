@@ -19,34 +19,45 @@
          [beforeDateColumns]="beforeDateColumns"
          [afterDateColumns]="afterDateColumns">
   </thead>
-  <ng-container *ngIf="groupable">
-    <tbody *ngFor="let group of rowGroupData"
-           app-table-row-group
-           [selectionEnabled]="selectionEnabled"
-           [editableRowGroup]="editableRowGroup"
-           [multipleSelect]="multipleSelect"
-           [showSumColumns]="showSumColumns"
-           [datedCellDef]="datedCellDef"
-           [beforeDateColumns]="beforeDateColumns"
-           [afterDateColumns]="afterDateColumns"
-           [groupData]="group"
-           [cellLabelSetter]="cellLabelSetter"
-           [onAddRowClick]="onAddRowClick">
-    </tbody>
-  </ng-container>
-  <ng-container>
-    <tr class="row"
-        *ngFor="let row of rowData"
-        app-table-row
-        [selectionEnabled]="selectionEnabled"
-        [multipleSelect]="multipleSelect"
-        [showSumColumns]="showSumColumns"
-        [datedCellDef]="datedCellDef"
-        [beforeDateColumns]="beforeDateColumns"
-        [afterDateColumns]="afterDateColumns"
-        [rowData]="row"
-        [cellLabelSetter]="cellLabelSetter">
+  <ng-container *ngIf="proxyViewIsShown">
+    <tr>
+      <td [attr.colspan]="colspan">
+        <div class="table-proxy-view">
+          <ng-container [ngTemplateOutlet]="proxyViewDef"></ng-container>
+        </div>
+      </td>
     </tr>
+  </ng-container>
+  <ng-container *ngIf="!proxyViewIsShown">
+    <ng-container *ngIf="groupable">
+      <tbody *ngFor="let group of rowGroupData"
+             app-table-row-group
+             [selectionEnabled]="selectionEnabled"
+             [editableRowGroup]="editableRowGroup"
+             [multipleSelect]="multipleSelect"
+             [showSumColumns]="showSumColumns"
+             [datedCellDef]="datedCellDef"
+             [beforeDateColumns]="beforeDateColumns"
+             [afterDateColumns]="afterDateColumns"
+             [groupData]="group"
+             [cellLabelSetter]="cellLabelSetter"
+             [onAddRowClick]="onAddRowClick">
+      </tbody>
+    </ng-container>
+    <ng-container>
+      <tr class="row"
+          *ngFor="let row of rowData"
+          app-table-row
+          [selectionEnabled]="selectionEnabled"
+          [multipleSelect]="multipleSelect"
+          [showSumColumns]="showSumColumns"
+          [datedCellDef]="datedCellDef"
+          [beforeDateColumns]="beforeDateColumns"
+          [afterDateColumns]="afterDateColumns"
+          [rowData]="row"
+          [cellLabelSetter]="cellLabelSetter">
+      </tr>
+    </ng-container>
   </ng-container>
 </table>
 </div>

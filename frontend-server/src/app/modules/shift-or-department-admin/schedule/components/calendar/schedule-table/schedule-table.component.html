@@ -1,12 +1,18 @@
 <app-schedules-table [showSumColumns]="accessRights.isAdmin"
                      [multipleSelect]="true"
                      [rowGroupData]="tableData"
+                     [proxyViewIsShown]="proxyViewIsShown"
                      [cellLabelSetter]="cellLabelSetter"
                      [selectionEnabled]="accessRights.isAdmin"
                      (onAddRowClick)="accessRights.isDepartmentLevel && isEditable && dataSource.newRow($event)">
 
   <ng-template paginatorDef>
-    <app-month-year-paginator [paginationStrategy]="paginationStrategy"></app-month-year-paginator>
+    <app-month-year-paginator [paginationStrategy]="paginationStrategy"
+                              (onDateChange)="onDateChange()"></app-month-year-paginator>
+  </ng-template>
+
+  <ng-template proxyViewDef>
+    <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
   </ng-template>
 
   <ng-template headerDateCellDef let-date>

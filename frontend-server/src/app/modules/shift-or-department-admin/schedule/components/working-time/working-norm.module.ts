@@ -16,6 +16,7 @@ import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
 import { AvrEntityGenerationModule } from "../../../../../lib/avr-entity-generation/avr-entity-generation.module";
 import { TableSumCalculator } from "../../../../../services/calculators/table-sum-calculator.service";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 
 @NgModule({
   imports: [
@@ -27,6 +28,7 @@ import { TableSumCalculator } from "../../../../../services/calculators/table-su
     ScheduleTableModule,
     MonthYearPaginatorModule,
     MatDialogModule,
+    MatProgressSpinnerModule,
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,

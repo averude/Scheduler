@@ -17,6 +17,7 @@ import { AfterDateColumnDef, BeforeDateColumnDef } from "./directives/column";
 import { PaginatorDef } from "./directives/paginator";
 import { SelectableCellDirective } from "./directives/selectable-cell.directive";
 import { TableCellComponent } from "./table-cell/table-cell.component";
+import { ProxyViewDef } from "./directives/proxy-view";
 
 @NgModule({
   imports: [
@@ -33,6 +34,7 @@ import { TableCellComponent } from "./table-cell/table-cell.component";
     SelectableRowDirective,
     TableTopItemDirective,
     PaginatorDef,
+    ProxyViewDef,
     BeforeDateColumnDef,
     AfterDateColumnDef,
     HeaderCellDef,
@@ -45,6 +47,7 @@ import { TableCellComponent } from "./table-cell/table-cell.component";
     SelectableCellDirective,
     TableTopItemDirective,
     PaginatorDef,
+    ProxyViewDef,
     BeforeDateColumnDef,
     AfterDateColumnDef,
     HeaderCellDef,

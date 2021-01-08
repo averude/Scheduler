@@ -1,6 +1,6 @@
 <ng-container *ngIf="(groupData?.rows && groupData?.rows.length > 0) || editableRowGroup">
   <tr class="group-label-row">
-    <td [attr.colspan]="numberOfColumns">
+    <td [attr.colspan]="colspan">
       <div class="group-label-container">
         <div class="group-label"
              (click)="isHidden = !isHidden">

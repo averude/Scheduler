@@ -3,12 +3,23 @@ import { Observable, Subject } from "rxjs";
 
 @Injectable()
 export class TableRenderer {
+
+  //table
+  private tableSubject:               Subject<void>   = new Subject();
   //groups
   private renderRowGroupSubject:      Subject<number> = new Subject();
   private renderAllRowGroupsSubject:  Subject<void>   = new Subject();
   // rows
   private renderRowSubject:           Subject<number> = new Subject();
   private renderAllRowsSubject:       Subject<void> = new Subject();
+
+  renderTable() {
+    this.tableSubject.next();
+  }
+
+  get onTableRender(): Observable<void> {
+    return this.tableSubject.asObservable();
+  }
 
   renderRow(rowEntityId: number) {
     this.renderRowSubject.next(rowEntityId);

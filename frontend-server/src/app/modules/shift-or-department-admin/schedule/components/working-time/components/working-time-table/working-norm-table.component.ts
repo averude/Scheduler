@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { YearPaginationStrategy } from "../../../../../../../shared/paginators/pagination-strategy/year-pagination-strategy";
 import { PaginationService } from "../../../../../../../lib/ngx-schedule-table/service/pagination.service";
 import { from, Subscription } from "rxjs";
@@ -31,8 +31,9 @@ import { CellUpdater, getMonthCellIndex } from "../../../../../../../services/co
 })
 export class WorkingNormTableComponent implements OnInit, OnDestroy {
   isAdmin: boolean = false;
+  proxyViewIsShown: boolean;
 
-  rowData:  RowData[] = [];
+  rowData: RowData[] = [];
   private shifts:   Shift[]   = [];
   private shiftPatterns: ShiftPattern[] = [];
 
@@ -43,7 +44,6 @@ export class WorkingNormTableComponent implements OnInit, OnDestroy {
   private rowRenderSub: Subscription;
 
   constructor(private authService: AuthService,
-              private cd: ChangeDetectorRef,
               private dialog: MatDialog,
               private cellUpdater: CellUpdater,
               private rowClearSelection: ClearSelectionService,
@@ -68,11 +68,12 @@ export class WorkingNormTableComponent implements OnInit, OnDestroy {
       .subscribe(months => this.workingNormService
         .getAllDto(months[0].isoString, months[months.length - 1].isoString)
         .subscribe(dtos => {
+          this.proxyViewIsShown = false;
           this.shifts = dtos.map(dto => dto.parent);
           this.generationUnits = getGenerationUnits(this.shifts);
           this.rowData = this.dataCollector.getRowData(months, dtos, this.shiftPatterns);
           this.sumCalculator.calculateHoursNormSum(this.rowData);
-          this.cd.markForCheck();
+          this.tableRenderer.renderTable();
         }));
 
     if (this.isAdmin) {
@@ -128,5 +129,10 @@ export class WorkingNormTableComponent implements OnInit, OnDestroy {
     from(dtos).pipe(
       concatMap(generationDto => this.workingNormService.generate(generationDto))
     ).subscribe(res => this.notificationsService.success('Generated', res));
+  }
+
+  onDateChange() {
+    this.proxyViewIsShown = true;
+    this.tableRenderer.renderTable();
   }
 }

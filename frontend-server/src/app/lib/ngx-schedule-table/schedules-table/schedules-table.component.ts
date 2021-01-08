@@ -1,5 +1,7 @@
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ContentChild,
   ContentChildren,
@@ -20,6 +22,8 @@ import { RowData } from "../model/data/row-data";
 import { CellLabelSetter, SimpleCellLabelSetter } from "../utils/cell-label-setter";
 import { TableStateService } from "../service/table-state.service";
 import { Subscription } from "rxjs";
+import { ProxyViewDef } from "../directives/proxy-view";
+import { TableRenderer } from "../service/table-renderer.service";
 
 @Component({
   selector: 'app-schedules-table',
@@ -27,7 +31,9 @@ import { Subscription } from "rxjs";
   styleUrls: ['./schedules-table.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SchedulesTableComponent implements OnInit, OnDestroy {
+export class SchedulesTableComponent implements OnInit, AfterViewInit, OnDestroy {
+  @Input() proxyViewIsShown: boolean = false;
+
   @Input() groupable: boolean = true;
   @Input() selectionEnabled   = false;
   @Input() multipleSelect     = true;
@@ -53,16 +59,24 @@ export class SchedulesTableComponent implements OnInit, OnDestroy {
   @ContentChildren(AfterDateColumnDef)
   afterDateColumns: QueryList<AfterDateColumnDef>;
 
-  @Input() rowGroupData:  RowGroupData[];
-  @Input() rowData:       RowData[];
+  @ContentChild(ProxyViewDef, {read: TemplateRef})
+  proxyViewDef: TemplateRef<any>;
 
+  @Input() rowGroupData:  RowGroupData[];
+
+  @Input() rowData:       RowData[];
   @Input() cellLabelSetter: CellLabelSetter;
 
   @Output() onAddRowClick: EventEmitter<RowGroupData> = new EventEmitter();
 
-  private tableStateSub: Subscription;
+  colspan: number;
 
-  constructor(private tableStateService: TableStateService) {
+  private tableStateSub: Subscription;
+  private tableRenderSub: Subscription;
+
+  constructor(private tableStateService: TableStateService,
+              private tableRenderer: TableRenderer,
+              private cd: ChangeDetectorRef) {
   }
 
   ngOnInit() {
@@ -72,9 +86,16 @@ export class SchedulesTableComponent implements OnInit, OnDestroy {
 
     this.tableStateSub = this.tableStateService.editableGroupsState
       .subscribe(editableRowGroup => this.editableRowGroup = editableRowGroup);
+
+    this.tableRenderSub = this.tableRenderer.onTableRender.subscribe(() => this.cd.markForCheck());
+  }
+
+  ngAfterViewInit(): void {
+    this.colspan = this.beforeDateColumns?.length + 31 + this.afterDateColumns?.length;
   }
 
   ngOnDestroy(): void {
     if (this.tableStateSub) this.tableStateSub.unsubscribe();
+    if (this.tableRenderSub) this.tableRenderSub.unsubscribe();
   }
 }
