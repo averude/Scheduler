@@ -1,7 +1,7 @@
 package com.averude.uksatse.scheduler.shared.service;
 
-import com.averude.uksatse.scheduler.core.entity.SummationColumn;
-import com.averude.uksatse.scheduler.core.entity.SummationColumnDayTypeRange;
+import com.averude.uksatse.scheduler.core.model.entity.SummationColumn;
+import com.averude.uksatse.scheduler.core.model.entity.SummationColumnDayTypeRange;
 import com.averude.uksatse.scheduler.shared.repository.DepartmentRepository;
 import com.averude.uksatse.scheduler.shared.repository.ShiftRepository;
 import com.averude.uksatse.scheduler.shared.repository.SummationColumnDayTypeRangeRepository;

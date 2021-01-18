@@ -1,6 +1,6 @@
 package com.averude.uksatse.scheduler.shared.repository;
 
-import com.averude.uksatse.scheduler.core.entity.WorkingNorm;
+import com.averude.uksatse.scheduler.core.model.entity.WorkingNorm;
 import com.averude.uksatse.scheduler.shared.repository.interfaces.IByDepartmentIdAndDateRepository;
 
 import java.time.LocalDate;

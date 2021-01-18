@@ -2,7 +2,7 @@ package com.averude.uksatse.scheduler.controllers;
 
 import com.averude.uksatse.scheduler.controllers.base.AByAuthController;
 import com.averude.uksatse.scheduler.controllers.interfaces.DayTypeController;
-import com.averude.uksatse.scheduler.core.entity.DayType;
+import com.averude.uksatse.scheduler.core.model.entity.DayType;
 import com.averude.uksatse.scheduler.security.modifier.entity.EnterpriseIdEntityModifier;
 import com.averude.uksatse.scheduler.security.state.entity.SimpleByAuthMethodResolver;
 import com.averude.uksatse.scheduler.shared.service.DayTypeService;

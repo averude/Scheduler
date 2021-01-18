@@ -1,8 +1,8 @@
 package com.averude.uksatse.scheduler.generator.utils;
 
-import com.averude.uksatse.scheduler.core.entity.SpecialCalendarDate;
-import com.averude.uksatse.scheduler.core.entity.WorkDay;
 import com.averude.uksatse.scheduler.core.interfaces.entity.HasDayTypeAndTime;
+import com.averude.uksatse.scheduler.core.model.entity.SpecialCalendarDate;
+import com.averude.uksatse.scheduler.core.model.entity.WorkDay;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;

@@ -1,6 +1,6 @@
 package com.averude.uksatse.scheduler.shared.service;
 
-import com.averude.uksatse.scheduler.core.entity.SubstitutionShiftComposition;
+import com.averude.uksatse.scheduler.core.model.entity.SubstitutionShiftComposition;
 import com.averude.uksatse.scheduler.shared.repository.SubstitutionShiftCompositionRepository;
 import com.averude.uksatse.scheduler.shared.service.base.AService;
 import lombok.extern.slf4j.Slf4j;

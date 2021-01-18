@@ -1,6 +1,6 @@
 package com.averude.uksatse.scheduler.core.interfaces.entity;
 
-import com.averude.uksatse.scheduler.core.entity.DayType;
+import com.averude.uksatse.scheduler.core.model.entity.DayType;
 
 public interface HasDayTypeAndTime extends HasTime {
     DayType getDayType();

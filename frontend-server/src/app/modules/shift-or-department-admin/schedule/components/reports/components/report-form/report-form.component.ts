@@ -106,6 +106,18 @@ export class ReportFormComponent implements OnInit {
     }
   }
 
+  moveAllToSelected() {
+    while (this.summationColumns.length > 0) {
+      this.selectedSummationColumns.push(this.summationColumns.pop());
+    }
+  }
+
+  moveAllToList() {
+    while (this.selectedSummationColumns.length > 0) {
+      this.summationColumns.push(this.selectedSummationColumns.pop());
+    }
+  }
+
   chosenMonthHandler(selectedDate: Moment, datepicker: MatDatepicker<Moment>) {
     this.date = selectedDate.clone();
 

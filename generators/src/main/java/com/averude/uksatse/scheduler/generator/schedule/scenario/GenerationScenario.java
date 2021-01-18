@@ -1,8 +1,8 @@
 package com.averude.uksatse.scheduler.generator.schedule.scenario;
 
-import com.averude.uksatse.scheduler.core.entity.PatternUnit;
-import com.averude.uksatse.scheduler.core.entity.WorkDay;
-import com.averude.uksatse.scheduler.generator.model.GenerationInterval;
+import com.averude.uksatse.scheduler.core.model.entity.PatternUnit;
+import com.averude.uksatse.scheduler.core.model.entity.WorkDay;
+import com.averude.uksatse.scheduler.core.model.interval.GenerationInterval;
 
 import java.util.List;
 

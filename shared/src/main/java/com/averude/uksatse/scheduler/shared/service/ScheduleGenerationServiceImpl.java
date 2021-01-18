@@ -1,12 +1,12 @@
 package com.averude.uksatse.scheduler.shared.service;
 
-import com.averude.uksatse.scheduler.core.entity.MainShiftComposition;
-import com.averude.uksatse.scheduler.core.entity.ShiftPattern;
-import com.averude.uksatse.scheduler.core.entity.SpecialCalendarDate;
-import com.averude.uksatse.scheduler.core.entity.WorkDay;
-import com.averude.uksatse.scheduler.core.interfaces.entity.EntityComposition;
-import com.averude.uksatse.scheduler.generator.interval.GenerationIntervalCreator;
-import com.averude.uksatse.scheduler.generator.model.GenerationInterval;
+import com.averude.uksatse.scheduler.core.creator.GenerationIntervalCreator;
+import com.averude.uksatse.scheduler.core.interfaces.entity.Composition;
+import com.averude.uksatse.scheduler.core.model.entity.ShiftPattern;
+import com.averude.uksatse.scheduler.core.model.entity.SpecialCalendarDate;
+import com.averude.uksatse.scheduler.core.model.entity.WorkDay;
+import com.averude.uksatse.scheduler.core.model.interval.GenerationInterval;
+import com.averude.uksatse.scheduler.core.util.OffsetCalculator;
 import com.averude.uksatse.scheduler.generator.schedule.ScheduleGenerator;
 import com.averude.uksatse.scheduler.shared.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +28,7 @@ import static com.averude.uksatse.scheduler.core.util.SpecialCalendarDateUtil.ge
 @RequiredArgsConstructor
 public class ScheduleGenerationServiceImpl implements ScheduleGenerationService {
 
+    private final OffsetCalculator                  offsetCalculator;
     private final ShiftRepository                   shiftRepository;
     private final ShiftPatternRepository            shiftPatternRepository;
     private final ScheduleRepository                scheduleRepository;
@@ -58,7 +59,7 @@ public class ScheduleGenerationServiceImpl implements ScheduleGenerationService 
         var specialCalendarDatesMap = getSpecialDateMap(specialCalendarDates);
 
         var mainCompositions = mainShiftCompositionRepository
-                .findAllByShiftIdAndToGreaterThanEqualAndFromLessThanEqual(shiftId, from, to);
+                .findAllByShiftIdAndToGreaterThanEqualAndFromLessThanEqualOrderByEmployeeId(shiftId, from, to);
         var otherShiftsSubstitutionCompositions = substitutionShiftCompositionRepository
                 .findAllByEmployeeIdInAndToGreaterThanEqualAndFromLessThanEqual(getEmployeeIds(mainCompositions), from, to);
         var substitutionCompositions = substitutionShiftCompositionRepository
@@ -71,9 +72,9 @@ public class ScheduleGenerationServiceImpl implements ScheduleGenerationService 
     }
 
     private List<WorkDay> generateWorkDays(ShiftPattern shiftPattern,
-                                           List<? extends EntityComposition<?, Long>> mainShiftCompositions,
-                                           List<? extends EntityComposition<?, Long>> otherShiftsCompositions,
-                                           List<? extends EntityComposition<?, Long>> substitutionShiftCompositions,
+                                           List<? extends Composition> mainShiftCompositions,
+                                           List<? extends Composition> otherShiftsCompositions,
+                                           List<? extends Composition> substitutionShiftCompositions,
                                            LocalDate from,
                                            LocalDate to,
                                            int offset,
@@ -82,18 +83,26 @@ public class ScheduleGenerationServiceImpl implements ScheduleGenerationService 
         var unitsSize = shiftPattern.getSequence().size();
 
         for (var mainComposition : mainShiftCompositions) {
-            var employeeId = mainComposition.getSideB();
+            var employeeId = mainComposition.getEmployeeId();
             var employeeOtherShiftsCompositions = otherShiftsCompositions.stream()
-                    .filter(value -> value.getSideB().equals(employeeId))
+                    .filter(value -> value.getEmployeeId().equals(employeeId))
                     .collect(Collectors.toList());
-            var intervals = intervalCreator.getIntervalsForMainShift(from, to, employeeOtherShiftsCompositions, employeeId, unitsSize, offset);
+
+            var intervals = intervalCreator.createMainIntervals(from, to, mainComposition, employeeOtherShiftsCompositions,
+                    (interval) -> {
+                interval.setObject(employeeId);
+                interval.setOffset(offsetCalculator.recalculateForDate(from, interval.getFrom(), unitsSize, offset));
+            });
             var days = generateWorkDaysForIntervals(shiftPattern, intervals, specialCalendarDatesMap);
             result.addAll(days);
         }
 
         for (var substitutionComposition : substitutionShiftCompositions) {
-            var interval = intervalCreator.getIntervalForSubstitutionShift(from, to, substitutionComposition, unitsSize, offset);
-            var days = generateWorkDaysForIntervals(shiftPattern, Collections.singletonList(interval), specialCalendarDatesMap);
+            var generationInterval = intervalCreator.createSubstitutionInterval(from, to, substitutionComposition, (interval) -> {
+                interval.setObject(substitutionComposition.getEmployeeId());
+                interval.setOffset(offsetCalculator.recalculateForDate(from, interval.getFrom(), unitsSize, offset));
+            });
+            var days = generateWorkDaysForIntervals(shiftPattern, Collections.singletonList(generationInterval), specialCalendarDatesMap);
             result.addAll(days);
         }
 
@@ -122,9 +131,9 @@ public class ScheduleGenerationServiceImpl implements ScheduleGenerationService 
         return scheduleGenerator.generate(interval, pattern, intervalSchedule, specialCalendarDatesMap);
     }
 
-    private List<Long> getEmployeeIds(List<MainShiftComposition> mainCompositions) {
-        return mainCompositions.stream()
-                .map(composition -> composition.getEmployeeId())
+    private List<Long> getEmployeeIds(List<? extends Composition> compositions) {
+        return compositions.stream()
+                .map(Composition::getEmployeeId)
                 .distinct()
                 .collect(Collectors.toList());
     }

@@ -1,10 +1,10 @@
 package com.averude.uksatse.scheduler.generator.timenorm;
 
-import com.averude.uksatse.scheduler.core.entity.PatternUnit;
-import com.averude.uksatse.scheduler.core.entity.ShiftPattern;
-import com.averude.uksatse.scheduler.core.entity.SpecialCalendarDate;
-import com.averude.uksatse.scheduler.core.entity.WorkingNorm;
-import com.averude.uksatse.scheduler.core.entity.structure.Shift;
+import com.averude.uksatse.scheduler.core.model.entity.PatternUnit;
+import com.averude.uksatse.scheduler.core.model.entity.ShiftPattern;
+import com.averude.uksatse.scheduler.core.model.entity.SpecialCalendarDate;
+import com.averude.uksatse.scheduler.core.model.entity.WorkingNorm;
+import com.averude.uksatse.scheduler.core.model.entity.structure.Shift;
 import com.averude.uksatse.scheduler.core.util.OffsetCalculator;
 import com.averude.uksatse.scheduler.core.util.TimeCalculator;
 import org.springframework.beans.factory.annotation.Autowired;

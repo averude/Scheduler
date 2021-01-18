@@ -168,6 +168,12 @@ export const arialCyrSize10 = {
   size: 10
 };
 
+export const greyArialCyrSize10 = {
+  name: 'Arial Cyr',
+  size: 10,
+  color: { argb: 'a1a1a1' }
+};
+
 export const arialCyrBoldSize10 = {
   name: 'Arial Cyr',
   size: 10,
@@ -193,4 +199,10 @@ export const arialCyrBoldSize16 = {
 export const scheduleDataFont = {
   name: 'Tahoma',
   size: 10
+};
+
+export const disabledScheduleDataFont = {
+  name: 'Tahoma',
+  size: 10,
+  color: { argb: 'a1a1a1' }
 };

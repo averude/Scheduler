@@ -1,15 +1,15 @@
 package com.averude.uksatse.scheduler.testing;
 
-import com.averude.uksatse.scheduler.core.entity.DayType;
-import com.averude.uksatse.scheduler.core.entity.DepartmentDayType;
-import com.averude.uksatse.scheduler.core.entity.ShiftPatternGenerationRule;
+import com.averude.uksatse.scheduler.core.model.entity.DayType;
+import com.averude.uksatse.scheduler.core.model.entity.DepartmentDayType;
+import com.averude.uksatse.scheduler.core.model.entity.ShiftPatternGenerationRule;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-import static com.averude.uksatse.scheduler.core.entity.SpecialCalendarDateType.*;
+import static com.averude.uksatse.scheduler.core.model.entity.SpecialCalendarDateType.*;
 
 public class ShiftPatternGenerationRuleGenerator {
 

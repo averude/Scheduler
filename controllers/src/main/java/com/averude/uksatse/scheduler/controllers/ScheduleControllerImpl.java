@@ -1,10 +1,10 @@
 package com.averude.uksatse.scheduler.controllers;
 
 import com.averude.uksatse.scheduler.controllers.interfaces.ScheduleController;
-import com.averude.uksatse.scheduler.core.dto.BasicDto;
-import com.averude.uksatse.scheduler.core.dto.GenerationDTO;
-import com.averude.uksatse.scheduler.core.entity.Employee;
-import com.averude.uksatse.scheduler.core.entity.WorkDay;
+import com.averude.uksatse.scheduler.core.model.dto.BasicDto;
+import com.averude.uksatse.scheduler.core.model.dto.GenerationDTO;
+import com.averude.uksatse.scheduler.core.model.entity.Employee;
+import com.averude.uksatse.scheduler.core.model.entity.WorkDay;
 import com.averude.uksatse.scheduler.security.entity.DepartmentAdminUserAccount;
 import com.averude.uksatse.scheduler.security.entity.ShiftAdminUserAccount;
 import com.averude.uksatse.scheduler.security.modifier.entity.DepartmentIdEntityModifier;

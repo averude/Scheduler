@@ -9,12 +9,14 @@ import { map, mergeMap } from "rxjs/operators";
 import { Moment } from "moment";
 import { DecorationData } from "./model/decoration-data";
 import { Buffer } from "exceljs";
-import { MainShiftCompositionService } from "../../http/main-shift-composition.service";
 import { SummationColumn } from "../../../model/summation-column";
 import { WorkingNormService } from "../../http/working-norm.service";
 import { ReportServiceConfig } from "./config/report-service-config";
 import { ReportGenerator } from "./report-generator";
 import { StatisticsColumnCompositor } from "../../../shared/compositor/statistics-column-compositor";
+import { PositionService } from "../../http/position.service";
+import { ShiftService } from "../../http/shift.service";
+import { SummationMode } from "../../../model/dto/summation-dto";
 
 @Injectable()
 export class ReportService {
@@ -26,8 +28,9 @@ export class ReportService {
               private specialCalendarDateService: SpecialCalendarDateService,
               private scheduleService: ScheduleService,
               private dayTypeService: DayTypeService,
+              private shiftService: ShiftService,
+              private positionService: PositionService,
               private statisticsService: StatisticsService,
-              private shiftCompositionService: MainShiftCompositionService,
               private workingNormService: WorkingNormService){}
 
   generateReport(reportType: string,
@@ -52,19 +55,20 @@ export class ReportService {
       const observables: Observable<any>[] = [
         this.specialCalendarDateService.getAll(from, to),
         this.scheduleService.getAllByDate(from, to),
-        this.statisticsService.getSummationDto(from, to),
+        this.statisticsService.getSummationDTO(from, to, SummationMode.PER_POSITION),
         this.dayTypeService.getAll().pipe(map(values => values.sort((a, b) => a.id - b.id))),
         this.workingNormService.getAll(from, to),
-        this.shiftCompositionService.getAll(from, to)
+        this.shiftService.getAll(),
+        this.positionService.getAll()
       ];
 
       return forkJoin(observables)
         .pipe(mergeMap(values => {
           const daysInMonth = this.paginationStrategy.calcDaysInMonth(date, values[0]);
-          this.statisticsColumnCompositor.composeResults(values[2], summationColumns, values[5], values[4]);
+          this.statisticsColumnCompositor.composeResults(values[2], summationColumns, values[4]);
 
-          const reportData = reportDataCollector.collect(daysInMonth, values[3], values[1], values[2],
-            summationColumns, values[5], useReportLabel);
+          const reportData = reportDataCollector.collect(daysInMonth, values[3], values[5],
+            values[6], values[1], values[2], summationColumns, useReportLabel);
 
           reportData.decorationData = decorationData;
 

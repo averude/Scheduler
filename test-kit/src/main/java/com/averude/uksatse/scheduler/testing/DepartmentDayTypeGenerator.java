@@ -1,7 +1,7 @@
 package com.averude.uksatse.scheduler.testing;
 
-import com.averude.uksatse.scheduler.core.entity.DayType;
-import com.averude.uksatse.scheduler.core.entity.DepartmentDayType;
+import com.averude.uksatse.scheduler.core.model.entity.DayType;
+import com.averude.uksatse.scheduler.core.model.entity.DepartmentDayType;
 
 import java.util.ArrayList;
 import java.util.List;

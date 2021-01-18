@@ -1,0 +1,17 @@
+.menu-button {
+  display: block;
+  height: 2em;
+  width: 40px;
+  background-color: transparent;
+  border: none;
+  user-select: none;
+  outline: none;
+  cursor: pointer;
+  padding: 0 8px;
+}
+
+.config-icon {
+  padding-top: 3.5px;
+  height: 16px;
+  width: 16px;
+}

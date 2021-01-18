@@ -1,6 +1,6 @@
 package com.averude.uksatse.scheduler.controllers.interfaces;
 
-import com.averude.uksatse.scheduler.core.entity.structure.Department;
+import com.averude.uksatse.scheduler.core.model.entity.structure.Department;
 import com.averude.uksatse.scheduler.security.annotations.IsDepartmentOrShiftUser;
 import com.averude.uksatse.scheduler.security.annotations.IsEnterpriseAdmin;
 import org.springframework.http.ResponseEntity;

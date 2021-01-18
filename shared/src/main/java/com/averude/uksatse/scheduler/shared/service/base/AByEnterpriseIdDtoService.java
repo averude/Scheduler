@@ -1,10 +1,10 @@
 package com.averude.uksatse.scheduler.shared.service.base;
 
-import com.averude.uksatse.scheduler.core.dto.BasicDto;
 import com.averude.uksatse.scheduler.core.interfaces.service.IByDepartmentIdDtoService;
 import com.averude.uksatse.scheduler.core.interfaces.service.IByEnterpriseIdDtoService;
 import com.averude.uksatse.scheduler.core.interfaces.service.IByShiftIdDtoService;
 import com.averude.uksatse.scheduler.core.interfaces.service.IDtoService;
+import com.averude.uksatse.scheduler.core.model.dto.BasicDto;
 import com.averude.uksatse.scheduler.shared.repository.DepartmentRepository;
 import com.averude.uksatse.scheduler.shared.repository.ShiftRepository;
 import com.averude.uksatse.scheduler.shared.repository.interfaces.IByEnterpriseIdRepository;

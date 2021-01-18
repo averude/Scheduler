@@ -1,6 +1,6 @@
 package com.averude.uksatse.scheduler.shared.repository;
 
-import com.averude.uksatse.scheduler.core.entity.SubstitutionShiftComposition;
+import com.averude.uksatse.scheduler.core.model.entity.SubstitutionShiftComposition;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

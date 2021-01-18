@@ -1,8 +1,9 @@
 import { Injectable } from "@angular/core";
-import { Composition } from "../../model/main-shift-composition";
+import { Composition, MainShiftComposition, SubstitutionShiftComposition } from "../../model/main-shift-composition";
 import { convertCompositionToInterval, RowInterval } from "../../model/ui/schedule-table/row-interval";
 import { Row } from "../../model/ui/schedule-table/table-data";
 import { EmployeeScheduleDTO } from "../../model/dto/employee-schedule-dto";
+import { Moment } from "moment";
 
 @Injectable()
 export class CompositionDivider {
@@ -21,7 +22,7 @@ export class CompositionDivider {
     for (let i = 0; i <= substCount; i++) {
 
       if (i >= substCount) {
-        if (from.isBefore(mainShiftComposition.to)) {
+        if (from.isSameOrBefore(mainShiftComposition.to)) {
           const interval = {parentId: mainShiftComposition.id, from: from, to: to};
           result.push(interval);
         }
@@ -60,6 +61,65 @@ export class CompositionDivider {
     return result;
   }
 
+  getEmployeePositionIntervals(from: Moment,
+                               to: Moment,
+                               mainCompositions: MainShiftComposition[],
+                               substitutionCompositions: SubstitutionShiftComposition[]) {
+    let intervalsMap: Map<number, RowInterval[]> = new Map();
+
+    let subs:SubstitutionShiftComposition[] = [].concat(substitutionCompositions);
+
+    for (let composition of mainCompositions) {
+
+      const otherPositionSubstitutions = [];
+
+      for (let subIndex = 0; subIndex < subs.length;) {
+        const subComposition = subs[subIndex];
+
+        if (subComposition.from.isAfter(composition.to)) {
+          break;
+        }
+
+        if (subComposition.positionId !== composition.positionId
+          && intersect(subComposition, composition)) {
+          otherPositionSubstitutions.push(subComposition);
+          subIndex++;
+          continue;
+        }
+
+        if (subComposition.positionId === composition.positionId
+          && intersect(subComposition, composition)) {
+          subs.splice(subIndex, 1);
+        }
+      }
+
+      const positionIntervals = this.getRowIntervals(composition, otherPositionSubstitutions);
+      const rowIntervals = intervalsMap.get(composition.positionId);
+      if (rowIntervals) {
+        positionIntervals.forEach(interval => rowIntervals.push(interval));
+      } else {
+        intervalsMap.set(composition.positionId, positionIntervals);
+      }
+
+    }
+
+    for (let composition of subs) {
+      if (composition.from.isAfter(to)) {
+        break;
+      }
+
+      const positionInterval = convertCompositionToInterval(composition);
+      const rowIntervals = intervalsMap.get(composition.positionId);
+      if (rowIntervals) {
+        rowIntervals.push(positionInterval);
+      } else {
+        intervalsMap.set(composition.positionId, [positionInterval]);
+      }
+    }
+
+    return intervalsMap;
+  }
+
   getRowIntervalsByArr(mainCompositions: Composition[],
                        substCompositions: Composition[]): RowInterval[] {
     let result = [];
@@ -78,4 +138,9 @@ export class CompositionDivider {
       row.intervals = this.getRowIntervalsByArr(row.compositions, dto.substitutionShiftCompositions);
     }
   }
+}
+
+export function intersect(a: Composition, b: Composition) {
+  return a.from.isBetween(b.from, b.to, undefined, '[]')
+    || a.to.isBetween(b.from, b.to, undefined, '[]');
 }

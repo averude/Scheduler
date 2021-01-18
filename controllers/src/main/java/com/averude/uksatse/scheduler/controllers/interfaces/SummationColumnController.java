@@ -1,8 +1,8 @@
 package com.averude.uksatse.scheduler.controllers.interfaces;
 
-import com.averude.uksatse.scheduler.core.dto.BasicDto;
-import com.averude.uksatse.scheduler.core.entity.SummationColumn;
-import com.averude.uksatse.scheduler.core.entity.SummationColumnDayTypeRange;
+import com.averude.uksatse.scheduler.core.model.dto.BasicDto;
+import com.averude.uksatse.scheduler.core.model.entity.SummationColumn;
+import com.averude.uksatse.scheduler.core.model.entity.SummationColumnDayTypeRange;
 import com.averude.uksatse.scheduler.security.annotations.IsAnyUser;
 import com.averude.uksatse.scheduler.security.annotations.IsEnterpriseAdmin;
 import org.springframework.http.ResponseEntity;

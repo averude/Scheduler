@@ -1,20 +1,36 @@
 package com.averude.uksatse.scheduler.statistics.strategy;
 
-import com.averude.uksatse.scheduler.core.entity.SummationColumn;
-import com.averude.uksatse.scheduler.statistics.wrapper.WorkDayWrapper;
+import com.averude.uksatse.scheduler.core.interfaces.entity.HasDayTypeId;
+import com.averude.uksatse.scheduler.core.interfaces.entity.HasTime;
+import com.averude.uksatse.scheduler.core.interfaces.entity.HasTimeDuration;
 import org.springframework.stereotype.Component;
 
-import java.util.Map;
-import java.util.stream.Stream;
+import java.util.List;
+import java.util.function.BiFunction;
 
-import static com.averude.uksatse.scheduler.core.entity.SummationColumnType.COUNT;
+import static com.averude.uksatse.scheduler.core.model.entity.SummationColumnType.COUNT;
+import static com.averude.uksatse.scheduler.core.util.CollectionUtils.binarySearch;
 
 @Component
 public class WorkDaysCountCalculationStrategy implements CalculationStrategy {
 
     @Override
-    public long calculate(Stream<Map.Entry<WorkDayWrapper, Integer>> entryStream, SummationColumn column) {
-        return entryStream.mapToLong(Map.Entry::getValue).sum();
+    public <T extends HasDayTypeId & HasTime, U extends HasDayTypeId & HasTimeDuration>
+    long getSum(T hasTime,
+                List<U> ranges,
+                BiFunction<T, U, Long> comparator) {
+        var count = 0;
+
+        if (ranges == null || ranges.isEmpty()) {
+            count++;
+        } else {
+            int index = binarySearch(ranges, (mid) -> mid.getDayTypeId() - hasTime.getDayTypeId());
+            if (index >= 0) {
+                count++;
+            }
+        }
+
+        return count;
     }
 
     @Override

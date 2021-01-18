@@ -1,8 +1,8 @@
 package com.averude.uksatse.scheduler.shared.service;
 
-import com.averude.uksatse.scheduler.core.entity.SummationColumn;
-import com.averude.uksatse.scheduler.core.entity.SummationColumnDayTypeRange;
 import com.averude.uksatse.scheduler.core.interfaces.service.*;
+import com.averude.uksatse.scheduler.core.model.entity.SummationColumn;
+import com.averude.uksatse.scheduler.core.model.entity.SummationColumnDayTypeRange;
 
 public interface SummationColumnService extends
         IByEnterpriseIdDtoService<SummationColumn, SummationColumnDayTypeRange, Long>,

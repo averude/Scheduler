@@ -2,7 +2,7 @@ package com.averude.uksatse.scheduler.controllers;
 
 import com.averude.uksatse.scheduler.controllers.base.AByAuthController;
 import com.averude.uksatse.scheduler.controllers.interfaces.DepartmentController;
-import com.averude.uksatse.scheduler.core.entity.structure.Department;
+import com.averude.uksatse.scheduler.core.model.entity.structure.Department;
 import com.averude.uksatse.scheduler.security.entity.DepartmentAdminUserAccount;
 import com.averude.uksatse.scheduler.security.entity.ShiftAdminUserAccount;
 import com.averude.uksatse.scheduler.security.entity.UserAccount;

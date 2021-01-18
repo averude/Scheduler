@@ -1,7 +1,7 @@
 package com.averude.uksatse.scheduler.testing;
 
-import com.averude.uksatse.scheduler.core.entity.Employee;
-import com.averude.uksatse.scheduler.core.entity.Position;
+import com.averude.uksatse.scheduler.core.model.entity.Employee;
+import com.averude.uksatse.scheduler.core.model.entity.Position;
 
 import java.util.ArrayList;
 import java.util.List;

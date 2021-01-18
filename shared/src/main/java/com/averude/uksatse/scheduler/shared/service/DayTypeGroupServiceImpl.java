@@ -1,6 +1,6 @@
 package com.averude.uksatse.scheduler.shared.service;
 
-import com.averude.uksatse.scheduler.core.entity.DayTypeGroup;
+import com.averude.uksatse.scheduler.core.model.entity.DayTypeGroup;
 import com.averude.uksatse.scheduler.shared.repository.DayTypeGroupRepository;
 import com.averude.uksatse.scheduler.shared.service.base.AService;
 import org.springframework.beans.factory.annotation.Autowired;

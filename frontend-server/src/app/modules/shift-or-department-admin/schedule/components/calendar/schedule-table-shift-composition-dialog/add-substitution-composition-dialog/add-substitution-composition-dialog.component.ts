@@ -48,7 +48,7 @@ export class AddSubstitutionCompositionDialogComponent implements OnInit {
       shiftId:              [null,                      Validators.required],
       mainShiftComposition: [this.mainShiftComposition, Validators.required],
       employeeId:           [this.employee.id,          Validators.required],
-      positionId:           [null,                      Validators.required],
+      positionId:           [this.mainShiftComposition.positionId, Validators.required],
       from:                 [this.from,                 Validators.required],
       to:                   [this.to,                   Validators.required]
     });

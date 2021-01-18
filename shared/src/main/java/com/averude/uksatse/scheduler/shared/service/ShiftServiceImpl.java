@@ -1,6 +1,6 @@
 package com.averude.uksatse.scheduler.shared.service;
 
-import com.averude.uksatse.scheduler.core.entity.structure.Shift;
+import com.averude.uksatse.scheduler.core.model.entity.structure.Shift;
 import com.averude.uksatse.scheduler.shared.repository.ShiftRepository;
 import com.averude.uksatse.scheduler.shared.service.base.AByDepartmentIdService;
 import org.springframework.beans.factory.annotation.Autowired;

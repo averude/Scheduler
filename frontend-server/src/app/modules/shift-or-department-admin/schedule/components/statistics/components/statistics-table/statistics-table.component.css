@@ -16,10 +16,6 @@
   border-collapse: collapse;
 }
 
-tr:hover {
-  background-color: #e8f2fb;
-}
-
 .thead-border {
   border: 1px solid #e5e9f0;
   border-radius: 5px;
@@ -45,10 +41,24 @@ tr:hover {
   padding-left: 40px;
 }
 
+.td-position {
+  border: 1px solid #e5e9f0;
+  height: 32px;
+  padding-left: 2em;
+  padding-right: 2em;
+  max-width: 8vw;
+}
+
 .name {
   color: #2b3944;
   font-family: 'MuseoSansMedium';
   font-size: 14px;
+}
+
+.position {
+  color: #2b3944;
+  font-family: 'MuseoSansMedium';
+  font-size: 12px;
 }
 
 .highlighted {
@@ -78,6 +88,17 @@ tr:hover {
   min-width: 150px;
 }
 
+.name-container {
+  display: flex;
+  align-items: center;
+}
+
+.name-container > p {
+  text-align: center;
+  width: 100%;
+  margin-right: 40px;
+}
+
 .norm-column {
   background-color: #e8f2fb;
 }
@@ -105,4 +126,48 @@ tr:hover {
   padding: 0px;
   border: 1px solid #e5e9f0;
   vertical-align: top;
+}
+
+.table-proxy-view {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 14vh 0;
+}
+
+.menu-button {
+  display: block;
+  height: 2em;
+  width: 40px;
+  background-color: transparent;
+  border: none;
+  user-select: none;
+  outline: none;
+  cursor: pointer;
+  padding: 0 8px;
+}
+
+.config-icon {
+  padding-top: 3.5px;
+  height: 16px;
+  width: 16px;
+}
+
+.group-label-row {
+  height: 32px;
+  background-color: #f8fafc;
+  border:  1px solid #e5e9f0;
+}
+
+.group-label {
+  font-family: 'MuseoSansMedium';
+  letter-spacing: .02em;
+  text-align: left;
+  font-size: 13px;
+  padding-left: 40px;
+  color: #637286;
+  flex-direction: row;
+  align-items: baseline;
+  width: 100%;
+  cursor: pointer;
 }

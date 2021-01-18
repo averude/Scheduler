@@ -1,6 +1,6 @@
 package com.averude.uksatse.scheduler.shared.repository;
 
-import com.averude.uksatse.scheduler.core.entity.ShiftPattern;
+import com.averude.uksatse.scheduler.core.model.entity.ShiftPattern;
 import com.averude.uksatse.scheduler.shared.repository.interfaces.IByDepartmentIdRepository;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.Query;

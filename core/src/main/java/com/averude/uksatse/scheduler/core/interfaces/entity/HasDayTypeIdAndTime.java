@@ -1,5 +1,4 @@
 package com.averude.uksatse.scheduler.core.interfaces.entity;
 
-public interface HasDayTypeIdAndTime extends HasTime {
-    Long getDayTypeId();
+public interface HasDayTypeIdAndTime extends HasTime, HasDayTypeId {
 }

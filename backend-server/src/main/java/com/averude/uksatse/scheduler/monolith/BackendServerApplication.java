@@ -12,11 +12,12 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.web.filter.CorsFilter;
 
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-@EntityScan("com.averude.uksatse.scheduler.core.entity")
+@EntityScan("com.averude.uksatse.scheduler.core.model.entity")
 @SpringBootApplication(scanBasePackages = {
         "com.averude.uksatse.scheduler.monolith",
         "com.averude.uksatse.scheduler.core.configuration",
         "com.averude.uksatse.scheduler.core.json",
+        "com.averude.uksatse.scheduler.core.creator",
         "com.averude.uksatse.scheduler.core.util",
         "com.averude.uksatse.scheduler.generator",
         "com.averude.uksatse.scheduler.shared.service",

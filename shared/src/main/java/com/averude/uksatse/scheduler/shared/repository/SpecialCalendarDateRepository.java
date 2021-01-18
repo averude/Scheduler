@@ -1,6 +1,6 @@
 package com.averude.uksatse.scheduler.shared.repository;
 
-import com.averude.uksatse.scheduler.core.entity.SpecialCalendarDate;
+import com.averude.uksatse.scheduler.core.model.entity.SpecialCalendarDate;
 import com.averude.uksatse.scheduler.shared.repository.interfaces.IByEnterpriseIdAndDateRepository;
 import org.springframework.data.jpa.repository.Query;
 

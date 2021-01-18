@@ -1,45 +1,49 @@
 package com.averude.uksatse.scheduler.statistics.strategy;
 
-import com.averude.uksatse.scheduler.core.entity.SummationColumn;
-import com.averude.uksatse.scheduler.core.entity.WorkDay;
+import com.averude.uksatse.scheduler.core.interfaces.entity.HasDayTypeId;
+import com.averude.uksatse.scheduler.core.interfaces.entity.HasTime;
+import com.averude.uksatse.scheduler.core.interfaces.entity.HasTimeDuration;
 import com.averude.uksatse.scheduler.core.util.TimeCalculator;
-import com.averude.uksatse.scheduler.statistics.wrapper.WorkDayWrapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.Map;
-import java.util.stream.Stream;
+import java.util.List;
+import java.util.function.BiFunction;
 
-import static com.averude.uksatse.scheduler.core.entity.SummationColumnType.HOURS_SUM;
+import static com.averude.uksatse.scheduler.core.model.entity.SummationColumnType.HOURS_SUM;
+import static com.averude.uksatse.scheduler.core.util.CollectionUtils.binarySearch;
+import static com.averude.uksatse.scheduler.core.util.CollectionUtils.findMatches;
 
 @Component
+@RequiredArgsConstructor
 public class WorkDaysHoursCalculationStrategy implements CalculationStrategy {
 
-    private TimeCalculator timeCalculator;
-
-    @Autowired
-    public WorkDaysHoursCalculationStrategy(TimeCalculator timeCalculator) {
-        this.timeCalculator = timeCalculator;
-    }
+    private final TimeCalculator timeCalculator;
 
     @Override
-    public long calculate(Stream<Map.Entry<WorkDayWrapper, Integer>> entryStream, SummationColumn column) {
-        return entryStream.mapToLong(entry ->
-                getWorkDayLength(entry.getKey().getWorkDay(), column) * entry.getValue())
-                .sum();
-    }
+    public <T extends HasDayTypeId & HasTime, U extends HasDayTypeId & HasTimeDuration>
+    long getSum(T hasTime, List<U> ranges, BiFunction<T, U, Long> comparator) {
+        var sum = 0;
 
-    private int getWorkDayLength(WorkDay workDay, SummationColumn summationColumn) {
-        if (summationColumn.getDayTypeRanges() == null || summationColumn.getDayTypeRanges().isEmpty()) {
-            return timeCalculator.getLength(workDay, null);
+        if (ranges == null || ranges.isEmpty()) {
+            sum = timeCalculator.getLength(hasTime, null);
         } else {
-            return summationColumn.getDayTypeRanges()
-                    .stream()
-                    .filter(range -> range.getDayTypeId().equals(workDay.getDayTypeId()))
-                    .findFirst()
-                    .map(range -> timeCalculator.getLength(workDay, range))
-                    .orElse(0);
+            int index = binarySearch(ranges, (mid) -> mid.getDayTypeId() - hasTime.getDayTypeId());
+
+            if (index >= 0) {
+
+                int[] matchIndexes = findMatches(index, ranges, (mid) -> mid.getDayTypeId() - hasTime.getDayTypeId());
+
+                if (matchIndexes != null) {
+                    for (int i = matchIndexes[0]; i <= matchIndexes[1]; i++) {
+                        sum += timeCalculator.getLength(hasTime, ranges.get(i));
+                    }
+                }
+
+            }
         }
+
+        return sum;
     }
 
     @Override

@@ -4,6 +4,7 @@ import {
   arialCyrSize8,
   centerAlignVertRotation,
   centerMiddleAlign,
+  disabledScheduleDataFont,
   dottedBorders,
   holidayFill,
   leftRightBottomMediumBorders,
@@ -127,6 +128,26 @@ export class ScheduleReportStyles {
 
   static holidayScheduleCellStyle: Partial<Style> = {
     font: scheduleDataFont,
+    alignment: centerMiddleAlign,
+    border: dottedBorders,
+    fill: holidayFill
+  };
+
+  static disabledScheduleCellStyle: Partial<Style> = {
+    font: disabledScheduleDataFont,
+    alignment: centerMiddleAlign,
+    border: dottedBorders
+  };
+
+  static disabledWeekendScheduleCellStyle: Partial<Style> = {
+    font: disabledScheduleDataFont,
+    alignment: centerMiddleAlign,
+    border: dottedBorders,
+    fill: weekendFill
+  };
+
+  static disabledHolidayScheduleCellStyle: Partial<Style> = {
+    font: disabledScheduleDataFont,
     alignment: centerMiddleAlign,
     border: dottedBorders,
     fill: holidayFill

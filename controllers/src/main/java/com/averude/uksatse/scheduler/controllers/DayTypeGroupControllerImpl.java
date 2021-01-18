@@ -2,7 +2,7 @@ package com.averude.uksatse.scheduler.controllers;
 
 import com.averude.uksatse.scheduler.controllers.base.ACrudController;
 import com.averude.uksatse.scheduler.controllers.interfaces.DayTypeGroupController;
-import com.averude.uksatse.scheduler.core.entity.DayTypeGroup;
+import com.averude.uksatse.scheduler.core.model.entity.DayTypeGroup;
 import com.averude.uksatse.scheduler.shared.service.DayTypeGroupService;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

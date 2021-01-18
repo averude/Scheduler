@@ -1,9 +1,9 @@
 package com.averude.uksatse.scheduler.generator.schedule;
 
-import com.averude.uksatse.scheduler.core.entity.ShiftPattern;
-import com.averude.uksatse.scheduler.core.entity.SpecialCalendarDate;
-import com.averude.uksatse.scheduler.core.entity.WorkDay;
-import com.averude.uksatse.scheduler.generator.model.GenerationInterval;
+import com.averude.uksatse.scheduler.core.model.entity.ShiftPattern;
+import com.averude.uksatse.scheduler.core.model.entity.SpecialCalendarDate;
+import com.averude.uksatse.scheduler.core.model.entity.WorkDay;
+import com.averude.uksatse.scheduler.core.model.interval.GenerationInterval;
 import com.averude.uksatse.scheduler.generator.schedule.processor.PatternRuleProcessor;
 import com.averude.uksatse.scheduler.generator.schedule.scenario.ExistingScheduleListGenerationScenario;
 import com.averude.uksatse.scheduler.generator.schedule.scenario.GenerationScenario;

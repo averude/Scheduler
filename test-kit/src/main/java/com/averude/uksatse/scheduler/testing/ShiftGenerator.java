@@ -1,7 +1,7 @@
 package com.averude.uksatse.scheduler.testing;
 
-import com.averude.uksatse.scheduler.core.entity.ShiftPattern;
-import com.averude.uksatse.scheduler.core.entity.structure.Shift;
+import com.averude.uksatse.scheduler.core.model.entity.ShiftPattern;
+import com.averude.uksatse.scheduler.core.model.entity.structure.Shift;
 
 import java.util.ArrayList;
 import java.util.Collections;

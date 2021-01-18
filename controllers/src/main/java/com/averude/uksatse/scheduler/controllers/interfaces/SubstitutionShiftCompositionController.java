@@ -1,6 +1,6 @@
 package com.averude.uksatse.scheduler.controllers.interfaces;
 
-import com.averude.uksatse.scheduler.core.entity.SubstitutionShiftComposition;
+import com.averude.uksatse.scheduler.core.model.entity.SubstitutionShiftComposition;
 import com.averude.uksatse.scheduler.security.annotations.IsDepartmentAdmin;
 import com.averude.uksatse.scheduler.security.annotations.IsDepartmentOrShiftUser;
 import org.springframework.format.annotation.DateTimeFormat;

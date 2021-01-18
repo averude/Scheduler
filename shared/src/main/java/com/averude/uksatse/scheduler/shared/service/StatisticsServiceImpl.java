@@ -1,6 +1,6 @@
 package com.averude.uksatse.scheduler.shared.service;
 
-import com.averude.uksatse.scheduler.core.dto.CountDTO;
+import com.averude.uksatse.scheduler.core.model.dto.CountDTO;
 import com.averude.uksatse.scheduler.shared.repository.StatisticsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

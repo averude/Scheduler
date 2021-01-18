@@ -2,10 +2,10 @@ package com.averude.uksatse.scheduler.controllers;
 
 import com.averude.uksatse.scheduler.controllers.base.AByAuthController;
 import com.averude.uksatse.scheduler.controllers.interfaces.WorkingNormController;
-import com.averude.uksatse.scheduler.core.dto.BasicDto;
-import com.averude.uksatse.scheduler.core.dto.GenerationDTO;
-import com.averude.uksatse.scheduler.core.entity.WorkingNorm;
-import com.averude.uksatse.scheduler.core.entity.structure.Shift;
+import com.averude.uksatse.scheduler.core.model.dto.BasicDto;
+import com.averude.uksatse.scheduler.core.model.dto.GenerationDTO;
+import com.averude.uksatse.scheduler.core.model.entity.WorkingNorm;
+import com.averude.uksatse.scheduler.core.model.entity.structure.Shift;
 import com.averude.uksatse.scheduler.security.entity.DepartmentAdminUserAccount;
 import com.averude.uksatse.scheduler.security.modifier.entity.DepartmentIdEntityModifier;
 import com.averude.uksatse.scheduler.security.state.entity.SimpleByAuthMethodResolver;

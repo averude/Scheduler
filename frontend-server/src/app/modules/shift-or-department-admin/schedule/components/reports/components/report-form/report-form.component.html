@@ -69,6 +69,12 @@
         <button mat-button style="display: block"
                 [disabled]="!rightList.selectedOptions.selected[0]?.value"
                 (click)="moveToList(rightList.selectedOptions.selected[0]?.value)"><-</button>
+        <button mat-button style="display: block"
+                [disabled]="summationColumns.length == 0"
+                (click)="moveAllToSelected()">>></button>
+        <button mat-button style="display: block"
+                [disabled]="selectedSummationColumns.length == 0"
+                (click)="moveAllToList()"><<</button>
       </div>
 
       <div class="summation-column-selection-list">

@@ -1,7 +1,7 @@
 package com.averude.uksatse.scheduler.security.modifier.dto;
 
-import com.averude.uksatse.scheduler.core.dto.BasicDto;
 import com.averude.uksatse.scheduler.core.interfaces.entity.HasDepartmentId;
+import com.averude.uksatse.scheduler.core.model.dto.BasicDto;
 import com.averude.uksatse.scheduler.security.entity.DepartmentAdminUserAccount;
 import com.averude.uksatse.scheduler.security.exception.NullOrgLevelIdException;
 import org.springframework.security.core.Authentication;

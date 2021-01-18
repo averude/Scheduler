@@ -1,6 +1,6 @@
 package com.averude.uksatse.scheduler.shared.service;
 
-import com.averude.uksatse.scheduler.core.entity.DayType;
+import com.averude.uksatse.scheduler.core.model.entity.DayType;
 import com.averude.uksatse.scheduler.shared.repository.DayTypeRepository;
 import com.averude.uksatse.scheduler.shared.repository.DepartmentRepository;
 import com.averude.uksatse.scheduler.shared.repository.ShiftRepository;

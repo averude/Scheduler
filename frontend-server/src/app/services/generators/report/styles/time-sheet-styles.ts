@@ -4,10 +4,10 @@ import {
   arialCyrSize10,
   arialCyrSize8,
   bottomMediumLeftRightDottedBorders,
-  centerAlign,
   centerAlignVertRotation,
   centerMiddleAlign,
   dottedBorders,
+  greyArialCyrSize10,
   holidayFill,
   leftRightMediumTopBottomDottedBorders,
   leftRightMediumTopDottedBottomThinBorders,
@@ -99,12 +99,25 @@ export class TimeSheetStyles {
     {
       font: arialCyrSize10,
       border: dottedBorders,
-      alignment: centerAlign
+      alignment: centerMiddleAlign
     },
     {
       font: arialCyrSize10,
       border: leftRightTopDottedBottomThinBorders,
-      alignment: centerAlign
+      alignment: centerMiddleAlign
+    }
+  ];
+
+  static disabledDataCellStyle: Partial<Style>[] = [
+    {
+      font: greyArialCyrSize10,
+      border: dottedBorders,
+      alignment: centerMiddleAlign
+    },
+    {
+      font: greyArialCyrSize10,
+      border: leftRightTopDottedBottomThinBorders,
+      alignment: centerMiddleAlign
     }
   ];
 
@@ -112,13 +125,13 @@ export class TimeSheetStyles {
     {
       font: arialCyrSize10,
       border: dottedBorders,
-      alignment: centerAlign,
+      alignment: centerMiddleAlign,
       fill: weekendFill
     },
     {
       font: arialCyrSize10,
       border: leftRightTopDottedBottomThinBorders,
-      alignment: centerAlign,
+      alignment: centerMiddleAlign,
       fill: weekendFill
     }
   ];
@@ -127,13 +140,43 @@ export class TimeSheetStyles {
     {
       font: arialCyrSize10,
       border: dottedBorders,
-      alignment: centerAlign,
+      alignment: centerMiddleAlign,
       fill: holidayFill
     },
     {
       font: arialCyrSize10,
       border: leftRightTopDottedBottomThinBorders,
-      alignment: centerAlign,
+      alignment: centerMiddleAlign,
+      fill: holidayFill
+    }
+  ];
+
+  static disabledWeekendDataCellStyle: Partial<Style>[] = [
+    {
+      font: greyArialCyrSize10,
+      border: dottedBorders,
+      alignment: centerMiddleAlign,
+      fill: weekendFill
+    },
+    {
+      font: greyArialCyrSize10,
+      border: leftRightTopDottedBottomThinBorders,
+      alignment: centerMiddleAlign,
+      fill: weekendFill
+    }
+  ];
+
+  static disabledHolidayDataCellStyle: Partial<Style>[] = [
+    {
+      font: greyArialCyrSize10,
+      border: dottedBorders,
+      alignment: centerMiddleAlign,
+      fill: holidayFill
+    },
+    {
+      font: greyArialCyrSize10,
+      border: leftRightTopDottedBottomThinBorders,
+      alignment: centerMiddleAlign,
       fill: holidayFill
     }
   ];
@@ -141,12 +184,12 @@ export class TimeSheetStyles {
   static sumCellStyle: Partial<Style> = {
     font: scheduleDataFont,
     border: leftRightMediumTopBottomDottedBorders,
-    alignment: centerAlign
+    alignment: centerMiddleAlign
   };
 
   static lastSumCellStyle: Partial<Style> = {
     font: scheduleDataFont,
     border: leftRightMediumTopDottedBottomThinBorders,
-    alignment: centerAlign
+    alignment: centerMiddleAlign
   };
 }

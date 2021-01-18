@@ -1,6 +1,6 @@
 package com.averude.uksatse.scheduler.shared.repository;
 
-import com.averude.uksatse.scheduler.core.entity.MainShiftComposition;
+import com.averude.uksatse.scheduler.core.model.entity.MainShiftComposition;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -9,9 +9,9 @@ import java.util.List;
 
 public interface MainShiftCompositionRepository extends JpaRepository<MainShiftComposition, Long> {
 
-    List<MainShiftComposition> findAllByShiftIdAndToGreaterThanEqualAndFromLessThanEqual(Long shiftId,
-                                                                                         LocalDate from,
-                                                                                         LocalDate to);
+    List<MainShiftComposition> findAllByShiftIdAndToGreaterThanEqualAndFromLessThanEqualOrderByEmployeeId(Long shiftId,
+                                                                                                          LocalDate from,
+                                                                                                          LocalDate to);
 
     @Query("select msc " +
             "from MainShiftComposition msc " +

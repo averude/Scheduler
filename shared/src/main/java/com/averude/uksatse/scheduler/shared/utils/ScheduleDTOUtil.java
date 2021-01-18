@@ -1,10 +1,10 @@
 package com.averude.uksatse.scheduler.shared.utils;
 
-import com.averude.uksatse.scheduler.core.dto.EmployeeScheduleDTO;
-import com.averude.uksatse.scheduler.core.entity.Employee;
-import com.averude.uksatse.scheduler.core.entity.MainShiftComposition;
-import com.averude.uksatse.scheduler.core.entity.SubstitutionShiftComposition;
-import com.averude.uksatse.scheduler.core.entity.WorkDay;
+import com.averude.uksatse.scheduler.core.model.dto.EmployeeScheduleDTO;
+import com.averude.uksatse.scheduler.core.model.entity.Employee;
+import com.averude.uksatse.scheduler.core.model.entity.MainShiftComposition;
+import com.averude.uksatse.scheduler.core.model.entity.SubstitutionShiftComposition;
+import com.averude.uksatse.scheduler.core.model.entity.WorkDay;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

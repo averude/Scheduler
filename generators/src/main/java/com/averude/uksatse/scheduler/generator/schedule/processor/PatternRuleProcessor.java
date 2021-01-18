@@ -1,8 +1,8 @@
 package com.averude.uksatse.scheduler.generator.schedule.processor;
 
-import com.averude.uksatse.scheduler.core.entity.ShiftPatternGenerationRule;
-import com.averude.uksatse.scheduler.core.entity.SpecialCalendarDate;
-import com.averude.uksatse.scheduler.core.entity.WorkDay;
+import com.averude.uksatse.scheduler.core.model.entity.ShiftPatternGenerationRule;
+import com.averude.uksatse.scheduler.core.model.entity.SpecialCalendarDate;
+import com.averude.uksatse.scheduler.core.model.entity.WorkDay;
 
 import java.util.List;
 import java.util.Map;

@@ -1,6 +1,6 @@
 package com.averude.uksatse.scheduler.shared.service;
 
-import com.averude.uksatse.scheduler.core.entity.structure.Enterprise;
+import com.averude.uksatse.scheduler.core.model.entity.structure.Enterprise;
 import com.averude.uksatse.scheduler.shared.manager.ScheduleTablePartitionManager;
 import com.averude.uksatse.scheduler.shared.manager.TablePartitionManager;
 import com.averude.uksatse.scheduler.shared.repository.EnterpriseRepository;

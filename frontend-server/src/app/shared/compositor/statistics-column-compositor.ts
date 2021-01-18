@@ -1,9 +1,7 @@
 import { SummationDto, SummationResult } from "../../model/dto/summation-dto";
-import { HOURS_SUM, SummationColumn } from "../../model/summation-column";
-import { MainShiftComposition } from "../../model/main-shift-composition";
+import { SummationColumn } from "../../model/summation-column";
 import { WorkingNorm } from "../../model/working-norm";
-import { sortByPattern, uniqById } from "../utils/collection-utils";
-import { roundToTwo } from "../utils/utils";
+import { sortByPattern } from "../utils/collection-utils";
 import { Injectable } from "@angular/core";
 
 @Injectable({providedIn: 'root'})
@@ -11,25 +9,16 @@ export class StatisticsColumnCompositor {
 
   composeResults(summationDtos: SummationDto[],
                  summationColumns: SummationColumn[],
-                 shiftCompositions: MainShiftComposition[],
                  workingNorms: WorkingNorm[]) {
-    let mainShiftCompositions = uniqById(shiftCompositions, value => value.employeeId);
-
     summationDtos.forEach(dto => {
       try {
-        const shiftId = mainShiftCompositions.find(value => value.employeeId === dto.parent.id)?.shiftId;
+        const shiftId = dto.shiftId;
         const norm = workingNorms.find(value => value.shiftId === shiftId);
+
         dto.collection.push({summationColumnId: -1, value: norm ? norm.hours : 0} as SummationResult);
         dto.collection.push({summationColumnId: -2, value: norm ? norm.days : 0} as SummationResult);
 
-        sortByPattern(dto.collection, summationColumns, (sumRes, sumCol) => {
-          const result = sumRes.summationColumnId == sumCol.id;
-          if (result && sumRes.type === HOURS_SUM && !sumRes.converted) {
-            sumRes.value = roundToTwo(sumRes.value / 60);
-            sumRes.converted = true;
-          }
-          return result;
-        });
+        sortByPattern(dto.collection, summationColumns, (sumRes, sumCol) => sumRes.summationColumnId == sumCol.id);
       } finally {}
     });
   }

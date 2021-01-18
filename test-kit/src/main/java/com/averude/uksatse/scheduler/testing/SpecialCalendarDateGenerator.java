@@ -1,12 +1,12 @@
 package com.averude.uksatse.scheduler.testing;
 
-import com.averude.uksatse.scheduler.core.entity.SpecialCalendarDate;
+import com.averude.uksatse.scheduler.core.model.entity.SpecialCalendarDate;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
-import static com.averude.uksatse.scheduler.core.entity.SpecialCalendarDateType.*;
+import static com.averude.uksatse.scheduler.core.model.entity.SpecialCalendarDateType.*;
 import static com.averude.uksatse.scheduler.core.util.SpecialCalendarDateUtil.getSpecialDateMap;
 
 public class SpecialCalendarDateGenerator {

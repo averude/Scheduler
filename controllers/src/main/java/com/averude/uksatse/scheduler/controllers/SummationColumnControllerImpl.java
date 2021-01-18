@@ -2,9 +2,9 @@ package com.averude.uksatse.scheduler.controllers;
 
 import com.averude.uksatse.scheduler.controllers.base.AByAuthDtoController;
 import com.averude.uksatse.scheduler.controllers.interfaces.SummationColumnController;
-import com.averude.uksatse.scheduler.core.dto.BasicDto;
-import com.averude.uksatse.scheduler.core.entity.SummationColumn;
-import com.averude.uksatse.scheduler.core.entity.SummationColumnDayTypeRange;
+import com.averude.uksatse.scheduler.core.model.dto.BasicDto;
+import com.averude.uksatse.scheduler.core.model.entity.SummationColumn;
+import com.averude.uksatse.scheduler.core.model.entity.SummationColumnDayTypeRange;
 import com.averude.uksatse.scheduler.security.modifier.dto.EnterpriseIdDtoModifier;
 import com.averude.uksatse.scheduler.security.state.dto.SimpleDtoByAuthMethodResolver;
 import com.averude.uksatse.scheduler.shared.service.SummationColumnService;

@@ -1,8 +1,8 @@
 package com.averude.uksatse.scheduler.testing;
 
-import com.averude.uksatse.scheduler.core.entity.Employee;
-import com.averude.uksatse.scheduler.core.entity.MainShiftComposition;
-import com.averude.uksatse.scheduler.core.entity.structure.Shift;
+import com.averude.uksatse.scheduler.core.model.entity.Employee;
+import com.averude.uksatse.scheduler.core.model.entity.MainShiftComposition;
+import com.averude.uksatse.scheduler.core.model.entity.structure.Shift;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

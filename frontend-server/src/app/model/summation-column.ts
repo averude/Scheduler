@@ -5,11 +5,13 @@ export class SummationColumn implements IdEntity, HasName {
   id:           number;
   name:         string;
   onlyHolidays: boolean;
-  columnType:   string;
+  columnType:   SummationType;
   specialCalendarDateTypes: string[];
 }
 
-export const COUNT: string = "count";
-export const HOURS_SUM: string = "hours_sum";
+export enum SummationType {
+  COUNT = "count",
+  HOURS_SUM = "hours_sum"
+}
 
-export const SUMMATION_COLUMN_TYPES: string[] = [COUNT, HOURS_SUM];
+export const SUMMATION_COLUMN_TYPES: string[] = [SummationType.COUNT, SummationType.HOURS_SUM];

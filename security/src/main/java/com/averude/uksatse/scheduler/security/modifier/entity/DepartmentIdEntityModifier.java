@@ -1,7 +1,7 @@
 package com.averude.uksatse.scheduler.security.modifier.entity;
 
-import com.averude.uksatse.scheduler.core.entity.structure.Shift;
 import com.averude.uksatse.scheduler.core.interfaces.entity.HasDepartmentId;
+import com.averude.uksatse.scheduler.core.model.entity.structure.Shift;
 import com.averude.uksatse.scheduler.security.entity.DepartmentAdminUserAccount;
 import com.averude.uksatse.scheduler.security.entity.ShiftAdminUserAccount;
 import com.averude.uksatse.scheduler.security.entity.UserAccount;

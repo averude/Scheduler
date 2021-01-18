@@ -1,6 +1,6 @@
 package com.averude.uksatse.scheduler.shared.repository;
 
-import com.averude.uksatse.scheduler.core.entity.SummationColumnDayTypeRange;
+import com.averude.uksatse.scheduler.core.model.entity.SummationColumnDayTypeRange;
 import com.averude.uksatse.scheduler.shared.repository.interfaces.IByEnterpriseIdRepository;
 import org.springframework.data.jpa.repository.Query;
 

@@ -1,6 +1,6 @@
 package com.averude.uksatse.scheduler.shared.service;
 
-import com.averude.uksatse.scheduler.core.entity.MainShiftComposition;
+import com.averude.uksatse.scheduler.core.model.entity.MainShiftComposition;
 import com.averude.uksatse.scheduler.shared.repository.MainShiftCompositionRepository;
 import com.averude.uksatse.scheduler.shared.service.base.AService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +31,6 @@ public class MainShiftCompositionServiceImpl
     @Override
     @Transactional
     public List<MainShiftComposition> findAllByShiftIdAndDateBetween(Long shiftId, LocalDate from, LocalDate to) {
-        return mainShiftCompositionRepository.findAllByShiftIdAndToGreaterThanEqualAndFromLessThanEqual(shiftId, from, to);
+        return mainShiftCompositionRepository.findAllByShiftIdAndToGreaterThanEqualAndFromLessThanEqualOrderByEmployeeId(shiftId, from, to);
     }
 }

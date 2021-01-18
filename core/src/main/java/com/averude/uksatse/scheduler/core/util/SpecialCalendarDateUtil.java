@@ -1,6 +1,6 @@
 package com.averude.uksatse.scheduler.core.util;
 
-import com.averude.uksatse.scheduler.core.entity.SpecialCalendarDate;
+import com.averude.uksatse.scheduler.core.model.entity.SpecialCalendarDate;
 
 import java.util.ArrayList;
 import java.util.HashMap;

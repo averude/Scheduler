@@ -1,12 +1,18 @@
 package com.averude.uksatse.scheduler.statistics.strategy;
 
-import com.averude.uksatse.scheduler.core.entity.SummationColumn;
-import com.averude.uksatse.scheduler.statistics.wrapper.WorkDayWrapper;
+import com.averude.uksatse.scheduler.core.interfaces.entity.HasDayTypeId;
+import com.averude.uksatse.scheduler.core.interfaces.entity.HasTime;
+import com.averude.uksatse.scheduler.core.interfaces.entity.HasTimeDuration;
 
-import java.util.Map;
-import java.util.stream.Stream;
+import java.util.List;
+import java.util.function.BiFunction;
 
 public interface CalculationStrategy {
-    long calculate(Stream<Map.Entry<WorkDayWrapper, Integer>> entryStream, SummationColumn column);
+
+    <T extends HasDayTypeId & HasTime, U extends HasDayTypeId & HasTimeDuration>
+    long getSum(T hasTime,
+                List<U> ranges,
+                BiFunction<T, U, Long> comparator);
+
     String getName();
 }

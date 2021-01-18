@@ -1,6 +1,6 @@
 package com.averude.uksatse.scheduler.controllers.interfaces;
 
-import com.averude.uksatse.scheduler.core.entity.SpecialCalendarDate;
+import com.averude.uksatse.scheduler.core.model.entity.SpecialCalendarDate;
 import com.averude.uksatse.scheduler.security.annotations.IsAnyUser;
 import com.averude.uksatse.scheduler.security.annotations.IsEnterpriseAdmin;
 import org.springframework.format.annotation.DateTimeFormat;

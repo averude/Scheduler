@@ -1,7 +1,7 @@
 package com.averude.uksatse.scheduler.controllers.errorhandler;
 
-import com.averude.uksatse.scheduler.core.dto.ErrorDetails;
 import com.averude.uksatse.scheduler.core.exception.JsonTimeStringDeserializeException;
+import com.averude.uksatse.scheduler.core.model.dto.ErrorDetails;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;

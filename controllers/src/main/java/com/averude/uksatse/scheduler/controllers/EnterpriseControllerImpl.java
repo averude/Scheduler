@@ -2,7 +2,7 @@ package com.averude.uksatse.scheduler.controllers;
 
 import com.averude.uksatse.scheduler.controllers.base.AByAuthController;
 import com.averude.uksatse.scheduler.controllers.interfaces.EnterpriseController;
-import com.averude.uksatse.scheduler.core.entity.structure.Enterprise;
+import com.averude.uksatse.scheduler.core.model.entity.structure.Enterprise;
 import com.averude.uksatse.scheduler.security.entity.EnterpriseAdminUserAccount;
 import com.averude.uksatse.scheduler.security.state.entity.SimpleByAuthMethodResolver;
 import com.averude.uksatse.scheduler.shared.service.EnterpriseService;

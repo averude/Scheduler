@@ -1,8 +1,8 @@
 package com.averude.uksatse.scheduler.testing;
 
-import com.averude.uksatse.scheduler.core.entity.DepartmentDayType;
-import com.averude.uksatse.scheduler.core.entity.PatternUnit;
-import com.averude.uksatse.scheduler.core.entity.ShiftPattern;
+import com.averude.uksatse.scheduler.core.model.entity.DepartmentDayType;
+import com.averude.uksatse.scheduler.core.model.entity.PatternUnit;
+import com.averude.uksatse.scheduler.core.model.entity.ShiftPattern;
 
 import java.util.Arrays;
 import java.util.List;

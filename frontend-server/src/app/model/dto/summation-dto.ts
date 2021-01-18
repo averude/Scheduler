@@ -4,11 +4,17 @@ import { BasicDto } from "./basic-dto";
 export class SummationDto extends BasicDto<Employee, SummationResult> {
   from:       string;
   to:         string;
+  positionId: number;
+  shiftId:    number;
 }
 
 export class SummationResult {
   summationColumnId:  number;
   type:               string;
   value:              number;
-  converted:          boolean = false;
+}
+
+export enum SummationMode {
+  OVERALL       = "overall",
+  PER_POSITION  = "per_position"
 }

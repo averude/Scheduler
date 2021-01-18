@@ -1,10 +1,10 @@
 package com.averude.uksatse.scheduler.shared.service;
 
-import com.averude.uksatse.scheduler.core.dto.BasicDto;
-import com.averude.uksatse.scheduler.core.entity.Employee;
-import com.averude.uksatse.scheduler.core.entity.MainShiftComposition;
-import com.averude.uksatse.scheduler.core.entity.WorkDay;
-import com.averude.uksatse.scheduler.core.interfaces.entity.EntityComposition;
+import com.averude.uksatse.scheduler.core.interfaces.entity.Composition;
+import com.averude.uksatse.scheduler.core.model.dto.BasicDto;
+import com.averude.uksatse.scheduler.core.model.entity.Employee;
+import com.averude.uksatse.scheduler.core.model.entity.MainShiftComposition;
+import com.averude.uksatse.scheduler.core.model.entity.WorkDay;
 import com.averude.uksatse.scheduler.shared.repository.EmployeeRepository;
 import com.averude.uksatse.scheduler.shared.repository.MainShiftCompositionRepository;
 import com.averude.uksatse.scheduler.shared.repository.ScheduleRepository;
@@ -67,13 +67,13 @@ public class ScheduleServiceImpl
                                                                                   LocalDate from,
                                                                                   LocalDate to) {
         var mainShiftCompositions = mainShiftCompositionRepository
-                .findAllByShiftIdAndToGreaterThanEqualAndFromLessThanEqual(shiftId, from, to);
+                .findAllByShiftIdAndToGreaterThanEqualAndFromLessThanEqualOrderByEmployeeId(shiftId, from, to);
         var mainShiftCompositionIds = mainShiftCompositions.stream().map(MainShiftComposition::getId).collect(toList());
         var substitutionShiftCompositions = substitutionShiftCompositionRepository
                 .getAllByShiftIdAndMainShiftCompositionInAndDateBetweenOrdered(shiftId, mainShiftCompositionIds, from, to);
 
         var employeeIds = Stream.concat(mainShiftCompositions.stream(), substitutionShiftCompositions.stream())
-                .map(EntityComposition::getSideB)
+                .map(Composition::getEmployeeId)
                 .sorted()
                 .distinct()
                 .collect(toList());

@@ -1,6 +1,6 @@
 package com.averude.uksatse.scheduler.core.interfaces.service;
 
-import com.averude.uksatse.scheduler.core.dto.BasicDto;
+import com.averude.uksatse.scheduler.core.model.dto.BasicDto;
 
 import javax.validation.Valid;
 import java.io.Serializable;

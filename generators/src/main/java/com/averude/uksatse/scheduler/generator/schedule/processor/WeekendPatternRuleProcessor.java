@@ -1,14 +1,14 @@
 package com.averude.uksatse.scheduler.generator.schedule.processor;
 
-import com.averude.uksatse.scheduler.core.entity.ShiftPatternGenerationRule;
-import com.averude.uksatse.scheduler.core.entity.SpecialCalendarDate;
-import com.averude.uksatse.scheduler.core.entity.WorkDay;
+import com.averude.uksatse.scheduler.core.model.entity.ShiftPatternGenerationRule;
+import com.averude.uksatse.scheduler.core.model.entity.SpecialCalendarDate;
+import com.averude.uksatse.scheduler.core.model.entity.WorkDay;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
 
-import static com.averude.uksatse.scheduler.core.entity.SpecialCalendarDateType.WEEKEND;
+import static com.averude.uksatse.scheduler.core.model.entity.SpecialCalendarDateType.WEEKEND;
 import static com.averude.uksatse.scheduler.generator.utils.GenerationUtils.updateWorkDay;
 
 @Component

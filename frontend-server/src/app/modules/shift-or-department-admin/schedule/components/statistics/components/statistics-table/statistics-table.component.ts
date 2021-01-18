@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { StatisticsService } from "../../../../../../../services/http/statistics.service";
-import { SummationDto } from "../../../../../../../model/dto/summation-dto";
+import { SummationDto, SummationMode } from "../../../../../../../model/dto/summation-dto";
 import { PaginationService } from "../../../../../../../lib/ngx-schedule-table/service/pagination.service";
 import { forkJoin, Subscription } from "rxjs";
 import { SummationColumnDtoService } from "../../../../../../../services/http/summation-column-dto.service";
@@ -9,11 +9,15 @@ import { SimplePaginationStrategy } from "../../../../../../../shared/paginators
 import { Shift } from "../../../../../../../model/shift";
 import { ShiftService } from "../../../../../../../services/http/shift.service";
 import { Employee } from "../../../../../../../model/employee";
+import { Position } from "../../../../../../../model/position";
 import { getEmployeeShortName } from "../../../../../../../shared/utils/utils";
-import { MainShiftCompositionService } from "../../../../../../../services/http/main-shift-composition.service";
 import { StatisticsColumnCompositor } from "../../../../../../../shared/compositor/statistics-column-compositor";
 import { WorkingNormService } from "../../../../../../../services/http/working-norm.service";
-import { sortByCompositions } from "../../../../../../../shared/utils/collection-utils";
+import { PositionService } from "../../../../../../../services/http/position.service";
+import {
+  StatisticsRowGroup,
+  StatisticsTableDataCollector
+} from "../../../../../../../services/collectors/statistics/statistics-table-data-collector";
 
 @Component({
   selector: 'app-statistics-table',
@@ -22,9 +26,18 @@ import { sortByCompositions } from "../../../../../../../shared/utils/collection
 })
 export class StatisticsTableComponent implements OnInit, OnDestroy {
 
+  viewProxyShown: boolean;
+
   summationColumns: SummationColumn[];
   summationDtos:    SummationDto[];
   shifts:           Shift[];
+  positions:        Position[];
+
+  currentMode: SummationMode = SummationMode.PER_POSITION;
+
+  private collector: StatisticsTableDataCollector = new StatisticsTableDataCollector();
+
+  tableData: StatisticsRowGroup[] = [];
 
   private paginationSub: Subscription;
 
@@ -32,34 +45,43 @@ export class StatisticsTableComponent implements OnInit, OnDestroy {
               private paginationService: PaginationService,
               private statisticsColumnCompositor: StatisticsColumnCompositor,
               private shiftService: ShiftService,
+              private positionService: PositionService,
               private summationColumnDtoService: SummationColumnDtoService,
               private statisticsService: StatisticsService,
-              private workingNormService: WorkingNormService,
-              private shiftCompositionService: MainShiftCompositionService) { }
+              private workingNormService: WorkingNormService) { }
 
   ngOnInit() {
+    this.refresh();
+  }
+
+  private refresh() {
+    if (this.paginationSub) this.paginationSub.unsubscribe();
+
     forkJoin([
       this.shiftService.getAll(),
-      this.summationColumnDtoService.getAll(),
-    ]).subscribe(values => {
-      this.shifts           = values[0];
-      this.summationColumns = values[1].map(value => value.parent);
+      this.positionService.getAll(),
+      this.summationColumnDtoService.getAll(), // refactor
+    ]).subscribe(([shifts, positions, summationColumns]) => {
+      this.shifts           = shifts;
+      this.positions        = positions;
+      this.summationColumns = summationColumns.map(value => value.parent);
       this.statisticsColumnCompositor.composeColumns(this.summationColumns);
 
       this.paginationSub = this.paginationService.onValueChange
-        .subscribe(monthPaginationObject =>
-          forkJoin([
-            this.statisticsService
-              .getSummationDto(monthPaginationObject.firstDayOfMonth, monthPaginationObject.lastDayOfMonth),
-            this.shiftCompositionService
-              .getAll(monthPaginationObject.firstDayOfMonth, monthPaginationObject.lastDayOfMonth),
-            this.workingNormService
-              .getAll(monthPaginationObject.firstDayOfMonth, monthPaginationObject.lastDayOfMonth)
-          ]).subscribe(values => {
-            sortByCompositions(values[0], values[1]);
-            this.statisticsColumnCompositor.composeResults(values[0], this.summationColumns, values[1], values[2]);
-            this.summationDtos = values[0];
-          })
+        .subscribe(monthPaginationObject => {
+            return forkJoin([
+              this.statisticsService
+                .getSummationDTO(monthPaginationObject.firstDayOfMonth, monthPaginationObject.lastDayOfMonth, this.currentMode),
+              this.workingNormService
+                .getAll(monthPaginationObject.firstDayOfMonth, monthPaginationObject.lastDayOfMonth)
+            ]).subscribe(([summationDTOs, workingNorms]) => {
+              this.viewProxyShown = false;
+              this.statisticsColumnCompositor.composeResults(summationDTOs, this.summationColumns, workingNorms);
+              this.summationDtos = summationDTOs;
+
+              this.tableData = this.collector.getTableData(summationDTOs, shifts, positions);
+            });
+          }
         );
     });
   }
@@ -71,5 +93,20 @@ export class StatisticsTableComponent implements OnInit, OnDestroy {
 
   getEmployeeShortName(employee: Employee): string {
     return getEmployeeShortName(employee);
+  }
+
+  onDateChange() {
+    this.viewProxyShown = true;
+  }
+
+  changeMode() {
+    if (this.currentMode == SummationMode.PER_POSITION) {
+      this.currentMode = SummationMode.OVERALL;
+    } else {
+      this.currentMode = SummationMode.PER_POSITION;
+    }
+
+    this.viewProxyShown = true;
+    this.refresh();
   }
 }

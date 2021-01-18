@@ -65,8 +65,14 @@ export abstract class AReportCreator implements ReportCreator {
       let col_idx = reportMarkup.sheet_col_start_num;
 
       if (rowData && rowData.reportCellData) {
-        rowData.reportCellData.forEach(cell =>
-          this.cellFiller.fill(rows, col_idx++, cell.value, cell.style));
+        rowData.reportCellData.forEach(cell => {
+          if (cell.merge && cell.value.length > 1) {
+            this.cellFiller.fillWithMerge(sheet, row_idx, row_idx + cell.value.length - 1,
+              rows, col_idx++, cell.value, cell.style);
+          } else {
+            this.cellFiller.fill(rows, col_idx++, cell.value, cell.style);
+          }
+        });
       }
 
       rows.forEach(row => row.commit());

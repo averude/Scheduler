@@ -21,7 +21,7 @@ import org.springframework.web.filter.CorsFilter;
 })
 @EntityScan(basePackages = {
         "com.averude.uksatse.scheduler.security.entity",
-        "com.averude.uksatse.scheduler.core.entity"
+        "com.averude.uksatse.scheduler.core.model.entity"
 })
 @EnableJpaRepositories(basePackageClasses = {UserAccountRepository.class})
 public class AuthServerApplication {
