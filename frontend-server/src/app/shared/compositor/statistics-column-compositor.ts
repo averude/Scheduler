@@ -1,9 +1,8 @@
-import { SummationResult } from "../../model/dto/summation-dto";
+import { EmployeeWorkStatDTO, SummationResult } from "../../model/dto/employee-work-stat-dto";
 import { SummationColumn } from "../../model/summation-column";
 import { WorkingNorm } from "../../model/working-norm";
 import { sortByPattern } from "../utils/collection-utils";
 import { Injectable } from "@angular/core";
-import { EmployeeWorkStatDTO } from "../../model/dto/employee-work-stat-dto";
 
 @Injectable({providedIn: 'root'})
 export class StatisticsColumnCompositor {

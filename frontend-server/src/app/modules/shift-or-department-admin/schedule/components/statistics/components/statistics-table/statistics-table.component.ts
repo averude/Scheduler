@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { StatisticsService } from "../../../../../../../services/http/statistics.service";
-import { SummationMode } from "../../../../../../../model/dto/summation-dto";
+import { EmployeeWorkStatDTO, SummationMode } from "../../../../../../../model/dto/employee-work-stat-dto";
 import { PaginationService } from "../../../../../../../lib/ngx-schedule-table/service/pagination.service";
 import { forkJoin, Subscription } from "rxjs";
 import { SummationColumnDtoService } from "../../../../../../../services/http/summation-column-dto.service";
@@ -18,7 +18,6 @@ import {
   StatisticsRowGroup,
   StatisticsTableDataCollector
 } from "../../../../../../../services/collectors/statistics/statistics-table-data-collector";
-import { EmployeeWorkStatDTO } from "../../../../../../../model/dto/employee-work-stat-dto";
 
 @Component({
   selector: 'app-statistics-table',

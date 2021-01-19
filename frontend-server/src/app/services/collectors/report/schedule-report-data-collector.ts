@@ -6,7 +6,7 @@ import { SCHEDULE_REPORT } from "../../generators/report/model/report-types";
 import { ReportCellData, ReportHeaderCell } from "../../generators/report/model/report-cell-data";
 import { ScheduleReportStyles } from "../../generators/report/styles/schedule-report-styles";
 import { CalendarDay } from "../../../lib/ngx-schedule-table/model/calendar-day";
-import { SummationResult } from "../../../model/dto/summation-dto";
+import { SummationResult } from "../../../model/dto/employee-work-stat-dto";
 import { SummationColumn } from "../../../model/summation-column";
 import { ReportData } from "../../generators/report/model/report-row-data";
 import { ReportMarkup } from "../../generators/report/model/report-markup";

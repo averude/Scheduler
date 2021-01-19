@@ -1,72 +1,74 @@
 import { StatisticsTableDataCollector } from "./statistics-table-data-collector";
-import { SummationDto } from "../../../model/dto/summation-dto";
 import { Position } from "../../../model/position";
 import { Shift } from "../../../model/shift";
+import { EmployeeWorkStatDTO } from "../../../model/dto/employee-work-stat-dto";
 
-
-const DTOS: SummationDto[] = [
+const DTOS: EmployeeWorkStatDTO[] = [
   {
-    id: 1,
-    parent: {
+    employee: {
       id: 1,
       firstName: 'First Name',
       secondName: 'Second Name',
       patronymic: 'Patronymic',
       position: null
     },
-    collection: [
-      {
-        summationColumnId: 1,
-        value: 10,
-        type: 'hours_sum',
-      }
-    ],
-    from: null,
-    to: null,
-    positionId: 1,
     shiftId:    1,
+    positionStats: [
+      {
+        positionId: 1,
+        summations: [
+          {
+            summationColumnId: 1,
+            value: 10,
+            type: 'hours_sum',
+          }
+        ]
+      }
+    ]
   },
   {
-    id: 1,
-    parent: {
+    employee: {
       id: 1,
       firstName: 'First Name',
       secondName: 'Second Name',
       patronymic: 'Patronymic',
       position: null
     },
-    collection: [
-      {
-        summationColumnId: 1,
-        value: 10,
-        type: 'hours_sum',
-      }
-    ],
-    from: null,
-    to: null,
-    positionId: 2,
     shiftId:    1,
+    positionStats: [
+      {
+        positionId: 2,
+        summations: [
+          {
+            summationColumnId: 1,
+            value: 10,
+            type: 'hours_sum',
+          }
+        ],
+      }
+    ]
   },
   {
-    id: 3,
-    parent: {
+    employee: {
       id: 3,
       firstName: 'First Name',
       secondName: 'Second Name',
       patronymic: 'Patronymic',
       position: null
     },
-    collection: [
-      {
-        summationColumnId: 1,
-        value: 10,
-        type: 'hours_sum',
-      }
-    ],
-    from: null,
-    to: null,
-    positionId: 1,
     shiftId:    1,
+    positionStats: [
+      {
+        positionId: 1,
+        summations: [
+          {
+            summationColumnId: 1,
+            value: 10,
+            type: 'hours_sum',
+          }
+        ]
+      }
+    ]
   }
 ];
 

@@ -16,7 +16,7 @@ import { ReportGenerator } from "./report-generator";
 import { StatisticsColumnCompositor } from "../../../shared/compositor/statistics-column-compositor";
 import { PositionService } from "../../http/position.service";
 import { ShiftService } from "../../http/shift.service";
-import { SummationMode } from "../../../model/dto/summation-dto";
+import { SummationMode } from "../../../model/dto/employee-work-stat-dto";
 
 @Injectable()
 export class ReportService {

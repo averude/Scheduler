@@ -1,6 +1,6 @@
 import { RowData } from "../../../../lib/ngx-schedule-table/model/data/row-data";
 import { CellData } from "../../../../lib/ngx-schedule-table/model/data/cell-data";
-import { SummationResult } from "../../../../model/dto/summation-dto";
+import { SummationResult } from "../../../../model/dto/employee-work-stat-dto";
 import { ReportCellData, ReportHeaderCell } from "./report-cell-data";
 import { ReportMarkup } from "./report-markup";
 import { DecorationData } from "./decoration-data";

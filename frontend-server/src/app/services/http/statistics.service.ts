@@ -3,8 +3,7 @@ import { RestConfig } from "../../rest.config";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { CountDTO } from "../../model/dto/count-dto";
-import { SummationMode } from "../../model/dto/summation-dto";
-import { EmployeeWorkStatDTO } from "../../model/dto/employee-work-stat-dto";
+import { EmployeeWorkStatDTO, SummationMode } from "../../model/dto/employee-work-stat-dto";
 
 @Injectable({
   providedIn: "root"

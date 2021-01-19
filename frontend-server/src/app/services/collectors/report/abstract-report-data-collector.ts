@@ -1,7 +1,7 @@
 import { ReportData, ReportGroupData, ReportRowData } from "../../generators/report/model/report-row-data";
 import { DayType } from "../../../model/day-type";
 import { Position } from "../../../model/position";
-import { SummationResult } from "../../../model/dto/summation-dto";
+import { EmployeeWorkStatDTO, SummationResult } from "../../../model/dto/employee-work-stat-dto";
 import { CalendarDay } from "../../../lib/ngx-schedule-table/model/calendar-day";
 import { ReportDataCollector } from "./report-data-collector";
 import { ReportCellData, ReportHeaderCell } from "../../generators/report/model/report-cell-data";
@@ -13,7 +13,6 @@ import * as moment from "moment";
 import { binarySearch } from "../../../shared/utils/collection-utils";
 import { RowInterval } from "../../../model/ui/schedule-table/row-interval";
 import { roundToTwo } from "../../../shared/utils/utils";
-import { EmployeeWorkStatDTO } from "../../../model/dto/employee-work-stat-dto";
 import { getMainShiftId } from "../../utils";
 import { WorkDay } from "../../../model/workday";
 import { CellEnabledSetter } from "../schedule/cell-enabled-setter";

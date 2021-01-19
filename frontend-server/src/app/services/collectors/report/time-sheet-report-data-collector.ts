@@ -10,7 +10,7 @@ import {
 } from "../../../shared/utils/utils";
 import { ReportCellData, ReportHeaderCell } from "../../generators/report/model/report-cell-data";
 import { TimeSheetStyles } from "../../generators/report/styles/time-sheet-styles";
-import { SummationResult } from "../../../model/dto/summation-dto";
+import { SummationResult } from "../../../model/dto/employee-work-stat-dto";
 import { CalendarDay } from "../../../lib/ngx-schedule-table/model/calendar-day";
 import { SummationColumn } from "../../../model/summation-column";
 import { ReportData } from "../../generators/report/model/report-row-data";
