@@ -11,13 +11,20 @@ import { SummationColumn } from "../../../model/summation-column";
 import { ReportData } from "../../generators/report/model/report-row-data";
 import { ReportMarkup } from "../../generators/report/model/report-markup";
 import { EmployeeScheduleDTO } from "../../../model/dto/employee-schedule-dto";
-import * as moment from "moment";
 import { CellEnabledSetter } from "../schedule/cell-enabled-setter";
 import { RowInterval } from "../../../model/ui/schedule-table/row-interval";
+import { IntervalCreator } from "../../creator/interval-creator.service";
+import { CellCollector } from "../cell-collector";
 
 export class ScheduleReportDataCollector extends AbstractReportDataCollector {
 
   REPORT_TYPE: string = SCHEDULE_REPORT;
+
+  constructor(intervalCreator: IntervalCreator,
+              cellEnabledSetter: CellEnabledSetter,
+              cellCollector: CellCollector) {
+    super(intervalCreator, cellEnabledSetter, cellCollector);
+  }
 
   fillCellWithValue(cell: ReportCellData,
                     workDay: WorkDay,
@@ -39,7 +46,7 @@ export class ScheduleReportDataCollector extends AbstractReportDataCollector {
         value: '№',
         style: ScheduleReportStyles.idHeaderCellStyle,
         merge: true,
-        width: 3
+        width: 4
       },
       {
         value: 'П.І.Б.',
@@ -142,42 +149,5 @@ export class ScheduleReportDataCollector extends AbstractReportDataCollector {
       result = disabled ? ScheduleReportStyles.disabledHolidayScheduleCellStyle : ScheduleReportStyles.holidayScheduleCellStyle;
     }
     return result;
-  }
-
-  private cellEnabledSetter: CellEnabledSetter = new CellEnabledSetter();
-
-  private collectCells(dto: EmployeeScheduleDTO,
-                       calendarDays: CalendarDay[],
-                       intervals: RowInterval[],
-                       dayTypes: DayType[],
-                       useReportLabel: boolean) {
-
-    const cells: ReportCellData[] = [];
-    const workDays = dto.collection;
-
-    for (let date_idx = 0, sched_idx = 0; date_idx < calendarDays.length; date_idx++) {
-      const date = calendarDays[date_idx];
-      const workDay = workDays[sched_idx];
-
-      const cell  = <ReportCellData>{};
-      cell.date   = date;
-      this.fillDisabledCell(cell);
-
-      if (workDay && date.isoString === workDay.date) {
-        cell.workDay = workDay;
-        sched_idx++;
-      }
-
-      cells.push(cell);
-    }
-
-    const from = moment.utc(calendarDays[0].isoString);
-    const to = moment.utc(calendarDays[calendarDays.length - 1].isoString);
-
-    this.cellEnabledSetter.processCells(cells, intervals, from, to, (cell => {
-      this.fillCellWithValue(cell, cell.workDay, dayTypes, useReportLabel);
-    }));
-
-    return cells;
   }
 }

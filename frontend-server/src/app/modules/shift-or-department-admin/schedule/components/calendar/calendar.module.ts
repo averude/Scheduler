@@ -11,7 +11,7 @@ import { ScheduleGenerationService } from "../../../../../services/generators/sc
 import { ScheduleTablePaginationStrategy } from "../../../../../shared/paginators/pagination-strategy/schedule-table-pagination-strategy";
 import { MonthYearPaginatorModule } from "../../../../../shared/paginators/month-year-paginator/month-year-paginator.module";
 import { SchedulerCellLabelSetter } from "./utils/scheduler-cell-label-setter";
-import { CompositionDivider } from "../../../../../services/divider/composition-divider.service";
+import { IntervalCreator } from "../../../../../services/creator/interval-creator.service";
 import { TableSumCalculator } from "../../../../../services/calculators/table-sum-calculator.service";
 import { ScheduleTableCompositionDialogModule } from "./schedule-table-shift-composition-dialog/schedule-table-composition-dialog.module";
 import { SchedulerUtility } from "./utils/scheduler-utility";
@@ -45,7 +45,7 @@ import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
     ScheduleGenerationService,
     ScheduleTablePaginationStrategy,
     SchedulerCellLabelSetter,
-    CompositionDivider,
+    IntervalCreator,
     TableSumCalculator,
     TableDataCollector,
     TableRowProcessor,

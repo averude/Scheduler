@@ -5,7 +5,7 @@ import { binarySearch } from "../../../shared/utils/collection-utils";
 import { RowInterval } from "../../../model/ui/schedule-table/row-interval";
 import { CellEnabledSetter } from "./cell-enabled-setter";
 import { TableRenderer } from "../../../lib/ngx-schedule-table/service/table-renderer.service";
-import { CompositionDivider } from "../../divider/composition-divider.service";
+import { IntervalCreator } from "../../creator/interval-creator.service";
 import { NotificationsService } from "angular2-notifications";
 import { Injectable } from "@angular/core";
 
@@ -14,7 +14,7 @@ export class TableRowRemover {
 
   constructor(private cellEnabledSetter: CellEnabledSetter,
               private tableRenderer: TableRenderer,
-              private divider: CompositionDivider,
+              private divider: IntervalCreator,
               private notificationsService: NotificationsService) {}
 
   removeRow(groupData: RowGroup,
@@ -54,7 +54,7 @@ export class TableRowRemover {
       for (let row of rows) {
 
         if (row.id === composition.employeeId && !row.isSubstitution) {
-          row.intervals = this.divider.getRowIntervalsByArr(row.compositions, substitutionShiftCompositions);
+          row.intervals = this.divider.getEmployeeShiftIntervalsByArr(row.compositions, substitutionShiftCompositions);
           this.cellEnabledSetter.processRow(row, table.from, table.to);
         }
 

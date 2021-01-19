@@ -6,14 +6,14 @@ import { WorkingNorm } from "../../../model/working-norm";
 import * as moment from "moment";
 import { RowGroup, TableData } from "../../../model/ui/schedule-table/table-data";
 import { Injectable } from "@angular/core";
-import { CompositionDivider } from "../../divider/composition-divider.service";
+import { IntervalCreator } from "../../creator/interval-creator.service";
 import { binarySearch } from "../../../shared/utils/collection-utils";
 import { TableRowProcessor } from "./table-row-processor.service";
 
 @Injectable()
 export class TableDataCollector {
 
-  constructor(private divider: CompositionDivider,
+  constructor(private divider: IntervalCreator,
               private rowProcessor: TableRowProcessor) {}
 
   collect(shifts: Shift[],

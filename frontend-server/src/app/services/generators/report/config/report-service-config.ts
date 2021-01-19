@@ -9,6 +9,9 @@ import { TimeSheetReportDecorator } from "../decorator/time-sheet-report-decorat
 import { ScheduleReportCreator } from "../creator/schedule-report-creator";
 import { TimeSheetReportCreator } from "../creator/time-sheet-report-creator";
 import { CellFiller } from "../core/cell-filler";
+import { IntervalCreator } from "../../../creator/interval-creator.service";
+import { CellEnabledSetter } from "../../../collectors/schedule/cell-enabled-setter";
+import { CellCollector } from "../../../collectors/cell-collector";
 
 @Injectable()
 export class ReportServiceConfig {
@@ -17,13 +20,16 @@ export class ReportServiceConfig {
   private _creatorsMap:   Map<string, ReportCreator>;
   private _decoratorsMap: Map<string, ReportDecorator>;
 
-  constructor(private cellFiller: CellFiller){}
+  constructor(private cellFiller: CellFiller,
+              private intervalCreator: IntervalCreator,
+              private cellEnabledSetter: CellEnabledSetter,
+              private cellCollector: CellCollector){}
 
   get collectors(): Map<string, ReportDataCollector> {
     if (!this._collectorsMap) {
       this._collectorsMap = new Map<string, ReportDataCollector>();
-      const scheduleReportDataCollector = new ScheduleReportDataCollector();
-      const timeSheetReportDataCollector = new TimeSheetReportDataCollector();
+      const scheduleReportDataCollector = new ScheduleReportDataCollector(this.intervalCreator, this.cellEnabledSetter, this.cellCollector);
+      const timeSheetReportDataCollector = new TimeSheetReportDataCollector(this.intervalCreator, this.cellEnabledSetter, this.cellCollector);
       this._collectorsMap.set(scheduleReportDataCollector.REPORT_TYPE, scheduleReportDataCollector);
       this._collectorsMap.set(timeSheetReportDataCollector.REPORT_TYPE, timeSheetReportDataCollector);
     }

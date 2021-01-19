@@ -6,7 +6,7 @@ import { Composition } from "../../../model/main-shift-composition";
 import { convertCompositionToInterval } from "../../../model/ui/schedule-table/row-interval";
 import { binarySearchLastRepeatableIndex } from "../../../shared/utils/collection-utils";
 import { CellEnabledSetter } from "./cell-enabled-setter";
-import { CompositionDivider } from "../../divider/composition-divider.service";
+import { IntervalCreator } from "../../creator/interval-creator.service";
 import { CellCollector } from "../cell-collector";
 import { Injectable } from "@angular/core";
 import { WorkDay } from "../../../model/workday";
@@ -15,7 +15,7 @@ import { WorkDay } from "../../../model/workday";
 export class TableRowProcessor {
 
   constructor(private cellEnabledSetter: CellEnabledSetter,
-              private compositionDivider: CompositionDivider,
+              private compositionDivider: IntervalCreator,
               private cellCollector: CellCollector) {}
 
   initRowInsert(group: RowGroup,
@@ -101,7 +101,7 @@ export class TableRowProcessor {
       row.intervals = row.compositions.map(value => convertCompositionToInterval(value));
     } else {
       this.exchangeComposition(dto.mainShiftCompositions, composition);
-      row.intervals = this.compositionDivider.getRowIntervalsByArr(row.compositions, dto.substitutionShiftCompositions);
+      row.intervals = this.compositionDivider.getEmployeeShiftIntervalsByArr(row.compositions, dto.substitutionShiftCompositions);
     }
   }
 

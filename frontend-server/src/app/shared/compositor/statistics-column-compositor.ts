@@ -1,25 +1,26 @@
-import { SummationDto, SummationResult } from "../../model/dto/summation-dto";
+import { SummationResult } from "../../model/dto/summation-dto";
 import { SummationColumn } from "../../model/summation-column";
 import { WorkingNorm } from "../../model/working-norm";
 import { sortByPattern } from "../utils/collection-utils";
 import { Injectable } from "@angular/core";
+import { EmployeeWorkStatDTO } from "../../model/dto/employee-work-stat-dto";
 
 @Injectable({providedIn: 'root'})
 export class StatisticsColumnCompositor {
 
-  composeResults(summationDtos: SummationDto[],
+  composeResults(dtos: EmployeeWorkStatDTO[],
                  summationColumns: SummationColumn[],
                  workingNorms: WorkingNorm[]) {
-    summationDtos.forEach(dto => {
-      try {
-        const shiftId = dto.shiftId;
-        const norm = workingNorms.find(value => value.shiftId === shiftId);
+    dtos.forEach(dto => {
+      const shiftId = dto.shiftId;
+      const norm = workingNorms.find(value => value.shiftId === shiftId);
 
-        dto.collection.push({summationColumnId: -1, value: norm ? norm.hours : 0} as SummationResult);
-        dto.collection.push({summationColumnId: -2, value: norm ? norm.days : 0} as SummationResult);
+      dto.positionStats.forEach(pStat => {
+        pStat.summations.push({summationColumnId: -1, value: norm ? norm.hours : 0} as SummationResult);
+        pStat.summations.push({summationColumnId: -2, value: norm ? norm.days : 0} as SummationResult);
 
-        sortByPattern(dto.collection, summationColumns, (sumRes, sumCol) => sumRes.summationColumnId == sumCol.id);
-      } finally {}
+        sortByPattern(pStat.summations, summationColumns, (sumRes, sumCol) => sumRes.summationColumnId == sumCol.id);
+      });
     });
   }
 

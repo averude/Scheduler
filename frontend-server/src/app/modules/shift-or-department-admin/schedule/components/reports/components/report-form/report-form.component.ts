@@ -108,13 +108,13 @@ export class ReportFormComponent implements OnInit {
 
   moveAllToSelected() {
     while (this.summationColumns.length > 0) {
-      this.selectedSummationColumns.push(this.summationColumns.pop());
+      this.selectedSummationColumns.push(this.summationColumns.shift());
     }
   }
 
   moveAllToList() {
     while (this.selectedSummationColumns.length > 0) {
-      this.summationColumns.push(this.selectedSummationColumns.pop());
+      this.summationColumns.push(this.selectedSummationColumns.shift());
     }
   }
 

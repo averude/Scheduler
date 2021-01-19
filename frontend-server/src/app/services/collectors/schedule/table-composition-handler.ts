@@ -13,7 +13,7 @@ import { EmployeeScheduleDTO } from "../../../model/dto/employee-schedule-dto";
 import { WorkingNorm } from "../../../model/working-norm";
 import { CalendarDay } from "../../../lib/ngx-schedule-table/model/calendar-day";
 import { Injectable } from "@angular/core";
-import { CompositionDivider } from "../../divider/composition-divider.service";
+import { IntervalCreator } from "../../creator/interval-creator.service";
 import { convertCompositionToInterval } from "../../../model/ui/schedule-table/row-interval";
 import { TableRowRemover } from "./table-row-remover";
 
@@ -23,7 +23,7 @@ export class TableCompositionHandler {
   constructor(private tableRenderer: TableRenderer,
               private rowRemover: TableRowRemover,
               private rowProcessor: TableRowProcessor,
-              private divider: CompositionDivider,
+              private divider: IntervalCreator,
               private cellEnabledSetter: CellEnabledSetter,
               private sumCalculator: TableSumCalculator,
               private mainShiftCompositionService: MainShiftCompositionService,
@@ -132,12 +132,12 @@ export class TableCompositionHandler {
 
       if (isSubstitution) {
         if (parentRow) {
-          parentRow.intervals = this.divider.getRowIntervalsByArr(parentRow.compositions, dto.substitutionShiftCompositions);
+          parentRow.intervals = this.divider.getEmployeeShiftIntervalsByArr(parentRow.compositions, dto.substitutionShiftCompositions);
           this.cellEnabledSetter.processRow(parentRow, group.table.from, group.table.to);
         }
         row.intervals = row.compositions.map(value => convertCompositionToInterval(value));
       } else {
-        row.intervals = this.divider.getRowIntervalsByArr(row.compositions, dto.substitutionShiftCompositions);
+        row.intervals = this.divider.getEmployeeShiftIntervalsByArr(row.compositions, dto.substitutionShiftCompositions);
       }
 
       this.cellEnabledSetter.processRow(row, group.table.from, group.table.to);
@@ -193,7 +193,7 @@ export class TableCompositionHandler {
         for (let otherGroupMainRow of rows) {
 
           if (otherGroupMainRow.id === mainShiftComposition.employeeId && !otherGroupMainRow.isSubstitution) {
-            otherGroupMainRow.intervals = this.divider.getRowIntervalsByArr(otherGroupMainRow.compositions, dto.substitutionShiftCompositions);
+            otherGroupMainRow.intervals = this.divider.getEmployeeShiftIntervalsByArr(otherGroupMainRow.compositions, dto.substitutionShiftCompositions);
             this.cellEnabledSetter.processRow(otherGroupMainRow, group.table.from, group.table.to);
           }
         }

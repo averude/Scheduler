@@ -1,14 +1,14 @@
-import { SummationDto } from "../../../model/dto/summation-dto";
 import { Employee } from "../../../model/employee";
 import { Position } from "../../../model/position";
 import { binarySearch } from "../../../shared/utils/collection-utils";
 import { roundToTwo } from "../../../shared/utils/utils";
 import { SummationType } from "../../../model/summation-column";
 import { Shift } from "../../../model/shift";
+import { EmployeePositionStat, EmployeeWorkStatDTO } from "../../../model/dto/employee-work-stat-dto";
 
 export class StatisticsTableDataCollector {
 
-  getTableData(dtos: SummationDto[],
+  getTableData(dtos: EmployeeWorkStatDTO[],
                shifts: Shift[],
                positions: Position[]) {
     const groups: StatisticsRowGroup[] = shifts
@@ -19,18 +19,18 @@ export class StatisticsTableDataCollector {
         rows: []
       }));
 
-    const employeeRows: StatisticsEmployeeRow[] = [];
     for (let dto of dtos) {
       const group = binarySearch(groups, (mid => mid.groupId - dto.shiftId));
-      let last = group.rows.length - 1;
+      if (group) {
+        const employeeRow: StatisticsEmployeeRow = {
+          employee: dto.employee,
+          rows: []
+        };
 
-      if (last >= 0 && group.rows[last].employee.id === dto.parent.id) {
-        group.rows[last].rows.push(this.getPositionRow(positions, dto));
-      } else {
-        group.rows.push({
-          employee: dto.parent,
-          rows: [this.getPositionRow(positions, dto)]
+        dto.positionStats.forEach(pStat => {
+          employeeRow.rows.push(this.getPositionRow(positions, pStat));
         });
+        group.rows.push(employeeRow);
       }
     }
 
@@ -38,10 +38,11 @@ export class StatisticsTableDataCollector {
 
   }
 
-  private getPositionRow(positions: Position[], dto) {
+  private getPositionRow(positions: Position[],
+                         positionStat: EmployeePositionStat) {
     return {
-      position: binarySearch(positions, (mid => mid.id - dto.positionId)),
-      cells: dto.collection.map(summation => ({
+      position: binarySearch(positions, (mid => mid.id - positionStat.positionId)),
+      cells: positionStat.summations.map(summation => ({
         columnId: summation.summationColumnId,
         value: summation.type === SummationType.HOURS_SUM ? roundToTwo(summation.value / 60) : summation.value
       }))

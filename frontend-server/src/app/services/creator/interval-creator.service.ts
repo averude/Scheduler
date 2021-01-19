@@ -6,30 +6,30 @@ import { EmployeeScheduleDTO } from "../../model/dto/employee-schedule-dto";
 import { Moment } from "moment";
 
 @Injectable()
-export class CompositionDivider {
+export class IntervalCreator {
 
-  getRowIntervals(mainShiftComposition: Composition,
-                  substitutionShiftCompositions: Composition[]): RowInterval[] {
-    let substitutionCompositions = substitutionShiftCompositions.sort((a,b) => a.from.diff(b.from));
+  getEmployeeShiftIntervals(mainComposition: Composition,
+                            substitutionCompositions: Composition[]): RowInterval[] {
+    let sortedSubCompositions = substitutionCompositions.sort((a,b) => a.from.diff(b.from));
 
     let result: RowInterval[] = [];
 
-    let from  = mainShiftComposition.from;
-    let to    = mainShiftComposition.to;
+    let from  = mainComposition.from;
+    let to    = mainComposition.to;
 
-    let substCount = substitutionCompositions.length;
+    let substCount = sortedSubCompositions.length;
 
     for (let i = 0; i <= substCount; i++) {
 
       if (i >= substCount) {
-        if (from.isSameOrBefore(mainShiftComposition.to)) {
-          const interval = {parentId: mainShiftComposition.id, from: from, to: to};
+        if (from.isSameOrBefore(mainComposition.to)) {
+          const interval = {parentId: mainComposition.id, from: from, to: to};
           result.push(interval);
         }
         break;
       }
 
-      let substitutionComposition = substitutionCompositions[i];
+      let substitutionComposition = sortedSubCompositions[i];
 
       if (from.isSameOrAfter(substitutionComposition.from)) {
         if (substitutionComposition.to.isSameOrBefore(to)) {
@@ -44,7 +44,7 @@ export class CompositionDivider {
 
       if (to.isAfter(substitutionComposition.from)) {
         const interval = {
-          parentId: mainShiftComposition.id,
+          parentId: mainComposition.id,
           from: from,
           to: substitutionComposition.from.clone().subtract(1, 'day')
         };
@@ -52,7 +52,7 @@ export class CompositionDivider {
         result.push(interval);
         from = substitutionComposition.to.clone().add(1, 'day');
       } else {
-        const interval = {parentId: mainShiftComposition.id, from: from, to: to};
+        const interval = {parentId: mainComposition.id, from: from, to: to};
         result.push(interval);
         break;
       }
@@ -64,17 +64,17 @@ export class CompositionDivider {
   getEmployeePositionIntervals(from: Moment,
                                to: Moment,
                                mainCompositions: MainShiftComposition[],
-                               substitutionCompositions: SubstitutionShiftComposition[]) {
-    let intervalsMap: Map<number, RowInterval[]> = new Map();
+                               substitutionCompositions: SubstitutionShiftComposition[]): Map<number, RowInterval[]> {
+    const intervalsMap: Map<number, RowInterval[]> = new Map();
 
-    let subs:SubstitutionShiftComposition[] = [].concat(substitutionCompositions);
+    const tempSubstitutions:SubstitutionShiftComposition[] = [].concat(substitutionCompositions);
 
     for (let composition of mainCompositions) {
 
       const otherPositionSubstitutions = [];
 
-      for (let subIndex = 0; subIndex < subs.length;) {
-        const subComposition = subs[subIndex];
+      for (let subIndex = 0; subIndex < tempSubstitutions.length;) {
+        const subComposition = tempSubstitutions[subIndex];
 
         if (subComposition.from.isAfter(composition.to)) {
           break;
@@ -89,11 +89,11 @@ export class CompositionDivider {
 
         if (subComposition.positionId === composition.positionId
           && intersect(subComposition, composition)) {
-          subs.splice(subIndex, 1);
+          tempSubstitutions.splice(subIndex, 1);
         }
       }
 
-      const positionIntervals = this.getRowIntervals(composition, otherPositionSubstitutions);
+      const positionIntervals = this.getEmployeeShiftIntervals(composition, otherPositionSubstitutions);
       const rowIntervals = intervalsMap.get(composition.positionId);
       if (rowIntervals) {
         positionIntervals.forEach(interval => rowIntervals.push(interval));
@@ -103,7 +103,7 @@ export class CompositionDivider {
 
     }
 
-    for (let composition of subs) {
+    for (let composition of tempSubstitutions) {
       if (composition.from.isAfter(to)) {
         break;
       }
@@ -120,12 +120,12 @@ export class CompositionDivider {
     return intervalsMap;
   }
 
-  getRowIntervalsByArr(mainCompositions: Composition[],
-                       substCompositions: Composition[]): RowInterval[] {
+  getEmployeeShiftIntervalsByArr(mainCompositions: Composition[],
+                                 substCompositions: Composition[]): RowInterval[] {
     let result = [];
 
     mainCompositions.forEach(composition =>
-      this.getRowIntervals(composition, substCompositions)
+      this.getEmployeeShiftIntervals(composition, substCompositions)
         .forEach(value => result.push(value)));
 
     return result;
@@ -135,7 +135,7 @@ export class CompositionDivider {
     if (row.isSubstitution) {
       row.intervals = row.compositions.map(value => convertCompositionToInterval(value));
     } else {
-      row.intervals = this.getRowIntervalsByArr(row.compositions, dto.substitutionShiftCompositions);
+      row.intervals = this.getEmployeeShiftIntervalsByArr(row.compositions, dto.substitutionShiftCompositions);
     }
   }
 }

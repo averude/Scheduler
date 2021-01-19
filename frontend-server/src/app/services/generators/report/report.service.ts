@@ -67,8 +67,7 @@ export class ReportService {
           const daysInMonth = this.paginationStrategy.calcDaysInMonth(date, values[0]);
           this.statisticsColumnCompositor.composeResults(values[2], summationColumns, values[4]);
 
-          const reportData = reportDataCollector.collect(daysInMonth, values[3], values[5],
-            values[6], values[1], values[2], summationColumns, useReportLabel);
+          const reportData = reportDataCollector.collect(daysInMonth, values[3], values[5], values[6], values[1], values[2], summationColumns, useReportLabel);
 
           reportData.decorationData = decorationData;
 

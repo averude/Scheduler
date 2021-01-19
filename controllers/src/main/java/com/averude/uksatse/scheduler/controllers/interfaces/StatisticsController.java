@@ -1,7 +1,7 @@
 package com.averude.uksatse.scheduler.controllers.interfaces;
 
 import com.averude.uksatse.scheduler.core.model.dto.CountDTO;
-import com.averude.uksatse.scheduler.core.model.dto.SummationDTO;
+import com.averude.uksatse.scheduler.core.model.dto.EmployeeWorkStatDTO;
 import com.averude.uksatse.scheduler.security.annotations.IsDepartmentAdmin;
 import com.averude.uksatse.scheduler.security.annotations.IsDepartmentOrShiftUser;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -22,24 +22,13 @@ public interface StatisticsController {
 
     @IsDepartmentOrShiftUser
     @RequestMapping(method = RequestMethod.GET,
-            value = "/summation_columns/dates")
-    List<SummationDTO> getSummationDtoByDepartmentIdAndDate(Authentication authentication,
-                                                            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-                                                            @RequestParam(value = "from")
-                                                                    LocalDate from,
-                                                            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-                                                            @RequestParam(value = "to")
-                                                                    LocalDate to);
-
-    @IsDepartmentOrShiftUser
-    @RequestMapping(method = RequestMethod.GET,
             value = "/summation_columns/{mode}/dates")
-    List<SummationDTO> getSummationDTOByAuthAndDate(Authentication authentication,
-                                                    @PathVariable String mode,
-                                                    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-                                                    @RequestParam(value = "from")
-                                                            LocalDate from,
-                                                    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-                                                    @RequestParam(value = "to")
-                                                            LocalDate to);
+    List<EmployeeWorkStatDTO> getSummationDTOByAuthAndDate(Authentication authentication,
+                                                           @PathVariable String mode,
+                                                           @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                                                 @RequestParam(value = "from")
+                                                                         LocalDate from,
+                                                           @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                                                 @RequestParam(value = "to")
+                                                                         LocalDate to);
 }

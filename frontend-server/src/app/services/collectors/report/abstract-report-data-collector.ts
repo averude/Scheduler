@@ -1,32 +1,38 @@
 import { ReportData, ReportGroupData, ReportRowData } from "../../generators/report/model/report-row-data";
 import { DayType } from "../../../model/day-type";
 import { Position } from "../../../model/position";
-import { SummationDto, SummationResult } from "../../../model/dto/summation-dto";
+import { SummationResult } from "../../../model/dto/summation-dto";
 import { CalendarDay } from "../../../lib/ngx-schedule-table/model/calendar-day";
 import { ReportDataCollector } from "./report-data-collector";
 import { ReportCellData, ReportHeaderCell } from "../../generators/report/model/report-cell-data";
 import { SummationColumn, SummationType } from "../../../model/summation-column";
 import { EmployeeScheduleDTO } from "../../../model/dto/employee-schedule-dto";
 import { Shift } from "../../../model/shift";
-import { CompositionDivider } from "../../divider/composition-divider.service";
+import { IntervalCreator } from "../../creator/interval-creator.service";
 import * as moment from "moment";
 import { binarySearch } from "../../../shared/utils/collection-utils";
 import { RowInterval } from "../../../model/ui/schedule-table/row-interval";
 import { roundToTwo } from "../../../shared/utils/utils";
+import { EmployeeWorkStatDTO } from "../../../model/dto/employee-work-stat-dto";
+import { getMainShiftId } from "../../utils";
+import { WorkDay } from "../../../model/workday";
+import { CellEnabledSetter } from "../schedule/cell-enabled-setter";
+import { CellCollector } from "../cell-collector";
 
 export abstract class AbstractReportDataCollector implements ReportDataCollector {
-  private divider: CompositionDivider = new CompositionDivider();
 
   abstract REPORT_TYPE: string;
 
-  constructor() {}
+  constructor(private intervalCreator: IntervalCreator,
+              private cellEnabledSetter: CellEnabledSetter,
+              private cellCollector: CellCollector) {}
 
   collect(calendarDays: CalendarDay[],
           dayTypes: DayType[],
           shifts: Shift[],
           positions: Position[],
           schedule: EmployeeScheduleDTO[],
-          summations: SummationDto[],
+          summations: EmployeeWorkStatDTO[],
           summationColumns: SummationColumn[],
           useReportLabel?: boolean): ReportData {
 
@@ -44,7 +50,7 @@ export abstract class AbstractReportDataCollector implements ReportDataCollector
                        dates: CalendarDay[],
                        dayTypes: DayType[],
                        positions: Position[],
-                       summations: SummationDto[],
+                       summations: EmployeeWorkStatDTO[],
                        useReportLabel?: boolean) {
 
     const groups: ReportGroupData[] = shifts
@@ -58,7 +64,7 @@ export abstract class AbstractReportDataCollector implements ReportDataCollector
     for (let dto of schedule) {
       const shiftId = getMainShiftId(dto);
 
-      const positionIntervalsMap = this.divider.getEmployeePositionIntervals(
+      const positionIntervalsMap = this.intervalCreator.getEmployeePositionIntervals(
         moment.utc(dates[0].isoString),
         moment.utc(dates[dates.length - 1].isoString),
         dto.mainShiftCompositions,
@@ -91,18 +97,20 @@ export abstract class AbstractReportDataCollector implements ReportDataCollector
     return rows;
   }
 
-  private getSummationResults(summations: SummationDto[],
+  private getSummationResults(employeeWorkStats: EmployeeWorkStatDTO[],
                               employeeId: number,
                               positionId: number) {
-    return summations
-      .find(sum => sum.parent.id === employeeId && sum.positionId === positionId)
-      .collection
-      .map(summation => {
-        summation.value = summation.type === SummationType.HOURS_SUM ? roundToTwo(summation.value / 60) : summation.value;
-        return summation;
-      });
+    const statDTO = binarySearch(employeeWorkStats, (mid => mid.employee.id - employeeId));
+    if (statDTO && statDTO.positionStats) {
+      return statDTO.positionStats
+        .find(value => value.positionId === positionId)
+        ?.summations
+        .map(summation => {
+          summation.value = summation.type === SummationType.HOURS_SUM ? roundToTwo(summation.value / 60) : summation.value;
+          return summation;
+        });
+    }
   }
-
 
   abstract getHeaders(calendarDays: CalendarDay[],
                       summationColumns: SummationColumn[]): ReportHeaderCell[];
@@ -116,22 +124,33 @@ export abstract class AbstractReportDataCollector implements ReportDataCollector
                               useReportLabel?: boolean,
                               intervals?: RowInterval[]): ReportCellData[];
 
+  abstract fillCellWithValue(cell: ReportCellData,
+                             workDay: WorkDay,
+                             dayTypes: DayType[],
+                             useReportLabel?: boolean): void;
+
+  abstract fillDisabledCell(cell: ReportCellData);
+
   abstract afterDataInsert(data: ReportData);
-}
 
-export function getMainShiftId(dto: EmployeeScheduleDTO) {
+  collectCells(dto: EmployeeScheduleDTO,
+               calendarDays: CalendarDay[],
+               intervals: RowInterval[],
+               dayTypes: DayType[],
+               useReportLabel: boolean) {
+    const cells = this.cellCollector.collectByFn(calendarDays, dto.collection, (date => {
+      const cell = {date: date} as ReportCellData;
+      this.fillDisabledCell(cell);
+      return cell;
+    }), ((cell, hasDate) => cell.workDay = hasDate));
 
-  const lastMainCompositionIndex = dto.mainShiftCompositions.length - 1;
+    const from = moment.utc(calendarDays[0].isoString);
+    const to = moment.utc(calendarDays[calendarDays.length - 1].isoString);
 
-  if (lastMainCompositionIndex >= 0) {
-    return dto.mainShiftCompositions[lastMainCompositionIndex].shiftId;
-  } else {
-    const lastSubstitutionCompositionIndex = dto.substitutionShiftCompositions.length - 1;
+    this.cellEnabledSetter.processCells(cells, intervals, from, to, (cell => {
+      this.fillCellWithValue(cell, cell.workDay, dayTypes, useReportLabel);
+    }));
 
-    if (lastSubstitutionCompositionIndex >= 0) {
-      return dto.substitutionShiftCompositions[lastSubstitutionCompositionIndex]
-        .mainShiftComposition
-        .shiftId;
-    }
+    return cells;
   }
 }

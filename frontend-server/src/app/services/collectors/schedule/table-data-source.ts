@@ -27,7 +27,7 @@ import { getEmployeeShortName } from "../../../shared/utils/utils";
 import { PositionService } from "../../http/position.service";
 import { SelectionData } from "../../../lib/ngx-schedule-table/model/selection-data";
 import { AddSubstitutionCompositionDialogComponent } from "../../../modules/shift-or-department-admin/schedule/components/calendar/schedule-table-shift-composition-dialog/add-substitution-composition-dialog/add-substitution-composition-dialog.component";
-import { CompositionDivider } from "../../divider/composition-divider.service";
+import { IntervalCreator } from "../../creator/interval-creator.service";
 import { convertCompositionToInterval } from "../../../model/ui/schedule-table/row-interval";
 import { binarySearch } from "../../../shared/utils/collection-utils";
 
@@ -45,7 +45,7 @@ export class TableDataSource {
   constructor(private dialog: MatDialog,
               private tableCompositionHandler: TableCompositionHandler,
               private tableDataCollector: TableDataCollector,
-              private divider: CompositionDivider,
+              private divider: IntervalCreator,
               private cellEnabledSetter: CellEnabledSetter,
               private authService: AuthService,
               private sumCalculator: TableSumCalculator,
@@ -90,7 +90,7 @@ export class TableDataSource {
                   row.intervals = row.compositions.map(composition => convertCompositionToInterval(composition));
                 } else {
                   const dto = binarySearch(this.scheduleDto, (mid => mid.parent.id - row.id));
-                  row.intervals = this.divider.getRowIntervalsByArr(row.compositions, dto.substitutionShiftCompositions);
+                  row.intervals = this.divider.getEmployeeShiftIntervalsByArr(row.compositions, dto.substitutionShiftCompositions);
                 }
 
                 this.cellEnabledSetter.processRow(row, data.from, data.to);
