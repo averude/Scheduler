@@ -30,7 +30,7 @@ public class MainShiftCompositionServiceImpl
 
     @Override
     @Transactional
-    public List<MainShiftComposition> findAllByShiftIdAndDateBetween(Long shiftId, LocalDate from, LocalDate to) {
-        return mainShiftCompositionRepository.findAllByShiftIdAndToGreaterThanEqualAndFromLessThanEqualOrderByEmployeeId(shiftId, from, to);
+    public List<MainShiftComposition> findAllByShiftIdsAndDateBetween(List<Long> shiftIds, LocalDate from, LocalDate to) {
+        return mainShiftCompositionRepository.findAllByShiftIdInAndToGreaterThanEqualAndFromLessThanEqualOrderByEmployeeId(shiftIds, from, to);
     }
 }

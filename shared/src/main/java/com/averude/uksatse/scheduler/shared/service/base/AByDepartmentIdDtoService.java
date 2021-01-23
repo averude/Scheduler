@@ -1,7 +1,7 @@
 package com.averude.uksatse.scheduler.shared.service.base;
 
 import com.averude.uksatse.scheduler.core.interfaces.service.IByDepartmentIdDtoService;
-import com.averude.uksatse.scheduler.core.interfaces.service.IByShiftIdDtoService;
+import com.averude.uksatse.scheduler.core.interfaces.service.IByShiftIdsDtoService;
 import com.averude.uksatse.scheduler.core.interfaces.service.IDtoService;
 import com.averude.uksatse.scheduler.core.model.dto.BasicDto;
 import com.averude.uksatse.scheduler.shared.repository.ShiftRepository;
@@ -16,7 +16,7 @@ import java.util.List;
 public abstract class AByDepartmentIdDtoService<P extends Serializable, C extends Serializable, ID>
         extends AByDepartmentIdService<P, ID>
         implements IByDepartmentIdDtoService<P, C, ID>,
-        IByShiftIdDtoService<P, C, ID>,
+        IByShiftIdsDtoService<P, C, ID>,
         IDtoService<P, C, ID> {
 
     private IByDepartmentIdRepository<P, ID>    parentRepository;
@@ -41,8 +41,8 @@ public abstract class AByDepartmentIdDtoService<P extends Serializable, C extend
 
     @Override
     @Transactional
-    public List<? extends BasicDto<P, C>> findAllDtoByShiftId(Long shiftId) {
-        return basicDtoSavingUtil.convertToDto(findAllByShiftId(shiftId), this::getChildren);
+    public List<? extends BasicDto<P, C>> findAllDtoByShiftIds(List<Long> shiftIds) {
+        return basicDtoSavingUtil.convertToDto(findAllByShiftIds(shiftIds), this::getChildren);
     }
 
     @Override

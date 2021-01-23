@@ -4,9 +4,10 @@ import com.averude.uksatse.scheduler.core.interfaces.service.IByDepartmentIdAndD
 import com.averude.uksatse.scheduler.core.interfaces.service.IByDepartmentIdDtoService;
 import com.averude.uksatse.scheduler.core.interfaces.service.IService;
 import com.averude.uksatse.scheduler.core.model.dto.BasicDto;
-import com.averude.uksatse.scheduler.security.entity.DepartmentAdminUserAccount;
+import com.averude.uksatse.scheduler.security.authority.Authorities;
 import com.averude.uksatse.scheduler.security.exception.NoRequiredServiceException;
 import com.averude.uksatse.scheduler.security.exception.NullOrgLevelIdException;
+import com.averude.uksatse.scheduler.security.model.entity.UserAccount;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -22,8 +23,8 @@ public class DepartmentAdminDtoServiceInvocationHandler implements DtoServiceInv
                                                                                                       IService<P, ID> service,
                                                                                                       LocalDate from,
                                                                                                       LocalDate to) {
-        var departmentAdmin = (DepartmentAdminUserAccount) userAccount;
-        var departmentId = departmentAdmin.getDepartmentId();
+        var account = (UserAccount) userAccount;
+        var departmentId = account.getDepartmentId();
 
         if (departmentId == null) throw new NullOrgLevelIdException();
 
@@ -37,7 +38,7 @@ public class DepartmentAdminDtoServiceInvocationHandler implements DtoServiceInv
     }
 
     @Override
-    public Class getUserAccountClass() {
-        return DepartmentAdminUserAccount.class;
+    public String getUserAuthority() {
+        return Authorities.DEPARTMENT_ADMIN;
     }
 }

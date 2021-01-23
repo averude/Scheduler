@@ -9,9 +9,9 @@ import java.util.List;
 
 public interface MainShiftCompositionRepository extends JpaRepository<MainShiftComposition, Long> {
 
-    List<MainShiftComposition> findAllByShiftIdAndToGreaterThanEqualAndFromLessThanEqualOrderByEmployeeId(Long shiftId,
-                                                                                                          LocalDate from,
-                                                                                                          LocalDate to);
+    List<MainShiftComposition> findAllByShiftIdInAndToGreaterThanEqualAndFromLessThanEqualOrderByEmployeeId(List<Long> shiftId,
+                                                                                                            LocalDate from,
+                                                                                                            LocalDate to);
 
     @Query("select msc " +
             "from MainShiftComposition msc " +
@@ -27,8 +27,16 @@ public interface MainShiftCompositionRepository extends JpaRepository<MainShiftC
             "left join Shift s " +
             "on msc.shiftId = s.id " +
             "where s.departmentId = ?1 and ?2 <= msc.to and ?3 >= msc.from " +
-            "order by msc.employeeId asc, msc.shiftId asc, msc.from")
+            "order by msc.employeeId asc, msc.shiftId asc, msc.from asc")
     List<MainShiftComposition> getAllByDepartmentIdAndDateBetweenOrdered(Long departmentId,
                                                                          LocalDate from,
                                                                          LocalDate to);
+
+    @Query("select msc " +
+            "from MainShiftComposition msc " +
+            "where msc.shiftId in ?1 and ?2 <= msc.to and ?3 >= msc.from " +
+            "order by msc.employeeId asc, msc.shiftId asc, msc.from asc ")
+    List<MainShiftComposition> getAllByShiftIdsAndDateBetweenOrdered(List<Long> shiftIds,
+                                                                     LocalDate from,
+                                                                     LocalDate to);
 }

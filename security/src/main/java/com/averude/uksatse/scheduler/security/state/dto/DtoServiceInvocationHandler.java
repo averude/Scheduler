@@ -13,7 +13,7 @@ public interface DtoServiceInvocationHandler {
                                                                                                LocalDate from,
                                                                                                LocalDate to);
 
-    Class getUserAccountClass();
+    String getUserAuthority();
 
     default String getErrorMessage(Object o) {
         return "Found wrong instance of service: " + o.getClass();

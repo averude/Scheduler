@@ -1,8 +1,9 @@
 package com.averude.uksatse.scheduler.security.state.entity;
 
 import com.averude.uksatse.scheduler.core.interfaces.service.IService;
-import com.averude.uksatse.scheduler.security.entity.GlobalAdminUserAccount;
+import com.averude.uksatse.scheduler.security.authority.Authorities;
 import com.averude.uksatse.scheduler.security.exception.NoRequiredServiceException;
+import com.averude.uksatse.scheduler.security.model.entity.UserAccount;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
@@ -12,7 +13,7 @@ import java.util.List;
 @Component
 public class GlobalAdminServiceInvocationHandler implements ServiceInvocationHandler {
     @Override
-    public <T extends Serializable, ID> List<T> invoke(Object userAccount,
+    public <T extends Serializable, ID> List<T> invoke(UserAccount userAccount,
                                                        Object service,
                                                        LocalDate from,
                                                        LocalDate to) {
@@ -22,7 +23,7 @@ public class GlobalAdminServiceInvocationHandler implements ServiceInvocationHan
     }
 
     @Override
-    public Class getUserAccountClass() {
-        return GlobalAdminUserAccount.class;
+    public String getUserAuthority() {
+        return Authorities.GLOBAL_ADMIN;
     }
 }

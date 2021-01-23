@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { BasicDto } from "../../../../../model/dto/basic-dto";
+import { BasicDTO } from "../../../../../model/dto/basic-dto";
 import { SummationColumn } from "../../../../../model/summation-column";
 import { SummationColumnDayTypeRange } from "../../../../../model/summation-column-day-type-range";
 import { MatDialog } from "@angular/material/dialog";
@@ -37,7 +37,7 @@ export class SummationColumnsTableComponent extends DtoTableBaseComponent<Summat
       .subscribe(dayTypes => this.dayTypes = dayTypes);
   }
 
-  openDialog(dto: BasicDto<SummationColumn, SummationColumnDayTypeRange>) {
+  openDialog(dto: BasicDTO<SummationColumn, SummationColumnDayTypeRange>) {
     const data = {
       dto:  dto,
       dayTypes: this.dayTypes

@@ -1,5 +1,5 @@
 import { TableBaseComponent } from "./table-base.component";
-import { BasicDto } from "../../../model/dto/basic-dto";
+import { BasicDTO } from "../../../model/dto/basic-dto";
 import { IdEntity } from "../../../model/interface/id-entity";
 import { NotificationsService } from "angular2-notifications";
 import { CUDService } from "../../../services/http/interface/cud-service";
@@ -7,15 +7,15 @@ import { MatDialog } from "@angular/material/dialog";
 import { Directive } from "@angular/core";
 
 @Directive()
-export abstract class DtoTableBaseComponent<P extends IdEntity, C> extends TableBaseComponent<BasicDto<P, C>> {
+export abstract class DtoTableBaseComponent<P extends IdEntity, C> extends TableBaseComponent<BasicDTO<P, C>> {
 
   constructor(matDialog: MatDialog,
-              crudService: CUDService<BasicDto<P, C>>,
+              crudService: CUDService<BasicDTO<P, C>>,
               notification: NotificationsService) {
     super(matDialog, crudService, notification);
   }
 
-  onCreated(value: BasicDto<P, C>): (response: BasicDto<P, C>) => void {
+  onCreated(value: BasicDTO<P, C>): (response: BasicDTO<P, C>) => void {
     return res => {
       this.addRow(res);
       this.notification
@@ -25,7 +25,7 @@ export abstract class DtoTableBaseComponent<P extends IdEntity, C> extends Table
     }
   }
 
-  onUpdated(value: BasicDto<P, C>, oldValue: BasicDto<P, C>): (response: BasicDto<P, C>) => void {
+  onUpdated(value: BasicDTO<P, C>, oldValue: BasicDTO<P, C>): (response: BasicDTO<P, C>) => void {
     return res => {
       this.updateRow(res, oldValue);
       this.notification

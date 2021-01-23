@@ -7,9 +7,9 @@ import com.averude.uksatse.scheduler.core.model.entity.SummationColumnDayTypeRan
 public interface SummationColumnService extends
         IByEnterpriseIdDtoService<SummationColumn, SummationColumnDayTypeRange, Long>,
         IByDepartmentIdDtoService<SummationColumn, SummationColumnDayTypeRange, Long>,
-        IByShiftIdDtoService<SummationColumn, SummationColumnDayTypeRange, Long>,
+        IByShiftIdsDtoService<SummationColumn, SummationColumnDayTypeRange, Long>,
         IByEnterpriseIdService<SummationColumn, Long>,
         IByDepartmentIdService<SummationColumn, Long>,
-        IByShiftIdService<SummationColumn, Long>,
+        IByShiftIdsService<SummationColumn, Long>,
         IDtoService<SummationColumn, SummationColumnDayTypeRange, Long> {
 }

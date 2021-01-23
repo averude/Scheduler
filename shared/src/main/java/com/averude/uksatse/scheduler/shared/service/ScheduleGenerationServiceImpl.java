@@ -59,7 +59,7 @@ public class ScheduleGenerationServiceImpl implements ScheduleGenerationService 
         var specialCalendarDatesMap = getSpecialDateMap(specialCalendarDates);
 
         var mainCompositions = mainShiftCompositionRepository
-                .findAllByShiftIdAndToGreaterThanEqualAndFromLessThanEqualOrderByEmployeeId(shiftId, from, to);
+                .findAllByShiftIdInAndToGreaterThanEqualAndFromLessThanEqualOrderByEmployeeId(Collections.singletonList(shiftId), from, to);
         var otherShiftsSubstitutionCompositions = substitutionShiftCompositionRepository
                 .findAllByEmployeeIdInAndToGreaterThanEqualAndFromLessThanEqual(getEmployeeIds(mainCompositions), from, to);
         var substitutionCompositions = substitutionShiftCompositionRepository

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config xmlns='http://www.ehcache.org/v3'>
 
-    <cache alias="com.averude.uksatse.scheduler.security.entity.UserAccount">
+    <cache alias="com.averude.uksatse.scheduler.security.model.entity.UserAccount">
         <expiry>
             <ttl unit="minutes">2</ttl>
         </expiry>

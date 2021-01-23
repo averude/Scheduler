@@ -2,6 +2,7 @@ package com.averude.uksatse.scheduler.shared.service;
 
 import com.averude.uksatse.scheduler.core.interfaces.entity.Composition;
 import com.averude.uksatse.scheduler.core.model.dto.BasicDto;
+import com.averude.uksatse.scheduler.core.model.dto.EmployeeScheduleDTO;
 import com.averude.uksatse.scheduler.core.model.entity.Employee;
 import com.averude.uksatse.scheduler.core.model.entity.MainShiftComposition;
 import com.averude.uksatse.scheduler.core.model.entity.WorkDay;
@@ -63,16 +64,24 @@ public class ScheduleServiceImpl
 
     @Override
     @Transactional
-    public List<? extends BasicDto<Employee, WorkDay>> findAllDtoByShiftIdAndDate(Long shiftId,
-                                                                                  LocalDate from,
-                                                                                  LocalDate to) {
-        var mainShiftCompositions = mainShiftCompositionRepository
-                .findAllByShiftIdAndToGreaterThanEqualAndFromLessThanEqualOrderByEmployeeId(shiftId, from, to);
-        var mainShiftCompositionIds = mainShiftCompositions.stream().map(MainShiftComposition::getId).collect(toList());
-        var substitutionShiftCompositions = substitutionShiftCompositionRepository
-                .getAllByShiftIdAndMainShiftCompositionInAndDateBetweenOrdered(shiftId, mainShiftCompositionIds, from, to);
+    public List<? extends BasicDto<Employee, WorkDay>> findAllDtoByShiftIdsAndDate(List<Long> shiftIds,
+                                                                                   LocalDate from,
+                                                                                   LocalDate to) {
+        return findScheduleDTOByShiftIdsAndDate(shiftIds, from, to);
+    }
 
-        var employeeIds = Stream.concat(mainShiftCompositions.stream(), substitutionShiftCompositions.stream())
+    @Override
+    @Transactional
+    public List<EmployeeScheduleDTO> findScheduleDTOByShiftIdsAndDate(List<Long> shiftIds,
+                                                                      LocalDate from,
+                                                                      LocalDate to) {
+        var mainCompositions = mainShiftCompositionRepository
+                .getAllByShiftIdsAndDateBetweenOrdered(shiftIds, from, to);
+        var mainCompositionIds = mainCompositions.stream().map(MainShiftComposition::getId).collect(toList());
+        var subCompositions = substitutionShiftCompositionRepository
+                .getAllByShiftIdsAndMainShiftCompositionInAndDateBetweenOrdered(shiftIds, mainCompositionIds, from, to);
+
+        var employeeIds = Stream.concat(mainCompositions.stream(), subCompositions.stream())
                 .map(Composition::getEmployeeId)
                 .sorted()
                 .distinct()
@@ -84,6 +93,6 @@ public class ScheduleServiceImpl
 
         var schedule = scheduleRepository.findAllByEmployeeIdsAndDateBetween(departmentId, employeeIds, from, to);
 
-        return scheduleDTOUtil.createEmployeeScheduleDTOList(employees, mainShiftCompositions, substitutionShiftCompositions, schedule);
+        return scheduleDTOUtil.createEmployeeScheduleDTOList(employees, mainCompositions, subCompositions, schedule);
     }
 }

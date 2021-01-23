@@ -33,7 +33,7 @@ public class SubstitutionShiftCompositionServiceImpl
 
     @Override
     @Transactional
-    public List<SubstitutionShiftComposition> findAllByShiftIdAndDateBetween(Long shiftId, LocalDate from, LocalDate to) {
-        return substitutionShiftCompositionRepository.findAllByShiftIdAndDatesBetween(shiftId, from, to);
+    public List<SubstitutionShiftComposition> findAllByShiftIdsAndDateBetween(List<Long> shiftIds, LocalDate from, LocalDate to) {
+        return substitutionShiftCompositionRepository.findAllByShiftIdsAndDatesBetween(shiftIds, from, to);
     }
 }

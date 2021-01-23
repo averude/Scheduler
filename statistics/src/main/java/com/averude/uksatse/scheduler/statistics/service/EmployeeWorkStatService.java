@@ -14,8 +14,8 @@ public interface EmployeeWorkStatService {
                                                                   String mode);
 
     @Transactional
-    List<EmployeeWorkStatDTO> findAllByShiftIdAndDateBetween(Long departmentId,
-                                                             LocalDate from,
-                                                             LocalDate to,
-                                                             String mode);
+    List<EmployeeWorkStatDTO> findAllByShiftIdsAndDateBetween(List<Long> shiftIds,
+                                                              LocalDate from,
+                                                              LocalDate to,
+                                                              String mode);
 }

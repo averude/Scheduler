@@ -13,10 +13,10 @@ public interface ShiftPatternRepository extends IByDepartmentIdRepository<ShiftP
     @EntityGraph(value = "graph.ShiftPattern.sequence")
     Optional<ShiftPattern> getShiftPatternById(Long id);
 
-    @Query("select sp " +
+    @Query("select distinct sp " +
             "from ShiftPattern sp " +
             "left join Shift s " +
             "on sp.departmentId = s.departmentId " +
-            "where s.id = ?1")
-    List<ShiftPattern> findAllByShiftId(Long shiftId);
+            "where s.id in ?1")
+    List<ShiftPattern> findAllByShiftIds(List<Long> shiftIds);
 }

@@ -288,44 +288,25 @@ CREATE TABLE IF NOT EXISTS user_accounts (
   password        VARCHAR(64)     NOT NULL,
   name            VARCHAR(128),
   role            VARCHAR(64)     NOT NULL    DEFAULT 'USER',
+  authority       VARCHAR(64)     NOT NULL,
+
+  enterprise_id   INTEGER,
+  department_id   INTEGER,
+
   locked          BOOLEAN         NOT NULL    DEFAULT FALSE,
   enabled         BOOLEAN         NOT NULL    DEFAULT TRUE,
 
   PRIMARY KEY (id),
-  UNIQUE (username)
+  UNIQUE (username),
+  FOREIGN KEY (enterprise_id) REFERENCES enterprises(id)    ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (department_id) REFERENCES departments(id)    ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS shift_admin_user_accounts (
-  id              SERIAL,
+CREATE TABLE IF NOT EXISTS user_accounts_shifts (
+  user_account_id INTEGER         NOT NULL,
   shift_id        INTEGER         NOT NULL,
 
-  PRIMARY KEY (id),
-  FOREIGN KEY (id)        REFERENCES user_accounts(id) ON DELETE CASCADE,
-  FOREIGN KEY (shift_id)  REFERENCES shifts(id)        ON DELETE CASCADE
-);
-
-CREATE TABLE IF NOT EXISTS department_admin_user_accounts (
-  id              SERIAL,
-  department_id   INTEGER         NOT NULL,
-
-  PRIMARY KEY (id),
-  FOREIGN KEY (id)            REFERENCES user_accounts(id)  ON DELETE CASCADE,
-  FOREIGN KEY (department_id) REFERENCES departments(id)    ON DELETE CASCADE
-);
-
-CREATE TABLE IF NOT EXISTS enterprise_admin_user_accounts (
-  id              SERIAL,
-  enterprise_id   INTEGER         NOT NULL,
-
-  PRIMARY KEY (id),
-  FOREIGN KEY (id)            REFERENCES user_accounts(id)  ON DELETE CASCADE,
-  FOREIGN KEY (enterprise_id) REFERENCES enterprises(id)    ON DELETE CASCADE
-);
-
-CREATE TABLE IF NOT EXISTS global_admin_user_accounts (
-  id              SERIAL,
-  is_global_admin BOOLEAN         NOT NULL,
-
-  PRIMARY KEY (id),
-  FOREIGN KEY (id)            REFERENCES user_accounts(id)  ON DELETE CASCADE
+  PRIMARY KEY (user_account_id, shift_id),
+  FOREIGN KEY (user_account_id) REFERENCES user_accounts(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (shift_id)        REFERENCES shifts(id)        ON DELETE CASCADE ON UPDATE CASCADE
 );

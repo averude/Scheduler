@@ -3,9 +3,10 @@ package com.averude.uksatse.scheduler.security.state.dto;
 import com.averude.uksatse.scheduler.core.interfaces.service.IByEnterpriseIdDtoService;
 import com.averude.uksatse.scheduler.core.interfaces.service.IService;
 import com.averude.uksatse.scheduler.core.model.dto.BasicDto;
-import com.averude.uksatse.scheduler.security.entity.EnterpriseAdminUserAccount;
+import com.averude.uksatse.scheduler.security.authority.Authorities;
 import com.averude.uksatse.scheduler.security.exception.NoRequiredServiceException;
 import com.averude.uksatse.scheduler.security.exception.NullOrgLevelIdException;
+import com.averude.uksatse.scheduler.security.model.entity.UserAccount;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
@@ -19,8 +20,8 @@ public class EnterpriseAdminDtoServiceInvocationHandler implements DtoServiceInv
                                                                                                       IService<P, ID> service,
                                                                                                       LocalDate from,
                                                                                                       LocalDate to) {
-        var enterpriseAdmin = (EnterpriseAdminUserAccount) userAccount;
-        var enterpriseId = enterpriseAdmin.getEnterpriseId();
+        var account = (UserAccount) userAccount;
+        var enterpriseId = account.getEnterpriseId();
 
         if (enterpriseId == null) throw new NullOrgLevelIdException();
 
@@ -30,7 +31,7 @@ public class EnterpriseAdminDtoServiceInvocationHandler implements DtoServiceInv
     }
 
     @Override
-    public Class getUserAccountClass() {
-        return EnterpriseAdminUserAccount.class;
+    public String getUserAuthority() {
+        return Authorities.ENTERPRISE_ADMIN;
     }
 }

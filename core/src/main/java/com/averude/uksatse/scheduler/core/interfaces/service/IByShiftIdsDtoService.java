@@ -5,6 +5,6 @@ import com.averude.uksatse.scheduler.core.model.dto.BasicDto;
 import java.io.Serializable;
 import java.util.List;
 
-public interface IByShiftIdDtoService<T extends Serializable, C extends Serializable, ID> {
-    List<? extends BasicDto<T, C>> findAllDtoByShiftId(Long shiftId);
+public interface IByShiftIdsDtoService<T extends Serializable, C extends Serializable, ID> {
+    List<? extends BasicDto<T, C>> findAllDtoByShiftIds(List<Long> shiftIds);
 }

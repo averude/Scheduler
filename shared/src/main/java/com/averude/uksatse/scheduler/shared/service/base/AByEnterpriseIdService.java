@@ -2,7 +2,7 @@ package com.averude.uksatse.scheduler.shared.service.base;
 
 import com.averude.uksatse.scheduler.core.interfaces.service.IByDepartmentIdService;
 import com.averude.uksatse.scheduler.core.interfaces.service.IByEnterpriseIdService;
-import com.averude.uksatse.scheduler.core.interfaces.service.IByShiftIdService;
+import com.averude.uksatse.scheduler.core.interfaces.service.IByShiftIdsService;
 import com.averude.uksatse.scheduler.shared.repository.DepartmentRepository;
 import com.averude.uksatse.scheduler.shared.repository.ShiftRepository;
 import com.averude.uksatse.scheduler.shared.repository.interfaces.IByEnterpriseIdRepository;
@@ -16,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 public abstract class AByEnterpriseIdService<T extends Serializable, ID>
         extends AService<T, ID>
-        implements IByEnterpriseIdService<T, ID>, IByDepartmentIdService<T, ID>, IByShiftIdService<T, ID> {
+        implements IByEnterpriseIdService<T, ID>, IByDepartmentIdService<T, ID>, IByShiftIdsService<T, ID> {
 
     private IByEnterpriseIdRepository<T, ID>    repository;
     private DepartmentRepository                departmentRepository;
@@ -47,8 +47,12 @@ public abstract class AByEnterpriseIdService<T extends Serializable, ID>
 
     @Override
     @Transactional
-    public List<T> findAllByShiftId(Long shiftId) {
-        return shiftRepository.findById(shiftId)
+    public List<T> findAllByShiftIds(List<Long> shiftIds) {
+        if (shiftIds == null || shiftIds.isEmpty()) {
+            throw new RuntimeException();
+        }
+
+        return shiftRepository.findById(shiftIds.get(0))
                 .map(shift -> findAllByDepartmentId(shift.getDepartmentId()))
                 .orElse(Collections.emptyList());
     }

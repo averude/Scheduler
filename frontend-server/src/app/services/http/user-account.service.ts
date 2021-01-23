@@ -1,15 +1,11 @@
-import {
-  DepartmentAdminUserAccount,
-  EnterpriseAdminUserAccount,
-  ShiftAdminUserAccount,
-  UserAccount
-} from "../../model/accounts/user-account";
+import { UserAccount } from "../../model/accounts/user-account";
 import { Observable } from "rxjs";
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { RestConfig } from "../../rest.config";
 import { CUDService } from "./interface/cud-service";
 import { IByAuthService } from "./interface/i-by-auth.service";
+import { AccountDTO } from "../../model/dto/account-dto";
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +18,12 @@ export class UserAccountService implements IByAuthService<UserAccount>, CUDServi
   getAll(): Observable<any[]> {
     return this.http.get<any[]>(
       `${this.config.baseUrl}/uaa/users`
+    );
+  }
+
+  getAllShiftUsers(): Observable<AccountDTO[]> {
+    return this.http.get<AccountDTO[]>(
+      `${this.config.baseUrl}/uaa/users/shift_admins`
     );
   }
 
@@ -40,7 +42,7 @@ export class UserAccountService implements IByAuthService<UserAccount>, CUDServi
     );
   }
 
-  createEnterpriseAdmin(userAccount: EnterpriseAdminUserAccount): Observable<any> {
+  createEnterpriseAdmin(userAccount: UserAccount): Observable<any> {
     return this.http.post(
       `${this.config.baseUrl}/uaa/users/enterprise_admins`,
       userAccount,
@@ -48,7 +50,7 @@ export class UserAccountService implements IByAuthService<UserAccount>, CUDServi
     );
   }
 
-  createDepartmentAdmin(userAccount: DepartmentAdminUserAccount): Observable<any> {
+  createDepartmentAdmin(userAccount: UserAccount): Observable<any> {
     return this.http.post(
       `${this.config.baseUrl}/uaa/users/department_admins`,
       userAccount,
@@ -56,10 +58,17 @@ export class UserAccountService implements IByAuthService<UserAccount>, CUDServi
     );
   }
 
-  createShiftAdmin(userAccount: ShiftAdminUserAccount): Observable<any> {
-    return this.http.post(
+  createShiftAdmin(accountDTO: AccountDTO): Observable<number> {
+    return this.http.post<number>(
       `${this.config.baseUrl}/uaa/users/shift_admins`,
-      userAccount,
+      accountDTO
+    );
+  }
+
+  updateShiftAdmin(accountDTO: AccountDTO): Observable<any> {
+    return this.http.put(
+      `${this.config.baseUrl}/uaa/users/shift_admins`,
+      accountDTO,
       {responseType: 'text'}
     );
   }

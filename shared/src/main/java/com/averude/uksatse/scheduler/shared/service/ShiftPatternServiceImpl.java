@@ -48,8 +48,8 @@ public class ShiftPatternServiceImpl
 
     @Override
     @Transactional
-    public List<? extends BasicDto<ShiftPattern, PatternUnit>> findAllDtoByShiftId(Long shiftId) {
-        var patterns = shiftPatternRepository.findAllByShiftId(shiftId);
+    public List<? extends BasicDto<ShiftPattern, PatternUnit>> findAllDtoByShiftIds(List<Long> shiftIds) {
+        var patterns = shiftPatternRepository.findAllByShiftIds(shiftIds);
         return transformPatternsList(patterns);
     }
 

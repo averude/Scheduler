@@ -1,6 +1,6 @@
 package com.averude.uksatse.scheduler.security.modifier.entity;
 
-import com.averude.uksatse.scheduler.security.entity.UserAccount;
+import com.averude.uksatse.scheduler.security.model.entity.UserAccount;
 import org.springframework.security.core.Authentication;
 
 public interface EntityModifier<T> {

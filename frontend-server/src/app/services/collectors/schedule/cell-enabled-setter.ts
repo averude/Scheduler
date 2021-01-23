@@ -6,8 +6,11 @@ import { RowInterval } from "../../../model/ui/schedule-table/row-interval";
 @Injectable()
 export class CellEnabledSetter {
 
-  processCells<T>(cells: T[], intervals: RowInterval[],
-                  from: Moment, to: Moment, cellFn: (cell: T) => void) {
+  processCells<T>(cells: T[],
+                  intervals: RowInterval[],
+                  from: Moment,
+                  to: Moment,
+                  cellFn: (cell: T) => void) {
 
     if (!cells || !intervals || cells.length === 0 || from.isAfter(to)) {
       return;

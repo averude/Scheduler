@@ -1,10 +1,10 @@
 import { Component, Inject } from "@angular/core";
 import { DialogBaseComponent } from "../../../../../../../shared/abstract-components/dialog-base/dialog-base.component";
-import { ShiftAdminUserAccount, UserAccount } from "../../../../../../../model/accounts/user-account";
 import { FormBuilder, Validators } from "@angular/forms";
 import { Shift } from "../../../../../../../model/shift";
 import { AuthService } from "../../../../../../../services/http/auth.service";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
+import { AccountDTO } from "../../../../../../../model/dto/account-dto";
 
 
 @Component({
@@ -12,7 +12,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
   templateUrl: './user-accounts-dialog.component.html',
   styleUrls: ['../../../../../../../shared/common/dialog.common.css', './user-accounts-dialog.component.css']
 })
-export class UserAccountsDialogComponent extends DialogBaseComponent<UserAccount> {
+export class UserAccountsDialogComponent extends DialogBaseComponent<AccountDTO> {
 
   shifts:  Shift[] = [];
 
@@ -26,29 +26,38 @@ export class UserAccountsDialogComponent extends DialogBaseComponent<UserAccount
 
   initTheForm() {
     this.dialogForm = this.fb.group({
-      username:     ['', [Validators.required,
-                          Validators.minLength(3),
-                          Validators.maxLength(128)]],
-      name:         ['', Validators.maxLength(128)],
-      password:     ['', [Validators.required,
-                          Validators.minLength(3),
-                          Validators.maxLength(128)]],
-      shiftId:      [null,  [Validators.required]],
-      role:         [null,  [Validators.required]],
-      locked:       [false, [Validators.required]],
-      enabled:      [true,  [Validators.required]]
+      userAccount: this.fb.group({
+        id:           [],
+        username:     ['', [Validators.required,
+                            Validators.minLength(3),
+                            Validators.maxLength(128)]],
+        name:         ['', Validators.maxLength(128)],
+        password:     ['', [Validators.required,
+                            Validators.minLength(3),
+                            Validators.maxLength(128)]],
+        role:         [null,  [Validators.required]],
+        authority:    ['SHIFT_ADMIN'],
+        locked:       [false, [Validators.required]],
+        enabled:      [true,  [Validators.required]]
+      }),
+      shiftIds: [[], Validators.required]
     });
   }
 
-  fillInTheForm(userAccount: ShiftAdminUserAccount) {
+  fillInTheForm(dto: AccountDTO) {
+    const userAccount = dto.userAccount;
     this.dialogForm.setValue({
-      username:     userAccount.username,
-      name:         userAccount.name,
-      password:     null,
-      shiftId:      userAccount.shiftId,
-      role:         userAccount.role,
-      locked:       userAccount.locked,
-      enabled:      userAccount.enabled
+      userAccount: {
+        id:           userAccount.id,
+        username:     userAccount.username,
+        name:         userAccount.name,
+        password:     null,
+        authority:    userAccount.authority,
+        role:         userAccount.role,
+        locked:       userAccount.locked,
+        enabled:      userAccount.enabled
+      },
+      shiftIds: dto.shiftIds
     });
   }
 }

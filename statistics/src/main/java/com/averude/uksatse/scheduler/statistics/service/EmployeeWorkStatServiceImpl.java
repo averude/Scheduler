@@ -49,17 +49,17 @@ public class EmployeeWorkStatServiceImpl implements EmployeeWorkStatService {
     }
 
     @Override
-    public List<EmployeeWorkStatDTO> findAllByShiftIdAndDateBetween(Long departmentId,
-                                                                    LocalDate from,
-                                                                    LocalDate to,
-                                                                    String mode) {
-        var specialCalendarDates = specialCalendarDateRepository.findAllByShiftIdAndDateBetween(departmentId, from, to);
-        var summationColumns = summationColumnRepository.findAllByShiftId(departmentId);
+    public List<EmployeeWorkStatDTO> findAllByShiftIdsAndDateBetween(List<Long> shiftIds,
+                                                                     LocalDate from,
+                                                                     LocalDate to,
+                                                                     String mode) {
+        var specialCalendarDates = specialCalendarDateRepository.findAllByShiftIdAndDateBetween(shiftIds.get(0), from, to);
+        var summationColumns = summationColumnRepository.findAllByShiftId(shiftIds.get(0));
         if (summationColumns == null || summationColumns.isEmpty()) {
             return null;
         }
 
-        var scheduleDTO = (List<EmployeeScheduleDTO>) scheduleService.findAllDtoByShiftIdAndDate(departmentId, from, to);
+        var scheduleDTO = (List<EmployeeScheduleDTO>) scheduleService.findScheduleDTOByShiftIdsAndDate(shiftIds, from, to);
 
         return getSummationDTOS(from, to, mode, specialCalendarDates, summationColumns, scheduleDTO);
     }

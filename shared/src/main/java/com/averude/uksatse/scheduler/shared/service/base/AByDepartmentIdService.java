@@ -1,7 +1,7 @@
 package com.averude.uksatse.scheduler.shared.service.base;
 
 import com.averude.uksatse.scheduler.core.interfaces.service.IByDepartmentIdService;
-import com.averude.uksatse.scheduler.core.interfaces.service.IByShiftIdService;
+import com.averude.uksatse.scheduler.core.interfaces.service.IByShiftIdsService;
 import com.averude.uksatse.scheduler.shared.repository.ShiftRepository;
 import com.averude.uksatse.scheduler.shared.repository.interfaces.IByDepartmentIdRepository;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,7 +12,7 @@ import java.util.List;
 
 public class AByDepartmentIdService<T extends Serializable, ID>
         extends AService<T, ID>
-        implements IByDepartmentIdService<T, ID>, IByShiftIdService<T, ID> {
+        implements IByDepartmentIdService<T, ID>, IByShiftIdsService<T, ID> {
 
     private IByDepartmentIdRepository<T, ID>    repository;
     private ShiftRepository                     shiftRepository;
@@ -32,8 +32,12 @@ public class AByDepartmentIdService<T extends Serializable, ID>
 
     @Override
     @Transactional
-    public List<T> findAllByShiftId(Long shiftId) {
-        return shiftRepository.findById(shiftId)
+    public List<T> findAllByShiftIds(List<Long> shiftIds) {
+        if (shiftIds == null || shiftIds.isEmpty()) {
+            throw new RuntimeException();
+        }
+
+        return shiftRepository.findById(shiftIds.get(0))
                 .map(shift -> findAllByDepartmentId(shift.getDepartmentId()))
                 .orElse(Collections.emptyList());
     }

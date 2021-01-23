@@ -1,6 +1,7 @@
 package com.averude.uksatse.scheduler.security.state.entity;
 
 import com.averude.uksatse.scheduler.security.exception.NoServiceInvocationHandlerException;
+import com.averude.uksatse.scheduler.security.model.entity.UserAccount;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -16,11 +17,11 @@ import java.util.Map;
 @Component
 public class SimpleByAuthMethodResolver implements IByAuthMethodResolver {
 
-    private Map<Class, ServiceInvocationHandler> serviceInvocationHandlerMap;
+    private Map<String, ServiceInvocationHandler> serviceInvocationHandlerMap;
 
     @Autowired
     public SimpleByAuthMethodResolver(@Qualifier("serviceInvocationHandlerMap")
-                                                  Map<Class, ServiceInvocationHandler> serviceInvocationHandlerMap) {
+                                                  Map<String, ServiceInvocationHandler> serviceInvocationHandlerMap) {
         this.serviceInvocationHandlerMap = serviceInvocationHandlerMap;
     }
 
@@ -29,13 +30,13 @@ public class SimpleByAuthMethodResolver implements IByAuthMethodResolver {
                                                         Object service,
                                                         LocalDate from,
                                                         LocalDate to) {
-        var userAccount = authentication.getPrincipal();
+        var userAccount = (UserAccount) authentication.getPrincipal();
 
-        var serviceInvocationHandler = serviceInvocationHandlerMap.get(userAccount.getClass());
+        var serviceInvocationHandler = serviceInvocationHandlerMap.get(userAccount.getAuthority());
         if (serviceInvocationHandler != null) {
             return serviceInvocationHandler.invoke(userAccount, service, from, to);
         } else {
-            var errorMessage = "Cannot find Service Invocation Handler for Class: " + userAccount.getClass();
+            var errorMessage = "Cannot find Service Invocation Handler for Authority: " + userAccount.getAuthority();
             log.error(errorMessage);
             throw new NoServiceInvocationHandlerException(errorMessage);
         }

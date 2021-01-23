@@ -15,17 +15,17 @@ public class ControllersConfig {
 
     @Bean
     @Qualifier("serviceInvocationHandlerMap")
-    public Map<Class, ServiceInvocationHandler> serviceInvocationHandlerMap(List<ServiceInvocationHandler> serviceInvocationHandlers) {
-        var serviceInvocationHandlerHashMap = new HashMap<Class, ServiceInvocationHandler>();
-        serviceInvocationHandlers.forEach(handler -> serviceInvocationHandlerHashMap.put(handler.getUserAccountClass(), handler));
+    public Map<String, ServiceInvocationHandler> serviceInvocationHandlerMap(List<ServiceInvocationHandler> serviceInvocationHandlers) {
+        var serviceInvocationHandlerHashMap = new HashMap<String, ServiceInvocationHandler>();
+        serviceInvocationHandlers.forEach(handler -> serviceInvocationHandlerHashMap.put(handler.getUserAuthority(), handler));
         return serviceInvocationHandlerHashMap;
     }
 
     @Bean
     @Qualifier("dtoServiceInvocationHandlerMap")
-    public Map<Class, DtoServiceInvocationHandler> dtoServiceInvocationHandlerMap(List<DtoServiceInvocationHandler> serviceInvocationHandlers) {
-        var serviceInvocationHandlerHashMap = new HashMap<Class, DtoServiceInvocationHandler>();
-        serviceInvocationHandlers.forEach(handler -> serviceInvocationHandlerHashMap.put(handler.getUserAccountClass(), handler));
+    public Map<String, DtoServiceInvocationHandler> dtoServiceInvocationHandlerMap(List<DtoServiceInvocationHandler> serviceInvocationHandlers) {
+        var serviceInvocationHandlerHashMap = new HashMap<String, DtoServiceInvocationHandler>();
+        serviceInvocationHandlers.forEach(handler -> serviceInvocationHandlerHashMap.put(handler.getUserAuthority(), handler));
         return serviceInvocationHandlerHashMap;
     }
 }

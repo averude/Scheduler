@@ -5,18 +5,9 @@ export class UserAccount implements IdEntity{
   username:     string;
   name:         string;
   role:         string;
+  authority:    string;
+  enterpriseId: number;
+  departmentId: number;
   locked:       boolean;
   enabled:      boolean;
-}
-
-export class ShiftAdminUserAccount extends UserAccount {
-  shiftId:      number;
-}
-
-export class DepartmentAdminUserAccount extends UserAccount {
-  departmentId: number;
-}
-
-export class EnterpriseAdminUserAccount extends UserAccount {
-  enterpriseId: number;
 }

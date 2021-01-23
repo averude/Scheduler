@@ -25,12 +25,12 @@ public interface EmployeeRepository extends IByDepartmentIdRepository<Employee, 
             "from Employee e " +
             "inner join MainShiftComposition msc " +
             "on msc.employeeId = e.id " +
-            "where msc.shiftId = ?1 and ?2 <= msc.to and ?3 >= msc.from " +
+            "where msc.shiftId in ?1 and ?2 <= msc.to and ?3 >= msc.from " +
             "order by msc.shiftId , e.secondName, e.firstName, e.patronymic")
     @EntityGraph(value = "graph.Employee.position")
-    List<Employee> findEmployeesByShiftIdAndDatesBetween(Long shiftId,
-                                                         LocalDate from,
-                                                         LocalDate to);
+    List<Employee> findEmployeesByShiftIdsAndDatesBetween(List<Long> shiftIds,
+                                                          LocalDate from,
+                                                          LocalDate to);
 
     @Query("select e " +
             "from Employee e " +

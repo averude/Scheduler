@@ -1,10 +1,12 @@
 package com.averude.uksatse.scheduler.security.state.entity;
 
 import com.averude.uksatse.scheduler.core.interfaces.service.IByShiftIdAndDateService;
-import com.averude.uksatse.scheduler.core.interfaces.service.IByShiftIdService;
-import com.averude.uksatse.scheduler.security.entity.ShiftAdminUserAccount;
+import com.averude.uksatse.scheduler.core.interfaces.service.IByShiftIdsService;
+import com.averude.uksatse.scheduler.security.authority.Authorities;
 import com.averude.uksatse.scheduler.security.exception.NoRequiredServiceException;
 import com.averude.uksatse.scheduler.security.exception.NullOrgLevelIdException;
+import com.averude.uksatse.scheduler.security.model.entity.UserAccount;
+import com.averude.uksatse.scheduler.security.model.entity.UserAccountShift;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -12,23 +14,31 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 
+import static java.util.stream.Collectors.toList;
+
 @Slf4j
 @Component
 public class ShiftAdminServiceInvocationHandler implements ServiceInvocationHandler {
     @Override
-    public <T extends Serializable, ID> List<T> invoke(Object userAccount,
+    public <T extends Serializable, ID> List<T> invoke(UserAccount userAccount,
                                                        Object service,
                                                        LocalDate from,
                                                        LocalDate to) {
-        var shiftAdmin = (ShiftAdminUserAccount) userAccount;
-        Long shiftId = shiftAdmin.getShiftId();
+        if (userAccount.getAccountShifts() == null || userAccount.getAccountShifts().isEmpty()) {
+            throw new RuntimeException("No account shifts found");
+        }
 
-        if (shiftId == null) throw new NullOrgLevelIdException();
+        var shiftIds = userAccount.getAccountShifts()
+                .stream()
+                .map(UserAccountShift::getShiftId)
+                .collect(toList());
 
-        if (service instanceof IByShiftIdService && (from == null) && (to == null)) {
-            return ((IByShiftIdService<T, ID>) service).findAllByShiftId(shiftId);
+        if (shiftIds.isEmpty()) throw new NullOrgLevelIdException();
+
+        if (service instanceof IByShiftIdsService && (from == null) && (to == null)) {
+            return ((IByShiftIdsService<T, ID>) service).findAllByShiftIds(shiftIds);
         } else if (service instanceof IByShiftIdAndDateService && (from != null) && (to != null)) {
-            return ((IByShiftIdAndDateService<T, ID>) service).findAllByShiftIdAndDateBetween(shiftId, from, to);
+            return ((IByShiftIdAndDateService<T, ID>) service).findAllByShiftIdsAndDateBetween(shiftIds, from, to);
         } else {
             String errorMessage = getErrorMessage(service);
             log.error(errorMessage);
@@ -37,7 +47,7 @@ public class ShiftAdminServiceInvocationHandler implements ServiceInvocationHand
     }
 
     @Override
-    public Class getUserAccountClass() {
-        return ShiftAdminUserAccount.class;
+    public String getUserAuthority() {
+        return Authorities.SHIFT_ADMIN;
     }
 }

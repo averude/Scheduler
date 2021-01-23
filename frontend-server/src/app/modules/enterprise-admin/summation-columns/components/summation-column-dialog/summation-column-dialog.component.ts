@@ -5,7 +5,7 @@ import { SUMMATION_COLUMN_TYPES, SummationColumn } from "../../../../../model/su
 import { SummationColumnDayTypeRange } from "../../../../../model/summation-column-day-type-range";
 import { DtoDialogBaseComponent } from "../../../../../shared/abstract-components/dialog-base/dto-dialog-base.component";
 import { AuthService } from "../../../../../services/http/auth.service";
-import { BasicDto } from "../../../../../model/dto/basic-dto";
+import { BasicDTO } from "../../../../../model/dto/basic-dto";
 import { SPECIAL_CALENDAR_DATE_TYPES } from "../../../../../model/special-calendar-date";
 
 @Component({
@@ -28,7 +28,7 @@ export class SummationColumnDialogComponent extends DtoDialogBaseComponent<Summa
   }
 
 
-  get newDto(): BasicDto<SummationColumn, SummationColumnDayTypeRange> {
+  get newDto(): BasicDTO<SummationColumn, SummationColumnDayTypeRange> {
     let newDto = super.newDto;
     newDto.parent.onlyHolidays = false;
     return newDto;

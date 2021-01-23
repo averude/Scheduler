@@ -17,10 +17,9 @@ import org.springframework.web.filter.CorsFilter;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @SpringBootApplication(scanBasePackages = {
         "com.averude.uksatse.scheduler.server.auth",
-        "com.averude.uksatse.scheduler.security.creator"
 })
 @EntityScan(basePackages = {
-        "com.averude.uksatse.scheduler.security.entity",
+        "com.averude.uksatse.scheduler.security.model.entity",
         "com.averude.uksatse.scheduler.core.model.entity"
 })
 @EnableJpaRepositories(basePackageClasses = {UserAccountRepository.class})

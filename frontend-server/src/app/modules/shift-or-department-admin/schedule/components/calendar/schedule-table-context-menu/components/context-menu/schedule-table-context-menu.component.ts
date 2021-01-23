@@ -17,7 +17,7 @@ import { ContextMenuService } from "../../../../../../../../lib/ngx-contextmenu/
 import { CustomDaytypeDialogComponent } from "../custom-daytype-dialog/custom-daytype-dialog.component";
 import { SelectionData } from "../../../../../../../../lib/ngx-schedule-table/model/selection-data";
 import { DepartmentDayType } from "../../../../../../../../model/department-day-type";
-import { BasicDto } from "../../../../../../../../model/dto/basic-dto";
+import { BasicDTO } from "../../../../../../../../model/dto/basic-dto";
 import { PatternUnit } from "../../../../../../../../model/pattern-unit";
 import { ShiftPatternDtoService } from "../../../../../../../../services/http/shift-pattern-dto.service";
 import { DepartmentDayTypeService } from "../../../../../../../../services/http/department-day-type.service";
@@ -48,7 +48,7 @@ export class ScheduleTableContextMenuComponent implements OnInit, OnDestroy {
   @Input() shifts: Shift[] = [];
   @Input() groups: RowGroup[] = [];
 
-  patternDtos:         BasicDto<ShiftPattern, PatternUnit>[]   = [];
+  patternDtos:         BasicDTO<ShiftPattern, PatternUnit>[]   = [];
   departmentDayTypes:  DepartmentDayType[] = [];
   serviceDayTypes:     DepartmentDayType[] = [];
 

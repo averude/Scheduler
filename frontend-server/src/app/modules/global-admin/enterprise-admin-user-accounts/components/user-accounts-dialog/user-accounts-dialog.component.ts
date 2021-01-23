@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { DialogBaseComponent } from "../../../../../shared/abstract-components/dialog-base/dialog-base.component";
-import { EnterpriseAdminUserAccount, UserAccount } from "../../../../../model/accounts/user-account";
+import { UserAccount } from "../../../../../model/accounts/user-account";
 import { FormBuilder, Validators } from "@angular/forms";
 import { AuthService } from "../../../../../services/http/auth.service";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
@@ -39,7 +39,7 @@ export class UserAccountsDialogComponent extends DialogBaseComponent<UserAccount
     });
   }
 
-  fillInTheForm(userAccount: EnterpriseAdminUserAccount) {
+  fillInTheForm(userAccount: UserAccount) {
     this.dialogForm.setValue({
       username:     userAccount.username,
       name:         userAccount.name,

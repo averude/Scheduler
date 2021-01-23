@@ -1,5 +1,5 @@
 import { Directive, OnInit } from "@angular/core";
-import { BasicDto } from "../../../model/dto/basic-dto";
+import { BasicDTO } from "../../../model/dto/basic-dto";
 import { MatDialogRef } from "@angular/material/dialog";
 import { CdkDragDrop } from "@angular/cdk/drag-drop";
 import { IdEntity } from "../../../model/interface/id-entity";
@@ -9,7 +9,7 @@ export abstract class DtoDialogBaseComponent<P extends IdEntity, C> implements O
 
   operation: string;
 
-  constructor(public dto: BasicDto<P, C>,
+  constructor(public dto: BasicDTO<P, C>,
               protected dialogRef: MatDialogRef<any>) {
     this.dto = dto ? dto : this.newDto;
     this.operation = dto ? 'Edit' : 'Add';
@@ -51,8 +51,8 @@ export abstract class DtoDialogBaseComponent<P extends IdEntity, C> implements O
     return (a && b) && (a.id === b.id);
   }
 
-  get newDto(): BasicDto<P, C> {
-    const dto = new BasicDto<P, C>();
+  get newDto(): BasicDTO<P, C> {
+    const dto = new BasicDTO<P, C>();
     dto.parent = <P> {};
     dto.collection = [];
     return dto;

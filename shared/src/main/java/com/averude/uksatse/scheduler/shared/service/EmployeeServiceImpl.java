@@ -30,8 +30,8 @@ public class EmployeeServiceImpl
 
     @Override
     @Transactional
-    public List<Employee> findAllByShiftIdAndDateBetween(Long shiftId, LocalDate from, LocalDate to) {
-        return employeeRepository.findEmployeesByShiftIdAndDatesBetween(shiftId, from, to);
+    public List<Employee> findAllByShiftIdsAndDateBetween(List<Long> shiftIds, LocalDate from, LocalDate to) {
+        return employeeRepository.findEmployeesByShiftIdsAndDatesBetween(shiftIds, from, to);
     }
 
     @Override

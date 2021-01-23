@@ -14,3 +14,9 @@ export interface ReportHeaderCell extends ReportCellData {
   merge: boolean;
   width?: number;
 }
+
+export interface ReportWorkDayCell extends ReportCellData {
+  date: any;
+  workDay: WorkDay;
+  merge: boolean;
+}

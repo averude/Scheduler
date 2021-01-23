@@ -3,6 +3,7 @@ package com.averude.uksatse.scheduler.security.state.dto;
 import com.averude.uksatse.scheduler.core.interfaces.service.IService;
 import com.averude.uksatse.scheduler.core.model.dto.BasicDto;
 import com.averude.uksatse.scheduler.security.exception.NoServiceInvocationHandlerException;
+import com.averude.uksatse.scheduler.security.model.entity.UserAccount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.Authentication;
@@ -16,11 +17,11 @@ import java.util.Map;
 @Component
 public class SimpleDtoByAuthMethodResolver implements IByAuthDtoMethodResolver {
 
-    private Map<Class, DtoServiceInvocationHandler> dtoServiceInvocationHandlerMap;
+    private Map<String, DtoServiceInvocationHandler> dtoServiceInvocationHandlerMap;
 
     @Autowired
     public SimpleDtoByAuthMethodResolver(@Qualifier("dtoServiceInvocationHandlerMap")
-                                                     Map<Class, DtoServiceInvocationHandler> dtoServiceInvocationHandlerMap) {
+                                                     Map<String, DtoServiceInvocationHandler> dtoServiceInvocationHandlerMap) {
         this.dtoServiceInvocationHandlerMap = dtoServiceInvocationHandlerMap;
     }
 
@@ -29,13 +30,13 @@ public class SimpleDtoByAuthMethodResolver implements IByAuthDtoMethodResolver {
                                                                                                        IService<P, ID> service,
                                                                                                        LocalDate from,
                                                                                                        LocalDate to) {
-        var userAccount = authentication.getPrincipal();
+        var userAccount = (UserAccount) authentication.getPrincipal();
 
-        var serviceInvocationHandler = dtoServiceInvocationHandlerMap.get(userAccount.getClass());
+        var serviceInvocationHandler = dtoServiceInvocationHandlerMap.get(userAccount.getAuthority());
         if (serviceInvocationHandler != null) {
             return serviceInvocationHandler.invoke(userAccount, service, from, to);
         } else {
-            var errorMessage = "Cannot find Service Invocation Handler for Class: " + userAccount.getClass();
+            var errorMessage = "Cannot find Service Invocation Handler for Authority: " + userAccount.getAuthority();
             throw new NoServiceInvocationHandlerException(errorMessage);
         }
     }

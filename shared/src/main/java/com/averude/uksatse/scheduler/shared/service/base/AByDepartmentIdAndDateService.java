@@ -33,8 +33,12 @@ public abstract class AByDepartmentIdAndDateService<T extends Serializable, ID>
 
     @Override
     @Transactional
-    public List<T> findAllByShiftIdAndDateBetween(Long shiftId, LocalDate from, LocalDate to) {
-        return shiftRepository.findById(shiftId)
+    public List<T> findAllByShiftIdsAndDateBetween(List<Long> shiftIds, LocalDate from, LocalDate to) {
+        if (shiftIds == null || shiftIds.isEmpty()) {
+            throw new RuntimeException();
+        }
+
+        return shiftRepository.findById(shiftIds.get(0))
                 .map(shift -> findAllByDepartmentIdAndDateBetween(shift.getDepartmentId(), from, to))
                 .orElse(Collections.emptyList());
     }

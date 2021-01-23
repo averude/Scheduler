@@ -1,20 +1,14 @@
 package com.averude.uksatse.scheduler.security.modifier.entity;
 
 import com.averude.uksatse.scheduler.core.interfaces.entity.HasDepartmentId;
-import com.averude.uksatse.scheduler.core.model.entity.structure.Shift;
-import com.averude.uksatse.scheduler.security.entity.DepartmentAdminUserAccount;
-import com.averude.uksatse.scheduler.security.entity.ShiftAdminUserAccount;
-import com.averude.uksatse.scheduler.security.entity.UserAccount;
+import com.averude.uksatse.scheduler.security.authority.Authorities;
 import com.averude.uksatse.scheduler.security.exception.NullOrgLevelIdException;
-import com.averude.uksatse.scheduler.shared.service.ShiftService;
-import lombok.RequiredArgsConstructor;
+import com.averude.uksatse.scheduler.security.model.entity.UserAccount;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 @Component
-@RequiredArgsConstructor
 public class DepartmentIdEntityModifier<T extends HasDepartmentId> implements EntityModifier<T> {
-    private final ShiftService shiftService;
 
     @Override
     public void modify(T hasDepartmentId, Authentication authentication) {
@@ -33,13 +27,9 @@ public class DepartmentIdEntityModifier<T extends HasDepartmentId> implements En
     }
 
     private Long getDepartmentId(UserAccount account) {
-        if (account instanceof DepartmentAdminUserAccount) {
-            return ((DepartmentAdminUserAccount) account).getDepartmentId();
-        } else if (account instanceof ShiftAdminUserAccount) {
-            Long shiftId = ((ShiftAdminUserAccount) account).getShiftId();
-            return shiftService.findById(shiftId)
-                    .map(Shift::getDepartmentId)
-                    .orElseThrow();
+        if (account.getAuthority().equals(Authorities.DEPARTMENT_ADMIN)
+                || account.getAuthority().equals(Authorities.SHIFT_ADMIN)) {
+            return account.getDepartmentId();
         } else throw new RuntimeException();
     }
 }

@@ -5,8 +5,9 @@ import com.averude.uksatse.scheduler.core.model.dto.BasicDto;
 import com.averude.uksatse.scheduler.core.model.dto.GenerationDTO;
 import com.averude.uksatse.scheduler.core.model.entity.Employee;
 import com.averude.uksatse.scheduler.core.model.entity.WorkDay;
-import com.averude.uksatse.scheduler.security.entity.DepartmentAdminUserAccount;
-import com.averude.uksatse.scheduler.security.entity.ShiftAdminUserAccount;
+import com.averude.uksatse.scheduler.security.authority.Authorities;
+import com.averude.uksatse.scheduler.security.model.entity.UserAccount;
+import com.averude.uksatse.scheduler.security.model.entity.UserAccountShift;
 import com.averude.uksatse.scheduler.security.modifier.entity.DepartmentIdEntityModifier;
 import com.averude.uksatse.scheduler.shared.service.ScheduleGenerationService;
 import com.averude.uksatse.scheduler.shared.service.ScheduleService;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -53,16 +55,19 @@ public class ScheduleControllerImpl implements ScheduleController {
                                                                            LocalDate from,
                                                                            LocalDate to){
 
-        var userAccount = authentication.getPrincipal();
+        var userAccount = (UserAccount) authentication.getPrincipal();
 
         log.debug("User:{} - Getting work schedule from:{} to:{}", userAccount, from, to);
 
-        if (userAccount instanceof DepartmentAdminUserAccount) {
-            var account = (DepartmentAdminUserAccount) userAccount;
-            return scheduleService.findAllDtoByDepartmentIdAndDate(account.getDepartmentId(), from, to);
-        } else if (userAccount instanceof ShiftAdminUserAccount) {
-            var account = (ShiftAdminUserAccount) userAccount;
-            return scheduleService.findAllDtoByShiftIdAndDate(account.getShiftId(), from, to);
+        if (userAccount.getAuthority().equals(Authorities.DEPARTMENT_ADMIN)) {
+
+            return scheduleService.findAllDtoByDepartmentIdAndDate(userAccount.getDepartmentId(), from, to);
+        } else if (userAccount.getAuthority().equals(Authorities.SHIFT_ADMIN)) {
+            var shiftIds = userAccount.getAccountShifts()
+                    .stream()
+                    .map(UserAccountShift::getShiftId)
+                    .collect(Collectors.toList());
+            return scheduleService.findScheduleDTOByShiftIdsAndDate(shiftIds, from, to);
         } else throw new AccessDeniedException("User doesn't have required permission");
     }
 

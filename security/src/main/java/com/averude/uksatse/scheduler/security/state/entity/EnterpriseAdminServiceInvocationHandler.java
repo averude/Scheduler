@@ -2,9 +2,10 @@ package com.averude.uksatse.scheduler.security.state.entity;
 
 import com.averude.uksatse.scheduler.core.interfaces.service.IByEnterpriseIdAndDateService;
 import com.averude.uksatse.scheduler.core.interfaces.service.IByEnterpriseIdService;
-import com.averude.uksatse.scheduler.security.entity.EnterpriseAdminUserAccount;
+import com.averude.uksatse.scheduler.security.authority.Authorities;
 import com.averude.uksatse.scheduler.security.exception.NoRequiredServiceException;
 import com.averude.uksatse.scheduler.security.exception.NullOrgLevelIdException;
+import com.averude.uksatse.scheduler.security.model.entity.UserAccount;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -16,12 +17,11 @@ import java.util.List;
 @Slf4j
 public class EnterpriseAdminServiceInvocationHandler implements ServiceInvocationHandler {
     @Override
-    public <T extends Serializable, ID> List<T> invoke(Object userAccount,
+    public <T extends Serializable, ID> List<T> invoke(UserAccount userAccount,
                                                        Object service,
                                                        LocalDate from,
                                                        LocalDate to) {
-        var enterpriseAdmin = (EnterpriseAdminUserAccount) userAccount;
-        var enterpriseId = enterpriseAdmin.getEnterpriseId();
+        var enterpriseId = userAccount.getEnterpriseId();
 
         if (enterpriseId == null) throw new NullOrgLevelIdException();
 
@@ -37,7 +37,7 @@ public class EnterpriseAdminServiceInvocationHandler implements ServiceInvocatio
     }
 
     @Override
-    public Class getUserAccountClass() {
-        return EnterpriseAdminUserAccount.class;
+    public String getUserAuthority() {
+        return Authorities.ENTERPRISE_ADMIN;
     }
 }

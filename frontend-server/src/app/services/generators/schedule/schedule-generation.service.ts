@@ -6,7 +6,7 @@ import { NotificationsService } from "angular2-notifications";
 import { Injectable } from "@angular/core";
 import { PatternUnit } from "../../../model/pattern-unit";
 import { DepartmentDayType } from "../../../model/department-day-type";
-import { BasicDto } from "../../../model/dto/basic-dto";
+import { BasicDTO } from "../../../model/dto/basic-dto";
 import { ShiftPattern } from "../../../model/shift-pattern";
 import { HasDayTypeAndTime } from "../../../model/interface/has-day-type-and-time";
 import { CellUpdater } from "../../collectors/cell-updater";
@@ -23,7 +23,7 @@ export class ScheduleGenerationService {
               private notificationService: NotificationsService,
               private scheduleGenerator: ScheduleGenerator) {}
 
-  generateSchedule(dto: BasicDto<ShiftPattern, PatternUnit>,
+  generateSchedule(dto: BasicDTO<ShiftPattern, PatternUnit>,
                    data: SelectionData,
                    offset: number) {
     this.scheduleGenerator.generateScheduleWithPattern(

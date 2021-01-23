@@ -42,6 +42,16 @@ public interface SubstitutionShiftCompositionRepository extends JpaRepository<Su
 
     @Query("select ssc " +
             "from SubstitutionShiftComposition ssc " +
+            "left join MainShiftComposition msc " +
+            "on ssc.mainShiftComposition = msc " +
+            "where ?2 <= ssc.to and ?3 >= ssc.from and (ssc.shiftId in ?1 or msc.shiftId in ?1)")
+    @EntityGraph(value = "graph.SubstitutionShiftComposition")
+    List<SubstitutionShiftComposition> findAllByShiftIdsAndDatesBetween(List<Long> shiftIds,
+                                                                       LocalDate from,
+                                                                       LocalDate to);
+
+    @Query("select ssc " +
+            "from SubstitutionShiftComposition ssc " +
             "left join Shift s " +
             "on ssc.shiftId = s.id " +
             "where s.departmentId = ?1 and ?2 <= ssc.to and ?3 >= ssc.from " +
@@ -61,4 +71,15 @@ public interface SubstitutionShiftCompositionRepository extends JpaRepository<Su
                                                                                                      List<Long> ids,
                                                                                                      LocalDate from,
                                                                                                      LocalDate to);
+
+    @Query("select ssc " +
+            "from SubstitutionShiftComposition as ssc " +
+            "where (ssc.shiftId in ?1 or ssc.mainShiftComposition.id in ?2) " +
+            "and ?3 <= ssc.to and ?4 >= ssc.from " +
+            "order by ssc.employeeId asc, ssc.shiftId asc, ssc.from asc")
+    @EntityGraph(value = "graph.SubstitutionShiftComposition")
+    List<SubstitutionShiftComposition> getAllByShiftIdsAndMainShiftCompositionInAndDateBetweenOrdered(List<Long> shiftIds,
+                                                                                                      List<Long> ids,
+                                                                                                      LocalDate from,
+                                                                                                      LocalDate to);
 }

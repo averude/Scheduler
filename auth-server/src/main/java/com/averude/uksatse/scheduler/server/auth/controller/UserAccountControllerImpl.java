@@ -1,7 +1,10 @@
 package com.averude.uksatse.scheduler.server.auth.controller;
 
+import com.averude.uksatse.scheduler.security.authority.Authorities;
 import com.averude.uksatse.scheduler.security.details.UserAccountDetails;
-import com.averude.uksatse.scheduler.security.entity.*;
+import com.averude.uksatse.scheduler.security.model.dto.AccountDTO;
+import com.averude.uksatse.scheduler.security.model.entity.UserAccount;
+import com.averude.uksatse.scheduler.security.model.entity.UserAccountShift;
 import com.averude.uksatse.scheduler.server.auth.service.UserAccountDetailsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +21,8 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.security.Principal;
 import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 @Slf4j
 @RestController
@@ -45,42 +50,79 @@ public class UserAccountControllerImpl implements UserAccountController {
         var userAccount = ((UserAccountDetails) authentication.getPrincipal()).getUserAccount();
         log.debug("User:{} - Getting list of user accounts.", userAccount);
 
-        if (userAccount instanceof GlobalAdminUserAccount) {
+        if (userAccount.getAuthority().equals(Authorities.GLOBAL_ADMIN)) {
             return userAccountDetailsService.findAll();
-        } else if (userAccount instanceof EnterpriseAdminUserAccount) {
-            return userAccountDetailsService.findAllByEnterpriseId(((EnterpriseAdminUserAccount) userAccount).getEnterpriseId());
-        } else if (userAccount instanceof DepartmentAdminUserAccount) {
-            return userAccountDetailsService.findAllByDepartmentId(((DepartmentAdminUserAccount) userAccount).getDepartmentId());
+        } else if (userAccount.getAuthority().equals(Authorities.ENTERPRISE_ADMIN)) {
+            return userAccountDetailsService.findAllByEnterpriseId(userAccount.getEnterpriseId());
         } else throw new AccessDeniedException("");
     }
 
+    @Override
+    public List<AccountDTO> getAllShiftAccountsByAuth(Authentication authentication) {
+        var userAccount = ((UserAccountDetails) authentication.getPrincipal()).getUserAccount();
+        log.debug("User:{} - Getting list of user accounts.", userAccount);
+
+        if (userAccount.getAuthority().equals(Authorities.DEPARTMENT_ADMIN)) {
+            var departmentId = userAccount.getDepartmentId();
+
+            return userAccountDetailsService.findAllByDepartmentId(departmentId)
+                    .stream()
+                    .map(account -> {
+                        var shiftIds = account.getAccountShifts()
+                                .stream()
+                                .map(UserAccountShift::getShiftId)
+                                .collect(toList());
+                        return new AccountDTO(account, shiftIds);
+                    })
+                    .collect(toList());
+        } else throw new AccessDeniedException("");
+    }
 
     @Override
-    public ResponseEntity<String> createNewShiftUser(@Valid @RequestBody ShiftAdminUserAccount user,
+    public ResponseEntity<Long> createShiftUser(@Valid @RequestBody AccountDTO dto,
+                                                Authentication authentication) {
+        var userAccount = ((UserAccountDetails) authentication.getPrincipal()).getUserAccount();
+        log.debug("User:{} - Creating new user account:{}", userAccount, dto);
+
+        userAccountDetailsService.saveShiftAccount(dto, userAccount);
+        return ResponseEntity.created(ServletUriComponentsBuilder
+                .fromCurrentRequest().path("/{id}")
+                .buildAndExpand(dto.getUserAccount().getId()).toUri())
+                .body(dto.getUserAccount().getId());
+    }
+
+    @Override
+    public ResponseEntity<String> updateShiftUser(@Valid AccountDTO dto,
+                                                  Authentication authentication) {
+        var userAccount = ((UserAccountDetails) authentication.getPrincipal()).getUserAccount();
+        log.debug("User:{} - Updating new user account:{}", userAccount, dto);
+
+        userAccountDetailsService.saveShiftAccount(dto, userAccount);
+        return ResponseEntity.ok("User " + userAccount + " updated");
+    }
+
+    @Override
+    public ResponseEntity<Long> createDepartmentUser(@RequestBody UserAccount user,
+                                                     Authentication authentication) {
+        var userAccount = ((UserAccountDetails) authentication.getPrincipal()).getUserAccount();
+        user.setEnterpriseId(userAccount.getEnterpriseId());
+        return createNewUser(user, authentication);
+    }
+
+    @Override
+    public ResponseEntity<Long> createEnterpriseUser(@RequestBody UserAccount user,
                                                      Authentication authentication) {
         return createNewUser(user, authentication);
     }
 
-    @Override
-    public ResponseEntity<String> createNewDepartmentUser(@Valid @RequestBody DepartmentAdminUserAccount user,
-                                                          Authentication authentication) {
-        return createNewUser(user, authentication);
-    }
-
-    @Override
-    public ResponseEntity<String> createNewEnterpriseUser(@Valid @RequestBody EnterpriseAdminUserAccount user,
-                                                          Authentication authentication) {
-        return createNewUser(user, authentication);
-    }
-
-    private ResponseEntity<String> createNewUser(UserAccount user, Authentication authentication) {
+    private ResponseEntity<Long> createNewUser(UserAccount user, Authentication authentication) {
         log.debug("User:{} - Creating new user account:{}", authentication.getPrincipal(), user);
         userAccountDetailsService.save(user);
         URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest().path("/{username}")
+                .fromCurrentRequest().path("/{id}")
                 .buildAndExpand(user.getUsername()).toUri();
 
-        return ResponseEntity.created(location).body(user.getUsername());
+        return ResponseEntity.created(location).body(user.getId());
     }
 
     @Override

@@ -1,6 +1,6 @@
 package com.averude.uksatse.scheduler.security.details;
 
-import com.averude.uksatse.scheduler.security.entity.UserAccount;
+import com.averude.uksatse.scheduler.security.model.entity.UserAccount;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;

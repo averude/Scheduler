@@ -1,9 +1,5 @@
-export interface CellData extends HasValue{
+export interface CellData {
   date: any;
   enabled: boolean;
-  value: any;
-}
-
-export interface HasValue {
   value: any;
 }

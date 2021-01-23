@@ -1,6 +1,6 @@
 import { IdEntity } from "../interface/id-entity";
 
-export class BasicDto<E extends IdEntity, C> implements IdEntity {
+export class BasicDTO<E extends IdEntity, C> implements IdEntity {
   parent:     E;
   collection: C[];
 

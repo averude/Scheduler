@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface IByShiftIdAndDateService<T extends Serializable, ID> {
     @CheckDateParameters
-    List<T> findAllByShiftIdAndDateBetween(Long shiftId, LocalDate from, LocalDate to);
+    List<T> findAllByShiftIdsAndDateBetween(List<Long> shiftIds, LocalDate from, LocalDate to);
 }

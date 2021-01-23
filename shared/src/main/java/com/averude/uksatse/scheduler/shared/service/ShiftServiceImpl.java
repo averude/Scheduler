@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -24,8 +23,7 @@ public class ShiftServiceImpl
 
     @Override
     @Transactional
-    public List<Shift> findAllByShiftId(Long shiftId) {
-        return Collections.singletonList(shiftRepository.findById(shiftId)
-                .orElse(null));
+    public List<Shift> findAllByShiftIds(List<Long> shiftIds) {
+        return shiftRepository.findAllById(shiftIds);
     }
 }

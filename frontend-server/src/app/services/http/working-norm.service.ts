@@ -7,7 +7,7 @@ import { parseDateOfEntities } from "../../shared/utils/utils";
 import { AuthService } from "./auth.service";
 import { CUDService } from "./interface/cud-service";
 import { ACrudService } from "./abstract-service/a-crud-service";
-import { BasicDto } from "../../model/dto/basic-dto";
+import { BasicDTO } from "../../model/dto/basic-dto";
 import { Shift } from "../../model/shift";
 import { GenerationDto } from "../../model/dto/generation-dto";
 import { map } from "rxjs/operators";
@@ -24,8 +24,8 @@ export class WorkingNormService
     super(`${config.baseUrl}/admin/working_norm`, http);
   }
 
-  getAllDto(from?: string, to?: string): Observable<BasicDto<Shift, WorkingNorm>[]> {
-    return this.http.get<BasicDto<Shift, WorkingNorm>[]>(
+  getAllDto(from?: string, to?: string): Observable<BasicDTO<Shift, WorkingNorm>[]> {
+    return this.http.get<BasicDTO<Shift, WorkingNorm>[]>(
       `${this.url}/dto/dates?from=${from}&to=${to}`
     ).pipe(
       map(value => value.sort((a, b) => a.parent.id - b.parent.id))
