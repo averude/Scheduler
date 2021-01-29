@@ -13,7 +13,7 @@ import { TableRowProcessor } from "./table-row-processor.service";
 @Injectable()
 export class TableDataCollector {
 
-  constructor(private divider: IntervalCreator,
+  constructor(private intervalCreator: IntervalCreator,
               private rowProcessor: TableRowProcessor) {}
 
   collect(shifts: Shift[],
@@ -23,47 +23,30 @@ export class TableDataCollector {
           workingNorms: WorkingNorm[]) {
     const table: TableData = new TableData();
 
-    const sortedShifts = shifts.sort((a, b) => a.id - b.id);
-
     table.from  = moment.utc(calendarDays[0].isoString);
     table.to    = moment.utc(calendarDays[calendarDays.length - 1].isoString);
 
-    table.groups = sortedShifts.map(shift => {
-      const group = new RowGroup();
-      group.table = table;
-      group.id    = shift.id;
-      group.name  = shift.name;
-      group.rows  = [];
-      return group;
-    });
-
-    schedule.forEach(dto => {
-
-      dto.mainShiftCompositions.forEach(mainComposition => {
-        const position = binarySearch(positions, (mid => mid.id - mainComposition.positionId));
-
-        const rowGroup = table.findRowGroup(mainComposition.shiftId);
-        if (rowGroup) {
-          const workingNorm   = this.getWorkingNorm(workingNorms, mainComposition.shiftId);
-
-          this.rowProcessor.initRowInsert(rowGroup, dto, calendarDays,
-            mainComposition, position, workingNorm, false, (row) => row?.position.id === mainComposition.positionId);
-        }
+    table.groups = shifts
+      .sort((a, b) => a.id - b.id)
+      .map(shift => {
+        const group = new RowGroup();
+        group.table = table;
+        group.id    = shift.id;
+        group.name  = shift.name;
+        group.rows  = [];
+        return group;
       });
 
-      dto.substitutionShiftCompositions.forEach(substComposition => {
-        const position = binarySearch(positions, (mid => mid.id - substComposition.positionId));
+    for (let dto of schedule) {
 
-        const rowGroup = table.findRowGroup(substComposition.shiftId);
-        if (rowGroup) {
-          const workingNorm   = this.getWorkingNorm(workingNorms, substComposition.mainShiftComposition.shiftId);
+      this.rowProcessor.fillRows(dto, calendarDays, dto.mainShiftCompositions, false, positions,
+        (composition => table.findRowGroup(composition.shiftId)),
+        (composition => this.getWorkingNorm(workingNorms, composition.shiftId)));
 
-          this.rowProcessor.initRowInsert(rowGroup, dto, calendarDays,
-            substComposition, position, workingNorm, true, (row) => row?.position.id === substComposition.positionId);
-        }
-      });
-
-    });
+      this.rowProcessor.fillRows(dto, calendarDays, dto.substitutionShiftCompositions, true, positions,
+        (composition => table.findRowGroup(composition.shiftId)),
+        (composition => this.getWorkingNorm(workingNorms, composition.mainShiftComposition.shiftId)))
+    }
 
     return table;
   }

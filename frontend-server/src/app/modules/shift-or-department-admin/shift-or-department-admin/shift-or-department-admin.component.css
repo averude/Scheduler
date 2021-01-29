@@ -30,3 +30,7 @@
   font-size: 13px;
   color: #8d8d8d;
 }
+
+.full-name {
+  cursor: pointer;
+}

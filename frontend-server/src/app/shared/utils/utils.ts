@@ -134,6 +134,8 @@ export function calculateWorkHoursByTime(startTime: number,
 
 export const timeValidationPattern: string = '^([01]?\\d|2[0-3]|24(?=:00?$)):([0-5]\\d)$';
 
+export const passwordValidationPattern: string = '^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&-+=()])(?=\\S+$).{8,20}$';
+
 export function getCellValueExt(workDay: WorkDay,
                                 dayTypes: DayType[],
                                 fn: (workday: WorkDay) => number,

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { TableBaseComponent } from "../../../../../shared/abstract-components/table-base/table-base.component";
+import { TableBaseIdEntityComponent } from "../../../../../shared/abstract-components/table-base/table-base-id-entity-component.directive";
 import { Enterprise } from "../../../../../model/enterprise";
 import { MatDialog } from "@angular/material/dialog";
 import { EnterpriseService } from "../../../../../services/http/enterprise.service";
@@ -12,7 +12,7 @@ import { EnterpriseDialogComponent } from "../enterprise-dialog/enterprise-dialo
   styleUrls: ['../../../../../shared/common/table.common.css',
     './enterprises-table.component.css']
 })
-export class EnterprisesTableComponent extends TableBaseComponent<Enterprise> {
+export class EnterprisesTableComponent extends TableBaseIdEntityComponent<Enterprise> {
   displayedColumns = ['select', 'name', 'control'];
 
   constructor(dialog: MatDialog,

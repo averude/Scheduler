@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { TableBaseComponent } from "../../../../../../../shared/abstract-components/table-base/table-base.component";
+import { TableBaseIdEntityComponent } from "../../../../../../../shared/abstract-components/table-base/table-base-id-entity-component.directive";
 import { MatDialog } from "@angular/material/dialog";
 import { NotificationsService } from "angular2-notifications";
 import { DepartmentDayType } from "../../../../../../../model/department-day-type";
@@ -18,7 +18,7 @@ import { DayType } from "../../../../../../../model/day-type";
     './patterns-table.component.css'
   ]
 })
-export class PatternsTableComponent extends TableBaseComponent<ShiftPatternDTO> {
+export class PatternsTableComponent extends TableBaseIdEntityComponent<ShiftPatternDTO> {
 
   displayedColumns = ['select', 'name', 'control'];
 

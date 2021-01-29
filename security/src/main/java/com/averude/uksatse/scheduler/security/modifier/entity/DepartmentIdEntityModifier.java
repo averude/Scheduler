@@ -7,11 +7,15 @@ import com.averude.uksatse.scheduler.security.model.entity.UserAccount;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
+
 @Component
 public class DepartmentIdEntityModifier<T extends HasDepartmentId> implements EntityModifier<T> {
 
     @Override
     public void modify(T hasDepartmentId, Authentication authentication) {
+        Objects.requireNonNull(hasDepartmentId);
+
         Long departmentId = getDepartmentId(convertToUserAccount(authentication));
 
         if (departmentId == null) throw new NullOrgLevelIdException();
@@ -20,6 +24,8 @@ public class DepartmentIdEntityModifier<T extends HasDepartmentId> implements En
 
     @Override
     public void modifyAll(Iterable<T> iterable, Authentication authentication) {
+        Objects.requireNonNull(iterable);
+
         Long departmentId = getDepartmentId(convertToUserAccount(authentication));
 
         if (departmentId == null) throw new NullOrgLevelIdException();

@@ -66,6 +66,12 @@
   height: 39px;
   background-color: #d9ebfd;
   border:  1px solid #e5e9f0;
+  cursor: pointer;
+}
+
+.month-header:hover {
+  background-color: #9dbbff;
+  color: #ffffff;
 }
 
 .weekend {

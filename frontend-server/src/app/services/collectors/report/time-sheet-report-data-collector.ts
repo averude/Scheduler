@@ -60,7 +60,6 @@ export class TimeSheetReportDataCollector extends AbstractReportDataCollector {
                      dayTypes: DayType[],
                      positionName: string,
                      summations: SummationResult[],
-                     index: number,
                      useReportLabel?: boolean,
                      intervals?: RowInterval[]): ReportCellData[] {
     if (!calendarDays || calendarDays.length <= 0) {
@@ -69,8 +68,9 @@ export class TimeSheetReportDataCollector extends AbstractReportDataCollector {
 
     const result: ReportCellData[] = [].concat([
       {
-        value: [index + 1, null],
-        style: [TimeSheetStyles.idCellStyle, TimeSheetStyles.lastIdCellStyle]
+        merge: true,
+        value: [null, 0],
+        style: TimeSheetStyles.idCellStyle
       },
       {
         value: [getEmployeeShortName(dto.parent), positionName],
@@ -134,8 +134,6 @@ export class TimeSheetReportDataCollector extends AbstractReportDataCollector {
       table_cols_before_data: 2,
       table_report_label: 'ТАБЕЛЬ'
     } as ReportMarkup;
-
-    data.tableData.forEach((value, index) => value.reportCellData[0].value[0] = index + 1);
   }
 
   private getHeaderStyle(day: CalendarDay) {

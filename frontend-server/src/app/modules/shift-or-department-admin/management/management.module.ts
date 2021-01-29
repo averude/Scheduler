@@ -15,6 +15,7 @@ import { AvrSideBarModule } from "../../../lib/avr-side-bar/avr-side-bar.module"
 import { ShiftAdminUserAccountsModule } from "./components/shift-admin-user-accounts/shift-admin-user-accounts.module";
 import { MainShiftCompositionModule } from "./components/main-shift-composition/main-shift-composition.module";
 import { SubstitutionShiftCompositionModule } from "./components/substitution-shift-composition/substitution-shift-composition.module";
+import { ReportSheetModule } from "./components/report-sheets/report-sheet.module";
 
 @NgModule({
   imports: [
@@ -24,6 +25,7 @@ import { SubstitutionShiftCompositionModule } from "./components/substitution-sh
     EmployeesModule,
     PositionsModule,
     DepartmentDayTypesModule,
+    ReportSheetModule,
     ShiftsModule,
     ShiftAdminUserAccountsModule,
     PatternsModule,

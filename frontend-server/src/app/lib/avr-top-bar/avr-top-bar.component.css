@@ -46,6 +46,8 @@
   height: 30px;
   margin-right: 28px;
   padding-top: 10px;
+  user-select: none;
+  outline: none;
 }
 
 .divider {

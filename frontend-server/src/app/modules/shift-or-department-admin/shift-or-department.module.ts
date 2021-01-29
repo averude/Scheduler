@@ -13,11 +13,15 @@ import { NgxMaskModule } from "ngx-mask";
 import { AvrTopBarModule } from "../../lib/avr-top-bar/avr-top-bar.module";
 import { CellCollector } from "../../services/collectors/cell-collector";
 import { CellUpdater } from "../../services/collectors/cell-updater";
+import { ChangeUserAccountPasswordDialogModule } from "./change-user-account-password-dialog/change-user-account-password-dialog.module";
+import { MatMenuModule } from "@angular/material/menu";
 
 @NgModule({
   imports: [
     CommonModule,
     AvrTopBarModule,
+    ChangeUserAccountPasswordDialogModule,
+    MatMenuModule,
     CalendarModule,
     WorkingNormModule,
     RemoveDialogModule,

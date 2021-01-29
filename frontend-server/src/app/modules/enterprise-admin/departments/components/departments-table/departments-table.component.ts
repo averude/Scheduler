@@ -4,14 +4,14 @@ import { MatDialog } from "@angular/material/dialog";
 import { DepartmentService } from "../../../../../services/http/department.service";
 import { NotificationsService } from "angular2-notifications";
 import { DepartmentDialogComponent } from "../department-dialog/department-dialog.component";
-import { TableBaseComponent } from "../../../../../shared/abstract-components/table-base/table-base.component";
+import { TableBaseIdEntityComponent } from "../../../../../shared/abstract-components/table-base/table-base-id-entity-component.directive";
 
 @Component({
   selector: 'app-departments-table',
   templateUrl: './departments-table.component.html',
   styleUrls: ['../../../../../shared/common/table.common.css', './departments-table.component.css']
 })
-export class DepartmentsTableComponent extends TableBaseComponent<Department> {
+export class DepartmentsTableComponent extends TableBaseIdEntityComponent<Department> {
   displayedColumns = ['select', 'name', 'control'];
 
   constructor(dialog: MatDialog,

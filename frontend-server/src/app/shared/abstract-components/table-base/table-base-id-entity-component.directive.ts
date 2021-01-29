@@ -11,7 +11,7 @@ import { CUDService } from "../../../services/http/interface/cud-service";
 import { IByAuthService } from "../../../services/http/interface/i-by-auth.service";
 
 @Directive()
-export abstract class TableBaseComponent<T extends IdEntity> implements OnInit, OnDestroy {
+export class TableBaseComponent<T> implements OnInit, OnDestroy {
 
   dataSource  = new MatTableDataSource<T>([]);
   selection   = new SelectionModel<T>(true, []);
@@ -19,9 +19,7 @@ export abstract class TableBaseComponent<T extends IdEntity> implements OnInit, 
   @ViewChild(MatSort, { static: true })
   sort: MatSort;
 
-  protected constructor(private matDialog: MatDialog,
-                        protected crudService: CUDService<T>,
-                        protected notification: NotificationsService) { }
+  constructor(protected crudService: CUDService<T>) {}
 
   ngOnInit(): void {
     this.initDataSourceSort();
@@ -61,6 +59,43 @@ export abstract class TableBaseComponent<T extends IdEntity> implements OnInit, 
     let index = data.indexOf(object);
     data.splice(index, 1);
     this.dataSource.data = data;
+  }
+
+
+  /** Whether the number of selected elements matches the total number of rows. */
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.dataSource.data.length;
+    return numSelected === numRows;
+  }
+
+  /** Selects all rows if they are not all selected; otherwise clear selection. */
+  masterToggle() {
+    this.isAllSelected() ?
+      this.selection.clear() :
+      this.dataSource.data.forEach(row => this.selection.select(row));
+  }
+
+  /** The label for the checkbox on the passed rowData */
+  checkboxLabel(row?: T): string {
+    if (!row) {
+      return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
+    }
+    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.toString() + 1}`;
+  }
+
+  applyFilter(filterValue: string) {
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+}
+
+@Directive()
+export abstract class TableBaseIdEntityComponent<T extends IdEntity> extends TableBaseComponent<T> {
+
+  protected constructor(protected matDialog: MatDialog,
+                        crudService: CUDService<T>,
+                        protected notification: NotificationsService) {
+    super(crudService);
   }
 
   abstract openDialog(t: T);
@@ -147,31 +182,5 @@ export abstract class TableBaseComponent<T extends IdEntity> implements OnInit, 
           'Selected values was successfully deleted'
         );
       });
-  }
-
-  /** Whether the number of selected elements matches the total number of rows. */
-  isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data.length;
-    return numSelected === numRows;
-  }
-
-  /** Selects all rows if they are not all selected; otherwise clear selection. */
-  masterToggle() {
-    this.isAllSelected() ?
-      this.selection.clear() :
-      this.dataSource.data.forEach(row => this.selection.select(row));
-  }
-
-  /** The label for the checkbox on the passed rowData */
-  checkboxLabel(row?: T): string {
-    if (!row) {
-      return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
-    }
-    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.toString() + 1}`;
-  }
-
-  applyFilter(filterValue: string) {
-    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 }

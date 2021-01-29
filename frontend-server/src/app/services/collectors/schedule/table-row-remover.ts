@@ -14,7 +14,7 @@ export class TableRowRemover {
 
   constructor(private cellEnabledSetter: CellEnabledSetter,
               private tableRenderer: TableRenderer,
-              private divider: IntervalCreator,
+              private intervalCreator: IntervalCreator,
               private notificationsService: NotificationsService) {}
 
   removeRow(groupData: RowGroup,
@@ -54,7 +54,7 @@ export class TableRowRemover {
       for (let row of rows) {
 
         if (row.id === composition.employeeId && !row.isSubstitution) {
-          row.intervals = this.divider.getEmployeeShiftIntervalsByArr(row.compositions, substitutionShiftCompositions);
+          row.intervals = this.intervalCreator.getEmployeeShiftIntervalsByArr(row.compositions, substitutionShiftCompositions);
           this.cellEnabledSetter.processRow(row, table.from, table.to);
         }
 

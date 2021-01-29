@@ -16,3 +16,10 @@ export enum GenerationRuleType {
   WEEKEND = "weekend",
   // BEFORE_HOLIDAY = "before_holiday"
 }
+
+export const PATTERN_RULE_TYPES: string[] = [
+  GenerationRuleType.HOLIDAY,
+  GenerationRuleType.EXTRA_WEEKEND,
+  GenerationRuleType.EXTRA_WORK_DAY,
+  GenerationRuleType.WEEKEND
+];

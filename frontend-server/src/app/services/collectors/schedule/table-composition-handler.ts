@@ -23,7 +23,7 @@ export class TableCompositionHandler {
   constructor(private tableRenderer: TableRenderer,
               private rowRemover: TableRowRemover,
               private rowProcessor: TableRowProcessor,
-              private divider: IntervalCreator,
+              private intervalCreator: IntervalCreator,
               private cellEnabledSetter: CellEnabledSetter,
               private sumCalculator: TableSumCalculator,
               private mainShiftCompositionService: MainShiftCompositionService,
@@ -132,12 +132,12 @@ export class TableCompositionHandler {
 
       if (isSubstitution) {
         if (parentRow) {
-          parentRow.intervals = this.divider.getEmployeeShiftIntervalsByArr(parentRow.compositions, dto.substitutionShiftCompositions);
+          parentRow.intervals = this.intervalCreator.getEmployeeShiftIntervalsByArr(parentRow.compositions, dto.substitutionShiftCompositions);
           this.cellEnabledSetter.processRow(parentRow, group.table.from, group.table.to);
         }
         row.intervals = row.compositions.map(value => convertCompositionToInterval(value));
       } else {
-        row.intervals = this.divider.getEmployeeShiftIntervalsByArr(row.compositions, dto.substitutionShiftCompositions);
+        row.intervals = this.intervalCreator.getEmployeeShiftIntervalsByArr(row.compositions, dto.substitutionShiftCompositions);
       }
 
       this.cellEnabledSetter.processRow(row, group.table.from, group.table.to);
@@ -193,7 +193,7 @@ export class TableCompositionHandler {
         for (let otherGroupMainRow of rows) {
 
           if (otherGroupMainRow.id === mainShiftComposition.employeeId && !otherGroupMainRow.isSubstitution) {
-            otherGroupMainRow.intervals = this.divider.getEmployeeShiftIntervalsByArr(otherGroupMainRow.compositions, dto.substitutionShiftCompositions);
+            otherGroupMainRow.intervals = this.intervalCreator.getEmployeeShiftIntervalsByArr(otherGroupMainRow.compositions, dto.substitutionShiftCompositions);
             this.cellEnabledSetter.processRow(otherGroupMainRow, group.table.from, group.table.to);
           }
         }
@@ -217,12 +217,10 @@ export class TableCompositionHandler {
     to.compositions.push(composition);
     to.compositions.sort((a, b) => a.from.diff(b.from));
 
-    this.divider.recalculate(from, dto);
-    this.divider.recalculate(to, dto);
+    this.intervalCreator.recalculate(from, dto);
+    this.intervalCreator.recalculate(to, dto);
 
     this.cellEnabledSetter.process(from);
     this.cellEnabledSetter.process(to);
-
-
   }
 }

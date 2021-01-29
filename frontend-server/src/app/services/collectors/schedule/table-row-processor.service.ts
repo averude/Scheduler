@@ -4,7 +4,7 @@ import { EmployeeScheduleDTO } from "../../../model/dto/employee-schedule-dto";
 import { CalendarDay } from "../../../lib/ngx-schedule-table/model/calendar-day";
 import { Composition } from "../../../model/main-shift-composition";
 import { convertCompositionToInterval } from "../../../model/ui/schedule-table/row-interval";
-import { binarySearchLastRepeatableIndex } from "../../../shared/utils/collection-utils";
+import { binarySearch, binarySearchLastRepeatableIndex } from "../../../shared/utils/collection-utils";
 import { CellEnabledSetter } from "./cell-enabled-setter";
 import { IntervalCreator } from "../../creator/interval-creator.service";
 import { CellCollector } from "../cell-collector";
@@ -15,8 +15,29 @@ import { WorkDay } from "../../../model/workday";
 export class TableRowProcessor {
 
   constructor(private cellEnabledSetter: CellEnabledSetter,
-              private compositionDivider: IntervalCreator,
+              private intervalCreator: IntervalCreator,
               private cellCollector: CellCollector) {}
+
+  fillRows<T extends Composition>(dto: EmployeeScheduleDTO,
+                                  calendarDays: CalendarDay[],
+                                  compositions: T[],
+                                  isSubstitution: boolean,
+                                  positions: Position[],
+                                  rowGroupConsumer:  (composition: T) => RowGroup,
+                                  workingNormConsumer: (composition: T) => number) {
+    for (const composition of compositions) {
+      const position = binarySearch(positions, (mid => mid.id - composition.positionId));
+
+      const rowGroup = rowGroupConsumer(composition);
+      if (rowGroup) {
+        const workingNorm = workingNormConsumer(composition);
+
+        this.initRowInsert(rowGroup, dto, calendarDays,
+          composition, position, workingNorm, isSubstitution,
+          (row) => row?.position.id === composition.positionId);
+      }
+    }
+  }
 
   initRowInsert(group: RowGroup,
                 dto: EmployeeScheduleDTO,
@@ -101,7 +122,7 @@ export class TableRowProcessor {
       row.intervals = row.compositions.map(value => convertCompositionToInterval(value));
     } else {
       this.exchangeComposition(dto.mainShiftCompositions, composition);
-      row.intervals = this.compositionDivider.getEmployeeShiftIntervalsByArr(row.compositions, dto.substitutionShiftCompositions);
+      row.intervals = this.intervalCreator.getEmployeeShiftIntervalsByArr(row.compositions, dto.substitutionShiftCompositions);
     }
   }
 
@@ -130,8 +151,8 @@ export class TableRowProcessor {
                        workingNorm: number,
                        isSubstitution: boolean) {
     const row = {} as Row;
-    row.id = dto.parent.id;
     row.group = group;
+    row.id = dto.parent.id;
     row.employee = dto.parent;
     row.position = position;
     row.isSubstitution = isSubstitution;

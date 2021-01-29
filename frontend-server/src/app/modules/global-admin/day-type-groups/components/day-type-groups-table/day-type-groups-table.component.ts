@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { TableBaseComponent } from "../../../../../shared/abstract-components/table-base/table-base.component";
+import { TableBaseIdEntityComponent } from "../../../../../shared/abstract-components/table-base/table-base-id-entity-component.directive";
 import { DayTypeGroup } from "../../../../../model/day-type-group";
 import { MatDialog } from "@angular/material/dialog";
 import { NotificationsService } from "angular2-notifications";
@@ -12,7 +12,7 @@ import { DayTypeGroupsDialogComponent } from "../day-type-groups-dialog/day-type
   styleUrls: ['../../../../../shared/common/table.common.css',
     './day-type-groups-table.component.css']
 })
-export class DayTypeGroupsTableComponent extends TableBaseComponent<DayTypeGroup> {
+export class DayTypeGroupsTableComponent extends TableBaseIdEntityComponent<DayTypeGroup> {
 
   displayedColumns = ['select', 'name', 'color', 'control'];
 

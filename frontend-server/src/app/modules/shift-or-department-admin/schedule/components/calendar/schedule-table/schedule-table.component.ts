@@ -12,6 +12,7 @@ import { SchedulerUtility } from "../utils/scheduler-utility";
 import { UserAccessRights } from "../../../../../../model/user";
 import { TableStateService } from "../../../../../../lib/ngx-schedule-table/service/table-state.service";
 import { Row } from "../../../../../../model/ui/schedule-table/table-data";
+import { TableManager } from "../../../../../../services/collectors/schedule/table-manager";
 
 @Component({
   selector: 'app-schedule-table-component',
@@ -38,6 +39,7 @@ export class ScheduleTableComponent implements OnInit, OnDestroy {
               private sumCalculator: TableSumCalculator,
               public state: TableStateService,
               public dataSource: TableDataSource,
+              public tableManager: TableManager,
               public utility: SchedulerUtility) {}
 
   ngOnInit() {

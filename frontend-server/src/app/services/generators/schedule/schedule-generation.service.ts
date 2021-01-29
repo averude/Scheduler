@@ -107,7 +107,7 @@ export class ScheduleGenerationService {
     };
   };
 
-  generateFoo(departmentDayType: DepartmentDayType, cells: Cell[]) {
+  generateForCells(departmentDayType: DepartmentDayType, cells: Cell[]) {
     cells.forEach(cell => {
       const employeeId = cell.row.id;
       createOrUpdateCell(false, employeeId, departmentDayType, cell);
@@ -127,7 +127,7 @@ export class ScheduleGenerationService {
         this.rowRenderer.renderRow(cell.row.id);
         created[index].value.id = createdSchedule[index].id;
       });
-      this.notificationService.success("YEEESS!");
+      this.notificationService.success("Success");
     });
   }
 

@@ -37,8 +37,8 @@ export abstract class AbstractReportDataCollector implements ReportDataCollector
 
     const reportData = new ReportData();
     reportData.headerData = this.getHeaders(calendarDays, summationColumns);
-    const reportGroupData = this.collectGroup(shifts, schedule, calendarDays, dayTypes, positions, summations, useReportLabel);
-    reportData.tableData = this.convertToRows(reportGroupData);
+    reportData.tableData = this.collectGroup(shifts, schedule, calendarDays, dayTypes, positions, summations, useReportLabel);
+
     this.afterDataInsert(reportData);
 
     return reportData;
@@ -75,25 +75,20 @@ export abstract class AbstractReportDataCollector implements ReportDataCollector
         const reportRowData = new ReportRowData();
         const positionName = binarySearch(positions, (mid => mid.id - positionId))?.shortName;
         reportRowData.reportCellData = this
-          .collectRowCellData(dto, dates, dayTypes, positionName,
-            this.getSummationResults(summations, dto.parent.id, positionId), 0, useReportLabel, intervals);
+          .collectRowCellData(dto, dates, dayTypes, positionName, this.getSummationResults(summations, dto.parent.id, positionId), useReportLabel, intervals);
         rows.push(reportRowData);
       });
 
       if (shiftId > 0) {
         const reportGroupData = binarySearch(groups, (mid => mid.id - shiftId));
-        reportGroupData.rows = reportGroupData.rows.concat(rows);
+        if (reportGroupData && reportGroupData.rows) {
+          reportGroupData.rows = reportGroupData.rows.concat(rows);
+        }
       }
 
     }
 
     return groups;
-  }
-
-  private convertToRows(groups: ReportGroupData[]) {
-    const rows: ReportRowData[] = [];
-    groups.forEach(group => group.rows.forEach(row => rows.push(row)));
-    return rows;
   }
 
   private getSummationResults(employeeWorkStats: EmployeeWorkStatDTO[],
@@ -119,7 +114,6 @@ export abstract class AbstractReportDataCollector implements ReportDataCollector
                               dayTypes: DayType[],
                               positionName: string,
                               summations: SummationResult[],
-                              index: number,
                               useReportLabel?: boolean,
                               intervals?: RowInterval[]): ReportCellData[];
 

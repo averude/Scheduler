@@ -1,4 +1,4 @@
-import { TableBaseComponent } from "./table-base.component";
+import { TableBaseIdEntityComponent } from "./table-base-id-entity-component.directive";
 import { IdEntity } from "../../../model/interface/id-entity";
 import { MatDialog } from "@angular/material/dialog";
 import { NotificationsService } from "angular2-notifications";
@@ -10,7 +10,7 @@ import { IByAuthService } from "../../../services/http/interface/i-by-auth.servi
 import { Directive } from "@angular/core";
 
 @Directive()
-export abstract class PageableTableBaseComponent<T extends IdEntity> extends TableBaseComponent<T> {
+export abstract class PageableTableBaseComponent<T extends IdEntity> extends TableBaseIdEntityComponent<T> {
 
   private sub: Subscription;
 

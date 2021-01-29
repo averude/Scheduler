@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { MatDialog } from "@angular/material/dialog";
 import { NotificationsService } from "angular2-notifications";
 import { DayType } from "../../../../../../../model/day-type";
-import { TableBaseComponent } from "../../../../../../../shared/abstract-components/table-base/table-base.component";
+import { TableBaseIdEntityComponent } from "../../../../../../../shared/abstract-components/table-base/table-base-id-entity-component.directive";
 import { DepartmentDayType } from "../../../../../../../model/department-day-type";
 import { DepartmentDayTypeService } from "../../../../../../../services/http/department-day-type.service";
 import { DepartmentDayTypeDialogComponent } from "../department-day-type-dialog/department-day-type-dialog.component";
@@ -13,7 +13,7 @@ import { DayTypeService } from "../../../../../../../services/http/day-type.serv
   templateUrl: './department-day-types-table.component.html',
   styleUrls: ['../../../../../../../shared/common/table.common.css','./department-day-types-table.component.css']
 })
-export class DepartmentDayTypesTableComponent extends TableBaseComponent<DepartmentDayType> {
+export class DepartmentDayTypesTableComponent extends TableBaseIdEntityComponent<DepartmentDayType> {
 
   dayTypes: DayType[] = [];
 

@@ -6,14 +6,14 @@ import { MatDialog } from "@angular/material/dialog";
 import { DayTypeDialogComponent } from "../daytype-dialog/daytype-dialog.component";
 import { DayTypeGroupService } from "../../../../../services/http/day-type-group.service";
 import { DayTypeGroup } from "../../../../../model/day-type-group";
-import { TableBaseComponent } from "../../../../../shared/abstract-components/table-base/table-base.component";
+import { TableBaseIdEntityComponent } from "../../../../../shared/abstract-components/table-base/table-base-id-entity-component.directive";
 
 @Component({
   selector: 'app-mat-daytypes-table',
   templateUrl: './daytypes-table.component.html',
   styleUrls: ['../../../../../shared/common/table.common.css','./daytypes-table.component.css']
 })
-export class DayTypesTableComponent extends TableBaseComponent<DayType> {
+export class DayTypesTableComponent extends TableBaseIdEntityComponent<DayType> {
   dayTypeGroups: DayTypeGroup[] = [];
 
   displayedColumns = ['select', 'name', 'label', 'report_label','group', 'use_previous_value', 'control'];

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { TableBaseComponent } from "../../../../../../../shared/abstract-components/table-base/table-base.component";
+import { TableBaseIdEntityComponent } from "../../../../../../../shared/abstract-components/table-base/table-base-id-entity-component.directive";
 import { Shift } from "../../../../../../../model/shift";
 import { MatDialog } from "@angular/material/dialog";
 import { NotificationsService } from "angular2-notifications";
@@ -13,7 +13,7 @@ import { ShiftDialogComponent } from "../shift-dialog/shift-dialog.component";
   templateUrl: './shifts-table.component.html',
   styleUrls: ['../../../../../../../shared/common/table.common.css','./shifts-table.component.css']
 })
-export class ShiftsTableComponent extends TableBaseComponent<Shift> implements OnInit {
+export class ShiftsTableComponent extends TableBaseIdEntityComponent<Shift> implements OnInit {
   displayedColumns = ['select', 'name', 'pattern', 'control'];
 
   patterns: ShiftPattern[] = [];

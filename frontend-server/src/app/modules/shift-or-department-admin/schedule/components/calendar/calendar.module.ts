@@ -23,6 +23,7 @@ import { TableRowProcessor } from "../../../../../services/collectors/schedule/t
 import { TableCompositionHandler } from "../../../../../services/collectors/schedule/table-composition-handler";
 import { TableRowRemover } from "../../../../../services/collectors/schedule/table-row-remover";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import { TableManager } from "../../../../../services/collectors/schedule/table-manager";
 
 @NgModule({
   imports: [
@@ -52,6 +53,7 @@ import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
     TableRowRemover,
     CellEnabledSetter,
     TableDataSource,
+    TableManager,
     TableCompositionHandler,
     SchedulerUtility
   ]

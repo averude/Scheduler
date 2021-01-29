@@ -1,4 +1,4 @@
-import { TableBaseComponent } from "./table-base.component";
+import { TableBaseIdEntityComponent } from "./table-base-id-entity-component.directive";
 import { BasicDTO } from "../../../model/dto/basic-dto";
 import { IdEntity } from "../../../model/interface/id-entity";
 import { NotificationsService } from "angular2-notifications";
@@ -7,7 +7,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { Directive } from "@angular/core";
 
 @Directive()
-export abstract class DtoTableBaseComponent<P extends IdEntity, C> extends TableBaseComponent<BasicDTO<P, C>> {
+export abstract class DtoTableBaseComponent<P extends IdEntity, C> extends TableBaseIdEntityComponent<BasicDTO<P, C>> {
 
   constructor(matDialog: MatDialog,
               crudService: CUDService<BasicDTO<P, C>>,

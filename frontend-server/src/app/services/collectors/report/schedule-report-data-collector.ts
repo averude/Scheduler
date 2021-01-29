@@ -83,7 +83,6 @@ export class ScheduleReportDataCollector extends AbstractReportDataCollector {
                      dayTypes: DayType[],
                      positionName: string,
                      summations: SummationResult[],
-                     index: number,
                      useReportLabel?: boolean,
                      intervals?: RowInterval[]): ReportCellData[] {
     if (!calendarDays || calendarDays.length <= 0) {
@@ -92,7 +91,7 @@ export class ScheduleReportDataCollector extends AbstractReportDataCollector {
 
     const result: ReportCellData[] = [].concat([
       {
-        value: index + 1,
+        value: 0,
         style: ScheduleReportStyles.idCellStyle
       },
       {
@@ -127,8 +126,6 @@ export class ScheduleReportDataCollector extends AbstractReportDataCollector {
       table_cols_before_data: 3,
       table_report_label: 'ГРАФІК'
     } as ReportMarkup;
-
-    data.tableData.forEach((value, index) => value.reportCellData[0].value = index + 1);
   }
 
   private getHeaderStyle(day: CalendarDay) {

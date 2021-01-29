@@ -23,12 +23,12 @@ import { ShiftPatternDtoService } from "../../../../../../../../services/http/sh
 import { DepartmentDayTypeService } from "../../../../../../../../services/http/department-day-type.service";
 import { ShiftPattern } from "../../../../../../../../model/shift-pattern";
 import { DayTypeService } from "../../../../../../../../services/http/day-type.service";
-import { TableDataSource } from "../../../../../../../../services/collectors/schedule/table-data-source";
 import { Shift } from "../../../../../../../../model/shift";
 import { TableStateService } from "../../../../../../../../lib/ngx-schedule-table/service/table-state.service";
 import { RowGroup } from "../../../../../../../../model/ui/schedule-table/table-data";
 import { binarySearch } from "../../../../../../../../shared/utils/collection-utils";
 import { CalendarDay } from "../../../../../../../../lib/ngx-schedule-table/model/calendar-day";
+import { TableManager } from "../../../../../../../../services/collectors/schedule/table-manager";
 
 @Component({
   selector: 'app-schedule-table-context-menu',
@@ -48,7 +48,7 @@ export class ScheduleTableContextMenuComponent implements OnInit, OnDestroy {
   @Input() shifts: Shift[] = [];
   @Input() groups: RowGroup[] = [];
 
-  patternDtos:         BasicDTO<ShiftPattern, PatternUnit>[]   = [];
+  patternDTOs:         BasicDTO<ShiftPattern, PatternUnit>[]   = [];
   departmentDayTypes:  DepartmentDayType[] = [];
   serviceDayTypes:     DepartmentDayType[] = [];
 
@@ -58,7 +58,7 @@ export class ScheduleTableContextMenuComponent implements OnInit, OnDestroy {
 
   constructor(private dialog: MatDialog,
               private cd: ChangeDetectorRef,
-              private dataSource: TableDataSource,
+              private tableManager: TableManager,
               private shiftPatternDtoService: ShiftPatternDtoService,
               private dayTypeService: DayTypeService,
               private departmentDayTypeService: DepartmentDayTypeService,
@@ -71,11 +71,12 @@ export class ScheduleTableContextMenuComponent implements OnInit, OnDestroy {
   private headerCellClickSub: Subscription;
 
   ngOnInit() {
-    forkJoin([this.shiftPatternDtoService.getAll(),
+    forkJoin([
+      this.shiftPatternDtoService.getAll(),
       this.departmentDayTypeService.getAll(),
-      this.dayTypeService.getAll()]
-    ).subscribe(values => {
-      this.patternDtos = values[0];
+      this.dayTypeService.getAll()
+    ]).subscribe(values => {
+      this.patternDTOs = values[0];
       this.departmentDayTypes = values[1];
       this.noServiceDepartmentDayTypes = values[1]
         .filter(departmentDayType => !departmentDayType.dayType.usePreviousValue);
@@ -132,7 +133,7 @@ export class ScheduleTableContextMenuComponent implements OnInit, OnDestroy {
   }
 
   openAddSubstitutionDialog(selectionData: SelectionData) {
-    this.dataSource.addSubstitutionDialog(selectionData);
+    this.tableManager.addSubstitutionDialog(selectionData);
   }
 
   ngOnDestroy(): void {
@@ -144,9 +145,9 @@ export class ScheduleTableContextMenuComponent implements OnInit, OnDestroy {
     this.rowClearSelection.clearSelection();
   }
 
-  foo(shiftId: number,
-      departmentDayType: DepartmentDayType,
-      day: CalendarDay) {
+  generateForShift(shiftId: number,
+                   departmentDayType: DepartmentDayType,
+                   day: CalendarDay) {
     const rowGroup = binarySearch(this.groups, (mid => mid.id - shiftId));
     if (rowGroup) {
       const cells = [];
@@ -158,7 +159,7 @@ export class ScheduleTableContextMenuComponent implements OnInit, OnDestroy {
         }
       }
 
-      this.scheduleGenerationService.generateFoo(departmentDayType, cells);
+      this.scheduleGenerationService.generateForCells(departmentDayType, cells);
     }
   }
 
@@ -169,7 +170,7 @@ export class ScheduleTableContextMenuComponent implements OnInit, OnDestroy {
     this.dialog.open(CustomDaytypeDialogComponent, config)
       .afterClosed().subscribe(customDay => {
       if (customDay) {
-        this.foo(shiftId, customDay, day);
+        this.generateForShift(shiftId, customDay, day);
       }
     });
   }

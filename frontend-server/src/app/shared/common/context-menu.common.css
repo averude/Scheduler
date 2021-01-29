@@ -2,12 +2,19 @@
   background-color: #ffffff;
   padding: 5px 0;
   overflow-y: scroll;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
   width: 100%;
   max-height: 50vh;
   box-shadow: 0 5px 10px rgba(154,160,185,.35), 0 15px 40px rgba(166,173,201,.5);
   user-select: none;
   outline: none;
 }
+
+.dropdown-menu::-webkit-scrollbar {
+  display: none;
+}
+
 .ngx-contextmenu li {
   padding: 0 5px;
   display: block;

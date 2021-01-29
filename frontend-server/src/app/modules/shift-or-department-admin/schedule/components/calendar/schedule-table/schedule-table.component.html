@@ -4,7 +4,7 @@
                      [proxyViewIsShown]="proxyViewIsShown"
                      [cellLabelSetter]="cellLabelSetter"
                      [selectionEnabled]="accessRights.isAdmin"
-                     (onAddRowClick)="accessRights.isDepartmentLevel && isEditable && dataSource.newRow($event)">
+                     (onAddRowClick)="accessRights.isDepartmentLevel && isEditable && tableManager.newRow($event)">
 
   <ng-template paginatorDef>
     <app-month-year-paginator [paginationStrategy]="paginationStrategy"
@@ -33,7 +33,7 @@
     <td class="td-name"
         *cellDef="let rowData"
         [class.editable]="isRowEditable(rowData)"
-        (click)="isRowEditable(rowData) && dataSource.editRow(rowData)">
+        (click)="isRowEditable(rowData) && tableManager.editRow(rowData)">
       <div class="name"
            [class.highlighted]="rowData.isSubstitution">
         {{utility.getEmployeeName(rowData.employee)}}

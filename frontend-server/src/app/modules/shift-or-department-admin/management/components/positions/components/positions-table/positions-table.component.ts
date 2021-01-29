@@ -6,7 +6,7 @@ import { PositionService } from "../../../../../../../services/http/position.ser
 import { PositionDialogComponent } from "../position-dialog/position-dialog.component";
 import { StatisticsService } from "../../../../../../../services/http/statistics.service";
 import { CountDTO } from "../../../../../../../model/dto/count-dto";
-import { TableBaseComponent } from "../../../../../../../shared/abstract-components/table-base/table-base.component";
+import { TableBaseIdEntityComponent } from "../../../../../../../shared/abstract-components/table-base/table-base-id-entity-component.directive";
 
 @Component({
   selector: 'app-mat-positions-table',
@@ -16,7 +16,7 @@ import { TableBaseComponent } from "../../../../../../../shared/abstract-compone
     './positions-table.component.css'
   ]
 })
-export class PositionsTableComponent extends TableBaseComponent<Position> {
+export class PositionsTableComponent extends TableBaseIdEntityComponent<Position> {
   displayedColumns = ['select', 'name', 'shortName', 'quantity', 'control'];
 
   employeesCount: CountDTO[];
