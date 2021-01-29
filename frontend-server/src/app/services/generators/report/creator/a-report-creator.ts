@@ -13,9 +13,10 @@ export abstract class AReportCreator implements ReportCreator {
   }
 
   create(sheet: Worksheet,
-         reportData: ReportData) {
+         reportData: ReportData,
+         reportRowData: ReportRowData[]) {
     this.createHeader(sheet, reportData.headerData, reportData.reportMarkup);
-    this.createDataSection(sheet, reportData.tableData, reportData.reportMarkup);
+    this.createDataSection(sheet, reportRowData, reportData.reportMarkup);
   }
 
   createHeader(sheet: Worksheet,

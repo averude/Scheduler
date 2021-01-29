@@ -7,6 +7,11 @@
   background-color: #f8fafc;
 }
 
+.options-container {
+  display: flex;
+  flex-direction: column;
+}
+
 .first-step-container {
   display: flex;
   flex-direction: column;

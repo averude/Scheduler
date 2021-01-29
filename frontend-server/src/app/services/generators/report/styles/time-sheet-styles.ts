@@ -76,7 +76,8 @@ export class TimeSheetStyles {
 
   static idCellStyle: Partial<Style> = {
     font: scheduleDataFont,
-    border: leftRightMediumTopBottomDottedBorders
+    border: leftRightMediumTopBottomDottedBorders,
+    alignment: centerMiddleAlign
   };
 
   static lastIdCellStyle: Partial<Style> = {

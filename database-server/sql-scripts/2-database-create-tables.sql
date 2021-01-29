@@ -171,6 +171,26 @@ CREATE TABLE IF NOT EXISTS shifts (
   FOREIGN KEY (pattern_id)    REFERENCES shift_patterns(id) ON DELETE SET NULL
 );
 
+CREATE TABLE IF NOT EXISTS report_sheets (
+  id            SERIAL,
+  department_id INTEGER       NOT NULL,
+  name          VARCHAR(128)  NOT NULL,
+
+  UNIQUE (department_id, name),
+
+  PRIMARY KEY (id),
+  FOREIGN KEY (department_id) REFERENCES departments(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS report_sheets_shifts (
+  report_sheet_id   INTEGER   NOT NULL,
+  shift_id          INTEGER   NOT NULL,
+
+  PRIMARY KEY (report_sheet_id, shift_id),
+  FOREIGN KEY (report_sheet_id) REFERENCES report_sheets(id)  ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (shift_id)        REFERENCES shifts(id)         ON DELETE CASCADE ON UPDATE CASCADE
+);
+
 CREATE TABLE IF NOT EXISTS employees (
   id            SERIAL,
   department_id INTEGER       NOT NULL,
@@ -292,9 +312,6 @@ CREATE TABLE IF NOT EXISTS user_accounts (
 
   enterprise_id   INTEGER,
   department_id   INTEGER,
-
-  locked          BOOLEAN         NOT NULL    DEFAULT FALSE,
-  enabled         BOOLEAN         NOT NULL    DEFAULT TRUE,
 
   PRIMARY KEY (id),
   UNIQUE (username),

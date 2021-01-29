@@ -1,0 +1,70 @@
+import { Component } from '@angular/core';
+import { TableBaseIdEntityComponent } from "../../../../../../shared/abstract-components/table-base/table-base-id-entity-component.directive";
+import { ReportSheetDTO } from "../../../../../../model/dto/report-sheet-dto";
+import { MatDialog } from "@angular/material/dialog";
+import { ReportSheetDTOService } from "../../../../../../services/http/report-sheet-dto.service";
+import { NotificationsService } from "angular2-notifications";
+import { Shift } from "../../../../../../model/shift";
+import { ReportSheetDialogComponent } from "../report-sheet-dialog/report-sheet-dialog.component";
+import { ShiftService } from "../../../../../../services/http/shift.service";
+import { binarySearch } from "../../../../../../shared/utils/collection-utils";
+
+@Component({
+  selector: 'app-report-sheet-table',
+  templateUrl: './report-sheet-table.component.html',
+  styleUrls: ['../../../../../../shared/common/table.common.css','./report-sheet-table.component.css']
+})
+export class ReportSheetTableComponent extends TableBaseIdEntityComponent<ReportSheetDTO> {
+
+  displayedColumns = ['select', 'name', 'shifts', 'control'];
+
+  shifts: Shift[] = [];
+
+  constructor(matDialog: MatDialog,
+              crudService: ReportSheetDTOService,
+              notification: NotificationsService,
+              private shiftService: ShiftService) {
+    super(matDialog, crudService, notification);
+
+    this.shiftService.getAll().subscribe(shifts =>
+      this.shifts = shifts.sort((a,b) => a.id - b.id));
+  }
+
+  openDialog(dto: ReportSheetDTO) {
+    const data = {
+      dto: dto,
+      shifts: this.shifts
+    };
+
+    this.openAddOrEditDialog(dto, data, ReportSheetDialogComponent, (value => value.subDepartment.id));
+  }
+
+
+  removeEntity(entity: ReportSheetDTO): void {
+    this.crudService.delete(entity.reportSheet.id)
+      .subscribe(res => {
+        this.removeRow(entity);
+        this.notification.success(
+          'Deleted',
+          'Selected values was successfully deleted'
+        );
+      });
+  }
+
+  getShiftsName(shiftIds: number[]): string {
+    if (shiftIds && shiftIds.length > 0) {
+      return shiftIds.sort()
+        .map((shiftId, index) => {
+          const shift = this.getShift(shiftId);
+          if (shift) {
+            return `${shift.name}${index < shiftIds.length - 1 ? ', ' : ''}`
+          }
+        })
+        .reduce(((previousValue, currentValue) => previousValue.concat(currentValue)));
+    }
+  }
+
+  getShift(shiftId: number): Shift {
+    return binarySearch(this.shifts, mid => mid.id - shiftId);
+  }
+}

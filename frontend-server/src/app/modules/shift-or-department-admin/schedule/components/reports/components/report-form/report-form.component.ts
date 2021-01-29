@@ -23,6 +23,8 @@ export class ReportFormComponent implements OnInit {
   decorationDataForm: FormGroup;
   date: Moment;
 
+  splitIntoSheets: boolean = false;
+
   summationColumns: SummationColumn[] = [];
   selectedSummationColumns: SummationColumn[] = [];
 
@@ -131,7 +133,7 @@ export class ReportFormComponent implements OnInit {
   generateReport() {
     const reportName = `${this.reportType}-report-${this.date.format("MM-YYYY")}.xlsx`;
     this.reportService
-      .generateReport(this.reportType, this.date, this.decorationDataForm.value, this.selectedSummationColumns, this.useReportLabel)
+      .generateReport(this.reportType, this.date, this.decorationDataForm.value, this.selectedSummationColumns, this.useReportLabel, this.splitIntoSheets)
       .subscribe(buffer => fileSaver.saveAs(new Blob([buffer]), reportName));
   }
 }

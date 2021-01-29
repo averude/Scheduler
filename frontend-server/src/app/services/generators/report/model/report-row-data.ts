@@ -7,7 +7,7 @@ import { DecorationData } from "./decoration-data";
 export class ReportData {
   reportMarkup: ReportMarkup;
   headerData: ReportHeaderCell[];
-  tableData:  ReportRowData[];
+  tableData:  ReportGroupData[];
   decorationData: DecorationData;
 }
 

@@ -6,6 +6,7 @@ import { CellFiller } from "../core/cell-filler";
 import { AReportCreator } from "./a-report-creator";
 import { ReportMarkup } from "../model/report-markup";
 import { ReportHeaderCell } from "../model/report-cell-data";
+import { ReportRowData } from "../model/report-row-data";
 
 export class ScheduleReportCreator extends AReportCreator implements ReportCreator {
   REPORT_TYPE: string = SCHEDULE_REPORT;
@@ -21,6 +22,13 @@ export class ScheduleReportCreator extends AReportCreator implements ReportCreat
     let monthDateCaption = sheet.getCell(reportMarkup.table_row_start_num, reportMarkup.sheet_col_start_num + reportMarkup.table_cols_before_data);
     monthDateCaption.value = 'Числа місяця';
     monthDateCaption.style.font = arialCyrSize10;
+  }
+
+  createDataSection(sheet: Worksheet,
+                    data: ReportRowData[],
+                    reportMarkup: ReportMarkup): void {
+    data.forEach((row, index) => row.reportCellData[0].value = index + 1);
+    super.createDataSection(sheet, data, reportMarkup);
   }
 
   setHeaderRowsHeight(rows: Row[]) {

@@ -3,14 +3,19 @@
   <mat-step [stepControl]="decorationDataForm">
     <ng-template matStepLabel>Date and caption</ng-template>
 
-    <mat-checkbox [(ngModel)]="useReportLabel">Use Report Labels</mat-checkbox>
-
     <div class="first-step-container">
+
+      <div class="options-container">
+        <mat-checkbox [(ngModel)]="useReportLabel">Use Report Labels</mat-checkbox>
+        <mat-checkbox [(ngModel)]="splitIntoSheets">Split into sheets</mat-checkbox>
+      </div>
 
       <div class="type-and-date-container">
         <mat-form-field class="report-type">
           <mat-select [(ngModel)]="reportType"
-                      placeholder="Report type">
+                      #typeSelect="ngModel"
+                      placeholder="Report type"
+                      required>
             <mat-option *ngFor="let type of reportTypes"
                         [value]="type">
               {{type}}
@@ -43,7 +48,7 @@
 
     <div class="stepper-footer">
       <button mat-raised-button
-              matStepperNext>Next</button>
+              matStepperNext [disabled]="typeSelect.invalid">Next</button>
     </div>
   </mat-step>
 
