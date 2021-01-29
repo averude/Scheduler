@@ -1,55 +1,78 @@
 import { Component } from '@angular/core';
-import { TableBaseComponent } from "../../../../../shared/abstract-components/table-base/table-base.component";
-import { UserAccount } from "../../../../../model/accounts/user-account";
-import { UserAccountService } from "../../../../../services/http/user-account.service";
+import { TableBaseIdEntityComponent } from "../../../../../shared/abstract-components/table-base/table-base-id-entity-component.directive";
 import { MatDialog } from "@angular/material/dialog";
 import { NotificationsService } from "angular2-notifications";
-import { UserAccountsDialogComponent } from "../user-accounts-dialog/user-accounts-dialog.component";
 import { EnterpriseService } from "../../../../../services/http/enterprise.service";
 import { Enterprise } from "../../../../../model/enterprise";
+import { EnterpriseUserAccountService } from "../../../../../services/http/auth/enterprise-user-account.service";
+import { UserAccountDTO } from "../../../../../model/dto/new-user-account-dto";
+import { binarySearch } from "../../../../../shared/utils/collection-utils";
+import { AddEnterpriseUserAccountDialogComponent } from "../add-enterprise-user-account-dialog/add-enterprise-user-account-dialog.component";
+import { EditEnterpriseUserAccountDialogComponent } from "../edit-enterprise-user-account-dialog/edit-enterprise-user-account-dialog.component";
 
 @Component({
   selector: 'app-user-accounts-table',
   templateUrl: './user-accounts-table.component.html',
   styleUrls: ['../../../../../shared/common/table.common.css', './user-accounts-table.component.css']
 })
-export class UserAccountsTableComponent extends TableBaseComponent<UserAccount> {
+export class UserAccountsTableComponent extends TableBaseIdEntityComponent<UserAccountDTO> {
 
-  displayedColumns = ['select', 'username', 'name',
-    'enterprise', 'role', 'locked', 'enabled', 'control'];
+  displayedColumns = ['select', 'username', 'name', 'enterprise', 'role', 'control'];
 
   enterprises: Enterprise[] = [];
 
   constructor(dialog: MatDialog,
-              userAccountService: UserAccountService,
+              userAccountService: EnterpriseUserAccountService,
               notificationsService: NotificationsService,
               private enterpriseService: EnterpriseService) {
     super(dialog, userAccountService, notificationsService);
 
     this.enterpriseService.getAll()
-      .subscribe(enterprises => this.enterprises = enterprises);
+      .subscribe(enterprises => this.enterprises = enterprises.sort((a, b) => a.id - b.id));
   }
 
-  openDialog(userAccount: UserAccount) {
+  openDialog(t: UserAccountDTO) {
+  }
+
+  openAddDialog() {
     const data = {
-      userAccount:  userAccount,
-      enterprises:  this.enterprises
+      enterprises: this.enterprises
     };
 
-    this.openAddOrEditDialog(userAccount, data, UserAccountsDialogComponent);
+    this.openAddOrEditDialog(null, data, AddEnterpriseUserAccountDialogComponent);
   }
 
-  removeEntity(entity: UserAccount): void {
-    this.crudService.delete(entity.id).subscribe(res => {
-      this.removeRow(entity);
-      this.notification.success(
-        'Deleted',
-        'Selected values was successfully deleted'
-      );
-    });
+  openEditDialog(userAccountDTO: UserAccountDTO) {
+    const data = {
+      dto: userAccountDTO,
+      enterprises: this.enterprises
+    };
+
+    this.openAddOrEditDialog(userAccountDTO, data, EditEnterpriseUserAccountDialogComponent);
+  }
+
+  onUpdated(value: UserAccountDTO, oldValue: UserAccountDTO): (value: any) => void {
+    return res => {
+      this.updateRow(res, oldValue);
+      this.notification
+        .success(
+          'Updated',
+          `User account was successfully updated`);
+    }
+  }
+
+  onCreated(value: UserAccountDTO): (value: any) => void {
+    return res => {
+      value = res;
+      this.addRow(value);
+      this.notification
+        .success(
+          'Created',
+          `User account was successfully created`)
+    }
   }
 
   getEnterpriseById(id: number): Enterprise {
-    return this.enterprises.find(value => value.id === id);
+    return binarySearch(this.enterprises, mid => mid.id - id);
   }
 }

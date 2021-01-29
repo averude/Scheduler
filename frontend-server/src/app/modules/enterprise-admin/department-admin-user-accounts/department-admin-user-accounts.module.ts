@@ -1,6 +1,5 @@
 import { NgModule } from "@angular/core";
 import { UserAccountsTableComponent } from './components/user-accounts-table/user-accounts-table.component';
-import { UserAccountsDialogComponent } from './components/user-accounts-dialog/user-accounts-dialog.component';
 import { CommonModule } from "@angular/common";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { SharedModule } from "../../../shared/shared.module";
@@ -11,6 +10,9 @@ import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
 import { MatSortModule } from "@angular/material/sort";
 import { MatTableModule } from "@angular/material/table";
+import { DepartmentUserAccountService } from "../../../services/http/auth/department-user-account.service";
+import { AddDepartmentUserAccountDialogComponent } from './components/add-department-user-account-dialog/add-department-user-account-dialog.component';
+import { EditDepartmentUserAccountDialogComponent } from './components/edit-department-user-account-dialog/edit-department-user-account-dialog.component';
 
 @NgModule({
   imports: [
@@ -28,7 +30,11 @@ import { MatTableModule } from "@angular/material/table";
   ],
   declarations: [
     UserAccountsTableComponent,
-    UserAccountsDialogComponent
+    AddDepartmentUserAccountDialogComponent,
+    EditDepartmentUserAccountDialogComponent
+  ],
+  providers: [
+    DepartmentUserAccountService
   ]
 })
 export class DepartmentAdminUserAccountsModule {}

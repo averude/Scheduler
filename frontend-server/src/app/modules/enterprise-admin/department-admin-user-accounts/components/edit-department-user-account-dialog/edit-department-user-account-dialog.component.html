@@ -1,0 +1,49 @@
+<h2 matDialogTitle>{{operation}}</h2>
+<mat-dialog-content [formGroup]="dialogForm">
+
+  <mat-form-field>
+    <input matInput
+           placeholder="Username"
+           formControlName="username">
+    <mat-error *ngIf="isControlInvalid('username')">{{getErrorMessage()}}</mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput
+           placeholder="Name"
+           formControlName="name">
+    <mat-error *ngIf="isControlInvalid('name')">{{getErrorMessage()}}</mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-select placeholder="Role"
+                formControlName="role">
+      <mat-option [value]="roles[0]">
+        Administrator
+      </mat-option>
+      <mat-option [value]="roles[1]">
+        User
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="isControlInvalid('role')">{{getErrorMessage()}}</mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-select placeholder="Department"
+                [compareWith]="compareNums"
+                formControlName="departmentId">
+      <mat-option *ngFor="let department of departments"
+                  [value]="department.id">
+        {{department.name}}
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="isControlInvalid('departmentId')">{{getErrorMessage()}}</mat-error>
+  </mat-form-field>
+
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button class="scheduler-dialog-action-button" (click)="close()">Close</button>
+  <button class="scheduler-dialog-action-button" type="submit" (click)="submit()">Save</button>
+</mat-dialog-actions>
+

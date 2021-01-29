@@ -3,7 +3,7 @@
 
   <mat-form-field>
     <input matInput
-           placeholder="User name"
+           placeholder="Username"
            formControlName="username">
     <mat-error *ngIf="isControlInvalid('username')">{{getErrorMessage()}}</mat-error>
   </mat-form-field>
@@ -16,42 +16,29 @@
   </mat-form-field>
 
   <mat-form-field>
-    <input matInput
-           type="password"
-           placeholder="Password"
-           formControlName="password">
-    <mat-error *ngIf="isControlInvalid('password')">{{getErrorMessage()}}</mat-error>
-  </mat-form-field>
-
-  <mat-form-field>
     <mat-select placeholder="Role"
                 formControlName="role">
-      <mat-option [value]="'ADMIN'">
-        {{'ADMIN'}}
+      <mat-option [value]="roles[0]">
+        Administrator
       </mat-option>
-      <mat-option [value]="'USER'">
-        {{'USER'}}
+      <mat-option [value]="roles[1]">
+        User
       </mat-option>
     </mat-select>
     <mat-error *ngIf="isControlInvalid('role')">{{getErrorMessage()}}</mat-error>
   </mat-form-field>
 
   <mat-form-field>
-    <mat-select placeholder="Department"
+    <mat-select placeholder="Enterprise"
                 [compareWith]="compareNums"
-                formControlName="departmentId">
-      <mat-option *ngFor="let department of departments"
-                  [value]="department.id">
-        {{department.name}}
+                formControlName="enterpriseId">
+      <mat-option *ngFor="let enterprise of enterprises"
+                  [value]="enterprise.id">
+        {{enterprise.name}}
       </mat-option>
     </mat-select>
-    <mat-error *ngIf="isControlInvalid('departmentId')">{{getErrorMessage()}}</mat-error>
+    <mat-error *ngIf="isControlInvalid('enterpriseId')">{{getErrorMessage()}}</mat-error>
   </mat-form-field>
-
-  <mat-checkbox class="dialog-checkbox"
-                formControlName="locked">Locked</mat-checkbox>
-  <mat-checkbox class="dialog-checkbox"
-                formControlName="enabled">Enabled</mat-checkbox>
 
 </mat-dialog-content>
 

@@ -9,6 +9,10 @@ import java.util.Optional;
 
 public interface UserAccountRepository extends JpaRepository<UserAccount, Long> {
 
+    @EntityGraph(value = "graph.UserAccount.accountShifts")
+    List<UserAccount> findAllByAuthority(String authority);
+
+    @EntityGraph(value = "graph.UserAccount.accountShifts")
     List<UserAccount> findAllByEnterpriseIdAndAuthority(Long enterpriseId, String authority);
 
     @EntityGraph(value = "graph.UserAccount.accountShifts")

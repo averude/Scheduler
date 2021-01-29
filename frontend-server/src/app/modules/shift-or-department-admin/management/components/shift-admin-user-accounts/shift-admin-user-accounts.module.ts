@@ -1,6 +1,5 @@
 import { NgModule } from "@angular/core";
 import { UserAccountsTableComponent } from './components/user-accounts-table/user-accounts-table.component';
-import { UserAccountsDialogComponent } from './components/user-accounts-dialog/user-accounts-dialog.component';
 import { CommonModule } from "@angular/common";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatCheckboxModule } from "@angular/material/checkbox";
@@ -11,6 +10,9 @@ import { MatSelectModule } from "@angular/material/select";
 import { MatSortModule } from "@angular/material/sort";
 import { MatTableModule } from "@angular/material/table";
 import { SharedModule } from "../../../../../shared/shared.module";
+import { ShiftUserAccountService } from "../../../../../services/http/auth/shift-user-account.service";
+import { AddShiftUserAccountDialogComponent } from './components/add-shift-user-account-dialog/add-shift-user-account-dialog.component';
+import { EditShiftUserAccountDialogComponent } from './components/edit-shift-user-account-dialog/edit-shift-user-account-dialog.component';
 
 @NgModule({
   imports: [
@@ -28,7 +30,11 @@ import { SharedModule } from "../../../../../shared/shared.module";
   ],
   declarations: [
     UserAccountsTableComponent,
-    UserAccountsDialogComponent
+    AddShiftUserAccountDialogComponent,
+    EditShiftUserAccountDialogComponent
+  ],
+  providers: [
+    ShiftUserAccountService
   ]
 })
 export class ShiftAdminUserAccountsModule {}

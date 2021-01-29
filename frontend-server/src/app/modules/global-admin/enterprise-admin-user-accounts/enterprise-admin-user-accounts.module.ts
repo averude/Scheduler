@@ -11,6 +11,9 @@ import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
 import { MatSortModule } from "@angular/material/sort";
 import { MatTableModule } from "@angular/material/table";
+import { EnterpriseUserAccountService } from "../../../services/http/auth/enterprise-user-account.service";
+import { AddEnterpriseUserAccountDialogComponent } from './components/add-enterprise-user-account-dialog/add-enterprise-user-account-dialog.component';
+import { EditEnterpriseUserAccountDialogComponent } from './components/edit-enterprise-user-account-dialog/edit-enterprise-user-account-dialog.component';
 
 @NgModule({
   imports: [
@@ -28,7 +31,12 @@ import { MatTableModule } from "@angular/material/table";
   ],
   declarations: [
     UserAccountsTableComponent,
-    UserAccountsDialogComponent
+    UserAccountsDialogComponent,
+    AddEnterpriseUserAccountDialogComponent,
+    EditEnterpriseUserAccountDialogComponent
+  ],
+  providers: [
+    EnterpriseUserAccountService
   ]
 })
 export class EnterpriseAdminUserAccountsModule {}
