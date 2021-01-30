@@ -13,6 +13,7 @@ import { CellUpdater } from "../../collectors/cell-updater";
 import { Cell } from "../../../model/ui/schedule-table/table-data";
 import { createOrUpdateCell } from "./schedule-generation-utils";
 import { forkJoin } from "rxjs";
+import { tap } from "rxjs/operators";
 
 @Injectable()
 export class ScheduleGenerationService {
@@ -116,19 +117,27 @@ export class ScheduleGenerationService {
     const updated = cells.filter(cell => cell.value.id);
     const created = cells.filter(cell => !cell.value.id);
 
-    const obs = [
-      this.scheduleService.update(updated.map(value => value.value)),
-      this.scheduleService.create(created.map(value => value.value))
-    ];
+    const obs = [];
 
-    forkJoin(obs).subscribe(([updatedSchedule, createdSchedule]) => {
-      updated.forEach(cell => this.rowRenderer.renderRow(cell.row.id));
-      created.forEach((cell, index) => {
-        this.rowRenderer.renderRow(cell.row.id);
-        created[index].value.id = createdSchedule[index].id;
+    if (updated && updated.length > 0) {
+      obs.push(this.scheduleService.update(updated.map(value => value.value))
+        .pipe(tap(updatedSchedule => updated.forEach(cell =>
+          this.rowRenderer.renderRow(cell.row.id)))));
+    }
+
+    if (created && created.length > 0) {
+      obs.push(this.scheduleService.create(created.map(value => value.value))
+        .pipe(tap(createdSchedule => created.forEach((cell, index) => {
+          this.rowRenderer.renderRow(cell.row.id);
+          created[index].value.id = createdSchedule[index].id;
+        }))));
+    }
+
+    if (obs && obs.length > 0) {
+      forkJoin(obs).subscribe(([updatedSchedule, createdSchedule]) => {
+        this.notificationService.success("Success");
       });
-      this.notificationService.success("Success");
-    });
+    }
   }
 
   private get errorHandler(): (message) => void {
