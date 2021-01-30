@@ -5,6 +5,7 @@ import com.averude.uksatse.scheduler.core.model.dto.BasicDto;
 import com.averude.uksatse.scheduler.core.model.dto.EmployeeScheduleDTO;
 import com.averude.uksatse.scheduler.core.model.entity.Employee;
 import com.averude.uksatse.scheduler.core.model.entity.MainShiftComposition;
+import com.averude.uksatse.scheduler.core.model.entity.SubstitutionShiftComposition;
 import com.averude.uksatse.scheduler.core.model.entity.WorkDay;
 import com.averude.uksatse.scheduler.shared.repository.EmployeeRepository;
 import com.averude.uksatse.scheduler.shared.repository.MainShiftCompositionRepository;
@@ -79,8 +80,8 @@ public class ScheduleServiceImpl
         var mainCompositions = mainShiftCompositionRepository
                 .getAllByShiftIdsAndDateBetweenOrdered(shiftIds, from, to);
         var mainCompositionIds = mainCompositions.stream().map(MainShiftComposition::getId).collect(toList());
-        var subCompositions = substitutionShiftCompositionRepository
-                .getAllByShiftIdsAndMainShiftCompositionInAndDateBetweenOrdered(shiftIds, mainCompositionIds, from, to);
+
+        var subCompositions = getSubstitutionCompositions(shiftIds, mainCompositionIds, from, to);
 
         if (mainCompositions.isEmpty() && subCompositions.isEmpty()) {
             return Collections.emptyList();
@@ -99,5 +100,17 @@ public class ScheduleServiceImpl
         var schedule = scheduleRepository.findAllByEmployeeIdsAndDateBetween(departmentId, employeeIds, from, to);
 
         return scheduleDTOUtil.createEmployeeScheduleDTOList(employees, mainCompositions, subCompositions, schedule);
+    }
+
+    private List<SubstitutionShiftComposition> getSubstitutionCompositions(List<Long> shiftIds,
+                                                                           List<Long> mainCompositionIds,
+                                                                           LocalDate from,
+                                                                           LocalDate to) {
+        if (mainCompositionIds == null || mainCompositionIds.isEmpty()) {
+            return substitutionShiftCompositionRepository.findAllByShiftIdsAndDatesBetween(shiftIds, from, to);
+        } else {
+            return substitutionShiftCompositionRepository
+                    .getAllByShiftIdsAndMainShiftCompositionInAndDateBetweenOrdered(shiftIds, mainCompositionIds, from, to);
+        }
     }
 }
