@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -80,6 +81,10 @@ public class ScheduleServiceImpl
         var mainCompositionIds = mainCompositions.stream().map(MainShiftComposition::getId).collect(toList());
         var subCompositions = substitutionShiftCompositionRepository
                 .getAllByShiftIdsAndMainShiftCompositionInAndDateBetweenOrdered(shiftIds, mainCompositionIds, from, to);
+
+        if (mainCompositions.isEmpty() && subCompositions.isEmpty()) {
+            return Collections.emptyList();
+        }
 
         var employeeIds = Stream.concat(mainCompositions.stream(), subCompositions.stream())
                 .map(Composition::getEmployeeId)
