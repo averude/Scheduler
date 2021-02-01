@@ -1,17 +1,28 @@
 package com.averude.uksatse.scheduler.security.model.dto;
 
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import com.averude.uksatse.scheduler.core.interfaces.dto.PasswordChange;
+import com.averude.uksatse.scheduler.core.validation.CheckNewPassword;
+import com.averude.uksatse.scheduler.core.validation.CheckPasswordChange;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
-@Data
-@RequiredArgsConstructor
-public class PasswordChangeDTO {
+@Getter
+@Setter
+@CheckNewPassword
+@CheckPasswordChange
+public class PasswordChangeDTO extends PasswordResetDTO implements PasswordChange {
+
     @NotNull
-    private final String oldPassword;
-    @NotNull
-    private final String newPassword;
-    @NotNull
-    private final String confirmPassword;
+    @Size(min = 6, max = 64)
+    private String oldPassword;
+
+    public PasswordChangeDTO(String oldPassword,
+                             String newPassword,
+                             String confirmPassword) {
+        super(newPassword, confirmPassword);
+        this.oldPassword = oldPassword;
+    }
 }
