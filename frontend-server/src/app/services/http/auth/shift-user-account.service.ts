@@ -6,6 +6,7 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { RestConfig } from "../../../rest.config";
 import { Observable } from "rxjs";
+import { PasswordResetDTO } from "../../../model/dto/password-reset-dto";
 
 @Injectable()
 export class ShiftUserAccountService
@@ -28,6 +29,14 @@ export class ShiftUserAccountService
     return this.http.put<UserAccountDTO>(
       `${this.url}`,
       userAccountDTO
+    );
+  }
+
+  resetPassword(userAccountId: number,
+                passwordResetDTO: PasswordResetDTO): Observable<any> {
+    return this.http.put<string>(
+      `${this.url}/${userAccountId}/password`,
+      passwordResetDTO
     );
   }
 }

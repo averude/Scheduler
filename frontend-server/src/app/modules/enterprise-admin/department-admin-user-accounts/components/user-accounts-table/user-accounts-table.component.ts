@@ -9,6 +9,7 @@ import { UserAccountDTO } from "../../../../../model/dto/new-user-account-dto";
 import { binarySearch } from "../../../../../shared/utils/collection-utils";
 import { AddDepartmentUserAccountDialogComponent } from "../add-department-user-account-dialog/add-department-user-account-dialog.component";
 import { EditDepartmentUserAccountDialogComponent } from "../edit-department-user-account-dialog/edit-department-user-account-dialog.component";
+import { ResetUserAccountPasswordDialogComponent } from "../../../../shift-or-department-admin/reset-user-account-password-dialog/reset-user-account-password-dialog.component";
 
 @Component({
   selector: 'app-user-accounts-table',
@@ -17,7 +18,7 @@ import { EditDepartmentUserAccountDialogComponent } from "../edit-department-use
 })
 export class UserAccountsTableComponent extends TableBaseIdEntityComponent<UserAccountDTO> {
 
-  displayedColumns = ['select', 'username', 'name', 'department', 'role', 'control'];
+  displayedColumns = ['select', 'username', 'name', 'department', 'role', 'resetPass', 'control'];
 
   departments: Department[] = [];
 
@@ -49,6 +50,23 @@ export class UserAccountsTableComponent extends TableBaseIdEntityComponent<UserA
     };
 
     this.openAddOrEditDialog(userAccountDTO, data, EditDepartmentUserAccountDialogComponent);
+  }
+
+  openResetPassDialog(userAccountDTO: UserAccountDTO) {
+    const data = {
+      dto: userAccountDTO,
+    };
+
+    this.matDialog.open(ResetUserAccountPasswordDialogComponent, {data: data})
+      .afterClosed()
+      .subscribe(passwordResetDTO => {
+        if (passwordResetDTO) {
+          const crudService = <DepartmentUserAccountService> this.crudService;
+          crudService.resetPassword(userAccountDTO.id, passwordResetDTO)
+            .subscribe(res => this.notification
+              .success(`Password of ${userAccountDTO.username} successfully reset`));
+        }
+      })
   }
 
   onUpdated(value: UserAccountDTO, oldValue: UserAccountDTO): (value: any) => void {

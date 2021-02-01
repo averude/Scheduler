@@ -9,6 +9,7 @@ import { ShiftUserAccountService } from "../../../../../../../services/http/auth
 import { UserAccountDTO } from "../../../../../../../model/dto/new-user-account-dto";
 import { AddShiftUserAccountDialogComponent } from "../add-shift-user-account-dialog/add-shift-user-account-dialog.component";
 import { EditShiftUserAccountDialogComponent } from "../edit-shift-user-account-dialog/edit-shift-user-account-dialog.component";
+import { ResetUserAccountPasswordDialogComponent } from "../../../../../reset-user-account-password-dialog/reset-user-account-password-dialog.component";
 
 @Component({
   selector: 'app-user-accounts-table',
@@ -18,7 +19,7 @@ import { EditShiftUserAccountDialogComponent } from "../edit-shift-user-account-
 })
 export class UserAccountsTableComponent extends TableBaseIdEntityComponent<UserAccountDTO> {
 
-  displayedColumns = ['select', 'username', 'name', 'shifts', 'role', 'control'];
+  displayedColumns = ['select', 'username', 'name', 'shifts', 'role', 'resetPass', 'control'];
 
   shifts: Shift[] = [];
 
@@ -50,6 +51,23 @@ export class UserAccountsTableComponent extends TableBaseIdEntityComponent<UserA
     };
 
     this.openAddOrEditDialog(userAccountDTO, data, EditShiftUserAccountDialogComponent);
+  }
+
+  openResetPassDialog(userAccountDTO: UserAccountDTO) {
+    const data = {
+      dto: userAccountDTO,
+    };
+
+    this.matDialog.open(ResetUserAccountPasswordDialogComponent, {data: data})
+      .afterClosed()
+      .subscribe(passwordResetDTO => {
+        if (passwordResetDTO) {
+          const crudService = <ShiftUserAccountService> this.crudService;
+          crudService.resetPassword(userAccountDTO.id, passwordResetDTO)
+            .subscribe(res => this.notification
+              .success(`Password of ${userAccountDTO.username} successfully reset`));
+        }
+      })
   }
 
   onUpdated(value: UserAccountDTO, oldValue: UserAccountDTO): (value: any) => void {

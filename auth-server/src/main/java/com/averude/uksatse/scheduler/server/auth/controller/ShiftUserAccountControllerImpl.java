@@ -2,6 +2,7 @@ package com.averude.uksatse.scheduler.server.auth.controller;
 
 import com.averude.uksatse.scheduler.security.details.UserAccountDetails;
 import com.averude.uksatse.scheduler.security.model.dto.NewUserAccountDTO;
+import com.averude.uksatse.scheduler.security.model.dto.PasswordResetDTO;
 import com.averude.uksatse.scheduler.security.model.dto.UserAccountDTO;
 import com.averude.uksatse.scheduler.security.model.entity.UserAccount;
 import com.averude.uksatse.scheduler.server.auth.service.UserAccountDetailsService;
@@ -50,6 +51,15 @@ public class ShiftUserAccountControllerImpl implements ShiftUserAccountControlle
         var originator = getUserAccount(authentication);
         log.debug("User:{} - Deleting shift user account with id:{}.", originator, accountId);
         userAccountDetailsService.deleteShiftUser(accountId, originator);
+    }
+
+    @Override
+    public void resetPassword(@PathVariable Long accountId,
+                              @RequestBody PasswordResetDTO passwordResetDTO,
+                              Authentication authentication) {
+        var originator = getUserAccount(authentication);
+        log.info("User:{} - Password reset for shift user account with id: {}", originator, accountId);
+        userAccountDetailsService.resetShiftUserPassword(accountId, passwordResetDTO, originator);
     }
 
     private UserAccount getUserAccount(Authentication authentication) {

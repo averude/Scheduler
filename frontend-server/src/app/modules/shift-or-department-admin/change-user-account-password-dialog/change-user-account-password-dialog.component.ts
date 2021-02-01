@@ -58,7 +58,7 @@ export const samePasswordValidator: ValidatorFn = (control: AbstractControl): Va
   return isInvalid ? { samePassword: true } : null;
 };
 
-class CrossFieldErrorMatcher implements ErrorStateMatcher {
+export class CrossFieldErrorMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
     return control.dirty && form.invalid;
   }

@@ -2,6 +2,7 @@ package com.averude.uksatse.scheduler.server.auth.service;
 
 import com.averude.uksatse.scheduler.security.model.dto.NewUserAccountDTO;
 import com.averude.uksatse.scheduler.security.model.dto.PasswordChangeDTO;
+import com.averude.uksatse.scheduler.security.model.dto.PasswordResetDTO;
 import com.averude.uksatse.scheduler.security.model.dto.UserAccountDTO;
 import com.averude.uksatse.scheduler.security.model.entity.UserAccount;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -36,4 +37,10 @@ public interface UserAccountDetailsService extends UserDetailsService {
     UserAccountDTO updateShiftUser(UserAccountDTO userAccountDTO, UserAccount originator);
 
     void deleteShiftUser(Long accountId, UserAccount originator);
+
+    void resetEnterpriseUserPassword(Long accountId, PasswordResetDTO passwordResetDTO, UserAccount originator);
+
+    void resetDepartmentUserPassword(Long accountId, PasswordResetDTO passwordResetDTO, UserAccount originator);
+
+    void resetShiftUserPassword(Long accountId, PasswordResetDTO passwordResetDTO, UserAccount originator);
 }

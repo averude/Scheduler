@@ -13,6 +13,7 @@ import { MatTableModule } from "@angular/material/table";
 import { DepartmentUserAccountService } from "../../../services/http/auth/department-user-account.service";
 import { AddDepartmentUserAccountDialogComponent } from './components/add-department-user-account-dialog/add-department-user-account-dialog.component';
 import { EditDepartmentUserAccountDialogComponent } from './components/edit-department-user-account-dialog/edit-department-user-account-dialog.component';
+import { ResetUserAccountPasswordDialogModule } from "../../shift-or-department-admin/reset-user-account-password-dialog/reset-user-account-password-dialog.module";
 
 @NgModule({
   imports: [
@@ -26,7 +27,8 @@ import { EditDepartmentUserAccountDialogComponent } from './components/edit-depa
     MatDialogModule,
     MatSelectModule,
     MatCheckboxModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ResetUserAccountPasswordDialogModule
   ],
   declarations: [
     UserAccountsTableComponent,

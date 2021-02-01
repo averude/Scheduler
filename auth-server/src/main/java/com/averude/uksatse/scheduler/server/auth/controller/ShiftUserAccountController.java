@@ -2,6 +2,7 @@ package com.averude.uksatse.scheduler.server.auth.controller;
 
 import com.averude.uksatse.scheduler.security.annotations.IsDepartmentAdmin;
 import com.averude.uksatse.scheduler.security.model.dto.NewUserAccountDTO;
+import com.averude.uksatse.scheduler.security.model.dto.PasswordResetDTO;
 import com.averude.uksatse.scheduler.security.model.dto.UserAccountDTO;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +27,13 @@ public interface ShiftUserAccountController {
                           Authentication authentication);
 
     @IsDepartmentAdmin
-    @DeleteMapping(path = "/{accountId}")
+    @DeleteMapping("/{accountId}")
     void delete(@PathVariable Long accountId,
                 Authentication authentication);
+
+    @IsDepartmentAdmin
+    @PutMapping("/{accountId}/password")
+    void resetPassword(@PathVariable Long accountId,
+                       @RequestBody PasswordResetDTO passwordResetDTO,
+                       Authentication authentication);
 }

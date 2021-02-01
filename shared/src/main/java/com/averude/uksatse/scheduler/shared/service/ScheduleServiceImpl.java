@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -94,6 +95,7 @@ public class ScheduleServiceImpl
                 .collect(toList());
 
         var employees = employeeRepository.findAllById(employeeIds);
+        employees.sort(Comparator.comparing(Employee::getId));
 
         var departmentId = employees.get(0).getDepartmentId();
 

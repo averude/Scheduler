@@ -44,7 +44,8 @@ public interface SubstitutionShiftCompositionRepository extends JpaRepository<Su
             "from SubstitutionShiftComposition ssc " +
             "left join MainShiftComposition msc " +
             "on ssc.mainShiftComposition = msc " +
-            "where ?2 <= ssc.to and ?3 >= ssc.from and (ssc.shiftId in ?1 or msc.shiftId in ?1)")
+            "where ?2 <= ssc.to and ?3 >= ssc.from and (ssc.shiftId in ?1 or msc.shiftId in ?1) " +
+            "order by ssc.employeeId asc, ssc.shiftId asc, ssc.from")
     @EntityGraph(value = "graph.SubstitutionShiftComposition")
     List<SubstitutionShiftComposition> findAllByShiftIdsAndDatesBetween(List<Long> shiftIds,
                                                                         LocalDate from,

@@ -2,6 +2,7 @@ package com.averude.uksatse.scheduler.server.auth.controller;
 
 import com.averude.uksatse.scheduler.security.details.UserAccountDetails;
 import com.averude.uksatse.scheduler.security.model.dto.NewUserAccountDTO;
+import com.averude.uksatse.scheduler.security.model.dto.PasswordResetDTO;
 import com.averude.uksatse.scheduler.security.model.dto.UserAccountDTO;
 import com.averude.uksatse.scheduler.security.model.entity.UserAccount;
 import com.averude.uksatse.scheduler.server.auth.service.UserAccountDetailsService;
@@ -50,6 +51,15 @@ public class DepartmentUserAccountControllerImpl implements DepartmentUserAccoun
         var originator = getUserAccount(authentication);
         log.debug("User:{} - Deleting department user account with id:{}.", originator, accountId);
         userAccountDetailsService.deleteDepartmentUser(accountId, originator);
+    }
+
+    @Override
+    public void resetPassword(@PathVariable Long accountId,
+                              @RequestBody PasswordResetDTO passwordResetDTO,
+                              Authentication authentication) {
+        var originator = getUserAccount(authentication);
+        log.info("User:{} - Password reset for department user account with id: {}", originator, accountId);
+        userAccountDetailsService.resetDepartmentUserPassword(accountId, passwordResetDTO, originator);
     }
 
     private UserAccount getUserAccount(Authentication authentication) {

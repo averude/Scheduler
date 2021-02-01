@@ -9,6 +9,7 @@ import { UserAccountDTO } from "../../../../../model/dto/new-user-account-dto";
 import { binarySearch } from "../../../../../shared/utils/collection-utils";
 import { AddEnterpriseUserAccountDialogComponent } from "../add-enterprise-user-account-dialog/add-enterprise-user-account-dialog.component";
 import { EditEnterpriseUserAccountDialogComponent } from "../edit-enterprise-user-account-dialog/edit-enterprise-user-account-dialog.component";
+import { ResetUserAccountPasswordDialogComponent } from "../../../../shift-or-department-admin/reset-user-account-password-dialog/reset-user-account-password-dialog.component";
 
 @Component({
   selector: 'app-user-accounts-table',
@@ -17,7 +18,7 @@ import { EditEnterpriseUserAccountDialogComponent } from "../edit-enterprise-use
 })
 export class UserAccountsTableComponent extends TableBaseIdEntityComponent<UserAccountDTO> {
 
-  displayedColumns = ['select', 'username', 'name', 'enterprise', 'role', 'control'];
+  displayedColumns = ['select', 'username', 'name', 'enterprise', 'role', 'resetPass', 'control'];
 
   enterprises: Enterprise[] = [];
 
@@ -49,6 +50,23 @@ export class UserAccountsTableComponent extends TableBaseIdEntityComponent<UserA
     };
 
     this.openAddOrEditDialog(userAccountDTO, data, EditEnterpriseUserAccountDialogComponent);
+  }
+
+  openResetPassDialog(userAccountDTO: UserAccountDTO) {
+    const data = {
+      dto: userAccountDTO,
+    };
+
+    this.matDialog.open(ResetUserAccountPasswordDialogComponent, {data: data})
+      .afterClosed()
+      .subscribe(passwordResetDTO => {
+        if (passwordResetDTO) {
+          const crudService = <EnterpriseUserAccountService> this.crudService;
+          crudService.resetPassword(userAccountDTO.id, passwordResetDTO)
+            .subscribe(res => this.notification
+              .success(`Password of ${userAccountDTO.username} successfully reset`));
+        }
+      })
   }
 
   onUpdated(value: UserAccountDTO, oldValue: UserAccountDTO): (value: any) => void {

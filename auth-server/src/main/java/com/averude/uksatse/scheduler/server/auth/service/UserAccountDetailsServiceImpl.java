@@ -4,6 +4,7 @@ import com.averude.uksatse.scheduler.security.details.UserAccountDetails;
 import com.averude.uksatse.scheduler.security.exception.InvalidOldPasswordException;
 import com.averude.uksatse.scheduler.security.model.dto.NewUserAccountDTO;
 import com.averude.uksatse.scheduler.security.model.dto.PasswordChangeDTO;
+import com.averude.uksatse.scheduler.security.model.dto.PasswordResetDTO;
 import com.averude.uksatse.scheduler.security.model.dto.UserAccountDTO;
 import com.averude.uksatse.scheduler.security.model.entity.UserAccount;
 import com.averude.uksatse.scheduler.server.auth.converter.UserAccountDTOConverter;
@@ -163,7 +164,7 @@ public class UserAccountDetailsServiceImpl implements UserAccountDetailsService 
     @Transactional
     public void deleteEnterpriseUser(Long accountId, UserAccount originator) {
         var userAccount = userAccountRepository.findById(accountId).orElseThrow();
-        if (userAccount.getAuthority().equals(ENTERPRISE_ADMIN)) {
+        if (canModifyEnterpriseUser(userAccount, originator)) {
             userAccountRepository.delete(userAccount);
         }
     }
@@ -172,8 +173,7 @@ public class UserAccountDetailsServiceImpl implements UserAccountDetailsService 
     @Transactional
     public void deleteDepartmentUser(Long accountId, UserAccount originator) {
         var userAccount = userAccountRepository.findById(accountId).orElseThrow();
-        if (userAccount.getAuthority().equals(DEPARTMENT_ADMIN)
-                && originator.getEnterpriseId().equals(userAccount.getEnterpriseId())) {
+        if (canModifyDepartmentUser(originator, userAccount)) {
             userAccountRepository.delete(userAccount);
         }
     }
@@ -182,9 +182,55 @@ public class UserAccountDetailsServiceImpl implements UserAccountDetailsService 
     @Transactional
     public void deleteShiftUser(Long accountId, UserAccount originator) {
         var userAccount = userAccountRepository.findById(accountId).orElseThrow();
-        if (userAccount.getAuthority().equals(SHIFT_ADMIN)
-                && originator.getDepartmentId().equals(userAccount.getDepartmentId())) {
+        if (canModifyShiftUser(originator, userAccount)) {
             userAccountRepository.delete(userAccount);
         }
+    }
+
+    @Override
+    @Transactional
+    public void resetEnterpriseUserPassword(Long accountId,
+                                            PasswordResetDTO passwordResetDTO,
+                                            UserAccount originator) {
+        var userAccount = userAccountRepository.findById(accountId).orElseThrow();
+        if (canModifyEnterpriseUser(userAccount, originator)) {
+            userAccount.setPassword(encoder.encode(passwordResetDTO.getNewPassword()));
+        } else throw new RuntimeException();
+    }
+
+    @Override
+    @Transactional
+    public void resetDepartmentUserPassword(Long accountId,
+                                            PasswordResetDTO passwordResetDTO,
+                                            UserAccount originator) {
+        var userAccount = userAccountRepository.findById(accountId).orElseThrow();
+        if (canModifyDepartmentUser(userAccount, originator)) {
+            userAccount.setPassword(encoder.encode(passwordResetDTO.getNewPassword()));
+        } else throw new RuntimeException();
+    }
+
+    @Override
+    @Transactional
+    public void resetShiftUserPassword(Long accountId,
+                                       PasswordResetDTO passwordResetDTO,
+                                       UserAccount originator) {
+        var userAccount = userAccountRepository.findById(accountId).orElseThrow();
+        if (canModifyShiftUser(originator, userAccount)) {
+            userAccount.setPassword(encoder.encode(passwordResetDTO.getNewPassword()));
+        } else throw new RuntimeException();
+    }
+
+    private boolean canModifyEnterpriseUser(UserAccount userAccount, UserAccount originator) {
+        return userAccount.getAuthority().equals(ENTERPRISE_ADMIN);
+    }
+
+    private boolean canModifyDepartmentUser(UserAccount originator, UserAccount userAccount) {
+        return userAccount.getAuthority().equals(DEPARTMENT_ADMIN)
+                && originator.getEnterpriseId().equals(userAccount.getEnterpriseId());
+    }
+
+    private boolean canModifyShiftUser(UserAccount originator, UserAccount userAccount) {
+        return userAccount.getAuthority().equals(SHIFT_ADMIN)
+                && originator.getDepartmentId().equals(userAccount.getDepartmentId());
     }
 }

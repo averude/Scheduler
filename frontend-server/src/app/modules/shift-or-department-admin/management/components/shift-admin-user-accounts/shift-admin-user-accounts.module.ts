@@ -13,6 +13,7 @@ import { SharedModule } from "../../../../../shared/shared.module";
 import { ShiftUserAccountService } from "../../../../../services/http/auth/shift-user-account.service";
 import { AddShiftUserAccountDialogComponent } from './components/add-shift-user-account-dialog/add-shift-user-account-dialog.component';
 import { EditShiftUserAccountDialogComponent } from './components/edit-shift-user-account-dialog/edit-shift-user-account-dialog.component';
+import { ResetUserAccountPasswordDialogModule } from "../../../reset-user-account-password-dialog/reset-user-account-password-dialog.module";
 
 @NgModule({
   imports: [
@@ -26,7 +27,8 @@ import { EditShiftUserAccountDialogComponent } from './components/edit-shift-use
     MatDialogModule,
     MatSelectModule,
     MatCheckboxModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ResetUserAccountPasswordDialogModule
   ],
   declarations: [
     UserAccountsTableComponent,

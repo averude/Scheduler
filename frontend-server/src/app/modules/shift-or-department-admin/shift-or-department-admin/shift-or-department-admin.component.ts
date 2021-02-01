@@ -31,8 +31,8 @@ export class ShiftOrDepartmentAdminComponent implements OnInit {
     this.departmentService.getCurrent()
       .subscribe(department => this.department = department);
 
-    this.userAccountService.current()
-      .subscribe(userFullName => this.userFullName = userFullName);
+    this.userAccountService.me()
+      .subscribe(userAccountDTO => this.userFullName = userAccountDTO.name);
   }
 
   openChangePasswordDialog() {

@@ -40,8 +40,9 @@
 }
 
 .management-table-button-icon {
-  height: 25px;
-  width: 25px;
+  height: 26px;
+  width: 26px;
+  padding-top: 4px;
 }
 
 .border-bottom-color1 {
@@ -52,7 +53,25 @@
   width: 64px;
 }
 
+.change-pass-button-icon {
+  height: 30px;
+  width: 30px;
+  padding-top: 4px;
+  padding-right: 2px;
+}
+
+.mat-column-resetPass {
+  width: 5%;
+  min-width: 50px;
+  text-align: center;
+}
+
 .mat-column-control {
   width: 5%;
-  min-width: 40px;
+  min-width: 50px;
+  text-align: center;
+}
+
+.mat-column-role {
+  width: 5em;
 }

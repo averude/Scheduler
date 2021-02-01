@@ -8,12 +8,7 @@ import java.time.LocalDate;
 
 @SupportedValidationTarget(ValidationTarget.PARAMETERS)
 public class CheckServiceDateParameterValidator implements ConstraintValidator<CheckDateParameters, Object[]> {
-
-    @Override
-    public void initialize(CheckDateParameters constraintAnnotation) {
-
-    }
-
+    
     @Override
     public boolean isValid(Object[] value, ConstraintValidatorContext context) {
         if (value.length != 3) {
