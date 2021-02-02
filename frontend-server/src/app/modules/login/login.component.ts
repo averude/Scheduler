@@ -12,7 +12,7 @@ export class LoginComponent implements OnInit{
   loginForm: FormGroup;
 
   loading = false;
-  bad_credentials=false;
+  bad_credentials = false;
 
   constructor(private fb: FormBuilder,
               private authService: AuthService,

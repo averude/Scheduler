@@ -10,7 +10,7 @@ export class WorkingNormCellLabelSetter implements CellLabelSetter {
     let workingNorm: WorkingNorm = cell.value;
     if (workingNorm) {
       cell.label = workingNorm.hours + ' / ' + workingNorm.days ;
-      cell.labelColor = 'mistyrose';
+      cell.labelColor = '#cac6c5';
     }
   }
 }
