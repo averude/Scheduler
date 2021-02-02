@@ -109,17 +109,10 @@ CREATE TABLE IF NOT EXISTS shift_patterns (
   department_id               INTEGER       NOT NULL,
   name                        VARCHAR (128) NOT NULL,
 
-  holiday_dep_day_type_id         INTEGER       DEFAULT NULL,
-  extra_weekend_dep_day_type_id   INTEGER       DEFAULT NULL,
-  extra_work_day_dep_day_type_id  INTEGER       DEFAULT NULL,
-
   UNIQUE (department_id, name),
 
   PRIMARY KEY (id),
-  FOREIGN KEY (department_id)             REFERENCES departments(id)  ON DELETE CASCADE,
-  FOREIGN KEY (holiday_dep_day_type_id)         REFERENCES department_day_types(id)    ON DELETE SET NULL,
-  FOREIGN KEY (extra_weekend_dep_day_type_id)   REFERENCES department_day_types(id)    ON DELETE SET NULL,
-  FOREIGN KEY (extra_work_day_dep_day_type_id)  REFERENCES department_day_types(id)    ON DELETE SET NULL
+  FOREIGN KEY (department_id)             REFERENCES departments(id)  ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS pattern_units (
