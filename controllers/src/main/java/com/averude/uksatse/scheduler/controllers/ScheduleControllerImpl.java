@@ -82,4 +82,24 @@ public class ScheduleControllerImpl implements ScheduleController {
         log.debug(body);
         return ResponseEntity.ok(body);
     }
+
+    @Override
+    public List<? extends BasicDto<Employee, WorkDay>> getAllByDepartmentId(Authentication authentication,
+                                                                            Long departmentId,
+                                                                            LocalDate from,
+                                                                            LocalDate to) {
+        var userAccount = (UserAccount) authentication.getPrincipal();
+        log.debug("User:{} - Getting work schedule for department id:{} from:{} to:{}", userAccount, departmentId, from, to);
+        return scheduleService.findAllDtoByDepartmentIdAndDate(departmentId, from, to);
+    }
+
+    @Override
+    public List<? extends BasicDto<Employee, WorkDay>> getAllByShiftIds(Authentication authentication,
+                                                                        List<Long> shiftIds,
+                                                                        LocalDate from,
+                                                                        LocalDate to) {
+        var userAccount = (UserAccount) authentication.getPrincipal();
+        log.debug("User:{} - Getting work schedule for shift id:{} from:{} to:{}", userAccount, shiftIds, from, to);
+        return scheduleService.findScheduleDTOByShiftIdsAndDate(shiftIds, from, to);
+    }
 }

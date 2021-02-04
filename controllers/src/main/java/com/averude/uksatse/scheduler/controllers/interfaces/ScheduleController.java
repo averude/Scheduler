@@ -8,11 +8,9 @@ import com.averude.uksatse.scheduler.security.annotations.IsDepartmentOrShiftAdm
 import com.averude.uksatse.scheduler.security.annotations.IsDepartmentOrShiftUser;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
@@ -46,4 +44,26 @@ public interface ScheduleController {
     @RequestMapping(method = RequestMethod.POST,
                     value = "/generate")
     ResponseEntity<?> generate(@Valid @RequestBody GenerationDTO generationDTO);
+
+    @PreAuthorize("userPermissionChecker.checkDepartmentUser(authentication, departmentId)")
+    @GetMapping("/department/{departmentId}/dates")
+    List<? extends BasicDto<Employee, WorkDay>> getAllByDepartmentId(Authentication authentication,
+                                                                     @PathVariable Long departmentId,
+                                                                     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                                                     @RequestParam(value = "from")
+                                                                              LocalDate from,
+                                                                     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                                                     @RequestParam(value = "to")
+                                                                              LocalDate to);
+
+    @PreAuthorize("userPermissionChecker.checkShiftUser(authentication, shiftIds)")
+    @GetMapping("/shift/{shiftIds}/dates")
+    List<? extends BasicDto<Employee, WorkDay>> getAllByShiftIds(Authentication authentication,
+                                                                 @PathVariable List<Long> shiftIds,
+                                                                 @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                                                 @RequestParam(value = "from")
+                                                                         LocalDate from,
+                                                                 @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                                                 @RequestParam(value = "to")
+                                                                         LocalDate to);
 }
