@@ -56,8 +56,8 @@ export class LoginComponent implements OnInit{
       this.form.username.value.trim(),
       this.form.password.value.trim()
     ).subscribe(res => {
-        this.loading = false;
-        this.navigate(res);
+        this.navigate(res)
+          .catch(() => this.loading = false);
       }, err => {
         this.loading = false;
         this.bad_credentials = true;
@@ -66,18 +66,18 @@ export class LoginComponent implements OnInit{
       });
   }
 
-  private navigate(user: any) {
+  private navigate(user: any): Promise<boolean> {
     if (user.roles.indexOf('GLOBAL_ADMIN') >= 0) {
-      this.router.navigate(['/global_admin']);
+      return this.router.navigate(['/global_admin']);
     }
     if (user.roles.indexOf('ENTERPRISE_ADMIN') >= 0) {
-      this.router.navigate(['/enterprise_admin']);
+      return this.router.navigate(['/enterprise_admin']);
     }
     if (user.roles.indexOf('DEPARTMENT_ADMIN') >= 0) {
-      this.router.navigate(['/shift_or_department_admin/schedule/calendar']);
+      return this.router.navigate(['/shift_or_department_admin/schedule/calendar']);
     }
     if (user.roles.indexOf('SHIFT_ADMIN') >= 0 ) {
-      this.router.navigate(['/shift_or_department_admin/schedule/calendar']);
+      return this.router.navigate(['/shift_or_department_admin/schedule/calendar']);
     }
   }
 }
