@@ -1,16 +1,17 @@
 .cell-color-label {
-  height: 6px;
+  margin: 2px;
+  height: 4px;
 }
 
 .cell-value {
-  padding-top: 5px;
+  padding-top: 1px;
   vertical-align: middle;
 }
 
 .cell-value p {
   color: #2b3944;
   font-family: 'MuseoSansMedium';
-  font-size: 12px;
+  font-size: 13px;
 }
 
 .cell-disabled p {

@@ -33,7 +33,7 @@
   color: #000;
   position: sticky;
   top: 0;
-  background-color: #d9ebfd;
+  background-color: #F5F7F9;
 }
 
 .th-null {
@@ -43,28 +43,26 @@
 
 .th-sum {
   width: 42px;
-  background-color: #ffffff;
   border: 1px solid #e5e9f0;
 }
 
 .sum {
-  padding-top: 8px;
+  padding-top: 4px;
   border: 1px solid #e5e9f0;
 }
 
 .sum p {
   font-family: 'MuseoSansMedium';
-  font-size: 12px;
+  font-size: 13px;
 }
 
 .notEqual {
-  background-color: cornsilk;
+  color: #d60000;
 }
 
 .month-header {
   width: 2.5%;
   height: 39px;
-  background-color: #d9ebfd;
   border:  1px solid #e5e9f0;
   cursor: pointer;
 }
@@ -96,8 +94,4 @@
 .disabled {
   background-color: whitesmoke;
   cursor: not-allowed;
-}
-
-.selected {
-  background-color: #fffeb8;
 }

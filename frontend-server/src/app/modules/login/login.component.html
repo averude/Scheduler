@@ -32,15 +32,12 @@
     </div>
 
     <div class="button-container">
-      <button *ngIf="!loading"
+      <button [disabled]="loading || loginForm.invalid"
               mat-button
               color="primary"
               class="login-panel-button"
-              [disabled]="loginForm.invalid"
               type="submit"
               (click)="submit()">Login</button>
-      <div *ngIf="loading"
-           class="login-panel-button-preloader-image"></div>
     </div>
   </div>
 </div>

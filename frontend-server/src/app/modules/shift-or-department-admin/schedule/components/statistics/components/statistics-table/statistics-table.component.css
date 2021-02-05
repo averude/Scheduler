@@ -79,7 +79,7 @@
   color: #000;
   position: sticky;
   top: 0;
-  background-color: #d9ebfd;
+  background-color: #F5F7F9;
   border-color: white;
 }
 
@@ -100,7 +100,7 @@
 }
 
 .norm-column {
-  background-color: #e8f2fb;
+  background-color: #F5F7F9;
 }
 
 .th-sum {
@@ -155,7 +155,7 @@
 
 .group-label-row {
   height: 32px;
-  background-color: #f8fafc;
+  background-color: #E2F2E9;
   border:  1px solid #e5e9f0;
 }
 
@@ -165,7 +165,7 @@
   text-align: left;
   font-size: 13px;
   padding-left: 40px;
-  color: #637286;
+  color: #6d6d6d;
   flex-direction: row;
   align-items: baseline;
   width: 100%;

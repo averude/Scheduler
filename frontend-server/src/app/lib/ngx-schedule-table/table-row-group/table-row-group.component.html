@@ -2,14 +2,14 @@
   <tr class="group-label-row">
     <td [attr.colspan]="colspan">
       <div class="group-label-container">
-        <div class="group-label"
+        <div class="group-label group-control-element"
              (click)="isHidden = !isHidden">
           {{(isHidden ? "▸" : "▾") + ' ' + groupData.name}}
         </div>
         <div class="group-control">
-          <div class="group-add-row-button"
+          <div class="group-control-element"
                *ngIf="editableRowGroup"
-               (click)="addRowToGroup()">ADD</div>
+               (click)="addRowToGroup()">Add</div>
         </div>
       </div>
     </td>

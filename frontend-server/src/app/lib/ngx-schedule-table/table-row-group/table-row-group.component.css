@@ -1,6 +1,6 @@
 .group-label-row {
   height: 32px;
-  background-color: #f8fafc;
+  background-color: #E2F2E9;
   border:  1px solid #e5e9f0;
 }
 
@@ -11,29 +11,29 @@
 }
 
 .group-label {
+  padding-left: 26px;
+}
+
+.group-control {
+  display: flex;
+  width: 60px;
+  height: 100%;
+}
+
+.group-control-element {
   font-family: 'MuseoSansMedium';
   letter-spacing: .02em;
   text-align: left;
-  font-size: 13px;
-  padding-left: 26px;
-  color: #637286;
+  font-size: 14px;
+  color: #6d6d6d;
   flex-direction: row;
   align-items: baseline;
   width: 100%;
   cursor: pointer;
 }
 
-.group-control {
-  width: 60px;
-}
-
-.group-add-row-button {
-  color: black;
-  cursor: pointer;
-}
-
-.group-add-row-button:hover {
-  color: limegreen;
+.group-control-element:hover {
+  color: darkblue;
 }
 
 .row {
