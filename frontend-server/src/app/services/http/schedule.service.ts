@@ -21,12 +21,30 @@ export class ScheduleService {
     return this.http.get<EmployeeScheduleDTO[]>(
       `${this.config.baseUrl}/schedule/dates?from=${from}&to=${to}`
     ).pipe(tap(dtos => dtos.forEach(dto => {
-      const callbackfn = composition => {
-        composition.from = moment.utc(composition.from);
-        composition.to = moment.utc(composition.to);
-      };
-      dto.mainShiftCompositions.forEach(callbackfn);
-      dto.substitutionShiftCompositions.forEach(callbackfn);
+      dto.mainShiftCompositions.forEach(callbackFn);
+      dto.substitutionShiftCompositions.forEach(callbackFn);
+    })));
+  }
+
+  getAllByDepartmentId(departmentId: number,
+                       from: string,
+                       to: string): Observable<EmployeeScheduleDTO[]> {
+    return this.http.get<EmployeeScheduleDTO[]>(
+      `${this.config.baseUrl}/schedule/department/${departmentId}/dates?from=${from}&to=${to}`
+    ).pipe(tap(dtos => dtos.forEach(dto => {
+      dto.mainShiftCompositions.forEach(callbackFn);
+      dto.substitutionShiftCompositions.forEach(callbackFn);
+    })));
+  }
+
+  getAllByShiftIds(shiftIds: number[],
+                   from: string,
+                   to: string): Observable<EmployeeScheduleDTO[]> {
+    return this.http.get<EmployeeScheduleDTO[]>(
+      `${this.config.baseUrl}/schedule/department/${shiftIds}/dates?from=${from}&to=${to}`
+    ).pipe(tap(dtos => dtos.forEach(dto => {
+      dto.mainShiftCompositions.forEach(callbackFn);
+      dto.substitutionShiftCompositions.forEach(callbackFn);
     })));
   }
 
@@ -53,3 +71,8 @@ export class ScheduleService {
     );
   }
 }
+
+const callbackFn = composition => {
+  composition.from = moment.utc(composition.from);
+  composition.to = moment.utc(composition.to);
+};

@@ -23,6 +23,7 @@ import { PositionService } from "../../http/position.service";
 import { IntervalCreator } from "../../creator/interval-creator.service";
 import { convertCompositionToInterval } from "../../../model/ui/schedule-table/row-interval";
 import { binarySearch } from "../../../shared/utils/collection-utils";
+import { UserAccountAuthority, UserAccountDTO } from "../../../model/dto/new-user-account-dto";
 
 @Injectable()
 export class TableDataSource {
@@ -53,47 +54,99 @@ export class TableDataSource {
       this.employeeService.getAll().subscribe(employees => this.employees = employees);
     }
 
-    this.shiftService.getAll().subscribe(shifts => this.shifts = shifts);
+    const userAccount = this.authService.currentUserAccount;
 
+    this.shiftService.getAll().subscribe(shifts => this.shifts = shifts);
     this.positionService.getAll().subscribe(positions => this.positions = positions);
 
     return this.paginationService.onValueChange
       .pipe(
         mergeMap(daysInMonth => {
           this.calendarDays = daysInMonth;
-          return forkJoin([
-            this.scheduleService.getAllByDate(
-              daysInMonth[0].isoString,
-              daysInMonth[daysInMonth.length - 1].isoString),
-            this.workingNormService.getAll(
-              daysInMonth[0].isoString,
-              daysInMonth[daysInMonth.length - 1].isoString)
-          ]).pipe(map(values => {
-            this.scheduleDto = values[0];
-            this.workingNorms = values[1].sort((a, b) => a.shiftId - b.shiftId);
-
-            const data = this.tableDataCollector.collect(this.shifts, daysInMonth, this.scheduleDto, this.positions, this.workingNorms);
-
-            data.groups.forEach(group =>
-              group.rows.forEach((row: Row) => {
-
-                if (row.isSubstitution) {
-                  row.intervals = row.compositions.map(composition => convertCompositionToInterval(composition));
-                } else {
-                  const dto = binarySearch(this.scheduleDto, (mid => mid.parent.id - row.id));
-                  row.intervals = this.intervalCreator.getEmployeeShiftIntervalsByArr(row.compositions, dto.substitutionShiftCompositions);
-                }
-
-                this.cellEnabledSetter.processRow(row, data.from, data.to);
-
-              }));
-
-            const rowGroupData = data.groups;
-
-            this.sumCalculator.calculateWorkHoursSum(rowGroupData);
-            return rowGroupData;
-          }))
+          const sources = this.getSourcesByUserAccount(daysInMonth, userAccount);
+          return forkJoin(sources).pipe(map(this.handleData()))
         }),
       );
+  }
+
+  private handleData() {
+    return values => {
+      this.scheduleDto = values[0];
+      this.workingNorms = values[1].sort((a, b) => a.shiftId - b.shiftId);
+
+      const data = this.tableDataCollector.collect(this.shifts, this.calendarDays, this.scheduleDto, this.positions, this.workingNorms);
+
+      data.groups.forEach(group =>
+        group.rows.forEach((row: Row) => {
+
+          if (row.isSubstitution) {
+            row.intervals = row.compositions.map(composition => convertCompositionToInterval(composition));
+          } else {
+            const dto = binarySearch(this.scheduleDto, (mid => mid.parent.id - row.id));
+            row.intervals = this.intervalCreator.getEmployeeShiftIntervalsByArr(row.compositions, dto.substitutionShiftCompositions);
+          }
+
+          this.cellEnabledSetter.processRow(row, data.from, data.to);
+
+        }));
+
+      const rowGroupData = data.groups;
+
+      this.sumCalculator.calculateWorkHoursSum(rowGroupData);
+      return rowGroupData;
+    }
+  }
+
+  getSourcesByUserAccount(daysInMonth: CalendarDay[],
+                          userAccount: UserAccountDTO) {
+    let sources;
+
+    switch (userAccount.authority) {
+      case UserAccountAuthority.DEPARTMENT_ADMIN : {
+        sources = this.getDepartmentUserSources(daysInMonth, userAccount);
+        break;
+      }
+
+      case UserAccountAuthority.SHIFT_ADMIN : {
+        sources = this.getShiftUserSources(daysInMonth, userAccount);
+        break;
+      }
+
+      default : {
+        throw new Error('User doesn\'t have required authority');
+      }
+    }
+  }
+
+  getDepartmentUserSources(daysInMonth: CalendarDay[],
+                           userAccount: UserAccountDTO) {
+    return [
+
+      this.scheduleService.getAllByDepartmentId(
+        userAccount.departmentId,
+        daysInMonth[0].isoString,
+        daysInMonth[daysInMonth.length - 1].isoString),
+
+      this.workingNormService.getAll(
+        daysInMonth[0].isoString,
+        daysInMonth[daysInMonth.length - 1].isoString)
+
+    ];
+  }
+
+  getShiftUserSources(daysInMonth: CalendarDay[],
+                      userAccount: UserAccountDTO) {
+    return [
+
+      this.scheduleService.getAllByShiftIds(
+        userAccount.shiftIds,
+        daysInMonth[0].isoString,
+        daysInMonth[daysInMonth.length - 1].isoString),
+
+      this.workingNormService.getAll(
+        daysInMonth[0].isoString,
+        daysInMonth[daysInMonth.length - 1].isoString)
+
+    ];
   }
 }

@@ -7,6 +7,8 @@ import { User, UserAccessRights } from "../../model/user";
 import decode from "jwt-decode";
 import { RestConfig } from "../../rest.config";
 import { CacheMapService } from "../cache/cache-map.service";
+import { UserAccountService } from "./user-account.service";
+import { UserAccountDTO } from "../../model/dto/new-user-account-dto";
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +17,7 @@ export class AuthService {
   constructor(private cache: CacheMapService,
               private router: Router,
               private config: RestConfig,
+              private userService: UserAccountService,
               private http: HttpClient) {}
 
   public login(username: string, password: string): Observable<any> {
@@ -32,6 +35,8 @@ export class AuthService {
             user.access_token = token.access_token;
             this.fillAccessRights(user);
             sessionStorage.setItem('currentUser', JSON.stringify(user));
+            this.userService.me()
+              .subscribe(userAccount => sessionStorage.setItem("userAccount", JSON.stringify(userAccount)));
             return user;
           }
           return token;
@@ -42,6 +47,11 @@ export class AuthService {
   public get currentUserValue(): User {
     let user = sessionStorage.getItem('currentUser');
     return JSON.parse(user);
+  }
+
+  public get currentUserAccount(): UserAccountDTO {
+    let account = sessionStorage.getItem('userAccount');
+    return JSON.parse(account);
   }
 
   public isLogon(): boolean {
