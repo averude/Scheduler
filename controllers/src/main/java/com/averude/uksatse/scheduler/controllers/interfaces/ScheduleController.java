@@ -20,12 +20,12 @@ import java.util.List;
 @RequestMapping("/schedule")
 public interface ScheduleController {
 
-    @IsDepartmentOrShiftAdmin
+    @PreAuthorize("@scheduleControllerSecurity.hasPermission(authentication, #schedule)")
     @PostMapping
     ResponseEntity<Iterable<WorkDay>> create(@RequestBody Collection<WorkDay> schedule,
                                              Authentication authentication);
 
-    @IsDepartmentOrShiftAdmin
+    @PreAuthorize("@scheduleControllerSecurity.hasPermission(authentication, #schedule)")
     @PutMapping
     ResponseEntity<?> update(@RequestBody Collection<WorkDay> schedule,
                              Authentication authentication);
