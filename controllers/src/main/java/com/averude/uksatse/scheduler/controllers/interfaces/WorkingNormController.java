@@ -22,7 +22,7 @@ public interface WorkingNormController
         extends ICrudController<WorkingNorm>, IByAuthAndDateController<WorkingNorm> {
 
     @IsDepartmentOrShiftUser
-    @RequestMapping(method = RequestMethod.GET, value = "/dto/dates")
+    @GetMapping("/dto/dates")
     List<? extends BasicDto<Shift, WorkingNorm>> getAllDtoByAuth(Authentication authentication,
                                                        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
                                                        @RequestParam(value = "from")
@@ -32,7 +32,7 @@ public interface WorkingNormController
                                                                LocalDate to);
 
     @PreAuthorize("@userPermissionChecker.checkDepartmentUser(authentication, #departmentId)")
-    @RequestMapping(method = RequestMethod.GET, value = "/dto/department/{departmentId}/dates")
+    @GetMapping("/dto/department/{departmentId}/dates")
     List<? extends BasicDto<Shift, WorkingNorm>> getAllDtoByDepartmentId(@PathVariable Long departmentId,
                                                                  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
                                                                  @RequestParam(value = "from")
@@ -42,7 +42,7 @@ public interface WorkingNormController
                                                                          LocalDate to);
 
     @IsDepartmentOrShiftUser
-    @RequestMapping(method = RequestMethod.GET, value = "/dates")
+    @GetMapping("/dates")
     List<WorkingNorm> getAllByAuth(Authentication authentication,
                                    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
                                    @RequestParam(value = "from")
@@ -52,7 +52,7 @@ public interface WorkingNormController
                                            LocalDate to);
 
     @PreAuthorize("@userPermissionChecker.checkDepartmentUser(authentication, #departmentId)")
-    @RequestMapping(method = RequestMethod.GET, value = "/department/{departmentId}/dates")
+    @GetMapping("/department/{departmentId}/dates")
     List<WorkingNorm> getAllByDepartmentId(@PathVariable Long departmentId,
                                            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
                                            @RequestParam(value = "from")
@@ -62,7 +62,7 @@ public interface WorkingNormController
                                                    LocalDate to);
 
     @PreAuthorize("@userPermissionChecker.checkShiftUser(authentication, #shiftIds)")
-    @RequestMapping(method = RequestMethod.GET, value = "/shifts/{shiftIds}/dates")
+    @GetMapping("/shifts/{shiftIds}/dates")
     List<WorkingNorm> getAllByShiftIds(@PathVariable List<Long> shiftIds,
                                        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
                                        @RequestParam(value = "from")
@@ -72,19 +72,19 @@ public interface WorkingNormController
                                                LocalDate to);
 
     @IsDepartmentAdmin
-    @RequestMapping(method = RequestMethod.GET, value = "/{id}")
+    @GetMapping("/{id}")
     Optional<WorkingNorm> get(@PathVariable Long id);
 
     @IsDepartmentAdmin
-    @RequestMapping(method = RequestMethod.POST)
+    @PostMapping
     ResponseEntity<Long> post(@RequestBody WorkingNorm entity, Authentication authentication);
 
     @IsDepartmentAdmin
-    @RequestMapping(method = RequestMethod.PUT)
+    @PutMapping
     ResponseEntity<?> put(@RequestBody WorkingNorm entity, Authentication authentication);
 
     @IsDepartmentAdmin
-    @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
+    @DeleteMapping("/{id}")
     ResponseEntity<?> delete(@PathVariable Long id, Authentication authentication);
 
     @IsDepartmentAdmin

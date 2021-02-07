@@ -19,19 +19,19 @@ import java.util.List;
 
 @RequestMapping("/schedule")
 public interface ScheduleController {
+
     @IsDepartmentOrShiftAdmin
-    @RequestMapping(method = RequestMethod.POST)
+    @PostMapping
     ResponseEntity<Iterable<WorkDay>> create(@RequestBody Collection<WorkDay> schedule,
                                              Authentication authentication);
 
     @IsDepartmentOrShiftAdmin
-    @RequestMapping(method = RequestMethod.PUT)
+    @PutMapping
     ResponseEntity<?> update(@RequestBody Collection<WorkDay> schedule,
                              Authentication authentication);
 
     @IsDepartmentOrShiftUser
-    @RequestMapping(method = RequestMethod.GET,
-                    value = "/dates")
+    @GetMapping("/dates")
     List<? extends BasicDto<Employee, WorkDay>> getAllByAuthAndDate(Authentication authentication,
                                                   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
                                                   @RequestParam(value = "from")
@@ -41,8 +41,7 @@ public interface ScheduleController {
                                                           LocalDate to);
 
     @IsDepartmentOrShiftAdmin
-    @RequestMapping(method = RequestMethod.POST,
-                    value = "/generate")
+    @PostMapping("/generate")
     ResponseEntity<?> generate(@Valid @RequestBody GenerationDTO generationDTO);
 
     @PreAuthorize("@userPermissionChecker.checkDepartmentUser(authentication, #departmentId)")
