@@ -33,7 +33,7 @@ export class ScheduleGenerationService {
       dto.collection,
       offset,
       this.scheduleGeneratedHandler,
-      this.errorHandler
+      this.error403Handler
     );
   }
 
@@ -45,7 +45,7 @@ export class ScheduleGenerationService {
         data.selectedCells,
         unit,
         this.scheduleGeneratedHandler,
-        this.errorHandler
+        this.error403Handler
       );
   }
 
@@ -57,7 +57,7 @@ export class ScheduleGenerationService {
         data.selectedCells,
         departmentDayType,
         this.scheduleGeneratedHandler,
-        this.errorHandler
+        this.error403Handler
       );
   }
 
@@ -69,7 +69,7 @@ export class ScheduleGenerationService {
         serviceCells.forEach(cell => cell.value.actualDayTypeId = undefined);
         this.scheduleGeneratedHandler(data.rowData, data.selectedCells);
       } else {
-        this.errorHandler('There are no service days');
+        this.error403Handler('There are no service days');
       }
     }
   }
@@ -93,7 +93,7 @@ export class ScheduleGenerationService {
             this.notificationService.success(
               'Created',
               'Schedule sent successfully');
-          }, err => selectedCells.forEach(cell => cell.revertChanges()));
+          }, this.error403Handler);
       }
       if (updatedSchedule.length > 0) {
         this.scheduleService.update(updatedSchedule)
@@ -103,7 +103,7 @@ export class ScheduleGenerationService {
             this.notificationService.success(
               'Updated',
               'Schedule sent successfully');
-          }, err => selectedCells.forEach(cell => cell.revertChanges()));
+          }, this.error403Handler);
       }
     };
   };
@@ -136,11 +136,18 @@ export class ScheduleGenerationService {
     if (obs && obs.length > 0) {
       forkJoin(obs).subscribe(([updatedSchedule, createdSchedule]) => {
         this.notificationService.success("Success");
-      });
+      }, this.error403Handler);
     }
   }
 
   private get errorHandler(): (message) => void {
     return (message) => this.notificationService.error('Error', message);
   }
+
+  error403Handler = (err) => {
+    if (err.status == 403) {
+      this.notificationService.error("Access denied",
+        "You are not permitted to change the schedule of the previous months");
+    }
+  };
 }

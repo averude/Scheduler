@@ -22,7 +22,9 @@ export class HttpErrorInterceptor implements HttpInterceptor {
           err.error.errors.forEach(error => this.notificationsService
             .error(error.message, error.details, OPTIONS));
         } else {
-          if (err.status) {
+          if (err.status == 403) {
+
+          } else if (err.status) {
             this.notificationsService
               .error(`Backend error. Code: ${err.status} `, `${err.message}`, OPTIONS);
           } else {

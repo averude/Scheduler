@@ -48,7 +48,7 @@ export class WorkingNormService
                    from: string,
                    to: string): Observable<WorkingNorm[]> {
     return this.http.get<WorkingNorm[]>(
-      `${this.url}/department/${shiftIds}/dates?from=${from}&to=${to}`
+      `${this.url}/shifts/${shiftIds}/dates?from=${from}&to=${to}`
     ).pipe(parseDateOfEntities);
   }
 
