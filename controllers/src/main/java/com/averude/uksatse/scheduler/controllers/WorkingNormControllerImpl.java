@@ -57,6 +57,27 @@ public class WorkingNormControllerImpl
     }
 
     @Override
+    public List<? extends BasicDto<Shift, WorkingNorm>> getAllDtoByDepartmentId(Long departmentId,
+                                                                                LocalDate from,
+                                                                                LocalDate to) {
+        return workingNormService.findAllDtoByDepartmentIdAndDate(departmentId, from, to);
+    }
+
+    @Override
+    public List<WorkingNorm> getAllByDepartmentId(Long departmentId,
+                                                  LocalDate from,
+                                                  LocalDate to) {
+        return workingNormService.findAllByDepartmentIdAndDateBetween(departmentId, from, to);
+    }
+
+    @Override
+    public List<WorkingNorm> getAllByShiftIds(List<Long> shiftIds,
+                                              LocalDate from,
+                                              LocalDate to) {
+        return workingNormService.findAllByShiftIdsAndDateBetween(shiftIds, from, to);
+    }
+
+    @Override
     public Optional<WorkingNorm> get(Long id) {
         return super.get(id);
     }

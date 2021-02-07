@@ -41,18 +41,20 @@ export class ScheduleSourcesService {
   getDepartmentUserSources(from: string,
                            to: string,
                            userAccount: UserAccountDTO): Observable<any>[] {
+    const departmentId = userAccount.departmentId;
     return [
-      this.scheduleService.getAllByDepartmentId(userAccount.departmentId, from, to),
-      this.workingNormService.getAll(from, to)
+      this.scheduleService.getAllByDepartmentId(departmentId, from, to),
+      this.workingNormService.getAllByDepartmentId(departmentId, from, to)
     ];
   }
 
   getShiftUserSources(from: string,
                       to: string,
                       userAccount: UserAccountDTO): Observable<any>[] {
+    const shiftIds = userAccount.shiftIds;
     return [
-      this.scheduleService.getAllByShiftIds(userAccount.shiftIds, from, to),
-      this.workingNormService.getAll(from, to)
+      this.scheduleService.getAllByShiftIds(shiftIds, from, to),
+      this.workingNormService.getAllByShiftIds(shiftIds, from, to)
     ];
   }
 

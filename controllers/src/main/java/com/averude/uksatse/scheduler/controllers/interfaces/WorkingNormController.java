@@ -8,6 +8,7 @@ import com.averude.uksatse.scheduler.security.annotations.IsDepartmentAdmin;
 import com.averude.uksatse.scheduler.security.annotations.IsDepartmentOrShiftUser;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,6 +31,16 @@ public interface WorkingNormController
                                                        @RequestParam(value = "to")
                                                                LocalDate to);
 
+    @PreAuthorize("@userPermissionChecker.checkDepartmentUser(authentication, #departmentId)")
+    @RequestMapping(method = RequestMethod.GET, value = "/dto/department/{departmentId}/dates")
+    List<? extends BasicDto<Shift, WorkingNorm>> getAllDtoByDepartmentId(@PathVariable Long departmentId,
+                                                                 @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                                                 @RequestParam(value = "from")
+                                                                         LocalDate from,
+                                                                 @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                                                 @RequestParam(value = "to")
+                                                                         LocalDate to);
+
     @IsDepartmentOrShiftUser
     @RequestMapping(method = RequestMethod.GET, value = "/dates")
     List<WorkingNorm> getAllByAuth(Authentication authentication,
@@ -39,6 +50,26 @@ public interface WorkingNormController
                                    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
                                    @RequestParam(value = "to")
                                            LocalDate to);
+
+    @PreAuthorize("@userPermissionChecker.checkDepartmentUser(authentication, #departmentId)")
+    @RequestMapping(method = RequestMethod.GET, value = "/department/{departmentId}/dates")
+    List<WorkingNorm> getAllByDepartmentId(@PathVariable Long departmentId,
+                                           @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                           @RequestParam(value = "from")
+                                                   LocalDate from,
+                                           @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                           @RequestParam(value = "to")
+                                                   LocalDate to);
+
+    @PreAuthorize("@userPermissionChecker.checkShiftUser(authentication, #shiftIds)")
+    @RequestMapping(method = RequestMethod.GET, value = "/shifts/{shiftIds}/dates")
+    List<WorkingNorm> getAllByShiftIds(@PathVariable List<Long> shiftIds,
+                                       @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                       @RequestParam(value = "from")
+                                               LocalDate from,
+                                       @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                       @RequestParam(value = "to")
+                                               LocalDate to);
 
     @IsDepartmentAdmin
     @RequestMapping(method = RequestMethod.GET, value = "/{id}")

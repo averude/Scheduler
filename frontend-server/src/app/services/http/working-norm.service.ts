@@ -36,6 +36,22 @@ export class WorkingNormService
     return super.getAll(from, to).pipe(parseDateOfEntities);
   }
 
+  getAllByDepartmentId(departmentId: number,
+                       from: string,
+                       to: string): Observable<WorkingNorm[]> {
+    return this.http.get<WorkingNorm[]>(
+      `${this.url}/department/${departmentId}/dates?from=${from}&to=${to}`
+    ).pipe(parseDateOfEntities);
+  }
+
+  getAllByShiftIds(shiftIds: number[],
+                   from: string,
+                   to: string): Observable<WorkingNorm[]> {
+    return this.http.get<WorkingNorm[]>(
+      `${this.url}/department/${shiftIds}/dates?from=${from}&to=${to}`
+    ).pipe(parseDateOfEntities);
+  }
+
   generate(generationDto: GenerationDto): Observable<any> {
     return this.http.post(
       `${this.url}/generate`,
