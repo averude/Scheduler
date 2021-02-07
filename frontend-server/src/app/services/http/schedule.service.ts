@@ -16,16 +16,6 @@ export class ScheduleService {
   constructor(private http: HttpClient,
               private config: RestConfig) { }
 
-  getAllByDate(from: string,
-               to: string): Observable<EmployeeScheduleDTO[]> {
-    return this.http.get<EmployeeScheduleDTO[]>(
-      `${this.config.baseUrl}/schedule/dates?from=${from}&to=${to}`
-    ).pipe(tap(dtos => dtos.forEach(dto => {
-      dto.mainShiftCompositions.forEach(callbackFn);
-      dto.substitutionShiftCompositions.forEach(callbackFn);
-    })));
-  }
-
   getAllByDepartmentId(departmentId: number,
                        from: string,
                        to: string): Observable<EmployeeScheduleDTO[]> {
@@ -41,7 +31,7 @@ export class ScheduleService {
                    from: string,
                    to: string): Observable<EmployeeScheduleDTO[]> {
     return this.http.get<EmployeeScheduleDTO[]>(
-      `${this.config.baseUrl}/schedule/department/${shiftIds}/dates?from=${from}&to=${to}`
+      `${this.config.baseUrl}/schedule/shift/${shiftIds}/dates?from=${from}&to=${to}`
     ).pipe(tap(dtos => dtos.forEach(dto => {
       dto.mainShiftCompositions.forEach(callbackFn);
       dto.substitutionShiftCompositions.forEach(callbackFn);

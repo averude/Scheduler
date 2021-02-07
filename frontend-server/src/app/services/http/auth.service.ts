@@ -1,9 +1,9 @@
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { map, shareReplay } from "rxjs/operators";
+import { shareReplay, switchMap, tap } from "rxjs/operators";
 import { Observable } from "rxjs";
-import { User, UserAccessRights } from "../../model/user";
+import { UserAccessRights, UserSession } from "../../model/user";
 import decode from "jwt-decode";
 import { RestConfig } from "../../rest.config";
 import { CacheMapService } from "../cache/cache-map.service";
@@ -27,24 +27,23 @@ export class AuthService {
       this.getOptions()
     ).pipe(
         shareReplay(),
-        map(token => {
+        switchMap(token => {
           if (token && token.access_token) {
-            const user = new User();
+            const userSession = new UserSession();
             const token_claims = decode(token.access_token);
-            user.roles = token_claims.authorities;
-            user.access_token = token.access_token;
-            this.fillAccessRights(user);
-            sessionStorage.setItem('currentUser', JSON.stringify(user));
-            this.userService.me()
-              .subscribe(userAccount => sessionStorage.setItem("userAccount", JSON.stringify(userAccount)));
-            return user;
+            userSession.roles = token_claims.authorities;
+            userSession.access_token = token.access_token;
+            this.fillAccessRights(userSession);
+            sessionStorage.setItem('currentUser', JSON.stringify(userSession));
+
+            return this.userService.me().pipe(tap(userAccount =>
+              sessionStorage.setItem('userAccount', JSON.stringify(userAccount))));
           }
-          return token;
         })
     );
   }
 
-  public get currentUserValue(): User {
+  public get currentUserValue(): UserSession {
     let user = sessionStorage.getItem('currentUser');
     return JSON.parse(user);
   }
@@ -65,6 +64,7 @@ export class AuthService {
   public logout() {
     this.cache.clear();
     sessionStorage.removeItem("currentUser");
+    sessionStorage.removeItem("userAccount");
     this.router.navigate(['/login']);
   }
 
@@ -75,7 +75,7 @@ export class AuthService {
     return { headers: headers };
   }
 
-  private fillAccessRights(user: User) {
+  private fillAccessRights(user: UserSession) {
     user.accessRights = new UserAccessRights();
     user.roles.forEach(role => {
       switch (role) {

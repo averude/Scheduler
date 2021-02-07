@@ -15,6 +15,7 @@ import { CellCollector } from "../../services/collectors/cell-collector";
 import { CellUpdater } from "../../services/collectors/cell-updater";
 import { ChangeUserAccountPasswordDialogModule } from "./change-user-account-password-dialog/change-user-account-password-dialog.module";
 import { MatMenuModule } from "@angular/material/menu";
+import { ScheduleSourcesService } from "../../services/collectors/schedule/auth-strategy/schedule-sources.service";
 
 @NgModule({
   imports: [
@@ -37,6 +38,7 @@ import { MatMenuModule } from "@angular/material/menu";
   ],
   exports: [],
   providers: [
+    ScheduleSourcesService,
     CellCollector,
     CellUpdater
   ]

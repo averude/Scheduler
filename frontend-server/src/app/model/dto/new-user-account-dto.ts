@@ -27,6 +27,7 @@ export enum UserAccountRole {
 }
 
 export enum UserAccountAuthority {
+  GLOBAL_ADMIN      = 'GLOBAL_ADMIN',
   ENTERPRISE_ADMIN  = 'ENTERPRISE_ADMIN',
   DEPARTMENT_ADMIN  = 'DEPARTMENT_ADMIN',
   SHIFT_ADMIN       = 'SHIFT_ADMIN'

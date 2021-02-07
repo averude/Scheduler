@@ -1,4 +1,4 @@
-export class User {
+export class UserSession {
   access_token?: string;
   roles: string[];
   accessRights: UserAccessRights;

@@ -2,8 +2,6 @@ import { Injectable } from "@angular/core";
 import { forkJoin, Observable } from "rxjs";
 import { EmployeeService } from "../../http/employee.service";
 import { ShiftService } from "../../http/shift.service";
-import { ScheduleService } from "../../http/schedule.service";
-import { WorkingNormService } from "../../http/working-norm.service";
 import { PaginationService } from "../../../lib/ngx-schedule-table/service/pagination.service";
 import { map, mergeMap } from "rxjs/operators";
 import { TableSumCalculator } from "../../calculators/table-sum-calculator.service";
@@ -23,7 +21,7 @@ import { PositionService } from "../../http/position.service";
 import { IntervalCreator } from "../../creator/interval-creator.service";
 import { convertCompositionToInterval } from "../../../model/ui/schedule-table/row-interval";
 import { binarySearch } from "../../../shared/utils/collection-utils";
-import { UserAccountAuthority, UserAccountDTO } from "../../../model/dto/new-user-account-dto";
+import { ScheduleSourcesService } from "./auth-strategy/schedule-sources.service";
 
 @Injectable()
 export class TableDataSource {
@@ -45,8 +43,7 @@ export class TableDataSource {
               private employeeService: EmployeeService,
               private shiftService: ShiftService,
               private positionService: PositionService,
-              private scheduleService: ScheduleService,
-              private workingNormService: WorkingNormService) {
+              private scheduleSourcesService: ScheduleSourcesService) {
   }
 
   get tableData(): Observable<RowGroupData[]> {
@@ -63,16 +60,20 @@ export class TableDataSource {
       .pipe(
         mergeMap(daysInMonth => {
           this.calendarDays = daysInMonth;
-          const sources = this.getSourcesByUserAccount(daysInMonth, userAccount);
+          const sources = this.scheduleSourcesService
+            .getSourcesByUserAccount(
+              daysInMonth[0].isoString,
+              daysInMonth[daysInMonth.length - 1].isoString,
+              userAccount);
           return forkJoin(sources).pipe(map(this.handleData()))
         }),
       );
   }
 
   private handleData() {
-    return values => {
-      this.scheduleDto = values[0];
-      this.workingNorms = values[1].sort((a, b) => a.shiftId - b.shiftId);
+    return ([schedule, workingNorms]) => {
+      this.scheduleDto = schedule;
+      this.workingNorms = workingNorms.sort((a, b) => a.shiftId - b.shiftId);
 
       const data = this.tableDataCollector.collect(this.shifts, this.calendarDays, this.scheduleDto, this.positions, this.workingNorms);
 
@@ -95,58 +96,5 @@ export class TableDataSource {
       this.sumCalculator.calculateWorkHoursSum(rowGroupData);
       return rowGroupData;
     }
-  }
-
-  getSourcesByUserAccount(daysInMonth: CalendarDay[],
-                          userAccount: UserAccountDTO) {
-    let sources;
-
-    switch (userAccount.authority) {
-      case UserAccountAuthority.DEPARTMENT_ADMIN : {
-        sources = this.getDepartmentUserSources(daysInMonth, userAccount);
-        break;
-      }
-
-      case UserAccountAuthority.SHIFT_ADMIN : {
-        sources = this.getShiftUserSources(daysInMonth, userAccount);
-        break;
-      }
-
-      default : {
-        throw new Error('User doesn\'t have required authority');
-      }
-    }
-  }
-
-  getDepartmentUserSources(daysInMonth: CalendarDay[],
-                           userAccount: UserAccountDTO) {
-    return [
-
-      this.scheduleService.getAllByDepartmentId(
-        userAccount.departmentId,
-        daysInMonth[0].isoString,
-        daysInMonth[daysInMonth.length - 1].isoString),
-
-      this.workingNormService.getAll(
-        daysInMonth[0].isoString,
-        daysInMonth[daysInMonth.length - 1].isoString)
-
-    ];
-  }
-
-  getShiftUserSources(daysInMonth: CalendarDay[],
-                      userAccount: UserAccountDTO) {
-    return [
-
-      this.scheduleService.getAllByShiftIds(
-        userAccount.shiftIds,
-        daysInMonth[0].isoString,
-        daysInMonth[daysInMonth.length - 1].isoString),
-
-      this.workingNormService.getAll(
-        daysInMonth[0].isoString,
-        daysInMonth[daysInMonth.length - 1].isoString)
-
-    ];
   }
 }
