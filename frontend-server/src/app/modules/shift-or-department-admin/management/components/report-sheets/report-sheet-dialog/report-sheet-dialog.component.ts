@@ -26,7 +26,7 @@ export class ReportSheetDialogComponent extends DialogBaseComponent<ReportSheetD
 
   initTheForm() {
     this.dialogForm = this.fb.group({
-      subDepartment: this.fb.group({
+      reportSheet: this.fb.group({
         id:   [],
         name: ['', Validators.required]
       }),
@@ -36,7 +36,7 @@ export class ReportSheetDialogComponent extends DialogBaseComponent<ReportSheetD
 
   fillInTheForm(dto: ReportSheetDTO) {
     this.dialogForm.setValue({
-      subDepartment: {
+      reportSheet: {
         id:   dto.reportSheet.id,
         name: dto.reportSheet.name
       },

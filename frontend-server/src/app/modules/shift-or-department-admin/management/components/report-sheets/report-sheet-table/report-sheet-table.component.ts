@@ -36,9 +36,19 @@ export class ReportSheetTableComponent extends TableBaseIdEntityComponent<Report
       shifts: this.shifts
     };
 
-    this.openAddOrEditDialog(dto, data, ReportSheetDialogComponent, (value => value.subDepartment.id));
+    this.openAddOrEditDialog(dto, data, ReportSheetDialogComponent, (value => value.reportSheet.id));
   }
 
+
+  onCreated(value: ReportSheetDTO): (value: any) => void {
+    return res => {
+      this.addRow(res);
+      this.notification
+        .success(
+          'Created',
+          `Entity was successfully created`)
+    }
+  }
 
   removeEntity(entity: ReportSheetDTO): void {
     this.crudService.delete(entity.reportSheet.id)
