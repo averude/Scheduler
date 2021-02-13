@@ -19,16 +19,29 @@ import java.util.Optional;
 public class ShiftControllerImpl
         extends AByAuthController<Shift> implements ShiftController {
 
+    private final ShiftService shiftService;
+
     @Autowired
     public ShiftControllerImpl(ShiftService shiftService,
                                SimpleByAuthMethodResolver authStrategy,
                                DepartmentIdEntityModifier<Shift> entityModifier) {
         super(shiftService, authStrategy, entityModifier, LoggerFactory.getLogger(ShiftController.class));
+        this.shiftService = shiftService;
     }
 
     @Override
     public List<Shift> getAllByAuth(Authentication authentication) {
         return super.getAllByAuth(authentication);
+    }
+
+    @Override
+    public List<Shift> getAllByDepartmentId(Long departmentId) {
+        return shiftService.findAllByDepartmentId(departmentId);
+    }
+
+    @Override
+    public List<Shift> getAllByShiftIds(List<Long> shiftIds) {
+        return shiftService.findAllByShiftIds(shiftIds);
     }
 
     @Override

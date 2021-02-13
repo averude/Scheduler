@@ -21,7 +21,9 @@ import { PositionService } from "../../http/position.service";
 import { IntervalCreator } from "../../creator/interval-creator.service";
 import { convertCompositionToInterval } from "../../../model/ui/schedule-table/row-interval";
 import { binarySearch } from "../../../shared/utils/collection-utils";
-import { ScheduleSourcesService } from "./auth-strategy/schedule-sources.service";
+import { UserAccountAuthority } from "../../../model/dto/new-user-account-dto";
+import { ScheduleService } from "../../http/schedule.service";
+import { WorkingNormService } from "../../http/working-norm.service";
 
 @Injectable()
 export class TableDataSource {
@@ -43,29 +45,35 @@ export class TableDataSource {
               private employeeService: EmployeeService,
               private shiftService: ShiftService,
               private positionService: PositionService,
-              private scheduleSourcesService: ScheduleSourcesService) {
+              private scheduleService: ScheduleService,
+              private workingNormService: WorkingNormService) {
   }
 
   get tableData(): Observable<RowGroupData[]> {
-    if (this.authService.currentUserValue.roles.includes('DEPARTMENT_ADMIN')) {
-      this.employeeService.getAll().subscribe(employees => this.employees = employees);
-    }
 
     const userAccount = this.authService.currentUserAccount;
+    if (userAccount.authority === UserAccountAuthority.DEPARTMENT_ADMIN) {
+      this.employeeService.getAllByAuth()
+        .subscribe(employees => this.employees = employees);
+    }
 
-    this.shiftService.getAll().subscribe(shifts => this.shifts = shifts);
-    this.positionService.getAll().subscribe(positions => this.positions = positions);
+    this.shiftService.getAllByAuth().subscribe(shifts => this.shifts = shifts);
+    this.positionService.getAllByAuth().subscribe(positions => this.positions = positions);
 
     return this.paginationService.onValueChange
       .pipe(
         mergeMap(daysInMonth => {
           this.calendarDays = daysInMonth;
-          const sources = this.scheduleSourcesService
-            .getSourcesByUserAccount(
-              daysInMonth[0].isoString,
-              daysInMonth[daysInMonth.length - 1].isoString,
-              userAccount);
-          return forkJoin(sources).pipe(map(this.handleData()))
+
+          const from  = daysInMonth[0].isoString;
+          const to    = daysInMonth[daysInMonth.length - 1].isoString;
+
+          const sources = [
+            this.scheduleService.getAllByAuth(from, to),
+            this.workingNormService.getAllByAuth(from, to)
+          ];
+
+          return forkJoin(sources).pipe(map(this.handleData()));
         }),
       );
   }

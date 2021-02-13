@@ -4,11 +4,9 @@ import com.averude.uksatse.scheduler.core.model.entity.structure.Shift;
 import com.averude.uksatse.scheduler.security.annotations.IsAnyUser;
 import com.averude.uksatse.scheduler.security.annotations.IsDepartmentAdmin;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,6 +17,14 @@ public interface ShiftController extends ICrudController<Shift>, IByAuthControll
     @IsAnyUser
     @RequestMapping(method = RequestMethod.GET)
     List<Shift> getAllByAuth(Authentication authentication);
+
+    @PreAuthorize("@userPermissionChecker.checkDepartmentUser(authentication, #departmentId)")
+    @GetMapping("/departments/{departmentId}")
+    List<Shift> getAllByDepartmentId(@PathVariable Long departmentId);
+
+    @PreAuthorize("@userPermissionChecker.checkShiftUser(authentication, #shiftIds)")
+    @GetMapping("/shifts/{shiftIds}")
+    List<Shift> getAllByShiftIds(@PathVariable List<Long> shiftIds);
 
     @IsDepartmentAdmin
     @RequestMapping(method = RequestMethod.GET, value = "/{id}")

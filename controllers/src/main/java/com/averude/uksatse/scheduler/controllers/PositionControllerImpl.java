@@ -19,16 +19,29 @@ import java.util.Optional;
 public class PositionControllerImpl
         extends AByAuthController<Position> implements PositionController {
 
+    private final PositionService positionService;
+
     @Autowired
     public PositionControllerImpl(PositionService positionService,
                                   SimpleByAuthMethodResolver authStrategy,
                                   DepartmentIdEntityModifier<Position> entityModifier) {
         super(positionService, authStrategy, entityModifier, LoggerFactory.getLogger(PositionController.class));
+        this.positionService = positionService;
     }
 
     @Override
     public List<Position> getAllByAuth(Authentication authentication) {
         return super.getAllByAuth(authentication);
+    }
+
+    @Override
+    public List<Position> getAllByDepartmentId(Long departmentId) {
+        return positionService.findAllByDepartmentId(departmentId);
+    }
+
+    @Override
+    public List<Position> getAllByShiftIds(List<Long> shiftIds) {
+        return positionService.findAllByShiftIds(shiftIds);
     }
 
     @Override

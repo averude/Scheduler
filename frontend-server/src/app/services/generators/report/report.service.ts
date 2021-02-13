@@ -19,7 +19,6 @@ import { ShiftService } from "../../http/shift.service";
 import { SummationMode } from "../../../model/dto/employee-work-stat-dto";
 import { ReportSheetDTOService } from "../../http/report-sheet-dto.service";
 import { AuthService } from "../../http/auth.service";
-import { ScheduleSourcesService } from "../../collectors/schedule/auth-strategy/schedule-sources.service";
 
 @Injectable()
 export class ReportService {
@@ -36,8 +35,7 @@ export class ReportService {
               private shiftService: ShiftService,
               private positionService: PositionService,
               private statisticsService: StatisticsService,
-              private workingNormService: WorkingNormService,
-              private scheduleSourcesService: ScheduleSourcesService){}
+              private workingNormService: WorkingNormService){}
 
   generateReport(reportType: string,
                  date: Moment,
@@ -60,22 +58,23 @@ export class ReportService {
     if (reportDataCollector && reportCreator && reportDecorator) {
 
       const userAccount = this.authService.currentUserAccount;
-      let observables = this.scheduleSourcesService.getSourcesByUserAccount(from, to, userAccount);
 
-      observables = observables.concat([
+      const sources: Observable<any>[] = [
+        this.scheduleService.getAllByAuth(from, to),
+        this.workingNormService.getAllByAuth(from, to),
         this.specialCalendarDateService.getAll(from, to),
         this.statisticsService.getSummationDTO(from, to, SummationMode.PER_POSITION),
         this.dayTypeService.getAll().pipe(map(values => values.sort((a, b) => a.id - b.id))),
         this.shiftService.getAll(),
         this.positionService.getAll()
-      ]);
+      ];
 
       const accessRights = this.authService.currentUserValue.accessRights;
       if (accessRights.isDepartmentLevel && accessRights.isAdmin) {
-        observables.push(this.reportSheetDTOService.getAll());
+        sources.push(this.reportSheetDTOService.getAll());
       }
 
-      return forkJoin(observables)
+      return forkJoin(sources)
         .pipe(mergeMap((
           [schedule, workingNorms, calendarDays,
             summationDTO, dayTypes, shifts,

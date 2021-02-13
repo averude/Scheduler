@@ -11,14 +11,17 @@ import { BasicDTO } from "../../model/dto/basic-dto";
 import { Shift } from "../../model/shift";
 import { GenerationDto } from "../../model/dto/generation-dto";
 import { map } from "rxjs/operators";
+import { ByAuthService, ServiceAuthDecider } from "./auth-decider/service-auth-decider";
 
 @Injectable({
   providedIn: "root"
 })
 export class WorkingNormService
-  extends ACrudService<WorkingNorm> implements CUDService<WorkingNorm> {
+  extends ACrudService<WorkingNorm>
+  implements CUDService<WorkingNorm>, ByAuthService<WorkingNorm> {
 
-  constructor(authService: AuthService,
+  constructor(private authService: AuthService,
+              private decider: ServiceAuthDecider,
               http: HttpClient,
               private config: RestConfig) {
     super(`${config.baseUrl}/admin/working_norm`, http);
@@ -36,11 +39,16 @@ export class WorkingNormService
     return super.getAll(from, to).pipe(parseDateOfEntities);
   }
 
+  getAllByAuth(from: string, to: string): Observable<WorkingNorm[]> {
+    const userAccount = this.authService.currentUserAccount;
+    return this.decider.getAllByAuth(this, userAccount, from, to);
+  }
+
   getAllByDepartmentId(departmentId: number,
                        from: string,
                        to: string): Observable<WorkingNorm[]> {
     return this.http.get<WorkingNorm[]>(
-      `${this.url}/department/${departmentId}/dates?from=${from}&to=${to}`
+      `${this.url}/departments/${departmentId}/dates?from=${from}&to=${to}`
     ).pipe(parseDateOfEntities);
   }
 

@@ -7,20 +7,29 @@ import { GenerationDto } from "../../model/dto/generation-dto";
 import { EmployeeScheduleDTO } from "../../model/dto/employee-schedule-dto";
 import { tap } from "rxjs/operators";
 import * as moment from "moment";
+import { AuthService } from "./auth.service";
+import { ByAuthService, ServiceAuthDecider } from "./auth-decider/service-auth-decider";
 
 @Injectable({
   providedIn: 'root'
 })
-export class ScheduleService {
+export class ScheduleService implements ByAuthService<EmployeeScheduleDTO> {
 
-  constructor(private http: HttpClient,
+  constructor(private authService: AuthService,
+              private decider: ServiceAuthDecider,
+              private http: HttpClient,
               private config: RestConfig) { }
+
+  getAllByAuth(from: string, to: string): Observable<EmployeeScheduleDTO[]> {
+    const userAccount = this.authService.currentUserAccount;
+    return this.decider.getAllByAuth(this, userAccount, from, to);
+  }
 
   getAllByDepartmentId(departmentId: number,
                        from: string,
                        to: string): Observable<EmployeeScheduleDTO[]> {
     return this.http.get<EmployeeScheduleDTO[]>(
-      `${this.config.baseUrl}/schedule/department/${departmentId}/dates?from=${from}&to=${to}`
+      `${this.config.baseUrl}/schedule/departments/${departmentId}/dates?from=${from}&to=${to}`
     ).pipe(tap(dtos => dtos.forEach(dto => {
       dto.mainShiftCompositions.forEach(callbackFn);
       dto.substitutionShiftCompositions.forEach(callbackFn);
@@ -31,7 +40,7 @@ export class ScheduleService {
                    from: string,
                    to: string): Observable<EmployeeScheduleDTO[]> {
     return this.http.get<EmployeeScheduleDTO[]>(
-      `${this.config.baseUrl}/schedule/shift/${shiftIds}/dates?from=${from}&to=${to}`
+      `${this.config.baseUrl}/schedule/shifts/${shiftIds}/dates?from=${from}&to=${to}`
     ).pipe(tap(dtos => dtos.forEach(dto => {
       dto.mainShiftCompositions.forEach(callbackFn);
       dto.substitutionShiftCompositions.forEach(callbackFn);

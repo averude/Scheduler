@@ -45,7 +45,7 @@ public interface ScheduleController {
     ResponseEntity<?> generate(@Valid @RequestBody GenerationDTO generationDTO);
 
     @PreAuthorize("@userPermissionChecker.checkDepartmentUser(authentication, #departmentId)")
-    @GetMapping("/department/{departmentId}/dates")
+    @GetMapping("/departments/{departmentId}/dates")
     List<? extends BasicDto<Employee, WorkDay>> getAllByDepartmentId(Authentication authentication,
                                                                      @PathVariable Long departmentId,
                                                                      @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
@@ -56,7 +56,7 @@ public interface ScheduleController {
                                                                               LocalDate to);
 
     @PreAuthorize("@userPermissionChecker.checkShiftUser(authentication, #shiftIds)")
-    @GetMapping("/shift/{shiftIds}/dates")
+    @GetMapping("/shifts/{shiftIds}/dates")
     List<? extends BasicDto<Employee, WorkDay>> getAllByShiftIds(Authentication authentication,
                                                                  @PathVariable List<Long> shiftIds,
                                                                  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)

@@ -32,7 +32,7 @@ public interface WorkingNormController
                                                                LocalDate to);
 
     @PreAuthorize("@userPermissionChecker.checkDepartmentUser(authentication, #departmentId)")
-    @GetMapping("/dto/department/{departmentId}/dates")
+    @GetMapping("/dto/departments/{departmentId}/dates")
     List<? extends BasicDto<Shift, WorkingNorm>> getAllDtoByDepartmentId(@PathVariable Long departmentId,
                                                                  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
                                                                  @RequestParam(value = "from")
@@ -52,7 +52,7 @@ public interface WorkingNormController
                                            LocalDate to);
 
     @PreAuthorize("@userPermissionChecker.checkDepartmentUser(authentication, #departmentId)")
-    @GetMapping("/department/{departmentId}/dates")
+    @GetMapping("/departments/{departmentId}/dates")
     List<WorkingNorm> getAllByDepartmentId(@PathVariable Long departmentId,
                                            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
                                            @RequestParam(value = "from")
