@@ -52,6 +52,10 @@ export class LoginComponent implements OnInit{
       return;
     }
 
+    if (this.loading) {
+      return;
+    }
+
     this.loading = true;
     this.authService.login(
       this.form.username.value.trim(),
