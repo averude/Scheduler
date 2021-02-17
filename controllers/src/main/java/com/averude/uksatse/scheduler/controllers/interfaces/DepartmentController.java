@@ -4,11 +4,9 @@ import com.averude.uksatse.scheduler.core.model.entity.structure.Department;
 import com.averude.uksatse.scheduler.security.annotations.IsDepartmentOrShiftUser;
 import com.averude.uksatse.scheduler.security.annotations.IsEnterpriseAdmin;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,6 +16,12 @@ public interface DepartmentController extends ICrudController<Department>, IByAu
     @IsEnterpriseAdmin
     @RequestMapping(method = RequestMethod.GET)
     List<Department> getAllByAuth(Authentication authentication);
+
+    // This structure of REST endpoints are temporary while migrating
+    // from auth deciding strategy from backend to frontend
+    @PreAuthorize("@userPermissionChecker.checkEnterpriseUser(authentication, #enterpriseId)")
+    @GetMapping("/enterprises/{enterpriseId}")
+    List<Department> getAllByEnterpriseId(@PathVariable Long enterpriseId);
 
     @IsDepartmentOrShiftUser
     @RequestMapping(method = RequestMethod.GET, value = "/current")

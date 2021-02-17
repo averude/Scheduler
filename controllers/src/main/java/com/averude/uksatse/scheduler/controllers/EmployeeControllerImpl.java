@@ -2,6 +2,7 @@ package com.averude.uksatse.scheduler.controllers;
 
 import com.averude.uksatse.scheduler.controllers.base.AByAuthController;
 import com.averude.uksatse.scheduler.controllers.interfaces.EmployeeController;
+import com.averude.uksatse.scheduler.controllers.logging.Logged;
 import com.averude.uksatse.scheduler.core.model.entity.Employee;
 import com.averude.uksatse.scheduler.security.modifier.entity.DepartmentIdEntityModifier;
 import com.averude.uksatse.scheduler.security.state.entity.SimpleByAuthMethodResolver;
@@ -36,6 +37,7 @@ public class EmployeeControllerImpl
         return super.getAllByAuth(authentication);
     }
 
+    @Logged
     @Override
     public List<Employee> getAllByDepartmentId(Long departmentId) {
         return employeeService.findAllByDepartmentId(departmentId);

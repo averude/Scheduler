@@ -5,6 +5,7 @@ import com.averude.uksatse.scheduler.security.annotations.IsAnyUser;
 import com.averude.uksatse.scheduler.security.annotations.IsEnterpriseAdmin;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,6 +26,17 @@ public interface SpecialCalendarDateController
                                            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
                                            @RequestParam(value = "to")
                                                    LocalDate to);
+
+
+    @PreAuthorize("@userPermissionChecker.checkAnyUserOfEnterprise(authentication, #enterpriseId)")
+    @GetMapping("/enterprises/{enterpriseId}/dates")
+    List<SpecialCalendarDate> getAllByEnterpriseId(@PathVariable Long enterpriseId,
+                                                   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                                   @RequestParam(value = "from")
+                                                           LocalDate from,
+                                                   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                                   @RequestParam(value = "to")
+                                                           LocalDate to);
 
     @IsEnterpriseAdmin
     @RequestMapping(method = RequestMethod.GET, value = "/{id}")

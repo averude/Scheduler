@@ -46,19 +46,17 @@ public interface ScheduleController {
 
     @PreAuthorize("@userPermissionChecker.checkDepartmentUser(authentication, #departmentId)")
     @GetMapping("/departments/{departmentId}/dates")
-    List<? extends BasicDto<Employee, WorkDay>> getAllByDepartmentId(Authentication authentication,
-                                                                     @PathVariable Long departmentId,
+    List<? extends BasicDto<Employee, WorkDay>> getAllByDepartmentId(@PathVariable Long departmentId,
                                                                      @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
                                                                      @RequestParam(value = "from")
-                                                                              LocalDate from,
+                                                                             LocalDate from,
                                                                      @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
                                                                      @RequestParam(value = "to")
-                                                                              LocalDate to);
+                                                                             LocalDate to);
 
     @PreAuthorize("@userPermissionChecker.checkShiftUser(authentication, #shiftIds)")
     @GetMapping("/shifts/{shiftIds}/dates")
-    List<? extends BasicDto<Employee, WorkDay>> getAllByShiftIds(Authentication authentication,
-                                                                 @PathVariable List<Long> shiftIds,
+    List<? extends BasicDto<Employee, WorkDay>> getAllByShiftIds(@PathVariable List<Long> shiftIds,
                                                                  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
                                                                  @RequestParam(value = "from")
                                                                          LocalDate from,

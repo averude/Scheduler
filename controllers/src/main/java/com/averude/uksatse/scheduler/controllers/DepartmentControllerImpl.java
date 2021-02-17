@@ -2,6 +2,7 @@ package com.averude.uksatse.scheduler.controllers;
 
 import com.averude.uksatse.scheduler.controllers.base.AByAuthController;
 import com.averude.uksatse.scheduler.controllers.interfaces.DepartmentController;
+import com.averude.uksatse.scheduler.controllers.logging.Logged;
 import com.averude.uksatse.scheduler.core.model.entity.structure.Department;
 import com.averude.uksatse.scheduler.security.authority.Authorities;
 import com.averude.uksatse.scheduler.security.model.entity.UserAccount;
@@ -35,6 +36,12 @@ public class DepartmentControllerImpl
     @Override
     public List<Department> getAllByAuth(Authentication authentication) {
         return super.getAllByAuth(authentication);
+    }
+
+    @Logged
+    @Override
+    public List<Department> getAllByEnterpriseId(Long enterpriseId) {
+        return departmentService.findAllByEnterpriseId(enterpriseId);
     }
 
     @Override

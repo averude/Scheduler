@@ -1,6 +1,7 @@
 package com.averude.uksatse.scheduler.controllers;
 
 import com.averude.uksatse.scheduler.controllers.interfaces.ScheduleController;
+import com.averude.uksatse.scheduler.controllers.logging.Logged;
 import com.averude.uksatse.scheduler.core.model.dto.BasicDto;
 import com.averude.uksatse.scheduler.core.model.dto.GenerationDTO;
 import com.averude.uksatse.scheduler.core.model.entity.Employee;
@@ -83,23 +84,19 @@ public class ScheduleControllerImpl implements ScheduleController {
         return ResponseEntity.ok(body);
     }
 
+    @Logged
     @Override
-    public List<? extends BasicDto<Employee, WorkDay>> getAllByDepartmentId(Authentication authentication,
-                                                                            Long departmentId,
+    public List<? extends BasicDto<Employee, WorkDay>> getAllByDepartmentId(Long departmentId,
                                                                             LocalDate from,
                                                                             LocalDate to) {
-        var userAccount = (UserAccount) authentication.getPrincipal();
-        log.debug("User:{} - Getting work schedule for department id:{} from:{} to:{}", userAccount, departmentId, from, to);
         return scheduleService.findAllDtoByDepartmentIdAndDate(departmentId, from, to);
     }
 
+    @Logged
     @Override
-    public List<? extends BasicDto<Employee, WorkDay>> getAllByShiftIds(Authentication authentication,
-                                                                        List<Long> shiftIds,
+    public List<? extends BasicDto<Employee, WorkDay>> getAllByShiftIds(List<Long> shiftIds,
                                                                         LocalDate from,
                                                                         LocalDate to) {
-        var userAccount = (UserAccount) authentication.getPrincipal();
-        log.debug("User:{} - Getting work schedule for shift id:{} from:{} to:{}", userAccount, shiftIds, from, to);
         return scheduleService.findScheduleDTOByShiftIdsAndDate(shiftIds, from, to);
     }
 }

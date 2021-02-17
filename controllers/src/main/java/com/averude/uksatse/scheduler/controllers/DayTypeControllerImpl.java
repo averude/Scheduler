@@ -2,6 +2,7 @@ package com.averude.uksatse.scheduler.controllers;
 
 import com.averude.uksatse.scheduler.controllers.base.AByAuthController;
 import com.averude.uksatse.scheduler.controllers.interfaces.DayTypeController;
+import com.averude.uksatse.scheduler.controllers.logging.Logged;
 import com.averude.uksatse.scheduler.core.model.entity.DayType;
 import com.averude.uksatse.scheduler.security.modifier.entity.EnterpriseIdEntityModifier;
 import com.averude.uksatse.scheduler.security.state.entity.SimpleByAuthMethodResolver;
@@ -18,16 +19,26 @@ import java.util.Optional;
 @RestController
 public class DayTypeControllerImpl
         extends AByAuthController<DayType> implements DayTypeController {
+
+    private final DayTypeService dayTypeService;
+
     @Autowired
     public DayTypeControllerImpl(DayTypeService dayTypeService,
                                  SimpleByAuthMethodResolver authStrategy,
                                  EnterpriseIdEntityModifier<DayType> entityModifier) {
         super(dayTypeService, authStrategy, entityModifier, LoggerFactory.getLogger(DayTypeController.class));
+        this.dayTypeService = dayTypeService;
     }
 
     @Override
     public List<DayType> getAllByAuth(Authentication authentication) {
         return super.getAllByAuth(authentication);
+    }
+
+    @Logged
+    @Override
+    public List<DayType> getAllByEnterpriseId(Long enterpriseId) {
+        return dayTypeService.findAllByEnterpriseId(enterpriseId);
     }
 
     @Override

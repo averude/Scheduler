@@ -14,10 +14,28 @@ export class SummationColumnDtoService
   extends ACrudService<BasicDTO<SummationColumn, SummationColumnDayTypeRange>>
   implements CUDService<BasicDTO<SummationColumn, SummationColumnDayTypeRange>> {
 
-  constructor(authService: AuthService,
+  constructor(private authService: AuthService,
               http: HttpClient,
               private config: RestConfig) {
     super(`${config.baseUrl}/admin/summation_columns/dto`, http);
+  }
+
+  getAll(): Observable<BasicDTO<SummationColumn, SummationColumnDayTypeRange>[]> {
+    return this.getAllByAuth();
+  }
+
+  getAllByAuth(): Observable<BasicDTO<SummationColumn, SummationColumnDayTypeRange>[]> {
+    const userAccount = this.authService.currentUserAccount;
+
+    if (userAccount.enterpriseId) {
+      return this.getAllByEnterpriseId(userAccount.enterpriseId);
+    }
+  }
+
+  getAllByEnterpriseId(enterpriseId: number): Observable<BasicDTO<SummationColumn, SummationColumnDayTypeRange>[]> {
+    return this.http.get<BasicDTO<SummationColumn, SummationColumnDayTypeRange>[]>(
+      `${this.url}/enterprises/${enterpriseId}`
+    );
   }
 
   create(dto: BasicDTO<SummationColumn, SummationColumnDayTypeRange>): Observable<BasicDTO<SummationColumn, SummationColumnDayTypeRange>> {

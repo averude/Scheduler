@@ -22,6 +22,7 @@ public interface ShiftController extends ICrudController<Shift>, IByAuthControll
     @GetMapping("/departments/{departmentId}")
     List<Shift> getAllByDepartmentId(@PathVariable Long departmentId);
 
+    // Should be reworked
     @PreAuthorize("@userPermissionChecker.checkShiftUser(authentication, #shiftIds)")
     @GetMapping("/shifts/{shiftIds}")
     List<Shift> getAllByShiftIds(@PathVariable List<Long> shiftIds);

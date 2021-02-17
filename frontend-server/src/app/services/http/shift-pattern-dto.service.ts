@@ -6,6 +6,7 @@ import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { ACrudService } from "./abstract-service/a-crud-service";
 import { ShiftPatternDTO } from "../../model/dto/shift-pattern-dto";
+import { UserAccountAuthority } from "../../model/dto/new-user-account-dto";
 
 @Injectable({
   providedIn: 'root'
@@ -13,10 +14,29 @@ import { ShiftPatternDTO } from "../../model/dto/shift-pattern-dto";
 export class ShiftPatternDtoService
   extends ACrudService<ShiftPatternDTO> implements CUDService<ShiftPatternDTO> {
 
-  constructor(authService: AuthService,
+  constructor(private authService: AuthService,
               http: HttpClient,
               private config: RestConfig) {
     super(`${config.baseUrl}/admin/patterns/dto`, http);
+  }
+
+  getAll(from?: string, to?: string): Observable<ShiftPatternDTO[]> {
+    return this.getAllByAuth();
+  }
+
+  getAllByAuth(): Observable<ShiftPatternDTO[]> {
+    const userAccount = this.authService.currentUserAccount;
+
+    if (userAccount.authority === UserAccountAuthority.DEPARTMENT_ADMIN
+      || userAccount.authority === UserAccountAuthority.SHIFT_ADMIN) {
+      return this.getAllByDepartmentId(userAccount.departmentId);
+    }
+  }
+
+  getAllByDepartmentId(departmentId: number): Observable<ShiftPatternDTO[]> {
+    return this.http.get<ShiftPatternDTO[]>(
+      `${this.url}/departments/${departmentId}`
+    );
   }
 
   create(dto: ShiftPatternDTO): Observable<ShiftPatternDTO> {

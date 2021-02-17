@@ -23,31 +23,26 @@ export class ShiftService
     super(`${config.baseUrl}/admin/shifts`, http);
   }
 
+  getAll(from?: string, to?: string): Observable<Shift[]> {
+    return this.getAllByAuth();
+  }
+
   getAllByAuth(): Observable<Shift[]> {
     const account = this.authService.currentUserAccount;
-    return this.decider.getAllByAuth(this, account);
+    return this.decider.getAllByAuth(this, account).pipe(
+      map(value => value.sort((a, b) => a.id - b.id))
+    );
   }
 
   getAllByDepartmentId(departmentId: number): Observable<Shift[]> {
     return this.http.get<Shift[]>(
       `${this.url}/departments/${departmentId}`
-    ).pipe(
-      map(value => value.sort((a, b) => a.id - b.id))
     );
   }
 
   getAllByShiftIds(shiftIds: number[]): Observable<Shift[]> {
     return this.http.get<Shift[]>(
       `${this.url}/shifts/${shiftIds}`
-    ).pipe(
-      map(value => value.sort((a, b) => a.id - b.id))
     );
-  }
-
-  getAll(from?: string, to?: string): Observable<Shift[]> {
-    return super.getAll(from, to)
-      .pipe(
-        map(value => value.sort((a, b) => a.id - b.id))
-      );
   }
 }

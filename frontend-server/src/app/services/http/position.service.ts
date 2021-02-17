@@ -24,27 +24,25 @@ export class PositionService
   }
 
   getAll(): Observable<Position[]> {
-    return super.getAll().pipe(map(values => values.sort((a, b) => a.id - b.id)));
+    return this.getAllByAuth();
   }
 
   getAllByAuth(): Observable<Position[]> {
     const userAccount = this.authService.currentUserAccount;
-    return this.decider.getAllByAuth(this, userAccount);
+    return this.decider.getAllByAuth(this, userAccount).pipe(
+      map(value => value.sort((a, b) => a.id - b.id))
+    );
   }
 
   getAllByDepartmentId(departmentId: number): Observable<Position[]> {
     return this.http.get<Position[]>(
       `${this.url}/departments/${departmentId}`
-    ).pipe(
-      map(value => value.sort((a, b) => a.id - b.id))
     );
   }
 
   getAllByShiftIds(shiftIds: number[]): Observable<Position[]> {
     return this.http.get<Position[]>(
       `${this.url}/shifts/${shiftIds}`
-    ).pipe(
-      map(value => value.sort((a, b) => a.id - b.id))
     );
   }
 }

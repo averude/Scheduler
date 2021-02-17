@@ -60,7 +60,7 @@ public class UserAccount implements Serializable {
     private List<UserAccountShift> accountShifts;
 
     public UserAccount(NewUserAccountDTO accountDTO) {
-        this.username = accountDTO.getUsername();
+        this.username = accountDTO.getUsername().toLowerCase();
         this.authority = accountDTO.getAuthority();
         this.role = accountDTO.getRole();
         this.name = accountDTO.getName();

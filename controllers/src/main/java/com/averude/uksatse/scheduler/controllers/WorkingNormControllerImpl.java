@@ -2,6 +2,7 @@ package com.averude.uksatse.scheduler.controllers;
 
 import com.averude.uksatse.scheduler.controllers.base.AByAuthController;
 import com.averude.uksatse.scheduler.controllers.interfaces.WorkingNormController;
+import com.averude.uksatse.scheduler.controllers.logging.Logged;
 import com.averude.uksatse.scheduler.core.model.dto.BasicDto;
 import com.averude.uksatse.scheduler.core.model.dto.GenerationDTO;
 import com.averude.uksatse.scheduler.core.model.entity.WorkingNorm;
@@ -56,6 +57,7 @@ public class WorkingNormControllerImpl
         return super.getAllByAuth(authentication, from, to);
     }
 
+    @Logged
     @Override
     public List<? extends BasicDto<Shift, WorkingNorm>> getAllDtoByDepartmentId(Long departmentId,
                                                                                 LocalDate from,
@@ -63,6 +65,7 @@ public class WorkingNormControllerImpl
         return workingNormService.findAllDtoByDepartmentIdAndDate(departmentId, from, to);
     }
 
+    @Logged
     @Override
     public List<WorkingNorm> getAllByDepartmentId(Long departmentId,
                                                   LocalDate from,
@@ -70,6 +73,7 @@ public class WorkingNormControllerImpl
         return workingNormService.findAllByDepartmentIdAndDateBetween(departmentId, from, to);
     }
 
+    @Logged
     @Override
     public List<WorkingNorm> getAllByShiftIds(List<Long> shiftIds,
                                               LocalDate from,

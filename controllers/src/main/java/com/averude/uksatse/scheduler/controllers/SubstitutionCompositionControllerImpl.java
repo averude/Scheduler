@@ -1,7 +1,8 @@
 package com.averude.uksatse.scheduler.controllers;
 
 import com.averude.uksatse.scheduler.controllers.base.AByAuthController;
-import com.averude.uksatse.scheduler.controllers.interfaces.SubstitutionShiftCompositionController;
+import com.averude.uksatse.scheduler.controllers.interfaces.SubstitutionCompositionController;
+import com.averude.uksatse.scheduler.controllers.logging.Logged;
 import com.averude.uksatse.scheduler.core.model.entity.SubstitutionShiftComposition;
 import com.averude.uksatse.scheduler.security.state.entity.SimpleByAuthMethodResolver;
 import com.averude.uksatse.scheduler.shared.service.SubstitutionShiftCompositionService;
@@ -16,14 +17,17 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-public class SubstitutionShiftCompositionControllerImpl
+public class SubstitutionCompositionControllerImpl
         extends AByAuthController<SubstitutionShiftComposition>
-        implements SubstitutionShiftCompositionController {
+        implements SubstitutionCompositionController {
+
+    private final SubstitutionShiftCompositionService substitutionShiftCompositionService;
 
     @Autowired
-    public SubstitutionShiftCompositionControllerImpl(SubstitutionShiftCompositionService substitutionShiftCompositionService,
-                                                      SimpleByAuthMethodResolver authStrategy) {
-        super(substitutionShiftCompositionService, authStrategy, LoggerFactory.getLogger(SubstitutionShiftCompositionController.class));
+    public SubstitutionCompositionControllerImpl(SubstitutionShiftCompositionService substitutionShiftCompositionService,
+                                                 SimpleByAuthMethodResolver authStrategy) {
+        super(substitutionShiftCompositionService, authStrategy, LoggerFactory.getLogger(SubstitutionCompositionController.class));
+        this.substitutionShiftCompositionService = substitutionShiftCompositionService;
     }
 
     @Override
@@ -31,6 +35,18 @@ public class SubstitutionShiftCompositionControllerImpl
                                                            LocalDate from,
                                                            LocalDate to) {
         return super.getAllByAuth(authentication, from, to);
+    }
+
+    @Logged
+    @Override
+    public List<SubstitutionShiftComposition> getAllByDepartmentId(Long departmentId, LocalDate from, LocalDate to) {
+        return substitutionShiftCompositionService.findAllByDepartmentIdAndDateBetween(departmentId, from, to);
+    }
+
+    @Logged
+    @Override
+    public List<SubstitutionShiftComposition> getAllByShiftIds(List<Long> shiftIds, LocalDate from, LocalDate to) {
+        return substitutionShiftCompositionService.findAllByShiftIdsAndDateBetween(shiftIds, from, to);
     }
 
     @Override

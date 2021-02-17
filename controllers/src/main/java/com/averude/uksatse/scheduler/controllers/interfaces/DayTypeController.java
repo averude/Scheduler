@@ -4,11 +4,9 @@ import com.averude.uksatse.scheduler.core.model.entity.DayType;
 import com.averude.uksatse.scheduler.security.annotations.IsAnyUser;
 import com.averude.uksatse.scheduler.security.annotations.IsEnterpriseAdmin;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,22 +15,26 @@ import java.util.Optional;
 public interface DayTypeController {
 
     @IsAnyUser
-    @RequestMapping(method = RequestMethod.GET)
+    @GetMapping
     List<DayType> getAllByAuth(Authentication authentication);
 
+    @PreAuthorize("@userPermissionChecker.checkAnyUserOfEnterprise(authentication, #enterpriseId)")
+    @GetMapping("/enterprises/{enterpriseId}")
+    List<DayType> getAllByEnterpriseId(@PathVariable Long enterpriseId);
+
     @IsEnterpriseAdmin
-    @RequestMapping(method = RequestMethod.GET, value = "/{id}")
+    @GetMapping("/{id}")
     Optional<DayType> get(@PathVariable Long id);
 
     @IsEnterpriseAdmin
-    @RequestMapping(method = RequestMethod.POST)
+    @PostMapping
     ResponseEntity<Long> post(@RequestBody DayType entity, Authentication authentication);
 
     @IsEnterpriseAdmin
-    @RequestMapping(method = RequestMethod.PUT)
+    @PutMapping
     ResponseEntity<?> put(@RequestBody DayType entity, Authentication authentication);
 
     @IsEnterpriseAdmin
-    @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
+    @DeleteMapping("/{id}")
     ResponseEntity<?> delete(@PathVariable Long id, Authentication authentication);
 }

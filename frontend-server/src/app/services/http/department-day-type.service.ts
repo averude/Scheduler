@@ -17,6 +17,10 @@ export class DepartmentDayTypeService
     super(`${config.baseUrl}/admin/department_day_types`, http);
   }
 
+  getAll(from?: string, to?: string): Observable<DepartmentDayType[]> {
+    return this.getAllByAuth();
+  }
+
   getAllByAuth(): Observable<DepartmentDayType[]> {
     const userAccount = this.authService.currentUserAccount;
 

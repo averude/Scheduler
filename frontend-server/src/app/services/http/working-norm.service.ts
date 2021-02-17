@@ -12,6 +12,7 @@ import { Shift } from "../../model/shift";
 import { GenerationDto } from "../../model/dto/generation-dto";
 import { map } from "rxjs/operators";
 import { ByAuthService, ServiceAuthDecider } from "./auth-decider/service-auth-decider";
+import { UserAccountAuthority } from "../../model/dto/new-user-account-dto";
 
 @Injectable({
   providedIn: "root"
@@ -28,20 +29,33 @@ export class WorkingNormService
   }
 
   getAllDto(from?: string, to?: string): Observable<BasicDTO<Shift, WorkingNorm>[]> {
-    return this.http.get<BasicDTO<Shift, WorkingNorm>[]>(
-      `${this.url}/dto/dates?from=${from}&to=${to}`
-    ).pipe(
+    return this.getAllDTOByAuth(from, to).pipe(
       map(value => value.sort((a, b) => a.parent.id - b.parent.id))
     );
   }
 
+  getAllDTOByAuth(from: string, to: string): Observable<BasicDTO<Shift, WorkingNorm>[]> {
+    const userAccount = this.authService.currentUserAccount;
+
+    if (userAccount.authority === UserAccountAuthority.DEPARTMENT_ADMIN) {
+      return this.getAllDTOByDepartmentId(userAccount.departmentId, from ,to);
+    }
+  }
+
+  getAllDTOByDepartmentId(departmentId: number, from: string, to: string): Observable<BasicDTO<Shift, WorkingNorm>[]> {
+    return this.http.get<BasicDTO<Shift, WorkingNorm>[]>(
+      `${this.url}/dto/departments/${departmentId}/dates?from=${from}&to=${to}`
+    );
+  }
+
   getAll(from?: string, to?: string): Observable<WorkingNorm[]> {
-    return super.getAll(from, to).pipe(parseDateOfEntities);
+    return this.getAllByAuth(from, to);
   }
 
   getAllByAuth(from: string, to: string): Observable<WorkingNorm[]> {
     const userAccount = this.authService.currentUserAccount;
-    return this.decider.getAllByAuth(this, userAccount, from, to);
+    return this.decider.getAllByAuth(this, userAccount, from, to)
+      .pipe(parseDateOfEntities);
   }
 
   getAllByDepartmentId(departmentId: number,
@@ -49,7 +63,7 @@ export class WorkingNormService
                        to: string): Observable<WorkingNorm[]> {
     return this.http.get<WorkingNorm[]>(
       `${this.url}/departments/${departmentId}/dates?from=${from}&to=${to}`
-    ).pipe(parseDateOfEntities);
+    );
   }
 
   getAllByShiftIds(shiftIds: number[],
@@ -57,7 +71,7 @@ export class WorkingNormService
                    to: string): Observable<WorkingNorm[]> {
     return this.http.get<WorkingNorm[]>(
       `${this.url}/shifts/${shiftIds}/dates?from=${from}&to=${to}`
-    ).pipe(parseDateOfEntities);
+    );
   }
 
   generate(generationDto: GenerationDto): Observable<any> {

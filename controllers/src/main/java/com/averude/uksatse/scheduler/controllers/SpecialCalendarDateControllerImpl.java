@@ -2,6 +2,7 @@ package com.averude.uksatse.scheduler.controllers;
 
 import com.averude.uksatse.scheduler.controllers.base.AByAuthController;
 import com.averude.uksatse.scheduler.controllers.interfaces.SpecialCalendarDateController;
+import com.averude.uksatse.scheduler.controllers.logging.Logged;
 import com.averude.uksatse.scheduler.core.model.entity.SpecialCalendarDate;
 import com.averude.uksatse.scheduler.security.modifier.entity.EnterpriseIdEntityModifier;
 import com.averude.uksatse.scheduler.security.state.entity.SimpleByAuthMethodResolver;
@@ -23,11 +24,14 @@ public class SpecialCalendarDateControllerImpl
         extends AByAuthController<SpecialCalendarDate>
         implements SpecialCalendarDateController {
 
+    private final SpecialCalendarDateService specialCalendarDateService;
+
     @Autowired
-    public SpecialCalendarDateControllerImpl(SpecialCalendarDateService service,
+    public SpecialCalendarDateControllerImpl(SpecialCalendarDateService specialCalendarDateService,
                                              SimpleByAuthMethodResolver methodResolver,
                                              EnterpriseIdEntityModifier<SpecialCalendarDate> entityModifier) {
-        super(service, methodResolver, entityModifier, log);
+        super(specialCalendarDateService, methodResolver, entityModifier, log);
+        this.specialCalendarDateService = specialCalendarDateService;
     }
 
     @Override
@@ -35,6 +39,12 @@ public class SpecialCalendarDateControllerImpl
                                                   @NonNull LocalDate from,
                                                   @NonNull LocalDate to) {
         return super.getAllByAuth(authentication, from, to);
+    }
+
+    @Logged
+    @Override
+    public List<SpecialCalendarDate> getAllByEnterpriseId(Long enterpriseId, LocalDate from, LocalDate to) {
+        return specialCalendarDateService.findAllByEnterpriseIdAndDateBetween(enterpriseId, from, to);
     }
 
     @Override

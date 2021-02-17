@@ -2,6 +2,7 @@ package com.averude.uksatse.scheduler.controllers;
 
 import com.averude.uksatse.scheduler.controllers.base.AByAuthController;
 import com.averude.uksatse.scheduler.controllers.interfaces.DepartmentDayTypeController;
+import com.averude.uksatse.scheduler.controllers.logging.Logged;
 import com.averude.uksatse.scheduler.core.model.entity.DepartmentDayType;
 import com.averude.uksatse.scheduler.security.modifier.entity.DepartmentIdEntityModifier;
 import com.averude.uksatse.scheduler.security.state.entity.SimpleByAuthMethodResolver;
@@ -19,16 +20,25 @@ import java.util.Optional;
 public class DepartmentDayTypeControllerImpl
         extends AByAuthController<DepartmentDayType> implements DepartmentDayTypeController {
 
+    private final DepartmentDayTypeService departmentDayTypeService;
+
     @Autowired
     public DepartmentDayTypeControllerImpl(DepartmentDayTypeService departmentDayTypeService,
                                            SimpleByAuthMethodResolver authStrategy,
                                            DepartmentIdEntityModifier<DepartmentDayType> entityModifier) {
         super(departmentDayTypeService, authStrategy, entityModifier, LoggerFactory.getLogger(DepartmentDayTypeController.class));
+        this.departmentDayTypeService = departmentDayTypeService;
     }
 
     @Override
     public List<DepartmentDayType> getAllByAuth(Authentication authentication) {
         return super.getAllByAuth(authentication);
+    }
+
+    @Logged
+    @Override
+    public List<DepartmentDayType> getAllByDepartmentId(Long departmentId) {
+        return departmentDayTypeService.findAllByDepartmentId(departmentId);
     }
 
     @Override

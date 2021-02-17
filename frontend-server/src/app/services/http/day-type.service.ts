@@ -22,19 +22,19 @@ export class DayTypeService
   }
 
   getAll(from?: string, to?: string): Observable<DayType[]> {
-    return super.getAll(from, to)
-      .pipe(map(values => values.sort((a, b) => a.id - b.id)));
+    return this.getAllByAuth();
   }
 
   getAllByAuth(): Observable<DayType[]> {
     const userAccount = this.authService.currentUserAccount;
 
-    return this.getAllByEnterpriseId(userAccount.enterpriseId);
+    return this.getAllByEnterpriseId(userAccount.enterpriseId)
+      .pipe(map(values => values.sort((a, b) => a.id - b.id)));
   }
 
   getAllByEnterpriseId(enterpriseId: number): Observable<DayType[]> {
     return this.http.get<DayType[]>(
-      `${this.url}/enterprise/${enterpriseId}`
+      `${this.url}/enterprises/${enterpriseId}`
     );
   }
 
