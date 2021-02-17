@@ -2,6 +2,7 @@ package com.averude.uksatse.scheduler.controllers;
 
 import com.averude.uksatse.scheduler.controllers.base.AByAuthDtoController;
 import com.averude.uksatse.scheduler.controllers.interfaces.SummationColumnController;
+import com.averude.uksatse.scheduler.controllers.logging.Logged;
 import com.averude.uksatse.scheduler.core.model.dto.BasicDto;
 import com.averude.uksatse.scheduler.core.model.entity.SummationColumn;
 import com.averude.uksatse.scheduler.core.model.entity.SummationColumnDayTypeRange;
@@ -22,16 +23,25 @@ import java.util.Optional;
 public class SummationColumnControllerImpl
         extends AByAuthDtoController<SummationColumn, SummationColumnDayTypeRange> implements SummationColumnController {
 
+    private final SummationColumnService summationColumnService;
+
     @Autowired
     public SummationColumnControllerImpl(SummationColumnService summationColumnService,
                                          SimpleDtoByAuthMethodResolver authStrategy,
                                          EnterpriseIdDtoModifier<SummationColumn, SummationColumnDayTypeRange> dtoModifier) {
         super(summationColumnService, authStrategy, dtoModifier, LoggerFactory.getLogger(SummationColumnController.class));
+        this.summationColumnService = summationColumnService;
     }
 
     @Override
     public List<? extends BasicDto<SummationColumn, SummationColumnDayTypeRange>> getAllDtoByAuth(@NonNull Authentication authentication) {
         return super.getAllDtoByAuth(authentication);
+    }
+
+    @Logged
+    @Override
+    public List<? extends BasicDto<SummationColumn, SummationColumnDayTypeRange>> getAllDTOByDepartmentId(Long enterpriseId) {
+        return summationColumnService.findAllDtoByEnterpriseId(enterpriseId);
     }
 
     @Override

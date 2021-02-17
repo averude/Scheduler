@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from "../../services/http/auth.service";
 import { Router } from "@angular/router";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { UserAccountAuthority, UserAccountDTO } from "../../model/dto/new-user-account-dto";
 
 @Component({
   selector: 'app-login',
@@ -51,33 +52,46 @@ export class LoginComponent implements OnInit{
       return;
     }
 
+    if (this.loading) {
+      return;
+    }
+
     this.loading = true;
     this.authService.login(
-      this.form.username.value.trim(),
+      this.form.username.value.trim().toLowerCase(),
       this.form.password.value.trim()
     ).subscribe(res => {
-        this.navigate(res)
-          .catch(() => this.loading = false);
+        this.navigate(res).catch(() => this.loading = false);
       }, err => {
         this.loading = false;
         this.bad_credentials = true;
         this.loginForm.patchValue({password: null})
-        // this.loginForm.reset();
       });
   }
 
-  private navigate(user: any): Promise<boolean> {
-    if (user.roles.indexOf('GLOBAL_ADMIN') >= 0) {
-      return this.router.navigate(['/global_admin']);
+  private navigate(user: UserAccountDTO): Promise<boolean> {
+    let promise;
+    switch (user.authority) {
+
+      case UserAccountAuthority.GLOBAL_ADMIN:
+        promise = this.router.navigate(['/global_admin']);
+        break;
+
+      case UserAccountAuthority.ENTERPRISE_ADMIN:
+        promise = this.router.navigate(['/enterprise_admin']);
+        break;
+
+      case UserAccountAuthority.DEPARTMENT_ADMIN:
+        promise = this.router.navigate(['/shift_or_department_admin/schedule/calendar']);
+        break;
+
+      case UserAccountAuthority.SHIFT_ADMIN:
+        promise = this.router.navigate(['/shift_or_department_admin/schedule/calendar']);
+        break;
+
+      default:
+        throw new Error("Wrong authority of user account");
     }
-    if (user.roles.indexOf('ENTERPRISE_ADMIN') >= 0) {
-      return this.router.navigate(['/enterprise_admin']);
-    }
-    if (user.roles.indexOf('DEPARTMENT_ADMIN') >= 0) {
-      return this.router.navigate(['/shift_or_department_admin/schedule/calendar']);
-    }
-    if (user.roles.indexOf('SHIFT_ADMIN') >= 0 ) {
-      return this.router.navigate(['/shift_or_department_admin/schedule/calendar']);
-    }
+    return promise;
   }
 }

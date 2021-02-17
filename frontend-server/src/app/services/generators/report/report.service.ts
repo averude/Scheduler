@@ -31,7 +31,7 @@ export class ReportService {
               private specialCalendarDateService: SpecialCalendarDateService,
               private scheduleService: ScheduleService,
               private dayTypeService: DayTypeService,
-              private subDepartmentService: ReportSheetDTOService,
+              private reportSheetDTOService: ReportSheetDTOService,
               private shiftService: ShiftService,
               private positionService: PositionService,
               private statisticsService: StatisticsService,
@@ -57,32 +57,39 @@ export class ReportService {
 
     if (reportDataCollector && reportCreator && reportDecorator) {
 
-      const observables: Observable<any>[] = [
+      const userAccount = this.authService.currentUserAccount;
+
+      const sources: Observable<any>[] = [
+        this.scheduleService.getAllByAuth(from, to),
+        this.workingNormService.getAllByAuth(from, to),
         this.specialCalendarDateService.getAll(from, to),
-        this.scheduleService.getAllByDate(from, to),
         this.statisticsService.getSummationDTO(from, to, SummationMode.PER_POSITION),
         this.dayTypeService.getAll().pipe(map(values => values.sort((a, b) => a.id - b.id))),
-        this.workingNormService.getAll(from, to),
         this.shiftService.getAll(),
         this.positionService.getAll()
       ];
 
       const accessRights = this.authService.currentUserValue.accessRights;
       if (accessRights.isDepartmentLevel && accessRights.isAdmin) {
-        observables.push(this.subDepartmentService.getAll());
+        sources.push(this.reportSheetDTOService.getAll());
       }
 
-      return forkJoin(observables)
-        .pipe(mergeMap(values => {
-          const daysInMonth = this.paginationStrategy.calcDaysInMonth(date, values[0]);
-          this.statisticsColumnCompositor.composeResults(values[2], summationColumns, values[4]);
+      return forkJoin(sources)
+        .pipe(mergeMap((
+          [schedule, workingNorms, calendarDays,
+            summationDTO, dayTypes, shifts,
+            positions, reportSheets]) => {
 
-          const reportData = reportDataCollector.collect(daysInMonth, values[3], values[5],
-            values[6], values[1], values[2], summationColumns, useReportLabel);
+          const daysInMonth = this.paginationStrategy.calcDaysInMonth(date, calendarDays);
+          this.statisticsColumnCompositor.composeResults(summationDTO, summationColumns, workingNorms);
+
+          const reportData = reportDataCollector.collect(daysInMonth, dayTypes, shifts,
+            positions, schedule, summationDTO, summationColumns, useReportLabel);
           reportData.decorationData = decorationData;
 
           return this.reportGenerator
-              .generate(reportCreator, reportDecorator, reportData, values[7], divideBySubDep);
+              .generate(reportCreator, reportDecorator, reportData, reportSheets, divideBySubDep);
+
         }));
     }
   }

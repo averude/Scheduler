@@ -1,12 +1,14 @@
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { map, shareReplay } from "rxjs/operators";
+import { shareReplay, switchMap, tap } from "rxjs/operators";
 import { Observable } from "rxjs";
-import { User, UserAccessRights } from "../../model/user";
+import { UserAccessRights, UserSession } from "../../model/user";
 import decode from "jwt-decode";
 import { RestConfig } from "../../rest.config";
 import { CacheMapService } from "../cache/cache-map.service";
+import { UserAccountService } from "./user-account.service";
+import { UserAccountDTO } from "../../model/dto/new-user-account-dto";
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +17,7 @@ export class AuthService {
   constructor(private cache: CacheMapService,
               private router: Router,
               private config: RestConfig,
+              private userService: UserAccountService,
               private http: HttpClient) {}
 
   public login(username: string, password: string): Observable<any> {
@@ -24,24 +27,30 @@ export class AuthService {
       this.getOptions()
     ).pipe(
         shareReplay(),
-        map(token => {
+        switchMap(token => {
           if (token && token.access_token) {
-            const user = new User();
+            const userSession = new UserSession();
             const token_claims = decode(token.access_token);
-            user.roles = token_claims.authorities;
-            user.access_token = token.access_token;
-            this.fillAccessRights(user);
-            sessionStorage.setItem('currentUser', JSON.stringify(user));
-            return user;
+            userSession.roles = token_claims.authorities;
+            userSession.access_token = token.access_token;
+            this.fillAccessRights(userSession);
+            sessionStorage.setItem('currentUser', JSON.stringify(userSession));
+
+            return this.userService.me().pipe(tap(userAccount =>
+              sessionStorage.setItem('userAccount', JSON.stringify(userAccount))));
           }
-          return token;
         })
     );
   }
 
-  public get currentUserValue(): User {
+  public get currentUserValue(): UserSession {
     let user = sessionStorage.getItem('currentUser');
     return JSON.parse(user);
+  }
+
+  public get currentUserAccount(): UserAccountDTO {
+    let account = sessionStorage.getItem('userAccount');
+    return JSON.parse(account);
   }
 
   public isLogon(): boolean {
@@ -55,6 +64,7 @@ export class AuthService {
   public logout() {
     this.cache.clear();
     sessionStorage.removeItem("currentUser");
+    sessionStorage.removeItem("userAccount");
     this.router.navigate(['/login']);
   }
 
@@ -65,7 +75,7 @@ export class AuthService {
     return { headers: headers };
   }
 
-  private fillAccessRights(user: User) {
+  private fillAccessRights(user: UserSession) {
     user.accessRights = new UserAccessRights();
     user.roles.forEach(role => {
       switch (role) {

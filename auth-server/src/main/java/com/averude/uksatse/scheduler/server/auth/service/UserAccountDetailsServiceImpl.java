@@ -30,10 +30,10 @@ import static com.averude.uksatse.scheduler.security.authority.Authorities.*;
 @RequiredArgsConstructor
 public class UserAccountDetailsServiceImpl implements UserAccountDetailsService {
 
-    private final PasswordEncoder encoder;
-    private final UserAccountRepository userAccountRepository;
-    private final UserAccountShiftRepository userAccountShiftRepository;
-    private final UserAccountDTOConverter dtoConverter;
+    private final PasswordEncoder               encoder;
+    private final UserAccountRepository         userAccountRepository;
+    private final UserAccountShiftRepository    userAccountShiftRepository;
+    private final UserAccountDTOConverter       dtoConverter;
 
     @Override
     @Transactional
@@ -59,7 +59,8 @@ public class UserAccountDetailsServiceImpl implements UserAccountDetailsService 
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userAccountRepository.findByUsername(username)
+        var lowercaseUsername = username.toLowerCase();
+        return userAccountRepository.findByUsername(lowercaseUsername)
                 .map(userAccount -> new UserAccountDetails(userAccount,
                         Arrays.asList(
                                 new SimpleGrantedAuthority(userAccount.getAuthority()),
@@ -143,7 +144,7 @@ public class UserAccountDetailsServiceImpl implements UserAccountDetailsService 
     public UserAccountDTO updateUser(UserAccountDTO accountDTO) {
         return userAccountRepository.findById(accountDTO.getId())
                 .map(account -> {
-                    account.setUsername(accountDTO.getUsername());
+                    account.setUsername(accountDTO.getUsername().toLowerCase());
                     account.setName(accountDTO.getName());
                     account.setRole(accountDTO.getRole());
                     account.setAuthority(accountDTO.getAuthority());

@@ -2,6 +2,7 @@ package com.averude.uksatse.scheduler.controllers;
 
 import com.averude.uksatse.scheduler.controllers.base.AByAuthDtoController;
 import com.averude.uksatse.scheduler.controllers.interfaces.ShiftPatternController;
+import com.averude.uksatse.scheduler.controllers.logging.Logged;
 import com.averude.uksatse.scheduler.core.model.dto.BasicDto;
 import com.averude.uksatse.scheduler.core.model.dto.ShiftPatternDTO;
 import com.averude.uksatse.scheduler.core.model.entity.PatternUnit;
@@ -44,6 +45,12 @@ public class ShiftPatternControllerImpl
         return super.getAllDtoByAuth(authentication);
     }
 
+    @Logged
+    @Override
+    public List<? extends BasicDto<ShiftPattern, PatternUnit>> getAllDtoByDepartmentId(Long departmentId) {
+        return shiftPatternService.findAllDtoByDepartmentId(departmentId);
+    }
+
     @Override
     public Optional<ShiftPattern> get(Long id) {
         return super.get(id);
@@ -66,6 +73,12 @@ public class ShiftPatternControllerImpl
     @Override
     public List<ShiftPattern> getAll(Authentication authentication) {
         return methodResolver.findAll(authentication, shiftPatternService, null, null);
+    }
+
+    @Logged
+    @Override
+    public List<ShiftPattern> getAllByDepartmentId(Long departmentId) {
+        return shiftPatternService.findAllByDepartmentId(departmentId);
     }
 
     @Override

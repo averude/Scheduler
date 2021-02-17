@@ -8,6 +8,7 @@ import com.averude.uksatse.scheduler.security.annotations.IsDepartmentAdmin;
 import com.averude.uksatse.scheduler.security.annotations.IsDepartmentOrShiftUser;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +22,7 @@ public interface WorkingNormController
         extends ICrudController<WorkingNorm>, IByAuthAndDateController<WorkingNorm> {
 
     @IsDepartmentOrShiftUser
-    @RequestMapping(method = RequestMethod.GET, value = "/dto/dates")
+    @GetMapping("/dto/dates")
     List<? extends BasicDto<Shift, WorkingNorm>> getAllDtoByAuth(Authentication authentication,
                                                        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
                                                        @RequestParam(value = "from")
@@ -30,8 +31,18 @@ public interface WorkingNormController
                                                        @RequestParam(value = "to")
                                                                LocalDate to);
 
+    @PreAuthorize("@userPermissionChecker.checkDepartmentUser(authentication, #departmentId)")
+    @GetMapping("/dto/departments/{departmentId}/dates")
+    List<? extends BasicDto<Shift, WorkingNorm>> getAllDtoByDepartmentId(@PathVariable Long departmentId,
+                                                                 @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                                                 @RequestParam(value = "from")
+                                                                         LocalDate from,
+                                                                 @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                                                 @RequestParam(value = "to")
+                                                                         LocalDate to);
+
     @IsDepartmentOrShiftUser
-    @RequestMapping(method = RequestMethod.GET, value = "/dates")
+    @GetMapping("/dates")
     List<WorkingNorm> getAllByAuth(Authentication authentication,
                                    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
                                    @RequestParam(value = "from")
@@ -40,20 +51,40 @@ public interface WorkingNormController
                                    @RequestParam(value = "to")
                                            LocalDate to);
 
+    @PreAuthorize("@userPermissionChecker.checkDepartmentUser(authentication, #departmentId)")
+    @GetMapping("/departments/{departmentId}/dates")
+    List<WorkingNorm> getAllByDepartmentId(@PathVariable Long departmentId,
+                                           @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                           @RequestParam(value = "from")
+                                                   LocalDate from,
+                                           @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                           @RequestParam(value = "to")
+                                                   LocalDate to);
+
+    @PreAuthorize("@userPermissionChecker.checkShiftUser(authentication, #shiftIds)")
+    @GetMapping("/shifts/{shiftIds}/dates")
+    List<WorkingNorm> getAllByShiftIds(@PathVariable List<Long> shiftIds,
+                                       @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                       @RequestParam(value = "from")
+                                               LocalDate from,
+                                       @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                       @RequestParam(value = "to")
+                                               LocalDate to);
+
     @IsDepartmentAdmin
-    @RequestMapping(method = RequestMethod.GET, value = "/{id}")
+    @GetMapping("/{id}")
     Optional<WorkingNorm> get(@PathVariable Long id);
 
     @IsDepartmentAdmin
-    @RequestMapping(method = RequestMethod.POST)
+    @PostMapping
     ResponseEntity<Long> post(@RequestBody WorkingNorm entity, Authentication authentication);
 
     @IsDepartmentAdmin
-    @RequestMapping(method = RequestMethod.PUT)
+    @PutMapping
     ResponseEntity<?> put(@RequestBody WorkingNorm entity, Authentication authentication);
 
     @IsDepartmentAdmin
-    @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
+    @DeleteMapping("/{id}")
     ResponseEntity<?> delete(@PathVariable Long id, Authentication authentication);
 
     @IsDepartmentAdmin

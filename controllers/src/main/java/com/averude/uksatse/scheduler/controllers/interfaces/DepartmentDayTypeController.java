@@ -4,11 +4,9 @@ import com.averude.uksatse.scheduler.core.model.entity.DepartmentDayType;
 import com.averude.uksatse.scheduler.security.annotations.IsAnyUser;
 import com.averude.uksatse.scheduler.security.annotations.IsDepartmentAdmin;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,6 +18,10 @@ public interface DepartmentDayTypeController
     @IsAnyUser
     @RequestMapping(method = RequestMethod.GET)
     List<DepartmentDayType> getAllByAuth(Authentication authentication);
+
+    @PreAuthorize("@userPermissionChecker.checkAnyUserOfDepartment(authentication, #departmentId)")
+    @GetMapping("/departments/{departmentId}")
+    List<DepartmentDayType> getAllByDepartmentId(@PathVariable Long departmentId);
 
     @IsDepartmentAdmin
     @RequestMapping(method = RequestMethod.GET, value = "/{id}")

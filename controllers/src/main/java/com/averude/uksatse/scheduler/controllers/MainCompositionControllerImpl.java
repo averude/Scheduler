@@ -1,7 +1,8 @@
 package com.averude.uksatse.scheduler.controllers;
 
 import com.averude.uksatse.scheduler.controllers.base.AByAuthController;
-import com.averude.uksatse.scheduler.controllers.interfaces.MainShiftCompositionController;
+import com.averude.uksatse.scheduler.controllers.interfaces.MainCompositionController;
+import com.averude.uksatse.scheduler.controllers.logging.Logged;
 import com.averude.uksatse.scheduler.core.model.entity.MainShiftComposition;
 import com.averude.uksatse.scheduler.security.state.entity.SimpleByAuthMethodResolver;
 import com.averude.uksatse.scheduler.shared.service.MainShiftCompositionService;
@@ -16,18 +17,33 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-public class MainShiftCompositionControllerImpl
-        extends AByAuthController<MainShiftComposition> implements MainShiftCompositionController {
+public class MainCompositionControllerImpl
+        extends AByAuthController<MainShiftComposition> implements MainCompositionController {
+
+    private final MainShiftCompositionService mainShiftCompositionService;
 
     @Autowired
-    public MainShiftCompositionControllerImpl(MainShiftCompositionService mainShiftCompositionService,
-                                              SimpleByAuthMethodResolver authStrategy) {
-        super(mainShiftCompositionService, authStrategy, LoggerFactory.getLogger(MainShiftCompositionController.class));
+    public MainCompositionControllerImpl(MainShiftCompositionService mainShiftCompositionService,
+                                         SimpleByAuthMethodResolver authStrategy) {
+        super(mainShiftCompositionService, authStrategy, LoggerFactory.getLogger(MainCompositionController.class));
+        this.mainShiftCompositionService = mainShiftCompositionService;
     }
 
     @Override
     public List<MainShiftComposition> getAllByAuth(Authentication authentication, LocalDate from, LocalDate to) {
         return super.getAllByAuth(authentication, from, to);
+    }
+
+    @Logged
+    @Override
+    public List<MainShiftComposition> getAllByDepartmentId(Long departmentId, LocalDate from, LocalDate to) {
+        return mainShiftCompositionService.findAllByDepartmentIdAndDateBetween(departmentId, from, to);
+    }
+
+    @Logged
+    @Override
+    public List<MainShiftComposition> getAllByShiftIds(List<Long> shiftIds, LocalDate from, LocalDate to) {
+        return mainShiftCompositionService.findAllByShiftIdsAndDateBetween(shiftIds, from, to);
     }
 
     @Override

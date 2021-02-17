@@ -2,6 +2,7 @@ package com.averude.uksatse.scheduler.controllers;
 
 import com.averude.uksatse.scheduler.controllers.base.AByAuthController;
 import com.averude.uksatse.scheduler.controllers.interfaces.EnterpriseController;
+import com.averude.uksatse.scheduler.controllers.logging.Logged;
 import com.averude.uksatse.scheduler.core.model.entity.structure.Enterprise;
 import com.averude.uksatse.scheduler.security.model.entity.UserAccount;
 import com.averude.uksatse.scheduler.security.state.entity.SimpleByAuthMethodResolver;
@@ -28,9 +29,10 @@ public class EnterpriseControllerImpl
         this.enterpriseService = enterpriseService;
     }
 
+    @Logged
     @Override
-    public List<Enterprise> getAllByAuth(Authentication authentication) {
-        return super.getAllByAuth(authentication);
+    public List<Enterprise> getAll() {
+        return super.getAll();
     }
 
     @Override

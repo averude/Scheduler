@@ -1,6 +1,7 @@
 package com.averude.uksatse.scheduler.controllers;
 
 import com.averude.uksatse.scheduler.controllers.interfaces.ScheduleController;
+import com.averude.uksatse.scheduler.controllers.logging.Logged;
 import com.averude.uksatse.scheduler.core.model.dto.BasicDto;
 import com.averude.uksatse.scheduler.core.model.dto.GenerationDTO;
 import com.averude.uksatse.scheduler.core.model.entity.Employee;
@@ -81,5 +82,21 @@ public class ScheduleControllerImpl implements ScheduleController {
         String body = "Schedule " + generationDTO.toString() + " was successfully generated";
         log.debug(body);
         return ResponseEntity.ok(body);
+    }
+
+    @Logged
+    @Override
+    public List<? extends BasicDto<Employee, WorkDay>> getAllByDepartmentId(Long departmentId,
+                                                                            LocalDate from,
+                                                                            LocalDate to) {
+        return scheduleService.findAllDtoByDepartmentIdAndDate(departmentId, from, to);
+    }
+
+    @Logged
+    @Override
+    public List<? extends BasicDto<Employee, WorkDay>> getAllByShiftIds(List<Long> shiftIds,
+                                                                        LocalDate from,
+                                                                        LocalDate to) {
+        return scheduleService.findScheduleDTOByShiftIdsAndDate(shiftIds, from, to);
     }
 }

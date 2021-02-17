@@ -7,11 +7,9 @@ import com.averude.uksatse.scheduler.core.model.entity.ShiftPattern;
 import com.averude.uksatse.scheduler.security.annotations.IsDepartmentAdmin;
 import com.averude.uksatse.scheduler.security.annotations.IsDepartmentOrShiftUser;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +20,10 @@ public interface ShiftPatternController extends ICrudController<ShiftPattern> {
     @IsDepartmentOrShiftUser
     @RequestMapping(method = RequestMethod.GET, value = "/dto")
     List<? extends BasicDto<ShiftPattern, PatternUnit>> getAllDtoByAuth(Authentication authentication);
+
+    @PreAuthorize("@userPermissionChecker.checkAnyUserOfDepartment(authentication, #departmentId)")
+    @GetMapping("/dto/departments/{departmentId}")
+    List<? extends BasicDto<ShiftPattern, PatternUnit>> getAllDtoByDepartmentId(@PathVariable Long departmentId);
 
     @IsDepartmentAdmin
     @RequestMapping(method = RequestMethod.POST,
@@ -36,6 +38,10 @@ public interface ShiftPatternController extends ICrudController<ShiftPattern> {
     @IsDepartmentAdmin
     @RequestMapping(method = RequestMethod.GET)
     List<ShiftPattern> getAll(Authentication authentication);
+
+    @PreAuthorize("@userPermissionChecker.checkAnyUserOfDepartment(authentication, #departmentId)")
+    @GetMapping("/departments/{departmentId}")
+    List<ShiftPattern> getAllByDepartmentId(@PathVariable Long departmentId);
 
     @IsDepartmentAdmin
     @RequestMapping(method = RequestMethod.GET, value = "/{id}")

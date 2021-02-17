@@ -1,6 +1,7 @@
 package com.averude.uksatse.scheduler.controllers;
 
 import com.averude.uksatse.scheduler.controllers.interfaces.StatisticsController;
+import com.averude.uksatse.scheduler.controllers.logging.Logged;
 import com.averude.uksatse.scheduler.core.model.dto.CountDTO;
 import com.averude.uksatse.scheduler.core.model.dto.EmployeeWorkStatDTO;
 import com.averude.uksatse.scheduler.security.authority.Authorities;
@@ -54,5 +55,17 @@ public class StatisticsControllerImpl implements StatisticsController {
         } else {
             throw new RuntimeException();
         }
+    }
+
+    @Logged
+    @Override
+    public List<EmployeeWorkStatDTO> getSummationDTOByDepartmentId(String mode, Long departmentId, LocalDate from, LocalDate to) {
+        return employeeWorkStatService.findAllByDepartmentIdAndDateBetween(departmentId, from, to, mode);
+    }
+
+    @Logged
+    @Override
+    public List<EmployeeWorkStatDTO> getSummationDTOByShiftIds(String mode, List<Long> shiftIds, LocalDate from, LocalDate to) {
+        return employeeWorkStatService.findAllByShiftIdsAndDateBetween(shiftIds, from, to, mode);
     }
 }

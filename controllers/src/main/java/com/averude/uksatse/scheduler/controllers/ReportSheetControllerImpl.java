@@ -1,6 +1,7 @@
 package com.averude.uksatse.scheduler.controllers;
 
 import com.averude.uksatse.scheduler.controllers.interfaces.ReportSheetController;
+import com.averude.uksatse.scheduler.controllers.logging.Logged;
 import com.averude.uksatse.scheduler.core.model.dto.ReportSheetDTO;
 import com.averude.uksatse.scheduler.core.model.entity.ReportSheet;
 import com.averude.uksatse.scheduler.security.model.entity.UserAccount;
@@ -34,6 +35,12 @@ public class ReportSheetControllerImpl implements ReportSheetController {
         if (account.getAuthority().equals(DEPARTMENT_ADMIN)) {
             return reportSheetService.findAllByDepartmentId(account.getDepartmentId());
         } else throw new AccessDeniedException("User don't have required permission");
+    }
+
+    @Logged
+    @Override
+    public List<ReportSheetDTO> getAllByDepartmentId(Long departmentId) {
+        return reportSheetService.findAllByDepartmentId(departmentId);
     }
 
     @Override

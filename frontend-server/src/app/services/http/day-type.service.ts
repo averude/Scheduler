@@ -11,16 +11,31 @@ import { ACrudService } from "./abstract-service/a-crud-service";
 @Injectable({
   providedIn: 'root'
 })
-export class DayTypeService extends ACrudService<DayType> implements CUDService<DayType> {
+export class DayTypeService
+  extends ACrudService<DayType>
+  implements CUDService<DayType> {
 
-  constructor(authService: AuthService,
+  constructor(private authService: AuthService,
               http: HttpClient,
               private config: RestConfig) {
     super(`${config.baseUrl}/admin/day_types`, http);
   }
 
   getAll(from?: string, to?: string): Observable<DayType[]> {
-    return super.getAll(from, to)
+    return this.getAllByAuth();
+  }
+
+  getAllByAuth(): Observable<DayType[]> {
+    const userAccount = this.authService.currentUserAccount;
+
+    return this.getAllByEnterpriseId(userAccount.enterpriseId)
       .pipe(map(values => values.sort((a, b) => a.id - b.id)));
   }
+
+  getAllByEnterpriseId(enterpriseId: number): Observable<DayType[]> {
+    return this.http.get<DayType[]>(
+      `${this.url}/enterprises/${enterpriseId}`
+    );
+  }
+
 }

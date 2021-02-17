@@ -2,6 +2,7 @@ package com.averude.uksatse.scheduler.controllers;
 
 import com.averude.uksatse.scheduler.controllers.base.AByAuthController;
 import com.averude.uksatse.scheduler.controllers.interfaces.ShiftController;
+import com.averude.uksatse.scheduler.controllers.logging.Logged;
 import com.averude.uksatse.scheduler.core.model.entity.structure.Shift;
 import com.averude.uksatse.scheduler.security.modifier.entity.DepartmentIdEntityModifier;
 import com.averude.uksatse.scheduler.security.state.entity.SimpleByAuthMethodResolver;
@@ -19,16 +20,31 @@ import java.util.Optional;
 public class ShiftControllerImpl
         extends AByAuthController<Shift> implements ShiftController {
 
+    private final ShiftService shiftService;
+
     @Autowired
     public ShiftControllerImpl(ShiftService shiftService,
                                SimpleByAuthMethodResolver authStrategy,
                                DepartmentIdEntityModifier<Shift> entityModifier) {
         super(shiftService, authStrategy, entityModifier, LoggerFactory.getLogger(ShiftController.class));
+        this.shiftService = shiftService;
     }
 
     @Override
     public List<Shift> getAllByAuth(Authentication authentication) {
         return super.getAllByAuth(authentication);
+    }
+
+    @Logged
+    @Override
+    public List<Shift> getAllByDepartmentId(Long departmentId) {
+        return shiftService.findAllByDepartmentId(departmentId);
+    }
+
+    @Logged
+    @Override
+    public List<Shift> getAllByShiftIds(List<Long> shiftIds) {
+        return shiftService.findAllByShiftIds(shiftIds);
     }
 
     @Override
