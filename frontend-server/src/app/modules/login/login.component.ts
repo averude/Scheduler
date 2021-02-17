@@ -58,7 +58,7 @@ export class LoginComponent implements OnInit{
 
     this.loading = true;
     this.authService.login(
-      this.form.username.value.trim(),
+      this.form.username.value.trim().toLowerCase(),
       this.form.password.value.trim()
     ).subscribe(res => {
         this.navigate(res).catch(() => this.loading = false);

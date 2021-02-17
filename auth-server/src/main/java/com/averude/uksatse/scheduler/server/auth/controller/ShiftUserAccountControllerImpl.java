@@ -1,10 +1,8 @@
 package com.averude.uksatse.scheduler.server.auth.controller;
 
-import com.averude.uksatse.scheduler.security.details.UserAccountDetails;
 import com.averude.uksatse.scheduler.security.model.dto.NewUserAccountDTO;
 import com.averude.uksatse.scheduler.security.model.dto.PasswordResetDTO;
 import com.averude.uksatse.scheduler.security.model.dto.UserAccountDTO;
-import com.averude.uksatse.scheduler.security.model.entity.UserAccount;
 import com.averude.uksatse.scheduler.server.auth.service.UserAccountDetailsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+
+import static com.averude.uksatse.scheduler.server.auth.utils.AccountUtils.getUserAccount;
 
 @Slf4j
 @RestController
@@ -62,7 +62,4 @@ public class ShiftUserAccountControllerImpl implements ShiftUserAccountControlle
         userAccountDetailsService.resetShiftUserPassword(accountId, passwordResetDTO, originator);
     }
 
-    private UserAccount getUserAccount(Authentication authentication) {
-        return ((UserAccountDetails) authentication.getPrincipal()).getUserAccount();
-    }
 }
