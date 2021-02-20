@@ -11,26 +11,32 @@ import {
   leftAlign,
   rightAlign
 } from "../styles/report-styles";
+import { ReportSheet, ReportSheetParticipant } from "../../../../model/report-sheet";
 
 export abstract class AReportDecorator implements ReportDecorator {
   abstract REPORT_TYPE: string;
 
   decorate(sheet: Worksheet,
-           reportData: ReportData) {
+           reportData: ReportData,
+           dataRowsNum: number,
+           reportSheet: ReportSheet) {
     const reportMarkup    = reportData.reportMarkup;
     const numOfColumns    = reportData.headerData.length;
     const decorationData  = reportData.decorationData;
 
-    this.decorateTop(sheet, reportData);
+    this.decorateTop(sheet, reportData, reportSheet);
 
     const creator_row_start = reportMarkup.table_row_start_num + reportMarkup.table_header_height
-      + (reportData.tableData.length * reportMarkup.table_data_row_step) + reportMarkup.table_creator_interval;
+      + (dataRowsNum * reportMarkup.table_data_row_step) + reportMarkup.table_creator_interval;
 
-    this.decorateBottom(sheet, reportData, creator_row_start);
+    if (reportSheet) {
+      this.decorateBottom(sheet, reportData, reportSheet.creators, creator_row_start);
+    }
   }
 
   decorateTop(sheet: Worksheet,
-              reportData: ReportData): void {
+              reportData: ReportData,
+              reportSheet: ReportSheet): void {
     const numberOfColumns = reportData.headerData.length;
     const reportMarkup    = reportData.reportMarkup;
     const decorationData  = reportData.decorationData;
@@ -43,18 +49,18 @@ export abstract class AReportDecorator implements ReportDecorator {
     const approved_col_start_num = reportMarkup.sheet_col_start_num + numberOfColumns - approvedColInterval - 2;
 
     let extra = 0;
-    if (this.validate(decorationData.agreed) || this.validate(decorationData.approved)) {
+    if (reportSheet && (this.validate(reportSheet.agreed) || this.validate(reportSheet.approved))) {
       extra = 6;
-      this.decorateHeaderSection(sheet, decorationData.agreed, reportMarkup.sheet_row_start_num, reportMarkup.sheet_col_start_num + 1, 1);
-      this.decorateHeaderSection(sheet, decorationData.approved, reportMarkup.sheet_row_start_num, approved_col_start_num, approvedColInterval);
+      this.decorateHeaderSection(sheet, decorationData.agreed, reportSheet.agreed, reportMarkup.sheet_row_start_num, reportMarkup.sheet_col_start_num + 1, 1);
+      this.decorateHeaderSection(sheet, decorationData.approved, reportSheet.approved, reportMarkup.sheet_row_start_num, approved_col_start_num, approvedColInterval);
     }
 
-    this.decorateTableLabelSection(sheet, decorationData, reportMarkup.table_report_label, reportMarkup.sheet_row_start_num + extra, reportMarkup.sheet_col_start_num, numberOfColumns);
+    this.decorateTableLabelSection(sheet, decorationData, reportSheet, reportMarkup.table_report_label, reportMarkup.sheet_row_start_num + extra, reportMarkup.sheet_col_start_num, numberOfColumns);
 
     sheet.getRow(1).height = 4;
     sheet.getColumn(1).width = 1;
 
-    if (this.validate(decorationData.agreed) || this.validate(decorationData.approved)) {
+    if (reportSheet && (this.validate(reportSheet.agreed) || this.validate(reportSheet.approved))) {
       sheet.getRow(6).height = 4;
       sheet.getRow(9).height = 4;
       sheet.getRow(11).height = 4;
@@ -68,17 +74,17 @@ export abstract class AReportDecorator implements ReportDecorator {
 
   decorateBottom(sheet: Worksheet,
                  reportData: ReportData,
+                 creators: ReportSheetParticipant[],
                  start_row_num: number): void {
     const reportMarkup    = reportData.reportMarkup;
-    const decorationData  = reportData.decorationData;
 
-    if (!decorationData || !decorationData.documentCreators) {
+    if (!creators || !(creators.length > 0)) {
       return;
     }
 
     let row_num = start_row_num;
 
-    decorationData.documentCreators.forEach(creator => {
+    creators.forEach(creator => {
       if (creator.name && creator.position) {
         let col_start_num = 5;
 
@@ -108,20 +114,21 @@ export abstract class AReportDecorator implements ReportDecorator {
 
   decorateHeaderSection(sheet,
                         sectionData: HeaderSectionData,
+                        participant: ReportSheetParticipant,
                         start_row_num,
                         start_col_num,
                         col_interval: number) {
-    if (sectionData && sectionData.position && sectionData.person) {
+    if (sectionData && participant.position && participant.name) {
       const labelCell = sheet.getRow(start_row_num).getCell(start_col_num);
       labelCell.value = sectionData.label;
       labelCell.style.font = arialCyrSize12;
 
       const positionCell = sheet.getRow(start_row_num + 1).getCell(start_col_num);
-      positionCell.value = sectionData.position;
+      positionCell.value = participant.position;
       positionCell.style.font = arialCyrSize12;
 
       const personCell = sheet.getRow(start_row_num + 3).getCell(start_col_num + col_interval);
-      personCell.value = sectionData.person;
+      personCell.value = participant.name;
       personCell.style.font = arialCyrSize12;
 
       let row = sheet.getRow(start_row_num + 5);
@@ -138,6 +145,7 @@ export abstract class AReportDecorator implements ReportDecorator {
 
   decorateTableLabelSection(sheet: Worksheet,
                             decorationData: DecorationData,
+                            reportSheet: ReportSheet,
                             label: string,
                             start_row_num: number,
                             start_col_num: number,
@@ -153,7 +161,7 @@ export abstract class AReportDecorator implements ReportDecorator {
 
     sheet.mergeCells(sched_and_serv_row_num, merge_start_col_num, sched_and_serv_row_num, merge_end_col_num);
     const scheduleAndServiceNameCell = sheet.getCell(sched_and_serv_row_num, merge_start_col_num);
-    scheduleAndServiceNameCell.value = decorationData.schedAndServiceName;
+    scheduleAndServiceNameCell.value = reportSheet?.caption;
     scheduleAndServiceNameCell.style.font = arialCyrSize14;
     scheduleAndServiceNameCell.style.alignment = rightAlign;
 
@@ -175,7 +183,7 @@ export abstract class AReportDecorator implements ReportDecorator {
     yearCell.style.alignment = leftAlign;
   }
 
-  private validate(sectionData: HeaderSectionData): boolean {
-    return !!sectionData.person && !!sectionData.position;
+  private validate(sectionData: ReportSheetParticipant): boolean {
+    return sectionData && !!sectionData.name && !!sectionData.position;
   }
 }

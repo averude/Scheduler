@@ -1,24 +1,13 @@
+import { ReportSheetParticipant } from "../../../../model/report-sheet";
+
 export class DecorationData {
-  agreedPerson: string;
-  agreedPosition: string;
   year: number;
   month: string;
-  approvedPosition: string;
-  approvedPerson: string;
-  schedAndServiceName: string;
-  documentCreators: DocumentCreator[];
-  agreed?: HeaderSectionData;
-  approved?: HeaderSectionData;
+  agreed: HeaderSectionData;
+  approved: HeaderSectionData;
 }
 
-export class DocumentCreator {
-  position: string;
-  name: string;
-}
-
-export interface HeaderSectionData {
+export interface HeaderSectionData extends ReportSheetParticipant {
   label: string;
-  position: string;
-  person: string;
   year: number
 }

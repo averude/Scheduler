@@ -23,18 +23,18 @@ export class ReportGenerator {
 
     if (divideBySubDep) {
       this.splitIntoSheets(reportSheets, reportData.tableData)
-        .forEach(group => {
+        .forEach((group, index) => {
         if (group.rows && group.rows.length > 0) {
           const worksheet = workbook.addWorksheet(group.name);
 
-          reportDecorator.decorate(worksheet, reportData);
+          reportDecorator.decorate(worksheet, reportData, group.rows.length, reportSheets[index].reportSheet);
           reportCreator.create(worksheet, reportData, group.rows);
         }
       });
     } else {
       const worksheet = workbook.addWorksheet('Schedule');
 
-      reportDecorator.decorate(worksheet, reportData);
+      reportDecorator.decorate(worksheet, reportData, reportData.tableData.length, null);
       const rows = this.inline(reportData.tableData);
       reportCreator.create(worksheet, reportData, rows);
     }
@@ -52,10 +52,10 @@ export class ReportGenerator {
       .reduce((previousValue, currentValue) => previousValue.concat(currentValue));
   }
 
-  private splitIntoSheets(subDepartments: ReportSheetDTO[],
+  private splitIntoSheets(sheets: ReportSheetDTO[],
                           shiftGroups: ReportGroupData[]) {
     const groups: ReportGroupData[] = [];
-    subDepartments.forEach(dto => {
+    sheets.forEach(dto => {
       const group = new ReportGroupData();
       group.id    = dto.reportSheet.id;
       group.name  = dto.reportSheet.name;

@@ -17,6 +17,7 @@ import { ReportServiceConfig } from "../../../../../services/generators/report/c
 import { ReportGenerator } from "../../../../../services/generators/report/report-generator";
 import { MatListModule } from "@angular/material/list";
 import { CellFiller } from "../../../../../services/generators/report/core/cell-filler";
+import { MatIconModule } from "@angular/material/icon";
 
 @NgModule({
   imports: [
@@ -28,6 +29,7 @@ import { CellFiller } from "../../../../../services/generators/report/core/cell-
     ReactiveFormsModule,
     MatCheckboxModule,
     MatSelectModule,
+    MatIconModule,
     MatStepperModule,
     MatButtonModule,
     MatCardModule,

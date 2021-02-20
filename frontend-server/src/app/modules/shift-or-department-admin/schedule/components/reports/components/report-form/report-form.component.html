@@ -1,28 +1,11 @@
-<mat-horizontal-stepper>
+<mat-horizontal-stepper linear>
 
-  <mat-step [stepControl]="decorationDataForm">
-    <ng-template matStepLabel>Date and caption</ng-template>
+  <mat-step [stepControl]="decorationDataForm" label="Date and type" state="create">
+    <!--<ng-template matStepLabel>Date and caption</ng-template>-->
 
     <div class="first-step-container">
 
-      <div class="options-container">
-        <mat-checkbox [(ngModel)]="useReportLabel">Use Report Labels</mat-checkbox>
-        <mat-checkbox [(ngModel)]="splitIntoSheets">Split into sheets</mat-checkbox>
-      </div>
-
       <div class="type-and-date-container">
-        <mat-form-field class="report-type">
-          <mat-select [(ngModel)]="reportType"
-                      #typeSelect="ngModel"
-                      placeholder="Report type"
-                      required>
-            <mat-option *ngFor="let type of reportTypes"
-                        [value]="type">
-              {{type}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-
         <!--Year and month-->
         <mat-form-field class="report-date">
           <input matInput
@@ -36,18 +19,26 @@
                           (monthSelected)="chosenMonthHandler($event, picker)">
           </mat-datepicker>
         </mat-form-field>
+
+        <mat-form-field class="report-type">
+          <mat-select [(ngModel)]="reportType"
+                      #typeSelect="ngModel"
+                      placeholder="Report type"
+                      required>
+            <mat-option [value]="reportTypes[0]">Schedule Report</mat-option>
+            <mat-option [value]="reportTypes[1]">Time Sheet Report</mat-option>
+          </mat-select>
+        </mat-form-field>
       </div>
 
-      <mat-form-field class="report-caption"
-                      [formGroup]="decorationDataForm">
-        <input matInput
-               formControlName="schedAndServiceName"
-               placeholder="Schedule and service name"/>
-      </mat-form-field>
+      <div class="options-container">
+        <mat-checkbox [(ngModel)]="useReportLabel">Use Report Labels</mat-checkbox>
+        <mat-checkbox [(ngModel)]="splitIntoSheets">Split into sheets</mat-checkbox>
+      </div>
     </div>
 
     <div class="stepper-footer">
-      <button mat-raised-button
+      <button class="scheduler-dialog-action-button"
               matStepperNext [disabled]="typeSelect.invalid">Next</button>
     </div>
   </mat-step>
@@ -95,86 +86,16 @@
     </div>
 
     <div class="stepper-footer">
-      <button mat-raised-button
+      <button class="scheduler-dialog-action-button"
               matStepperPrevious>Back</button>
-      <button mat-raised-button
-              matStepperNext>Next</button>
-    </div>
-  </mat-step>
-
-  <mat-step [formGroup]="decorationDataForm" [stepControl]="decorationDataForm">
-    <ng-template matStepLabel>Agreed and approved persons</ng-template>
-
-    <div class="third-step-container">
-      <div class="person-block" formGroupName="agreed">
-        <mat-form-field>
-          <input matInput
-                 formControlName="position"
-                 placeholder="Agreed position"/>
-        </mat-form-field>
-
-        <mat-form-field>
-          <input matInput
-                 formControlName="person"
-                 placeholder="Agreed person"/>
-        </mat-form-field>
-      </div>
-
-      <div class="person-block" formGroupName="approved">
-        <mat-form-field>
-          <input matInput
-                 formControlName="position"
-                 placeholder="Approved position"/>
-        </mat-form-field>
-
-        <mat-form-field>
-          <input matInput
-                 formControlName="person"
-                 placeholder="Approved person"/>
-        </mat-form-field>
-      </div>
-    </div>
-
-
-    <div class="stepper-footer">
-      <button mat-raised-button
-              matStepperPrevious>Back</button>
-      <button mat-raised-button
-              matStepperNext>Next</button>
-    </div>
-  </mat-step>
-
-  <mat-step [formGroup]="decorationDataForm" [stepControl]="decorationDataForm">
-    <ng-template matStepLabel>Creators</ng-template>
-    <ng-container formArrayName="documentCreators">
-      <div *ngFor="let creator of documentCreators.controls; let i = index; let l = last">
-        <ng-container [formGroup]="creator">
-          <mat-form-field>
-            <input matInput
-                   placeholder="Position"
-                   formControlName="position">
-          </mat-form-field>
-          <mat-form-field>
-            <input matInput
-                   placeholder="Name"
-                   formControlName="name">
-          </mat-form-field>
-          <button mat-button
-                  *ngIf="l"
-                  (click)="addDocumentCreator()">+</button>
-          <button mat-button
-                  *ngIf="!l"
-                  (click)="removeDocumentCreator(i)">-</button>
-        </ng-container>
-      </div>
-    </ng-container>
-
-    <div class="stepper-footer">
-      <button mat-raised-button
-              matStepperPrevious>Back</button>
-      <button mat-raised-button color="primary"
+      <button class="scheduler-dialog-action-button"
               matStepperNext
+              [disabled]="typeSelect.invalid"
               (click)="generateReport()">Generate</button>
     </div>
   </mat-step>
+
+  <ng-template matStepperIcon="edit"></ng-template>
+  <ng-template matStepperIcon="done"></ng-template>
+
 </mat-horizontal-stepper>

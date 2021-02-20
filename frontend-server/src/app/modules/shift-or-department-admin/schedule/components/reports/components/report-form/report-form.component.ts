@@ -4,7 +4,7 @@ import { Moment } from "moment";
 import * as fileSaver from 'file-saver';
 import { MatDatepicker } from "@angular/material/datepicker";
 import { ReportService } from "../../../../../../../services/generators/report/report.service";
-import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { FormBuilder, FormGroup } from "@angular/forms";
 import { SummationColumn } from "../../../../../../../model/summation-column";
 import { SummationColumnDtoService } from "../../../../../../../services/http/summation-column-dto.service";
 import { SCHEDULE_REPORT, TIME_SHEET_REPORT } from "../../../../../../../services/generators/report/model/report-types";
@@ -23,14 +23,13 @@ export class ReportFormComponent implements OnInit {
   decorationDataForm: FormGroup;
   date: Moment;
 
-  splitIntoSheets: boolean = false;
-
   summationColumns: SummationColumn[] = [];
-  selectedSummationColumns: SummationColumn[] = [];
 
+  selectedSummationColumns: SummationColumn[] = [];
   normCols: SummationColumn[] = [];
 
   useReportLabel: boolean;
+  splitIntoSheets: boolean;
 
   constructor(private fb: FormBuilder,
               private statisticsColumnCompositor: StatisticsColumnCompositor,
@@ -49,16 +48,8 @@ export class ReportFormComponent implements OnInit {
     this.date = moment.utc();
 
     this.decorationDataForm = this.fb.group({
-      agreedPerson:         [],
-      agreedPosition:       [],
       year:                 [this.date.year()],
       month:                [this.date.clone().locale('uk-UA').format("MMMM")],
-      approvedPosition:     [],
-      approvedPerson:       [],
-      schedAndServiceName:  [null, [Validators.required]],
-      documentCreators:     this.fb.array([
-        this.createDocumentCreator()
-      ]),
       agreed:               this.createSection('Погоджено'),
       approved:             this.createSection('ЗАТВЕРДЖУЮ'),
     });
@@ -67,29 +58,8 @@ export class ReportFormComponent implements OnInit {
   private createSection(label: string) {
     return this.fb.group({
       label:              [label],
-      position:           [],
-      person:             [],
       year:               [this.date.year()],
     });
-  }
-
-  private createDocumentCreator() {
-    return this.fb.group({
-      position: [],
-      name:     []
-    });
-  }
-
-  get documentCreators(): FormArray {
-    return this.decorationDataForm.get('documentCreators') as FormArray;
-  }
-
-  addDocumentCreator() {
-    this.documentCreators.push(this.createDocumentCreator());
-  }
-
-  removeDocumentCreator(index: number) {
-    this.documentCreators.removeAt(index);
   }
 
   moveToSelected(selected) {
