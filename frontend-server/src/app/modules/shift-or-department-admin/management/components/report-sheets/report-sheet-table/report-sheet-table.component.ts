@@ -62,7 +62,7 @@ export class ReportSheetTableComponent extends TableBaseIdEntityComponent<Report
   }
 
   getShiftsName(shiftIds: number[]): string {
-    if (shiftIds && shiftIds.length > 0) {
+    if (this.shifts && shiftIds && shiftIds.length > 0) {
       return shiftIds.sort()
         .map((shiftId, index) => {
           const shift = this.getShift(shiftId);

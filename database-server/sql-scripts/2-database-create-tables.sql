@@ -165,9 +165,13 @@ CREATE TABLE IF NOT EXISTS shifts (
 );
 
 CREATE TABLE IF NOT EXISTS report_sheets (
-  id            SERIAL,
-  department_id INTEGER       NOT NULL,
-  name          VARCHAR(128)  NOT NULL,
+  id              SERIAL,
+  department_id   INTEGER       NOT NULL,
+  name            VARCHAR(128)  NOT NULL,
+  report_caption  VARCHAR(256),
+  creators_json   VARCHAR,
+  approved_json   VARCHAR,
+  agreed_json     VARCHAR,
 
   UNIQUE (department_id, name),
 

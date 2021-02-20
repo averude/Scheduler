@@ -1,7 +1,10 @@
 package com.averude.uksatse.scheduler.core.model.entity;
 
+import com.averude.uksatse.scheduler.core.converters.JsonReportParticipantConverter;
+import com.averude.uksatse.scheduler.core.converters.JsonReportParticipantsConverter;
 import com.averude.uksatse.scheduler.core.interfaces.entity.HasDepartmentId;
 import com.averude.uksatse.scheduler.core.interfaces.entity.HasId;
+import com.averude.uksatse.scheduler.core.model.ReportSheetParticipant;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -30,6 +33,21 @@ public class ReportSheet implements HasId, HasDepartmentId {
     @JsonIgnore
     @Column(name = "department_id")
     private Long departmentId;
+
+    @Column(name = "report_caption")
+    private String caption;
+
+    @Convert(converter = JsonReportParticipantsConverter.class)
+    @Column(name = "creators_json")
+    private ReportSheetParticipant[] creators;
+
+    @Convert(converter = JsonReportParticipantConverter.class)
+    @Column(name = "approved_json")
+    private ReportSheetParticipant approved;
+
+    @Convert(converter = JsonReportParticipantConverter.class)
+    @Column(name = "agreed_json")
+    private ReportSheetParticipant agreed;
 
     @JsonIgnore
     @OneToMany( cascade = {CascadeType.PERSIST, CascadeType.MERGE},

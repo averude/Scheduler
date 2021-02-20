@@ -13,6 +13,7 @@ import { MatSelectModule } from "@angular/material/select";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatMomentDateModule } from "@angular/material-moment-adapter";
+import { MatCardModule } from "@angular/material/card";
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { MatMomentDateModule } from "@angular/material-moment-adapter";
     SharedModule,
     MatTableModule,
     MatFormFieldModule,
+    MatCardModule,
     MatInputModule,
     MatSortModule,
     MatDialogModule,

@@ -1,27 +1,130 @@
 <h2 matDialogTitle>{{operation}}</h2>
 <mat-dialog-content [formGroup]="dialogForm">
 
-  <ng-container formGroupName="reportSheet">
-    <mat-form-field>
-      <input matInput
-             placeholder="Name"
-             formControlName="name">
-      <!--<mat-error *ngIf="isControlInvalid('name')">{{getErrorMessage()}}</mat-error>-->
-    </mat-form-field>
-  </ng-container>
+  <div class="report-sheet-dialog-container">
 
-  <mat-form-field>
-    <mat-select placeholder="Shifts"
-                [compareWith]="compareNums"
-                multiple
-                formControlName="shiftIds">
-      <mat-option *ngFor="let shift of shifts"
-                  [value]="shift.id">
-        {{shift.name}}
-      </mat-option>
-    </mat-select>
-    <!--<mat-error *ngIf="isControlInvalid('shiftIds')">{{getErrorMessage()}}</mat-error>-->
-  </mat-form-field>
+    <ng-container formGroupName="reportSheet">
+      <mat-form-field class="report-sheet-name-input" >
+        <input matInput
+               placeholder="Name"
+               formControlName="name">
+      </mat-form-field>
+    </ng-container>
+
+    <mat-form-field class="report-sheet-shifts-input">
+
+      <mat-select placeholder="Shifts"
+                  [compareWith]="compareNums"
+                  multiple
+                  formControlName="shiftIds">
+        <mat-option *ngFor="let shift of shifts"
+                    [value]="shift.id">
+          {{shift.name}}
+        </mat-option>
+      </mat-select>
+
+    </mat-form-field>
+
+    <ng-container formGroupName="reportSheet">
+
+      <div class="report-sheet-extra-options">
+
+        <div class="report-sheet-agreed-field">
+
+          <ng-container formGroupName="agreed">
+
+            <div class="report-sheet-participant-field">
+              <p>Agreed</p>
+
+              <mat-form-field>
+                <input matInput
+                       placeholder="Position"
+                       formControlName="position">
+              </mat-form-field>
+
+              <mat-form-field>
+                <input matInput
+                       placeholder="Name"
+                       formControlName="name">
+              </mat-form-field>
+            </div>
+
+          </ng-container>
+
+        </div>
+
+        <div class="report-sheet-approved-field">
+
+          <ng-container formGroupName="approved">
+
+            <div class="report-sheet-participant-field">
+              <p>Approved</p>
+
+              <mat-form-field>
+                <input matInput
+                       placeholder="Position"
+                       formControlName="position">
+              </mat-form-field>
+
+              <mat-form-field>
+                <input matInput
+                       placeholder="Name"
+                       formControlName="name">
+              </mat-form-field>
+            </div>
+
+          </ng-container>
+
+        </div>
+
+        <mat-form-field class="report-sheet-caption-input">
+          <input matInput
+                 placeholder="Caption"
+                 formControlName="caption">
+        </mat-form-field>
+
+        <div class="report-sheet-creators-field report-sheet-participant-field">
+
+          <ng-container formArrayName="creators">
+
+            <p>Creators</p>
+
+            <div *ngFor="let _ of creators.controls; index as i; last as l">
+
+              <ng-container [formGroupName]="i">
+
+                <mat-form-field>
+                  <input matInput
+                         placeholder="Position"
+                         formControlName="position">
+                </mat-form-field>
+
+                <mat-form-field>
+                  <input matInput
+                         placeholder="Name"
+                         formControlName="name">
+                </mat-form-field>
+
+                <button class="scheduler-dialog-action-button"
+                        *ngIf="!l"
+                        (click)="removeCreator(i)">-</button>
+                <button class="scheduler-dialog-action-button"
+                        *ngIf="l"
+                        (click)="addCreator()">+</button>
+
+              </ng-container>
+
+            </div>
+
+          </ng-container>
+
+        </div>
+
+      </div>
+
+    </ng-container>
+
+  </div>
 
 </mat-dialog-content>
 

@@ -1,0 +1,76 @@
+.report-sheet-dialog-container {
+
+}
+
+.report-sheet-name-input {
+  width: 100%;
+}
+
+.report-sheet-shifts-input {
+  width: 100%;
+}
+
+.report-sheet-extra-options {
+  display: grid;
+  grid-template-columns: 25vw 25vw;
+  grid-column-gap: 3vw;
+  grid-template-areas:
+    "agreed approved"
+    "caption caption"
+    "creators creators";
+}
+
+.report-sheet-caption-input {
+  grid-area: caption;
+}
+
+.report-sheet-approved-field {
+  margin: 10px;
+  grid-area: approved;
+}
+
+.report-sheet-agreed-field {
+  margin: 10px;
+  grid-area: agreed;
+}
+
+.report-sheet-creators-field {
+  justify-self: center;
+  margin: 10px;
+  grid-area: creators;
+  width: 80%;
+}
+
+.report-sheet-creators-field > div {
+  display: flex;
+  justify-content: space-around;
+  align-items: baseline;
+}
+
+.report-sheet-creators-field > div > mat-form-field {
+  width: 100%;
+  padding-right: 10px;
+}
+
+.report-sheet-participant-field {
+  border: 1px solid #e6e6e6;
+  border-radius: 5px;
+  background-color: #fbfafa;
+  padding: 1em;
+}
+
+.report-sheet-participant-field > * {
+  display: block;
+}
+
+.report-sheet-participant-field > p {
+  padding: 0 0 8px;
+  font-size: 1.2em;
+  text-align: center;
+  margin: 0;
+  color: #b5b2b2;
+}
+
+.report-sheet-creators-field > mat-form-field {
+  display: inline-block;
+}
