@@ -1,0 +1,8 @@
+<div class="stepper-container">
+  <div *ngFor="let step of steps; let i = index"
+       class="stepper-content"
+       [attr.aria-expanded]="selectedIndex === i"
+       [@stepTransition]="_getAnimationDirection(i)">
+    <ng-container [ngTemplateOutlet]="step.content"></ng-container>
+  </div>
+</div>

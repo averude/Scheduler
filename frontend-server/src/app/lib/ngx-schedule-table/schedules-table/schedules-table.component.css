@@ -4,12 +4,21 @@
   max-width: 100%;
 }
 
+.dummy {
+  height: 28px;
+  position: sticky;
+  top: 0;
+  width: 100%;
+  background-color: #ffffff;
+}
+
 .table-base {
   font-family: 'MuseoSansRegular';
   user-select: none;
   border: 1px solid #e5e9f0;
   font-size: 12px;
-  margin: 10px auto 20px;
+  margin: 0 auto 20px;
+  max-width: 1600px;
   border-radius: 3px;
   width: 95%;
   border-spacing: 0;
@@ -28,16 +37,33 @@
   border-radius: 5px;
 }
 
+.date-container {
+  background-color: white;
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  padding-top: 25px;
+}
+
 .date-selector {
   margin: 0 auto;
   width: 300px;
 }
 
+.table-top-buttons-container {
+  padding-bottom: 4px;
+}
+
 .table-top-buttons {
   display: inline;
   margin-left: 20px;
+  height: 1em;
 }
 
 .table-top-buttons:first-child {
   margin-left: 95px;
+}
+
+.distinctByColor:nth-child(odd) {
+  background-color: #fbfcff;
 }

@@ -1,21 +1,27 @@
 import { ACrudService } from "../abstract-service/a-crud-service";
 import { NewUserAccountDTO, UserAccountDTO } from "../../../model/dto/new-user-account-dto";
-import { IByAuthService } from "../interface/i-by-auth.service";
 import { CUDService } from "../interface/cud-service";
 import { RestConfig } from "../../../rest.config";
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { PasswordResetDTO } from "../../../model/dto/password-reset-dto";
+import { HasEnterpriseIdService } from "../interface/has-enterprise-id.service";
 
 @Injectable()
 export class DepartmentUserAccountService
   extends ACrudService<UserAccountDTO>
-  implements IByAuthService<UserAccountDTO>, CUDService<UserAccountDTO> {
+  implements CUDService<UserAccountDTO>, HasEnterpriseIdService<UserAccountDTO> {
 
   constructor(private config: RestConfig,
               http: HttpClient) {
     super(`${config.baseUrl}/uaa/users/department_admins`, http);
+  }
+
+  getAllByEnterpriseId(enterpriseId: number): Observable<UserAccountDTO[]> {
+    return this.http.get<UserAccountDTO[]>(
+      `${this.url}/enterprises/${enterpriseId}`
+    );
   }
 
   create(userAccountDTO: NewUserAccountDTO): Observable<any> {

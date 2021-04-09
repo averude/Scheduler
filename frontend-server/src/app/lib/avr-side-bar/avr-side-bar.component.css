@@ -3,9 +3,9 @@
   list-style-type: none;
   margin: 0;
   padding: 0;
-  width: 20%;
+  width: 18%;
   min-width: 130px;
-  background-color: #444d58;
+  background-color: teal;
 }
 
 .sidebar-list-element {
@@ -13,7 +13,7 @@
 }
 
 .sidebar-content-box {
-  width: 80%;
+  width: 82%;
   overflow: scroll;
   height: 100%;
 }

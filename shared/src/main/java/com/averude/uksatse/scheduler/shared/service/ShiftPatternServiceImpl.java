@@ -7,8 +7,7 @@ import com.averude.uksatse.scheduler.core.model.entity.ShiftPattern;
 import com.averude.uksatse.scheduler.shared.repository.PatternUnitRepository;
 import com.averude.uksatse.scheduler.shared.repository.ShiftPatternGenerationRuleRepository;
 import com.averude.uksatse.scheduler.shared.repository.ShiftPatternRepository;
-import com.averude.uksatse.scheduler.shared.repository.ShiftRepository;
-import com.averude.uksatse.scheduler.shared.service.base.AByDepartmentIdService;
+import com.averude.uksatse.scheduler.shared.service.base.AService;
 import com.averude.uksatse.scheduler.shared.utils.BasicDtoSavingUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,7 +18,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class ShiftPatternServiceImpl
-        extends AByDepartmentIdService<ShiftPattern, Long> implements ShiftPatternService {
+        extends AService<ShiftPattern, Long> implements ShiftPatternService {
 
     private final ShiftPatternRepository shiftPatternRepository;
     private final PatternUnitRepository patternUnitRepository;
@@ -30,9 +29,8 @@ public class ShiftPatternServiceImpl
     public ShiftPatternServiceImpl(ShiftPatternRepository shiftPatternRepository,
                                    PatternUnitRepository patternUnitRepository,
                                    ShiftPatternGenerationRuleRepository shiftPatternGenerationRuleRepository,
-                                   ShiftRepository shiftRepository,
                                    BasicDtoSavingUtil basicDtoSavingUtil) {
-        super(shiftPatternRepository, shiftRepository);
+        super(shiftPatternRepository);
         this.shiftPatternRepository = shiftPatternRepository;
         this.patternUnitRepository = patternUnitRepository;
         this.shiftPatternGenerationRuleRepository = shiftPatternGenerationRuleRepository;
@@ -48,9 +46,8 @@ public class ShiftPatternServiceImpl
 
     @Override
     @Transactional
-    public List<? extends BasicDto<ShiftPattern, PatternUnit>> findAllDtoByShiftIds(List<Long> shiftIds) {
-        var patterns = shiftPatternRepository.findAllByShiftIds(shiftIds);
-        return transformPatternsList(patterns);
+    public List<ShiftPattern> findAllByDepartmentId(Long departmentId) {
+        return shiftPatternRepository.findAllByDepartmentId(departmentId);
     }
 
     @Override

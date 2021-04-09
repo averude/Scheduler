@@ -6,24 +6,29 @@ import { PaginationService } from "../../../lib/ngx-schedule-table/service/pagin
 import { IPaginationStrategy } from "../pagination-strategy/i-pagination-strategy";
 import { Subject, Subscription } from "rxjs";
 import { debounceTime, switchMap } from "rxjs/operators";
+import { MAT_DATE_FORMATS } from "@angular/material/core";
+import { DATE_FORMAT } from "../../utils/utils";
 
 @Component({
   selector: 'app-month-year-paginator',
   templateUrl: './month-year-paginator.component.html',
-  styleUrls: ['./month-year-paginator.component.css']
+  styleUrls: ['./month-year-paginator.component.css'],
+  providers: [{provide: MAT_DATE_FORMATS, useValue: DATE_FORMAT},]
 })
 export class MonthYearPaginatorComponent implements OnInit, OnDestroy {
   @Input() paginationStrategy:  IPaginationStrategy;
   @Input() dateUnit: DurationInputArg2 = 'month';
+
+  @Input() type: 'single' | 'range' = 'single';
 
   @Output() onDateChange: EventEmitter<void> = new EventEmitter<void>();
 
   private limiter:  Subject<any> = new Subject();
   private dateStep: DurationInputArg1 = 1;
 
-  currentDate:      Moment;
-  firstDayOfMonth:  Moment;
-  lastDayOfMonth:   Moment;
+  currentDate:  Moment;
+  fromDate:     Moment;
+  toDate:       Moment;
 
   constructor(private datePaginationService: PaginationService) {}
 
@@ -82,16 +87,20 @@ export class MonthYearPaginatorComponent implements OnInit, OnDestroy {
   }
 
   private initFirstAndLastDaysOfDateUnit() {
-    this.firstDayOfMonth = this.currentDate.clone().startOf(this.dateUnit);
-    this.lastDayOfMonth  = this.currentDate.clone().endOf(this.dateUnit);
+    this.fromDate = this.currentDate.clone().startOf(this.dateUnit);
+    this.toDate  = this.currentDate.clone().endOf(this.dateUnit);
   }
 
-  private changeDate() {
+  changeDate() {
+    this.initFirstAndLastDaysOfDateUnit();
+    this.load();
+  }
+
+  load() {
     this.onDateChange.emit();
 
-    this.initFirstAndLastDaysOfDateUnit();
     if (this.paginationStrategy) {
-      let values = [this.currentDate, this.firstDayOfMonth, this.lastDayOfMonth];
+      let values = [this.currentDate, this.fromDate, this.toDate];
       this.limiter.next(values);
     }
   }

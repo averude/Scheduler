@@ -40,7 +40,6 @@ public class Department implements HasId, HasEnterpriseId {
     @Positive(message = "{entity.id.negative}")
     private Long id;
 
-    @JsonIgnore
     @NotNull
     @Column(name = "enterprise_id",
             nullable = false)

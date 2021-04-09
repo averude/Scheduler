@@ -1,0 +1,4 @@
+<ng-template [ngTemplateOutlet]="name" (click)="toggle()"></ng-template>
+<div [class.expanded]="expandedChange | async" [@bodyExpansion]="getExpandedState()">
+  <ng-container [ngTemplateOutlet]="content"></ng-container>
+</div>

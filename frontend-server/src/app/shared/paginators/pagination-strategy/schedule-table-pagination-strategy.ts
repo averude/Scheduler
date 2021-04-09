@@ -7,11 +7,13 @@ import { map } from "rxjs/operators";
 import { IPaginationStrategy } from "./i-pagination-strategy";
 import { SpecialCalendarDateService } from "../../../services/http/special-calendar-date.service";
 import { SpecialCalendarDate } from "../../../model/special-calendar-date";
+import { AuthService } from "../../../services/http/auth.service";
 
 @Injectable()
 export class ScheduleTablePaginationStrategy implements IPaginationStrategy {
 
-  constructor(private specialCalendarDateService: SpecialCalendarDateService) {}
+  constructor(private authService: AuthService,
+              private specialCalendarDateService: SpecialCalendarDateService) {}
 
   getPaginationObject(selectedDate: Moment,
                       firstDay:     Moment,
@@ -19,7 +21,9 @@ export class ScheduleTablePaginationStrategy implements IPaginationStrategy {
     let firstDayOfMonthString = firstDay.format("YYYY-MM-DD");
     let lastDayOfMonthString = lastDay.format("YYYY-MM-DD");
 
-    return this.specialCalendarDateService.getAll(firstDayOfMonthString, lastDayOfMonthString)
+    const enterpriseId = this.authService.currentUserAccount.enterpriseId;
+
+    return this.specialCalendarDateService.getAllByEnterpriseId(enterpriseId, firstDayOfMonthString, lastDayOfMonthString)
       .pipe(map(specialCalendarDates => this.calcDaysInMonth(selectedDate, specialCalendarDates)));
   }
 

@@ -1,11 +1,29 @@
+.container {
+  display: inline-flex;
+  height: 100%;
+}
+
+.range-paginator-container {
+  display: inline-flex;
+  align-items: center;
+}
+
+.range-paginator-container > mat-form-field {
+  padding: 0;
+  margin: 0 8px;
+  width: 120px;
+  height: 39px;
+}
+
+.range-paginator-container > * {
+  font-size: 16px;
+  color: white;
+}
+
 .btn-group {
   position: relative;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-  vertical-align: middle;
-  margin-top: 30px;
-  padding-top: 10px;
-  padding-bottom: 10px;
+  display: flex;
+  align-items: center;
 }
 
 .btn-date-select {
@@ -15,29 +33,38 @@
   vertical-align: center;
 }
 
+.btn-refresh {
+  height: 24px;
+  background-color: transparent;
+}
+
+.btn-refresh:hover {
+  cursor: pointer;
+}
+
 .btn-date-select:hover {
   cursor: pointer;
 }
 
 .hidden-input {
-  width:1px;
-  visibility:hidden;
+  height: 0;
+  width: 0;
+  margin: 0;
+  padding: 0;
+  visibility: hidden;
 }
 
 .month-container {
   width: 180px;
-  padding-top: 7px;
-  height: 32px;
 }
 
-.month-container:hover {
-  background-color: #f0f6fb;
-  border-radius: 20px;
+.month-container:hover > div {
   cursor: pointer;
+  color: mediumblue;
 }
 
 .date-label {
-  color: #2b3944;
+  color: #ffffff;
   font-family: 'MuseoSansMedium', 'Roboto', sans-serif;
   font-size: 20px;
   text-align: center;

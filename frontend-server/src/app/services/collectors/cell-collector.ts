@@ -1,14 +1,14 @@
 import { CalendarDay } from "../../lib/ngx-schedule-table/model/calendar-day";
 import { HasDate } from "../../model/interface/has-date";
-import { CellData } from "../../lib/ngx-schedule-table/model/data/cell-data";
+import { Cell } from "../../lib/ngx-schedule-table/model/data/cell";
 import { Injectable } from "@angular/core";
 
 @Injectable()
 export class CellCollector {
 
-  public collect<T extends HasDate, R extends CellData>(dates: CalendarDay[],
-                                                        hasDates: T[],
-                                                        cellEnabled: boolean): R[] {
+  public collect<T extends HasDate, R extends Cell>(dates: CalendarDay[],
+                                                    hasDates: T[],
+                                                    cellEnabled: boolean): R[] {
     return this.collectByFn(dates, hasDates,
       (date => ({date: date, value: null, enabled: cellEnabled} as R)),
       ((cell, hasDate) => cell.value = hasDate));

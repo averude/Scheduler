@@ -17,39 +17,12 @@ export class SummationColumnDtoService
   constructor(private authService: AuthService,
               http: HttpClient,
               private config: RestConfig) {
-    super(`${config.baseUrl}/admin/summation_columns/dto`, http);
-  }
-
-  getAll(): Observable<BasicDTO<SummationColumn, SummationColumnDayTypeRange>[]> {
-    return this.getAllByAuth();
-  }
-
-  getAllByAuth(): Observable<BasicDTO<SummationColumn, SummationColumnDayTypeRange>[]> {
-    const userAccount = this.authService.currentUserAccount;
-
-    if (userAccount.enterpriseId) {
-      return this.getAllByEnterpriseId(userAccount.enterpriseId);
-    }
+    super(`${config.baseUrl}/summation_columns/dto`, http);
   }
 
   getAllByEnterpriseId(enterpriseId: number): Observable<BasicDTO<SummationColumn, SummationColumnDayTypeRange>[]> {
     return this.http.get<BasicDTO<SummationColumn, SummationColumnDayTypeRange>[]>(
       `${this.url}/enterprises/${enterpriseId}`
-    );
-  }
-
-  create(dto: BasicDTO<SummationColumn, SummationColumnDayTypeRange>): Observable<BasicDTO<SummationColumn, SummationColumnDayTypeRange>> {
-    return this.http.post<BasicDTO<SummationColumn, SummationColumnDayTypeRange>>(`${this.url}`, dto);
-  }
-
-  update(dto: BasicDTO<SummationColumn, SummationColumnDayTypeRange>): Observable<BasicDTO<SummationColumn, SummationColumnDayTypeRange>> {
-    return this.http.put<BasicDTO<SummationColumn, SummationColumnDayTypeRange>>(`${this.url}`, dto);
-  }
-
-  delete(id: number): Observable<any> {
-    return this.http.delete(
-      `${this.config.baseUrl}/admin/summation_columns/${id}`,
-      {responseType: 'text'}
     );
   }
 }

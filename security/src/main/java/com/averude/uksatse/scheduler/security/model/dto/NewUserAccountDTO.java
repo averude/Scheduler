@@ -1,5 +1,6 @@
 package com.averude.uksatse.scheduler.security.model.dto;
 
+import com.averude.uksatse.scheduler.security.model.IUser;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,7 +12,7 @@ import java.util.StringJoiner;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class NewUserAccountDTO {
+public class NewUserAccountDTO implements IUser {
 
     @NotNull
     private String username;

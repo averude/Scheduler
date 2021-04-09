@@ -17,18 +17,11 @@ const routes: Routes = [
       .then(mod => mod.GlobalAdminModule)
   },
   {
-    path: 'enterprise_admin',
+    path: 'admin',
     canActivate: [RoleGuard],
-    data: {roles: ['ENTERPRISE_ADMIN']},
-    loadChildren: () => import('./modules/enterprise-admin/enterprise-admin.module')
-      .then(mod => mod.EnterpriseAdminModule)
-  },
-  {
-    path: 'shift_or_department_admin',
-    canActivate: [RoleGuard],
-    data: {roles: ['DEPARTMENT_ADMIN', 'SHIFT_ADMIN']},
-    loadChildren: () => import('./modules/shift-or-department-admin/shift-or-department.module')
-      .then(mod => mod.ShiftOrDepartmentModule)
+    data: {roles: ['ENTERPRISE_ADMIN', 'DEPARTMENT_ADMIN', 'SHIFT_ADMIN']},
+    loadChildren: () => import('./modules/admin/admin.module')
+      .then(mod => mod.AdminModule)
   },
   {
     path: '',

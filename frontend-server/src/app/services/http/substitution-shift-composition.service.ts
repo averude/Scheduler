@@ -1,31 +1,31 @@
 import { ACrudService } from "./abstract-service/a-crud-service";
-import { SubstitutionShiftComposition } from "../../model/main-shift-composition";
+import { SubstitutionComposition } from "../../model/composition";
 import { CUDService } from "./interface/cud-service";
 import { HttpClient } from "@angular/common/http";
 import { AuthService } from "./auth.service";
 import { RestConfig } from "../../rest.config";
-import { Observable } from "rxjs";
-import { tap } from "rxjs/operators";
-import * as moment from "moment";
 import { Injectable } from "@angular/core";
+import { Observable } from "rxjs";
+import { map } from "rxjs/operators";
+import { convertDateStringToMoment } from "./schedule.service";
 
 @Injectable({
   providedIn: "root"
 })
 export class SubstitutionShiftCompositionService
-  extends ACrudService<SubstitutionShiftComposition> implements CUDService<SubstitutionShiftComposition> {
+  extends ACrudService<SubstitutionComposition> implements CUDService<SubstitutionComposition> {
 
   constructor(authService: AuthService,
               http: HttpClient,
               private config: RestConfig) {
-    super(`${config.baseUrl}/admin/substitution_shift_compositions`, http);
+    super(`${config.baseUrl}/substitution_compositions`, http);
   }
 
-  getAll(from?: string, to?: string): Observable<SubstitutionShiftComposition[]> {
-    return super.getAll(from, to)
-      .pipe(tap(compositions => compositions.forEach(composition => {
-        composition.from  = moment.utc(composition.from);
-        composition.to    = moment.utc(composition.to);
-      })));
+  create(t: SubstitutionComposition): Observable<SubstitutionComposition> {
+    return super.create(t).pipe(map(convertDateStringToMoment));
+  }
+
+  update(t: SubstitutionComposition): Observable<SubstitutionComposition> {
+    return super.update(t).pipe(map(convertDateStringToMoment));
   }
 }

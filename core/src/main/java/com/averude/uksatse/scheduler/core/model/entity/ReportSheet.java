@@ -30,7 +30,6 @@ public class ReportSheet implements HasId, HasDepartmentId {
     private String name;
 
     @NotNull
-    @JsonIgnore
     @Column(name = "department_id")
     private Long departmentId;
 

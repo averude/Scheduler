@@ -9,6 +9,7 @@ import com.averude.uksatse.scheduler.core.model.interval.GenerationInterval;
 import com.averude.uksatse.scheduler.core.util.OffsetCalculator;
 import com.averude.uksatse.scheduler.generator.schedule.ScheduleGenerator;
 import com.averude.uksatse.scheduler.shared.repository.*;
+import com.averude.uksatse.scheduler.shared.repository.common.ShiftRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -35,8 +36,8 @@ public class ScheduleGenerationServiceImpl implements ScheduleGenerationService 
     private final SpecialCalendarDateRepository     specialCalendarDateRepository;
     private final ScheduleGenerator                 scheduleGenerator;
     private final GenerationIntervalCreator<Long>   intervalCreator;
-    private final MainShiftCompositionRepository    mainShiftCompositionRepository;
-    private final SubstitutionShiftCompositionRepository substitutionShiftCompositionRepository;
+    private final MainCompositionRepository         mainCompositionRepository;
+    private final SubstitutionCompositionRepository substitutionCompositionRepository;
 
     @Override
     @Transactional
@@ -58,11 +59,11 @@ public class ScheduleGenerationServiceImpl implements ScheduleGenerationService 
                 .findAllByDepartmentIdAndDateBetween(shift.getDepartmentId(), from, to);
         var specialCalendarDatesMap = getSpecialDateMap(specialCalendarDates);
 
-        var mainCompositions = mainShiftCompositionRepository
+        var mainCompositions = mainCompositionRepository
                 .findAllByShiftIdInAndToGreaterThanEqualAndFromLessThanEqualOrderByEmployeeId(Collections.singletonList(shiftId), from, to);
-        var otherShiftsSubstitutionCompositions = substitutionShiftCompositionRepository
+        var otherShiftsSubstitutionCompositions = substitutionCompositionRepository
                 .findAllByEmployeeIdInAndToGreaterThanEqualAndFromLessThanEqual(getEmployeeIds(mainCompositions), from, to);
-        var substitutionCompositions = substitutionShiftCompositionRepository
+        var substitutionCompositions = substitutionCompositionRepository
                 .findAllByShiftIdAndToGreaterThanEqualAndFromLessThanEqual(shiftId, from, to);
 
         var workDays = generateWorkDays(shiftPattern, mainCompositions, otherShiftsSubstitutionCompositions, substitutionCompositions, from, to, offset, specialCalendarDatesMap);

@@ -3,6 +3,7 @@ import { SummationColumn } from "../../model/summation-column";
 import { WorkingNorm } from "../../model/working-norm";
 import { sortByPattern } from "../utils/collection-utils";
 import { Injectable } from "@angular/core";
+import { Shift } from "../../model/shift";
 
 @Injectable({providedIn: 'root'})
 export class StatisticsColumnCompositor {
@@ -21,6 +22,34 @@ export class StatisticsColumnCompositor {
         sortByPattern(pStat.summations, summationColumns, (sumRes, sumCol) => sumRes.summationColumnId == sumCol.id);
       });
     });
+  }
+
+  cr(shifts: Shift[],
+     dtos: EmployeeWorkStatDTO[],
+     summationColumns: SummationColumn[],
+     workingNorms: WorkingNorm[]) {
+
+    const rangeWorkingNorms = [];
+
+    shifts.forEach(shift => {
+
+      const filtered = workingNorms
+        .filter(norm => norm.shiftId === shift.id);
+
+      if (filtered.length > 0) {
+        const reduced = filtered
+          .reduce((prev, curr) => {
+            prev.hours = prev.hours + curr.hours;
+            prev.days  = prev.days + curr.days;
+            return prev;
+          });
+
+        rangeWorkingNorms.push(reduced);
+      }
+
+    });
+
+    this.composeResults(dtos, summationColumns, rangeWorkingNorms);
   }
 
   composeColumns(summationColumns: SummationColumn[]) {

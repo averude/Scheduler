@@ -9,11 +9,9 @@ import {
   QueryList,
 } from '@angular/core';
 import { PaginationService } from "../service/pagination.service";
-import { RowGroupData } from "../model/data/row-group-data";
-import { AfterDateColumnDef, BeforeDateColumnDef } from "../directives/column";
-import { DatedCellDef } from "../directives/cell";
+import { RowGroup } from "../model/data/row-group";
+import { AfterDateColumnDef, BeforeDateColumnDef, PageableColumnDef } from "../directives/column";
 import { Subscription } from "rxjs";
-import { CellLabelSetter } from "../utils/cell-label-setter";
 import { TableRenderer } from "../service/table-renderer.service";
 import { filter } from "rxjs/operators";
 
@@ -26,20 +24,21 @@ import { filter } from "rxjs/operators";
 export class TableRowGroupComponent implements OnInit, OnDestroy {
   colspan:  number;
 
+  @Input() trackByFn;
+
   @Input() selectionEnabled:  boolean;
   @Input() multipleSelect:    boolean;
   @Input() editableRowGroup:  boolean;
   @Input() showSumColumns:    boolean;
+  @Input() distinctByColor:   boolean;
 
-  @Input() datedCellDef:      DatedCellDef;
+  @Input() pageableColumns:   PageableColumnDef;
   @Input() beforeDateColumns: QueryList<BeforeDateColumnDef>;
   @Input() afterDateColumns:  QueryList<AfterDateColumnDef>;
 
-  @Input() groupData:         RowGroupData;
+  @Input() groupData:         RowGroup;
 
-  @Input() cellLabelSetter:   CellLabelSetter;
-
-  @Input() onAddRowClick:     EventEmitter<RowGroupData>;
+  @Input() onAddRowClick:     EventEmitter<RowGroup>;
 
   private paginatorSub: Subscription;
   private rowGroupRenderSub: Subscription;

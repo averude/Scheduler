@@ -20,7 +20,7 @@ public interface UserAccountDetailsService extends UserDetailsService {
 
     UserAccountDTO createEnterpriseUser(@Valid NewUserAccountDTO accountDTO, UserAccount originator);
 
-    UserAccountDTO createDepartmentUser(@Valid NewUserAccountDTO accountDTO, UserAccount originator);
+    UserAccountDTO createDepartmentUser(@Valid NewUserAccountDTO accountDTO);
 
     UserAccountDTO createShiftUser(@Valid NewUserAccountDTO accountDTO, UserAccount originator);
 
@@ -30,9 +30,9 @@ public interface UserAccountDetailsService extends UserDetailsService {
 
     void deleteEnterpriseUser(Long accountId, UserAccount originator);
 
-    UserAccountDTO updateDepartmentUser(UserAccountDTO userAccountDTO, UserAccount originator);
+    UserAccountDTO updateDepartmentUser(UserAccountDTO userAccountDTO);
 
-    void deleteDepartmentUser(Long accountId, UserAccount originator);
+    void deleteDepartmentUser(Long accountId);
 
     UserAccountDTO updateShiftUser(UserAccountDTO userAccountDTO, UserAccount originator);
 
@@ -40,7 +40,7 @@ public interface UserAccountDetailsService extends UserDetailsService {
 
     void resetEnterpriseUserPassword(Long accountId, PasswordResetDTO passwordResetDTO, UserAccount originator);
 
-    void resetDepartmentUserPassword(Long accountId, PasswordResetDTO passwordResetDTO, UserAccount originator);
+    void resetDepartmentUserPassword(Long accountId, PasswordResetDTO passwordResetDTO);
 
     void resetShiftUserPassword(Long accountId, PasswordResetDTO passwordResetDTO, UserAccount originator);
 }

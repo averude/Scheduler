@@ -1,0 +1,17 @@
+.toolbar-row {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  height: 60px;
+}
+
+.toolbar-icon {
+  width: 30px;
+  user-select: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.dummy {
+  width: 30px;
+}

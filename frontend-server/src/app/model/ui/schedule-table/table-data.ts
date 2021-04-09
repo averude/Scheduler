@@ -1,15 +1,15 @@
-import { Composition } from "../../main-shift-composition";
+import { Composition } from "../../composition";
 import { Employee } from "../../employee";
 import { Position } from "../../position";
 import { Moment } from "moment";
-import { CellData } from "../../../lib/ngx-schedule-table/model/data/cell-data";
-import { RowData } from "../../../lib/ngx-schedule-table/model/data/row-data";
-import { RowGroupData } from "../../../lib/ngx-schedule-table/model/data/row-group-data";
+import { Cell } from "../../../lib/ngx-schedule-table/model/data/cell";
+import { Row } from "../../../lib/ngx-schedule-table/model/data/row";
+import { RowGroup } from "../../../lib/ngx-schedule-table/model/data/row-group";
 import { binarySearch, binarySearchIndex, binarySearchInsertIndex } from "../../../shared/utils/collection-utils";
 import { RowInterval } from "./row-interval";
 
 export class TableData {
-  groups: RowGroup[];
+  groups: ScheduleRowGroup[];
   from:   Moment;
   to:     Moment;
 
@@ -17,7 +17,7 @@ export class TableData {
     this.groups = [];
   }
 
-  addRowGroup(group: RowGroup) {
+  addRowGroup(group: ScheduleRowGroup) {
     if (!this.groups) {
       return;
     }
@@ -28,16 +28,16 @@ export class TableData {
     }
   }
 
-  findRowGroup(groupId: number): RowGroup {
+  findRowGroup(groupId: number): ScheduleRowGroup {
     return binarySearch(this.groups, (mid => mid.id - groupId));
   }
 
-  findRow(group_id: number, row_id: number): Row {
+  findRow(group_id: number, row_id: number): ScheduleRow {
     return this.findRowGroup(group_id)?.findRow(row_id);
   }
 
-  findRows(id: number): Row[] {
-    const result: Row[] = [];
+  findRows(id: number): ScheduleRow[] {
+    const result: ScheduleRow[] = [];
     this.groups.forEach(group => {
       const row = group.findRow(id);
       if (row) {
@@ -71,13 +71,13 @@ export class TableData {
   }
 }
 
-export class RowGroup implements RowGroupData {
+export class ScheduleRowGroup implements RowGroup {
   table:  TableData;
   id:     number;
   name:   string;
-  rows:   RowData[];
+  rows:   Row[];
 
-  addRows(rows: Row[]) {
+  addRows(rows: ScheduleRow[]) {
     if (!rows) {
       return;
     }
@@ -85,7 +85,7 @@ export class RowGroup implements RowGroupData {
     rows.forEach(row => this.addRow(row));
   }
 
-  addRow(row: Row) {
+  addRow(row: ScheduleRow) {
     if (!this.rows) {
       return;
     }
@@ -99,7 +99,7 @@ export class RowGroup implements RowGroupData {
     }
   }
 
-  addRowOrElse(row: Row, fn: (row: RowData) => void) {
+  addRowOrElse(row: ScheduleRow, fn: (row: Row) => void) {
     if (!this.rows) {
       return;
     }
@@ -114,9 +114,9 @@ export class RowGroup implements RowGroupData {
     }
   }
 
-  findRow(id: number): Row {
+  findRow(id: number): ScheduleRow {
     if (this.rows) {
-      return <Row> binarySearch(this.rows, (mid => mid.id - id));
+      return <ScheduleRow> binarySearch(this.rows, (mid => mid.id - id));
     }
   }
 
@@ -132,20 +132,20 @@ export class RowGroup implements RowGroupData {
   }
 }
 
-export interface Row extends RowData {
-  group:        RowGroup;
-  id:           number;
-  employee:     Employee;
-  position:     Position;
-  compositions: Composition[];
+export interface ScheduleRow extends Row {
+  group:          ScheduleRowGroup;
+  id:             number;
+  employee:       Employee;
+  position:       Position;
+  compositions:   Composition[];
   isSubstitution: boolean;
-  cellData:     CellData[];
-  workingNorm:  number;
-  intervals?:   RowInterval[];
+  cells:          Cell[];
+  workingNorm:    number;
+  intervals?:     RowInterval[];
 }
 
-export interface Cell extends CellData {
-  row:      Row;
+export interface ScheduleCell extends Cell {
+  row:      ScheduleRow;
   value:    any;
   date:     any;
   enabled:  boolean;

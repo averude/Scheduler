@@ -9,13 +9,3 @@ export class CellDef {}
   selector: '[headerCellDef]'
 })
 export class HeaderCellDef {}
-
-@Directive({
-  selector: '[headerDateCellDef]'
-})
-export class HeaderDateCellDef {}
-
-@Directive({
-  selector: '[datedCellDef]'
-})
-export class DatedCellDef {}

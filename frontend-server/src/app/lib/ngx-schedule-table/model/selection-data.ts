@@ -1,8 +1,8 @@
-import { RowData } from "./data/row-data";
-import { CellData } from "./data/cell-data";
+import { Row } from "./data/row";
+import { Cell } from "./data/cell";
 
 export interface SelectionData {
-  event: MouseEvent;
-  rowData: RowData;
-  selectedCells: CellData[];
+  event:          MouseEvent;
+  row:            Row;
+  selectedCells:  Cell[];
 }

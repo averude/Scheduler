@@ -1,4 +1,4 @@
-import { Row, TableData } from "../../../model/ui/schedule-table/table-data";
+import { ScheduleRow, TableData } from "../../../model/ui/schedule-table/table-data";
 import { Moment } from "moment";
 import { Injectable } from "@angular/core";
 import { RowInterval } from "../../../model/ui/schedule-table/row-interval";
@@ -31,18 +31,18 @@ export class CellEnabledSetter {
     });
   }
 
-  processRow(row: Row, from: Moment, to: Moment) {
-    row.cellData.forEach(cell => cell.enabled = false);
-    this.processCells(row.cellData, row.intervals, from, to, (cell => cell.enabled = true));
+  processRow(row: ScheduleRow, from: Moment, to: Moment) {
+    row.cells.forEach(cell => cell.enabled = false);
+    this.processCells(row.cells, row.intervals, from, to, (cell => cell.enabled = true));
   }
 
-  process(row: Row) {
+  process(row: ScheduleRow) {
     this.processRow(row, row.group.table.from, row.group.table.to);
   }
 
   processTable(table: TableData) {
     table.groups.forEach(group => {
-      group.rows.forEach((row: Row) => this.processRow(row, table.from, table.to));
+      group.rows.forEach((row: ScheduleRow) => this.processRow(row, table.from, table.to));
     });
   }
 }

@@ -1,24 +1,27 @@
 import { WorkDay } from "../../../model/workday";
-import { CellData } from "../../../lib/ngx-schedule-table/model/data/cell-data";
+import { Cell } from "../../../lib/ngx-schedule-table/model/data/cell";
 import { convertTimeStringToMin } from "../../../shared/utils/utils";
 import { HasDayTypeAndTime } from "../../../model/interface/has-day-type-and-time";
+import { ScheduleCell } from "../../../model/ui/schedule-table/table-data";
 
 export function createOrUpdateCell(usePreviousValue: boolean,
-                                   employeeId: number,
                                    unit: HasDayTypeAndTime,
-                                   cell: CellData) {
+                                   cell: Cell) {
   if (cell.value) {
     updateWorkDayInCell(usePreviousValue, cell, unit);
   } else {
-    createWorkDayInCell(employeeId, cell, unit);
+    createWorkDayInCell(cell, unit);
   }
 }
 
-function createWorkDayInCell(employeeId: number,
-                             cell: CellData,
+function createWorkDayInCell(cell: Cell,
                              unit: HasDayTypeAndTime) {
+  const scheduleCell  = <ScheduleCell> cell;
+  const employee      = scheduleCell.row.employee;
+
   cell.value                    = new WorkDay();
-  cell.value.employeeId         = employeeId;
+  cell.value.departmentId       = employee.departmentId;
+  cell.value.employeeId         = employee.id;
   cell.value.startTime          = convertTimeStringToMin(unit.startTime);
   cell.value.endTime            = convertTimeStringToMin(unit.endTime);
   cell.value.breakStartTime     = convertTimeStringToMin(unit.breakStartTime);
@@ -28,7 +31,7 @@ function createWorkDayInCell(employeeId: number,
 }
 
 function updateWorkDayInCell(usePreviousValue: boolean,
-                             cell: CellData,
+                             cell: Cell,
                              unit: HasDayTypeAndTime) {
   if (!usePreviousValue) {
     cell.value.startTime      = convertTimeStringToMin(unit.startTime);

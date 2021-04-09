@@ -3,36 +3,26 @@ import { WorkDay } from '../../model/workday';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { RestConfig } from '../../rest.config';
-import { GenerationDto } from "../../model/dto/generation-dto";
 import { EmployeeScheduleDTO } from "../../model/dto/employee-schedule-dto";
 import { tap } from "rxjs/operators";
 import * as moment from "moment";
-import { AuthService } from "./auth.service";
-import { ByAuthService, ServiceAuthDecider } from "./auth-decider/service-auth-decider";
 
 @Injectable({
   providedIn: 'root'
 })
-export class ScheduleService implements ByAuthService<EmployeeScheduleDTO> {
+export class ScheduleService {
 
-  constructor(private authService: AuthService,
-              private decider: ServiceAuthDecider,
-              private http: HttpClient,
+  constructor(private http: HttpClient,
               private config: RestConfig) { }
-
-  getAllByAuth(from: string, to: string): Observable<EmployeeScheduleDTO[]> {
-    const userAccount = this.authService.currentUserAccount;
-    return this.decider.getAllByAuth(this, userAccount, from, to);
-  }
 
   getAllByDepartmentId(departmentId: number,
                        from: string,
                        to: string): Observable<EmployeeScheduleDTO[]> {
     return this.http.get<EmployeeScheduleDTO[]>(
-      `${this.config.baseUrl}/schedule/departments/${departmentId}/dates?from=${from}&to=${to}`
+      `${this.config.baseUrl}/work_schedule/departments/${departmentId}?from=${from}&to=${to}`
     ).pipe(tap(dtos => dtos.forEach(dto => {
-      dto.mainShiftCompositions.forEach(callbackFn);
-      dto.substitutionShiftCompositions.forEach(callbackFn);
+      dto.mainCompositions.forEach(convertDateStringToMoment);
+      dto.substitutionCompositions.forEach(convertDateStringToMoment);
     })));
   }
 
@@ -40,38 +30,31 @@ export class ScheduleService implements ByAuthService<EmployeeScheduleDTO> {
                    from: string,
                    to: string): Observable<EmployeeScheduleDTO[]> {
     return this.http.get<EmployeeScheduleDTO[]>(
-      `${this.config.baseUrl}/schedule/shifts/${shiftIds}/dates?from=${from}&to=${to}`
+      `${this.config.baseUrl}/work_schedule/shifts/${shiftIds}?from=${from}&to=${to}`
     ).pipe(tap(dtos => dtos.forEach(dto => {
-      dto.mainShiftCompositions.forEach(callbackFn);
-      dto.substitutionShiftCompositions.forEach(callbackFn);
+      dto.mainCompositions.forEach(convertDateStringToMoment);
+      dto.substitutionCompositions.forEach(convertDateStringToMoment);
     })));
   }
 
   create(schedule: WorkDay[]): Observable<any> {
     return this.http.post<any>(
-      `${this.config.baseUrl}/schedule`,
+      `${this.config.baseUrl}/work_schedule`,
       schedule
     );
   }
 
   update(schedule: WorkDay[]): Observable<any> {
     return this.http.put(
-      `${this.config.baseUrl}/schedule`,
+      `${this.config.baseUrl}/work_schedule`,
       schedule,
-      {responseType: 'text'}
-    );
-  }
-
-  generate(generationDto: GenerationDto): Observable<any> {
-    return this.http.post(
-      `${this.config.baseUrl}/schedule/generate`,
-      generationDto,
       {responseType: 'text'}
     );
   }
 }
 
-const callbackFn = composition => {
-  composition.from = moment.utc(composition.from);
-  composition.to = moment.utc(composition.to);
+export const convertDateStringToMoment = hasDateInterval => {
+  hasDateInterval.from = moment.utc(hasDateInterval.from);
+  hasDateInterval.to = moment.utc(hasDateInterval.to);
+  return hasDateInterval;
 };

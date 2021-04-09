@@ -1,5 +1,6 @@
 package com.averude.uksatse.scheduler.security.model.dto;
 
+import com.averude.uksatse.scheduler.security.model.IUser;
 import com.averude.uksatse.scheduler.security.model.entity.UserAccount;
 import com.averude.uksatse.scheduler.security.model.entity.UserAccountShift;
 import lombok.AllArgsConstructor;
@@ -14,7 +15,7 @@ import java.util.stream.Collectors;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserAccountDTO {
+public class UserAccountDTO implements IUser {
     @NotNull
     private Long id;
 

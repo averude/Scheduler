@@ -1,6 +1,6 @@
 import { IdEntity } from "../../model/interface/id-entity";
 import { BasicDTO } from "../../model/dto/basic-dto";
-import { MainShiftComposition } from "../../model/main-shift-composition";
+import { MainComposition } from "../../model/composition";
 
 export function binarySearch<T>(arr: T[],
                                 comparator_fn: (mid: T) => number): T {
@@ -195,7 +195,7 @@ export function sortByPattern<T1, T2>(arr: T1[],
 }
 
 export function sortByCompositions<T extends IdEntity>(dtos: BasicDTO<T, any>[],
-                                                       compositions: MainShiftComposition[]) {
+                                                       compositions: MainComposition[]) {
   const employeeMainShiftCompositions = uniqById(
     compositions
       .sort((a, b) => a.shiftId - b.shiftId),

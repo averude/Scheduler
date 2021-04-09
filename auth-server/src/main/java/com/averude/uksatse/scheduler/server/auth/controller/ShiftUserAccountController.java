@@ -1,6 +1,7 @@
 package com.averude.uksatse.scheduler.server.auth.controller;
 
 import com.averude.uksatse.scheduler.security.annotations.IsDepartmentAdmin;
+import com.averude.uksatse.scheduler.security.annotations.IsEnterpriseOrDepartmentAdmin;
 import com.averude.uksatse.scheduler.security.model.dto.NewUserAccountDTO;
 import com.averude.uksatse.scheduler.security.model.dto.PasswordResetDTO;
 import com.averude.uksatse.scheduler.security.model.dto.UserAccountDTO;
@@ -16,22 +17,26 @@ public interface ShiftUserAccountController {
     @GetMapping
     List<UserAccountDTO> getAllByAuth(Authentication authentication);
 
-    @IsDepartmentAdmin
+    @IsEnterpriseOrDepartmentAdmin
+    @GetMapping("/departments/{departmentId}")
+    List<UserAccountDTO> getAllByDepartmentId(@PathVariable Long departmentId);
+
+    @IsEnterpriseOrDepartmentAdmin
     @PostMapping
     UserAccountDTO create(@RequestBody NewUserAccountDTO accountDTO,
                           Authentication authentication);
 
-    @IsDepartmentAdmin
+    @IsEnterpriseOrDepartmentAdmin
     @PutMapping
     UserAccountDTO update(@RequestBody UserAccountDTO accountDTO,
                           Authentication authentication);
 
-    @IsDepartmentAdmin
+    @IsEnterpriseOrDepartmentAdmin
     @DeleteMapping("/{accountId}")
     void delete(@PathVariable Long accountId,
                 Authentication authentication);
 
-    @IsDepartmentAdmin
+    @IsEnterpriseOrDepartmentAdmin
     @PutMapping("/{accountId}/password")
     void resetPassword(@PathVariable Long accountId,
                        @RequestBody PasswordResetDTO passwordResetDTO,

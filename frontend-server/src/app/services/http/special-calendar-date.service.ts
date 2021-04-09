@@ -6,32 +6,22 @@ import { AuthService } from "./auth.service";
 import { HttpClient } from "@angular/common/http";
 import { RestConfig } from "../../rest.config";
 import { Observable } from "rxjs";
+import { HasEnterpriseIdService } from "./interface/has-enterprise-id.service";
 
 @Injectable({providedIn: "root"})
 export class SpecialCalendarDateService
-  extends ACrudService<SpecialCalendarDate> implements CUDService<SpecialCalendarDate>  {
+  extends ACrudService<SpecialCalendarDate>
+  implements CUDService<SpecialCalendarDate>, HasEnterpriseIdService<SpecialCalendarDate>  {
 
   constructor(private authService: AuthService,
               http: HttpClient,
               private config: RestConfig) {
-    super(`${config.baseUrl}/admin/special_calendar_dates`, http);
-  }
-
-  getAll(from?: string, to?: string): Observable<SpecialCalendarDate[]> {
-    return this.getAllByAuth(from, to);
-  }
-
-  getAllByAuth(from: string, to: string): Observable<SpecialCalendarDate[]> {
-    const userAccount = this.authService.currentUserAccount;
-
-    if (userAccount.enterpriseId) {
-      return this.getAllByEnterpriseId(userAccount.enterpriseId, from, to);
-    }
+    super(`${config.baseUrl}/special_calendar_dates`, http);
   }
 
   getAllByEnterpriseId(enterpriseId: number, from: string, to: string): Observable<SpecialCalendarDate[]> {
     return this.http.get<SpecialCalendarDate[]>(
-      `${this.url}/enterprises/${enterpriseId}/dates?from=${from}&to=${to}`
+      `${this.url}/enterprises/${enterpriseId}?from=${from}&to=${to}`
     );
   }
 }

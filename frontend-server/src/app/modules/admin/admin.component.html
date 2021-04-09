@@ -1,0 +1,116 @@
+<mat-toolbar>
+  <app-toolbar-row (onMenuClick)="side.toggle()"></app-toolbar-row>
+</mat-toolbar>
+<mat-sidenav-container fullscreen>
+
+  <mat-sidenav mode="over" [(opened)]="sideNavOpened">
+
+    <div class="sidenav-elements-container">
+      <div class="sidenav-user-container">
+
+        <img class="sidenav-user-icon" src="assets/img/user.svg">
+
+        <p class="sidenav-user-name"
+           [matMenuTriggerFor]="userAccountMenu">{{userAccount?.name || "-"}}</p>
+
+        <mat-menu #userAccountMenu="matMenu">
+          <button mat-menu-item (click)="openChangePasswordDialog()">Change password</button>
+        </mat-menu>
+
+        <p class="sidenav-department-name">{{orgLevelName}}</p>
+      </div>
+
+      <div class="sidenav-divider"></div>
+
+      <side-panel-stepper>
+
+        <ng-container *ngIf="accessRights.isEnterpriseLevel">
+          <cdk-step>
+            <div class="buttons-container">
+
+              <button *ngIf="accessRights.isEnterpriseLevel"
+                      (click)="stepper.next(); orgLevelName = enterprise.name">
+                DEPARTMENTS
+              </button>
+
+              <button *ngIf="accessRights.isEnterpriseLevel && accessRights.isAdmin"
+                      [routerLink]="'enterprise/' + userAccount.enterpriseId + '/management'"
+                      routerLinkActive="active"
+                      (click)="sideNavOpened = !sideNavOpened">MANAGEMENT
+              </button>
+            </div>
+          </cdk-step>
+
+          <cdk-step>
+
+            <div class="buttons-container">
+              <button style="color: cornflowerblue"
+                      (click)="previousStep()">
+                BACK
+              </button>
+
+              <button *ngFor="let department of departments"
+                      (click)="departmentStep(department)">
+                {{department?.name.toUpperCase()}}
+              </button>
+            </div>
+          </cdk-step>
+        </ng-container>
+
+        <cdk-step>
+          <div class="buttons-container">
+            <button style="color: cornflowerblue"
+                    *ngIf="accessRights.isEnterpriseLevel"
+                    (click)="previousStep()">
+              BACK
+            </button>
+
+            <button [routerLink]="'department/' + selectedDepartment?.id + '/calendar'"
+                    routerLinkActive="active"
+                    (click)="sideNavOpened = !sideNavOpened">
+              CALENDAR
+            </button>
+
+            <button [routerLink]="'department/' + selectedDepartment?.id + '/statistics'"
+                    routerLinkActive="active"
+                    (click)="sideNavOpened = !sideNavOpened">
+              STATISTICS
+            </button>
+
+            <button *ngIf="accessRights.isAdmin && (accessRights.isDepartmentLevel || accessRights.isEnterpriseLevel)"
+                    [routerLink]="'department/' + selectedDepartment?.id + '/working_norms'"
+                    routerLinkActive="active"
+                    (click)="sideNavOpened = !sideNavOpened">
+              WORKING NORMS
+            </button>
+
+            <button [routerLink]="'department/' + selectedDepartment?.id + '/reports'"
+                    routerLinkActive="active"
+                    (click)="sideNavOpened = !sideNavOpened">
+              REPORTS
+            </button>
+
+            <button *ngIf="accessRights.isAdmin && (accessRights.isDepartmentLevel || accessRights.isEnterpriseLevel)"
+                    [routerLink]="'department/' + selectedDepartment?.id + '/management'"
+                    routerLinkActive="active"
+                    (click)="sideNavOpened = !sideNavOpened">
+              MANAGEMENT
+            </button>
+          </div>
+        </cdk-step>
+      </side-panel-stepper>
+
+      <div class="sidenav-divider"></div>
+
+      <button style="color: red" (click)="logout()">LOGOUT</button>
+
+    </div>
+
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+
+</mat-sidenav-container>
+<simple-notifications></simple-notifications>

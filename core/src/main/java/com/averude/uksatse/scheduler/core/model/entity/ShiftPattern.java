@@ -66,7 +66,6 @@ public class ShiftPattern implements HasId, HasDepartmentId {
     @Positive(message = "{entity.id.negative}")
     private Long id;
 
-    @JsonIgnore
     @NotNull(message = "{shiftpattern.department.null}")
     @Positive(message = "{shiftpattern.department.negative}")
     @Column(name = "department_id",

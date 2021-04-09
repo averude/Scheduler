@@ -2,7 +2,7 @@ package com.averude.uksatse.scheduler.core.model.entity.structure;
 
 import com.averude.uksatse.scheduler.core.interfaces.entity.HasDepartmentId;
 import com.averude.uksatse.scheduler.core.interfaces.entity.HasId;
-import com.averude.uksatse.scheduler.core.model.entity.MainShiftComposition;
+import com.averude.uksatse.scheduler.core.model.entity.MainComposition;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -46,7 +46,6 @@ public class Shift implements HasId, HasDepartmentId {
     @Column(nullable = false)
     private String name;
 
-    @JsonIgnore
     @Positive(message = "{shift.department.negative}")
     @Column(name = "department_id",
             nullable = false)
@@ -59,7 +58,7 @@ public class Shift implements HasId, HasDepartmentId {
     @OneToMany( mappedBy = "shiftId",
                 cascade = CascadeType.ALL,
                 fetch = FetchType.LAZY)
-    private List<@NotNull @Valid MainShiftComposition> employees = new ArrayList<>();
+    private List<@NotNull @Valid MainComposition> employees = new ArrayList<>();
 
     @Override
     public boolean equals(Object o) {

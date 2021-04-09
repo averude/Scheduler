@@ -3,7 +3,6 @@ import { Observable } from "rxjs";
 import { HttpClient } from "@angular/common/http";
 import { RestConfig } from "../../rest.config";
 import { Injectable } from "@angular/core";
-import { IByAuthService } from "./interface/i-by-auth.service";
 import { CUDService } from "./interface/cud-service";
 import { map } from "rxjs/operators";
 import { ACrudService } from "./abstract-service/a-crud-service";
@@ -13,11 +12,11 @@ import { ACrudService } from "./abstract-service/a-crud-service";
 })
 export class DayTypeGroupService
   extends ACrudService<DayTypeGroup>
-  implements IByAuthService<DayTypeGroup>, CUDService<DayTypeGroup> {
+  implements CUDService<DayTypeGroup> {
 
   constructor(http: HttpClient,
               config: RestConfig) {
-    super(`${config.baseUrl}/admin/day_type_groups`, http);
+    super(`${config.baseUrl}/day_type_groups`, http);
   }
 
   getAll(): Observable<DayTypeGroup[]> {

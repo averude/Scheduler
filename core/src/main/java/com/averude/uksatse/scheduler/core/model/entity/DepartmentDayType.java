@@ -52,7 +52,6 @@ public class DepartmentDayType implements HasId, HasDayTypeAndTime, HasDepartmen
     @Positive(message = "{entity.id.negative}")
     private Long id;
 
-    @JsonIgnore
     @NotNull
     @Column(name = "department_id", nullable = false)
     private Long departmentId;

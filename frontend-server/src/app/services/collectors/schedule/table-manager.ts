@@ -1,10 +1,10 @@
-import { Row, RowGroup } from "../../../model/ui/schedule-table/table-data";
-import { AddMainShiftCompositionDialogComponent } from "../../../modules/shift-or-department-admin/schedule/components/calendar/schedule-table-shift-composition-dialog/add-main-shift-composition-dialog/add-main-shift-composition-dialog.component";
-import { Composition, MainShiftComposition } from "../../../model/main-shift-composition";
+import { ScheduleRow, ScheduleRowGroup } from "../../../model/ui/schedule-table/table-data";
+import { AddMainShiftCompositionDialogComponent } from "../../../components/calendar/schedule-table-shift-composition-dialog/add-main-shift-composition-dialog/add-main-shift-composition-dialog.component";
+import { Composition, MainComposition } from "../../../model/composition";
 import { getEmployeeShortName } from "../../../shared/utils/utils";
-import { EditCompositionsDialogComponent } from "../../../modules/shift-or-department-admin/schedule/components/calendar/schedule-table-shift-composition-dialog/edit-compositions-dialog/edit-compositions-dialog.component";
+import { EditCompositionsDialogComponent } from "../../../components/calendar/schedule-table-shift-composition-dialog/edit-compositions-dialog/edit-compositions-dialog.component";
 import { SelectionData } from "../../../lib/ngx-schedule-table/model/selection-data";
-import { AddSubstitutionCompositionDialogComponent } from "../../../modules/shift-or-department-admin/schedule/components/calendar/schedule-table-shift-composition-dialog/add-substitution-composition-dialog/add-substitution-composition-dialog.component";
+import { AddSubstitutionCompositionDialogComponent } from "../../../components/calendar/schedule-table-shift-composition-dialog/add-substitution-composition-dialog/add-substitution-composition-dialog.component";
 import { MatDialog } from "@angular/material/dialog";
 import { TableDataSource } from "./table-data-source";
 import { TableCompositionHandler } from "./table-composition-handler";
@@ -18,7 +18,7 @@ export class TableManager {
               private tableDataSource: TableDataSource) {
   }
 
-  newRow(rowGroup: RowGroup) {
+  newRow(rowGroup: ScheduleRowGroup) {
     const data = {
       shiftId:      rowGroup.id,
       shifts:       this.tableDataSource.shifts,
@@ -29,7 +29,7 @@ export class TableManager {
 
     this.dialog.open(AddMainShiftCompositionDialogComponent, {data: data})
       .afterClosed()
-      .subscribe((mainShiftCompositions: MainShiftComposition[]) => {
+      .subscribe((mainShiftCompositions: MainComposition[]) => {
         if (!mainShiftCompositions) {
           return;
         }
@@ -46,7 +46,7 @@ export class TableManager {
       });
   }
 
-  editRow(row: Row) {
+  editRow(row: ScheduleRow) {
     if (!row || !row.group) {
       return;
     }
@@ -63,7 +63,7 @@ export class TableManager {
   }
 
   addSubstitutionDialog(selectionData: SelectionData) {
-    const mainCompositionRow = <Row> selectionData.rowData;
+    const mainCompositionRow = <ScheduleRow> selectionData.row;
 
     const data = {
       from: selectionData.selectedCells[0].date.isoString,
@@ -71,7 +71,7 @@ export class TableManager {
       shifts:     this.tableDataSource.shifts,
       positions:  this.tableDataSource.positions,
       employee:   mainCompositionRow.employee,
-      mainShiftComposition: mainCompositionRow.compositions[0]
+      mainComposition: mainCompositionRow.compositions[0]
     };
 
     this.dialog.open(AddSubstitutionCompositionDialogComponent, {data: data})
@@ -90,7 +90,7 @@ export class TableManager {
       });
   }
 
-  private openDialog(data, rowGroup: RowGroup, row: Row) {
+  private openDialog(data, rowGroup: ScheduleRowGroup, row: ScheduleRow) {
     this.dialog.open(EditCompositionsDialogComponent, {data: data})
       .afterClosed()
       .subscribe((dialogData) => {

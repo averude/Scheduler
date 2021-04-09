@@ -5,9 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
+import java.util.Arrays;
 import java.util.List;
 import java.util.StringJoiner;
 
@@ -16,11 +17,13 @@ import java.util.StringJoiner;
 @Setter
 public class UserAccountDetails implements UserDetails {
     private UserAccount userAccount;
-    private List<GrantedAuthority> grantedAuthorities;
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return grantedAuthorities;
+    private List<? extends GrantedAuthority> authorities;
+
+    public UserAccountDetails(UserAccount userAccount) {
+        this.userAccount = userAccount;
+        this.authorities = Arrays.asList(new SimpleGrantedAuthority(userAccount.getAuthority()),
+                new SimpleGrantedAuthority("ROLE_" + userAccount.getRole()));
     }
 
     @Override
@@ -57,7 +60,7 @@ public class UserAccountDetails implements UserDetails {
     public String toString() {
         return new StringJoiner(", ", UserAccountDetails.class.getSimpleName() + "[", "]")
                 .add("username=" + userAccount.getUsername())
-                .add("authorities=" + grantedAuthorities)
+                .add("authorities=" + authorities)
                 .toString();
     }
 }

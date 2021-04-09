@@ -1,0 +1,179 @@
+.table-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+}
+
+.dummy {
+  height: 28px;
+  position: sticky;
+  top: 0;
+  width: 100%;
+  background-color: #ffffff;
+}
+
+.table-base {
+  font-family: 'MuseoSansRegular';
+  user-select: none;
+  border: 1px solid #e5e9f0;
+  font-size: 12px;
+  margin: 0 auto 20px;
+  border-radius: 3px;
+  width: 95%;
+  max-width: 1600px;
+  border-spacing: 0;
+  border-collapse: collapse;
+}
+
+.thead-border {
+  border: 1px solid #e5e9f0;
+  border-radius: 5px;
+}
+
+.date-container {
+  background-color: white;
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  padding-top: 25px;
+  padding-bottom: 25px;
+}
+
+.date-selector {
+  margin: 0 auto;
+  width: fit-content;
+}
+
+.td-name {
+  border: 1px solid #e5e9f0;
+  height: 32px;
+  padding-left: 28px;
+}
+
+.td-position {
+  border: 1px solid #e5e9f0;
+  height: 32px;
+  padding-left: 1.5em;
+  padding-right: 2em;
+  max-width: 8vw;
+}
+
+.name {
+  color: #2b3944;
+  font-family: 'MuseoSansMedium';
+  font-size: 14px;
+}
+
+.position {
+  color: #2b3944;
+  font-family: 'MuseoSansMedium';
+  font-size: 12px;
+}
+
+.info {
+  padding-top: 4px;
+  font-size: 11px;
+  color: #7d8c9f;
+}
+
+.table-sticky-header {
+  min-width: 40px;
+  max-width: 60px;
+  font-family: 'MuseoSansRegular', 'Roboto', sans-serif;
+  font-size: 13px;
+  color: #000;
+  position: sticky;
+  top: 28px;
+  background-color: #F5F7F9;
+  box-shadow: 0 -1px 1px 0px #e5e9f0;
+}
+
+.th-null {
+  height: 39px;
+  min-width: 150px;
+  border: 1px solid #e5e9f0;
+}
+
+.name-container {
+  display: flex;
+  align-items: center;
+}
+
+.name-container > p {
+  text-align: center;
+  width: 100%;
+  margin-right: 40px;
+}
+
+.norm-column {
+  background-color: #F5F7F9;
+}
+
+.th-sum {
+  border: 1px solid #e5e9f0;
+}
+
+.sum {
+  padding-top: 8px;
+  border: 1px solid #e5e9f0;
+}
+
+.sum p {
+  font-family: 'MuseoSansMedium';
+  font-size: 12px;
+}
+
+.notEqual {
+  background-color: cornsilk;
+}
+
+.cell {
+  cursor: cell;
+  padding: 0px;
+  border: 1px solid #e5e9f0;
+  vertical-align: top;
+}
+
+.table-proxy-view {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 14vh 0;
+}
+
+.menu-button {
+  display: block;
+  height: 2em;
+  width: 40px;
+  background-color: transparent;
+  border: none;
+  user-select: none;
+  outline: none;
+  cursor: pointer;
+  padding: 0 8px;
+}
+
+.config-icon {
+  padding-top: 3.5px;
+  height: 16px;
+  width: 16px;
+}
+
+.group-label-row {
+  height: 32px;
+  background-color: #F5F7F9;
+  border:  1px solid #e5e9f0;
+}
+
+.group-label {
+  font-family: 'MuseoSansMedium';
+  letter-spacing: .02em;
+  text-align: left;
+  font-size: 13px;
+  padding-left: 13px;
+  color: #6d6d6d;
+  flex-direction: row;
+  align-items: baseline;
+  width: 100%;
+  cursor: pointer;
+}

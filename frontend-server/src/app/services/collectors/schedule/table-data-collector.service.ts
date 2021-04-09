@@ -4,7 +4,7 @@ import { CalendarDay } from "../../../lib/ngx-schedule-table/model/calendar-day"
 import { EmployeeScheduleDTO } from "../../../model/dto/employee-schedule-dto";
 import { WorkingNorm } from "../../../model/working-norm";
 import * as moment from "moment";
-import { RowGroup, TableData } from "../../../model/ui/schedule-table/table-data";
+import { ScheduleRowGroup, TableData } from "../../../model/ui/schedule-table/table-data";
 import { Injectable } from "@angular/core";
 import { IntervalCreator } from "../../creator/interval-creator.service";
 import { binarySearch } from "../../../shared/utils/collection-utils";
@@ -29,7 +29,7 @@ export class TableDataCollector {
     table.groups = shifts
       .sort((a, b) => a.id - b.id)
       .map(shift => {
-        const group = new RowGroup();
+        const group = new ScheduleRowGroup();
         group.table = table;
         group.id    = shift.id;
         group.name  = shift.name;
@@ -39,13 +39,13 @@ export class TableDataCollector {
 
     for (let dto of schedule) {
 
-      this.rowProcessor.fillRows(dto, calendarDays, dto.mainShiftCompositions, false, positions,
+      this.rowProcessor.fillRows(dto, calendarDays, dto.mainCompositions, false, positions,
         (composition => table.findRowGroup(composition.shiftId)),
         (composition => this.getWorkingNorm(workingNorms, composition.shiftId)));
 
-      this.rowProcessor.fillRows(dto, calendarDays, dto.substitutionShiftCompositions, true, positions,
+      this.rowProcessor.fillRows(dto, calendarDays, dto.substitutionCompositions, true, positions,
         (composition => table.findRowGroup(composition.shiftId)),
-        (composition => this.getWorkingNorm(workingNorms, composition.mainShiftComposition.shiftId)))
+        (composition => this.getWorkingNorm(workingNorms, composition.mainComposition.shiftId)))
     }
 
     return table;

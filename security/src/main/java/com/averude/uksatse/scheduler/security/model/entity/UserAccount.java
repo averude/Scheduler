@@ -1,5 +1,7 @@
 package com.averude.uksatse.scheduler.security.model.entity;
 
+import com.averude.uksatse.scheduler.core.interfaces.entity.HasId;
+import com.averude.uksatse.scheduler.security.model.IUser;
 import com.averude.uksatse.scheduler.security.model.dto.NewUserAccountDTO;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,7 +10,6 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
 import java.util.List;
 import java.util.StringJoiner;
 
@@ -23,7 +24,7 @@ import java.util.StringJoiner;
                 @NamedAttributeNode("accountShifts")
         }
 )
-public class UserAccount implements Serializable {
+public class UserAccount implements HasId, IUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

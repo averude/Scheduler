@@ -9,12 +9,12 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>scheduler-generators</artifactId>
+    <artifactId>generators</artifactId>
 
     <dependencies>
         <dependency>
             <groupId>com.averude.uksatse.scheduler</groupId>
-            <artifactId>scheduler-core</artifactId>
+            <artifactId>core</artifactId>
             <version>0.2.0</version>
             <scope>compile</scope>
         </dependency>
@@ -27,7 +27,7 @@
 
         <dependency>
             <groupId>com.averude.uksatse.scheduler</groupId>
-            <artifactId>scheduler-test-kit</artifactId>
+            <artifactId>test-kit</artifactId>
             <version>0.2.0</version>
             <scope>test</scope>
         </dependency>

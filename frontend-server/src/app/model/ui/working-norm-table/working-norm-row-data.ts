@@ -1,9 +1,9 @@
-import { RowData } from "../../../lib/ngx-schedule-table/model/data/row-data";
-import { CellData } from "../../../lib/ngx-schedule-table/model/data/cell-data";
+import { Row } from "../../../lib/ngx-schedule-table/model/data/row";
+import { Cell } from "../../../lib/ngx-schedule-table/model/data/cell";
 
-export class WorkingNormRowData implements RowData {
-  id: number;
-  shiftName: string;
-  patternName: string;
-  cellData: CellData[];
+export class WorkingNormRow implements Row {
+  id:           number;
+  shiftName:    string;
+  patternName:  string;
+  cells:        Cell[];
 }

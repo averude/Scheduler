@@ -50,7 +50,6 @@ public class Position implements HasId, HasDepartmentId {
     @Column(name = "short_name")
     private String shortName;
 
-    @JsonIgnore
     @NotNull(message = "{position.department.null}")
     @Positive(message = "{position.department.negative}")
     @Column(name = "department_id",

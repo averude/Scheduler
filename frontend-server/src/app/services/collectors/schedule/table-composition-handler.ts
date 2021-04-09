@@ -1,8 +1,8 @@
-import { Composition, MainShiftComposition, SubstitutionShiftComposition } from "../../../model/main-shift-composition";
+import { Composition, MainComposition, SubstitutionComposition } from "../../../model/composition";
 import { Position } from "../../../model/position";
-import { Row, RowGroup } from "../../../model/ui/schedule-table/table-data";
+import { ScheduleRow, ScheduleRowGroup } from "../../../model/ui/schedule-table/table-data";
 import { binarySearch } from "../../../shared/utils/collection-utils";
-import { MainShiftCompositionService } from "../../http/main-shift-composition.service";
+import { MainCompositionService } from "../../http/main-composition.service";
 import { SubstitutionShiftCompositionService } from "../../http/substitution-shift-composition.service";
 import { TableRenderer } from "../../../lib/ngx-schedule-table/service/table-renderer.service";
 import { TableRowProcessor } from "./table-row-processor.service";
@@ -26,14 +26,14 @@ export class TableCompositionHandler {
               private intervalCreator: IntervalCreator,
               private cellEnabledSetter: CellEnabledSetter,
               private sumCalculator: TableSumCalculator,
-              private mainShiftCompositionService: MainShiftCompositionService,
+              private mainShiftCompositionService: MainCompositionService,
               private substitutionShiftCompositionService: SubstitutionShiftCompositionService,
               private notificationsService: NotificationsService) {}
 
   createOrUpdateComposition(compositions: Composition[],
-                            rowGroup:     RowGroup,
-                            row:          Row,
-                            parentRow:    Row,
+                            rowGroup:     ScheduleRowGroup,
+                            row:          ScheduleRow,
+                            parentRow:    ScheduleRow,
                             scheduleDTOs: EmployeeScheduleDTO[],
                             positions:    Position[],
                             workingNorms: WorkingNorm[],
@@ -45,16 +45,15 @@ export class TableCompositionHandler {
 
         compositions.forEach(composition => {
           if (composition.id) {
-            this.substitutionShiftCompositionService.update(<SubstitutionShiftComposition> composition)
+            this.substitutionShiftCompositionService.update(<SubstitutionComposition> composition)
               .subscribe((res) => {
                 const position = binarySearch(positions, (mid => mid.id - composition.positionId));
                 this.updateRow(scheduleDTOs, calendarDays, composition, position, rowGroup, row);
               });
           } else {
-            this.substitutionShiftCompositionService.create(<SubstitutionShiftComposition> composition)
-              .subscribe((id) => {
-                composition.id = id;
-
+            this.substitutionShiftCompositionService.create(<SubstitutionComposition> composition)
+              .subscribe((res) => {
+                composition = res;
                 const position = binarySearch(positions, (mid => mid.id - composition.positionId));
                 this.createRow(scheduleDTOs, workingNorms, calendarDays,
                   composition, position, rowGroup, isSubstitution, parentRow);
@@ -73,8 +72,8 @@ export class TableCompositionHandler {
               });
           } else {
             this.mainShiftCompositionService.create(composition)
-              .subscribe((id) => {
-                composition.id = id;
+              .subscribe((res) => {
+                composition = res;
 
                 const position = binarySearch(positions, (mid => mid.id - composition.positionId));
                 this.createRow(scheduleDTOs, workingNorms, calendarDays,
@@ -88,8 +87,8 @@ export class TableCompositionHandler {
     }
   }
 
-  removeComposition(groupData: RowGroup,
-                    row: Row,
+  removeComposition(groupData: ScheduleRowGroup,
+                    row: ScheduleRow,
                     scheduleDTOs: EmployeeScheduleDTO[],
                     compositions: Composition[]) {
     compositions.forEach(composition => {
@@ -110,20 +109,20 @@ export class TableCompositionHandler {
                     calendarDays: CalendarDay[],
                     composition: Composition,
                     position: Position,
-                    group: RowGroup,
+                    group: ScheduleRowGroup,
                     isSubstitution: boolean,
-                    parentRow?: Row) {
+                    parentRow?: ScheduleRow) {
     if (scheduleDTOs && calendarDays) {
 
       const dto   = binarySearch(scheduleDTOs, (mid => mid.parent.id - composition.employeeId));
       const norm  = binarySearch(workingNorms, (mid => mid.shiftId - group.id))?.hours || 0;
 
       if (isSubstitution) {
-        dto.substitutionShiftCompositions.push(<SubstitutionShiftComposition> composition);
-        dto.substitutionShiftCompositions.sort((a, b) => (a.shiftId - b.shiftId) + (a.from.diff(b.from)));
+        dto.substitutionCompositions.push(<SubstitutionComposition> composition);
+        dto.substitutionCompositions.sort((a, b) => (a.shiftId - b.shiftId) + (a.from.diff(b.from)));
       } else {
-        dto.mainShiftCompositions.push(<MainShiftComposition> composition);
-        dto.mainShiftCompositions.sort((a, b) => (a.shiftId - b.shiftId) + (a.from.diff(b.from)));
+        dto.mainCompositions.push(<MainComposition> composition);
+        dto.mainCompositions.sort((a, b) => (a.shiftId - b.shiftId) + (a.from.diff(b.from)));
       }
 
       const row = this.rowProcessor.insertNewOrUpdateExistingRow(group, dto, calendarDays,
@@ -132,12 +131,12 @@ export class TableCompositionHandler {
 
       if (isSubstitution) {
         if (parentRow) {
-          parentRow.intervals = this.intervalCreator.getEmployeeShiftIntervalsByArr(parentRow.compositions, dto.substitutionShiftCompositions);
+          parentRow.intervals = this.intervalCreator.getEmployeeShiftIntervalsByArr(parentRow.compositions, dto.substitutionCompositions);
           this.cellEnabledSetter.processRow(parentRow, group.table.from, group.table.to);
         }
         row.intervals = row.compositions.map(value => convertCompositionToInterval(value));
       } else {
-        row.intervals = this.intervalCreator.getEmployeeShiftIntervalsByArr(row.compositions, dto.substitutionShiftCompositions);
+        row.intervals = this.intervalCreator.getEmployeeShiftIntervalsByArr(row.compositions, dto.substitutionCompositions);
       }
 
       this.cellEnabledSetter.processRow(row, group.table.from, group.table.to);
@@ -153,8 +152,8 @@ export class TableCompositionHandler {
                     calendarDays: CalendarDay[],
                     composition: Composition,
                     position: Position,
-                    group: RowGroup,
-                    row: Row) {
+                    group: ScheduleRowGroup,
+                    row: ScheduleRow) {
     if (!row) {
       throw new Error("No row provided");
     }
@@ -165,8 +164,8 @@ export class TableCompositionHandler {
       if (row.position.id !== composition.positionId) {
 
         const group = row.group;
-        const rowToMerge = <Row> group.rows
-          .find((value: Row) => value.id === composition.employeeId
+        const rowToMerge = <ScheduleRow> group.rows
+          .find((value: ScheduleRow) => value.id === composition.employeeId
             && value.position.id === composition.positionId
             && value.isSubstitution === row.isSubstitution);
 
@@ -187,13 +186,13 @@ export class TableCompositionHandler {
       }
 
       if (row.isSubstitution) {
-        const mainShiftComposition = (<SubstitutionShiftComposition> composition).mainShiftComposition;
-        const rows = <Row[]> group.table.findRowGroup(mainShiftComposition.shiftId).rows;
+        const mainShiftComposition = (<SubstitutionComposition> composition).mainComposition;
+        const rows = <ScheduleRow[]> group.table.findRowGroup(mainShiftComposition.shiftId).rows;
 
         for (let otherGroupMainRow of rows) {
 
           if (otherGroupMainRow.id === mainShiftComposition.employeeId && !otherGroupMainRow.isSubstitution) {
-            otherGroupMainRow.intervals = this.intervalCreator.getEmployeeShiftIntervalsByArr(otherGroupMainRow.compositions, dto.substitutionShiftCompositions);
+            otherGroupMainRow.intervals = this.intervalCreator.getEmployeeShiftIntervalsByArr(otherGroupMainRow.compositions, dto.substitutionCompositions);
             this.cellEnabledSetter.processRow(otherGroupMainRow, group.table.from, group.table.to);
           }
         }
@@ -207,8 +206,8 @@ export class TableCompositionHandler {
     }
   }
 
-  private transfer(from: Row,
-                   to: Row,
+  private transfer(from: ScheduleRow,
+                   to: ScheduleRow,
                    composition: Composition,
                    dto: EmployeeScheduleDTO){
 

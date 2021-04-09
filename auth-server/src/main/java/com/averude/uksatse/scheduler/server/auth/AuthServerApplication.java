@@ -1,8 +1,6 @@
 package com.averude.uksatse.scheduler.server.auth;
 
 import com.averude.uksatse.scheduler.security.filter.CustomCorsFilter;
-import com.averude.uksatse.scheduler.server.auth.repository.UserAccountRepository;
-import com.averude.uksatse.scheduler.server.auth.repository.UserAccountShiftRepository;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -17,13 +15,19 @@ import org.springframework.web.filter.CorsFilter;
 @EnableResourceServer
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @SpringBootApplication(scanBasePackages = {
-        "com.averude.uksatse.scheduler.server.auth"
+        "com.averude.uksatse.scheduler.server.auth",
+        "com.averude.uksatse.scheduler.security.config",
+        "com.averude.uksatse.scheduler.security.controller.base",
+        "com.averude.uksatse.scheduler.security.logging"
 })
 @EntityScan(basePackages = {
         "com.averude.uksatse.scheduler.security.model.entity",
         "com.averude.uksatse.scheduler.core.model.entity"
 })
-@EnableJpaRepositories(basePackageClasses = {UserAccountRepository.class, UserAccountShiftRepository.class})
+@EnableJpaRepositories({
+        "com.averude.uksatse.scheduler.server.auth.repository",
+        "com.averude.uksatse.scheduler.shared.repository.common"
+})
 public class AuthServerApplication {
     public static void main(String[] args) {
         SpringApplication.run(AuthServerApplication.class, args);

@@ -9,17 +9,17 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>scheduler-security</artifactId>
+    <artifactId>security</artifactId>
 
     <dependencies>
         <dependency>
             <groupId>com.averude.uksatse.scheduler</groupId>
-            <artifactId>scheduler-core</artifactId>
+            <artifactId>core</artifactId>
             <version>0.2.0</version>
         </dependency>
         <dependency>
             <groupId>com.averude.uksatse.scheduler</groupId>
-            <artifactId>scheduler-shared</artifactId>
+            <artifactId>shared</artifactId>
             <version>0.2.0</version>
         </dependency>
         <dependency>

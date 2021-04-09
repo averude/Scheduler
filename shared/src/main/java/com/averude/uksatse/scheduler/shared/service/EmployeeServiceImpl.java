@@ -1,13 +1,12 @@
 package com.averude.uksatse.scheduler.shared.service;
 
 import com.averude.uksatse.scheduler.core.model.entity.Employee;
-import com.averude.uksatse.scheduler.shared.repository.EmployeeRepository;
+import com.averude.uksatse.scheduler.shared.repository.common.EmployeeRepository;
 import com.averude.uksatse.scheduler.shared.service.base.AService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -26,17 +25,5 @@ public class EmployeeServiceImpl
     @Transactional
     public List<Employee> findAllByDepartmentId(Long departmentId) {
         return this.employeeRepository.findAllByDepartmentId(departmentId);
-    }
-
-    @Override
-    @Transactional
-    public List<Employee> findAllByShiftIdsAndDateBetween(List<Long> shiftIds, LocalDate from, LocalDate to) {
-        return employeeRepository.findEmployeesByShiftIdsAndDatesBetween(shiftIds, from, to);
-    }
-
-    @Override
-    @Transactional
-    public List<Employee> findAllByPositionId(Long positionId) {
-        return this.employeeRepository.findAllByPositionIdOrderBySecondNameAscFirstNameAscPatronymicAsc(positionId);
     }
 }

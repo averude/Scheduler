@@ -3,7 +3,6 @@ package com.averude.uksatse.scheduler.core.model.entity;
 import com.averude.uksatse.scheduler.core.interfaces.entity.HasDate;
 import com.averude.uksatse.scheduler.core.interfaces.entity.HasEnterpriseId;
 import com.averude.uksatse.scheduler.core.interfaces.entity.HasId;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -32,7 +31,6 @@ public class SpecialCalendarDate implements HasId, HasEnterpriseId, HasDate {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JsonIgnore
     @NotNull
     @Column(name = "enterprise_id",
             nullable = false)

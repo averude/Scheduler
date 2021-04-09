@@ -38,7 +38,12 @@ public class UserAccountDTOConverter {
 
         userAccount.setPassword(encoder.encode(accountDTO.getPassword()));
         userAccount.setEnterpriseId(enterpriseId);
-        userAccount.setDepartmentId(departmentId);
+
+        if (departmentId != null) {
+            userAccount.setDepartmentId(departmentId);
+        } else {
+            userAccount.setDepartmentId(accountDTO.getDepartmentId());
+        }
 
         return userAccount;
     }

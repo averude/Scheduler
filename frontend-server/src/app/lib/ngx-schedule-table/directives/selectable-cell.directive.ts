@@ -1,6 +1,6 @@
 import { Directive, ElementRef, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output } from "@angular/core";
 import { toggleClass } from "../utils/table-cell.utils";
-import { CellData } from "../model/data/cell-data";
+import { Cell } from "../model/data/cell";
 import { ClearSelectionService } from "../service/clear-selection.service";
 import { Subscription } from "rxjs";
 
@@ -8,13 +8,13 @@ import { Subscription } from "rxjs";
   selector: '[selectableCell]'
 })
 export class SelectableCellDirective implements OnInit, OnDestroy {
-  @Input() data:              CellData;
+  @Input() data:              Cell;
   @Input() selectionEnabled:  boolean;
   @Input() multipleSelect:    boolean;
 
   @Output() onClick: EventEmitter<any> = new EventEmitter();
 
-  selected: boolean;
+  public selected: boolean = false;
   className = "selected";
 
   private clearSelectionSub: Subscription;

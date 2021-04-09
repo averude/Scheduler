@@ -14,7 +14,7 @@ import { fromEvent, Observable, Subscription } from "rxjs";
 import { distinctUntilChanged, filter, map, throttleTime } from "rxjs/operators";
 import { selectingLeft, selectingRight } from "../utils/table-selection-utils";
 import { SelectableCellDirective } from "./selectable-cell.directive";
-import { CellData } from "../model/data/cell-data";
+import { Cell } from "../model/data/cell";
 
 @Directive({
   selector: '[selectableRow]'
@@ -26,7 +26,7 @@ export class SelectableRowDirective implements OnInit, OnDestroy, AfterViewInit 
 
   @Input() disabled:  boolean;
   @Input() element:   ElementRef;
-  @Input() value:     CellData;
+  @Input() value:     Cell;
 
   @Output() onSelectionEnds: EventEmitter<any> = new EventEmitter();
 
@@ -82,7 +82,7 @@ export class SelectableRowDirective implements OnInit, OnDestroy, AfterViewInit 
     }
   }
 
-  get selectedCells(): CellData[] {
+  get selectedCells(): Cell[] {
     return this.cells
       .filter(item => item.selected)
       .map(item => item.data);

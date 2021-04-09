@@ -1,5 +1,4 @@
 import {
-  AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
@@ -13,13 +12,11 @@ import {
   QueryList,
   TemplateRef
 } from "@angular/core";
-import { RowGroupData } from "../model/data/row-group-data";
+import { RowGroup } from "../model/data/row-group";
 import { TableTopItemDirective } from "../directives/table-top-item.directive";
-import { AfterDateColumnDef, BeforeDateColumnDef } from "../directives/column";
+import { AfterDateColumnDef, BeforeDateColumnDef, PageableColumnDef } from "../directives/column";
 import { PaginatorDef } from "../directives/paginator";
-import { DatedCellDef, HeaderDateCellDef } from "../directives/cell";
-import { RowData } from "../model/data/row-data";
-import { CellLabelSetter, SimpleCellLabelSetter } from "../utils/cell-label-setter";
+import { Row } from "../model/data/row";
 import { TableStateService } from "../service/table-state.service";
 import { Subscription } from "rxjs";
 import { ProxyViewDef } from "../directives/proxy-view";
@@ -31,7 +28,9 @@ import { TableRenderer } from "../service/table-renderer.service";
   styleUrls: ['./schedules-table.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SchedulesTableComponent implements OnInit, AfterViewInit, OnDestroy {
+export class SchedulesTableComponent implements OnInit, OnDestroy {
+  @Input() trackByFn;
+
   @Input() proxyViewIsShown: boolean = false;
 
   @Input() groupable: boolean = true;
@@ -40,6 +39,7 @@ export class SchedulesTableComponent implements OnInit, AfterViewInit, OnDestroy
 
   @Input() showSumColumns:    boolean;
   @Input() editableRowGroup:  boolean = false;
+  @Input() distinctByColor:   boolean = false;
 
   @ContentChild(PaginatorDef, { read: TemplateRef })
   paginator: TemplateRef<any>;
@@ -47,14 +47,11 @@ export class SchedulesTableComponent implements OnInit, AfterViewInit, OnDestroy
   @ContentChildren(TableTopItemDirective, {read: TemplateRef})
   topItems: QueryList<TemplateRef<any>>;
 
-  @ContentChild(DatedCellDef, { read: TemplateRef })
-  datedCellDef: DatedCellDef;
-
-  @ContentChild(HeaderDateCellDef, { read: TemplateRef })
-  headerDateCellDef: TemplateRef<any>;
-
   @ContentChildren(BeforeDateColumnDef)
   beforeDateColumns: QueryList<BeforeDateColumnDef>;
+
+  @ContentChild(PageableColumnDef)
+  pageableColumns: PageableColumnDef;
 
   @ContentChildren(AfterDateColumnDef)
   afterDateColumns: QueryList<AfterDateColumnDef>;
@@ -62,14 +59,11 @@ export class SchedulesTableComponent implements OnInit, AfterViewInit, OnDestroy
   @ContentChild(ProxyViewDef, {read: TemplateRef})
   proxyViewDef: TemplateRef<any>;
 
-  @Input() rowGroupData:  RowGroupData[];
+  @Input() rowGroupData:  RowGroup[];
 
-  @Input() rowData:       RowData[];
-  @Input() cellLabelSetter: CellLabelSetter;
+  @Input() rowData:       Row[];
 
-  @Output() onAddRowClick: EventEmitter<RowGroupData> = new EventEmitter();
-
-  colspan: number;
+  @Output() onAddRowClick: EventEmitter<RowGroup> = new EventEmitter();
 
   private tableStateSub: Subscription;
   private tableRenderSub: Subscription;
@@ -80,18 +74,11 @@ export class SchedulesTableComponent implements OnInit, AfterViewInit, OnDestroy
   }
 
   ngOnInit() {
-    if (!this.cellLabelSetter) {
-      this.cellLabelSetter = new SimpleCellLabelSetter();
-    }
-
     this.tableStateSub = this.tableStateService.editableGroupsState
       .subscribe(editableRowGroup => this.editableRowGroup = editableRowGroup);
 
-    this.tableRenderSub = this.tableRenderer.onTableRender.subscribe(() => this.cd.markForCheck());
-  }
-
-  ngAfterViewInit(): void {
-    this.colspan = this.beforeDateColumns?.length + 31 + this.afterDateColumns?.length;
+    this.tableRenderSub = this.tableRenderer.onTableRender
+      .subscribe(() => this.cd.markForCheck());
   }
 
   ngOnDestroy(): void {

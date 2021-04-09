@@ -1,7 +1,14 @@
 .cell {
   padding: 0px;
   border: 1px solid #e5e9f0;
+}
+
+.content-top-position {
   vertical-align: top;
+}
+
+.content-middle-position {
+  vertical-align: middle;
 }
 
 .selection-enabled {
@@ -22,5 +29,5 @@
 }
 
 .selected {
-  background-color: #fffeb8;
+  background-color: #fffeb8 !important;
 }

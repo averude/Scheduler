@@ -12,11 +12,10 @@ import { TableStateService } from "./service/table-state.service";
 import { PaginationService } from "./service/pagination.service";
 import { SelectionEndService } from "./service/selection-end.service";
 import { TableTopItemDirective } from './directives/table-top-item.directive';
-import { CellDef, DatedCellDef, HeaderCellDef, HeaderDateCellDef } from "./directives/cell";
-import { AfterDateColumnDef, BeforeDateColumnDef } from "./directives/column";
+import { CellDef, HeaderCellDef } from "./directives/cell";
+import { AfterDateColumnDef, BeforeDateColumnDef, PageableColumnDef } from "./directives/column";
 import { PaginatorDef } from "./directives/paginator";
 import { SelectableCellDirective } from "./directives/selectable-cell.directive";
-import { TableCellComponent } from "./table-cell/table-cell.component";
 import { ProxyViewDef } from "./directives/proxy-view";
 
 @NgModule({
@@ -29,7 +28,6 @@ import { ProxyViewDef } from "./directives/proxy-view";
     TableRowComponent,
     TableHeaderComponent,
     TableRowGroupComponent,
-    TableCellComponent,
     SelectableCellDirective,
     SelectableRowDirective,
     TableTopItemDirective,
@@ -37,9 +35,8 @@ import { ProxyViewDef } from "./directives/proxy-view";
     ProxyViewDef,
     BeforeDateColumnDef,
     AfterDateColumnDef,
+    PageableColumnDef,
     HeaderCellDef,
-    HeaderDateCellDef,
-    DatedCellDef,
     CellDef,
   ],
   exports: [
@@ -50,9 +47,8 @@ import { ProxyViewDef } from "./directives/proxy-view";
     ProxyViewDef,
     BeforeDateColumnDef,
     AfterDateColumnDef,
+    PageableColumnDef,
     HeaderCellDef,
-    HeaderDateCellDef,
-    DatedCellDef,
     CellDef
   ],
   providers: [

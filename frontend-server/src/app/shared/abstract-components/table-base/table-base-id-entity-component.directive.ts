@@ -8,7 +8,9 @@ import { NotificationsService } from "angular2-notifications";
 import { IdEntity } from "../../../model/interface/id-entity";
 import { ComponentType } from "@angular/cdk/portal";
 import { CUDService } from "../../../services/http/interface/cud-service";
-import { IByAuthService } from "../../../services/http/interface/i-by-auth.service";
+import { HasDepartmentIdService } from "../../../services/http/interface/has-department-id.service";
+import { HasEnterpriseIdService } from "../../../services/http/interface/has-enterprise-id.service";
+import { ACrudService } from "../../../services/http/abstract-service/a-crud-service";
 
 @Directive()
 export class TableBaseComponent<T> implements OnInit, OnDestroy {
@@ -34,7 +36,7 @@ export class TableBaseComponent<T> implements OnInit, OnDestroy {
   }
 
   initDataSourceValues() {
-    let service = this.crudService as unknown as IByAuthService<T>;
+    let service = this.crudService as unknown as ACrudService<T>;
     if (service.getAll) {
       service.getAll()
         .subscribe(values => this.dataSource.data = values);
@@ -132,7 +134,7 @@ export abstract class TableBaseIdEntityComponent<T extends IdEntity> extends Tab
 
   onUpdated(value: T, oldValue: T): (value: any) => void {
     return res => {
-      this.updateRow(value, oldValue);
+      this.updateRow(res, oldValue);
       this.notification
         .success(
           'Updated',
@@ -142,8 +144,7 @@ export abstract class TableBaseIdEntityComponent<T extends IdEntity> extends Tab
 
   onCreated(value: T): (value: any) => void {
     return res => {
-      value.id = res;
-      this.addRow(value);
+      this.addRow(res);
       this.notification
         .success(
           'Created',
@@ -182,5 +183,57 @@ export abstract class TableBaseIdEntityComponent<T extends IdEntity> extends Tab
           'Selected values was successfully deleted'
         );
       });
+  }
+}
+
+export abstract class HasDepartmentTableComponent<T extends IdEntity> extends TableBaseIdEntityComponent<T> {
+
+  constructor(matDialog: MatDialog,
+              protected departmentId: number,
+              private hasDepartmentIdService: HasDepartmentIdService<T> & CUDService<T>,
+              notification: NotificationsService) {
+    super(matDialog, hasDepartmentIdService, notification);
+    if (!departmentId) {
+      throw Error('No department ID provided');
+    }
+  }
+
+  initDataSourceValues() {
+    this.hasDepartmentIdService.getAllByDepartmentId(this.departmentId)
+      .subscribe(values => this.dataSource.data = values);
+  }
+
+  openAddOrEditDialog(t: T,
+                      data: any,
+                      component: ComponentType<any> | TemplateRef<any>,
+                      decideFunction?: (value) => boolean) {
+    data.departmentId = this.departmentId;
+    super.openAddOrEditDialog(t, data, component, decideFunction);
+  }
+}
+
+export abstract class HasEnterpriseTableComponent<T extends IdEntity> extends TableBaseIdEntityComponent<T> {
+
+  constructor(matDialog: MatDialog,
+              protected enterpriseId: number,
+              private hasDepartmentIdService: HasEnterpriseIdService<T> & CUDService<T>,
+              notification: NotificationsService) {
+    super(matDialog, hasDepartmentIdService, notification);
+    if (!enterpriseId) {
+      throw Error('No enterprise ID provided');
+    }
+  }
+
+  initDataSourceValues() {
+    this.hasDepartmentIdService.getAllByEnterpriseId(this.enterpriseId)
+      .subscribe(values => this.dataSource.data = values);
+  }
+
+  openAddOrEditDialog(t: T,
+                      data: any,
+                      component: ComponentType<any> | TemplateRef<any>,
+                      decideFunction?: (value) => boolean) {
+    data.enterpriseId = this.enterpriseId;
+    super.openAddOrEditDialog(t, data, component, decideFunction);
   }
 }

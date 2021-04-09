@@ -1,0 +1,20 @@
+<button class="menu-button"
+        [matMenuTriggerFor]="menu">
+  <img src="assets/img/settings.svg" class="config-icon">
+</button>
+<mat-menu #menu="matMenu">
+  <button mat-menu-item
+          (click)="changeCellState()">
+    Show {{cellsState > 0 ? "labels" : "hours"}}
+  </button>
+  <button mat-menu-item
+          *ngIf="isAble"
+          (click)="changeEditableState()">
+    {{editableRowGroups ? "Disable" : "Enable"}} edit mode
+  </button>
+  <button mat-menu-item
+          *ngIf="isAble"
+          (click)="openGenerateScheduleDialog()">
+    Generate schedule
+  </button>
+</mat-menu>

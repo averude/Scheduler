@@ -2,8 +2,8 @@ package com.averude.uksatse.scheduler.shared.utils;
 
 import com.averude.uksatse.scheduler.core.model.dto.EmployeeScheduleDTO;
 import com.averude.uksatse.scheduler.core.model.entity.Employee;
-import com.averude.uksatse.scheduler.core.model.entity.MainShiftComposition;
-import com.averude.uksatse.scheduler.core.model.entity.SubstitutionShiftComposition;
+import com.averude.uksatse.scheduler.core.model.entity.MainComposition;
+import com.averude.uksatse.scheduler.core.model.entity.SubstitutionComposition;
 import com.averude.uksatse.scheduler.core.model.entity.WorkDay;
 import org.springframework.stereotype.Component;
 
@@ -16,8 +16,8 @@ import java.util.function.BiFunction;
 public class ScheduleDTOUtil {
 
     public List<EmployeeScheduleDTO> createEmployeeScheduleDTOList(List<Employee> employees,
-                                                                   List<MainShiftComposition> mainShiftCompositions,
-                                                                   List<SubstitutionShiftComposition> substitutionShiftCompositions,
+                                                                   List<MainComposition> mainCompositions,
+                                                                   List<SubstitutionComposition> substitutionCompositions,
                                                                    List<WorkDay> schedule) {
         var result = new LinkedList<EmployeeScheduleDTO>();
 
@@ -33,12 +33,12 @@ public class ScheduleDTOUtil {
                     dto.getCollection(),lastScheduleIndex,
                     ((employee, workDay) -> employee.getId() - workDay.getEmployeeId()));
 
-            lastMainCompositionIndex = sequentialFill(e, mainShiftCompositions,
-                    dto.getMainShiftCompositions(), lastMainCompositionIndex,
+            lastMainCompositionIndex = sequentialFill(e, mainCompositions,
+                    dto.getMainCompositions(), lastMainCompositionIndex,
                     ((employee, composition) -> employee.getId() - composition.getEmployeeId()));
 
-            lastSubstitutionCompositionIndex = sequentialFill(e, substitutionShiftCompositions,
-                    dto.getSubstitutionShiftCompositions(), lastSubstitutionCompositionIndex,
+            lastSubstitutionCompositionIndex = sequentialFill(e, substitutionCompositions,
+                    dto.getSubstitutionCompositions(), lastSubstitutionCompositionIndex,
                     ((employee, composition) -> employee.getId() - composition.getEmployeeId()));
 
             result.add(dto);

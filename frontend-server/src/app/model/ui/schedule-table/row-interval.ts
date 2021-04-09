@@ -1,5 +1,5 @@
 import { Moment } from "moment";
-import { MainShiftComposition } from "../../main-shift-composition";
+import { MainComposition } from "../../composition";
 
 export class RowInterval {
   parentId:   number;
@@ -7,6 +7,6 @@ export class RowInterval {
   to:         Moment;
 }
 
-export function convertCompositionToInterval(composition: MainShiftComposition): RowInterval {
+export function convertCompositionToInterval(composition: MainComposition): RowInterval {
   return {parentId: composition.id, from: composition.from, to: composition.to};
 }

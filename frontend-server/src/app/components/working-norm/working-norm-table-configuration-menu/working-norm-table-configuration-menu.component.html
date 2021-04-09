@@ -1,0 +1,11 @@
+<button class="menu-button"
+        [matMenuTriggerFor]="menu">
+  <img src="assets/img/settings.svg" class="config-icon">
+</button>
+<mat-menu #menu="matMenu">
+  <button mat-menu-item
+          *ngIf="accessRights?.isDepartmentLevel && accessRights?.isAdmin"
+          (click)="openGenerateWorkingNormDialog()">
+    Generate working norm
+  </button>
+</mat-menu>

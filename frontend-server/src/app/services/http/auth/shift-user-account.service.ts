@@ -1,21 +1,27 @@
 import { ACrudService } from "../abstract-service/a-crud-service";
 import { NewUserAccountDTO, UserAccountDTO } from "../../../model/dto/new-user-account-dto";
 import { CUDService } from "../interface/cud-service";
-import { IByAuthService } from "../interface/i-by-auth.service";
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { RestConfig } from "../../../rest.config";
 import { Observable } from "rxjs";
 import { PasswordResetDTO } from "../../../model/dto/password-reset-dto";
+import { HasDepartmentIdService } from "../interface/has-department-id.service";
 
 @Injectable()
 export class ShiftUserAccountService
   extends ACrudService<UserAccountDTO>
-  implements IByAuthService<UserAccountDTO>, CUDService<UserAccountDTO> {
+  implements CUDService<UserAccountDTO>, HasDepartmentIdService<UserAccountDTO> {
 
   constructor(private config: RestConfig,
               http: HttpClient) {
     super(`${config.baseUrl}/uaa/users/shift_admins`, http);
+  }
+
+  getAllByDepartmentId(departmentId: number): Observable<UserAccountDTO[]> {
+    return this.http.get<UserAccountDTO[]>(
+      `${this.url}/departments/${departmentId}`
+    );
   }
 
   create(userAccountDTO: NewUserAccountDTO): Observable<any> {

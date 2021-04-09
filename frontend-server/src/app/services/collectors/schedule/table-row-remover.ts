@@ -1,5 +1,5 @@
-import { Row, RowGroup, TableData } from "../../../model/ui/schedule-table/table-data";
-import { Composition, SubstitutionShiftComposition } from "../../../model/main-shift-composition";
+import { ScheduleRow, ScheduleRowGroup, TableData } from "../../../model/ui/schedule-table/table-data";
+import { Composition, SubstitutionComposition } from "../../../model/composition";
 import { EmployeeScheduleDTO } from "../../../model/dto/employee-schedule-dto";
 import { binarySearch } from "../../../shared/utils/collection-utils";
 import { RowInterval } from "../../../model/ui/schedule-table/row-interval";
@@ -17,8 +17,8 @@ export class TableRowRemover {
               private intervalCreator: IntervalCreator,
               private notificationsService: NotificationsService) {}
 
-  removeRow(groupData: RowGroup,
-            row: Row,
+  removeRow(groupData: ScheduleRowGroup,
+            row: ScheduleRow,
             composition: Composition,
             dtos: EmployeeScheduleDTO[]) {
     const table = groupData.table;
@@ -27,16 +27,16 @@ export class TableRowRemover {
     const dto = binarySearch(dtos, (mid => mid.parent.id - composition.employeeId));
 
     if (row.isSubstitution) {
-      const index = dto.substitutionShiftCompositions.findIndex(value => value.id === composition.id);
-      dto.substitutionShiftCompositions.splice(index, 1);
+      const index = dto.substitutionCompositions.findIndex(value => value.id === composition.id);
+      dto.substitutionCompositions.splice(index, 1);
 
-      this.updateRelatedMainCompositions(dto.mainShiftCompositions, dto.substitutionShiftCompositions, table);
+      this.updateRelatedMainCompositions(dto.mainCompositions, dto.substitutionCompositions, table);
     } else {
-      const mainIndex = dto.mainShiftCompositions.findIndex(value => value.id === composition.id);
+      const mainIndex = dto.mainCompositions.findIndex(value => value.id === composition.id);
 
-      this.removeRelatedSubstitutionCompositions(dto.substitutionShiftCompositions, dto.mainShiftCompositions[mainIndex], table);
+      this.removeRelatedSubstitutionCompositions(dto.substitutionCompositions, dto.mainCompositions[mainIndex], table);
 
-      dto.mainShiftCompositions.splice(mainIndex, 1);
+      dto.mainCompositions.splice(mainIndex, 1);
     }
 
     this.removeCompositionAndInterval(row, composition);
@@ -49,7 +49,7 @@ export class TableRowRemover {
                                         table: TableData) {
     mainShiftCompositions.forEach(composition => {
 
-      const rows = <Row[]> table.findRowGroup(composition.shiftId).rows;
+      const rows = <ScheduleRow[]> table.findRowGroup(composition.shiftId).rows;
 
       for (let row of rows) {
 
@@ -63,7 +63,7 @@ export class TableRowRemover {
     });
   }
 
-  private removeRelatedSubstitutionCompositions(substitutionShiftCompositions: SubstitutionShiftComposition[],
+  private removeRelatedSubstitutionCompositions(substitutionShiftCompositions: SubstitutionComposition[],
                                                 mainComposition: Composition,
                                                 table: TableData) {
 
@@ -72,9 +72,9 @@ export class TableRowRemover {
 
       const composition = substitutionShiftCompositions[index];
 
-      if (composition.mainShiftComposition.id === mainComposition.id) {
+      if (composition.mainComposition.id === mainComposition.id) {
 
-        const rows = <Row[]> table.findRowGroup(composition.shiftId).rows;
+        const rows = <ScheduleRow[]> table.findRowGroup(composition.shiftId).rows;
 
         for (let row of rows) {
           if (row.id === composition.employeeId && row.isSubstitution) {
@@ -91,7 +91,7 @@ export class TableRowRemover {
     }
   }
 
-  removeCompositionAndInterval(row: Row,
+  removeCompositionAndInterval(row: ScheduleRow,
                                composition: Composition) {
     const group = row.group;
     const rows = group.rows;

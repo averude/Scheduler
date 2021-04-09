@@ -7,35 +7,24 @@ import { AuthService } from "./auth.service";
 import { CUDService } from "./interface/cud-service";
 import { map } from "rxjs/operators";
 import { ACrudService } from "./abstract-service/a-crud-service";
+import { HasEnterpriseIdService } from "./interface/has-enterprise-id.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class DayTypeService
   extends ACrudService<DayType>
-  implements CUDService<DayType> {
+  implements CUDService<DayType>, HasEnterpriseIdService<DayType> {
 
   constructor(private authService: AuthService,
               http: HttpClient,
               private config: RestConfig) {
-    super(`${config.baseUrl}/admin/day_types`, http);
-  }
-
-  getAll(from?: string, to?: string): Observable<DayType[]> {
-    return this.getAllByAuth();
-  }
-
-  getAllByAuth(): Observable<DayType[]> {
-    const userAccount = this.authService.currentUserAccount;
-
-    return this.getAllByEnterpriseId(userAccount.enterpriseId)
-      .pipe(map(values => values.sort((a, b) => a.id - b.id)));
+    super(`${config.baseUrl}/day_types`, http);
   }
 
   getAllByEnterpriseId(enterpriseId: number): Observable<DayType[]> {
     return this.http.get<DayType[]>(
       `${this.url}/enterprises/${enterpriseId}`
-    );
+    ).pipe(map(values => values.sort((a, b) => a.id - b.id)));
   }
-
 }

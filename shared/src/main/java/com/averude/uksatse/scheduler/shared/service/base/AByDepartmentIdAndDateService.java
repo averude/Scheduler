@@ -2,7 +2,7 @@ package com.averude.uksatse.scheduler.shared.service.base;
 
 import com.averude.uksatse.scheduler.core.interfaces.service.IByDepartmentIdAndDateService;
 import com.averude.uksatse.scheduler.core.interfaces.service.IByShiftIdAndDateService;
-import com.averude.uksatse.scheduler.shared.repository.ShiftRepository;
+import com.averude.uksatse.scheduler.shared.repository.common.ShiftRepository;
 import com.averude.uksatse.scheduler.shared.repository.interfaces.IByDepartmentIdAndDateRepository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,7 +12,7 @@ import java.util.Collections;
 import java.util.List;
 
 public abstract class AByDepartmentIdAndDateService<T extends Serializable, ID>
-        extends AByDepartmentIdService<T, ID>
+        extends AService<T, ID>
         implements IByDepartmentIdAndDateService<T, ID>, IByShiftIdAndDateService<T, ID> {
 
     private IByDepartmentIdAndDateRepository<T, ID> repository;
@@ -20,7 +20,7 @@ public abstract class AByDepartmentIdAndDateService<T extends Serializable, ID>
 
     public AByDepartmentIdAndDateService(IByDepartmentIdAndDateRepository<T, ID> repository,
                                          ShiftRepository shiftRepository) {
-        super(repository, shiftRepository);
+        super(repository);
         this.repository = repository;
         this.shiftRepository = shiftRepository;
     }

@@ -1,5 +1,6 @@
 package com.averude.uksatse.scheduler.server.auth.controller;
 
+import com.averude.uksatse.scheduler.security.logging.Logged;
 import com.averude.uksatse.scheduler.security.model.dto.NewUserAccountDTO;
 import com.averude.uksatse.scheduler.security.model.dto.PasswordResetDTO;
 import com.averude.uksatse.scheduler.security.model.dto.UserAccountDTO;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-import static com.averude.uksatse.scheduler.server.auth.utils.AccountUtils.getUserAccount;
+import static com.averude.uksatse.scheduler.security.details.AccountUtils.getUserAccount;
 
 @Slf4j
 @RestController
@@ -27,6 +28,12 @@ public class ShiftUserAccountControllerImpl implements ShiftUserAccountControlle
         var originator = getUserAccount(authentication);
         log.debug("User:{} - Getting list of shift user accounts.", originator);
         return userAccountDetailsService.findAllByDepartmentId(originator.getDepartmentId());
+    }
+
+    @Logged
+    @Override
+    public List<UserAccountDTO> getAllByDepartmentId(Long departmentId) {
+        return userAccountDetailsService.findAllByDepartmentId(departmentId);
     }
 
     @Override

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-import static com.averude.uksatse.scheduler.server.auth.utils.AccountUtils.getUserAccount;
+import static com.averude.uksatse.scheduler.security.details.AccountUtils.getUserAccount;
 
 @Slf4j
 @RestController

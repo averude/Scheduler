@@ -1,6 +1,8 @@
 package com.averude.uksatse.scheduler.core.util;
 
+import java.util.LinkedList;
 import java.util.List;
+import java.util.function.BiPredicate;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -63,5 +65,38 @@ public class CollectionUtils {
         while (lastMatchIndex + 1 < list.size() && comparator.apply(list.get(lastMatchIndex + 1)) == 0) {
             consumer.accept(list.get(++lastMatchIndex));
         }
+    }
+
+    public static <T, U> boolean containsAll(List<T> tArr,
+                                             List<U> uArr,
+                                             BiPredicate<T, U> equalsPredicate) {
+        if (invalidList(uArr) || invalidList(tArr)) {
+            return false;
+        }
+
+        var result = true;
+
+        var stack = new LinkedList<>(uArr);
+
+        outLoop:
+        for (var t : tArr) {
+            var iterator = stack.iterator();
+            while (iterator.hasNext()) {
+                var u = iterator.next();
+                if (equalsPredicate.test(t, u)) {
+                    iterator.remove();
+                    continue outLoop;
+                }
+            }
+
+            result = false;
+            break;
+        }
+
+        return result;
+    }
+
+    private static boolean invalidList(List list) {
+        return list == null || list.isEmpty();
     }
 }

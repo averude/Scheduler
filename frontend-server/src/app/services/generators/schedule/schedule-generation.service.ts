@@ -10,10 +10,11 @@ import { BasicDTO } from "../../../model/dto/basic-dto";
 import { ShiftPattern } from "../../../model/shift-pattern";
 import { HasDayTypeAndTime } from "../../../model/interface/has-day-type-and-time";
 import { CellUpdater } from "../../collectors/cell-updater";
-import { Cell } from "../../../model/ui/schedule-table/table-data";
+import { ScheduleCell } from "../../../model/ui/schedule-table/table-data";
 import { createOrUpdateCell } from "./schedule-generation-utils";
 import { forkJoin } from "rxjs";
 import { tap } from "rxjs/operators";
+import { Row } from "../../../lib/ngx-schedule-table/model/data/row";
 
 @Injectable()
 export class ScheduleGenerationService {
@@ -28,7 +29,7 @@ export class ScheduleGenerationService {
                    data: SelectionData,
                    offset: number) {
     this.scheduleGenerator.generateScheduleWithPattern(
-      data.rowData,
+      data.row,
       data.selectedCells,
       dto.collection,
       offset,
@@ -41,7 +42,7 @@ export class ScheduleGenerationService {
                          data: SelectionData) {
     this.scheduleGenerator
       .generateScheduleByUnit(
-        data.rowData,
+        data.row,
         data.selectedCells,
         unit,
         this.scheduleGeneratedHandler,
@@ -53,7 +54,7 @@ export class ScheduleGenerationService {
                                       data: SelectionData) {
     this.scheduleGenerator
       .generateScheduleByDepartmentDayType(
-        data.rowData,
+        data.row,
         data.selectedCells,
         departmentDayType,
         this.scheduleGeneratedHandler,
@@ -67,15 +68,15 @@ export class ScheduleGenerationService {
         .filter(cell => cell.value.actualDayTypeId);
       if (serviceCells.length > 0) {
         serviceCells.forEach(cell => cell.value.actualDayTypeId = undefined);
-        this.scheduleGeneratedHandler(data.rowData, data.selectedCells);
+        this.scheduleGeneratedHandler(data.row, data.selectedCells);
       } else {
         this.error403Handler('There are no service days');
       }
     }
   }
 
-  private get scheduleGeneratedHandler(): (rowData, selectedCells) => void {
-    return (rowData, selectedCells) => {
+  private get scheduleGeneratedHandler(): (row, selectedCells) => void {
+    return (row: Row, selectedCells: ScheduleCell[]) => {
 
       const createdSchedule = selectedCells
         .filter(cell => !cell.value.id)
@@ -88,8 +89,8 @@ export class ScheduleGenerationService {
       if (createdSchedule.length > 0) {
         this.scheduleService.create(createdSchedule)
           .subscribe(response => {
-            this.cellUpdater.updateCellData(rowData.cellData, response);
-            this.rowRenderer.renderRow(rowData.id);
+            this.cellUpdater.updateCellData(row.cells, response);
+            this.rowRenderer.renderRow(row.id);
             this.notificationService.success(
               'Created',
               'Schedule sent successfully');
@@ -98,8 +99,8 @@ export class ScheduleGenerationService {
       if (updatedSchedule.length > 0) {
         this.scheduleService.update(updatedSchedule)
           .subscribe(res => {
-            this.cellUpdater.updateCellData(rowData.cellData, updatedSchedule);
-            this.rowRenderer.renderRow(rowData.id);
+            this.cellUpdater.updateCellData(row.cells, updatedSchedule);
+            this.rowRenderer.renderRow(row.id);
             this.notificationService.success(
               'Updated',
               'Schedule sent successfully');
@@ -108,11 +109,9 @@ export class ScheduleGenerationService {
     };
   };
 
-  generateForCells(departmentDayType: DepartmentDayType, cells: Cell[]) {
-    cells.forEach(cell => {
-      const employeeId = cell.row.id;
-      createOrUpdateCell(false, employeeId, departmentDayType, cell);
-    });
+  generateForCells(departmentDayType: DepartmentDayType, cells: ScheduleCell[]) {
+    cells.forEach(cell =>
+      createOrUpdateCell(false, departmentDayType, cell));
 
     const updated = cells.filter(cell => cell.value.id);
     const created = cells.filter(cell => !cell.value.id);

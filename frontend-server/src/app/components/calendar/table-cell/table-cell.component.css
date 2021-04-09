@@ -1,0 +1,31 @@
+.cell {
+  width: 100%;
+  height: 100%;
+}
+
+.cell-color-label {
+  height: 4px;
+}
+
+.cell-value {
+  padding-top: 5px;
+  vertical-align: middle;
+}
+
+.cell-value p {
+  color: #2b3944;
+  font-family: 'MuseoSansMedium';
+  font-size: 12px;
+}
+
+.cell-disabled p {
+  color: #d3d3d3;
+}
+
+.weekend {
+  background-color: #e8f2fb;
+}
+
+.holiday {
+  background-color: #ffd5d5;
+}

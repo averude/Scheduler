@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
-import { Composition, MainShiftComposition, SubstitutionShiftComposition } from "../../model/main-shift-composition";
+import { Composition, MainComposition, SubstitutionComposition } from "../../model/composition";
 import { convertCompositionToInterval, RowInterval } from "../../model/ui/schedule-table/row-interval";
-import { Row } from "../../model/ui/schedule-table/table-data";
+import { ScheduleRow } from "../../model/ui/schedule-table/table-data";
 import { EmployeeScheduleDTO } from "../../model/dto/employee-schedule-dto";
 import { Moment } from "moment";
 
@@ -63,11 +63,11 @@ export class IntervalCreator {
 
   getEmployeePositionIntervals(from: Moment,
                                to: Moment,
-                               mainCompositions: MainShiftComposition[],
-                               substitutionCompositions: SubstitutionShiftComposition[]): Map<number, RowInterval[]> {
+                               mainCompositions: MainComposition[],
+                               substitutionCompositions: SubstitutionComposition[]): Map<number, RowInterval[]> {
     const intervalsMap: Map<number, RowInterval[]> = new Map();
 
-    const tempSubstitutions:SubstitutionShiftComposition[] = [].concat(substitutionCompositions);
+    const tempSubstitutions:SubstitutionComposition[] = [].concat(substitutionCompositions);
 
     for (let composition of mainCompositions) {
 
@@ -131,11 +131,11 @@ export class IntervalCreator {
     return result;
   }
 
-  recalculate(row: Row, dto: EmployeeScheduleDTO) {
+  recalculate(row: ScheduleRow, dto: EmployeeScheduleDTO) {
     if (row.isSubstitution) {
       row.intervals = row.compositions.map(value => convertCompositionToInterval(value));
     } else {
-      row.intervals = this.getEmployeeShiftIntervalsByArr(row.compositions, dto.substitutionShiftCompositions);
+      row.intervals = this.getEmployeeShiftIntervalsByArr(row.compositions, dto.substitutionCompositions);
     }
   }
 }

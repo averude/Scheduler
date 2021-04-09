@@ -46,7 +46,6 @@ public class Employee implements HasId, HasDepartmentId {
     @Positive(message = "{entity.id.negative}")
     private Long id;
 
-    @JsonIgnore
     @NotNull
     @Column(name = "department_id")
     private Long departmentId;

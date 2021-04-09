@@ -1,10 +1,9 @@
 import { Observable } from "rxjs";
 import { HttpClient } from "@angular/common/http";
-import { IByAuthService } from "../interface/i-by-auth.service";
 import { CUDService } from "../interface/cud-service";
 
 export abstract class ACrudService<T>
-  implements IByAuthService<T>, CUDService<T> {
+  implements CUDService<T> {
 
   protected constructor(protected url: string,
                         protected http: HttpClient) {}
@@ -18,12 +17,12 @@ export abstract class ACrudService<T>
     return this.http.get<T>(`${this.url}/${id}`);
   }
 
-  create(t: T): Observable<any> {
-    return this.http.post<number>(`${this.url}`, t);
+  create(t: T): Observable<T> {
+    return this.http.post<T>(`${this.url}`, t);
   }
 
-  update(t: T): Observable<any> {
-    return this.http.put(`${this.url}`, t, {responseType: 'text'});
+  update(t: T): Observable<T> {
+    return this.http.put<T>(`${this.url}`, t);
   }
 
   delete(id: number): Observable<any> {

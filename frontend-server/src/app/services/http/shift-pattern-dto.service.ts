@@ -7,17 +7,19 @@ import { Observable } from "rxjs";
 import { ACrudService } from "./abstract-service/a-crud-service";
 import { ShiftPatternDTO } from "../../model/dto/shift-pattern-dto";
 import { UserAccountAuthority } from "../../model/dto/new-user-account-dto";
+import { HasDepartmentIdService } from "./interface/has-department-id.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ShiftPatternDtoService
-  extends ACrudService<ShiftPatternDTO> implements CUDService<ShiftPatternDTO> {
+  extends ACrudService<ShiftPatternDTO>
+  implements CUDService<ShiftPatternDTO>, HasDepartmentIdService<ShiftPatternDTO> {
 
   constructor(private authService: AuthService,
               http: HttpClient,
               private config: RestConfig) {
-    super(`${config.baseUrl}/admin/patterns/dto`, http);
+    super(`${config.baseUrl}/shift_patterns`, http);
   }
 
   getAll(from?: string, to?: string): Observable<ShiftPatternDTO[]> {
@@ -35,21 +37,21 @@ export class ShiftPatternDtoService
 
   getAllByDepartmentId(departmentId: number): Observable<ShiftPatternDTO[]> {
     return this.http.get<ShiftPatternDTO[]>(
-      `${this.url}/departments/${departmentId}`
+      `${this.url}/departments/${departmentId}/dto`
     );
   }
 
   create(dto: ShiftPatternDTO): Observable<ShiftPatternDTO> {
-    return this.http.post<ShiftPatternDTO>(`${this.url}`, dto);
+    return this.http.post<ShiftPatternDTO>(`${this.url}/dto`, dto);
   }
 
   update(dto: ShiftPatternDTO): Observable<ShiftPatternDTO> {
-    return this.http.put<ShiftPatternDTO>(`${this.url}`, dto);
+    return this.http.put<ShiftPatternDTO>(`${this.url}/dto`, dto);
   }
 
   delete(id: number): Observable<any> {
     return this.http.delete(
-      `${this.config.baseUrl}/admin/patterns/${id}`,
+      `${this.config.baseUrl}/shift_patterns/${id}`,
       {responseType: 'text'}
     );
   }

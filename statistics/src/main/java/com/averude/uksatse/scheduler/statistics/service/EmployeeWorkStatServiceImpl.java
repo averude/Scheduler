@@ -105,7 +105,7 @@ public class EmployeeWorkStatServiceImpl implements EmployeeWorkStatService {
             workStatDTO.setPositionStats(new LinkedList<>());
 
             var positionIntervalsMap = intervalMapBuilder
-                    .getPositionIntervalsMap(from, to, dto.getMainShiftCompositions(), dto.getSubstitutionShiftCompositions());
+                    .getPositionIntervalsMap(from, to, dto.getMainCompositions(), dto.getSubstitutionCompositions());
 
             positionIntervalsMap.forEach(((positionId, generationIntervals) -> {
                 var positionStatistics = getPositionStatistics(dto, positionId, generationIntervals, specialCalendarDates, summationColumns);
@@ -158,8 +158,8 @@ public class EmployeeWorkStatServiceImpl implements EmployeeWorkStatService {
     private Long getPositionId(EmployeeScheduleDTO dto) {
         Long result = null;
 
-        var mainCompositions = dto.getMainShiftCompositions();
-        var substitutionCompositions = dto.getSubstitutionShiftCompositions();
+        var mainCompositions = dto.getMainCompositions();
+        var substitutionCompositions = dto.getSubstitutionCompositions();
 
         int lastMainIndex = mainCompositions.size() - 1;
         if (lastMainIndex >= 0) {
@@ -168,7 +168,7 @@ public class EmployeeWorkStatServiceImpl implements EmployeeWorkStatService {
             int lastSubIndex = substitutionCompositions.size() - 1;
             if (lastSubIndex >= 0) {
                 result = substitutionCompositions.get(lastSubIndex)
-                        .getMainShiftComposition()
+                        .getMainComposition()
                         .getPositionId();
             }
         }
@@ -179,8 +179,8 @@ public class EmployeeWorkStatServiceImpl implements EmployeeWorkStatService {
     private Long getShiftId(EmployeeScheduleDTO dto) {
         Long result = null;
 
-        var mainCompositions = dto.getMainShiftCompositions();
-        var substitutionCompositions = dto.getSubstitutionShiftCompositions();
+        var mainCompositions = dto.getMainCompositions();
+        var substitutionCompositions = dto.getSubstitutionCompositions();
 
         int lastMainIndex = mainCompositions.size() - 1;
         if (lastMainIndex >= 0) {
@@ -189,7 +189,7 @@ public class EmployeeWorkStatServiceImpl implements EmployeeWorkStatService {
             int lastSubIndex = substitutionCompositions.size() - 1;
             if (lastSubIndex >= 0) {
                 result = substitutionCompositions.get(lastSubIndex)
-                        .getMainShiftComposition()
+                        .getMainComposition()
                         .getShiftId();
             }
         }

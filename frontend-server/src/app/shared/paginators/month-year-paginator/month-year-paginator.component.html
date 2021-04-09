@@ -1,25 +1,61 @@
 <!--Hidden-->
-<mat-form-field class="hidden-input">
-  <input matInput [matDatepicker]="picker" [(ngModel)]="currentDate">
-  <mat-datepicker #picker
-                  startView="multi-year"
-                  (monthSelected)="onMonthSelected($event, picker)"
-                  (yearSelected)="onYearSelected($event, picker)"></mat-datepicker>
-</mat-form-field>
+<div class="container">
 
-<div class="btn-group">
-  <img class="btn-date-select"
-       src="assets/img/left.svg"
-       (click)="prevDate()">
+  <ng-container [ngTemplateOutlet]="type === 'single' ? single : range"></ng-container>
 
-  <div class="month-container" (click)="picker.open()">
-    <div class="date-label">
-      {{dateString()}}
+  <ng-template #single>
+    <mat-form-field class="hidden-input">
+      <input matInput [matDatepicker]="picker" [(ngModel)]="currentDate">
+      <mat-datepicker #picker
+                      startView="multi-year"
+                      (monthSelected)="onMonthSelected($event, picker)"
+                      (yearSelected)="onYearSelected($event, picker)"></mat-datepicker>
+    </mat-form-field>
+
+    <div class="btn-group">
+      <img class="btn-date-select"
+           src="assets/img/left.svg"
+           (click)="prevDate()">
+
+      <div class="month-container" (click)="picker.open()">
+        <div class="date-label">
+          {{dateString()}}
+        </div>
+      </div>
+
+      <img class="btn-date-select"
+           src="assets/img/right.svg"
+           (click)="nextDate()">
     </div>
-  </div>
+  </ng-template>
 
-  <img class="btn-date-select"
-       src="assets/img/right.svg"
-       (click)="nextDate()">
+  <ng-template #range>
+    <div class="range-paginator-container">
+      <mat-form-field>
+        <input matInput
+               [matDatepicker]="fromPicker"
+               placeholder="From date"
+               [(ngModel)]="fromDate">
+        <mat-datepicker-toggle matSuffix [for]="fromPicker"></mat-datepicker-toggle>
+        <mat-datepicker #fromPicker></mat-datepicker>
+      </mat-form-field>
+
+      <div>-</div>
+
+      <mat-form-field>
+        <input matInput
+               [matDatepicker]="toPicker"
+               placeholder="To date"
+               [(ngModel)]="toDate">
+        <mat-datepicker-toggle matSuffix [for]="toPicker"></mat-datepicker-toggle>
+        <mat-datepicker #toPicker></mat-datepicker>
+      </mat-form-field>
+
+      <img class="btn-refresh"
+           src="assets/img/refresh.svg"
+           (click)="load()"/>
+    </div>
+
+  </ng-template>
+
 </div>
-

@@ -80,8 +80,8 @@ public class UserAccountDetailsServiceImpl implements UserAccountDetailsService 
 
     @Override
     @Transactional
-    public UserAccountDTO createDepartmentUser(@Valid NewUserAccountDTO accountDTO, UserAccount originator) {
-        var userAccount = dtoConverter.convertToUserAccount(accountDTO, originator.getEnterpriseId(), accountDTO.getDepartmentId());
+    public UserAccountDTO createDepartmentUser(@Valid NewUserAccountDTO accountDTO) {
+        var userAccount = dtoConverter.convertToUserAccount(accountDTO, accountDTO.getEnterpriseId(), accountDTO.getDepartmentId());
         userAccountRepository.save(userAccount);
         return dtoConverter.convertToDTO(userAccount);
     }
@@ -89,7 +89,7 @@ public class UserAccountDetailsServiceImpl implements UserAccountDetailsService 
     @Override
     @Transactional
     public UserAccountDTO createShiftUser(@Valid NewUserAccountDTO accountDTO, UserAccount originator) {
-        var userAccount = dtoConverter.convertToUserAccount(accountDTO, originator.getEnterpriseId(), originator.getDepartmentId());
+        var userAccount = dtoConverter.convertToUserAccount(accountDTO, accountDTO.getEnterpriseId(), accountDTO.getDepartmentId());
         userAccountRepository.save(userAccount);
 
         var accountShifts = dtoConverter.getAccountShifts(accountDTO.getShiftIds(), userAccount.getId());
@@ -100,9 +100,8 @@ public class UserAccountDetailsServiceImpl implements UserAccountDetailsService 
 
     @Override
     @Transactional
-    public UserAccountDTO updateDepartmentUser(UserAccountDTO userAccountDTO, UserAccount originator) {
+    public UserAccountDTO updateDepartmentUser(UserAccountDTO userAccountDTO) {
         if (userAccountDTO.getAuthority().equals(DEPARTMENT_ADMIN)) {
-            userAccountDTO.setEnterpriseId(originator.getEnterpriseId());
             return updateUser(userAccountDTO);
         } else throw new RuntimeException();
     }
@@ -172,11 +171,8 @@ public class UserAccountDetailsServiceImpl implements UserAccountDetailsService 
 
     @Override
     @Transactional
-    public void deleteDepartmentUser(Long accountId, UserAccount originator) {
-        var userAccount = userAccountRepository.findById(accountId).orElseThrow();
-        if (canModifyDepartmentUser(originator, userAccount)) {
-            userAccountRepository.delete(userAccount);
-        }
+    public void deleteDepartmentUser(Long accountId) {
+        userAccountRepository.findById(accountId).ifPresent(userAccountRepository::delete);
     }
 
     @Override
@@ -202,12 +198,9 @@ public class UserAccountDetailsServiceImpl implements UserAccountDetailsService 
     @Override
     @Transactional
     public void resetDepartmentUserPassword(Long accountId,
-                                            PasswordResetDTO passwordResetDTO,
-                                            UserAccount originator) {
-        var userAccount = userAccountRepository.findById(accountId).orElseThrow();
-        if (canModifyDepartmentUser(userAccount, originator)) {
-            userAccount.setPassword(encoder.encode(passwordResetDTO.getNewPassword()));
-        } else throw new RuntimeException();
+                                            PasswordResetDTO passwordResetDTO) {
+        userAccountRepository.findById(accountId)
+                .ifPresent(userAccount -> userAccount.setPassword(encoder.encode(passwordResetDTO.getNewPassword())));
     }
 
     @Override

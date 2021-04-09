@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { PatternUnit } from '../../../model/pattern-unit';
 import { createOrUpdateCell } from "./schedule-generation-utils";
-import { RowData } from "../../../lib/ngx-schedule-table/model/data/row-data";
-import { CellData } from "../../../lib/ngx-schedule-table/model/data/cell-data";
+import { Row } from "../../../lib/ngx-schedule-table/model/data/row";
+import { Cell } from "../../../lib/ngx-schedule-table/model/data/cell";
 import { DepartmentDayType } from "../../../model/department-day-type";
 import { HasDayTypeAndTime } from "../../../model/interface/has-day-type-and-time";
 
@@ -13,38 +13,38 @@ export class ScheduleGenerator {
 
   constructor() { }
 
-  generateScheduleWithPattern(rowData: RowData,
-                              cells: CellData[],
+  generateScheduleWithPattern(row: Row,
+                              cells: Cell[],
                               patternUnits: PatternUnit[],
                               offset: number,
-                              onSave: (rowData: RowData, selectedCells: CellData[]) => void,
+                              onSave: (row: Row, selectedCells: Cell[]) => void,
                               onError: (message: string) => void) {
-    this.generate(rowData, cells, patternUnits, offset, false, onSave, onError);
+    this.generate(row, cells, patternUnits, offset, false, onSave, onError);
   }
 
-  generateScheduleByUnit(rowData: RowData,
-                         cells: CellData[],
+  generateScheduleByUnit(row: Row,
+                         cells: Cell[],
                          unit: HasDayTypeAndTime,
-                         onSave: (rowData: RowData, selectedCells: CellData[]) => void,
+                         onSave: (row: Row, selectedCells: Cell[]) => void,
                          onError: (message: string) => void) {
 
-    this.generate(rowData, cells, [unit], 0, false, onSave, onError);
+    this.generate(row, cells, [unit], 0, false, onSave, onError);
   }
 
-  generateScheduleByDepartmentDayType(rowData: RowData,
-                                      cells: CellData[],
+  generateScheduleByDepartmentDayType(row: Row,
+                                      cells: Cell[],
                                       departmentDayType: DepartmentDayType,
-                                      onSave: (rowData: RowData, selectedCells: CellData[]) => void,
+                                      onSave: (row: Row, selectedCells: Cell[]) => void,
                                       onError: (message: string) => void) {
-    this.generate(rowData, cells, [departmentDayType], 0, departmentDayType.dayType.usePreviousValue, onSave, onError);
+    this.generate(row, cells, [departmentDayType], 0, departmentDayType.dayType.usePreviousValue, onSave, onError);
   }
 
-  private generate(rowData: RowData,
-                   cells: CellData[],
+  private generate(row: Row,
+                   cells: Cell[],
                    units: HasDayTypeAndTime[],
                    offset: number,
                    usePreviousValue: boolean,
-                   onSave: (rowData: RowData, selectedCells: CellData[]) => void,
+                   onSave: (rowData: Row, selectedCells: Cell[]) => void,
                    onError: (message: string) => void) {
     if (!cells || !units || !(units.length > 0)) {
       onError('Illegal arguments');
@@ -74,13 +74,9 @@ export class ScheduleGenerator {
 
         const unit_index = (offset + j) % unitsSize;
 
-        createOrUpdateCell(
-          usePreviousValue,
-          rowData.id,
-          units[unit_index],
-          cells[cell_index]);
+        createOrUpdateCell(usePreviousValue, units[unit_index], cells[cell_index]);
       }
     }
-    onSave(rowData, cells);
+    onSave(row, cells);
   }
 }

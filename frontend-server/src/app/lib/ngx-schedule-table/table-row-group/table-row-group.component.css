@@ -1,6 +1,6 @@
 .group-label-row {
   height: 32px;
-  background-color: #E2F2E9;
+  background-color: #f5f7f9;
   border:  1px solid #e5e9f0;
 }
 
@@ -11,7 +11,7 @@
 }
 
 .group-label {
-  padding-left: 26px;
+  padding-left: 13px;
 }
 
 .group-control {
@@ -37,7 +37,11 @@
 }
 
 .row {
-  height: 51px;
+
+}
+
+.distinctByColor:nth-child(odd) {
+  background-color: #fbfcff;
 }
 
 .group-hide-button {

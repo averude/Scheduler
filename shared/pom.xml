@@ -10,17 +10,17 @@
     <packaging>jar</packaging>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>scheduler-shared</artifactId>
+    <artifactId>shared</artifactId>
 
     <dependencies>
         <dependency>
             <groupId>com.averude.uksatse.scheduler</groupId>
-            <artifactId>scheduler-core</artifactId>
+            <artifactId>core</artifactId>
             <version>0.2.0</version>
         </dependency>
         <dependency>
             <groupId>com.averude.uksatse.scheduler</groupId>
-            <artifactId>scheduler-generators</artifactId>
+            <artifactId>generators</artifactId>
             <version>0.2.0</version>
         </dependency>
         <dependency>

@@ -6,17 +6,19 @@ import { AuthService } from "./auth.service";
 import { CUDService } from "./interface/cud-service";
 import { ACrudService } from "./abstract-service/a-crud-service";
 import { Observable } from "rxjs";
+import { HasDepartmentIdService } from "./interface/has-department-id.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ShiftPatternService
-  extends ACrudService<ShiftPattern> implements CUDService<ShiftPattern> {
+  extends ACrudService<ShiftPattern>
+  implements CUDService<ShiftPattern>, HasDepartmentIdService<ShiftPattern> {
 
   constructor(private authService: AuthService,
               http: HttpClient,
               private config: RestConfig) {
-    super(`${config.baseUrl}/admin/patterns`, http);
+    super(`${config.baseUrl}/shift_patterns`, http);
   }
 
   getAll(from?: string, to?: string): Observable<ShiftPattern[]> {

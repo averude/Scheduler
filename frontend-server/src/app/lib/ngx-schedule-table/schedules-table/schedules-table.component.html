@@ -1,63 +1,67 @@
-<div>
-  <div class="date-selector">
-    <ng-container [ngTemplateOutlet]="paginator"></ng-container>
-  </div>
-  <div>
-    <div class="table-top-buttons"
-         *ngIf="topItems.length == 0"></div>
-    <div class="table-top-buttons"
-         *ngFor="let template of topItems" >
-      <ng-container [ngTemplateOutlet]="template"></ng-container>
-    </div>
-  </div>
-</div>
+<!--<div class="date-container">-->
+  <!--<div class="date-selector">-->
+    <!--<ng-container [ngTemplateOutlet]="paginator"></ng-container>-->
+  <!--</div>-->
+  <!--<div class="table-top-buttons-container">-->
+    <!--<div class="table-top-buttons"-->
+         <!--*ngIf="topItems.length == 0"></div>-->
+    <!--<div class="table-top-buttons"-->
+         <!--*ngFor="let template of topItems" >-->
+      <!--<ng-container [ngTemplateOutlet]="template"></ng-container>-->
+    <!--</div>-->
+  <!--</div>-->
+<!--</div>-->
 <div class="table-wrap">
-<table class="table-base">
-  <thead app-table-header
-         [showSumColumns]="showSumColumns"
-         [headerDateCellDef]="headerDateCellDef"
-         [beforeDateColumns]="beforeDateColumns"
-         [afterDateColumns]="afterDateColumns">
-  </thead>
-  <ng-container *ngIf="proxyViewIsShown">
-    <tr>
-      <td [attr.colspan]="colspan">
-        <div class="table-proxy-view">
-          <ng-container [ngTemplateOutlet]="proxyViewDef"></ng-container>
-        </div>
-      </td>
-    </tr>
-  </ng-container>
-  <ng-container *ngIf="!proxyViewIsShown">
-    <ng-container *ngIf="groupable">
-      <tbody *ngFor="let group of rowGroupData"
-             app-table-row-group
-             [selectionEnabled]="selectionEnabled"
-             [editableRowGroup]="editableRowGroup"
-             [multipleSelect]="multipleSelect"
-             [showSumColumns]="showSumColumns"
-             [datedCellDef]="datedCellDef"
-             [beforeDateColumns]="beforeDateColumns"
-             [afterDateColumns]="afterDateColumns"
-             [groupData]="group"
-             [cellLabelSetter]="cellLabelSetter"
-             [onAddRowClick]="onAddRowClick">
-      </tbody>
-    </ng-container>
-    <ng-container>
-      <tr class="row"
-          *ngFor="let row of rowData"
-          app-table-row
-          [selectionEnabled]="selectionEnabled"
-          [multipleSelect]="multipleSelect"
-          [showSumColumns]="showSumColumns"
-          [datedCellDef]="datedCellDef"
-          [beforeDateColumns]="beforeDateColumns"
-          [afterDateColumns]="afterDateColumns"
-          [rowData]="row"
-          [cellLabelSetter]="cellLabelSetter">
+  <div class="dummy"></div>
+
+  <table class="table-base">
+    <thead app-table-header
+           [showSumColumns]="showSumColumns"
+           [pageableColumns]="pageableColumns"
+           [beforeDateColumns]="beforeDateColumns"
+           [afterDateColumns]="afterDateColumns">
+    </thead>
+    <ng-container *ngIf="proxyViewIsShown">
+      <tr>
+        <td [attr.colspan]="100">
+          <div class="table-proxy-view">
+            <ng-container [ngTemplateOutlet]="proxyViewDef"></ng-container>
+          </div>
+        </td>
       </tr>
     </ng-container>
-  </ng-container>
-</table>
+    <ng-container *ngIf="!proxyViewIsShown">
+      <ng-container *ngIf="groupable">
+        <tbody *ngFor="let group of rowGroupData"
+               app-table-row-group
+               [trackByFn]="trackByFn"
+               [distinctByColor]="distinctByColor"
+               [selectionEnabled]="selectionEnabled"
+               [editableRowGroup]="editableRowGroup"
+               [multipleSelect]="multipleSelect"
+               [showSumColumns]="showSumColumns"
+               [beforeDateColumns]="beforeDateColumns"
+               [afterDateColumns]="afterDateColumns"
+               [pageableColumns]="pageableColumns"
+               [groupData]="group"
+               [onAddRowClick]="onAddRowClick">
+        </tbody>
+      </ng-container>
+      <ng-container>
+        <tr class="row"
+            [class.distinctByColor]="distinctByColor"
+            *ngFor="let row of rowData"
+            app-table-row
+            [trackByFn]="trackByFn"
+            [selectionEnabled]="selectionEnabled"
+            [multipleSelect]="multipleSelect"
+            [showSumColumns]="showSumColumns"
+            [beforeDateColumns]="beforeDateColumns"
+            [pageableColumns]="pageableColumns"
+            [afterDateColumns]="afterDateColumns"
+            [rowData]="row">
+        </tr>
+      </ng-container>
+    </ng-container>
+  </table>
 </div>

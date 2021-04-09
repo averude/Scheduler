@@ -7,17 +7,19 @@ import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { AuthService } from "./auth.service";
 import { UserAccountAuthority } from "../../model/dto/new-user-account-dto";
+import { HasDepartmentIdService } from "./interface/has-department-id.service";
 
 @Injectable({
   providedIn: "root"
 })
 export class ReportSheetDTOService
-  extends ACrudService<ReportSheetDTO> implements CUDService<ReportSheetDTO> {
+  extends ACrudService<ReportSheetDTO>
+  implements CUDService<ReportSheetDTO>, HasDepartmentIdService<ReportSheetDTO> {
 
   constructor(private authService: AuthService,
               private config: RestConfig,
               http: HttpClient) {
-    super(`${config.baseUrl}/admin/report_sheets`, http);
+    super(`${config.baseUrl}/report_sheets`, http);
   }
 
   getAll(from?: string, to?: string): Observable<ReportSheetDTO[]> {

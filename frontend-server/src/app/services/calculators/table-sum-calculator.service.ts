@@ -1,20 +1,20 @@
-import { RowGroupData } from "../../lib/ngx-schedule-table/model/data/row-group-data";
+import { RowGroup } from "../../lib/ngx-schedule-table/model/data/row-group";
 import { calculateHoursByHasTime, roundToTwo } from "../../shared/utils/utils";
 import { Injectable } from "@angular/core"
-import { RowData } from "../../lib/ngx-schedule-table/model/data/row-data";
+import { Row } from "../../lib/ngx-schedule-table/model/data/row";
 
 @Injectable()
 export class TableSumCalculator {
 
-  calculateWorkHoursSum(rowGroupData: RowGroupData[], rowId?: number) {
+  calculateWorkHoursSum(rowGroupData: RowGroup[], rowId?: number) {
     this.calculateRowGroupSum(rowGroupData, this.calcWorkHoursSum, rowId);
   }
 
-  calculateHoursNormSum(rows: RowData[], rowId?: number) {
+  calculateHoursNormSum(rows: Row[], rowId?: number) {
     this.calculateRowSum(rows, this.calcNormHoursSum, rowId);
   }
 
-  private calculateRowGroupSum(rowGroupData: RowGroupData[], fn: (row) => void, rowId?: number) {
+  private calculateRowGroupSum(rowGroupData: RowGroup[], fn: (row) => void, rowId?: number) {
     if (rowGroupData) {
       rowGroupData.forEach(group => {
         let rows = group.rows;
@@ -23,7 +23,7 @@ export class TableSumCalculator {
     }
   }
 
-  private calculateRowSum(rows: any[], fn, rowId?: number) {
+  private calculateRowSum(rows: Row[], fn, rowId?: number) {
     if (rows) {
       if (rowId && rowId > 0) rows = rows.filter(row => row.id === rowId);
       rows.forEach(row => fn(row));
@@ -33,7 +33,7 @@ export class TableSumCalculator {
   private calcWorkHoursSum(row: any) {
     if (!row) return;
 
-    row.sum = row.cellData
+    row.sum = row.cells
       .map(cell => calculateHoursByHasTime(cell.value))
       .reduce((prev, curr) => prev + curr, 0);
 
@@ -43,7 +43,7 @@ export class TableSumCalculator {
   private calcNormHoursSum(row: any) {
     if (!row) return;
 
-    row.sum = row.cellData
+    row.sum = row.cells
       .map(cell => (cell.value) ? cell.value.hours : 0)
       .reduce((prev, curr) => prev + curr, 0);
   }

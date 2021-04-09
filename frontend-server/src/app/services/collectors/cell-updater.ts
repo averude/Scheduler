@@ -1,4 +1,4 @@
-import { CellData } from "../../lib/ngx-schedule-table/model/data/cell-data";
+import { Cell } from "../../lib/ngx-schedule-table/model/data/cell";
 import { HasDate } from "../../model/interface/has-date";
 import * as moment from "moment";
 import { Injectable } from "@angular/core";
@@ -6,7 +6,7 @@ import { Injectable } from "@angular/core";
 @Injectable()
 export class CellUpdater {
 
-  public updateCellData(cellData: CellData[],
+  public updateCellData(cellData: Cell[],
                         values: HasDate[],
                         fn: (value: HasDate) => number = getDayCellIndex) {
     if (!values || values.length === 0) {

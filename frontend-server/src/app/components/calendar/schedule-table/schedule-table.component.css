@@ -1,0 +1,67 @@
+.td-name {
+  border: 1px solid #e5e9f0;
+  padding: 0;
+}
+
+.substitution {
+  border-left: 3px solid #938bd8;
+}
+
+.table-sticky-header {
+  font-family: 'MuseoSansRegular', 'Roboto', sans-serif;
+  font-size: 13px;
+  color: #000;
+  position: sticky;
+  top: 28px;
+  background-color: #F5F7F9;
+  box-shadow: 0 -1px 1px 0px #e5e9f0;
+}
+
+.th-null {
+  min-width: 150px;
+  border: 1px solid #e5e9f0;
+}
+
+.th-sum {
+  width: 42px;
+  border: 1px solid #e5e9f0;
+}
+
+.sum {
+  border: 1px solid #e5e9f0;
+  vertical-align: middle;
+}
+
+.sum p {
+  font-family: 'MuseoSansMedium';
+  font-size: 13px;
+  color: #6f7e91;
+}
+
+.notEqual > p {
+  color: #d60000;
+}
+
+.month-header {
+  width: 36px;
+  height: 39px;
+  border:  1px solid #e5e9f0;
+  cursor: pointer;
+}
+
+.month-header:hover {
+  background-color: #d7d4ea;
+  color: #ffffff;
+}
+
+.weekend {
+  background-color: #e8f2fb;
+}
+
+.holiday {
+  background-color: #ffd5d5;
+}
+
+.current-day {
+  color: royalblue;
+}

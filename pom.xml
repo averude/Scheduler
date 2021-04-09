@@ -29,10 +29,9 @@
         <module>shared</module>
         <module>generators</module>
         <module>auth-server</module>
-        <module>backend-server</module>
+        <module>work-schedule-service</module>
         <module>statistics</module>
         <module>security</module>
-        <module>controllers</module>
         <module>test-kit</module>
     </modules>
 

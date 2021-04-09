@@ -40,7 +40,6 @@ public class WorkDay implements HasId, HasEmployeeId, HasDepartmentId, HasDayTyp
     )
     private Long id;
 
-    @JsonIgnore
     @Id
     @NotNull
     @Column(name = "department_id")

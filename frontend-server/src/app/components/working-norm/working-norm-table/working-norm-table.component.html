@@ -1,0 +1,55 @@
+<ng-template #paginator paginatorDef>
+  <app-month-year-paginator [paginationStrategy]="paginationStrategy"
+                            (onDateChange)="onDateChange()"
+                            [dateUnit]="'year'"></app-month-year-paginator>
+</ng-template>
+
+<app-schedules-table [groupable]="false"
+                     [trackByFn]="trackByFn"
+                     [rowData]="rowData"
+                     [proxyViewIsShown]="proxyViewIsShown"
+                     [selectionEnabled]="!isAdmin"
+                     [multipleSelect]="false"
+                     [showSumColumns]="true"
+                     [distinctByColor]="true">
+
+  <ng-template proxyViewDef>
+    <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+  </ng-template>
+
+  <ng-container pageableColumnDef>
+    <th *headerCellDef="let date"
+        class="table-sticky-header month-header">
+      {{date.monthName}}
+    </th>
+    <div *cellDef="let cell"
+         class="cell">
+      <p align="center">
+        {{getCellValue(cell.value)}}
+      </p>
+    </div>
+  </ng-container>
+
+  <ng-container beforeDateColumnDef>
+    <th class="table-sticky-header th-null"
+        *headerCellDef>
+      <app-working-norm-table-configuration-menu [departmentId]="departmentId"></app-working-norm-table-configuration-menu>
+    </th>
+    <td class="td-name"
+        *cellDef="let rowData"
+        name-info-cell
+        [name]="rowData.shiftName"
+        [info]="rowData.patternName">
+    </td>
+  </ng-container>
+
+  <ng-container afterDateColumnDef>
+    <th class="table-sticky-header th-sum"
+        *headerCellDef>Sum</th>
+    <td class="sum"
+        *cellDef="let rowData">
+      <p align="center">{{rowData.sum}}</p>
+    </td>
+  </ng-container>
+
+</app-schedules-table>

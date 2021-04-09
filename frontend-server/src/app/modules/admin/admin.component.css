@@ -1,0 +1,109 @@
+.mat-toolbar {
+  position: sticky;
+  position: -webkit-sticky;
+  top: 0;
+  z-index: 1000;
+  height: 3em;
+  background-color: lightseagreen;
+}
+
+.mat-toolbar > * {
+  width: 100%;
+}
+
+.mat-sidenav-container {
+  margin-top: 60px;
+}
+
+.mat-sidenav {
+  width: 22vw;
+  min-width: 330px;
+  max-width: 420px;
+}
+
+::ng-deep .mat-drawer-backdrop.mat-drawer-shown {
+  background-color: rgba(0, 0, 0, 0.25);
+}
+
+.mat-sidenav-content {
+  background-color: white;
+}
+
+.sidenav-elements-container,
+.buttons-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.sidenav-user-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.5em 0 0 0;
+}
+
+.sidenav-user-icon {
+  width: 6em;
+  padding-bottom: 0.5em;
+  user-select: none;
+  outline: none;
+}
+
+.sidenav-user-name {
+  font-size: 20px;
+  font-family: MuseoSansLight;
+  text-align: center;
+  color: #6a6a6a;
+  margin: 5px 1.5em;
+  user-select: none;
+  outline: none;
+}
+
+.sidenav-user-name:hover {
+  color: darkblue;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.sidenav-department-name {
+  font-size: 12px;
+  text-align: center;
+  color: lightgrey;
+  font-family: MuseoSansMedium, sans-serif;
+  margin: 0 1.5em;
+  letter-spacing: 1px;
+  user-select: none;
+  outline: none;
+}
+
+.sidenav-divider {
+  border: 1px solid #ddf0ec;
+  margin: 1em 2vw;
+}
+
+.sidenav-elements-container > button,
+.buttons-container > button {
+  font-family: MuseoSansRegular, sans-serif;
+  font-size: 12px;
+  color: #636363;
+  border: none;
+  background-color: transparent;
+  height: 6vh;
+  min-height: 4em;
+  max-height: 6em;
+  outline: none;
+  letter-spacing: 1px;
+  cursor: pointer;
+  margin: 0 2vw;
+}
+
+.sidenav-elements-container > button:hover,
+.buttons-container > button:hover {
+  background-color: #f3f3f3;
+}
+
+.sidenav-elements-container > .active,
+.buttons-container > .active{
+  background-color: #F1F1F1;
+}

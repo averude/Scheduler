@@ -1,0 +1,83 @@
+<ng-template #paginator paginatorDef>
+  <app-month-year-paginator [paginationStrategy]="paginationStrategy"
+                            (onDateChange)="onDateChange()"></app-month-year-paginator>
+</ng-template>
+
+<app-schedules-table [trackByFn]="trackByFn"
+                     [showSumColumns]="accessRights?.isAdmin"
+                     [multipleSelect]="true"
+                     [rowGroupData]="tableData"
+                     [proxyViewIsShown]="proxyViewIsShown"
+                     [selectionEnabled]="accessRights?.isAdmin"
+                     (onAddRowClick)="isAble && isEditable && tableManager.newRow($event)">
+
+  <ng-template proxyViewDef>
+    <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+  </ng-template>
+
+  <ng-container pageableColumnDef
+                cellContentPosition="TOP">
+    <th *headerCellDef="let date"
+        class="table-sticky-header month-header"
+        [class.weekend]="date.weekend"
+        [class.holiday]="date.holiday"
+        [class.current-day]="date.isNow"
+        (click)="state.clickHeaderCell({value: date, event: $event})">
+      {{date.dayOfMonth}}
+    </th>
+    <app-table-cell *cellDef="let cell"
+                    [cellData]="cell"
+                    [value]="cell.value"></app-table-cell>
+  </ng-container>
+
+  <ng-container beforeDateColumnDef>
+    <th class="table-sticky-header th-null"
+        *headerCellDef>
+      <app-schedule-table-configuration-menu [departmentId]="departmentId"></app-schedule-table-configuration-menu>
+    </th>
+    <td class="td-name"
+        [class.substitution]="rowData.isSubstitution"
+        *cellDef="let rowData"
+        name-info-cell
+        [name]="utility.getEmployeeName(rowData.employee)"
+        [info]="rowData.position.shortName"
+        [isEditable]="isRowEditable(rowData)"
+        (click)="isRowEditable(rowData) && tableManager.editRow(rowData)">
+    </td>
+  </ng-container>
+
+  <ng-container afterDateColumnDef>
+    <th class="table-sticky-header th-sum"
+        *headerCellDef>Sum</th>
+    <td class="sum"
+        *cellDef="let rowData">
+      <p align="center">{{rowData.sum}}</p>
+    </td>
+  </ng-container>
+
+  <ng-container afterDateColumnDef>
+    <th class="table-sticky-header th-sum"
+        *headerCellDef>Norm</th>
+    <td class="sum"
+        *cellDef="let rowData">
+      <p align="center">{{rowData.workingNorm}}</p>
+    </td>
+  </ng-container>
+
+  <ng-container afterDateColumnDef>
+    <th class="table-sticky-header th-sum"
+        *headerCellDef>Diff</th>
+    <td class="sum"
+        *cellDef="let rowData"
+        [class.notEqual]="rowData.diff !== 0">
+      <p align="center">{{rowData.diff}}</p>
+    </td>
+  </ng-container>
+</app-schedules-table>
+
+<app-schedule-table-context-menu *ngIf="accessRights?.isAdmin"
+                                 [shifts]="dataSource.shifts"
+                                 [enterpriseId]="enterpriseId"
+                                 [departmentId]="departmentId"
+                                 [groups]="tableData"
+                                 [isEditableGroups]="isEditable"></app-schedule-table-context-menu>

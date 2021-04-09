@@ -42,7 +42,6 @@ public class DayType implements HasId, HasEnterpriseId {
     @Positive(message = "{entity.id.negative}")
     private Long id;
 
-    @JsonIgnore
     @NotNull
     @Column(name = "enterprise_id", nullable = false)
     private Long enterpriseId;

@@ -2,16 +2,16 @@ import { EmployeeScheduleDTO } from "../model/dto/employee-schedule-dto";
 
 export function getMainShiftId(dto: EmployeeScheduleDTO) {
 
-  const lastMainCompositionIndex = dto.mainShiftCompositions.length - 1;
+  const lastMainCompositionIndex = dto.mainCompositions.length - 1;
 
   if (lastMainCompositionIndex >= 0) {
-    return dto.mainShiftCompositions[lastMainCompositionIndex].shiftId;
+    return dto.mainCompositions[lastMainCompositionIndex].shiftId;
   } else {
-    const lastSubstitutionCompositionIndex = dto.substitutionShiftCompositions.length - 1;
+    const lastSubstitutionCompositionIndex = dto.substitutionCompositions.length - 1;
 
     if (lastSubstitutionCompositionIndex >= 0) {
-      return dto.substitutionShiftCompositions[lastSubstitutionCompositionIndex]
-        .mainShiftComposition
+      return dto.substitutionCompositions[lastSubstitutionCompositionIndex]
+        .mainComposition
         .shiftId;
     }
   }

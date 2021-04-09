@@ -1,0 +1,12 @@
+.stepper-container {
+  overflow: hidden;
+}
+
+.stepper-content {
+  outline: 0;
+
+  &[aria-expanded='false'] {
+   height: 0;
+   overflow: hidden;
+  }
+}

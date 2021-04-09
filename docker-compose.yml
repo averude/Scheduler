@@ -40,8 +40,33 @@ services:
       - ${LOG_VOLUME_PATH}:/logs
     ports:
       - 5000:5000
+#
+#  backend-server:
+#    environment:
+#      GRAYLOG_HOST: $GRAYLOG_HOST
+#      GRAYLOG_GELF_PORT: $GRAYLOG_GELF_PORT
+#      USER_INFO_URI: $USER_INFO_URI
+#      ACCESS_TOKEN_URI: $ACCESS_TOKEN_URI
+#      BACKEND_SERVER_ID: $BACKEND_SERVER_ID
+#      BACKEND_SERVER_PASSWORD: $BACKEND_SERVER_PASSWORD
+#      DB_DRIVER_CLASS_NAME: $DB_DRIVER_CLASS_NAME
+#      DB_URL: $DB_URL
+#      DB_USERNAME: $DB_USERNAME
+#      DB_PASSWD: $DB_PASSWD
+#    build:
+#      context: ./backend-server
+#      dockerfile: Dockerfile
+#    image: backend-server
+#    hostname: backend-server
+#    restart: always
+#    volumes:
+#      - ${LOG_VOLUME_PATH}:/logs
+#    depends_on:
+#      - auth-server
+#    ports:
+#      - 8080:8080
 
-  backend-server:
+  work-schedule-service:
     environment:
       GRAYLOG_HOST: $GRAYLOG_HOST
       GRAYLOG_GELF_PORT: $GRAYLOG_GELF_PORT
@@ -54,10 +79,10 @@ services:
       DB_USERNAME: $DB_USERNAME
       DB_PASSWD: $DB_PASSWD
     build:
-      context: ./backend-server
+      context: ./work-schedule-service
       dockerfile: Dockerfile
-    image: backend-server
-    hostname: backend-server
+    image: work-schedule-service
+    hostname: work-schedule-service
     restart: always
     volumes:
       - ${LOG_VOLUME_PATH}:/logs

@@ -1,0 +1,102 @@
+<mat-horizontal-stepper linear>
+
+  <mat-step [stepControl]="decorationDataForm" label="Date and type" state="create">
+    <!--<ng-template matStepLabel>Date and caption</ng-template>-->
+
+    <div class="first-step-container">
+
+      <div class="type-and-date-container">
+        <!--Year and month-->
+        <mat-form-field class="report-date">
+          <input matInput
+                 [(ngModel)]="date"
+                 [matDatepicker]="picker"
+                 placeholder="Month and year">
+          <mat-datepicker-toggle matSuffix
+                                 [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker
+                          startView="year"
+                          (monthSelected)="chosenMonthHandler($event, picker)">
+          </mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field class="report-type">
+          <mat-select [(ngModel)]="reportType"
+                      #typeSelect="ngModel"
+                      placeholder="Report type"
+                      required>
+            <mat-option [value]="reportTypes[0]">Schedule Report</mat-option>
+            <mat-option [value]="reportTypes[1]">Time Sheet Report</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="options-container">
+        <mat-checkbox [(ngModel)]="useReportLabel">Use Report Labels</mat-checkbox>
+        <mat-checkbox *ngIf="isAble"
+                      [(ngModel)]="splitIntoSheets">Split into sheets</mat-checkbox>
+      </div>
+    </div>
+
+    <div class="stepper-footer">
+      <button class="scheduler-dialog-action-button"
+              matStepperNext [disabled]="typeSelect.invalid">Next</button>
+    </div>
+  </mat-step>
+
+  <mat-step [stepControl]="decorationDataForm">
+    <ng-template matStepLabel>Summation columns</ng-template>
+
+    <div class="summation-column-select-container">
+      <div class="summation-column-selection-list">
+        <p class="summation-column-list-label">Summation columns</p>
+        <mat-selection-list #leftList
+                            [multiple]="false">
+          <mat-list-option *ngFor="let sumCol of summationColumns"
+                           [value]="sumCol">
+            {{sumCol.name}}
+          </mat-list-option>
+        </mat-selection-list>
+      </div>
+
+      <div class="summation-column-select-buttons">
+        <button mat-button style="display: block"
+                [disabled]="!leftList.selectedOptions.selected[0]?.value"
+                (click)="moveToSelected(leftList.selectedOptions.selected[0]?.value)">-></button>
+        <button mat-button style="display: block"
+                [disabled]="!rightList.selectedOptions.selected[0]?.value"
+                (click)="moveToList(rightList.selectedOptions.selected[0]?.value)"><-</button>
+        <button mat-button style="display: block"
+                [disabled]="summationColumns.length == 0"
+                (click)="moveAllToSelected()">>></button>
+        <button mat-button style="display: block"
+                [disabled]="selectedSummationColumns.length == 0"
+                (click)="moveAllToList()"><<</button>
+      </div>
+
+      <div class="summation-column-selection-list">
+        <p class="summation-column-list-label">Selected summation columns</p>
+        <mat-selection-list #rightList
+                            [multiple]="false">
+          <mat-list-option *ngFor="let selCol of selectedSummationColumns"
+                           [value]="selCol">
+            {{selCol.name}}
+          </mat-list-option>
+        </mat-selection-list>
+      </div>
+    </div>
+
+    <div class="stepper-footer">
+      <button class="scheduler-dialog-action-button"
+              matStepperPrevious>Back</button>
+      <button class="scheduler-dialog-action-button"
+              matStepperNext
+              [disabled]="typeSelect.invalid"
+              (click)="generateReport()">Generate</button>
+    </div>
+  </mat-step>
+
+  <ng-template matStepperIcon="edit"></ng-template>
+  <ng-template matStepperIcon="done"></ng-template>
+
+</mat-horizontal-stepper>

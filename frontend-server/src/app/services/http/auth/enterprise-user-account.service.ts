@@ -1,6 +1,5 @@
 import { ACrudService } from "../abstract-service/a-crud-service";
 import { NewUserAccountDTO, UserAccountDTO } from "../../../model/dto/new-user-account-dto";
-import { IByAuthService } from "../interface/i-by-auth.service";
 import { CUDService } from "../interface/cud-service";
 import { RestConfig } from "../../../rest.config";
 import { HttpClient } from "@angular/common/http";
@@ -11,7 +10,7 @@ import { PasswordResetDTO } from "../../../model/dto/password-reset-dto";
 @Injectable()
 export class EnterpriseUserAccountService
   extends ACrudService<UserAccountDTO>
-  implements IByAuthService<UserAccountDTO>, CUDService<UserAccountDTO> {
+  implements CUDService<UserAccountDTO> {
 
   constructor(private config: RestConfig,
               http: HttpClient) {

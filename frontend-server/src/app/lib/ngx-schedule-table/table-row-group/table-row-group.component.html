@@ -4,7 +4,7 @@
       <div class="group-label-container">
         <div class="group-label group-control-element"
              (click)="isHidden = !isHidden">
-          {{(isHidden ? "▸" : "▾") + ' ' + groupData.name}}
+          {{groupData.name + ' ' + (isHidden ? "▸" : "▾")}}
         </div>
         <div class="group-control">
           <div class="group-control-element"
@@ -16,16 +16,17 @@
   </tr>
   <tr [hidden]="isHidden"
       class="row"
+      [class.distinctByColor]="distinctByColor"
       *ngFor="let row of groupData.rows"
       app-table-row
+      [trackByFn]="trackByFn"
       [selectionEnabled]="selectionEnabled"
       [multipleSelect]="multipleSelect"
       [showSumColumns]="showSumColumns"
-      [datedCellDef]="datedCellDef"
+      [pageableColumns]="pageableColumns"
       [beforeDateColumns]="beforeDateColumns"
       [afterDateColumns]="afterDateColumns"
       [rowGroupId]="groupData.id"
-      [rowData]="row"
-      [cellLabelSetter]="cellLabelSetter">
+      [rowData]="row">
   </tr>
 </ng-container>
