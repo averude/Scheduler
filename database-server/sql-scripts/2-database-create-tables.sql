@@ -312,12 +312,19 @@ CREATE TABLE IF NOT EXISTS user_accounts (
   authority       VARCHAR(64)     NOT NULL,
 
   enterprise_id   INTEGER,
-  department_id   INTEGER,
 
   PRIMARY KEY (id),
   UNIQUE (username),
-  FOREIGN KEY (enterprise_id) REFERENCES enterprises(id)    ON DELETE CASCADE ON UPDATE CASCADE,
-  FOREIGN KEY (department_id) REFERENCES departments(id)    ON DELETE CASCADE ON UPDATE CASCADE
+  FOREIGN KEY (enterprise_id) REFERENCES enterprises(id)    ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS user_accounts_departments (
+  user_account_id INTEGER         NOT NULL,
+  department_id   INTEGER         NOT NULL,
+
+  PRIMARY KEY (user_account_id, department_id),
+  FOREIGN KEY (user_account_id) REFERENCES user_accounts(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (department_id)   REFERENCES departments(id)   ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS user_accounts_shifts (

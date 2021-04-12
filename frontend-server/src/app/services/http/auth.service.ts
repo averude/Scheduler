@@ -8,7 +8,7 @@ import decode from "jwt-decode";
 import { RestConfig } from "../../rest.config";
 import { CacheMapService } from "../cache/cache-map.service";
 import { UserAccountService } from "./user-account.service";
-import { UserAccountDTO } from "../../model/dto/new-user-account-dto";
+import { UserAccountDTO } from "../../model/dto/user-account-dto";
 
 @Injectable({
   providedIn: 'root'

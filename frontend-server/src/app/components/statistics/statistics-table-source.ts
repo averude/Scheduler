@@ -13,7 +13,7 @@ import { Position } from "../../model/position";
 import { PaginationService } from "../../lib/ngx-schedule-table/service/pagination.service";
 import { StatisticsTableDataCollector } from "./collector/statistics-table-data-collector";
 import { Injectable } from "@angular/core";
-import { UserAccountAuthority, UserAccountDTO } from "../../model/dto/new-user-account-dto";
+import { UserAccountAuthority, UserAccountDTO } from "../../model/dto/user-account-dto";
 
 @Injectable()
 export class StatisticsTableSource {

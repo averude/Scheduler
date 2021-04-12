@@ -4,7 +4,6 @@ import com.averude.uksatse.scheduler.security.details.UserAccountDetails;
 import com.averude.uksatse.scheduler.security.model.dto.PasswordChangeDTO;
 import com.averude.uksatse.scheduler.security.model.dto.UserAccountDTO;
 import com.averude.uksatse.scheduler.security.model.entity.UserAccount;
-import com.averude.uksatse.scheduler.server.auth.converter.UserAccountDTOConverter;
 import com.averude.uksatse.scheduler.server.auth.service.UserAccountDetailsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +19,6 @@ import java.security.Principal;
 public class UserAccountControllerImpl implements UserAccountController {
 
     private final UserAccountDetailsService userAccountDetailsService;
-    private final UserAccountDTOConverter dtoConverter;
 
     @Override
     public Principal getUser(Principal principal) {
@@ -30,7 +28,7 @@ public class UserAccountControllerImpl implements UserAccountController {
     @Override
     public UserAccountDTO me(Authentication authentication) {
         var originator = getUserAccount(authentication);
-        return dtoConverter.convertToDTO(originator);
+        return new UserAccountDTO(originator);
     }
 
     @Override

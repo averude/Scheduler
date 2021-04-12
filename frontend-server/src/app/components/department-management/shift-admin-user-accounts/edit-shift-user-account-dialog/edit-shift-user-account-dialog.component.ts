@@ -4,7 +4,7 @@ import {
   UserAccountAuthority,
   UserAccountDTO,
   UserAccountRole
-} from "../../../../model/dto/new-user-account-dto";
+} from "../../../../model/dto/user-account-dto";
 import { Shift } from "../../../../model/shift";
 import { FormBuilder, Validators } from "@angular/forms";
 import { AuthService } from "../../../../services/http/auth.service";
@@ -37,29 +37,29 @@ export class EditShiftUserAccountDialogComponent extends DialogBaseComponent<Use
 
   initTheForm() {
     this.dialogForm = this.fb.group({
-      id:           [],
-      username:     ['', [Validators.required,
+      id:             [],
+      username:       ['', [Validators.required,
                           Validators.minLength(3),
                           Validators.maxLength(128)]],
-      name:         ['',  Validators.maxLength(128)],
-      role:         [null,  [Validators.required]],
-      authority:    [UserAccountAuthority.SHIFT_ADMIN, [Validators.required]],
-      enterpriseId: [this.enterpriseId],
-      departmentId: [this.departmentId],
-      shiftIds:     [[], Validators.required]
+      name:           ['',  Validators.maxLength(128)],
+      role:           [null,  [Validators.required]],
+      authority:      [UserAccountAuthority.SHIFT_ADMIN, [Validators.required]],
+      enterpriseId:   [this.enterpriseId],
+      departmentId:   [[this.departmentId]],
+      shiftIds:       [[], Validators.required]
     });
   }
 
   fillInTheForm(accountDTO: NewUserAccountDTO) {
     this.dialogForm.setValue({
-      id:           accountDTO.id,
-      username:     accountDTO.username,
-      name:         accountDTO.name,
-      authority:    accountDTO.authority,
-      role:         accountDTO.role,
-      enterpriseId: accountDTO.enterpriseId,
-      departmentId: accountDTO.departmentId,
-      shiftIds:     accountDTO.shiftIds
+      id:             accountDTO.id,
+      username:       accountDTO.username,
+      name:           accountDTO.name,
+      authority:      accountDTO.authority,
+      role:           accountDTO.role,
+      enterpriseId:   accountDTO.enterpriseId,
+      departmentIds:  accountDTO.departmentIds,
+      shiftIds:       accountDTO.shiftIds
     });
   }
 

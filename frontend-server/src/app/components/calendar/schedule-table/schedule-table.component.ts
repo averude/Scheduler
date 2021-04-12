@@ -21,7 +21,7 @@ import { TableStateService } from "../../../lib/ngx-schedule-table/service/table
 import { ScheduleCell, ScheduleRow } from "../../../model/ui/schedule-table/table-data";
 import { TableManager } from "../../../services/collectors/schedule/table-manager";
 import { ActivatedRoute } from "@angular/router";
-import { UserAccountAuthority } from "../../../model/dto/new-user-account-dto";
+import { UserAccountAuthority } from "../../../model/dto/user-account-dto";
 import { filter, map, switchMap } from "rxjs/operators";
 import { WorkDay } from "../../../model/workday";
 import { ToolbarTemplateService } from "../../../services/top-bar/toolbar-template.service";
@@ -104,7 +104,7 @@ export class ScheduleTableComponent implements OnInit, AfterViewInit, OnDestroy 
             }
 
             if (userAccount.authority === UserAccountAuthority.SHIFT_ADMIN
-              && userAccount.departmentId === this.departmentId) {
+              && userAccount.departmentIds.indexOf(this.departmentId) >= 0 ) {
               return this.dataSource.getTableDataByShiftIds(this.departmentId, userAccount.shiftIds);
             }
 

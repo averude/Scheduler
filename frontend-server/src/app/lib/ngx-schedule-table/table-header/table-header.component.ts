@@ -14,7 +14,7 @@ export class TableHeaderComponent implements OnInit, OnDestroy {
 
   @Input() pageableColumns:   PageableColumnDef;
   @Input() beforeDateColumns: QueryList<BeforeDateColumnDef>;
-  @Input() afterDateColumns: QueryList<AfterDateColumnDef>;
+  @Input() afterDateColumns:  QueryList<AfterDateColumnDef>;
 
   dates: any[] = [];
   private sub: Subscription;

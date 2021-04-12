@@ -6,7 +6,7 @@ import { ShiftService } from "../../../../services/http/shift.service";
 import { Component } from "@angular/core";
 import { binarySearch } from "../../../../shared/utils/collection-utils";
 import { ShiftUserAccountService } from "../../../../services/http/auth/shift-user-account.service";
-import { UserAccountDTO } from "../../../../model/dto/new-user-account-dto";
+import { UserAccountDTO } from "../../../../model/dto/user-account-dto";
 import { AddShiftUserAccountDialogComponent } from "../add-shift-user-account-dialog/add-shift-user-account-dialog.component";
 import { EditShiftUserAccountDialogComponent } from "../edit-shift-user-account-dialog/edit-shift-user-account-dialog.component";
 import { ResetUserAccountPasswordDialogComponent } from "../../../reset-user-account-password-dialog/reset-user-account-password-dialog.component";

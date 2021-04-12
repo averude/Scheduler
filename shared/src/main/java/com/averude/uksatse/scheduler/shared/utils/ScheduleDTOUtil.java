@@ -50,9 +50,9 @@ public class ScheduleDTOUtil {
     private <T1, T2> int sequentialFill(T1 t1,
                                         List<T2> src,
                                         List<T2> dest,
-                                        int lastIdx,
+                                        int startIndex,
                                         BiFunction<T1, T2, Long> comparator) {
-        int collectionLastIndex = lastIdx;
+        int collectionLastIndex = startIndex;
         for (int i = collectionLastIndex; i < src.size(); i++) {
             var composition = src.get(i);
 

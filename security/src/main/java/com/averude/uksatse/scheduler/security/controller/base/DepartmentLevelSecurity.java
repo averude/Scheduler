@@ -1,8 +1,9 @@
 package com.averude.uksatse.scheduler.security.controller.base;
 
 import com.averude.uksatse.scheduler.core.interfaces.entity.HasDepartmentId;
+import com.averude.uksatse.scheduler.core.interfaces.entity.HasShiftId;
 import com.averude.uksatse.scheduler.core.util.CollectionUtils;
-import com.averude.uksatse.scheduler.security.model.IUser;
+import com.averude.uksatse.scheduler.security.model.entity.UserAccount;
 import com.averude.uksatse.scheduler.shared.repository.common.DepartmentRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -15,6 +16,7 @@ import java.util.Optional;
 
 import static com.averude.uksatse.scheduler.security.authority.Authorities.*;
 import static com.averude.uksatse.scheduler.security.details.AccountUtils.getUserAccount;
+import static java.util.stream.Collectors.toList;
 
 @Slf4j
 @Component
@@ -34,9 +36,13 @@ public class DepartmentLevelSecurity extends AbstractLevelSecurity {
         var account = getUserAccount(authentication);
         var accountShifts = account.getAccountShifts();
 
-        return checkAccess(account, mapName) &&
-                CollectionUtils.containsAll(shiftIds, accountShifts,
-                        (shiftId, userAccountShift) -> userAccountShift.getShiftId().equals(shiftId));
+        return checkAccess(account, mapName) && containsShifts(shiftIds, accountShifts);
+    }
+
+    public boolean containsShifts(List<Long> shiftIds,
+                                   Collection<? extends HasShiftId> hasShiftIds) {
+        return CollectionUtils.containsAll(shiftIds, hasShiftIds,
+                        (shiftId, hasShiftId) -> hasShiftId.getShiftId().equals(shiftId));
     }
 
     public boolean hasPermission(Authentication authentication,
@@ -46,9 +52,9 @@ public class DepartmentLevelSecurity extends AbstractLevelSecurity {
             return false;
         }
 
-        var user = getUserAccount(authentication);
+        var account = getUserAccount(authentication);
 
-        return checkAccess(user, mapName) && checkDepartmentId(user, departmentId);
+        return checkAccess(account, mapName) && checkDepartmentId(account, departmentId);
     }
 
     public boolean hasPermission(Authentication authentication,
@@ -64,11 +70,11 @@ public class DepartmentLevelSecurity extends AbstractLevelSecurity {
     public boolean hasPermission(Authentication authentication,
                                  String mapName,
                                  Collection<? extends HasDepartmentId> collection) {
-        var user = getUserAccount(authentication);
-
-        return checkAccess(user, mapName) && collection.stream().map(HasDepartmentId::getDepartmentId)
+        List<Long> departmentIds = collection.stream().map(HasDepartmentId::getDepartmentId)
                 .distinct()
-                .allMatch(departmentId -> checkDepartmentId(user, departmentId));
+                .collect(toList());
+
+        return hasPermission(authentication, mapName, departmentIds);
     }
 
     public boolean hasPermission(Authentication authentication,
@@ -82,10 +88,11 @@ public class DepartmentLevelSecurity extends AbstractLevelSecurity {
 
     }
 
-    private boolean checkDepartmentId(IUser user, Long departmentId) {
+    private boolean checkDepartmentId(UserAccount user, Long departmentId) {
         if (user.getAuthority().equals(DEPARTMENT_ADMIN)
                 || user.getAuthority().equals(SHIFT_ADMIN)) {
-            return user.getDepartmentId().equals(departmentId);
+            return user.getAccountDepartments().stream()
+                    .anyMatch(accDep -> accDep.getDepartmentId().equals(departmentId));
         }
 
         if (user.getAuthority().equals(ENTERPRISE_ADMIN)) {
@@ -94,5 +101,13 @@ public class DepartmentLevelSecurity extends AbstractLevelSecurity {
 
         log.error("No required authority found during check");
         return false;
+    }
+
+    public boolean hasPermission(Authentication authentication, String mapName, List<Long> departmentIds) {
+
+        var account = getUserAccount(authentication);
+
+        return checkAccess(account, mapName) && departmentIds.stream()
+                .allMatch(departmentId -> checkDepartmentId(account, departmentId));
     }
 }

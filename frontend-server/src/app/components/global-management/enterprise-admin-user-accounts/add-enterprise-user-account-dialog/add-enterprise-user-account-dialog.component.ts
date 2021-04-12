@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import { NewUserAccountDTO, UserAccountAuthority, UserAccountRole } from "../../../../model/dto/new-user-account-dto";
+import { NewUserAccountDTO, UserAccountAuthority, UserAccountRole } from "../../../../model/dto/user-account-dto";
 import { FormBuilder, Validators } from "@angular/forms";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { DialogBaseComponent } from "../../../../shared/abstract-components/dialog-base/dialog-base.component";

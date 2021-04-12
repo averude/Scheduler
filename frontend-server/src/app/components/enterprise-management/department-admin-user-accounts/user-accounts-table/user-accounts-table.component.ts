@@ -5,7 +5,7 @@ import { NotificationsService } from "angular2-notifications";
 import { Department } from "../../../../model/department";
 import { DepartmentService } from "../../../../services/http/department.service";
 import { DepartmentUserAccountService } from "../../../../services/http/auth/department-user-account.service";
-import { UserAccountDTO } from "../../../../model/dto/new-user-account-dto";
+import { UserAccountDTO } from "../../../../model/dto/user-account-dto";
 import { binarySearch } from "../../../../shared/utils/collection-utils";
 import { AddDepartmentUserAccountDialogComponent } from "../add-department-user-account-dialog/add-department-user-account-dialog.component";
 import { EditDepartmentUserAccountDialogComponent } from "../edit-department-user-account-dialog/edit-department-user-account-dialog.component";
@@ -74,7 +74,16 @@ export class UserAccountsTableComponent extends HasEnterpriseTableComponent<User
       })
   }
 
-  getDepartmentById(id: number): Department {
-    return binarySearch(this.departments, (mid => mid.id - id));
+  getDepartmentByIds(ids: number[]): string {
+    if (ids && ids.length > 0) {
+      return ids.sort()
+        .map((id, index) => {
+          const shift = binarySearch(this.departments, mid => mid.id - id);
+          if (shift) {
+            return `${shift.name}${index < ids.length - 1 ? ', ' : ''}`
+          }
+        })
+        .reduce(((previousValue, currentValue) => previousValue?.concat(currentValue)));
+    }
   }
 }

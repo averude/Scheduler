@@ -1,5 +1,5 @@
 import { ACrudService } from "../abstract-service/a-crud-service";
-import { NewUserAccountDTO, UserAccountDTO } from "../../../model/dto/new-user-account-dto";
+import { NewUserAccountDTO, UserAccountDTO } from "../../../model/dto/user-account-dto";
 import { CUDService } from "../interface/cud-service";
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";

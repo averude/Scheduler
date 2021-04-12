@@ -8,13 +8,15 @@ import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { MatMenuModule } from "@angular/material/menu";
 import { StatisticsTableSource } from "./statistics-table-source";
 import { StatisticsTableDataCollector } from "./collector/statistics-table-data-collector";
+import { ScheduleTableModule } from "../../lib/ngx-schedule-table/schedule-table.module";
 
 @NgModule({
   imports: [
     CommonModule,
     MatProgressSpinnerModule,
     MatMenuModule,
-    MonthYearPaginatorModule
+    MonthYearPaginatorModule,
+    ScheduleTableModule
   ],
   declarations: [
     StatisticsTableComponent

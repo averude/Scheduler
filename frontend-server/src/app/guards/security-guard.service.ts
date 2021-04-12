@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from "@angular/router";
 import { AuthService } from "../services/http/auth.service";
 import { Observable } from "rxjs";
-import { UserAccountAuthority, UserAccountRole } from "../model/dto/new-user-account-dto";
+import { UserAccountAuthority, UserAccountRole } from "../model/dto/user-account-dto";
 
 @Injectable({
   providedIn: 'root'

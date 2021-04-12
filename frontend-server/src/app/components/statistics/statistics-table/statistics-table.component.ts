@@ -19,7 +19,7 @@ import { StatisticsRowGroup } from "../collector/statistics-table-data-collector
 import { ActivatedRoute } from "@angular/router";
 import { filter, map } from "rxjs/operators";
 import { AuthService } from "../../../services/http/auth.service";
-import { UserAccountDTO } from "../../../model/dto/new-user-account-dto";
+import { UserAccountDTO } from "../../../model/dto/user-account-dto";
 import { ToolbarTemplateService } from "../../../services/top-bar/toolbar-template.service";
 import { StatisticsTableSource } from "../statistics-table-source";
 

@@ -6,7 +6,6 @@ import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { ACrudService } from "./abstract-service/a-crud-service";
 import { ShiftPatternDTO } from "../../model/dto/shift-pattern-dto";
-import { UserAccountAuthority } from "../../model/dto/new-user-account-dto";
 import { HasDepartmentIdService } from "./interface/has-department-id.service";
 
 @Injectable({
@@ -20,19 +19,6 @@ export class ShiftPatternDtoService
               http: HttpClient,
               private config: RestConfig) {
     super(`${config.baseUrl}/shift_patterns`, http);
-  }
-
-  getAll(from?: string, to?: string): Observable<ShiftPatternDTO[]> {
-    return this.getAllByAuth();
-  }
-
-  getAllByAuth(): Observable<ShiftPatternDTO[]> {
-    const userAccount = this.authService.currentUserAccount;
-
-    if (userAccount.authority === UserAccountAuthority.DEPARTMENT_ADMIN
-      || userAccount.authority === UserAccountAuthority.SHIFT_ADMIN) {
-      return this.getAllByDepartmentId(userAccount.departmentId);
-    }
   }
 
   getAllByDepartmentId(departmentId: number): Observable<ShiftPatternDTO[]> {

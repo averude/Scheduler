@@ -1,44 +1,56 @@
 package com.averude.uksatse.scheduler.server.auth.controller;
 
-import com.averude.uksatse.scheduler.security.annotations.IsDepartmentAdmin;
-import com.averude.uksatse.scheduler.security.annotations.IsEnterpriseOrDepartmentAdmin;
+import com.averude.uksatse.scheduler.security.logging.Logged;
 import com.averude.uksatse.scheduler.security.model.dto.NewUserAccountDTO;
 import com.averude.uksatse.scheduler.security.model.dto.PasswordResetDTO;
 import com.averude.uksatse.scheduler.security.model.dto.UserAccountDTO;
-import org.springframework.security.core.Authentication;
+import com.averude.uksatse.scheduler.server.auth.service.ShiftUserAccountService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RequestMapping("/users/shift_admins")
-public interface ShiftUserAccountController {
+@RestController
+@RequiredArgsConstructor
+public class ShiftUserAccountController {
 
-    @IsDepartmentAdmin
-    @GetMapping
-    List<UserAccountDTO> getAllByAuth(Authentication authentication);
+    private final ShiftUserAccountService shiftUserAccountService;
 
-    @IsEnterpriseOrDepartmentAdmin
+    @Logged
+    @PreAuthorize("@departmentLevelSecurity.hasPermission(authentication, 'MAP3', #departmentId)")
     @GetMapping("/departments/{departmentId}")
-    List<UserAccountDTO> getAllByDepartmentId(@PathVariable Long departmentId);
+    public List<UserAccountDTO> getAllByDepartmentId(@PathVariable Long departmentId) {
+        return shiftUserAccountService.findAllByDepartmentId(departmentId);
+    }
 
-    @IsEnterpriseOrDepartmentAdmin
+    @Logged
+    @PreAuthorize("@userAccountControllerSecurity.canSaveShiftAccount(authentication, 'MAP3', #accountDTO)")
     @PostMapping
-    UserAccountDTO create(@RequestBody NewUserAccountDTO accountDTO,
-                          Authentication authentication);
+    public UserAccountDTO create(@RequestBody NewUserAccountDTO accountDTO) {
+        return shiftUserAccountService.create(accountDTO);
+    }
 
-    @IsEnterpriseOrDepartmentAdmin
+    @Logged
+    @PreAuthorize("@userAccountControllerSecurity.canSaveShiftAccount(authentication, 'MAP3', #accountDTO)")
     @PutMapping
-    UserAccountDTO update(@RequestBody UserAccountDTO accountDTO,
-                          Authentication authentication);
+    public UserAccountDTO update(@RequestBody UserAccountDTO accountDTO) {
+        return shiftUserAccountService.update(accountDTO);
+    }
 
-    @IsEnterpriseOrDepartmentAdmin
+    @Logged
+    @PreAuthorize("@userAccountControllerSecurity.hasAccountPermission(authentication, 'MAP3', #accountId)")
     @DeleteMapping("/{accountId}")
-    void delete(@PathVariable Long accountId,
-                Authentication authentication);
+    public void delete(@PathVariable Long accountId) {
+        shiftUserAccountService.delete(accountId);
+    }
 
-    @IsEnterpriseOrDepartmentAdmin
+    @Logged
+    @PreAuthorize("@userAccountControllerSecurity.hasAccountPermission(authentication, 'MAP3', #accountId)")
     @PutMapping("/{accountId}/password")
-    void resetPassword(@PathVariable Long accountId,
-                       @RequestBody PasswordResetDTO passwordResetDTO,
-                       Authentication authentication);
+    public void resetPassword(@PathVariable Long accountId,
+                              @RequestBody PasswordResetDTO passwordResetDTO) {
+        shiftUserAccountService.resetPassword(accountId, passwordResetDTO);
+    }
 }

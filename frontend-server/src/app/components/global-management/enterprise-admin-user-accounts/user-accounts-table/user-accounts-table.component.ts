@@ -5,7 +5,7 @@ import { NotificationsService } from "angular2-notifications";
 import { EnterpriseService } from "../../../../services/http/enterprise.service";
 import { Enterprise } from "../../../../model/enterprise";
 import { EnterpriseUserAccountService } from "../../../../services/http/auth/enterprise-user-account.service";
-import { UserAccountDTO } from "../../../../model/dto/new-user-account-dto";
+import { UserAccountDTO } from "../../../../model/dto/user-account-dto";
 import { binarySearch } from "../../../../shared/utils/collection-utils";
 import { AddEnterpriseUserAccountDialogComponent } from "../add-enterprise-user-account-dialog/add-enterprise-user-account-dialog.component";
 import { EditEnterpriseUserAccountDialogComponent } from "../edit-enterprise-user-account-dialog/edit-enterprise-user-account-dialog.component";

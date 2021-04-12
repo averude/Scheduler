@@ -1,5 +1,6 @@
 package com.averude.uksatse.scheduler.core.util;
 
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.BiPredicate;
@@ -67,10 +68,10 @@ public class CollectionUtils {
         }
     }
 
-    public static <T, U> boolean containsAll(List<T> tArr,
-                                             List<U> uArr,
+    public static <T, U> boolean containsAll(Collection<T> tArr,
+                                             Collection<U> uArr,
                                              BiPredicate<T, U> equalsPredicate) {
-        if (invalidList(uArr) || invalidList(tArr)) {
+        if (invalidCollection(uArr) || invalidCollection(tArr)) {
             return false;
         }
 
@@ -96,7 +97,7 @@ public class CollectionUtils {
         return result;
     }
 
-    private static boolean invalidList(List list) {
-        return list == null || list.isEmpty();
+    private static boolean invalidCollection(Collection collection) {
+        return collection == null || collection.isEmpty();
     }
 }

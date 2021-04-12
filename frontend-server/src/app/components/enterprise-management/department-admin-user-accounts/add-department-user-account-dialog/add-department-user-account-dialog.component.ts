@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import { NewUserAccountDTO, UserAccountAuthority, UserAccountRole } from "../../../../model/dto/new-user-account-dto";
+import { NewUserAccountDTO, UserAccountAuthority, UserAccountRole } from "../../../../model/dto/user-account-dto";
 import { FormBuilder, Validators } from "@angular/forms";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { DialogBaseComponent } from "../../../../shared/abstract-components/dialog-base/dialog-base.component";
@@ -24,17 +24,17 @@ export class AddDepartmentUserAccountDialogComponent extends DialogBaseComponent
 
   initTheForm() {
     this.dialogForm = this.fb.group({
-      id:           [],
-      username:     ['', [Validators.required,
+      id:             [],
+      username:       ['', [Validators.required,
                           Validators.minLength(3),
                           Validators.maxLength(128)]],
-      name:         ['', Validators.maxLength(128)],
-      password:     ['', [Validators.required,
+      name:           ['', Validators.maxLength(128)],
+      password:       ['', [Validators.required,
                           Validators.minLength(3),
                           Validators.maxLength(128)]],
-      role:         [null,  [Validators.required]],
-      authority:    [UserAccountAuthority.DEPARTMENT_ADMIN, [Validators.required]],
-      departmentId: [null, Validators.required]
+      role:           [null,  [Validators.required]],
+      authority:      [UserAccountAuthority.DEPARTMENT_ADMIN, [Validators.required]],
+      departmentIds:  [null, Validators.required]
     });
   }
 

@@ -6,7 +6,7 @@ import { HttpClient } from "@angular/common/http";
 import { RestConfig } from "../../rest.config";
 import { ACrudService } from "./abstract-service/a-crud-service";
 import { AuthService } from "./auth.service";
-import { UserAccountAuthority } from "../../model/dto/new-user-account-dto";
+import { UserAccountAuthority } from "../../model/dto/user-account-dto";
 
 @Injectable({providedIn: 'root'})
 export class EnterpriseService

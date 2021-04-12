@@ -1,6 +1,6 @@
 package com.averude.uksatse.scheduler.security.controller.base;
 
-import com.averude.uksatse.scheduler.security.model.IUser;
+import com.averude.uksatse.scheduler.security.model.entity.UserAccount;
 import org.springframework.security.core.Authentication;
 
 import java.util.HashMap;
@@ -20,7 +20,7 @@ public abstract class AbstractLevelSecurity {
                 || mapName == null || mapName.isBlank();
     }
 
-    protected boolean checkAccess(IUser user, String mapName) {
+    public final boolean checkAccess(UserAccount user, String mapName) {
 
         var authorityMap = accessMap.get(mapName);
         if (authorityMap == null) {

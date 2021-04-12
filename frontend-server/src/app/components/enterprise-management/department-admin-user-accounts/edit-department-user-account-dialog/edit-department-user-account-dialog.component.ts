@@ -4,7 +4,7 @@ import {
   UserAccountAuthority,
   UserAccountDTO,
   UserAccountRole
-} from "../../../../model/dto/new-user-account-dto";
+} from "../../../../model/dto/user-account-dto";
 import { FormBuilder, Validators } from "@angular/forms";
 import { AuthService } from "../../../../services/http/auth.service";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
@@ -32,25 +32,25 @@ export class EditDepartmentUserAccountDialogComponent extends DialogBaseComponen
 
   initTheForm() {
     this.dialogForm = this.fb.group({
-      id:           [],
-      username:     ['', [Validators.required,
-                          Validators.minLength(3),
-                          Validators.maxLength(128)]],
-      name:         ['', Validators.maxLength(128)],
-      role:         [null,  [Validators.required]],
-      authority:    [UserAccountAuthority.DEPARTMENT_ADMIN, [Validators.required]],
-      departmentId: [null, Validators.required]
+      id:             [],
+      username:       ['', [Validators.required,
+                            Validators.minLength(3),
+                            Validators.maxLength(128)]],
+      name:           ['',  Validators.maxLength(128)],
+      role:           [null,  [Validators.required]],
+      authority:      [UserAccountAuthority.DEPARTMENT_ADMIN, [Validators.required]],
+      departmentIds:  [null,  [Validators.required]]
     });
   }
 
   fillInTheForm(accountDTO: NewUserAccountDTO) {
     this.dialogForm.setValue({
-      id:           accountDTO.id,
-      username:     accountDTO.username,
-      name:         accountDTO.name,
-      authority:    accountDTO.authority,
-      role:         accountDTO.role,
-      departmentId: accountDTO.departmentId
+      id:             accountDTO.id,
+      username:       accountDTO.username,
+      name:           accountDTO.name,
+      authority:      accountDTO.authority,
+      role:           accountDTO.role,
+      departmentIds:  accountDTO.departmentIds
     });
   }
 

@@ -1,14 +1,14 @@
 import { IdEntity } from "../interface/id-entity";
 
 export class UserAccountDTO implements IdEntity {
-  id:           number;
-  username:     string;
-  name:         string;
-  role:         UserAccountRole;
-  authority:    UserAccountAuthority;
-  enterpriseId: number;
-  departmentId: number;
-  shiftIds:     number[];
+  id:             number;
+  username:       string;
+  name:           string;
+  role:           UserAccountRole;
+  authority:      UserAccountAuthority;
+  enterpriseId:   number;
+  departmentIds:  number[];
+  shiftIds:       number[];
 }
 
 export class NewUserAccountDTO extends UserAccountDTO {

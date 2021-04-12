@@ -2,7 +2,7 @@ import { Observable } from "rxjs";
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { RestConfig } from "../../rest.config";
-import { PasswordChangeDTO, UserAccountDTO } from "../../model/dto/new-user-account-dto";
+import { PasswordChangeDTO, UserAccountDTO } from "../../model/dto/user-account-dto";
 
 @Injectable({
   providedIn: 'root'

@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { DialogBaseComponent } from "../../../../shared/abstract-components/dialog-base/dialog-base.component";
-import { NewUserAccountDTO, UserAccountAuthority, UserAccountRole } from "../../../../model/dto/new-user-account-dto";
+import { NewUserAccountDTO, UserAccountAuthority, UserAccountRole } from "../../../../model/dto/user-account-dto";
 import { Shift } from "../../../../model/shift";
 import { FormBuilder, Validators } from "@angular/forms";
 import { AuthService } from "../../../../services/http/auth.service";
@@ -34,19 +34,19 @@ export class AddShiftUserAccountDialogComponent extends DialogBaseComponent<NewU
 
   initTheForm() {
     this.dialogForm = this.fb.group({
-      id:           [],
-      username:     ['', [Validators.required,
+      id:             [],
+      username:       ['', [Validators.required,
                           Validators.minLength(3),
                           Validators.maxLength(128)]],
-      name:         ['', Validators.maxLength(128)],
-      password:     ['', [Validators.required,
+      name:           ['', Validators.maxLength(128)],
+      password:       ['', [Validators.required,
                           Validators.minLength(3),
                           Validators.maxLength(128)]],
-      role:         [null,  [Validators.required]],
-      authority:    [UserAccountAuthority.SHIFT_ADMIN, [Validators.required]],
-      enterpriseId: [this.enterpriseId],
-      departmentId: [this.departmentId],
-      shiftIds:     [[], Validators.required]
+      role:           [null,  [Validators.required]],
+      authority:      [UserAccountAuthority.SHIFT_ADMIN, [Validators.required]],
+      enterpriseId:   [this.enterpriseId],
+      departmentIds:  [[this.departmentId]],
+      shiftIds:       [[], Validators.required]
     });
   }
 

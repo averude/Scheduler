@@ -1,8 +1,8 @@
 package com.averude.uksatse.scheduler.security.model.entity;
 
 import com.averude.uksatse.scheduler.core.interfaces.entity.HasId;
-import com.averude.uksatse.scheduler.security.model.IUser;
 import com.averude.uksatse.scheduler.security.model.dto.NewUserAccountDTO;
+import com.averude.uksatse.scheduler.security.model.dto.UserAccountDTO;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Cache;
@@ -21,10 +21,11 @@ import java.util.StringJoiner;
 @NamedEntityGraph(
         name = "graph.UserAccount.accountShifts",
         attributeNodes = {
+                @NamedAttributeNode("accountDepartments"),
                 @NamedAttributeNode("accountShifts")
         }
 )
-public class UserAccount implements HasId, IUser {
+public class UserAccount implements HasId {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -52,8 +53,10 @@ public class UserAccount implements HasId, IUser {
     @Column(name = "enterprise_id")
     private Long enterpriseId;
 
-    @Column(name = "department_id")
-    private Long departmentId;
+    @OneToMany( cascade = {CascadeType.PERSIST, CascadeType.MERGE},
+            fetch = FetchType.LAZY,
+            mappedBy = "userAccountId")
+    private List<UserAccountDepartment> accountDepartments;
 
     @OneToMany( cascade = {CascadeType.PERSIST, CascadeType.MERGE},
             fetch = FetchType.LAZY,
@@ -65,6 +68,13 @@ public class UserAccount implements HasId, IUser {
         this.authority = accountDTO.getAuthority();
         this.role = accountDTO.getRole();
         this.name = accountDTO.getName();
+        this.enterpriseId = accountDTO.getEnterpriseId();
+    }
+
+    public void refreshFields(UserAccountDTO accountDTO) {
+        this.setUsername(accountDTO.getUsername().toLowerCase());
+        this.setName(accountDTO.getName());
+        this.setRole(accountDTO.getRole());
     }
 
     @Override

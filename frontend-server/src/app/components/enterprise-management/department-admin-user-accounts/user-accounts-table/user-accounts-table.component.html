@@ -38,8 +38,8 @@
     </ng-container>
 
     <ng-container matColumnDef="department">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Department</th>
-      <td mat-cell *matCellDef="let userAccount">{{getDepartmentById(userAccount.departmentId)?.name}}</td>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Departments</th>
+      <td mat-cell *matCellDef="let userAccount">{{getDepartmentByIds(userAccount.departmentIds)}}</td>
     </ng-container>
 
     <ng-container matColumnDef="role">

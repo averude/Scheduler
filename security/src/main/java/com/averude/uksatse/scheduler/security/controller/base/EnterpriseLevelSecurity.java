@@ -1,7 +1,7 @@
 package com.averude.uksatse.scheduler.security.controller.base;
 
 import com.averude.uksatse.scheduler.core.interfaces.entity.HasEnterpriseId;
-import com.averude.uksatse.scheduler.security.model.IUser;
+import com.averude.uksatse.scheduler.security.model.entity.UserAccount;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
@@ -25,9 +25,9 @@ public class EnterpriseLevelSecurity extends AbstractLevelSecurity {
             return false;
         }
 
-        var user = getUserAccount(authentication);
+        var account = getUserAccount(authentication);
 
-        return checkAccess(user, mapName) && checkEnterpriseId(user, enterpriseId);
+        return checkAccess(account, mapName) && checkEnterpriseId(account, enterpriseId);
     }
 
     public boolean hasPermission(Authentication authentication, String mapName, HasEnterpriseId hasEnterpriseId) {
@@ -38,11 +38,11 @@ public class EnterpriseLevelSecurity extends AbstractLevelSecurity {
         return hasPermission(authentication, mapName, hasEnterpriseId.getEnterpriseId());
     }
 
-    private boolean checkEnterpriseId(IUser user, Long enterpriseId) {
-        if (user.getAuthority().equals(ENTERPRISE_ADMIN)
-                || user.getAuthority().equals(DEPARTMENT_ADMIN)
-                || user.getAuthority().equals(SHIFT_ADMIN)) {
-            return user.getEnterpriseId().equals(enterpriseId);
+    private boolean checkEnterpriseId(UserAccount account, Long enterpriseId) {
+        if (account.getAuthority().equals(ENTERPRISE_ADMIN)
+                || account.getAuthority().equals(DEPARTMENT_ADMIN)
+                || account.getAuthority().equals(SHIFT_ADMIN)) {
+            return account.getEnterpriseId().equals(enterpriseId);
         }
 
         log.error("No required authority found during check");

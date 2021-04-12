@@ -26,7 +26,7 @@ public class ScheduleGeneratorImpl implements ScheduleGenerator {
     private final GenerationScenario noScheduleListGenerationScenario;
     private final GenerationScenario hasExistingScheduleGenerationScenario;
 
-     @Autowired
+    @Autowired
     public ScheduleGeneratorImpl(@Qualifier("patternRuleProcessorMap")
                                  Map<String, PatternRuleProcessor> patternRuleProcessorMap) {
         this.patternRuleProcessorMap = patternRuleProcessorMap;

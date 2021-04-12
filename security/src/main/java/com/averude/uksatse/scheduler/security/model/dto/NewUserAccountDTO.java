@@ -1,6 +1,5 @@
 package com.averude.uksatse.scheduler.security.model.dto;
 
-import com.averude.uksatse.scheduler.security.model.IUser;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,7 +11,7 @@ import java.util.StringJoiner;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class NewUserAccountDTO implements IUser {
+public class NewUserAccountDTO implements AccountDTO {
 
     @NotNull
     private String username;
@@ -30,7 +29,7 @@ public class NewUserAccountDTO implements IUser {
 
     private Long enterpriseId;
 
-    private Long departmentId;
+    private List<Long> departmentIds;
 
     private List<Long> shiftIds;
 
@@ -42,7 +41,7 @@ public class NewUserAccountDTO implements IUser {
                 .add("role='" + role + "'")
                 .add("authority='" + authority + "'")
                 .add("enterpriseId=" + enterpriseId)
-                .add("departmentId=" + departmentId)
+                .add("departmentIds=" + departmentIds)
                 .add("shiftIds=" + shiftIds)
                 .toString();
     }

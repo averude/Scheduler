@@ -6,7 +6,7 @@ import { StatisticsTableComponent } from "../../components/statistics/statistics
 import { WorkingNormTableComponent } from "../../components/working-norm/working-norm-table/working-norm-table.component";
 import { ReportGeneratorFormComponent } from "../../components/report-generator/report-generator-form/report-generator-form.component";
 import { SecurityGuardService } from "../../guards/security-guard.service";
-import { UserAccountAuthority, UserAccountRole } from "../../model/dto/new-user-account-dto";
+import { UserAccountAuthority, UserAccountRole } from "../../model/dto/user-account-dto";
 
 const routes: Routes = [
   {

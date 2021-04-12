@@ -31,7 +31,8 @@
   <mat-form-field>
     <mat-select placeholder="Department"
                 [compareWith]="compareNums"
-                formControlName="departmentId">
+                formControlName="departmentIds"
+                multiple>
       <mat-option *ngFor="let department of departments"
                   [value]="department.id">
         {{department.name}}

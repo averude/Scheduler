@@ -21,18 +21,6 @@ export class ShiftPatternService
     super(`${config.baseUrl}/shift_patterns`, http);
   }
 
-  getAll(from?: string, to?: string): Observable<ShiftPattern[]> {
-    return this.getAllByAuth();
-  }
-
-  getAllByAuth(): Observable<ShiftPattern[]> {
-    const userAccount = this.authService.currentUserAccount;
-
-    if (userAccount.departmentId) {
-      return this.getAllByDepartmentId(userAccount.departmentId);
-    }
-  }
-
   getAllByDepartmentId(departmentId: number): Observable<ShiftPattern[]> {
     return this.http.get<ShiftPattern[]>(
       `${this.url}/departments/${departmentId}`

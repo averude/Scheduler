@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { AuthService } from "../../services/http/auth.service";
-import { UserAccountAuthority, UserAccountDTO } from "../../model/dto/new-user-account-dto";
+import { UserAccountAuthority, UserAccountDTO } from "../../model/dto/user-account-dto";
 import { UserAccessRights } from "../../model/user";
 import { ChangeUserAccountPasswordDialogComponent } from "../../components/change-user-account-password-dialog/change-user-account-password-dialog.component";
 import { MatDialog } from "@angular/material/dialog";

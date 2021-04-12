@@ -1,20 +1,15 @@
 package com.averude.uksatse.scheduler.microservice.workschedule.controller;
 
 import com.averude.uksatse.scheduler.core.model.entity.structure.Department;
-import com.averude.uksatse.scheduler.security.annotations.IsDepartmentOrShiftUser;
 import com.averude.uksatse.scheduler.security.annotations.IsEnterpriseAdmin;
 import com.averude.uksatse.scheduler.security.logging.Logged;
-import com.averude.uksatse.scheduler.security.model.entity.UserAccount;
 import com.averude.uksatse.scheduler.shared.service.DepartmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
-
-import static com.averude.uksatse.scheduler.security.details.AccountUtils.getUserAccount;
 
 @RequestMapping("/departments")
 @RestController
@@ -31,15 +26,10 @@ public class DepartmentController {
     }
 
     @Logged
-    @IsDepartmentOrShiftUser
-    @GetMapping("/current")
-    public Optional<Department> getCurrent() {
-        var userAccount = getUser();
-
-        var departmentId = userAccount.getDepartmentId();
-        if (departmentId == null) throw new RuntimeException();
-
-        return departmentService.findById(departmentId);
+    @PreAuthorize("@departmentLevelSecurity.hasPermission(authentication, 'MAP*', #id)")
+    @GetMapping("{id}")
+    public Optional<Department> getById(@PathVariable Long id) {
+        return departmentService.findById(id);
     }
 
     @Logged
@@ -61,10 +51,5 @@ public class DepartmentController {
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
         departmentService.deleteById(id);
-    }
-
-    private UserAccount getUser() {
-        var authentication = SecurityContextHolder.getContext().getAuthentication();
-        return getUserAccount(authentication);
     }
 }

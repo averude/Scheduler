@@ -4,7 +4,7 @@ import {
   UserAccountAuthority,
   UserAccountDTO,
   UserAccountRole
-} from "../../../../model/dto/new-user-account-dto";
+} from "../../../../model/dto/user-account-dto";
 import { FormBuilder, Validators } from "@angular/forms";
 import { AuthService } from "../../../../services/http/auth.service";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";

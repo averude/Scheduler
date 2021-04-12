@@ -1,6 +1,6 @@
 package com.averude.uksatse.scheduler.security.model.entity;
 
-import com.averude.uksatse.scheduler.core.interfaces.entity.HasShiftId;
+import com.averude.uksatse.scheduler.core.interfaces.entity.HasDepartmentId;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,25 +14,23 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@Entity(name = "user_accounts_shifts")
-@IdClass(UserAccountShift.PK.class)
-public class UserAccountShift implements HasShiftId {
+@Entity(name = "user_accounts_departments")
+@IdClass(UserAccountDepartment.PK.class)
+public class UserAccountDepartment implements HasDepartmentId {
 
     @Id
     @Column(name = "user_account_id")
     private Long userAccountId;
 
     @Id
-    @Column(name = "shift_id")
-    private Long shiftId;
+    @Column(name = "department_id")
+    private Long departmentId;
 
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
     public static class PK implements Serializable {
         private Long userAccountId;
-        private Long shiftId;
+        private Long departmentId;
     }
 }
-
-
