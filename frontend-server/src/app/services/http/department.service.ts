@@ -25,10 +25,4 @@ export class DepartmentService
       `${this.url}/enterprises/${enterpriseId}`
     );
   }
-
-  getCurrent(): Observable<Department> {
-    return this.http.get<Department>(
-      `${this.url}/current`
-    );
-  }
 }

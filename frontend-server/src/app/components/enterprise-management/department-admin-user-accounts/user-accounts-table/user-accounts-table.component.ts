@@ -19,7 +19,7 @@ import { ActivatedRoute } from "@angular/router";
 })
 export class UserAccountsTableComponent extends HasEnterpriseTableComponent<UserAccountDTO> {
 
-  displayedColumns = ['select', 'username', 'name', 'department', 'role', 'resetPass', 'control'];
+  displayedColumns = ['select', 'username', 'name', 'departments', 'role', 'resetPass', 'control'];
 
   departments: Department[] = [];
 

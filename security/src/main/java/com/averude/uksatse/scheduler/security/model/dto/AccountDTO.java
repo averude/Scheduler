@@ -7,9 +7,11 @@ import com.averude.uksatse.scheduler.security.model.entity.UserAccountShift;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 
 public interface AccountDTO extends HasEnterpriseId {
     String getAuthority();
@@ -29,15 +31,15 @@ public interface AccountDTO extends HasEnterpriseId {
                 .collect(toList());
     }
 
-    default List<UserAccountDepartment> getAccountDepartments(Long userAccountId) {
+    default Set<UserAccountDepartment> getAccountDepartments(Long userAccountId) {
         var departmentIds = getDepartmentIds();
         if (departmentIds == null) {
-            return Collections.emptyList();
+            return Collections.emptySet();
         }
 
         return departmentIds.stream()
                 .map(departmentId -> new UserAccountDepartment(userAccountId, departmentId))
-                .collect(toList());
+                .collect(toSet());
     }
 
     static List<UserAccountDTO> convertToDTO(List<UserAccount> userAccounts) {

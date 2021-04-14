@@ -37,7 +37,7 @@
   </mat-form-field>
 
   <mat-form-field>
-    <mat-select placeholder="Department"
+    <mat-select placeholder="Departments"
                 [compareWith]="compareNums"
                 formControlName="departmentIds"
                 multiple>
@@ -46,7 +46,7 @@
         {{department.name}}
       </mat-option>
     </mat-select>
-    <mat-error *ngIf="isControlInvalid('departmentId')">{{getErrorMessage()}}</mat-error>
+    <mat-error *ngIf="isControlInvalid('departmentIds')">{{getErrorMessage()}}</mat-error>
   </mat-form-field>
 
 </mat-dialog-content>

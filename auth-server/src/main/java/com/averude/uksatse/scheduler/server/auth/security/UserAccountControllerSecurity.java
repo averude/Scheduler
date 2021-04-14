@@ -30,7 +30,7 @@ public class UserAccountControllerSecurity {
 
         var departmentIds = dto.getDepartmentIds();
 
-        if (departmentLevelSecurity.hasPermission(authentication, mapName, departmentIds)) {
+        if (departmentLevelSecurity.hasDepPermission(authentication, mapName, departmentIds)) {
             var shifts = shiftRepository.findAllByDepartmentIdInOrderByDepartmentIdAsc(departmentIds);
             return CollectionUtils.containsAll(dto.getShiftIds(), shifts,
                     ((shiftId, shift) -> shift.getId().equals(shiftId)));

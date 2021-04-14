@@ -74,7 +74,7 @@ public class DepartmentLevelSecurity extends AbstractLevelSecurity {
                 .distinct()
                 .collect(toList());
 
-        return hasPermission(authentication, mapName, departmentIds);
+        return hasDepPermission(authentication, mapName, departmentIds);
     }
 
     public boolean hasPermission(Authentication authentication,
@@ -103,7 +103,9 @@ public class DepartmentLevelSecurity extends AbstractLevelSecurity {
         return false;
     }
 
-    public boolean hasPermission(Authentication authentication, String mapName, List<Long> departmentIds) {
+    public boolean hasDepPermission(Authentication authentication,
+                                    String mapName,
+                                    List<Long> departmentIds) {
 
         var account = getUserAccount(authentication);
 

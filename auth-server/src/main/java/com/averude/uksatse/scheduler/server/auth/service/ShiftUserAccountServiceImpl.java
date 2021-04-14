@@ -23,10 +23,10 @@ import static com.averude.uksatse.scheduler.security.model.dto.AccountDTO.conver
 @Transactional(readOnly = true)
 public class ShiftUserAccountServiceImpl implements ShiftUserAccountService {
 
-    private final PasswordEncoder encoder;
-    private final UserAccountRepository userAccountRepository;
-    private final UserAccountDepartmentRepository userAccountDepartmentRepository;
-    private final UserAccountShiftRepository userAccountShiftRepository;
+    private final PasswordEncoder                   encoder;
+    private final UserAccountRepository             userAccountRepository;
+    private final UserAccountDepartmentRepository   userAccountDepartmentRepository;
+    private final UserAccountShiftRepository        userAccountShiftRepository;
 
     @Override
     public List<UserAccountDTO> findAllByDepartmentId(Long departmentId) {

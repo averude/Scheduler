@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
@@ -55,14 +56,14 @@ public class UserAccountDTO implements AccountDTO {
         }
     }
 
-    private List<Long> getDepartmentIds(List<UserAccountDepartment> accountDepartments) {
+    private List<Long> getDepartmentIds(Collection<UserAccountDepartment> accountDepartments) {
         return accountDepartments
                 .stream()
                 .map(UserAccountDepartment::getDepartmentId)
                 .collect(toList());
     }
 
-    private List<Long> getShiftIds(List<UserAccountShift> accountShifts) {
+    private List<Long> getShiftIds(Collection<UserAccountShift> accountShifts) {
         return accountShifts
                 .stream()
                 .map(UserAccountShift::getShiftId)

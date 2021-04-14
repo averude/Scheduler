@@ -62,7 +62,7 @@ export class AdminComponent implements OnInit {
 
     if (this.userAccount.authority === UserAccountAuthority.DEPARTMENT_ADMIN
       || this.userAccount.authority === UserAccountAuthority.SHIFT_ADMIN) {
-      this.departmentService.getCurrent()
+      this.departmentService.getById(this.userAccount.departmentIds[0])
         .subscribe(department => {
           this.selectedDepartment = department;
           this.orgLevelName = this.selectedDepartment.name;

@@ -26,7 +26,7 @@ public class DepartmentController {
     }
 
     @Logged
-    @PreAuthorize("@departmentLevelSecurity.hasPermission(authentication, 'MAP*', #id)")
+    @PreAuthorize("@departmentLevelSecurity.hasPermission(authentication, 'MAP2', #id)")
     @GetMapping("{id}")
     public Optional<Department> getById(@PathVariable Long id) {
         return departmentService.findById(id);

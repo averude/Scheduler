@@ -45,7 +45,7 @@ export class EditShiftUserAccountDialogComponent extends DialogBaseComponent<Use
       role:           [null,  [Validators.required]],
       authority:      [UserAccountAuthority.SHIFT_ADMIN, [Validators.required]],
       enterpriseId:   [this.enterpriseId],
-      departmentId:   [[this.departmentId]],
+      departmentIds:  [[this.departmentId]],
       shiftIds:       [[], Validators.required]
     });
   }

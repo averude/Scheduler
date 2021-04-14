@@ -11,6 +11,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Set;
 import java.util.StringJoiner;
 
 @Data
@@ -53,10 +54,13 @@ public class UserAccount implements HasId {
     @Column(name = "enterprise_id")
     private Long enterpriseId;
 
+    // https://www.baeldung.com/java-hibernate-multiplebagfetchexception
+    // https://vladmihalcea.com/hibernate-multiplebagfetchexception/
+    // https://thorben-janssen.com/hibernate-tips-how-to-avoid-hibernates-multiplebagfetchexception/
     @OneToMany( cascade = {CascadeType.PERSIST, CascadeType.MERGE},
             fetch = FetchType.LAZY,
             mappedBy = "userAccountId")
-    private List<UserAccountDepartment> accountDepartments;
+    private Set<UserAccountDepartment> accountDepartments;
 
     @OneToMany( cascade = {CascadeType.PERSIST, CascadeType.MERGE},
             fetch = FetchType.LAZY,
@@ -84,6 +88,7 @@ public class UserAccount implements HasId {
                 .add("username='" + username + "'")
                 .add("authority='" + authority + "'")
                 .add("role='" + role + "'")
+                .add("departments=" + accountDepartments)
                 .toString();
     }
 }
