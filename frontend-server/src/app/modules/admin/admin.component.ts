@@ -2,10 +2,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { AuthService } from "../../services/http/auth.service";
 import { UserAccountAuthority, UserAccountDTO } from "../../model/dto/user-account-dto";
 import { UserAccessRights } from "../../model/user";
-import { ChangeUserAccountPasswordDialogComponent } from "../../components/change-user-account-password-dialog/change-user-account-password-dialog.component";
-import { MatDialog } from "@angular/material/dialog";
-import { UserAccountService } from "../../services/http/user-account.service";
-import { NotificationsService } from "angular2-notifications";
 import { SidePanelStepperComponent } from "../../lib/side-panel-stepper/side-panel-stepper.component";
 import { DepartmentService } from "../../services/http/department.service";
 import { Department } from "../../model/department";
@@ -29,8 +25,8 @@ export class AdminComponent implements OnInit {
   userAccount:  UserAccountDTO;
   accessRights: UserAccessRights;
 
-  enterprise: Enterprise;
-  departments: Department[];
+  enterprise:   Enterprise;
+  departments:  Department[];
 
   selectedDepartment: Department;
   orgLevelName: string;
@@ -38,9 +34,6 @@ export class AdminComponent implements OnInit {
   sideNavOpened: boolean;
 
   constructor(private authService: AuthService,
-              private dialog: MatDialog,
-              private userAccountService: UserAccountService,
-              private notificationsService: NotificationsService,
               private enterpriseService: EnterpriseService,
               private departmentService: DepartmentService) { }
 
@@ -72,17 +65,6 @@ export class AdminComponent implements OnInit {
 
   logout() {
     this.authService.logout();
-  }
-
-  openChangePasswordDialog() {
-    this.dialog.open(ChangeUserAccountPasswordDialogComponent)
-      .afterClosed()
-      .subscribe(passwordChangeDTO => {
-        if (passwordChangeDTO) {
-          this.userAccountService.changePassword(passwordChangeDTO)
-            .subscribe(res => this.notificationsService.success("Password changed"));
-        }
-      });
   }
 
   previousStep() {

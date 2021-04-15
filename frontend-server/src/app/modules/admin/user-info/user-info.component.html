@@ -1,0 +1,13 @@
+<div class="sidenav-user-container">
+
+  <img class="sidenav-user-icon" src="assets/img/user.svg">
+
+  <p class="sidenav-user-name"
+     [matMenuTriggerFor]="userAccountMenu">{{name}}</p>
+
+  <mat-menu #userAccountMenu="matMenu">
+    <button mat-menu-item (click)="openChangePasswordDialog()">Change password</button>
+  </mat-menu>
+
+  <p class="sidenav-department-name">{{org}}</p>
+</div>

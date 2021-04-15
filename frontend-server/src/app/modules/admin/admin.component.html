@@ -6,19 +6,9 @@
   <mat-sidenav mode="over" [(opened)]="sideNavOpened">
 
     <div class="sidenav-elements-container">
-      <div class="sidenav-user-container">
 
-        <img class="sidenav-user-icon" src="assets/img/user.svg">
-
-        <p class="sidenav-user-name"
-           [matMenuTriggerFor]="userAccountMenu">{{userAccount?.name || "-"}}</p>
-
-        <mat-menu #userAccountMenu="matMenu">
-          <button mat-menu-item (click)="openChangePasswordDialog()">Change password</button>
-        </mat-menu>
-
-        <p class="sidenav-department-name">{{orgLevelName}}</p>
-      </div>
+      <user-info [name]="userAccount?.name || '-'"
+                 [org]="orgLevelName"></user-info>
 
       <div class="sidenav-divider"></div>
 
@@ -54,6 +44,7 @@
                 {{department?.name.toUpperCase()}}
               </button>
             </div>
+
           </cdk-step>
         </ng-container>
 

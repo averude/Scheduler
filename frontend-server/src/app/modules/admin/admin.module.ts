@@ -20,6 +20,7 @@ import { MatExpansionModule } from "@angular/material/expansion";
 import { SimpleAccordionModule } from "../../lib/simple-accordion/simple-accordion.module";
 import { ToolbarTemplateService } from "../../services/top-bar/toolbar-template.service";
 import { ToolbarRowComponent } from './toolbar-row.component';
+import { UserInfoComponent } from './user-info/user-info.component';
 
 @NgModule({
   imports: [
@@ -42,7 +43,8 @@ import { ToolbarRowComponent } from './toolbar-row.component';
   declarations: [
     AdminComponent,
     SidePanelStepperComponent,
-    ToolbarRowComponent
+    ToolbarRowComponent,
+    UserInfoComponent
   ],
   entryComponents: [SidePanelStepperComponent],
   providers: [
