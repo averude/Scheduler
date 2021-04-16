@@ -60,7 +60,7 @@
 
 .month-container:hover > div {
   cursor: pointer;
-  color: mediumblue;
+  color: #91e2df;
 }
 
 .date-label {
