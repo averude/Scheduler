@@ -33,6 +33,9 @@ export class AdminComponent implements OnInit {
 
   sideNavOpened: boolean;
 
+  isEnterpriseAdmin: boolean;
+  isEnterpriseOrMultiDepartmentLevel: boolean;
+
   constructor(private authService: AuthService,
               private enterpriseService: EnterpriseService,
               private departmentService: DepartmentService) { }
@@ -41,25 +44,39 @@ export class AdminComponent implements OnInit {
     this.userAccount = this.authService.currentUserAccount;
 
     this.accessRights = this.authService.currentUserValue?.accessRights;
-    this.sideNavOpened = this.accessRights?.isEnterpriseLevel;
 
-    if (this.userAccount.authority === UserAccountAuthority.ENTERPRISE_ADMIN) {
-      this.departmentService.getAllByEnterpriseId(this.userAccount.enterpriseId)
-        .subscribe(departments => this.departments = departments);
+    this.isEnterpriseAdmin = this.accessRights.isEnterpriseLevel && this.accessRights.isAdmin;
+    this.isEnterpriseOrMultiDepartmentLevel = this.accessRights.isEnterpriseLevel || this.userAccount.departmentIds.length > 1;
 
+    this.sideNavOpened = this.isEnterpriseOrMultiDepartmentLevel;
+
+    if (this.accessRights.isEnterpriseLevel) {
       this.enterpriseService.getCurrent()
         .subscribe(enterprise => {
           this.enterprise = enterprise;
           this.orgLevelName = enterprise.name;
         });
+
+      this.departmentService.getAllByEnterpriseId(this.userAccount.enterpriseId)
+        .subscribe(departments => this.departments = departments.sort((a, b) => a.name.localeCompare(b.name)));
     }
 
-    if (this.userAccount.authority === UserAccountAuthority.DEPARTMENT_ADMIN
+    if (this.accessRights.isDepartmentLevel && this.userAccount.departmentIds.length > 1) {
+      this.enterpriseService.getCurrent()
+        .subscribe(enterprise => {
+          this.enterprise = enterprise;
+          this.orgLevelName = enterprise.name;
+        });
+
+      this.departmentService.getByIds(this.userAccount.departmentIds)
+        .subscribe(departments => this.departments = departments.sort((a, b) => a.name.localeCompare(b.name)));
+
+    } else if (this.userAccount.authority === UserAccountAuthority.DEPARTMENT_ADMIN
       || this.userAccount.authority === UserAccountAuthority.SHIFT_ADMIN) {
-      this.departmentService.getById(this.userAccount.departmentIds[0])
+      this.departmentService.getByIds(this.userAccount.departmentIds)
         .subscribe(department => {
-          this.selectedDepartment = department;
-          this.orgLevelName = this.selectedDepartment.name;
+          this.selectedDepartment = department[0];
+          this.orgLevelName = department[0].name;
         });
     }
   }

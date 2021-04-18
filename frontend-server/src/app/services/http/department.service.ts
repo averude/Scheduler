@@ -25,4 +25,10 @@ export class DepartmentService
       `${this.url}/enterprises/${enterpriseId}`
     );
   }
+
+  getByIds(departmentIds: number[]) {
+    return this.http.get<Department[]>(
+      `${this.url}/${departmentIds}`
+    );
+  }
 }

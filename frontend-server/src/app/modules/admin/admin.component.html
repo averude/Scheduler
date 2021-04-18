@@ -8,23 +8,22 @@
     <div class="sidenav-elements-container">
 
       <user-info [name]="userAccount?.name || '-'"
-                 [org]="orgLevelName"></user-info>
+                 [org]="orgLevelName || '-'"></user-info>
 
       <div class="sidenav-divider"></div>
 
       <side-panel-stepper>
 
-        <ng-container *ngIf="accessRights.isEnterpriseLevel">
-          <cdk-step>
+        <ng-container *ngIf="isEnterpriseOrMultiDepartmentLevel">
+
+          <cdk-step *ngIf="isEnterpriseAdmin">
             <div class="buttons-container">
 
-              <button *ngIf="accessRights.isEnterpriseLevel"
-                      (click)="stepper.next(); orgLevelName = enterprise.name">
+              <button (click)="stepper.next()">
                 DEPARTMENTS
               </button>
 
-              <button *ngIf="accessRights.isEnterpriseLevel && accessRights.isAdmin"
-                      [routerLink]="'enterprise/' + userAccount.enterpriseId + '/management'"
+              <button [routerLink]="'enterprise/' + userAccount.enterpriseId + '/management'"
                       routerLinkActive="active"
                       (click)="sideNavOpened = !sideNavOpened">MANAGEMENT
               </button>
@@ -34,7 +33,8 @@
           <cdk-step>
 
             <div class="buttons-container">
-              <button style="color: cornflowerblue"
+              <button *ngIf="isEnterpriseAdmin"
+                      style="color: cornflowerblue"
                       (click)="previousStep()">
                 BACK
               </button>
@@ -51,7 +51,7 @@
         <cdk-step>
           <div class="buttons-container">
             <button style="color: cornflowerblue"
-                    *ngIf="accessRights.isEnterpriseLevel"
+                    *ngIf="isEnterpriseOrMultiDepartmentLevel"
                     (click)="previousStep()">
               BACK
             </button>

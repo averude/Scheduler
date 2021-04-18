@@ -9,7 +9,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RequestMapping("/departments")
 @RestController
@@ -26,10 +25,10 @@ public class DepartmentController {
     }
 
     @Logged
-    @PreAuthorize("@departmentLevelSecurity.hasPermission(authentication, 'MAP2', #id)")
-    @GetMapping("{id}")
-    public Optional<Department> getById(@PathVariable Long id) {
-        return departmentService.findById(id);
+    @PreAuthorize("@departmentLevelSecurity.hasDepPermission(authentication, 'MAP2', #ids)")
+    @GetMapping("{ids}")
+    public List<Department> getByIds(@PathVariable List<Long> ids) {
+        return departmentService.findAllById(ids);
     }
 
     @Logged

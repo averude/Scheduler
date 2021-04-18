@@ -82,7 +82,11 @@ export class LoginComponent implements OnInit{
         break;
 
       case UserAccountAuthority.DEPARTMENT_ADMIN:
-        promise = this.router.navigate([`/admin/department/${user.departmentIds[0]}/calendar`]);
+        if (user.departmentIds.length > 1) {
+          promise = this.router.navigate(['/admin']);
+        } else {
+          promise = this.router.navigate([`/admin/department/${user.departmentIds[0]}/calendar`]);
+        }
         break;
 
       case UserAccountAuthority.SHIFT_ADMIN:
