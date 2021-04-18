@@ -41,6 +41,7 @@ export class AdminComponent implements OnInit {
     this.userAccount = this.authService.currentUserAccount;
 
     this.accessRights = this.authService.currentUserValue?.accessRights;
+    this.sideNavOpened = this.accessRights?.isEnterpriseLevel;
 
     if (this.userAccount.authority === UserAccountAuthority.ENTERPRISE_ADMIN) {
       this.departmentService.getAllByEnterpriseId(this.userAccount.enterpriseId)
