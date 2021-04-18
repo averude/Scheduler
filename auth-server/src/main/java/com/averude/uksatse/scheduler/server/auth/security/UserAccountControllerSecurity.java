@@ -9,6 +9,7 @@ import com.averude.uksatse.scheduler.shared.repository.common.ShiftRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import java.util.function.Function;
 
@@ -22,6 +23,7 @@ public class UserAccountControllerSecurity {
     private final UserAccountRepository     userAccountRepository;
     private final ShiftRepository           shiftRepository;
     private final DepartmentLevelSecurity   departmentLevelSecurity;
+    private final TransactionTemplate       transactionTemplate;
 
     public boolean canSaveShiftAccount(Authentication authentication, String mapName, AccountDTO dto){
         if (!dto.getAuthority().equals(SHIFT_ADMIN)) {
@@ -39,7 +41,9 @@ public class UserAccountControllerSecurity {
         return false;
     }
 
-    public boolean hasAccountPermission(Authentication authentication, String mapName, Long accountId) {
+    public boolean hasAccountPermission(Authentication authentication,
+                                        String mapName,
+                                        Long accountId) {
         var originator = getUserAccount(authentication);
         if (departmentLevelSecurity.checkAccess(originator, mapName)) {
 
@@ -62,8 +66,11 @@ public class UserAccountControllerSecurity {
             }
 
             if (function != null) {
-                return userAccountRepository.findById(accountId)
-                        .map(function).orElse(false);
+                final Function<UserAccount, Boolean> fn = function;
+                return transactionTemplate.execute(status ->
+                        userAccountRepository.findById(accountId)
+                                .map(fn)
+                                .orElse(false));
             }
         }
 
