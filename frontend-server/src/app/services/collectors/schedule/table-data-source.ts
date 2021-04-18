@@ -91,7 +91,7 @@ export class TableDataSource {
 
           const sources = [
             this.scheduleService.getAllByShiftIds(shiftIds, from, to),
-            this.workingNormService.getAllByShiftIds(shiftIds, from, to)
+            this.workingNormService.getAllByDepartmentId(departmentId, from, to)
           ];
 
           return forkJoin(sources).pipe(map(this.handleData()));

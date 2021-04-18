@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface WorkingNormRepository extends IByDepartmentIdAndDateRepository<WorkingNorm, Long> {
+    List<WorkingNorm> findAllByShiftIdInAndDateBetweenOrderByDateAsc(List<Long> shiftIds, LocalDate from, LocalDate to);
     List<WorkingNorm> findAllByShiftIdAndDateBetweenOrderByDateAsc(Long shiftId, LocalDate from, LocalDate to);
     void deleteAllByShiftIdAndDateBetween(Long shiftId, LocalDate from, LocalDate to);
 }

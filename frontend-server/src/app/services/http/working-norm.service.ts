@@ -38,12 +38,4 @@ export class WorkingNormService
       `${this.url}/departments/${departmentId}?from=${from}&to=${to}`
     );
   }
-
-  getAllByShiftIds(shiftIds: number[],
-                   from: string,
-                   to: string): Observable<WorkingNorm[]> {
-    return this.http.get<WorkingNorm[]>(
-      `${this.url}/shifts/${shiftIds}?from=${from}&to=${to}`
-    );
-  }
 }

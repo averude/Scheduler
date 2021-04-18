@@ -36,7 +36,7 @@ public class WorkingNormController {
     }
 
     @Logged
-    @PreAuthorize("@departmentLevelSecurity.hasPermission(authentication, 'MAP1', #departmentId)")
+    @PreAuthorize("@departmentLevelSecurity.hasPermission(authentication, 'MAP2', #departmentId)")
     @GetMapping("/departments/{departmentId}")
     public List<WorkingNorm> findAllByDepartmentId(@PathVariable Long departmentId,
                                                    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
@@ -46,19 +46,6 @@ public class WorkingNormController {
                                                    @RequestParam(value = "to")
                                                            LocalDate to) {
         return workingNormService.findAllByDepartmentIdAndDateBetween(departmentId, from, to);
-    }
-
-    @Logged
-    @PreAuthorize("@departmentLevelSecurity.hasShiftsPermission(authentication, 'MAP5', #shiftIds)")
-    @GetMapping("/shifts/{shiftIds}")
-    public List<WorkingNorm> findAllByShiftIds(@PathVariable List<Long> shiftIds,
-                                               @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-                                               @RequestParam(value = "from")
-                                                       LocalDate from,
-                                               @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-                                               @RequestParam(value = "to")
-                                                       LocalDate to) {
-        return workingNormService.findAllByShiftIdsAndDateBetween(shiftIds, from, to);
     }
 
     @Logged

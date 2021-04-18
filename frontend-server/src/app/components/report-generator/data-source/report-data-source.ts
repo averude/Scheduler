@@ -63,7 +63,7 @@ export class ReportDataSource {
                to:            string): Observable<ReportData> {
     const sources: Observable<any>[] = [
       this.scheduleService.getAllByShiftIds(shiftIds, from, to),
-      this.workingNormService.getAllByShiftIds(shiftIds, from, to),
+      this.workingNormService.getAllByDepartmentId(departmentId, from, to),
       this.specialCalendarDateService.getAllByEnterpriseId(enterpriseId, from, to),
       this.statisticsService.getSummationDTOByShiftIds(SummationMode.PER_POSITION, shiftIds, from, to,),
       this.dayTypeService.getAllByEnterpriseId(enterpriseId)

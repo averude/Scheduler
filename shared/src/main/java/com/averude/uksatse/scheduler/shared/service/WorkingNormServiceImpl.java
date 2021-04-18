@@ -5,11 +5,10 @@ import com.averude.uksatse.scheduler.core.model.entity.WorkingNorm;
 import com.averude.uksatse.scheduler.core.model.entity.structure.Shift;
 import com.averude.uksatse.scheduler.shared.repository.WorkingNormRepository;
 import com.averude.uksatse.scheduler.shared.repository.common.ShiftRepository;
-import com.averude.uksatse.scheduler.shared.service.base.AByDepartmentIdAndDateService;
+import com.averude.uksatse.scheduler.shared.service.base.AService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
@@ -19,21 +18,21 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public class WorkingNormServiceImpl
-        extends AByDepartmentIdAndDateService<WorkingNorm, Long> implements WorkingNormService {
+        extends AService<WorkingNorm, Long> implements WorkingNormService {
 
     private final WorkingNormRepository     workingNormRepository;
     private final ShiftRepository           shiftRepository;
 
     @Autowired
-    public WorkingNormServiceImpl(WorkingNormRepository     workingNormRepository,
-                                  ShiftRepository           shiftRepository) {
-        super(workingNormRepository, shiftRepository);
+    public WorkingNormServiceImpl(WorkingNormRepository workingNormRepository,
+                                  ShiftRepository       shiftRepository) {
+        super(workingNormRepository);
         this.workingNormRepository  = workingNormRepository;
         this.shiftRepository        = shiftRepository;
     }
 
     @Override
-    @Transactional(propagation = Propagation.SUPPORTS)
+    @Transactional(readOnly = true)
     public List<? extends BasicDto<Shift, WorkingNorm>> findAllDtoByDepartmentIdAndDate(Long departmentId,
                                                                                         LocalDate from,
                                                                                         LocalDate to) {
@@ -42,5 +41,11 @@ public class WorkingNormServiceImpl
                 .map(shift -> new BasicDto<>(shift, workingNormRepository
                         .findAllByShiftIdAndDateBetweenOrderByDateAsc(shift.getId(), from, to)))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<WorkingNorm> findAllByDepartmentIdAndDateBetween(Long departmentId, LocalDate from, LocalDate to) {
+        return workingNormRepository.findAllByDepartmentIdAndDateBetween(departmentId, from, to);
     }
 }

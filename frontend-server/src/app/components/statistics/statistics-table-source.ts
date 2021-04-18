@@ -83,7 +83,7 @@ export class StatisticsTableSource {
         this.statisticsService
           .getSummationDTOByShiftIds(mode, shiftIds, monthPaginationObject.firstDayOfMonth, monthPaginationObject.lastDayOfMonth),
         this.workingNormService
-          .getAllByShiftIds(shiftIds, monthPaginationObject.firstDayOfMonth, monthPaginationObject.lastDayOfMonth)
+          .getAllByDepartmentId(departmentId, monthPaginationObject.firstDayOfMonth, monthPaginationObject.lastDayOfMonth)
       ]);
 
     return this.getData(sources, fn);
