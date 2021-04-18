@@ -86,7 +86,7 @@ public class ShiftUserAccountServiceImpl implements ShiftUserAccountService {
                         userAccountShiftRepository.saveAll(accountShifts);
                     }
 
-                    return new UserAccountDTO(account);
+                    return accountDTO;
                 }).orElseThrow();
     }
 }

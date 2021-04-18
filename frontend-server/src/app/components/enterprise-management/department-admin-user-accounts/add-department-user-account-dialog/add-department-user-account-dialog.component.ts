@@ -13,12 +13,16 @@ import { Department } from "../../../../model/department";
 export class AddDepartmentUserAccountDialogComponent extends DialogBaseComponent<NewUserAccountDTO> {
 
   roles: UserAccountRole[] = [UserAccountRole.ADMIN, UserAccountRole.USER];
+
+  enterpriseId: number;
+
   departments: Department[] = [];
 
   constructor(private fb: FormBuilder,
               private dialogRef: MatDialogRef<AddDepartmentUserAccountDialogComponent>,
               @Inject(MAT_DIALOG_DATA) data) {
     super(null, dialogRef);
+    this.enterpriseId = data.enterpriseId;
     this.departments  = data.departments;
   }
 
@@ -34,6 +38,7 @@ export class AddDepartmentUserAccountDialogComponent extends DialogBaseComponent
                           Validators.maxLength(128)]],
       role:           [null,  [Validators.required]],
       authority:      [UserAccountAuthority.DEPARTMENT_ADMIN, [Validators.required]],
+      enterpriseId:   [this.enterpriseId],
       departmentIds:  [null, Validators.required]
     });
   }

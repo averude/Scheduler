@@ -24,7 +24,7 @@ export class DepartmentUserAccountService
     );
   }
 
-  create(userAccountDTO: NewUserAccountDTO): Observable<any> {
+  create(userAccountDTO: NewUserAccountDTO): Observable<UserAccountDTO> {
     return this.http.post<UserAccountDTO>(
       `${this.url}`,
       userAccountDTO

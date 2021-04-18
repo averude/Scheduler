@@ -20,6 +20,9 @@ import { DialogBaseComponent } from "../../../../shared/abstract-components/dial
 export class EditDepartmentUserAccountDialogComponent extends DialogBaseComponent<UserAccountDTO> {
 
   roles: UserAccountRole[] = [UserAccountRole.ADMIN, UserAccountRole.USER];
+
+  enterpriseId: number;
+
   departments: Department[] = [];
 
   constructor(private fb: FormBuilder,
@@ -27,6 +30,7 @@ export class EditDepartmentUserAccountDialogComponent extends DialogBaseComponen
               private dialogRef: MatDialogRef<EditDepartmentUserAccountDialogComponent>,
               @Inject(MAT_DIALOG_DATA) data) {
     super(data.dto, dialogRef);
+    this.enterpriseId = data.enterpriseId;
     this.departments  = data.departments;
   }
 
@@ -39,6 +43,7 @@ export class EditDepartmentUserAccountDialogComponent extends DialogBaseComponen
       name:           ['',  Validators.maxLength(128)],
       role:           [null,  [Validators.required]],
       authority:      [UserAccountAuthority.DEPARTMENT_ADMIN, [Validators.required]],
+      enterpriseId:   [this.enterpriseId],
       departmentIds:  [null,  [Validators.required]]
     });
   }
@@ -50,6 +55,7 @@ export class EditDepartmentUserAccountDialogComponent extends DialogBaseComponen
       name:           accountDTO.name,
       authority:      accountDTO.authority,
       role:           accountDTO.role,
+      enterpriseId:   accountDTO.enterpriseId,
       departmentIds:  accountDTO.departmentIds
     });
   }

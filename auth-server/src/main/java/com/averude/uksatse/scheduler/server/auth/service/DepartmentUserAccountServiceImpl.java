@@ -76,7 +76,7 @@ public class DepartmentUserAccountServiceImpl implements DepartmentUserAccountSe
                         userAccountDepartmentRepository.saveAll(accountDepartments);
                     }
 
-                    return new UserAccountDTO(account);
+                    return accountDTO;
                 }).orElseThrow();
     }
 }
