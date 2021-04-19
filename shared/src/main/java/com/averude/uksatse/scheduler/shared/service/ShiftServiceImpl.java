@@ -23,7 +23,7 @@ public class ShiftServiceImpl
 
     @Override
     @Transactional
-    public List<Shift> findAllByDepartmentId(Long departmentId) {
+    public List<Shift> getAllByDepartmentId(Long departmentId) {
         return shiftRepository.findAllByDepartmentId(departmentId);
     }
 

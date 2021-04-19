@@ -117,7 +117,6 @@ export class TableDataSource {
           }
 
           this.cellEnabledSetter.processRow(row, data.from, data.to);
-
         }));
 
       const rowGroupData = data.groups;

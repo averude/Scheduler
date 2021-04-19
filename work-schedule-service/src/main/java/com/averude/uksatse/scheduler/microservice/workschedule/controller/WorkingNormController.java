@@ -25,11 +25,11 @@ public class WorkingNormController {
     @Logged
     @PreAuthorize("@departmentLevelSecurity.hasPermission(authentication, 'MAP3', #departmentId)")
     @GetMapping("/departments/{departmentId}/dto")
-    public List<? extends BasicDto<Shift, WorkingNorm>> findAllDtoByDepartmentId(@PathVariable Long departmentId,
-                                                                                 @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    public List<? extends BasicDto<Shift, WorkingNorm>> getAllDtoByDepartmentId(@PathVariable Long departmentId,
+                                                                                @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
                                                                                  @RequestParam(value = "from")
                                                                                          LocalDate from,
-                                                                                 @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                                                                @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
                                                                                  @RequestParam(value = "to")
                                                                                          LocalDate to) {
         return workingNormService.findAllDtoByDepartmentIdAndDate(departmentId, from, to);
@@ -38,11 +38,11 @@ public class WorkingNormController {
     @Logged
     @PreAuthorize("@departmentLevelSecurity.hasPermission(authentication, 'MAP2', #departmentId)")
     @GetMapping("/departments/{departmentId}")
-    public List<WorkingNorm> findAllByDepartmentId(@PathVariable Long departmentId,
-                                                   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    public List<WorkingNorm> getAllByDepartmentId(@PathVariable Long departmentId,
+                                                  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
                                                    @RequestParam(value = "from")
                                                            LocalDate from,
-                                                   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                                  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
                                                    @RequestParam(value = "to")
                                                            LocalDate to) {
         return workingNormService.findAllByDepartmentIdAndDateBetween(departmentId, from, to);

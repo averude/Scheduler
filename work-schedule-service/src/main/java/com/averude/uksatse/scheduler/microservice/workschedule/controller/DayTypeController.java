@@ -20,7 +20,7 @@ public class DayTypeController {
     @Logged
     @PreAuthorize("@enterpriseLevelSecurity.hasPermission(authentication, 'MAP2', #enterpriseId)")
     @GetMapping("/enterprises/{enterpriseId}")
-    public List<DayType> findAllByEnterpriseId(@PathVariable Long enterpriseId) {
+    public List<DayType> getAllByEnterpriseId(@PathVariable Long enterpriseId) {
         return dayTypeService.findAllByEnterpriseId(enterpriseId);
     }
 

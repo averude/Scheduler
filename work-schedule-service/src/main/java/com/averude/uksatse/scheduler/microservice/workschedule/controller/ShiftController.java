@@ -20,14 +20,14 @@ public class ShiftController {
     @Logged
     @PreAuthorize("@departmentLevelSecurity.hasPermission(authentication, 'MAP2', #departmentId)")
     @GetMapping("/departments/{departmentId}")
-    public List<Shift> findAllByDepartmentId(@PathVariable Long departmentId) {
-        return shiftService.findAllByDepartmentId(departmentId);
+    public List<Shift> getAllByDepartmentId(@PathVariable Long departmentId) {
+        return shiftService.getAllByDepartmentId(departmentId);
     }
 
     @Logged
     @PreAuthorize("@departmentLevelSecurity.hasShiftsPermission(authentication, 'MAP5', #shiftIds)")
     @GetMapping("{shiftIds}")
-    public List<Shift> findAllByIds(@PathVariable List<Long> shiftIds) {
+    public List<Shift> getAllByIds(@PathVariable List<Long> shiftIds) {
         return shiftService.findAllByShiftIds(shiftIds);
     }
 

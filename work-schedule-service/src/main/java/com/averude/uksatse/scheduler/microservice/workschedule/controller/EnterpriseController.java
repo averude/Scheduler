@@ -7,6 +7,7 @@ import com.averude.uksatse.scheduler.security.logging.Logged;
 import com.averude.uksatse.scheduler.security.model.entity.UserAccount;
 import com.averude.uksatse.scheduler.shared.service.EnterpriseService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,7 +26,7 @@ public class EnterpriseController {
     @Logged
     @IsGlobalAdmin
     @GetMapping
-    public List<Enterprise> findAll() {
+    public List<Enterprise> getAll() {
         return enterpriseService.findAll();
     }
 
@@ -39,6 +40,13 @@ public class EnterpriseController {
         if (enterpriseId == null) throw new RuntimeException();
 
         return enterpriseService.findById(enterpriseId);
+    }
+
+    @Logged
+    @PreAuthorize("@enterpriseLevelSecurity.hasPermission(authentication, 'MAP2', #id)")
+    @GetMapping("{id}")
+    public Optional<Enterprise> getById(@PathVariable Long id) {
+        return enterpriseService.findById(id);
     }
 
     @Logged

@@ -23,7 +23,7 @@ public class DepartmentDayTypeServiceImpl
 
     @Override
     @Transactional
-    public List<DepartmentDayType> findAllByDepartmentId(Long departmentId) {
+    public List<DepartmentDayType> getAllByDepartmentId(Long departmentId) {
         return departmentDayTypeRepository.findAllByDepartmentId(departmentId);
     }
 }

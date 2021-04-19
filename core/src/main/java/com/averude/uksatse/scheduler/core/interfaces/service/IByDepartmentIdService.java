@@ -4,5 +4,5 @@ import java.io.Serializable;
 import java.util.List;
 
 public interface IByDepartmentIdService<T extends Serializable, ID> {
-    List<T> findAllByDepartmentId(Long departmentId);
+    List<T> getAllByDepartmentId(Long departmentId);
 }

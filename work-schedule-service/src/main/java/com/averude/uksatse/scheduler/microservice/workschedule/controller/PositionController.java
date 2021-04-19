@@ -23,13 +23,13 @@ public class PositionController {
     @PreAuthorize("@departmentLevelSecurity.hasPermission(authentication, 'MAP2', #departmentId)")
     @GetMapping("/departments/{departmentId}")
     public List<Position> findAllByDepartmentId(@PathVariable Long departmentId) {
-        return positionService.findAllByDepartmentId(departmentId);
+        return positionService.getAllByDepartmentId(departmentId);
     }
 
     @Logged
     @PostAuthorize("@departmentLevelSecurity.hasPermission(authentication, 'MAP2', #returnObject)")
     @GetMapping("/{id}")
-    public Optional<Position> findById(@PathVariable Long id) {
+    public Optional<Position> getById(@PathVariable Long id) {
         return positionService.findById(id);
     }
 

@@ -46,7 +46,7 @@ public class ShiftPatternServiceImpl
 
     @Override
     @Transactional
-    public List<ShiftPattern> findAllByDepartmentId(Long departmentId) {
+    public List<ShiftPattern> getAllByDepartmentId(Long departmentId) {
         return shiftPatternRepository.findAllByDepartmentId(departmentId);
     }
 

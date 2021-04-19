@@ -22,7 +22,7 @@ public class SummationColumnController {
     @Logged
     @PreAuthorize("@enterpriseLevelSecurity.hasPermission(authentication, 'MAP2', #enterpriseId)")
     @GetMapping("/enterprises/{enterpriseId}")
-    public List<? extends BasicDto<SummationColumn, SummationColumnDayTypeRange>> findAllDtoByEnterpriseId(@PathVariable Long enterpriseId) {
+    public List<? extends BasicDto<SummationColumn, SummationColumnDayTypeRange>> getAllDtoByEnterpriseId(@PathVariable Long enterpriseId) {
         return summationColumnService.findAllDtoByEnterpriseId(enterpriseId);
     }
 

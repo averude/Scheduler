@@ -27,20 +27,20 @@ public class ShiftPatternController {
 
     @PreAuthorize("@departmentLevelSecurity.hasPermission(authentication, 'MAP3', #shiftPatternDTO.parent)")
     @PostMapping("/dto")
-    public ShiftPatternDTO postDTO(@RequestBody ShiftPatternDTO shiftPatternDTO) {
+    public ShiftPatternDTO post(@RequestBody ShiftPatternDTO shiftPatternDTO) {
         return shiftPatternService.saveDTO(shiftPatternDTO);
     }
 
     @PreAuthorize("@departmentLevelSecurity.hasPermission(authentication, 'MAP3', #shiftPatternDTO.parent)")
     @PutMapping("/dto")
-    public ShiftPatternDTO putDTO(@RequestBody ShiftPatternDTO shiftPatternDTO) {
+    public ShiftPatternDTO put(@RequestBody ShiftPatternDTO shiftPatternDTO) {
         return shiftPatternService.saveDTO(shiftPatternDTO);
     }
 
     @PreAuthorize("@departmentLevelSecurity.hasPermission(authentication, 'MAP2', #departmentId)")
     @GetMapping("/departments/{departmentId}")
     public List<ShiftPattern> getAllByDepartmentId(@PathVariable Long departmentId) {
-        return shiftPatternService.findAllByDepartmentId(departmentId);
+        return shiftPatternService.getAllByDepartmentId(departmentId);
     }
 
     @IsDepartmentAdmin

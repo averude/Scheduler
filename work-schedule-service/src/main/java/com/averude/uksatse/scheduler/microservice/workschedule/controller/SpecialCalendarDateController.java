@@ -22,11 +22,11 @@ public class SpecialCalendarDateController {
     @Logged
     @PreAuthorize("@enterpriseLevelSecurity.hasPermission(authentication, 'MAP2', #enterpriseId)")
     @GetMapping("/enterprises/{enterpriseId}")
-    public List<SpecialCalendarDate> findAllByEnterpriseId(@PathVariable Long enterpriseId,
-                                                           @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    public List<SpecialCalendarDate> getAllByEnterpriseId(@PathVariable Long enterpriseId,
+                                                          @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
                                                            @RequestParam(value = "from")
                                                                    LocalDate from,
-                                                           @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                                          @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
                                                            @RequestParam(value = "to")
                                                                    LocalDate to) {
         return specialCalendarDateService.findAllByEnterpriseIdAndDateBetween(enterpriseId, from, to);

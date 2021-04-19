@@ -22,14 +22,14 @@ public class DepartmentDayTypeController {
     @Logged
     @PreAuthorize("@departmentLevelSecurity.hasPermission(authentication, 'MAP2', #departmentId)")
     @GetMapping("/departments/{departmentId}")
-    public List<DepartmentDayType> findAllByDepartmentId(@PathVariable Long departmentId) {
-        return departmentDayTypeService.findAllByDepartmentId(departmentId);
+    public List<DepartmentDayType> getAllByDepartmentId(@PathVariable Long departmentId) {
+        return departmentDayTypeService.getAllByDepartmentId(departmentId);
     }
 
     @Logged
     @PostAuthorize("@departmentLevelSecurity.hasPermission(authentication, 'MAP3', #returnObject)")
     @GetMapping("{id}")
-    public Optional<DepartmentDayType> findById(@PathVariable Long id) {
+    public Optional<DepartmentDayType> getById(@PathVariable Long id) {
         return departmentDayTypeService.findById(id);
     }
 

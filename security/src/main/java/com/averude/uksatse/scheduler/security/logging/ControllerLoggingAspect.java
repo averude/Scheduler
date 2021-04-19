@@ -1,5 +1,6 @@
 package com.averude.uksatse.scheduler.security.logging;
 
+import com.averude.uksatse.scheduler.security.model.entity.UserAccount;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
@@ -8,6 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
+import java.util.StringJoiner;
 
 import static com.averude.uksatse.scheduler.security.details.AccountUtils.getUserAccount;
 
@@ -32,7 +34,12 @@ public class ControllerLoggingAspect {
 
         var authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null) {
-            user = getUserAccount(authentication).toString();
+            UserAccount userAccount = getUserAccount(authentication);
+            user = new StringJoiner(", ", UserAccount.class.getSimpleName() + "[", "]")
+                    .add("username='" + userAccount.getUsername() + "'")
+                    .add("authority='" + userAccount.getAuthority() + "'")
+                    .add("role='" + userAccount.getRole() + "'")
+                    .toString();
         }
         return user;
     }

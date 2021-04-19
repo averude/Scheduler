@@ -12,7 +12,6 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Set;
-import java.util.StringJoiner;
 
 @Data
 @NoArgsConstructor
@@ -80,16 +79,4 @@ public class UserAccount implements HasId {
         this.setName(accountDTO.getName());
         this.setRole(accountDTO.getRole());
     }
-
-    @Override
-    public String toString() {
-        return new StringJoiner(", ", UserAccount.class.getSimpleName() + "[", "]")
-                .add("id=" + id)
-                .add("username='" + username + "'")
-                .add("authority='" + authority + "'")
-                .add("role='" + role + "'")
-                .add("departments=" + accountDepartments)
-                .toString();
-    }
 }
-

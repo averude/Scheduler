@@ -23,13 +23,13 @@ public class EmployeeController {
     @PreAuthorize("@departmentLevelSecurity.hasPermission(authentication, 'MAP1', #departmentId)")
     @GetMapping("/departments/{departmentId}")
     public List<Employee> getAllByDepartmentId(@PathVariable Long departmentId) {
-        return employeeService.findAllByDepartmentId(departmentId);
+        return employeeService.getAllByDepartmentId(departmentId);
     }
 
     @Logged
     @PostAuthorize("@departmentLevelSecurity.hasPermission(authentication, 'MAP1', #returnObject)")
     @GetMapping("/{id}")
-    public Optional<Employee> get(@PathVariable Long id) {
+    public Optional<Employee> getById(@PathVariable Long id) {
         return employeeService.findById(id);
     }
 
