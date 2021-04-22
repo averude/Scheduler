@@ -1,7 +1,7 @@
 package com.averude.uksatse.scheduler.microservice.workschedule.controller;
 
 import com.averude.uksatse.scheduler.core.model.entity.Position;
-import com.averude.uksatse.scheduler.security.annotations.IsDepartmentAdmin;
+import com.averude.uksatse.scheduler.security.annotations.IsEnterpriseOrDepartmentAdmin;
 import com.averude.uksatse.scheduler.security.logging.Logged;
 import com.averude.uksatse.scheduler.shared.service.PositionService;
 import lombok.RequiredArgsConstructor;
@@ -48,7 +48,7 @@ public class PositionController {
     }
 
     @Logged
-    @IsDepartmentAdmin
+    @IsEnterpriseOrDepartmentAdmin
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
         positionService.findById(id).ifPresent(positionService::delete);
