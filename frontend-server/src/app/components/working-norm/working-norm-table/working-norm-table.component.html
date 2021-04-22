@@ -4,14 +4,10 @@
                             [dateUnit]="'year'"></app-month-year-paginator>
 </ng-template>
 
-<app-schedules-table [groupable]="false"
+<app-schedules-table [options]="options"
                      [trackByFn]="trackByFn"
                      [rowData]="rowData"
-                     [proxyViewIsShown]="proxyViewIsShown"
-                     [selectionEnabled]="!isAdmin"
-                     [multipleSelect]="false"
-                     [showSumColumns]="true"
-                     [distinctByColor]="true">
+                     [proxyViewIsShown]="proxyViewIsShown">
 
   <ng-template proxyViewDef>
     <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>

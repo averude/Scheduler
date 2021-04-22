@@ -14,6 +14,8 @@ import { AfterDateColumnDef, BeforeDateColumnDef, PageableColumnDef } from "../d
 import { Subscription } from "rxjs";
 import { TableRenderer } from "../service/table-renderer.service";
 import { filter } from "rxjs/operators";
+import { Row } from "../model/data/row";
+import { Options } from "../model/options";
 
 @Component({
   selector: '[app-table-row-group]',
@@ -26,11 +28,9 @@ export class TableRowGroupComponent implements OnInit, OnDestroy {
 
   @Input() trackByFn;
 
-  @Input() selectionEnabled:  boolean;
-  @Input() multipleSelect:    boolean;
-  @Input() editableRowGroup:  boolean;
-  @Input() showSumColumns:    boolean;
-  @Input() distinctByColor:   boolean;
+  @Input() options: Options;
+
+  @Input() editableRowGroup: boolean;
 
   @Input() pageableColumns:   PageableColumnDef;
   @Input() beforeDateColumns: QueryList<BeforeDateColumnDef>;
@@ -43,13 +43,14 @@ export class TableRowGroupComponent implements OnInit, OnDestroy {
   private paginatorSub: Subscription;
   private rowGroupRenderSub: Subscription;
 
-  isHidden: boolean = false;
+  isHiddenGroup: boolean = false;
 
   constructor(private paginatorService: PaginationService,
               private tableRenderer: TableRenderer,
               private cd: ChangeDetectorRef) {}
 
   ngOnInit() {
+
     this.paginatorSub = this.paginatorService.onValueChange
       .subscribe(daysInMonth => {
         this.colspan = this.beforeDateColumns?.length + daysInMonth.length + this.afterDateColumns?.length;
@@ -68,11 +69,16 @@ export class TableRowGroupComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.paginatorSub.unsubscribe();
+    this.rowGroupRenderSub.unsubscribe();
   }
 
   renderRows() {
     if (this.groupData) {
       this.cd.markForCheck();
     }
+  }
+
+  isHidden(row: Row) {
+    return row.cells.filter(cell => cell.enabled).length == 0;
   }
 }

@@ -4,11 +4,9 @@
 </ng-template>
 
 <app-schedules-table [trackByFn]="trackByFn"
-                     [showSumColumns]="accessRights?.isAdmin"
-                     [multipleSelect]="true"
+                     [options]="options"
                      [rowGroupData]="tableData"
                      [proxyViewIsShown]="proxyViewIsShown"
-                     [selectionEnabled]="accessRights?.isAdmin"
                      (onAddRowClick)="isAble && isEditable && tableManager.newRow($event)">
 
   <ng-template proxyViewDef>

@@ -3,16 +3,18 @@ import { toggleClass } from "../utils/table-cell.utils";
 import { Cell } from "../model/data/cell";
 import { ClearSelectionService } from "../service/clear-selection.service";
 import { Subscription } from "rxjs";
+import { Options } from "../model/options";
 
 @Directive({
   selector: '[selectableCell]'
 })
 export class SelectableCellDirective implements OnInit, OnDestroy {
-  @Input() data:              Cell;
-  @Input() selectionEnabled:  boolean;
-  @Input() multipleSelect:    boolean;
+  @Input() data:    Cell;
+  @Input() options: Options;
 
   @Output() onClick: EventEmitter<any> = new EventEmitter();
+
+  private selectionEnabled:  boolean;
 
   public selected: boolean = false;
   className = "selected";
@@ -25,25 +27,26 @@ export class SelectableCellDirective implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.clearSelectionSub = this.clearSelectionService.onClearSelection()
       .subscribe(() => {
-        if (!this.multipleSelect && this.selected) this.deselect();
+        if (!this.options?.multipleSelect && this.selected) this.deselect();
       });
+
+    this.selectionEnabled = this.data.enabled && this.options?.selectionEnabled;
   }
 
   ngOnDestroy(): void {
     if (this.clearSelectionSub) this.clearSelectionSub.unsubscribe();
   }
 
-
   @HostListener('mousedown')
   mouseDown() {
-    if (this.selectionEnabled && this.multipleSelect) {
+    if (this.selectionEnabled && this.options?.multipleSelect) {
       this.select();
     }
   }
 
   @HostListener('click', ['$event'])
   click(event) {
-    if (!this.multipleSelect) {
+    if (!this.options?.multipleSelect) {
       this.select();
       this.onClick.emit({event: event, selectedCells: [this.data]});
     }

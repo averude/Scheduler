@@ -21,6 +21,15 @@ import { TableStateService } from "../service/table-state.service";
 import { Subscription } from "rxjs";
 import { ProxyViewDef } from "../directives/proxy-view";
 import { TableRenderer } from "../service/table-renderer.service";
+import { Options } from "../model/options";
+
+const DEFAULT_OPTIONS: Options = {
+  selectionEnabled: false,
+  multipleSelect:   true,
+  showSumColumns:   false,
+  distinctByColor:  false,
+  groupable:        true,
+};
 
 @Component({
   selector: 'app-schedules-table',
@@ -31,15 +40,10 @@ import { TableRenderer } from "../service/table-renderer.service";
 export class SchedulesTableComponent implements OnInit, OnDestroy {
   @Input() trackByFn;
 
+  @Input() options: Options = DEFAULT_OPTIONS;
+
   @Input() proxyViewIsShown: boolean = false;
-
-  @Input() groupable: boolean = true;
-  @Input() selectionEnabled   = false;
-  @Input() multipleSelect     = true;
-
-  @Input() showSumColumns:    boolean;
-  @Input() editableRowGroup:  boolean = false;
-  @Input() distinctByColor:   boolean = false;
+  @Input() editableRowGroup: boolean = false;
 
   @ContentChild(PaginatorDef, { read: TemplateRef })
   paginator: TemplateRef<any>;

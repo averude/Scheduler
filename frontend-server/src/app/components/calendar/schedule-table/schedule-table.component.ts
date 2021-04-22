@@ -25,6 +25,7 @@ import { UserAccountAuthority } from "../../../model/dto/user-account-dto";
 import { filter, map, switchMap } from "rxjs/operators";
 import { WorkDay } from "../../../model/workday";
 import { ToolbarTemplateService } from "../../../services/top-bar/toolbar-template.service";
+import { Options } from "../../../lib/ngx-schedule-table/model/options";
 
 @Component({
   selector: 'app-schedule-table-component',
@@ -48,6 +49,8 @@ export class ScheduleTableComponent implements OnInit, AfterViewInit, OnDestroy 
       return item.enabled;
     }
   };
+
+  options: Options;
 
   enterpriseId: number;
   departmentId: number;
@@ -123,6 +126,13 @@ export class ScheduleTableComponent implements OnInit, AfterViewInit, OnDestroy 
 
     this.rowRenderSub = this.tableRenderer.onRenderRow
       .subscribe(rowId => this.sumCalculator.calculateWorkHoursSum(this.tableData, rowId));
+
+    this.options = {
+      showSumColumns: this.accessRights?.isAdmin,
+      multipleSelect: true,
+      selectionEnabled: this.accessRights?.isAdmin,
+      groupable: true
+    };
   }
 
   ngAfterViewInit() {

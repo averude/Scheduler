@@ -13,13 +13,13 @@ import { TableRenderer } from "../service/table-renderer.service";
 import { Subscription } from "rxjs";
 import { filter } from "rxjs/operators";
 import { ClearSelectionService } from "../service/clear-selection.service";
-import { CalendarDay } from "../model/calendar-day";
 import { SelectableRowDirective } from "../directives/selectable-row.directive";
 import { Row } from "../model/data/row";
 import { Cell } from "../model/data/cell";
 import { PaginationService } from "../service/pagination.service";
 import { SelectionEndService } from "../service/selection-end.service";
 import { AfterDateColumnDef, BeforeDateColumnDef, PageableColumnDef } from "../directives/column";
+import { Options } from "../model/options";
 
 @Component({
   selector: '[app-table-row]',
@@ -30,10 +30,7 @@ import { AfterDateColumnDef, BeforeDateColumnDef, PageableColumnDef } from "../d
 export class TableRowComponent implements OnInit, OnDestroy {
 
   @Input() trackByFn;
-
-  @Input() selectionEnabled:  boolean;
-  @Input() multipleSelect:    boolean;
-  @Input() showSumColumns:    boolean;
+  @Input() options: Options;
 
   @Input() pageableColumns:   PageableColumnDef;
   @Input() beforeDateColumns: QueryList<BeforeDateColumnDef>;
@@ -42,14 +39,11 @@ export class TableRowComponent implements OnInit, OnDestroy {
   @Input() rowGroupId:      number;
   @Input() rowData:         Row;
 
-  dates: CalendarDay[];
-
   @ViewChild(SelectableRowDirective, { static: true })
   selectableRowDirective: SelectableRowDirective;
 
   private rowRenderSub:     Subscription;
   private rowClearSub:      Subscription;
-  private paginatorSub:     Subscription;
 
   constructor(public elementRef: ElementRef,
               private paginatorService: PaginationService,
@@ -65,15 +59,11 @@ export class TableRowComponent implements OnInit, OnDestroy {
 
     this.rowClearSub = this.rowClearSelection.onClearSelection()
       .subscribe(() => this.clearSelection());
-
-    this.paginatorSub = this.paginatorService.onValueChange
-      .subscribe(daysInMonth => this.dates = daysInMonth);
   }
 
   ngOnDestroy(): void {
     this.rowRenderSub.unsubscribe();
     this.rowClearSub.unsubscribe();
-    this.paginatorSub.unsubscribe();
   }
 
   onSelectionEnd($event: MouseEvent,
@@ -86,7 +76,7 @@ export class TableRowComponent implements OnInit, OnDestroy {
   }
 
   renderCells() {
-    if (!this.rowData || !this.dates) {
+    if (!this.rowData) {
       return;
     }
 

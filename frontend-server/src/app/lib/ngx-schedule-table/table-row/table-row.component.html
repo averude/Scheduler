@@ -3,17 +3,16 @@
               [ngTemplateOutletContext]="{$implicit: rowData}"></ng-container>
 
 <ng-container selectableRow
-              [disabled]="!selectionEnabled || !multipleSelect"
+              [disabled]="!options?.selectionEnabled || !options?.multipleSelect"
               [element]="elementRef"
               (onSelectionEnds)="onSelectionEnd($event.event, $event.selectedCells)">
   <td class="cell"
       [ngClass]="getContentPositioning()"
-      [class.selection-enabled]="selectionEnabled"
+      [class.selection-enabled]="options?.selectionEnabled"
       *ngFor="let cell of rowData.cells;trackBy:trackByFn"
       selectableCell
-      [selectionEnabled]="cell.enabled && selectionEnabled"
+      [options]="options"
       [data]="cell"
-      [multipleSelect]="multipleSelect"
       [class.weekend]="cell.date.weekend"
       [class.holiday]="cell.date.holiday"
       [class.disabled]="!cell.enabled"
@@ -23,7 +22,7 @@
   </td>
 </ng-container>
 
-<ng-container *ngIf="showSumColumns">
+<ng-container *ngIf="options?.showSumColumns">
   <ng-container *ngFor="let column of afterDateColumns"
                 [ngTemplateOutlet]="column.cellDef"
                 [ngTemplateOutletContext]="{$implicit: rowData}"></ng-container>

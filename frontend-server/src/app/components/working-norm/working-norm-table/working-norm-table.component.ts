@@ -33,6 +33,7 @@ import { WorkingNorm } from "../../../model/working-norm";
 import { NotificationsService } from "angular2-notifications";
 import { ToolbarTemplateService } from "../../../services/top-bar/toolbar-template.service";
 import { filter, map, switchMap } from "rxjs/operators";
+import { Options } from "../../../lib/ngx-schedule-table/model/options";
 
 @Component({
   selector: 'app-working-norm-table',
@@ -45,6 +46,8 @@ export class WorkingNormTableComponent implements OnInit, AfterViewInit, OnDestr
     const value = <WorkingNorm> item.value;
     return `${value?.hours} + ${value?.days}`;
   };
+
+  options: Options;
 
   private months;
 
@@ -128,6 +131,14 @@ export class WorkingNormTableComponent implements OnInit, AfterViewInit, OnDestr
 
     this.rowRenderSub = this.tableRenderer.onRenderRow
       .subscribe(rowId => this.sumCalculator.calculateHoursNormSum(this.rowData, rowId));
+
+    this.options = {
+      groupable: false,
+      selectionEnabled: !this.isAdmin,
+      multipleSelect: false,
+      showSumColumns: true,
+      distinctByColor: true
+    };
   }
 
   ngAfterViewInit() {

@@ -2,6 +2,7 @@ import { Component, Input, OnDestroy, OnInit, QueryList } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { PaginationService } from "../service/pagination.service";
 import { AfterDateColumnDef, BeforeDateColumnDef, PageableColumnDef } from "../directives/column";
+import { Options } from "../model/options";
 
 @Component({
   selector: '[app-table-header]',
@@ -10,7 +11,7 @@ import { AfterDateColumnDef, BeforeDateColumnDef, PageableColumnDef } from "../d
 })
 export class TableHeaderComponent implements OnInit, OnDestroy {
 
-  @Input() showSumColumns: boolean;
+  @Input() options: Options;
 
   @Input() pageableColumns:   PageableColumnDef;
   @Input() beforeDateColumns: QueryList<BeforeDateColumnDef>;

@@ -3,8 +3,8 @@
     <td [attr.colspan]="colspan">
       <div class="group-label-container">
         <div class="group-label group-control-element"
-             (click)="isHidden = !isHidden">
-          {{groupData.name + ' ' + (isHidden ? "▸" : "▾")}}
+             (click)="isHiddenGroup = !isHiddenGroup">
+          {{groupData.name + ' ' + (isHiddenGroup ? "▸" : "▾")}}
         </div>
         <div class="group-control">
           <div class="group-control-element"
@@ -14,19 +14,19 @@
       </div>
     </td>
   </tr>
-  <tr [hidden]="isHidden"
-      class="row"
-      [class.distinctByColor]="distinctByColor"
-      *ngFor="let row of groupData.rows"
-      app-table-row
-      [trackByFn]="trackByFn"
-      [selectionEnabled]="selectionEnabled"
-      [multipleSelect]="multipleSelect"
-      [showSumColumns]="showSumColumns"
-      [pageableColumns]="pageableColumns"
-      [beforeDateColumns]="beforeDateColumns"
-      [afterDateColumns]="afterDateColumns"
-      [rowGroupId]="groupData.id"
-      [rowData]="row">
-  </tr>
+  <ng-container *ngFor="let row of groupData.rows">
+    <tr *ngIf="!(options?.hideDisabledRow && isHidden(row))"
+        [hidden]="isHiddenGroup"
+        class="row"
+        [class.distinctByColor]="options?.distinctByColor"
+        app-table-row
+        [options]="options"
+        [trackByFn]="trackByFn"
+        [pageableColumns]="pageableColumns"
+        [beforeDateColumns]="beforeDateColumns"
+        [afterDateColumns]="afterDateColumns"
+        [rowGroupId]="groupData.id"
+        [rowData]="row">
+    </tr>
+  </ng-container>
 </ng-container>

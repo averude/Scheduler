@@ -1,22 +1,9 @@
-<!--<div class="date-container">-->
-  <!--<div class="date-selector">-->
-    <!--<ng-container [ngTemplateOutlet]="paginator"></ng-container>-->
-  <!--</div>-->
-  <!--<div class="table-top-buttons-container">-->
-    <!--<div class="table-top-buttons"-->
-         <!--*ngIf="topItems.length == 0"></div>-->
-    <!--<div class="table-top-buttons"-->
-         <!--*ngFor="let template of topItems" >-->
-      <!--<ng-container [ngTemplateOutlet]="template"></ng-container>-->
-    <!--</div>-->
-  <!--</div>-->
-<!--</div>-->
 <div class="table-wrap">
   <div class="dummy"></div>
 
   <table class="table-base">
     <thead app-table-header
-           [showSumColumns]="showSumColumns"
+           [options]="options"
            [pageableColumns]="pageableColumns"
            [beforeDateColumns]="beforeDateColumns"
            [afterDateColumns]="afterDateColumns">
@@ -31,15 +18,12 @@
       </tr>
     </ng-container>
     <ng-container *ngIf="!proxyViewIsShown">
-      <ng-container *ngIf="groupable">
+      <ng-container *ngIf="options?.groupable">
         <tbody *ngFor="let group of rowGroupData"
                app-table-row-group
-               [trackByFn]="trackByFn"
-               [distinctByColor]="distinctByColor"
-               [selectionEnabled]="selectionEnabled"
                [editableRowGroup]="editableRowGroup"
-               [multipleSelect]="multipleSelect"
-               [showSumColumns]="showSumColumns"
+               [options]="options"
+               [trackByFn]="trackByFn"
                [beforeDateColumns]="beforeDateColumns"
                [afterDateColumns]="afterDateColumns"
                [pageableColumns]="pageableColumns"
@@ -49,13 +33,11 @@
       </ng-container>
       <ng-container>
         <tr class="row"
-            [class.distinctByColor]="distinctByColor"
+            [class.distinctByColor]="options?.distinctByColor"
             *ngFor="let row of rowData"
             app-table-row
+            [options]="options"
             [trackByFn]="trackByFn"
-            [selectionEnabled]="selectionEnabled"
-            [multipleSelect]="multipleSelect"
-            [showSumColumns]="showSumColumns"
             [beforeDateColumns]="beforeDateColumns"
             [pageableColumns]="pageableColumns"
             [afterDateColumns]="afterDateColumns"
