@@ -23,12 +23,12 @@ import { ShiftPatternDtoService } from "../../../../../services/http/shift-patte
 import { DepartmentDayTypeService } from "../../../../../services/http/department-day-type.service";
 import { ShiftPattern } from "../../../../../model/shift-pattern";
 import { DayTypeService } from "../../../../../services/http/day-type.service";
-import { Shift } from "../../../../../model/shift";
 import { TableStateService } from "../../../../../lib/ngx-schedule-table/service/table-state.service";
 import { ScheduleRowGroup } from "../../../../../model/ui/schedule-table/table-data";
 import { binarySearch } from "../../../../../shared/utils/collection-utils";
 import { CalendarDay } from "../../../../../lib/ngx-schedule-table/model/calendar-day";
 import { TableManager } from "../../../../../services/collectors/schedule/table-manager";
+import { InitialData } from "../../../../../model/datasource/initial-data";
 
 @Component({
   selector: 'app-schedule-table-context-menu',
@@ -44,8 +44,8 @@ export class ScheduleTableContextMenuComponent implements OnInit, OnDestroy {
   @ViewChild('tableHeaderMenu')
   tableHeaderMenu: ContextMenuComponent;
 
+  @Input() initData: InitialData;
   @Input() isEditableGroups: boolean = false;
-  @Input() shifts: Shift[] = [];
   @Input() groups: ScheduleRowGroup[] = [];
 
   @Input() enterpriseId: number;
@@ -58,6 +58,7 @@ export class ScheduleTableContextMenuComponent implements OnInit, OnDestroy {
   noServiceDepartmentDayTypes: DepartmentDayType[] = [];
 
   private selectionEndSub: Subscription;
+  private headerCellClickSub: Subscription;
 
   constructor(private dialog: MatDialog,
               private cd: ChangeDetectorRef,
@@ -70,8 +71,6 @@ export class ScheduleTableContextMenuComponent implements OnInit, OnDestroy {
               private selectionEndService: SelectionEndService,
               private tableState: TableStateService,
               private contextMenuService: ContextMenuService) { }
-
-  private headerCellClickSub: Subscription;
 
   ngOnInit() {
     if (!this.departmentId) {
@@ -140,7 +139,7 @@ export class ScheduleTableContextMenuComponent implements OnInit, OnDestroy {
   }
 
   openAddSubstitutionDialog(selectionData: SelectionData) {
-    this.tableManager.addSubstitutionDialog(selectionData);
+    this.tableManager.addSubstitutionDialog(selectionData, this.initData);
   }
 
   ngOnDestroy(): void {

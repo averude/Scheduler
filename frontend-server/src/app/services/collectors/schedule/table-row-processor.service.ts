@@ -10,6 +10,7 @@ import { IntervalCreator } from "../../creator/interval-creator.service";
 import { CellCollector } from "../cell-collector";
 import { Injectable } from "@angular/core";
 import { WorkDay } from "../../../model/workday";
+import { InitialData } from "../../../model/datasource/initial-data";
 
 @Injectable()
 export class TableRowProcessor {
@@ -18,21 +19,20 @@ export class TableRowProcessor {
               private intervalCreator: IntervalCreator,
               private cellCollector: CellCollector) {}
 
-  fillRows<T extends Composition>(dto: EmployeeScheduleDTO,
-                                  calendarDays: CalendarDay[],
+  fillRows<T extends Composition>(initData: InitialData,
+                                  dto: EmployeeScheduleDTO,
                                   compositions: T[],
                                   isSubstitution: boolean,
-                                  positions: Position[],
                                   rowGroupConsumer:  (composition: T) => ScheduleRowGroup,
                                   workingNormConsumer: (composition: T) => number) {
     for (const composition of compositions) {
-      const position = binarySearch(positions, (mid => mid.id - composition.positionId));
+      const position = binarySearch(initData.positions, (mid => mid.id - composition.positionId));
 
       const rowGroup = rowGroupConsumer(composition);
       if (rowGroup) {
         const workingNorm = workingNormConsumer(composition);
 
-        this.initRowInsert(rowGroup, dto, calendarDays,
+        this.initRowInsert(rowGroup, dto, initData.calendarDays,
           composition, position, workingNorm, isSubstitution,
           (row) => row?.position.id === composition.positionId);
       }

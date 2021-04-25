@@ -26,6 +26,8 @@ import { filter, map, switchMap } from "rxjs/operators";
 import { WorkDay } from "../../../model/workday";
 import { ToolbarTemplateService } from "../../../services/top-bar/toolbar-template.service";
 import { Options } from "../../../lib/ngx-schedule-table/model/options";
+import { InitialData } from "../../../model/datasource/initial-data";
+import { TableDataCollector } from "../../../services/collectors/schedule/table-data.collector";
 
 @Component({
   selector: 'app-schedule-table-component',
@@ -62,8 +64,11 @@ export class ScheduleTableComponent implements OnInit, AfterViewInit, OnDestroy 
   @ViewChild('paginator', { read: TemplateRef })
   paginator: TemplateRef<any>;
 
+  initData: InitialData;
+
   tableData: RowGroup[];
 
+  private routeSub:         Subscription;
   private rowRenderSub:     Subscription;
   private editableStateSub: Subscription;
 
@@ -75,11 +80,10 @@ export class ScheduleTableComponent implements OnInit, AfterViewInit, OnDestroy 
               private tableRenderer: TableRenderer,
               private sumCalculator: TableSumCalculator,
               public state: TableStateService,
-              public dataSource: TableDataSource,
+              private dataSource: TableDataSource,
+              private tableDataCollector: TableDataCollector,
               public tableManager: TableManager,
               public utility: SchedulerUtility) {}
-
-  private routeSub: Subscription;
 
   ngOnInit() {
     this.accessRights = this.authService.currentUserValue.accessRights;
@@ -103,12 +107,26 @@ export class ScheduleTableComponent implements OnInit, AfterViewInit, OnDestroy 
 
             if (userAccount.authority === UserAccountAuthority.DEPARTMENT_ADMIN
               || userAccount.authority === UserAccountAuthority.ENTERPRISE_ADMIN) {
-              return this.dataSource.getTableDataByDepartmentId(this.departmentId);
+
+              return this.dataSource.byDepartmentId(this.departmentId)
+                .pipe(
+                  map(initData => {
+                    this.initData = initData;
+                    return this.tableDataCollector.handleData(initData);
+                  })
+                );
             }
 
             if (userAccount.authority === UserAccountAuthority.SHIFT_ADMIN
               && userAccount.departmentIds.indexOf(this.departmentId) >= 0 ) {
-              return this.dataSource.getTableDataByShiftIds(this.departmentId, userAccount.shiftIds);
+
+              return this.dataSource.byShiftIds(this.departmentId, userAccount.shiftIds)
+                .pipe(
+                  map(initData => {
+                    this.initData = initData;
+                    return this.tableDataCollector.handleData(initData);
+                  })
+                );
             }
 
             return of([]);

@@ -36,8 +36,8 @@ export class AddSubstitutionCompositionDialogComponent implements OnInit {
               @Inject(MAT_DIALOG_DATA) data) {
     this.from       = data.from;
     this.to         = data.to;
-    this.shifts     = data.shifts;
-    this.positions  = data.positions;
+    this.shifts     = data.initData.shifts;
+    this.positions  = data.initData.positions;
     this.employee   = data.employee;
 
     this.mainComposition = data.mainComposition;

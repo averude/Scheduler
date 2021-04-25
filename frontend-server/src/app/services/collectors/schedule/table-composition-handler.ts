@@ -10,12 +10,17 @@ import { NotificationsService } from "angular2-notifications";
 import { CellEnabledSetter } from "./cell-enabled-setter";
 import { TableSumCalculator } from "../../calculators/table-sum-calculator.service";
 import { EmployeeScheduleDTO } from "../../../model/dto/employee-schedule-dto";
-import { WorkingNorm } from "../../../model/working-norm";
-import { CalendarDay } from "../../../lib/ngx-schedule-table/model/calendar-day";
 import { Injectable } from "@angular/core";
 import { IntervalCreator } from "../../creator/interval-creator.service";
 import { convertCompositionToInterval } from "../../../model/ui/schedule-table/row-interval";
 import { TableRowRemover } from "./table-row-remover";
+import { InitialData } from "../../../model/datasource/initial-data";
+import { CUDService } from "../../http/interface/cud-service";
+
+function putSorted<T extends Composition>(composition: T, compositions: T[]) {
+  compositions.push(composition);
+  compositions.sort((a, b) => (a.shiftId - b.shiftId) + (a.from.diff(b.from)));
+}
 
 @Injectable()
 export class TableCompositionHandler {
@@ -30,102 +35,83 @@ export class TableCompositionHandler {
               private substitutionShiftCompositionService: SubstitutionShiftCompositionService,
               private notificationsService: NotificationsService) {}
 
-  createOrUpdateComposition(compositions: Composition[],
-                            rowGroup:     ScheduleRowGroup,
-                            row:          ScheduleRow,
-                            parentRow:    ScheduleRow,
-                            scheduleDTOs: EmployeeScheduleDTO[],
-                            positions:    Position[],
-                            workingNorms: WorkingNorm[],
-                            calendarDays: CalendarDay[],
+  createOrUpdate(compositions: Composition[],
+                            rowGroup: ScheduleRowGroup,
+                            row: ScheduleRow,
+                            parentRow: ScheduleRow,
+                            initData: InitialData,
                             isSubstitution: boolean) {
     if (compositions) {
-
       if (isSubstitution) {
-
-        compositions.forEach(composition => {
-          if (composition.id) {
-            this.substitutionShiftCompositionService.update(<SubstitutionComposition> composition)
-              .subscribe((res) => {
-                const position = binarySearch(positions, (mid => mid.id - composition.positionId));
-                this.updateRow(scheduleDTOs, calendarDays, composition, position, rowGroup, row);
-              });
-          } else {
-            this.substitutionShiftCompositionService.create(<SubstitutionComposition> composition)
-              .subscribe((res) => {
-                composition = res;
-                const position = binarySearch(positions, (mid => mid.id - composition.positionId));
-                this.createRow(scheduleDTOs, workingNorms, calendarDays,
-                  composition, position, rowGroup, isSubstitution, parentRow);
-              });
-          }
-        });
-
+        this.createOrUpdateComposition(this.substitutionShiftCompositionService, compositions, rowGroup,
+          row, parentRow, initData, isSubstitution);
       } else {
-
-        compositions.forEach(composition => {
-          if (composition.id) {
-            this.mainShiftCompositionService.update(composition)
-              .subscribe((res) => {
-                const position = binarySearch(positions, (mid => mid.id - composition.positionId));
-                this.updateRow(scheduleDTOs, calendarDays, composition, position, rowGroup, row);
-              });
-          } else {
-            this.mainShiftCompositionService.create(composition)
-              .subscribe((res) => {
-                composition = res;
-
-                const position = binarySearch(positions, (mid => mid.id - composition.positionId));
-                this.createRow(scheduleDTOs, workingNorms, calendarDays,
-                  composition, position, rowGroup, isSubstitution);
-              });
-          }
-        });
-
+        this.createOrUpdateComposition(this.mainShiftCompositionService, compositions, rowGroup,
+          row, parentRow, initData, isSubstitution);
       }
-
     }
   }
 
-  removeComposition(groupData: ScheduleRowGroup,
-                    row: ScheduleRow,
-                    scheduleDTOs: EmployeeScheduleDTO[],
-                    compositions: Composition[]) {
+  remove(groupData: ScheduleRowGroup,
+         row: ScheduleRow,
+         initData: InitialData,
+         compositions: Composition[]) {
     compositions.forEach(composition => {
       if (composition.id) {
         if (row.isSubstitution) {
           this.substitutionShiftCompositionService.delete(composition.id)
-            .subscribe(res => this.rowRemover.removeRow(groupData, row, composition, scheduleDTOs));
+            .subscribe(res => this.rowRemover.removeRow(groupData, row, composition, initData.scheduleDto));
         } else {
           this.mainShiftCompositionService.delete(composition.id)
-            .subscribe(res => this.rowRemover.removeRow(groupData, row, composition, scheduleDTOs));
+            .subscribe(res => this.rowRemover.removeRow(groupData, row, composition, initData.scheduleDto));
         }
       }
     });
   }
 
-  private createRow(scheduleDTOs: EmployeeScheduleDTO[],
-                    workingNorms: WorkingNorm[],
-                    calendarDays: CalendarDay[],
+  private createOrUpdateComposition<T extends Composition>(compositionService: CUDService<T>,
+                                                           compositions: T[],
+                                                           rowGroup: ScheduleRowGroup,
+                                                           row: ScheduleRow,
+                                                           parentRow: ScheduleRow,
+                                                           initData: InitialData,
+                                                           isSubstitution: boolean) {
+    compositions.forEach(composition => {
+      if (composition.id) {
+        compositionService.update(composition)
+          .subscribe((res) => {
+            const position = binarySearch(initData.positions, (mid => mid.id - composition.positionId));
+            this.updateRow(initData, composition, position, rowGroup, row);
+          });
+      } else {
+        compositionService.create(composition)
+          .subscribe((res) => {
+            composition = res;
+            const position = binarySearch(initData.positions, (mid => mid.id - composition.positionId));
+            this.createRow(initData, composition, position, rowGroup, isSubstitution, parentRow);
+          });
+      }
+    });
+  }
+
+  private createRow(initData: InitialData,
                     composition: Composition,
                     position: Position,
                     group: ScheduleRowGroup,
                     isSubstitution: boolean,
                     parentRow?: ScheduleRow) {
-    if (scheduleDTOs && calendarDays) {
+    if (initData.scheduleDto && initData.calendarDays) {
 
-      const dto   = binarySearch(scheduleDTOs, (mid => mid.parent.id - composition.employeeId));
-      const norm  = binarySearch(workingNorms, (mid => mid.shiftId - group.id))?.hours || 0;
+      const dto   = binarySearch(initData.scheduleDto, (mid => mid.parent.id - composition.employeeId));
+      const norm  = binarySearch(initData.workingNorms, (mid => mid.shiftId - group.id))?.hours || 0;
 
       if (isSubstitution) {
-        dto.substitutionCompositions.push(<SubstitutionComposition> composition);
-        dto.substitutionCompositions.sort((a, b) => (a.shiftId - b.shiftId) + (a.from.diff(b.from)));
+        putSorted(<SubstitutionComposition> composition, dto.substitutionCompositions);
       } else {
-        dto.mainCompositions.push(<MainComposition> composition);
-        dto.mainCompositions.sort((a, b) => (a.shiftId - b.shiftId) + (a.from.diff(b.from)));
+        putSorted(<MainComposition> composition, dto.mainCompositions);
       }
 
-      const row = this.rowProcessor.insertNewOrUpdateExistingRow(group, dto, calendarDays,
+      const row = this.rowProcessor.insertNewOrUpdateExistingRow(group, dto, initData.calendarDays,
         composition, position, norm, isSubstitution,
         (row) => row.position.id === composition.positionId);
 
@@ -148,8 +134,7 @@ export class TableCompositionHandler {
     }
   }
 
-  private updateRow(scheduleDTOs: EmployeeScheduleDTO[],
-                    calendarDays: CalendarDay[],
+  private updateRow(initData: InitialData,
                     composition: Composition,
                     position: Position,
                     group: ScheduleRowGroup,
@@ -158,8 +143,8 @@ export class TableCompositionHandler {
       throw new Error("No row provided");
     }
 
-    if (scheduleDTOs && calendarDays) {
-      const dto = binarySearch(scheduleDTOs, (mid => mid.parent.id - composition.employeeId));
+    if (initData.scheduleDto && initData.calendarDays) {
+      const dto = binarySearch(initData.scheduleDto, (mid => mid.parent.id - composition.employeeId));
 
       if (row.position.id !== composition.positionId) {
 
@@ -172,7 +157,7 @@ export class TableCompositionHandler {
         if (rowToMerge) {
           this.transfer(row, rowToMerge, composition, dto);
         } else {
-          const newRow = this.rowProcessor.insertNewOrUpdateExistingRow(group, dto, calendarDays, composition,
+          const newRow = this.rowProcessor.insertNewOrUpdateExistingRow(group, dto, initData.calendarDays, composition,
             position, row.workingNorm, row.isSubstitution, () => false);
           newRow.compositions = [];
           newRow.intervals    = [];

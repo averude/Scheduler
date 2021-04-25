@@ -18,7 +18,7 @@ import { SchedulerUtility } from "./utils/scheduler-utility";
 import { TableDataSource } from "../../services/collectors/schedule/table-data-source";
 import { CellEnabledSetter } from "../../services/collectors/schedule/cell-enabled-setter";
 import { ScheduleTableConfigurationMenuModule } from "./schedule-table-configuration-menu/schedule-table-configuration-menu.module";
-import { TableDataCollector } from "../../services/collectors/schedule/table-data-collector.service";
+import { TableDataCollector } from "../../services/collectors/schedule/table-data.collector";
 import { TableRowProcessor } from "../../services/collectors/schedule/table-row-processor.service";
 import { TableCompositionHandler } from "../../services/collectors/schedule/table-composition-handler";
 import { TableRowRemover } from "../../services/collectors/schedule/table-row-remover";

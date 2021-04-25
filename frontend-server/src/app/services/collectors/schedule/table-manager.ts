@@ -6,25 +6,21 @@ import { EditCompositionsDialogComponent } from "../../../components/calendar/sc
 import { SelectionData } from "../../../lib/ngx-schedule-table/model/selection-data";
 import { AddSubstitutionCompositionDialogComponent } from "../../../components/calendar/schedule-table-shift-composition-dialog/add-substitution-composition-dialog/add-substitution-composition-dialog.component";
 import { MatDialog } from "@angular/material/dialog";
-import { TableDataSource } from "./table-data-source";
 import { TableCompositionHandler } from "./table-composition-handler";
 import { Injectable } from "@angular/core";
+import { InitialData } from "../../../model/datasource/initial-data";
 
 @Injectable()
 export class TableManager {
 
   constructor(private dialog: MatDialog,
-              private tableCompositionHandler: TableCompositionHandler,
-              private tableDataSource: TableDataSource) {
+              private tableCompositionHandler: TableCompositionHandler) {
   }
 
-  newRow(rowGroup: ScheduleRowGroup) {
+  newRow(rowGroup: ScheduleRowGroup, initData: InitialData) {
     const data = {
-      shiftId:      rowGroup.id,
-      shifts:       this.tableDataSource.shifts,
-      employees:    this.tableDataSource.employees,
-      positions:    this.tableDataSource.positions,
-      calendarDays: this.tableDataSource.calendarDays
+      shiftId:  rowGroup.id,
+      initData: initData
     };
 
     this.dialog.open(AddMainShiftCompositionDialogComponent, {data: data})
@@ -37,40 +33,34 @@ export class TableManager {
         mainShiftCompositions
           .forEach(composition =>
             this.tableCompositionHandler
-              .createOrUpdateComposition([composition], rowGroup, null, null,
-                this.tableDataSource.scheduleDto,
-                this.tableDataSource.positions,
-                this.tableDataSource.workingNorms,
-                this.tableDataSource.calendarDays,
-                false));
+              .createOrUpdate([composition], rowGroup, null,
+                null, data.initData, false));
       });
   }
 
-  editRow(row: ScheduleRow) {
+  editRow(row: ScheduleRow, initData: InitialData) {
     if (!row || !row.group) {
       return;
     }
 
     const groupData = row.group;
     const data = {
-      compositions:   row.compositions,
-      positions:      this.tableDataSource.positions,
-      calendarDays:   this.tableDataSource.calendarDays,
-      employeeName:   getEmployeeShortName(row.employee)
+      compositions: row.compositions,
+      initData:     initData,
+      employeeName: getEmployeeShortName(row.employee)
     };
 
     this.openDialog(data, groupData, row);
   }
 
-  addSubstitutionDialog(selectionData: SelectionData) {
+  addSubstitutionDialog(selectionData: SelectionData, initData: InitialData) {
     const mainCompositionRow = <ScheduleRow> selectionData.row;
 
     const data = {
       from: selectionData.selectedCells[0].date.isoString,
       to:   selectionData.selectedCells[selectionData.selectedCells.length - 1].date.isoString,
-      shifts:     this.tableDataSource.shifts,
-      positions:  this.tableDataSource.positions,
-      employee:   mainCompositionRow.employee,
+      initData: initData,
+      employee: mainCompositionRow.employee,
       mainComposition: mainCompositionRow.compositions[0]
     };
 
@@ -80,12 +70,8 @@ export class TableManager {
         if (value) {
           const group = mainCompositionRow.group.table.findRowGroup(value.shiftId);
           this.tableCompositionHandler
-            .createOrUpdateComposition([value], group, null, mainCompositionRow,
-              this.tableDataSource.scheduleDto,
-              this.tableDataSource.positions,
-              this.tableDataSource.workingNorms,
-              this.tableDataSource.calendarDays,
-              true);
+            .createOrUpdate([value], group, null,
+              mainCompositionRow, data.initData, true);
         }
       });
   }
@@ -93,28 +79,24 @@ export class TableManager {
   private openDialog(data, rowGroup: ScheduleRowGroup, row: ScheduleRow) {
     this.dialog.open(EditCompositionsDialogComponent, {data: data})
       .afterClosed()
-      .subscribe((dialogData) => {
-        if (!dialogData) {
+      .subscribe((dialogResult) => {
+        if (!dialogResult) {
           return;
         }
 
-        const compositions: Composition[] = dialogData.data;
-        switch (dialogData.command) {
+        const compositions: Composition[] = dialogResult.data;
+        switch (dialogResult.command) {
 
           case 'save' : {
             this.tableCompositionHandler
-              .createOrUpdateComposition(compositions, rowGroup, row, null,
-                this.tableDataSource.scheduleDto,
-                this.tableDataSource.positions,
-                this.tableDataSource.workingNorms,
-                this.tableDataSource.calendarDays,
-                row.isSubstitution);
+              .createOrUpdate(compositions, rowGroup, row, null,
+                data.initData, row.isSubstitution);
             break;
           }
 
           case 'delete' : {
             this.tableCompositionHandler
-              .removeComposition(rowGroup, row, this.tableDataSource.scheduleDto, compositions);
+              .remove(rowGroup, row, data.initData, compositions);
             break;
           }
 

@@ -62,6 +62,7 @@ export class TableCellComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['value']) {
+      this.labelColor = "transparent";
       this.cellLabelSetter.setLabel(this);
     }
   }

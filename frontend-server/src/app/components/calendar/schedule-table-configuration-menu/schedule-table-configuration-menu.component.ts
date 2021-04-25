@@ -1,7 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { from, Subscription } from "rxjs";
 import { TableStateService } from "../../../lib/ngx-schedule-table/service/table-state.service";
-import { TableDataSource } from "../../../services/collectors/schedule/table-data-source";
 import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
 import { AvrEntityGenerationDialogComponent } from "../../../lib/avr-entity-generation/avr-entity-generation-dialog/avr-entity-generation-dialog.component";
 import { getGenerationUnits, toGenerationDto } from "../../../lib/avr-entity-generation/util/utils";
@@ -11,6 +10,7 @@ import { NotificationsService } from "angular2-notifications";
 import { AuthService } from "../../../services/http/auth.service";
 import { UserAccessRights } from "../../../model/user";
 import { GenerationService } from "../../../services/http/generation.service";
+import { InitialData } from "../../../model/datasource/initial-data";
 
 @Component({
   selector: 'app-schedule-table-configuration-menu',
@@ -20,6 +20,7 @@ import { GenerationService } from "../../../services/http/generation.service";
 export class ScheduleTableConfigurationMenuComponent implements OnInit, OnDestroy {
 
   @Input() departmentId: number;
+  @Input() initData: InitialData;
 
   isAble: boolean = false;
 
@@ -35,7 +36,6 @@ export class ScheduleTableConfigurationMenuComponent implements OnInit, OnDestro
   constructor(private dialog: MatDialog,
               private authService: AuthService,
               private tableStateService: TableStateService,
-              private tableDataSource: TableDataSource,
               private generationService: GenerationService,
               private notificationsService: NotificationsService) { }
 
@@ -71,7 +71,7 @@ export class ScheduleTableConfigurationMenuComponent implements OnInit, OnDestro
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = false;
     dialogConfig.autoFocus = true;
-    dialogConfig.data = getGenerationUnits(this.tableDataSource.shifts);
+    dialogConfig.data = getGenerationUnits(this.initData.shifts);
 
     this.dialog.open(AvrEntityGenerationDialogComponent, dialogConfig)
       .afterClosed()

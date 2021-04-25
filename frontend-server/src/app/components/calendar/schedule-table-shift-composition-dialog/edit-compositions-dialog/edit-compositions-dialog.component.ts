@@ -33,7 +33,7 @@ export class EditCompositionsDialogComponent implements OnInit {
     this.compositionForms = this.fb.array([]);
     this.compositions = data.compositions;
     this.employeeName = data.employeeName;
-    this.positions    = data.positions;
+    this.positions    = data.initData.positions;
   }
 
   ngOnInit(): void {

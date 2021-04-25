@@ -26,6 +26,7 @@ import { MAT_DATE_FORMATS } from "@angular/material/core";
 export class AddMainShiftCompositionDialogComponent extends DialogBaseComponent<MainComposition> {
 
   shiftId: number;
+
   employees: Employee[] = [];
   calendarDays: CalendarDay[];
 
@@ -35,8 +36,9 @@ export class AddMainShiftCompositionDialogComponent extends DialogBaseComponent<
     super(null, dialogRef);
 
     this.shiftId      = data.shiftId;
-    this.employees    = data.employees;
-    this.calendarDays = data.calendarDays;
+
+    this.employees    = data.initData.employees;
+    this.calendarDays = data.initData.calendarDays;
   }
 
   fillInTheForm(mainShiftComposition: MainComposition) {

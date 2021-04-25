@@ -7,7 +7,7 @@
                      [options]="options"
                      [rowGroupData]="tableData"
                      [proxyViewIsShown]="proxyViewIsShown"
-                     (onAddRowClick)="isAble && isEditable && tableManager.newRow($event)">
+                     (onAddRowClick)="isAble && isEditable && tableManager.newRow($event, initData)">
 
   <ng-template proxyViewDef>
     <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
@@ -31,7 +31,8 @@
   <ng-container beforeDateColumnDef>
     <th class="table-sticky-header th-null"
         *headerCellDef>
-      <app-schedule-table-configuration-menu [departmentId]="departmentId"></app-schedule-table-configuration-menu>
+      <app-schedule-table-configuration-menu [departmentId]="departmentId"
+                                             [initData]="initData"></app-schedule-table-configuration-menu>
     </th>
     <td class="td-name"
         [class.substitution]="rowData.isSubstitution"
@@ -40,7 +41,7 @@
         [name]="utility.getEmployeeName(rowData.employee)"
         [info]="rowData.position.shortName"
         [isEditable]="isRowEditable(rowData)"
-        (click)="isRowEditable(rowData) && tableManager.editRow(rowData)">
+        (click)="isRowEditable(rowData) && tableManager.editRow(rowData, initData)">
     </td>
   </ng-container>
 
@@ -74,7 +75,7 @@
 </app-schedules-table>
 
 <app-schedule-table-context-menu *ngIf="accessRights?.isAdmin"
-                                 [shifts]="dataSource.shifts"
+                                 [initData]="initData"
                                  [enterpriseId]="enterpriseId"
                                  [departmentId]="departmentId"
                                  [groups]="tableData"
