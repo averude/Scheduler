@@ -29,14 +29,14 @@ public class SummationColumnController {
     @Logged
     @PreAuthorize("@enterpriseLevelSecurity.hasPermission(authentication, 'MAP6', #dto.parent)")
     @PostMapping
-    public BasicDto<SummationColumn, SummationColumnDayTypeRange> post(BasicDto<SummationColumn, SummationColumnDayTypeRange> dto) {
+    public BasicDto<SummationColumn, SummationColumnDayTypeRange> post(@RequestBody BasicDto<SummationColumn, SummationColumnDayTypeRange> dto) {
         return summationColumnService.saveDto(dto);
     }
 
     @Logged
     @PreAuthorize("@enterpriseLevelSecurity.hasPermission(authentication, 'MAP6', #dto.parent)")
     @PutMapping
-    public BasicDto<SummationColumn, SummationColumnDayTypeRange> put(BasicDto<SummationColumn, SummationColumnDayTypeRange> dto) {
+    public BasicDto<SummationColumn, SummationColumnDayTypeRange> put(@RequestBody BasicDto<SummationColumn, SummationColumnDayTypeRange> dto) {
         return summationColumnService.saveDto(dto);
     }
 

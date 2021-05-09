@@ -4,6 +4,8 @@ import com.averude.uksatse.scheduler.core.interfaces.entity.HasId;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 @Data
@@ -41,6 +43,11 @@ public class ShiftPatternGenerationRule implements HasId {
 
     @Column(name = "on_day_type_id")
     private Long onDayTypeId;
+
+    @Max(7)
+    @Min(1)
+    @Column(name = "day_of_week")
+    private Integer dayOfWeek;
 
     @NotNull
     @ManyToOne

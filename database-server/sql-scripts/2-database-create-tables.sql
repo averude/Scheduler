@@ -142,6 +142,7 @@ CREATE TABLE IF NOT EXISTS shift_pattern_generation_rules (
   on_day_type_id              INTEGER,
   use_department_day_type_id  INTEGER     NOT NULL,
   type                        VARCHAR(64) NOT NULL,
+  day_of_week                 INTEGER     DEFAULT 1 CHECK ( 1 <= day_of_week <= 7 ),
 
   UNIQUE (shift_pattern_id, on_day_type_id, use_department_day_type_id, type),
 

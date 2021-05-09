@@ -8,6 +8,7 @@ import com.averude.uksatse.scheduler.shared.service.DayTypeGroupService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RequestMapping("/day_type_groups")
@@ -27,14 +28,14 @@ public class DayTypeGroupController {
     @Logged
     @IsGlobalAdmin
     @PostMapping
-    public DayTypeGroup post(@RequestBody DayTypeGroup dayTypeGroup) {
+    public DayTypeGroup post(@RequestBody @Valid DayTypeGroup dayTypeGroup) {
         return dayTypeGroupService.save(dayTypeGroup);
     }
 
     @Logged
     @IsGlobalAdmin
     @PutMapping
-    public DayTypeGroup put(@RequestBody DayTypeGroup dayTypeGroup) {
+    public DayTypeGroup put(@RequestBody @Valid DayTypeGroup dayTypeGroup) {
         return dayTypeGroupService.save(dayTypeGroup);
     }
 

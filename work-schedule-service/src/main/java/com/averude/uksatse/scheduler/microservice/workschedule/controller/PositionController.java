@@ -9,6 +9,7 @@ import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,14 +37,14 @@ public class PositionController {
     @Logged
     @PreAuthorize("@departmentLevelSecurity.hasPermission(authentication, 'MAP3', #position)")
     @PostMapping
-    public Position post(@RequestBody Position position) {
+    public Position post(@RequestBody @Valid Position position) {
         return positionService.save(position);
     }
 
     @Logged
     @PreAuthorize("@departmentLevelSecurity.hasPermission(authentication, 'MAP3', #position)")
     @PutMapping
-    public Position put(@RequestBody Position position) {
+    public Position put(@RequestBody @Valid Position position) {
         return positionService.save(position);
     }
 

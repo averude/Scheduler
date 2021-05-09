@@ -33,9 +33,9 @@ export class TableSumCalculator {
   private calcWorkHoursSum(row: any) {
     if (!row) return;
 
-    row.sum = row.cells
+    row.sum = roundToTwo(row.cells
       .map(cell => calculateHoursByHasTime(cell.value))
-      .reduce((prev, curr) => prev + curr, 0);
+      .reduce((prev, curr) => prev + curr, 0));
 
     row.diff = roundToTwo(row.sum - row.workingNorm);
   }

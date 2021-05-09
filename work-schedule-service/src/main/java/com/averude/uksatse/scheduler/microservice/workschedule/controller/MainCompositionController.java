@@ -20,14 +20,14 @@ public class MainCompositionController {
     @Logged
     @PreAuthorize("@departmentLevelSecurity.hasPermission(authentication, 'MAP3', #mainComposition)")
     @PostMapping
-    public MainComposition post(@Valid @RequestBody MainComposition mainComposition) {
+    public MainComposition post(@RequestBody @Valid MainComposition mainComposition) {
         return mainCompositionService.save(mainComposition);
     }
 
     @Logged
     @PreAuthorize("@departmentLevelSecurity.hasPermission(authentication, 'MAP3', #mainComposition)")
     @PutMapping
-    public MainComposition put(@Valid @RequestBody MainComposition mainComposition) {
+    public MainComposition put(@RequestBody @Valid MainComposition mainComposition) {
         return mainCompositionService.save(mainComposition);
     }
 

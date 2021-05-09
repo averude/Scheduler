@@ -11,6 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,14 +53,14 @@ public class EnterpriseController {
     @Logged
     @IsGlobalAdmin
     @PostMapping
-    public Enterprise post(@RequestBody Enterprise enterprise) {
+    public Enterprise post(@RequestBody @Valid Enterprise enterprise) {
         return enterpriseService.save(enterprise);
     }
 
     @Logged
     @IsGlobalAdmin
     @PutMapping
-    public Enterprise put(@RequestBody Enterprise enterprise) {
+    public Enterprise put(@RequestBody @Valid Enterprise enterprise) {
         return enterpriseService.save(enterprise);
     }
 

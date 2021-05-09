@@ -25,6 +25,34 @@
     </mat-select>
   </mat-form-field>
 
+  <mat-form-field class="day-of-week">
+    <mat-select placeholder="Day of week"
+                [disabled]="item.type !== 'day_of_week'"
+                [(ngModel)]="item.dayOfWeek">
+      <mat-option [value]="1">
+        Monday
+      </mat-option>
+      <mat-option [value]="2">
+        Tuesday
+      </mat-option>
+      <mat-option [value]="3">
+        Wednesday
+      </mat-option>
+      <mat-option [value]="4">
+        Thursday
+      </mat-option>
+      <mat-option [value]="5">
+        Friday
+      </mat-option>
+      <mat-option [value]="6">
+        Saturday
+      </mat-option>
+      <mat-option [value]="7">
+        Sunday
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
   <mat-form-field class="type">
     <mat-select [(ngModel)]="item.type"
                 placeholder="Rule type">

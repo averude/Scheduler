@@ -9,6 +9,7 @@ import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,14 +37,14 @@ public class DepartmentDayTypeController {
     @Logged
     @PreAuthorize("@departmentLevelSecurity.hasPermission(authentication, 'MAP3', #departmentDayType)")
     @PostMapping
-    public DepartmentDayType post(@RequestBody DepartmentDayType departmentDayType) {
+    public DepartmentDayType post(@RequestBody @Valid DepartmentDayType departmentDayType) {
         return departmentDayTypeService.save(departmentDayType);
     }
 
     @Logged
     @PreAuthorize("@departmentLevelSecurity.hasPermission(authentication, 'MAP3', #departmentDayType)")
     @PutMapping
-    public DepartmentDayType put(@RequestBody DepartmentDayType departmentDayType) {
+    public DepartmentDayType put(@RequestBody @Valid DepartmentDayType departmentDayType) {
         return departmentDayTypeService.save(departmentDayType);
     }
 

@@ -11,6 +11,7 @@ import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -58,14 +59,14 @@ public class WorkingNormController {
     @Logged
     @PreAuthorize("@departmentLevelSecurity.hasPermission(authentication, 'MAP3', #workingNorm)")
     @PostMapping
-    public WorkingNorm post(@RequestBody WorkingNorm workingNorm) {
+    public WorkingNorm post(@RequestBody @Valid WorkingNorm workingNorm) {
         return workingNormService.save(workingNorm);
     }
 
     @Logged
     @PreAuthorize("@departmentLevelSecurity.hasPermission(authentication, 'MAP3', #workingNorm)")
     @PutMapping
-    public WorkingNorm put(@RequestBody WorkingNorm workingNorm) {
+    public WorkingNorm put(@RequestBody @Valid WorkingNorm workingNorm) {
         return workingNormService.save(workingNorm);
     }
 }

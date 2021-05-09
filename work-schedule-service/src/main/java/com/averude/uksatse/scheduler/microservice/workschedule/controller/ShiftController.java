@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RequestMapping("/shifts")
@@ -34,14 +35,14 @@ public class ShiftController {
     @Logged
     @PreAuthorize("@departmentLevelSecurity.hasPermission(authentication, 'MAP3', #shift)")
     @PostMapping
-    public Shift post(@RequestBody Shift shift) {
+    public Shift post(@RequestBody @Valid Shift shift) {
         return shiftService.save(shift);
     }
 
     @Logged
     @PreAuthorize("@departmentLevelSecurity.hasPermission(authentication, 'MAP3', #shift)")
     @PutMapping
-    public Shift put(@RequestBody Shift shift) {
+    public Shift put(@RequestBody @Valid Shift shift) {
         return shiftService.save(shift);
     }
 

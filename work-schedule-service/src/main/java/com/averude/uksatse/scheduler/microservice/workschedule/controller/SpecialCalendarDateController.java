@@ -9,6 +9,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -35,14 +36,14 @@ public class SpecialCalendarDateController {
     @Logged
     @PreAuthorize("@enterpriseLevelSecurity.hasPermission(authentication, 'MAP6', #specialCalendarDate)")
     @PostMapping
-    public SpecialCalendarDate post(@RequestBody SpecialCalendarDate specialCalendarDate) {
+    public SpecialCalendarDate post(@RequestBody @Valid SpecialCalendarDate specialCalendarDate) {
         return specialCalendarDateService.save(specialCalendarDate);
     }
 
     @Logged
     @PreAuthorize("@enterpriseLevelSecurity.hasPermission(authentication, 'MAP6', #specialCalendarDate)")
     @PutMapping
-    public SpecialCalendarDate put(@RequestBody SpecialCalendarDate specialCalendarDate) {
+    public SpecialCalendarDate put(@RequestBody @Valid SpecialCalendarDate specialCalendarDate) {
         return specialCalendarDateService.save(specialCalendarDate);
     }
 

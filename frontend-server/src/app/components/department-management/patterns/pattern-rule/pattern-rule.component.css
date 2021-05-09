@@ -4,7 +4,7 @@
   grid-template-rows: 4em 4em;
   justify-content: space-between;
   grid-template-areas:
-    "color-block on-day-type             type control-button"
+    "color-block on-day-type      day-of-week control-button"
     "color-block use-department-day-type type control-button";
   min-width: 32em;
   width: 100%;
@@ -30,9 +30,14 @@
   grid-area: use-department-day-type;
 }
 
+.day-of-week {
+  padding-top: 0.5em;
+  grid-area: day-of-week;
+}
+
 .type {
+  padding-top: 0.5em;
   grid-area: type;
-  align-self: center;
 }
 
 .control-button-box {

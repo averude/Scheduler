@@ -28,14 +28,14 @@ public class ReportSheetController {
     @Logged
     @PreAuthorize("@departmentLevelSecurity.hasPermission(authentication, 'MAP3', #dto.reportSheet)")
     @PostMapping
-    public ReportSheetDTO post(@Valid @RequestBody ReportSheetDTO dto) {
+    public ReportSheetDTO post(@RequestBody @Valid ReportSheetDTO dto) {
         return reportSheetService.save(dto);
     }
 
     @Logged
     @PreAuthorize("@departmentLevelSecurity.hasPermission(authentication, 'MAP3', #dto.reportSheet)")
     @PutMapping
-    public ReportSheetDTO put(@Valid @RequestBody ReportSheetDTO dto) {
+    public ReportSheetDTO put(@RequestBody @Valid ReportSheetDTO dto) {
         return reportSheetService.save(dto);
     }
 

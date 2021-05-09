@@ -9,6 +9,7 @@ import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,14 +37,14 @@ public class EmployeeController {
     @Logged
     @PreAuthorize("@departmentLevelSecurity.hasPermission(authentication, 'MAP3', #employee)")
     @PostMapping
-    public Employee post(@RequestBody Employee employee) {
+    public Employee post(@RequestBody @Valid Employee employee) {
         return employeeService.save(employee);
     }
 
     @Logged
     @PreAuthorize("@departmentLevelSecurity.hasPermission(authentication, 'MAP3', #employee)")
     @PutMapping
-    public Employee put(@RequestBody Employee employee) {
+    public Employee put(@RequestBody @Valid Employee employee) {
         return employeeService.save(employee);
     }
 

@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RequestMapping("/departments")
@@ -34,14 +35,14 @@ public class DepartmentController {
     @Logged
     @PreAuthorize("@enterpriseLevelSecurity.hasPermission(authentication, 'MAP6', #department)")
     @PostMapping
-    public Department post(@RequestBody Department department) {
+    public Department post(@RequestBody @Valid Department department) {
         return departmentService.save(department);
     }
 
     @Logged
     @PreAuthorize("@enterpriseLevelSecurity.hasPermission(authentication, 'MAP6', #department)")
     @PutMapping
-    public Department put(@RequestBody Department department) {
+    public Department put(@RequestBody @Valid Department department) {
         return departmentService.save(department);
     }
 

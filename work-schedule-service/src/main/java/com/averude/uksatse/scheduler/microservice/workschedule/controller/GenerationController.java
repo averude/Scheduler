@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RequestMapping("/generation")
 @RestController
 @RequiredArgsConstructor
@@ -21,7 +23,7 @@ public class GenerationController {
     @PreAuthorize("@departmentLevelSecurity.hasPermission(authentication, 'MAP3', #departmentId)")
     @PostMapping("/schedule/{departmentId}")
     public ResponseEntity<?> generate(@PathVariable Long departmentId,
-                                      @RequestBody GenerationDTO generationDTO) {
+                                      @RequestBody @Valid GenerationDTO generationDTO) {
         scheduleGenerationService.generate(
                 generationDTO.getShiftId(),
                 generationDTO.getFrom(),
@@ -35,7 +37,7 @@ public class GenerationController {
     @PreAuthorize("@departmentLevelSecurity.hasPermission(authentication, 'MAP3', #departmentId)")
     @PostMapping("/working_norm/{departmentId}")
     public void generateWorkingHoursNorm(@PathVariable Long departmentId,
-                                         @RequestBody GenerationDTO generationDTO) {
+                                         @RequestBody @Valid GenerationDTO generationDTO) {
         workingNormGenerationService.generateWorkingNorm(departmentId,
                 generationDTO.getShiftId(),
                 generationDTO.getFrom(),

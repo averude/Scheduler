@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RequestMapping("/day_types")
@@ -27,14 +28,14 @@ public class DayTypeController {
     @Logged
     @PreAuthorize("@enterpriseLevelSecurity.hasPermission(authentication, 'MAP6', #dayType)")
     @PostMapping
-    public DayType post(@RequestBody DayType dayType) {
+    public DayType post(@RequestBody @Valid DayType dayType) {
         return dayTypeService.save(dayType);
     }
 
     @Logged
     @PreAuthorize("@enterpriseLevelSecurity.hasPermission(authentication, 'MAP6', #dayType)")
     @PutMapping
-    public DayType put(@RequestBody DayType dayType) {
+    public DayType put(@RequestBody @Valid DayType dayType) {
         return dayTypeService.save(dayType);
     }
 

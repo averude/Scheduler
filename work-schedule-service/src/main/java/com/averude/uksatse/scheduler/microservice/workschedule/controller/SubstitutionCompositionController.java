@@ -20,14 +20,14 @@ public class SubstitutionCompositionController {
     @Logged
     @PreAuthorize("@departmentLevelSecurity.hasPermission(authentication, 'MAP3', #composition)")
     @PostMapping
-    public SubstitutionComposition post(@Valid @RequestBody SubstitutionComposition composition) {
+    public SubstitutionComposition post(@RequestBody @Valid SubstitutionComposition composition) {
         return substitutionCompositionService.save(composition);
     }
 
     @Logged
     @PreAuthorize("@departmentLevelSecurity.hasPermission(authentication, 'MAP3', #composition)")
     @PutMapping
-    public SubstitutionComposition put(@RequestBody SubstitutionComposition composition) {
+    public SubstitutionComposition put(@RequestBody @Valid SubstitutionComposition composition) {
         return substitutionCompositionService.save(composition);
     }
 
