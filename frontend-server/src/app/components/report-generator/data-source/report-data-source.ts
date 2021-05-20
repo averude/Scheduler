@@ -41,17 +41,19 @@ export class ReportDataSource {
     ];
 
     return forkJoin(sources).pipe(
-      map(([schedule, workingNorms, calendarDays,
+      map(([schedule, workingNorms, specialCalendarDates,
              summationDTO, dayTypes, shifts,
              positions, reportSheets]) => ({
-        schedule:     schedule,
-        workingNorms: workingNorms,
-        calendarDays: calendarDays,
-        summationDTO: summationDTO,
-        dayTypes:     dayTypes,
-        shifts:       shifts,
-        positions:    positions,
-        reportSheets: reportSheets
+        scheduleDTOs:   schedule,
+        workingNorms:   workingNorms,
+        summationDTOs:  summationDTO,
+        dayTypes:       dayTypes,
+        shifts:         shifts,
+        positions:      positions,
+        reportSheets:   reportSheets,
+        specialCalendarDates:   specialCalendarDates,
+        employees: null,
+        calendarDays: null
       }))
     );
   }
@@ -73,17 +75,19 @@ export class ReportDataSource {
     ];
 
     return forkJoin(sources).pipe(
-      map(([schedule, workingNorms, calendarDays,
+      map(([schedule, workingNorms, specialCalendarDates,
              summationDTO, dayTypes, shifts,
              positions, reportSheets]) => ({
-        schedule:     schedule,
-        workingNorms: workingNorms,
-        calendarDays: calendarDays,
-        summationDTO: summationDTO,
-        dayTypes:     dayTypes,
-        shifts:       shifts,
-        positions:    positions,
-        reportSheets: reportSheets
+        scheduleDTOs:   schedule,
+        workingNorms:   workingNorms,
+        summationDTOs:  summationDTO,
+        dayTypes:       dayTypes,
+        shifts:         shifts,
+        positions:      positions,
+        reportSheets:   reportSheets,
+        specialCalendarDates: specialCalendarDates,
+        employees: null,
+        calendarDays: null
       }))
     );
   }
