@@ -50,7 +50,7 @@ export abstract class AbstractReportDataCollector implements ReportDataCollector
                        positions: Position[],
                        summations: EmployeeWorkStatDTO[],
                        useReportLabel?: boolean) {
-    console.log('One');
+
     const groups: ReportGroup[] = shifts
       .sort((a, b) => a.id - b.id)
       .map(shift => ({
@@ -58,16 +58,16 @@ export abstract class AbstractReportDataCollector implements ReportDataCollector
         name: shift.name,
         rows: []
       }));
-    console.log('Two');
+
     for (let dto of schedule) {
       const shiftId = getMainShiftId(dto);
-      console.log(dto.parent);
+
       const positionIntervalsMap = this.intervalCreator.getEmployeePositionIntervals(
         moment.utc(dates[0].isoString),
         moment.utc(dates[dates.length - 1].isoString),
         dto.mainCompositions,
         dto.substitutionCompositions);
-      console.log(positionIntervalsMap);
+
       const rows: ReportRow[] = [];
 
       positionIntervalsMap.forEach((intervals, positionId) => {

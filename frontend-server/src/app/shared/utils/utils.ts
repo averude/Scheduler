@@ -38,7 +38,6 @@ export const parseDateOfEntities: OperatorFunction<any, any> =
 
 export function dateToISOString(date: Date): string {
   let isoDate = date.toISOString().split('T')[0];
-  console.log(isoDate);
   return isoDate;
 }
 
