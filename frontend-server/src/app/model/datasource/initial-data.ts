@@ -6,10 +6,10 @@ import { WorkingNorm } from "../working-norm";
 import { CalendarDay } from "../../lib/ngx-schedule-table/model/calendar-day";
 
 export class InitialData {
-  shifts: Shift[];
-  positions: Position[];
-  employees: Employee[];
-  scheduleDto: EmployeeScheduleDTO[];
+  shifts:       Shift[];
+  positions:    Position[];
+  employees:    Employee[];
+  scheduleDTOs: EmployeeScheduleDTO[];
   workingNorms: WorkingNorm[];
   calendarDays: CalendarDay[];
 }

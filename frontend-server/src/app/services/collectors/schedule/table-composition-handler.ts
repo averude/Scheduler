@@ -60,10 +60,10 @@ export class TableCompositionHandler {
       if (composition.id) {
         if (row.isSubstitution) {
           this.substitutionShiftCompositionService.delete(composition.id)
-            .subscribe(res => this.rowRemover.removeRow(groupData, row, composition, initData.scheduleDto));
+            .subscribe(res => this.rowRemover.removeRow(groupData, row, composition, initData.scheduleDTOs));
         } else {
           this.mainShiftCompositionService.delete(composition.id)
-            .subscribe(res => this.rowRemover.removeRow(groupData, row, composition, initData.scheduleDto));
+            .subscribe(res => this.rowRemover.removeRow(groupData, row, composition, initData.scheduleDTOs));
         }
       }
     });
@@ -100,9 +100,9 @@ export class TableCompositionHandler {
                     group: ScheduleRowGroup,
                     isSubstitution: boolean,
                     parentRow?: ScheduleRow) {
-    if (initData.scheduleDto && initData.calendarDays) {
+    if (initData.scheduleDTOs && initData.calendarDays) {
 
-      const dto   = binarySearch(initData.scheduleDto, (mid => mid.parent.id - composition.employeeId));
+      const dto   = binarySearch(initData.scheduleDTOs, (mid => mid.parent.id - composition.employeeId));
       const norm  = binarySearch(initData.workingNorms, (mid => mid.shiftId - group.id))?.hours || 0;
 
       if (isSubstitution) {
@@ -143,8 +143,8 @@ export class TableCompositionHandler {
       throw new Error("No row provided");
     }
 
-    if (initData.scheduleDto && initData.calendarDays) {
-      const dto = binarySearch(initData.scheduleDto, (mid => mid.parent.id - composition.employeeId));
+    if (initData.scheduleDTOs && initData.calendarDays) {
+      const dto = binarySearch(initData.scheduleDTOs, (mid => mid.parent.id - composition.employeeId));
 
       if (row.position.id !== composition.positionId) {
 

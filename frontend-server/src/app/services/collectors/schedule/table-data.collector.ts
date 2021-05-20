@@ -27,7 +27,7 @@ export class TableDataCollector {
         if (row.isSubstitution) {
           row.intervals = row.compositions.map(composition => convertCompositionToInterval(composition));
         } else {
-          const dto = binarySearch(initData.scheduleDto, (mid => mid.parent.id - row.id));
+          const dto = binarySearch(initData.scheduleDTOs, (mid => mid.parent.id - row.id));
           row.intervals = this.intervalCreator.getEmployeeShiftIntervalsByArr(row.compositions, dto.substitutionCompositions);
         }
 
@@ -57,7 +57,7 @@ export class TableDataCollector {
         return group;
       });
 
-    for (let dto of initialData.scheduleDto) {
+    for (let dto of initialData.scheduleDTOs) {
 
       this.rowProcessor.fillRows(initialData, dto, dto.mainCompositions, false,
         (composition => table.findRowGroup(composition.shiftId)),

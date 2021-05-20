@@ -22,7 +22,7 @@ export class ScheduleViewTableDataSource {
             daysInMonth[daysInMonth.length - 1].isoString)
             .pipe(
               map(schedule => {
-                initData.scheduleDto = schedule;
+                initData.scheduleDTOs = schedule;
                 return initData;
               })
             );

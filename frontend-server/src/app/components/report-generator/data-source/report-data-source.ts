@@ -10,7 +10,7 @@ import { WorkingNormService } from "../../../services/http/working-norm.service"
 import { forkJoin, Observable } from "rxjs";
 import { SummationMode } from "../../../model/dto/employee-work-stat-dto";
 import { map } from "rxjs/operators";
-import { ReportData } from "../model/report-data";
+import { ReportInitialData } from "../model/report-initial-data";
 
 @Injectable()
 export class ReportDataSource {
@@ -27,7 +27,7 @@ export class ReportDataSource {
   getForDepartment(enterpriseId: number,
                    departmentId: number,
                    from: string,
-                   to: string): Observable<ReportData> {
+                   to: string): Observable<ReportInitialData> {
     const sources: Observable<any>[] = [
       this.scheduleService.getAllByDepartmentId(departmentId, from, to),
       this.workingNormService.getAllByDepartmentId(departmentId, from, to),
@@ -60,7 +60,7 @@ export class ReportDataSource {
                departmentId:  number,
                shiftIds:      number[],
                from:          string,
-               to:            string): Observable<ReportData> {
+               to:            string): Observable<ReportInitialData> {
     const sources: Observable<any>[] = [
       this.scheduleService.getAllByShiftIds(shiftIds, from, to),
       this.workingNormService.getAllByDepartmentId(departmentId, from, to),

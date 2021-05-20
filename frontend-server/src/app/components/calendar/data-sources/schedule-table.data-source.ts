@@ -82,7 +82,7 @@ export class ScheduleTableDataSource {
 
                 return forkJoin(sources).pipe(
                   map(([schedule, workingNorm]) => {
-                    initData.scheduleDto = schedule;
+                    initData.scheduleDTOs = schedule;
                     initData.workingNorms = workingNorm.sort((a, b) => a.shiftId - b.shiftId);
                     return initData;
                   })

@@ -1,13 +1,11 @@
 import { ReportData, ReportGroup, ReportRow } from "../model/report-row";
 import { DayType } from "../../../model/day-type";
-import { Position } from "../../../model/position";
 import { EmployeeWorkStatDTO, SummationResult } from "../../../model/dto/employee-work-stat-dto";
 import { CalendarDay } from "../../../lib/ngx-schedule-table/model/calendar-day";
 import { ReportDataCollector } from "./report-data-collector";
 import { ReportCellData, ReportHeaderCell } from "../model/report-cell-data";
 import { SummationColumn, SummationType } from "../../../model/summation-column";
 import { EmployeeScheduleDTO } from "../../../model/dto/employee-schedule-dto";
-import { Shift } from "../../../model/shift";
 import { IntervalCreator } from "../../../services/creator/interval-creator.service";
 import * as moment from "moment";
 import { binarySearch } from "../../../shared/utils/collection-utils";
@@ -17,6 +15,7 @@ import { getMainShiftId } from "../../../services/utils";
 import { WorkDay } from "../../../model/workday";
 import { CellEnabledSetter } from "../../../services/collectors/schedule/cell-enabled-setter";
 import { CellCollector } from "../../../services/collectors/cell-collector";
+import { ReportInitialData } from "../model/report-initial-data";
 
 export abstract class AbstractReportDataCollector implements ReportDataCollector {
 
@@ -26,32 +25,22 @@ export abstract class AbstractReportDataCollector implements ReportDataCollector
               private cellEnabledSetter: CellEnabledSetter,
               private cellCollector: CellCollector) {}
 
-  collect(calendarDays: CalendarDay[],
-          dayTypes: DayType[],
-          shifts: Shift[],
-          positions: Position[],
-          schedule: EmployeeScheduleDTO[],
-          summations: EmployeeWorkStatDTO[],
+  collect(initialData: ReportInitialData,
           summationColumns: SummationColumn[],
-          useReportLabel?: boolean): ReportData {
+          useReportLabel: boolean) {
     const reportData = new ReportData();
-    reportData.headerData = this.getHeaders(calendarDays, summationColumns);
-    reportData.tableData = this.collectGroup(shifts, schedule, calendarDays, dayTypes, positions, summations, useReportLabel);
+    reportData.headerData = this.getHeaders(initialData.calendarDays, summationColumns);
+    reportData.tableData = this.collectGroup(initialData, useReportLabel);
 
     this.afterDataInsert(reportData);
 
     return reportData;
   }
 
-  private collectGroup(shifts: Shift[],
-                       schedule: EmployeeScheduleDTO[],
-                       dates: CalendarDay[],
-                       dayTypes: DayType[],
-                       positions: Position[],
-                       summations: EmployeeWorkStatDTO[],
+  private collectGroup(initialData: ReportInitialData,
                        useReportLabel?: boolean) {
 
-    const groups: ReportGroup[] = shifts
+    const groups: ReportGroup[] = initialData.shifts
       .sort((a, b) => a.id - b.id)
       .map(shift => ({
         id: shift.id,
@@ -59,12 +48,12 @@ export abstract class AbstractReportDataCollector implements ReportDataCollector
         rows: []
       }));
 
-    for (let dto of schedule) {
+    for (let dto of initialData.scheduleDTOs) {
       const shiftId = getMainShiftId(dto);
 
       const positionIntervalsMap = this.intervalCreator.getEmployeePositionIntervals(
-        moment.utc(dates[0].isoString),
-        moment.utc(dates[dates.length - 1].isoString),
+        moment.utc(initialData.calendarDays[0].isoString),
+        moment.utc(initialData.calendarDays[initialData.calendarDays.length - 1].isoString),
         dto.mainCompositions,
         dto.substitutionCompositions);
 
@@ -72,9 +61,10 @@ export abstract class AbstractReportDataCollector implements ReportDataCollector
 
       positionIntervalsMap.forEach((intervals, positionId) => {
         const reportRowData = new ReportRow();
-        const positionName = binarySearch(positions, (mid => mid.id - positionId))?.shortName;
-        reportRowData.reportCellData = this
-          .collectRowCellData(dto, dates, dayTypes, positionName, this.getSummationResults(summations, dto.parent.id, positionId), useReportLabel, intervals);
+        const positionName = binarySearch(initialData.positions, (mid => mid.id - positionId))?.shortName;
+        reportRowData.reportCellData = this.collectRowCellData(dto,
+          initialData.calendarDays, initialData.dayTypes, positionName,
+          this.getSummationResults(initialData.summationDTOs, dto.parent.id, positionId), useReportLabel, intervals);
         rows.push(reportRowData);
       });
 

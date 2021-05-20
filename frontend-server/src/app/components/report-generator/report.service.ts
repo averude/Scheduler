@@ -1,5 +1,4 @@
 import { Injectable } from "@angular/core";
-import { ScheduleTablePaginationStrategy } from "../../shared/paginators/pagination-strategy/schedule-table-pagination-strategy";
 import { Observable } from "rxjs";
 import { mergeMap } from "rxjs/operators";
 import { DecorationData } from "./model/decoration-data";
@@ -9,19 +8,16 @@ import { ReportServiceConfig } from "./config/report-service-config";
 import { ReportGenerator } from "./report-generator";
 import { StatisticsColumnCompositor } from "../../shared/compositor/statistics-column-compositor";
 import { ReportOptions } from "./model/report-options";
-import { ReportData } from "./model/report-data";
-import { Moment } from "moment";
+import { ReportInitialData } from "./model/report-initial-data";
 
 @Injectable()
 export class ReportService {
 
-  constructor(private paginationStrategy: ScheduleTablePaginationStrategy,
-              private reportGenerator: ReportGenerator,
+  constructor(private reportGenerator: ReportGenerator,
               private statisticsColumnCompositor: StatisticsColumnCompositor,
               private config: ReportServiceConfig){}
 
-  generate(date: Moment,
-           reportDataObservable: Observable<ReportData>,
+  generate(reportDataObservable: Observable<ReportInitialData>,
            decorationData: DecorationData,
            reportType: string,
            reportOptions?: ReportOptions,
@@ -38,11 +34,9 @@ export class ReportService {
     if (reportDataCollector && reportCreator && reportDecorator) {
 
       return reportDataObservable.pipe(mergeMap(data => {
-        const daysInMonth = this.paginationStrategy.calcDaysInMonth(date, data.calendarDays);
-        this.statisticsColumnCompositor.composeResults(data.summationDTO, summationColumns, data.workingNorms);
+        this.statisticsColumnCompositor.composeResults(data.summationDTOs, summationColumns, data.workingNorms);
 
-        const collectedData = reportDataCollector.collect(daysInMonth, data.dayTypes, data.shifts,
-          data.positions, data.schedule, data.summationDTO, summationColumns, reportOptions.useReportLabel);
+        const collectedData = reportDataCollector.collect(data, summationColumns, reportOptions.useReportLabel);
         collectedData.decorationData = decorationData;
 
         return this.reportGenerator

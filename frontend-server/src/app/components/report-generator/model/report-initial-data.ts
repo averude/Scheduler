@@ -6,14 +6,16 @@ import { DayType } from "../../../model/day-type";
 import { Shift } from "../../../model/shift";
 import { Position } from "../../../model/position";
 import { ReportSheetDTO } from "../../../model/dto/report-sheet-dto";
+import { InitialData } from "../../../model/datasource/initial-data";
 
-export class ReportData {
-  schedule:     EmployeeScheduleDTO[];
-  workingNorms: WorkingNorm[];
-  calendarDays: SpecialCalendarDate[];
-  summationDTO: EmployeeWorkStatDTO[];
-  dayTypes:     DayType[];
-  shifts:       Shift[];
-  positions:    Position[];
-  reportSheets: ReportSheetDTO[];
+export class ReportInitialData extends InitialData {
+  shifts:         Shift[];
+  positions:      Position[];
+  scheduleDTOs:   EmployeeScheduleDTO[];
+  workingNorms:   WorkingNorm[];
+  summationDTOs:  EmployeeWorkStatDTO[];
+  dayTypes:       DayType[];
+  reportSheets:   ReportSheetDTO[];
+
+  specialCalendarDates: SpecialCalendarDate[];
 }
