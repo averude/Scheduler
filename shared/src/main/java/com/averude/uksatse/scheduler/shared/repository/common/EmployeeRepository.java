@@ -14,4 +14,8 @@ public interface EmployeeRepository extends IByDepartmentIdRepository<Employee, 
 
     @EntityGraph(value = "graph.Employee.position")
     List<Employee> findAllByDepartmentIdOrderById(Long departmentId);
+
+    @Override
+    @EntityGraph(value = "graph.Employee.position")
+    List<Employee> findAllById(Iterable<Long> ids);
 }
