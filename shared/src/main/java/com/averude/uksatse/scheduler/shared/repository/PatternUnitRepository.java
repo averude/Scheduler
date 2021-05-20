@@ -7,8 +7,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface PatternUnitRepository extends JpaRepository<PatternUnit, Long> {
+
     @EntityGraph(value = "graph.PatternUnit.dayType")
-    List<PatternUnit> findAllByPatternIdOrderByOrderId(long patternId);
+    List<PatternUnit> findAllByPatternIdInOrderByPatternIdAscOrderIdAsc(List<Long> patternIds);
 
     void deleteAllByPatternId(Long patternId);
     void deleteAllByPatternIdAndIdIsNotIn(Long patternId, List<Long> ids);

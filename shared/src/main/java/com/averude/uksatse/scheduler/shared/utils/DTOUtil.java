@@ -1,10 +1,8 @@
 package com.averude.uksatse.scheduler.shared.utils;
 
 import com.averude.uksatse.scheduler.core.model.dto.EmployeeScheduleDTO;
-import com.averude.uksatse.scheduler.core.model.entity.Employee;
-import com.averude.uksatse.scheduler.core.model.entity.MainComposition;
-import com.averude.uksatse.scheduler.core.model.entity.SubstitutionComposition;
-import com.averude.uksatse.scheduler.core.model.entity.WorkDay;
+import com.averude.uksatse.scheduler.core.model.dto.ShiftPatternDTO;
+import com.averude.uksatse.scheduler.core.model.entity.*;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -13,7 +11,33 @@ import java.util.List;
 import java.util.function.BiFunction;
 
 @Component
-public class ScheduleDTOUtil {
+public class DTOUtil {
+
+    public List<ShiftPatternDTO> createShiftPatternDTOList(List<ShiftPattern> patterns,
+                                                           List<PatternUnit> patternUnits,
+                                                           List<ShiftPatternGenerationRule> generationRules) {
+        var result = new ArrayList<ShiftPatternDTO>();
+
+        int lastUnitIndex = 0;
+        int lastRuleIndex = 0;
+
+        for (var pattern : patterns) {
+
+            var dto = new ShiftPatternDTO(pattern, new ArrayList<>(), new ArrayList<>());
+
+            lastUnitIndex = sequentialFill(pattern, patternUnits,
+                    dto.getCollection(),lastUnitIndex,
+                    ((shiftPattern, patternUnit) -> shiftPattern.getId() - patternUnit.getPatternId()));
+
+            lastRuleIndex = sequentialFill(pattern, generationRules,
+                    dto.getGenerationRules(), lastRuleIndex,
+                    ((shiftPattern, patternUnit) -> shiftPattern.getId() - patternUnit.getShiftPatternId()));
+
+            result.add(dto);
+        }
+
+        return result;
+    }
 
     public List<EmployeeScheduleDTO> createEmployeeScheduleDTOList(List<Employee> employees,
                                                                    List<WorkDay> schedule) {
@@ -74,14 +98,14 @@ public class ScheduleDTOUtil {
                                         BiFunction<T1, T2, Long> comparator) {
         int collectionLastIndex = startIndex;
         for (int i = collectionLastIndex; i < src.size(); i++) {
-            var composition = src.get(i);
+            var srcValue = src.get(i);
 
-            if (comparator.apply(t1, composition) == 0) {
-                dest.add(composition);
+            if (comparator.apply(t1, srcValue) == 0) {
+                dest.add(srcValue);
                 continue;
             }
 
-            if (comparator.apply(t1, composition) < 0) {
+            if (comparator.apply(t1, srcValue) < 0) {
                 collectionLastIndex = i;
                 break;
             }

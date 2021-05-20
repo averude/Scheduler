@@ -29,6 +29,7 @@ import { binarySearch } from "../../../../../shared/utils/collection-utils";
 import { CalendarDay } from "../../../../../lib/ngx-schedule-table/model/calendar-day";
 import { TableManager } from "../../../../../services/collectors/schedule/table-manager";
 import { InitialData } from "../../../../../model/datasource/initial-data";
+import { DayType } from "../../../../../model/day-type";
 
 @Component({
   selector: 'app-schedule-table-context-menu',
@@ -50,6 +51,12 @@ export class ScheduleTableContextMenuComponent implements OnInit, OnDestroy {
 
   @Input() enterpriseId: number;
   @Input() departmentId: number;
+
+  @Input() set dayTypes(dayTypes: DayType[]) {
+    this.serviceDayTypes = dayTypes
+      .filter(dayType => dayType.usePreviousValue)
+      .map(dayType => ({dayType: dayType} as DepartmentDayType));
+  }
 
   patternDTOs:         BasicDTO<ShiftPattern, PatternUnit>[]   = [];
   departmentDayTypes:  DepartmentDayType[] = [];
@@ -80,16 +87,12 @@ export class ScheduleTableContextMenuComponent implements OnInit, OnDestroy {
     forkJoin([
       this.shiftPatternDtoService.getAllByDepartmentId(this.departmentId),
       this.departmentDayTypeService.getAllByDepartmentId(this.departmentId),
-      this.dayTypeService.getAllByEnterpriseId(this.enterpriseId)
     ]).subscribe(values => {
       this.patternDTOs = values[0];
       this.departmentDayTypes = values[1];
       this.noServiceDepartmentDayTypes = values[1]
         .filter(departmentDayType => !departmentDayType.dayType.usePreviousValue);
 
-      this.serviceDayTypes = values[2]
-        .filter(dayType => dayType.usePreviousValue)
-        .map(dayType => ({dayType: dayType} as DepartmentDayType));
       this.cd.markForCheck();
     });
 

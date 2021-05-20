@@ -51,7 +51,7 @@ export class ScheduleViewTableComponent implements OnInit, AfterViewInit, OnDest
               private paginationService: PaginationService,
               private tableRenderer: TableRenderer,
               private dataSource: ScheduleViewTableDataSource,
-              private tableDataCollector: ScheduleViewDataCollector, // rewrite
+              private tableDataCollector: ScheduleViewDataCollector,
               public utility: SchedulerUtility) { }
 
   ngOnInit(): void {
@@ -76,7 +76,7 @@ export class ScheduleViewTableComponent implements OnInit, AfterViewInit, OnDest
             if (userAccount.authority === UserAccountAuthority.DEPARTMENT_ADMIN
               || userAccount.authority === UserAccountAuthority.ENTERPRISE_ADMIN) {
 
-              return this.dataSource.byViewId(this.viewId)
+              return this.dataSource.byViewId(this.enterpriseId, this.viewId)
                 .pipe(
                   map(initData => {
                     this.initData = initData;

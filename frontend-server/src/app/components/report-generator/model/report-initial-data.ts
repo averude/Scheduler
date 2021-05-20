@@ -9,12 +9,12 @@ import { ReportSheetDTO } from "../../../model/dto/report-sheet-dto";
 import { InitialData } from "../../../model/datasource/initial-data";
 
 export class ReportInitialData extends InitialData {
+  dayTypes:       DayType[];
   shifts:         Shift[];
   positions:      Position[];
   scheduleDTOs:   EmployeeScheduleDTO[];
   workingNorms:   WorkingNorm[];
   summationDTOs:  EmployeeWorkStatDTO[];
-  dayTypes:       DayType[];
   reportSheets:   ReportSheetDTO[];
 
   specialCalendarDates: SpecialCalendarDate[];

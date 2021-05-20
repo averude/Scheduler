@@ -2,27 +2,15 @@ import { TableCellComponent } from "../table-cell/table-cell.component";
 import { DayType } from "../../../model/day-type";
 import { WorkDay } from "../../../model/workday";
 import { calculateHoursByHasTime, getWorkDayDayTypeId } from "../../../shared/utils/utils";
-import { DayTypeService } from "../../../services/http/day-type.service";
 import { Injectable } from "@angular/core";
-import { AuthService } from "../../../services/http/auth.service";
 
 @Injectable()
 export class ScheduleCellLabelPipe {
 
-  private dayTypeMap: Map<number, DayType>;
+  constructor() {}
 
-  constructor(private authService: AuthService,
-              private dayTypeService: DayTypeService) {
-    const enterpriseId = authService.currentUserAccount.enterpriseId;
-
-    this.dayTypeService.getAllByEnterpriseId(enterpriseId)
-      .subscribe(dayTypes => {
-        this.dayTypeMap = new Map<number, DayType>();
-        dayTypes.forEach(dayType => this.dayTypeMap.set(dayType.id, dayType));
-      });
-  }
-
-  setLabel(cell: TableCellComponent): void {
+  setLabel(cell: TableCellComponent,
+           dayTypeMap: Map<number, DayType>): void {
     if (cell) {
       if (!cell.cellData.enabled) {
         cell.label = 'X';
@@ -30,10 +18,10 @@ export class ScheduleCellLabelPipe {
       }
       if (cell.value) {
         let dayTypeId = getWorkDayDayTypeId(cell.value);
-        if (cell.cellState === 1 || !dayTypeId || !this.dayTypeMap) {
-          this.setHoursWithColor(cell, dayTypeId);
+        if (cell.cellState === 1 || !dayTypeId || !dayTypeMap) {
+          this.setHoursWithColor(cell, dayTypeId, dayTypeMap);
         } else {
-          this.setLabelWithColor(cell, dayTypeId);
+          this.setLabelWithColor(cell, dayTypeId, dayTypeMap);
         }
       } else {
         cell.label = '-';
@@ -41,19 +29,23 @@ export class ScheduleCellLabelPipe {
     }
   }
 
-  private setHoursWithColor(cell: TableCellComponent, dayTypeId: number) {
+  private setHoursWithColor(cell: TableCellComponent,
+                            dayTypeId: number,
+                            dayTypeMap: Map<number, DayType>) {
     cell.label = this.calcHours(cell.value);
-    if (this.dayTypeMap) {
-      let dayType = this.dayTypeMap.get(dayTypeId);
+    if (dayTypeMap) {
+      let dayType = dayTypeMap.get(dayTypeId);
       if (dayType) {
         cell.labelColor = dayType.dayTypeGroup.color;
       }
     }
   }
 
-  private setLabelWithColor(cell: TableCellComponent, dayTypeId: number) {
-    if (this.dayTypeMap) {
-      let dayType = this.dayTypeMap.get(dayTypeId);
+  private setLabelWithColor(cell: TableCellComponent,
+                            dayTypeId: number,
+                            dayTypeMap: Map<number, DayType>) {
+    if (dayTypeMap) {
+      let dayType = dayTypeMap.get(dayTypeId);
       if (dayType) {
         cell.labelColor = dayType.dayTypeGroup.color;
 

@@ -52,9 +52,7 @@ export class ReportDataSource {
         positions:      positions,
         reportSheets:   reportSheets,
         specialCalendarDates:   specialCalendarDates,
-        employees: null,
-        calendarDays: null
-      }))
+      } as ReportInitialData))
     );
   }
 
@@ -85,10 +83,8 @@ export class ReportDataSource {
         shifts:         shifts,
         positions:      positions,
         reportSheets:   reportSheets,
-        specialCalendarDates: specialCalendarDates,
-        employees: null,
-        calendarDays: null
-      }))
+        specialCalendarDates: specialCalendarDates
+      } as ReportInitialData))
     );
   }
 

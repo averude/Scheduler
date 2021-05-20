@@ -12,6 +12,7 @@ import { TableStateService } from "../../../lib/ngx-schedule-table/service/table
 import { Cell } from "../../../lib/ngx-schedule-table/model/data/cell";
 import { Subscription } from "rxjs";
 import { ScheduleCellLabelPipe } from "../utils/schedule-cell-label-pipe";
+import { DayType } from "../../../model/day-type";
 
 @Component({
   selector: 'app-table-cell',
@@ -36,6 +37,8 @@ export class TableCellComponent implements OnInit, OnChanges, OnDestroy {
   @Input() cellData: Cell;
 
   @Input() labelColor = "transparent";
+
+  @Input() dayTypeMap: Map<number, DayType>;
 
   cellState: number;
   label: string | number = '-';
@@ -63,7 +66,7 @@ export class TableCellComponent implements OnInit, OnChanges, OnDestroy {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['value']) {
       this.labelColor = "transparent";
-      this.cellLabelSetter.setLabel(this);
+      this.cellLabelSetter.setLabel(this, this.dayTypeMap);
     }
   }
 
@@ -74,7 +77,7 @@ export class TableCellComponent implements OnInit, OnChanges, OnDestroy {
 
   refreshLabel() {
     this.labelColor = "transparent";
-    this.cellLabelSetter.setLabel(this);
+    this.cellLabelSetter.setLabel(this, this.dayTypeMap);
     this.cd.markForCheck();
   }
 }

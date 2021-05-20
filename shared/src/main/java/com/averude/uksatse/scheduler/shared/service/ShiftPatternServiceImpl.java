@@ -9,16 +9,21 @@ import com.averude.uksatse.scheduler.shared.repository.ShiftPatternGenerationRul
 import com.averude.uksatse.scheduler.shared.repository.ShiftPatternRepository;
 import com.averude.uksatse.scheduler.shared.service.base.AService;
 import com.averude.uksatse.scheduler.shared.utils.BasicDtoSavingUtil;
+import com.averude.uksatse.scheduler.shared.utils.DTOUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 @Service
 public class ShiftPatternServiceImpl
         extends AService<ShiftPattern, Long> implements ShiftPatternService {
+
+    private final DTOUtil dtoUtil;
 
     private final ShiftPatternRepository shiftPatternRepository;
     private final PatternUnitRepository patternUnitRepository;
@@ -26,11 +31,13 @@ public class ShiftPatternServiceImpl
     private final BasicDtoSavingUtil    basicDtoSavingUtil;
 
     @Autowired
-    public ShiftPatternServiceImpl(ShiftPatternRepository shiftPatternRepository,
+    public ShiftPatternServiceImpl(DTOUtil dtoUtil,
+                                   ShiftPatternRepository shiftPatternRepository,
                                    PatternUnitRepository patternUnitRepository,
                                    ShiftPatternGenerationRuleRepository shiftPatternGenerationRuleRepository,
                                    BasicDtoSavingUtil basicDtoSavingUtil) {
         super(shiftPatternRepository);
+        this.dtoUtil = dtoUtil;
         this.shiftPatternRepository = shiftPatternRepository;
         this.patternUnitRepository = patternUnitRepository;
         this.shiftPatternGenerationRuleRepository = shiftPatternGenerationRuleRepository;
@@ -40,7 +47,10 @@ public class ShiftPatternServiceImpl
     @Override
     @Transactional
     public List<? extends BasicDto<ShiftPattern, PatternUnit>> findAllDtoByDepartmentId(Long departmentId) {
-        var patterns = shiftPatternRepository.findAllByDepartmentId(departmentId);
+        var patterns = shiftPatternRepository.findAllByDepartmentId(departmentId)
+                .stream()
+                .sorted(Comparator.comparing(ShiftPattern::getId))
+                .collect(toList());
         return transformPatternsList(patterns);
     }
 
@@ -88,15 +98,11 @@ public class ShiftPatternServiceImpl
     }
 
     private List<ShiftPatternDTO> transformPatternsList(List<ShiftPattern> patterns) {
-        return patterns
-                .stream()
-                .map(shiftPattern -> {
-                    var dto = new ShiftPatternDTO();
-                    dto.setParent(shiftPattern);
-                    dto.setCollection(patternUnitRepository.findAllByPatternIdOrderByOrderId(shiftPattern.getId()));
-                    dto.setGenerationRules(shiftPatternGenerationRuleRepository.findAllByShiftPatternIdOrderByOrderIdAsc(shiftPattern.getId()));
-                    return dto;
-                })
-                .collect(Collectors.toList());
+
+        var patternIds = patterns.stream().map(ShiftPattern::getId).collect(toList());
+        var patternUnits = patternUnitRepository.findAllByPatternIdInOrderByPatternIdAscOrderIdAsc(patternIds);
+        var generationRules = shiftPatternGenerationRuleRepository.findAllByShiftPatternIdInOrderByShiftPatternIdAscOrderIdAsc(patternIds);
+
+        return dtoUtil.createShiftPatternDTOList(patterns, patternUnits, generationRules);
     }
 }

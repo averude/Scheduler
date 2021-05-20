@@ -12,5 +12,5 @@ public interface ShiftPatternGenerationRuleRepository extends JpaRepository<Shif
     void deleteAllByShiftPatternId(Long shiftPatternId);
 
     @EntityGraph(value = "graph.ShiftPatternGenerationRule.useDepartmentDayType")
-    List<ShiftPatternGenerationRule> findAllByShiftPatternIdOrderByOrderIdAsc(Long shiftPatternId);
+    List<ShiftPatternGenerationRule> findAllByShiftPatternIdInOrderByShiftPatternIdAscOrderIdAsc(List<Long> shiftPatternIds);
 }
