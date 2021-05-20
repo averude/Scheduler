@@ -23,7 +23,7 @@ public class EmployeeServiceImpl
 
     @Override
     @Transactional
-    public List<Employee> getAllByDepartmentId(Long departmentId) {
+    public List<Employee> findAllByDepartmentId(Long departmentId) {
         return this.employeeRepository.findAllByDepartmentId(departmentId);
     }
 }

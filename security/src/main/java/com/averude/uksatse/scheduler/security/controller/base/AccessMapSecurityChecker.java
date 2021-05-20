@@ -1,20 +1,20 @@
 package com.averude.uksatse.scheduler.security.controller.base;
 
 import com.averude.uksatse.scheduler.security.model.entity.UserAccount;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.List;
 
-public abstract class AbstractLevelSecurity {
+@Component
+@RequiredArgsConstructor
+public class AccessMapSecurityChecker {
 
     private final HashMap<String, HashMap<String, List<String>>> accessMap;
 
-    public AbstractLevelSecurity(HashMap<String, HashMap<String, List<String>>> accessMap) {
-        this.accessMap = accessMap;
-    }
-
-    protected boolean isInvalid(Authentication authentication, String mapName, Long id) {
+    public boolean isInvalid(Authentication authentication, String mapName, Long id) {
         return id == null || id <= 0
                 || authentication == null || authentication.getPrincipal() == null
                 || mapName == null || mapName.isBlank();

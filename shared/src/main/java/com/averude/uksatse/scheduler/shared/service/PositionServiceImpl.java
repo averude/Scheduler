@@ -23,7 +23,7 @@ public class PositionServiceImpl
 
     @Override
     @Transactional
-    public List<Position> getAllByDepartmentId(Long departmentId) {
+    public List<Position> findAllByDepartmentId(Long departmentId) {
         return positionRepository.findAllByDepartmentId(departmentId);
     }
 }

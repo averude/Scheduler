@@ -6,7 +6,6 @@ import {
   UserAccountRole
 } from "../../../../model/dto/user-account-dto";
 import { FormBuilder, Validators } from "@angular/forms";
-import { AuthService } from "../../../../services/http/auth.service";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { Department } from "../../../../model/department";
 import { DialogBaseComponent } from "../../../../shared/abstract-components/dialog-base/dialog-base.component";
@@ -26,7 +25,6 @@ export class EditDepartmentUserAccountDialogComponent extends DialogBaseComponen
   departments: Department[] = [];
 
   constructor(private fb: FormBuilder,
-              private authService: AuthService,
               private dialogRef: MatDialogRef<EditDepartmentUserAccountDialogComponent>,
               @Inject(MAT_DIALOG_DATA) data) {
     super(data.dto, dialogRef);

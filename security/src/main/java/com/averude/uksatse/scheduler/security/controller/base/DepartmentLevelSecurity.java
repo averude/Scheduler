@@ -5,12 +5,12 @@ import com.averude.uksatse.scheduler.core.interfaces.entity.HasShiftId;
 import com.averude.uksatse.scheduler.core.util.CollectionUtils;
 import com.averude.uksatse.scheduler.security.model.entity.UserAccount;
 import com.averude.uksatse.scheduler.shared.repository.common.DepartmentRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,15 +20,11 @@ import static java.util.stream.Collectors.toList;
 
 @Slf4j
 @Component
-public class DepartmentLevelSecurity extends AbstractLevelSecurity {
+@RequiredArgsConstructor
+public class DepartmentLevelSecurity {
 
-    private final DepartmentRepository departmentRepository;
-
-    public DepartmentLevelSecurity(HashMap<String, HashMap<String, List<String>>> accessMap,
-                                   DepartmentRepository departmentRepository) {
-        super(accessMap);
-        this.departmentRepository = departmentRepository;
-    }
+    private final DepartmentRepository      departmentRepository;
+    private final AccessMapSecurityChecker  accessMapSecurityChecker;
 
     public boolean hasShiftsPermission(Authentication authentication,
                                        String mapName,
@@ -36,7 +32,7 @@ public class DepartmentLevelSecurity extends AbstractLevelSecurity {
         var account = getUserAccount(authentication);
         var accountShifts = account.getAccountShifts();
 
-        return checkAccess(account, mapName) && containsShifts(shiftIds, accountShifts);
+        return accessMapSecurityChecker.checkAccess(account, mapName) && containsShifts(shiftIds, accountShifts);
     }
 
     public boolean containsShifts(List<Long> shiftIds,
@@ -48,13 +44,13 @@ public class DepartmentLevelSecurity extends AbstractLevelSecurity {
     public boolean hasPermission(Authentication authentication,
                                  String mapName,
                                  Long departmentId) {
-        if (isInvalid(authentication, mapName, departmentId)) {
+        if (accessMapSecurityChecker.isInvalid(authentication, mapName, departmentId)) {
             return false;
         }
 
         var account = getUserAccount(authentication);
 
-        return checkAccess(account, mapName) && checkDepartmentId(account, departmentId);
+        return accessMapSecurityChecker.checkAccess(account, mapName) && checkDepartmentId(account, departmentId);
     }
 
     public boolean hasPermission(Authentication authentication,
@@ -109,7 +105,7 @@ public class DepartmentLevelSecurity extends AbstractLevelSecurity {
 
         var account = getUserAccount(authentication);
 
-        return checkAccess(account, mapName) && departmentIds.stream()
+        return accessMapSecurityChecker.checkAccess(account, mapName) && departmentIds.stream()
                 .allMatch(departmentId -> checkDepartmentId(account, departmentId));
     }
 }

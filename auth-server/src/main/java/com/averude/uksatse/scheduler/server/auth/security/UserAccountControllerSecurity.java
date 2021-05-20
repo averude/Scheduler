@@ -1,6 +1,7 @@
 package com.averude.uksatse.scheduler.server.auth.security;
 
 import com.averude.uksatse.scheduler.core.util.CollectionUtils;
+import com.averude.uksatse.scheduler.security.controller.base.AccessMapSecurityChecker;
 import com.averude.uksatse.scheduler.security.controller.base.DepartmentLevelSecurity;
 import com.averude.uksatse.scheduler.security.model.dto.AccountDTO;
 import com.averude.uksatse.scheduler.security.model.entity.UserAccount;
@@ -23,6 +24,7 @@ public class UserAccountControllerSecurity {
     private final UserAccountRepository     userAccountRepository;
     private final ShiftRepository           shiftRepository;
     private final DepartmentLevelSecurity   departmentLevelSecurity;
+    private final AccessMapSecurityChecker  accessMapSecurityChecker;
     private final TransactionTemplate       transactionTemplate;
 
     public boolean canSaveShiftAccount(Authentication authentication, String mapName, AccountDTO dto){
@@ -45,7 +47,7 @@ public class UserAccountControllerSecurity {
                                         String mapName,
                                         Long accountId) {
         var originator = getUserAccount(authentication);
-        if (departmentLevelSecurity.checkAccess(originator, mapName)) {
+        if (accessMapSecurityChecker.checkAccess(originator, mapName)) {
 
             Function<UserAccount, Boolean> function = null;
 

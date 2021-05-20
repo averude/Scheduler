@@ -24,7 +24,7 @@ public class DepartmentDayTypeController {
     @PreAuthorize("@departmentLevelSecurity.hasPermission(authentication, 'MAP2', #departmentId)")
     @GetMapping("/departments/{departmentId}")
     public List<DepartmentDayType> getAllByDepartmentId(@PathVariable Long departmentId) {
-        return departmentDayTypeService.getAllByDepartmentId(departmentId);
+        return departmentDayTypeService.findAllByDepartmentId(departmentId);
     }
 
     @Logged

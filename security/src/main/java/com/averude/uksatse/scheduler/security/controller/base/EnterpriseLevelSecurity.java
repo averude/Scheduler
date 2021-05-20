@@ -2,32 +2,29 @@ package com.averude.uksatse.scheduler.security.controller.base;
 
 import com.averude.uksatse.scheduler.core.interfaces.entity.HasEnterpriseId;
 import com.averude.uksatse.scheduler.security.model.entity.UserAccount;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
-
-import java.util.HashMap;
-import java.util.List;
 
 import static com.averude.uksatse.scheduler.security.authority.Authorities.*;
 import static com.averude.uksatse.scheduler.security.details.AccountUtils.getUserAccount;
 
 @Slf4j
 @Component
-public class EnterpriseLevelSecurity extends AbstractLevelSecurity {
+@RequiredArgsConstructor
+public class EnterpriseLevelSecurity {
 
-    public EnterpriseLevelSecurity(HashMap<String, HashMap<String, List<String>>> accessMap) {
-        super(accessMap);
-    }
+    private final AccessMapSecurityChecker accessMapSecurityChecker;
 
     public boolean hasPermission(Authentication authentication, String mapName, Long enterpriseId) {
-        if (isInvalid(authentication, mapName, enterpriseId)) {
+        if (accessMapSecurityChecker.isInvalid(authentication, mapName, enterpriseId)) {
             return false;
         }
 
         var account = getUserAccount(authentication);
 
-        return checkAccess(account, mapName) && checkEnterpriseId(account, enterpriseId);
+        return accessMapSecurityChecker.checkAccess(account, mapName) && checkEnterpriseId(account, enterpriseId);
     }
 
     public boolean hasPermission(Authentication authentication, String mapName, HasEnterpriseId hasEnterpriseId) {

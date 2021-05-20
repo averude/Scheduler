@@ -1,6 +1,7 @@
 package com.averude.uksatse.scheduler.shared.service.base;
 
 import com.averude.uksatse.scheduler.core.interfaces.service.IByEnterpriseIdDtoService;
+import com.averude.uksatse.scheduler.core.interfaces.service.IByEnterpriseIdService;
 import com.averude.uksatse.scheduler.core.interfaces.service.IDtoService;
 import com.averude.uksatse.scheduler.core.model.dto.BasicDto;
 import com.averude.uksatse.scheduler.shared.repository.interfaces.IByEnterpriseIdRepository;
@@ -13,6 +14,7 @@ import java.util.List;
 public abstract class AByEnterpriseIdDtoService<P extends Serializable, C extends Serializable, ID>
         extends AService<P, ID>
         implements IByEnterpriseIdDtoService<P, C, ID>,
+        IByEnterpriseIdService<P, ID>,
         IDtoService<P, C, ID> {
 
     private IByEnterpriseIdRepository<P, ID>    parentRepository;

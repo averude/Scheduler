@@ -4,7 +4,6 @@ import { BasicDTO } from "../../model/dto/basic-dto";
 import { SummationColumn } from "../../model/summation-column";
 import { SummationColumnDayTypeRange } from "../../model/summation-column-day-type-range";
 import { CUDService } from "./interface/cud-service";
-import { AuthService } from "./auth.service";
 import { HttpClient } from "@angular/common/http";
 import { RestConfig } from "../../rest.config";
 import { Observable } from "rxjs";
@@ -14,8 +13,7 @@ export class SummationColumnDtoService
   extends ACrudService<BasicDTO<SummationColumn, SummationColumnDayTypeRange>>
   implements CUDService<BasicDTO<SummationColumn, SummationColumnDayTypeRange>> {
 
-  constructor(private authService: AuthService,
-              http: HttpClient,
+  constructor(http: HttpClient,
               private config: RestConfig) {
     super(`${config.baseUrl}/summation_columns/dto`, http);
   }

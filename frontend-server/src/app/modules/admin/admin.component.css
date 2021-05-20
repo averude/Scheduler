@@ -41,6 +41,14 @@
   margin: 1em 2vw;
 }
 
+.back-button {
+  color: cornflowerblue !important;
+}
+
+.logout-button {
+  color: red !important;
+}
+
 .sidenav-elements-container > button,
 .buttons-container > button {
   font-family: MuseoSansRegular, sans-serif;

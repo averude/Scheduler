@@ -24,7 +24,7 @@ public class PositionController {
     @PreAuthorize("@departmentLevelSecurity.hasPermission(authentication, 'MAP2', #departmentId)")
     @GetMapping("/departments/{departmentId}")
     public List<Position> findAllByDepartmentId(@PathVariable Long departmentId) {
-        return positionService.getAllByDepartmentId(departmentId);
+        return positionService.findAllByDepartmentId(departmentId);
     }
 
     @Logged

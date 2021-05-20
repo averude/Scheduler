@@ -43,7 +43,7 @@ export abstract class DialogBaseComponent<T> implements OnInit {
   }
 
   compareIdEntities(a: IdEntity, b: IdEntity): boolean {
-    return a && b ? a.id === b.id : false;
+    return (a && b) && (a.id === b.id);
   }
 
   getErrorMessage(): string {

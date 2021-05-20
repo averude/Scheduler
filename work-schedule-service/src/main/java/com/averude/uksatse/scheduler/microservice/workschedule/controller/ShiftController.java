@@ -22,7 +22,7 @@ public class ShiftController {
     @PreAuthorize("@departmentLevelSecurity.hasPermission(authentication, 'MAP2', #departmentId)")
     @GetMapping("/departments/{departmentId}")
     public List<Shift> getAllByDepartmentId(@PathVariable Long departmentId) {
-        return shiftService.getAllByDepartmentId(departmentId);
+        return shiftService.findAllByDepartmentId(departmentId);
     }
 
     @Logged

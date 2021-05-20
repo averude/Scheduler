@@ -45,7 +45,7 @@ public class ShiftPatternController {
     @PreAuthorize("@departmentLevelSecurity.hasPermission(authentication, 'MAP2', #departmentId)")
     @GetMapping("/departments/{departmentId}")
     public List<ShiftPattern> getAllByDepartmentId(@PathVariable Long departmentId) {
-        return shiftPatternService.getAllByDepartmentId(departmentId);
+        return shiftPatternService.findAllByDepartmentId(departmentId);
     }
 
     @Logged

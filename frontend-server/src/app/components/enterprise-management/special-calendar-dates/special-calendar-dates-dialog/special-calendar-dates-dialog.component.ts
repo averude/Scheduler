@@ -1,6 +1,5 @@
 import { Component, Inject } from '@angular/core';
 import { DialogBaseComponent } from "../../../../shared/abstract-components/dialog-base/dialog-base.component";
-import { AuthService } from "../../../../services/http/auth.service";
 import { FormBuilder, Validators } from "@angular/forms";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { SPECIAL_CALENDAR_DATE_TYPES, SpecialCalendarDate } from "../../../../model/special-calendar-date";
@@ -17,8 +16,7 @@ export class SpecialCalendarDatesDialogComponent extends DialogBaseComponent<Spe
 
   dateTypes: string[] = SPECIAL_CALENDAR_DATE_TYPES;
 
-  constructor(private authService: AuthService,
-              private fb: FormBuilder,
+  constructor(private fb: FormBuilder,
               private dialogRef: MatDialogRef<SpecialCalendarDatesDialogComponent>,
               @Inject(MAT_DIALOG_DATA) data) {
     super(data.specialCalendarDate, dialogRef);

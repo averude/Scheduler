@@ -31,7 +31,7 @@ export class ScheduleReportDataCollector extends AbstractReportDataCollector {
                     dayTypes: DayType[],
                     useReportLabel?: boolean): void {
     cell.style = this.getStyle(cell.date, false);
-    cell.value = getCellValue(workDay, dayTypes, useReportLabel);
+    cell.value = workDay ? getCellValue(workDay, dayTypes, useReportLabel) : null;
   }
 
   fillDisabledCell(cell: ReportCellData) {

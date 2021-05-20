@@ -41,7 +41,7 @@ public class DayTypeController {
 
     @Logged
     @IsEnterpriseAdmin
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
         dayTypeService.deleteById(id);
     }

@@ -25,7 +25,8 @@ export class DepartmentsTableComponent extends HasEnterpriseTableComponent<Depar
 
   openDialog(department: Department) {
     const data = {
-      department:   department
+      department:   department,
+      enterpriseId: this.enterpriseId
     };
 
     this.openAddOrEditDialog(department, data, DepartmentDialogComponent);

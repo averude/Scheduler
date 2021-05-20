@@ -38,13 +38,15 @@ export class TimeSheetReportDataCollector extends AbstractReportDataCollector {
     cell.style  = this.getStyle(cell.date, false);
     cell.merge = false;
     const val = [];
-    if (workDay.actualDayTypeId) {
-      val[0] = getCellValueExt(workDay, dayTypes, (workDay) => workDay.actualDayTypeId, useReportLabel);
-      val[1] = getCellValueExt(workDay, dayTypes, (workDay) => workDay.scheduledDayTypeId, useReportLabel);
-    } else {
-      val[0] = calculateHoursByHasTime(workDay);
-      val[1] = getCellValue(workDay, dayTypes, useReportLabel);
-      if (val[0] == 0) val[0] = '';
+    if (workDay) {
+      if (workDay.actualDayTypeId) {
+        val[0] = getCellValueExt(workDay, dayTypes, (workDay) => workDay.actualDayTypeId, useReportLabel);
+        val[1] = getCellValueExt(workDay, dayTypes, (workDay) => workDay.scheduledDayTypeId, useReportLabel);
+      } else {
+        val[0] = calculateHoursByHasTime(workDay);
+        val[1] = getCellValue(workDay, dayTypes, useReportLabel);
+        if (val[0] == 0) val[0] = '';
+      }
     }
     cell.value = val;
   }
