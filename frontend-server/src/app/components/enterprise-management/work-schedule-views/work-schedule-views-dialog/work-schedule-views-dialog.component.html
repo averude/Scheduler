@@ -1,0 +1,52 @@
+<h2 matDialogTitle>{{operation}}</h2>
+<mat-dialog-content [formGroup]="dialogForm">
+
+  <ng-container formGroupName="parent">
+    <mat-form-field>
+      <input matInput
+             placeholder="Name"
+             formControlName="name">
+
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-select placeholder="Target Department"
+                  formControlName="targetDepartmentId">
+        <mat-option *ngFor="let department of departments"
+                    [value]="department.id">
+          {{department.name}}
+        </mat-option>
+      </mat-select>
+
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-select placeholder="Department"
+                  formControlName="departmentId">
+        <mat-option *ngFor="let department of departments"
+                    [value]="department.id">
+          {{department.name}}
+        </mat-option>
+      </mat-select>
+
+    </mat-form-field>
+  </ng-container>
+
+  <mat-form-field>
+    <mat-select multiple
+                placeholder="Day Types"
+                formControlName="collection">
+      <mat-option *ngFor="let dayType of dayTypes"
+                  [value]="dayType.id">
+        {{dayType.name}}
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="isControlInvalid('collection')">{{getErrorMessage()}}</mat-error>
+  </mat-form-field>
+
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button class="scheduler-dialog-action-button" (click)="close()">Close</button>
+  <button class="scheduler-dialog-action-button" type="submit" (click)="submit()">Save</button>
+</mat-dialog-actions>

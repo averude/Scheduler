@@ -1,0 +1,37 @@
+.td-name {
+  border: 1px solid #e5e9f0;
+  padding: 0;
+}
+
+.table-sticky-header {
+  font-family: 'MuseoSansRegular', 'Roboto', sans-serif;
+  font-size: 13px;
+  color: #000;
+  position: sticky;
+  top: 28px;
+  background-color: #F5F7F9;
+  box-shadow: 0 -1px 1px 0px #e5e9f0;
+}
+
+.th-null {
+  min-width: 150px;
+  border: 1px solid #e5e9f0;
+}
+
+.month-header {
+  width: 36px;
+  height: 39px;
+  border:  1px solid #e5e9f0;
+}
+
+.weekend {
+  background-color: #e8f2fb;
+}
+
+.holiday {
+  background-color: #ffd5d5;
+}
+
+.current-day {
+  color: royalblue;
+}

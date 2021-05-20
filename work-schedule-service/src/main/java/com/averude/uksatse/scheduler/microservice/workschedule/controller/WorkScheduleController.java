@@ -47,6 +47,19 @@ public class WorkScheduleController {
     }
 
     @Logged
+    @PreAuthorize("@scheduleViewSecurity.hasPermission(authentication, 'MAP1', #viewId)")
+    @GetMapping("/views/{viewId}")
+    public List<EmployeeScheduleDTO> getAllByViewId(@PathVariable Long viewId,
+                                                    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                                    @RequestParam(value = "from")
+                                                            LocalDate from,
+                                                    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                                    @RequestParam(value = "to")
+                                                            LocalDate to) {
+        return scheduleService.findScheduleDTOByViewIdAndDate(viewId, from, to);
+    }
+
+    @Logged
     @PreAuthorize("@departmentLevelSecurity.hasPermission(authentication, 'MAP4', #schedule) and " +
                   "@hasDateLimiter.check(authentication, #schedule) and " +
                   "@employeeShiftChecker.belongs(authentication, #schedule)")

@@ -9,6 +9,7 @@ import { SpecialCalendarDatesModule } from "./special-calendar-dates/special-cal
 import { SummationColumnsModule } from "./summation-columns/summation-columns.module";
 import { EnterpriseManagementRoutingModule } from "./enterprise-management-routing.module";
 import { EnterpriseManagementComponent } from './enterprise-management.component';
+import { WorkScheduleViewModule } from "./work-schedule-views/work-schedule-view.module";
 
 @NgModule({
   imports: [
@@ -20,6 +21,7 @@ import { EnterpriseManagementComponent } from './enterprise-management.component
     DepartmentsModule,
     SpecialCalendarDatesModule,
     SummationColumnsModule,
+    WorkScheduleViewModule,
     EnterpriseManagementRoutingModule
   ],
   declarations: [

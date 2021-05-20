@@ -16,4 +16,8 @@ public interface ScheduleService extends IService<WorkDay, Long> {
     List<EmployeeScheduleDTO> findScheduleDTOByShiftIdsAndDate(List<Long> shiftIds,
                                                                LocalDate from,
                                                                LocalDate to);
+
+    List<EmployeeScheduleDTO> findScheduleDTOByViewIdAndDate(Long viewId,
+                                                             LocalDate from,
+                                                             LocalDate to);
 }

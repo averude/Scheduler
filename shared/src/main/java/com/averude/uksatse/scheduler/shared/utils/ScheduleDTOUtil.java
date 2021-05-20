@@ -16,6 +16,26 @@ import java.util.function.BiFunction;
 public class ScheduleDTOUtil {
 
     public List<EmployeeScheduleDTO> createEmployeeScheduleDTOList(List<Employee> employees,
+                                                                   List<WorkDay> schedule) {
+        var result = new LinkedList<EmployeeScheduleDTO>();
+
+        int lastScheduleIndex = 0;
+
+        for (var e : employees) {
+
+            var dto = new EmployeeScheduleDTO(e, new ArrayList<>(), null, null);
+
+            lastScheduleIndex = sequentialFill(e, schedule,
+                    dto.getCollection(),lastScheduleIndex,
+                    ((employee, workDay) -> employee.getId() - workDay.getEmployeeId()));
+
+            result.add(dto);
+        }
+
+        return result;
+    }
+
+    public List<EmployeeScheduleDTO> createEmployeeScheduleDTOList(List<Employee> employees,
                                                                    List<MainComposition> mainCompositions,
                                                                    List<SubstitutionComposition> substitutionCompositions,
                                                                    List<WorkDay> schedule) {

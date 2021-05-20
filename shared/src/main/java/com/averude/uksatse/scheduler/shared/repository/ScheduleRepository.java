@@ -13,10 +13,6 @@ public interface ScheduleRepository extends JpaRepository<WorkDay, Long> {
                                                                                  LocalDate from,
                                                                                  LocalDate to);
 
-    List<WorkDay> findAllByEmployeeIdInAndDateBetweenOrderByDateAsc(List<Long> employeeIds, LocalDate from, LocalDate to);
-
-    void deleteAllByEmployeeIdAndDateBetween(Long employeeId, LocalDate from, LocalDate to);
-
     @Query("select wd " +
             "from WorkDay wd " +
             "where wd.departmentId = ?1 and wd.employeeId in ?2 and wd.date between ?3 and ?4 " +
@@ -33,4 +29,16 @@ public interface ScheduleRepository extends JpaRepository<WorkDay, Long> {
     List<WorkDay> findAllByDepartmentIdAndDateBetween(Long departmentId,
                                                       LocalDate from,
                                                       LocalDate to);
+
+    @Query("select wd " +
+            "from WorkDay wd " +
+            "where wd.departmentId = ?1 " +
+                "and wd.scheduledDayTypeId in ?2 " +
+                "and wd.actualDayTypeId is NULL " +
+                "and wd.date between ?3 and ?4 " +
+            "order by wd.employeeId asc, wd.date asc")
+    List<WorkDay> findAllByDepartmentIdAndDayTypeIdInAndDateBetween(Long departmentId,
+                                                                    List<Long> dayTypeIds,
+                                                                    LocalDate from,
+                                                                    LocalDate to);
 }

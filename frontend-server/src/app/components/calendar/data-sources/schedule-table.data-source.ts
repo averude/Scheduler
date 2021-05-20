@@ -1,16 +1,16 @@
 import { Injectable } from "@angular/core";
 import { forkJoin, Observable } from "rxjs";
-import { EmployeeService } from "../../http/employee.service";
-import { ShiftService } from "../../http/shift.service";
+import { EmployeeService } from "../../../services/http/employee.service";
+import { ShiftService } from "../../../services/http/shift.service";
 import { PaginationService } from "../../../lib/ngx-schedule-table/service/pagination.service";
 import { map, switchMap } from "rxjs/operators";
-import { PositionService } from "../../http/position.service";
-import { ScheduleService } from "../../http/schedule.service";
-import { WorkingNormService } from "../../http/working-norm.service";
+import { PositionService } from "../../../services/http/position.service";
+import { ScheduleService } from "../../../services/http/schedule.service";
+import { WorkingNormService } from "../../../services/http/working-norm.service";
 import { InitialData } from "../../../model/datasource/initial-data";
 
 @Injectable()
-export class TableDataSource {
+export class ScheduleTableDataSource {
 
   constructor(private paginationService: PaginationService,
               private employeeService: EmployeeService,

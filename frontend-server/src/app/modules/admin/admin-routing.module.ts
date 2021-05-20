@@ -7,6 +7,7 @@ import { WorkingNormTableComponent } from "../../components/working-norm/working
 import { ReportGeneratorFormComponent } from "../../components/report-generator/report-generator-form/report-generator-form.component";
 import { SecurityGuardService } from "../../guards/security-guard.service";
 import { UserAccountAuthority, UserAccountRole } from "../../model/dto/user-account-dto";
+import { ScheduleViewTableComponent } from "../../components/calendar/schedule-view-table/schedule-view-table.component";
 
 const routes: Routes = [
   {
@@ -35,6 +36,10 @@ const routes: Routes = [
           {
             path: ':departmentId/statistics',
             component: StatisticsTableComponent
+          },
+          {
+            path: ':departmentId/view/:viewId',
+            component: ScheduleViewTableComponent
           },
           {
             path: ':departmentId/working_norms',

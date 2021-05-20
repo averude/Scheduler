@@ -2,13 +2,11 @@ package com.averude.uksatse.scheduler.shared.service;
 
 import com.averude.uksatse.scheduler.core.interfaces.entity.Composition;
 import com.averude.uksatse.scheduler.core.model.dto.EmployeeScheduleDTO;
-import com.averude.uksatse.scheduler.core.model.entity.Employee;
-import com.averude.uksatse.scheduler.core.model.entity.MainComposition;
-import com.averude.uksatse.scheduler.core.model.entity.SubstitutionComposition;
-import com.averude.uksatse.scheduler.core.model.entity.WorkDay;
+import com.averude.uksatse.scheduler.core.model.entity.*;
 import com.averude.uksatse.scheduler.shared.repository.MainCompositionRepository;
 import com.averude.uksatse.scheduler.shared.repository.ScheduleRepository;
 import com.averude.uksatse.scheduler.shared.repository.SubstitutionCompositionRepository;
+import com.averude.uksatse.scheduler.shared.repository.WorkScheduleViewRepository;
 import com.averude.uksatse.scheduler.shared.repository.common.EmployeeRepository;
 import com.averude.uksatse.scheduler.shared.service.base.AService;
 import com.averude.uksatse.scheduler.shared.utils.ScheduleDTOUtil;
@@ -34,6 +32,7 @@ public class ScheduleServiceImpl
     private final EmployeeRepository    employeeRepository;
     private final ScheduleDTOUtil       scheduleDTOUtil;
 
+    private final WorkScheduleViewRepository        workScheduleViewRepository;
     private final MainCompositionRepository         mainCompositionRepository;
     private final SubstitutionCompositionRepository substitutionCompositionRepository;
 
@@ -41,12 +40,14 @@ public class ScheduleServiceImpl
     public ScheduleServiceImpl(ScheduleRepository scheduleRepository,
                                EmployeeRepository employeeRepository,
                                ScheduleDTOUtil scheduleDTOUtil,
+                               WorkScheduleViewRepository workScheduleViewRepository,
                                MainCompositionRepository mainCompositionRepository,
                                SubstitutionCompositionRepository substitutionCompositionRepository) {
         super(scheduleRepository);
         this.scheduleRepository = scheduleRepository;
         this.employeeRepository = employeeRepository;
         this.scheduleDTOUtil = scheduleDTOUtil;
+        this.workScheduleViewRepository = workScheduleViewRepository;
         this.mainCompositionRepository = mainCompositionRepository;
         this.substitutionCompositionRepository = substitutionCompositionRepository;
     }
@@ -95,6 +96,26 @@ public class ScheduleServiceImpl
         return scheduleDTOUtil.createEmployeeScheduleDTOList(employees, mainCompositions, subCompositions, schedule);
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public List<EmployeeScheduleDTO> findScheduleDTOByViewIdAndDate(Long viewId, LocalDate from, LocalDate to) {
+        var view = workScheduleViewRepository.findById(viewId).orElseThrow();
+
+        var dayTypeIds = view.getViewDayTypes()
+                .stream()
+                .map(WorkScheduleViewDayType::getDayTypeId)
+                .collect(toList());
+
+        var workDays = scheduleRepository.findAllByDepartmentIdAndDayTypeIdInAndDateBetween(view.getTargetDepartmentId(), dayTypeIds, from, to);
+
+        var employeeIds = getEmployeeIds(workDays);
+
+        var employees = employeeRepository.findAllById(employeeIds);
+        employees.sort(Comparator.comparing(Employee::getId));
+
+        return scheduleDTOUtil.createEmployeeScheduleDTOList(employees, workDays);
+    }
+
     private List<SubstitutionComposition> getSubstitutionCompositions(List<Long> shiftIds,
                                                                       List<Long> mainCompositionIds,
                                                                       LocalDate from,
@@ -105,5 +126,14 @@ public class ScheduleServiceImpl
             return substitutionCompositionRepository
                     .getAllByShiftIdsAndMainShiftCompositionInAndDateBetweenOrdered(shiftIds, mainCompositionIds, from, to);
         }
+    }
+
+    // Note: should be rewritten due to probable performance issue
+    private List<Long> getEmployeeIds(List<WorkDay> workDays) {
+        return workDays.stream()
+                .map(WorkDay::getEmployeeId)
+                .sorted()
+                .distinct()
+                .collect(toList());
     }
 }

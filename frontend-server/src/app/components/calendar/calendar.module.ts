@@ -15,7 +15,7 @@ import { IntervalCreator } from "../../services/creator/interval-creator.service
 import { TableSumCalculator } from "../../services/calculators/table-sum-calculator.service";
 import { ScheduleTableCompositionDialogModule } from "./schedule-table-shift-composition-dialog/schedule-table-composition-dialog.module";
 import { SchedulerUtility } from "./utils/scheduler-utility";
-import { TableDataSource } from "../../services/collectors/schedule/table-data-source";
+import { ScheduleTableDataSource } from "./data-sources/schedule-table.data-source";
 import { CellEnabledSetter } from "../../services/collectors/schedule/cell-enabled-setter";
 import { ScheduleTableConfigurationMenuModule } from "./schedule-table-configuration-menu/schedule-table-configuration-menu.module";
 import { TableDataCollector } from "../../services/collectors/schedule/table-data.collector";
@@ -26,6 +26,7 @@ import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { TableManager } from "../../services/collectors/schedule/table-manager";
 import { TableCellComponent } from "./table-cell/table-cell.component";
 import { NameInfoCellModule } from "../shared/name-info-cell/name-info-cell.module";
+import { ScheduleViewTableComponent } from "./schedule-view-table/schedule-view-table.component";
 
 @NgModule({
   imports: [
@@ -44,6 +45,7 @@ import { NameInfoCellModule } from "../shared/name-info-cell/name-info-cell.modu
   ],
   declarations: [
     ScheduleTableComponent,
+    ScheduleViewTableComponent,
     TableCellComponent
   ],
   providers: [
@@ -56,7 +58,7 @@ import { NameInfoCellModule } from "../shared/name-info-cell/name-info-cell.modu
     TableRowProcessor,
     TableRowRemover,
     CellEnabledSetter,
-    TableDataSource,
+    ScheduleTableDataSource,
     TableManager,
     TableCompositionHandler,
     SchedulerUtility

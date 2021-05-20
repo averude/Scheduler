@@ -1,7 +1,5 @@
-INSERT INTO user_accounts (username, password)
-VALUES ('global_admin', '$2a$10$zHFEsBOCUZt0JCTVJ5hrJeNwCrZFE366f2DDTauuioHJyVsXUdHJ.');
-INSERT INTO global_admin_user_accounts (username, is_global_admin)
-VALUES ('global_admin', true);
+INSERT INTO user_accounts (username, password, role, authority)
+VALUES ('global_admin', '$2a$10$zHFEsBOCUZt0JCTVJ5hrJeNwCrZFE366f2DDTauuioHJyVsXUdHJ.', 'ADMIN', 'GLOBAL_ADMIN');
 
 INSERT INTO day_type_groups (name, color) VALUES ('Normal working day', '#51a761');
 INSERT INTO day_type_groups (name, color) VALUES ('Night shift', '#51a761');

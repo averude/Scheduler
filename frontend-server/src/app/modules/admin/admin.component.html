@@ -25,7 +25,8 @@
 
               <button [routerLink]="'enterprise/' + userAccount.enterpriseId + '/management'"
                       routerLinkActive="active"
-                      (click)="sideNavOpened = !sideNavOpened">MANAGEMENT
+                      (click)="sideNavOpened = !sideNavOpened">
+                MANAGEMENT
               </button>
             </div>
           </cdk-step>
@@ -34,7 +35,7 @@
 
             <div class="buttons-container">
               <button *ngIf="isEnterpriseAdmin"
-                      style="color: cornflowerblue"
+                      class="back-button"
                       (click)="previousStep()">
                 BACK
               </button>
@@ -50,7 +51,7 @@
 
         <cdk-step>
           <div class="buttons-container">
-            <button style="color: cornflowerblue"
+            <button class="back-button"
                     *ngIf="isEnterpriseOrMultiDepartmentLevel"
                     (click)="previousStep()">
               BACK
@@ -61,6 +62,12 @@
                     (click)="sideNavOpened = !sideNavOpened">
               CALENDAR
             </button>
+
+            <ng-container *ngIf="(accessRights.isDepartmentLevel || accessRights.isEnterpriseLevel) && views && views.length > 0">
+              <button (click)="stepper.next()">
+                VIEWS
+              </button>
+            </ng-container>
 
             <button [routerLink]="'department/' + selectedDepartment?.id + '/statistics'"
                     routerLinkActive="active"
@@ -89,11 +96,29 @@
             </button>
           </div>
         </cdk-step>
+
+        <cdk-step>
+          <div class="buttons-container">
+            <button class="back-button"
+                    (click)="stepper.previous()">
+              BACK
+            </button>
+
+            <button *ngFor="let view of views"
+                    [routerLink]="'department/' + selectedDepartment?.id + '/view/' + view.id"
+                    (click)="sideNavOpened = !sideNavOpened">
+              {{view.name.toUpperCase()}}
+            </button>
+          </div>
+        </cdk-step>
       </side-panel-stepper>
 
       <div class="sidenav-divider"></div>
 
-      <button style="color: red" (click)="logout()">LOGOUT</button>
+      <button class="logout-button"
+              (click)="logout()">
+        LOGOUT
+      </button>
 
     </div>
 

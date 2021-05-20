@@ -14,7 +14,7 @@ import { RowGroup } from "../../../lib/ngx-schedule-table/model/data/row-group";
 import { TableRenderer } from "../../../lib/ngx-schedule-table/service/table-renderer.service";
 import { TableSumCalculator } from "../../../services/calculators/table-sum-calculator.service";
 import { AuthService } from "../../../services/http/auth.service";
-import { TableDataSource } from "../../../services/collectors/schedule/table-data-source";
+import { ScheduleTableDataSource } from "../data-sources/schedule-table.data-source";
 import { SchedulerUtility } from "../utils/scheduler-utility";
 import { UserAccessRights } from "../../../model/user";
 import { TableStateService } from "../../../lib/ngx-schedule-table/service/table-state.service";
@@ -80,7 +80,7 @@ export class ScheduleTableComponent implements OnInit, AfterViewInit, OnDestroy 
               private tableRenderer: TableRenderer,
               private sumCalculator: TableSumCalculator,
               public state: TableStateService,
-              private dataSource: TableDataSource,
+              private dataSource: ScheduleTableDataSource,
               private tableDataCollector: TableDataCollector,
               public tableManager: TableManager,
               public utility: SchedulerUtility) {}

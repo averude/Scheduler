@@ -8,6 +8,8 @@ import { Department } from "../../model/department";
 import { EnterpriseService } from "../../services/http/enterprise.service";
 import { Enterprise } from "../../model/enterprise";
 import { MatSidenav } from "@angular/material/sidenav";
+import { WorkScheduleViewDTOService } from "../../services/http/work-schedule-view-dto.service";
+import { WorkScheduleView } from "../../model/work-schedule-view";
 
 @Component({
   selector: 'app-admin',
@@ -27,6 +29,7 @@ export class AdminComponent implements OnInit {
 
   enterprise:   Enterprise;
   departments:  Department[];
+  views:        WorkScheduleView[];
 
   selectedDepartment: Department;
   orgLevelName: string;
@@ -38,7 +41,8 @@ export class AdminComponent implements OnInit {
 
   constructor(private authService: AuthService,
               private enterpriseService: EnterpriseService,
-              private departmentService: DepartmentService) { }
+              private departmentService: DepartmentService,
+              private scheduleViewService: WorkScheduleViewDTOService) { }
 
   ngOnInit(): void {
     this.userAccount = this.authService.currentUserAccount;
@@ -73,12 +77,16 @@ export class AdminComponent implements OnInit {
 
     } else if (this.userAccount.authority === UserAccountAuthority.DEPARTMENT_ADMIN
       || this.userAccount.authority === UserAccountAuthority.SHIFT_ADMIN) {
+
       this.departmentService.getByIds(this.userAccount.departmentIds)
         .subscribe(department => {
           this.selectedDepartment = department[0];
+          this.scheduleViewService.getAllByDepartmentId(this.selectedDepartment.id)
+            .subscribe(views => this.views = views);
           this.orgLevelName = department[0].name;
         });
     }
+
   }
 
   logout() {
@@ -93,6 +101,10 @@ export class AdminComponent implements OnInit {
   departmentStep(department: Department) {
     this.stepper.next();
     this.selectedDepartment = department;
+    if (this.isEnterpriseOrMultiDepartmentLevel) {
+      this.scheduleViewService.getAllByDepartmentId(this.selectedDepartment.id)
+        .subscribe(views => this.views = views);
+    }
     this.orgLevelName = department.name
   }
 }
