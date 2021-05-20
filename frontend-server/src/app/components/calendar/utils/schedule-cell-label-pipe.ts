@@ -1,5 +1,4 @@
 import { TableCellComponent } from "../table-cell/table-cell.component";
-import { binarySearch } from "../../../shared/utils/collection-utils";
 import { DayType } from "../../../model/day-type";
 import { WorkDay } from "../../../model/workday";
 import { calculateHoursByHasTime, getWorkDayDayTypeId } from "../../../shared/utils/utils";
@@ -10,14 +9,17 @@ import { AuthService } from "../../../services/http/auth.service";
 @Injectable()
 export class ScheduleCellLabelPipe {
 
-  dayTypes: DayType[];
+  private dayTypeMap: Map<number, DayType>;
 
   constructor(private authService: AuthService,
               private dayTypeService: DayTypeService) {
     const enterpriseId = authService.currentUserAccount.enterpriseId;
 
     this.dayTypeService.getAllByEnterpriseId(enterpriseId)
-      .subscribe(dayTypes => this.dayTypes = dayTypes);
+      .subscribe(dayTypes => {
+        this.dayTypeMap = new Map<number, DayType>();
+        dayTypes.forEach(dayType => this.dayTypeMap.set(dayType.id, dayType));
+      });
   }
 
   setLabel(cell: TableCellComponent): void {
@@ -28,7 +30,7 @@ export class ScheduleCellLabelPipe {
       }
       if (cell.value) {
         let dayTypeId = getWorkDayDayTypeId(cell.value);
-        if (cell.cellState === 1 || !dayTypeId || !this.dayTypes) {
+        if (cell.cellState === 1 || !dayTypeId || !this.dayTypeMap) {
           this.setHoursWithColor(cell, dayTypeId);
         } else {
           this.setLabelWithColor(cell, dayTypeId);
@@ -41,8 +43,8 @@ export class ScheduleCellLabelPipe {
 
   private setHoursWithColor(cell: TableCellComponent, dayTypeId: number) {
     cell.label = this.calcHours(cell.value);
-    if (this.dayTypes) {
-      let dayType = binarySearch(this.dayTypes, (mid => mid.id - dayTypeId));
+    if (this.dayTypeMap) {
+      let dayType = this.dayTypeMap.get(dayTypeId);
       if (dayType) {
         cell.labelColor = dayType.dayTypeGroup.color;
       }
@@ -50,8 +52,8 @@ export class ScheduleCellLabelPipe {
   }
 
   private setLabelWithColor(cell: TableCellComponent, dayTypeId: number) {
-    if (this.dayTypes) {
-      let dayType = binarySearch(this.dayTypes, (mid => mid.id - dayTypeId));
+    if (this.dayTypeMap) {
+      let dayType = this.dayTypeMap.get(dayTypeId);
       if (dayType) {
         cell.labelColor = dayType.dayTypeGroup.color;
 
