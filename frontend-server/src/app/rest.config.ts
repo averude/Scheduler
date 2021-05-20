@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
+import { environment } from "../environments/environment";
 
 @Injectable()
 export class RestConfig {
-  public baseUrl = 'http://134.249.143.161:50640/api/v1';
-  // public baseUrl = 'http://134.249.143.161:50640/api/v2';
+  public baseUrl = environment.baseUrl;
 }
