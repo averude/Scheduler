@@ -6,7 +6,6 @@ import com.averude.uksatse.scheduler.core.model.entity.*;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.function.BiFunction;
 
@@ -16,7 +15,7 @@ public class DTOUtil {
     public List<ShiftPatternDTO> createShiftPatternDTOList(List<ShiftPattern> patterns,
                                                            List<PatternUnit> patternUnits,
                                                            List<ShiftPatternGenerationRule> generationRules) {
-        var result = new ArrayList<ShiftPatternDTO>();
+        var result = new ArrayList<ShiftPatternDTO>(patterns.size());
 
         int lastUnitIndex = 0;
         int lastRuleIndex = 0;
@@ -41,7 +40,7 @@ public class DTOUtil {
 
     public List<EmployeeScheduleDTO> createEmployeeScheduleDTOList(List<Employee> employees,
                                                                    List<WorkDay> schedule) {
-        var result = new LinkedList<EmployeeScheduleDTO>();
+        var result = new ArrayList<EmployeeScheduleDTO>(employees.size());
 
         int lastScheduleIndex = 0;
 
@@ -63,7 +62,7 @@ public class DTOUtil {
                                                                    List<MainComposition> mainCompositions,
                                                                    List<SubstitutionComposition> substitutionCompositions,
                                                                    List<WorkDay> schedule) {
-        var result = new LinkedList<EmployeeScheduleDTO>();
+        var result = new ArrayList<EmployeeScheduleDTO>(employees.size());
 
         int lastScheduleIndex = 0;
         int lastMainCompositionIndex = 0;
