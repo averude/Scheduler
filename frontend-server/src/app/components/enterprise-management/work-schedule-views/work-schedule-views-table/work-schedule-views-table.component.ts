@@ -26,6 +26,9 @@ export class WorkScheduleViewsTableComponent extends HasEnterpriseTableComponent
   dayTypes: DayType[];
   departments: Department[];
 
+  depMap: Map<number, Department>;
+  dayTypeMap: Map<number, DayType>;
+
   constructor(private dialog: MatDialog,
               private authService: AuthService,
               private notificationsService: NotificationsService,
@@ -43,10 +46,20 @@ export class WorkScheduleViewsTableComponent extends HasEnterpriseTableComponent
     const enterpriseId = this.authService.currentUserAccount.enterpriseId;
 
     this.dayTypeService.getAllByEnterpriseId(enterpriseId)
-      .subscribe(dayTypes => this.dayTypes = dayTypes);
+      .subscribe(dayTypes => {
+        this.dayTypes = dayTypes;
+
+        this.dayTypeMap = new Map<number, DayType>();
+        dayTypes.forEach(dayType => this.dayTypeMap.set(dayType.id, dayType));
+      });
 
     this.departmentService.getAllByEnterpriseId(enterpriseId)
-      .subscribe(departments => this.departments = departments);
+      .subscribe(departments => {
+        this.departments = departments;
+
+        this.depMap = new Map<number, Department>();
+        departments.forEach(department => this.depMap.set(department.id, department));
+      });
   }
 
   openDialog(dto: BasicDTO<WorkScheduleView, number>) {
@@ -59,6 +72,12 @@ export class WorkScheduleViewsTableComponent extends HasEnterpriseTableComponent
     };
 
     this.openAddOrEditDialog(dto, data, WorkScheduleViewsDialogComponent);
+  }
+
+  getDayTypesNames(ids: number[]): string {
+    return ids
+      .map(id => this.dayTypeMap.get(id)?.name)
+      .reduce((previousValue, currentValue) => previousValue += (', ' + currentValue));
   }
 
 }
