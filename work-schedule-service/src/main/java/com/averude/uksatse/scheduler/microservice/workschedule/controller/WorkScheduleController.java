@@ -30,7 +30,7 @@ public class WorkScheduleController {
                                                           @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
                                                           @RequestParam(value = "to")
                                                                   LocalDate to) {
-        return scheduleService.findAllDtoByDepartmentIdAndDate(departmentId, from, to);
+        return scheduleService.findAllDTOByDepartmentIdAndDate(departmentId, from, to);
     }
 
     @Logged

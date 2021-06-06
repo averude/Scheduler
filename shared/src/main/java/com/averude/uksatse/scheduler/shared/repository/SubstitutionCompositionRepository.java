@@ -22,23 +22,11 @@ public interface SubstitutionCompositionRepository extends JpaRepository<Substit
 
     @Query("select sc " +
             "from SubstitutionComposition sc " +
-            "left join Shift s " +
-            "on sc.shiftId = s.id " +
-            "where s.departmentId = ?1 and ?2 <= sc.to and ?3 >= sc.from")
+            "where sc.departmentId = ?1 and ?2 <= sc.to and ?3 >= sc.from")
     @EntityGraph(value = "graph.SubstitutionComposition")
     List<SubstitutionComposition> findAllByDepartmentIdAndDatesBetween(Long departmentId,
                                                                        LocalDate from,
                                                                        LocalDate to);
-
-    @Query("select sc " +
-            "from SubstitutionComposition sc " +
-            "left join MainComposition mc " +
-            "on sc.mainComposition = mc " +
-            "where ?2 <= sc.to and ?3 >= sc.from and (sc.shiftId = ?1 or mc.shiftId = ?1)")
-    @EntityGraph(value = "graph.SubstitutionComposition")
-    List<SubstitutionComposition> findAllByShiftIdAndDatesBetween(Long shiftId,
-                                                                  LocalDate from,
-                                                                  LocalDate to);
 
     @Query("select sc " +
             "from SubstitutionComposition sc " +
@@ -53,9 +41,7 @@ public interface SubstitutionCompositionRepository extends JpaRepository<Substit
 
     @Query("select sc " +
             "from SubstitutionComposition sc " +
-            "left join Shift s " +
-            "on sc.shiftId = s.id " +
-            "where s.departmentId = ?1 and ?2 <= sc.to and ?3 >= sc.from " +
+            "where sc.departmentId = ?1 and ?2 <= sc.to and ?3 >= sc.from " +
             "order by sc.employeeId asc, sc.shiftId asc, sc.from")
     @EntityGraph(value = "graph.SubstitutionComposition")
     List<SubstitutionComposition> getAllByDepartmentIdAndDateBetweenOrdered(Long departmentId,

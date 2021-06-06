@@ -15,18 +15,14 @@ public interface MainCompositionRepository extends JpaRepository<MainComposition
 
     @Query("select mc " +
             "from MainComposition mc " +
-            "left join Shift s " +
-            "on mc.shiftId = s.id " +
-            "where s.departmentId = ?1 and ?2 <= mc.to and ?3 >= mc.from ")
+            "where mc.departmentId = ?1 and ?2 <= mc.to and ?3 >= mc.from ")
     List<MainComposition> findAllByDepartmentIdAndDatesBetween(Long departmentId,
                                                                LocalDate from,
                                                                LocalDate to);
 
     @Query("select mc " +
             "from MainComposition mc " +
-            "left join Shift s " +
-            "on mc.shiftId = s.id " +
-            "where s.departmentId = ?1 and ?2 <= mc.to and ?3 >= mc.from " +
+            "where mc.departmentId = ?1 and ?2 <= mc.to and ?3 >= mc.from " +
             "order by mc.employeeId asc, mc.shiftId asc, mc.from asc")
     List<MainComposition> getAllByDepartmentIdAndDateBetweenOrdered(Long departmentId,
                                                                     LocalDate from,

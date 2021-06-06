@@ -43,7 +43,7 @@ public class EmployeeWorkStatServiceImpl implements EmployeeWorkStatService {
             return null;
         }
 
-        var scheduleDTO = (List<EmployeeScheduleDTO>) scheduleService.findAllDtoByDepartmentIdAndDate(departmentId, from, to);
+        var scheduleDTO = (List<EmployeeScheduleDTO>) scheduleService.findAllDTOByDepartmentIdAndDate(departmentId, from, to);
 
         return getSummationDTOS(from, to, mode, specialCalendarDates, summationColumns, scheduleDTO);
     }

@@ -55,7 +55,7 @@ public class ScheduleServiceImpl
 
     @Override
     @Transactional
-    public List<EmployeeScheduleDTO> findAllDtoByDepartmentIdAndDate(Long departmentId,
+    public List<EmployeeScheduleDTO> findAllDTOByDepartmentIdAndDate(Long departmentId,
                                                                      LocalDate from,
                                                                      LocalDate to) {
         var employees = employeeRepository.findAllByDepartmentIdOrderById(departmentId);

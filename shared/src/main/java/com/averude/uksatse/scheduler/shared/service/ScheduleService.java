@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface ScheduleService extends IService<WorkDay, Long> {
 
-    List<EmployeeScheduleDTO> findAllDtoByDepartmentIdAndDate(Long departmentId,
+    List<EmployeeScheduleDTO> findAllDTOByDepartmentIdAndDate(Long departmentId,
                                                               LocalDate from,
                                                               LocalDate to);
 
