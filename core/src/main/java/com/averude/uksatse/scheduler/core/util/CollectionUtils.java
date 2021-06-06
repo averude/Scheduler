@@ -1,8 +1,6 @@
 package com.averude.uksatse.scheduler.core.util;
 
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.function.BiPredicate;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -99,5 +97,45 @@ public class CollectionUtils {
 
     private static boolean invalidCollection(Collection collection) {
         return collection == null || collection.isEmpty();
+    }
+
+    // Only for sorted lists
+    public static <T,R> List<R> collectSortedDistinct(Function<T,R> fn, List<T> list) {
+        var result = new ArrayList<R>();
+
+        if (list.isEmpty()) {
+            return result;
+        }
+
+        int resIdx = 0;
+        int listIdx = 0;
+
+        var value = fn.apply(list.get(listIdx++));
+        result.add(value);
+
+        while (listIdx < list.size()) {
+
+            value = fn.apply(list.get(listIdx++));
+
+            if (!result.get(resIdx).equals(value)) {
+                result.add(value);
+                resIdx++;
+            }
+
+        }
+
+        return result;
+    }
+
+    public static <T,R extends Comparable> List<R> collectDistinct(Function<T,R> fn, List<? extends T> ... lists) {
+        var set = new HashSet<R>();
+
+        for (var list : lists) {
+            for (var value : list) {
+                set.add(fn.apply(value));
+            }
+        }
+
+        return new ArrayList<>(set);
     }
 }

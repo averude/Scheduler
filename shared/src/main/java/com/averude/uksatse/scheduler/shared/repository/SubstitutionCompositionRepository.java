@@ -22,14 +22,6 @@ public interface SubstitutionCompositionRepository extends JpaRepository<Substit
 
     @Query("select sc " +
             "from SubstitutionComposition sc " +
-            "where sc.departmentId = ?1 and ?2 <= sc.to and ?3 >= sc.from")
-    @EntityGraph(value = "graph.SubstitutionComposition")
-    List<SubstitutionComposition> findAllByDepartmentIdAndDatesBetween(Long departmentId,
-                                                                       LocalDate from,
-                                                                       LocalDate to);
-
-    @Query("select sc " +
-            "from SubstitutionComposition sc " +
             "left join MainComposition mc " +
             "on sc.mainComposition = mc " +
             "where ?2 <= sc.to and ?3 >= sc.from and (sc.shiftId in ?1 or mc.shiftId in ?1) " +

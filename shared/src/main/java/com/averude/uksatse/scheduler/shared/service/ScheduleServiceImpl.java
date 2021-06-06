@@ -1,8 +1,9 @@
 package com.averude.uksatse.scheduler.shared.service;
 
-import com.averude.uksatse.scheduler.core.interfaces.entity.Composition;
+import com.averude.uksatse.scheduler.core.interfaces.entity.HasEmployeeId;
 import com.averude.uksatse.scheduler.core.model.dto.EmployeeScheduleDTO;
 import com.averude.uksatse.scheduler.core.model.entity.*;
+import com.averude.uksatse.scheduler.core.util.CollectionUtils;
 import com.averude.uksatse.scheduler.shared.repository.MainCompositionRepository;
 import com.averude.uksatse.scheduler.shared.repository.ScheduleRepository;
 import com.averude.uksatse.scheduler.shared.repository.SubstitutionCompositionRepository;
@@ -19,7 +20,6 @@ import java.time.LocalDate;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 
@@ -81,11 +81,7 @@ public class ScheduleServiceImpl
             return Collections.emptyList();
         }
 
-        var employeeIds = Stream.concat(mainCompositions.stream(), subCompositions.stream())
-                .map(Composition::getEmployeeId)
-                .sorted()
-                .distinct()
-                .collect(toList());
+        var employeeIds = CollectionUtils.collectDistinct(HasEmployeeId::getEmployeeId, mainCompositions, subCompositions);
 
         var employees = employeeRepository.findAllById(employeeIds);
         employees.sort(Comparator.comparing(Employee::getId));
@@ -109,7 +105,7 @@ public class ScheduleServiceImpl
 
         var workDays = scheduleRepository.findAllByDepartmentIdAndDayTypeIdInAndDateBetween(view.getTargetDepartmentId(), dayTypeIds, from, to);
 
-        var employeeIds = getEmployeeIds(workDays);
+        var employeeIds = CollectionUtils.collectSortedDistinct(HasEmployeeId::getEmployeeId, workDays);
 
         var employees = employeeRepository.findAllById(employeeIds);
         employees.sort(Comparator.comparing(Employee::getId));
@@ -127,14 +123,5 @@ public class ScheduleServiceImpl
             return substitutionCompositionRepository
                     .getAllByShiftIdsAndMainShiftCompositionInAndDateBetweenOrdered(shiftIds, mainCompositionIds, from, to);
         }
-    }
-
-    // Note: should be rewritten due to probable performance issue
-    private List<Long> getEmployeeIds(List<WorkDay> workDays) {
-        return workDays.stream()
-                .map(WorkDay::getEmployeeId)
-                .sorted()
-                .distinct()
-                .collect(toList());
     }
 }
