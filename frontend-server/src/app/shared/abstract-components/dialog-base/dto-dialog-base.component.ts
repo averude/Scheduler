@@ -11,11 +11,11 @@ export abstract class DtoDialogBaseComponent<P extends IdEntity, C> implements O
 
   constructor(public dto: BasicDTO<P, C>,
               protected dialogRef: MatDialogRef<any>) {
-    this.dto = dto ? dto : this.newDto;
-    this.operation = dto ? 'Edit' : 'Add';
   }
 
   ngOnInit() {
+    this.dto = this.dto ? this.dto : this.newDto;
+    this.operation = this.dto ? 'Edit' : 'Add';
   }
 
   addChild() {

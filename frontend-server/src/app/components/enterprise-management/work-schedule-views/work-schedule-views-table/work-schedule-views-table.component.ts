@@ -80,4 +80,14 @@ export class WorkScheduleViewsTableComponent extends HasEnterpriseTableComponent
       .reduce((previousValue, currentValue) => previousValue += (', ' + currentValue));
   }
 
+  removeEntity(entity: BasicDTO<WorkScheduleView, number>): void {
+    this.crudService.delete(entity.parent.id)
+      .subscribe(res => {
+        this.removeRow(entity);
+        this.notification.success(
+          'Deleted',
+          'Selected values was successfully deleted'
+        );
+      });
+  }
 }

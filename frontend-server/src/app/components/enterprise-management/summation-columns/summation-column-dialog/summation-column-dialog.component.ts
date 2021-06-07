@@ -15,6 +15,8 @@ import { SPECIAL_CALENDAR_DATE_TYPES } from "../../../../model/special-calendar-
 })
 export class SummationColumnDialogComponent extends DtoDialogBaseComponent<SummationColumn, SummationColumnDayTypeRange> {
 
+  enterpriseId: number;
+
   dayTypes: DayType[];
 
   columnTypes:  string[] = SUMMATION_COLUMN_TYPES;
@@ -24,12 +26,13 @@ export class SummationColumnDialogComponent extends DtoDialogBaseComponent<Summa
               dialogRef: MatDialogRef<SummationColumnDialogComponent>,
               @Inject(MAT_DIALOG_DATA) data) {
     super(data.dto, dialogRef);
+    this.enterpriseId = data.enterpriseId;
     this.dayTypes = data.dayTypes ? data.dayTypes : [];
   }
 
-
   get newDto(): BasicDTO<SummationColumn, SummationColumnDayTypeRange> {
     let newDto = super.newDto;
+    newDto.parent.enterpriseId = this.enterpriseId;
     newDto.parent.onlyHolidays = false;
     return newDto;
   }

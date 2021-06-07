@@ -21,7 +21,7 @@ import { AuthService } from "../../../../services/http/auth.service";
   ]
 })
 export class SummationColumnsTableComponent extends HasEnterpriseTableComponent<BasicDTO<SummationColumn, SummationColumnDayTypeRange>> {
-
+  enterpriseId: number;
   displayedColumns = ['select', 'name', 'type', 'special_calendar_date_types', 'control'];
 
   dayTypes: DayType[];
@@ -39,18 +39,30 @@ export class SummationColumnsTableComponent extends HasEnterpriseTableComponent<
   ngOnInit() {
     super.ngOnInit();
 
-    const enterpriseId = this.authService.currentUserAccount.enterpriseId;
+    this.enterpriseId = this.authService.currentUserAccount.enterpriseId;
 
-    this.dayTypeService.getAllByEnterpriseId(enterpriseId)
+    this.dayTypeService.getAllByEnterpriseId(this.enterpriseId)
       .subscribe(dayTypes => this.dayTypes = dayTypes);
   }
 
   openDialog(dto: BasicDTO<SummationColumn, SummationColumnDayTypeRange>) {
     const data = {
       dto:  dto,
-      dayTypes: this.dayTypes
+      dayTypes: this.dayTypes,
+      enterpriseId: this.enterpriseId
     };
 
     this.openAddOrEditDialog(dto, data, SummationColumnDialogComponent);
+  }
+
+  removeEntity(entity: BasicDTO<SummationColumn, SummationColumnDayTypeRange>): void {
+    this.crudService.delete(entity.parent.id)
+      .subscribe(res => {
+        this.removeRow(entity);
+        this.notification.success(
+          'Deleted',
+          'Selected values was successfully deleted'
+        );
+      });
   }
 }
