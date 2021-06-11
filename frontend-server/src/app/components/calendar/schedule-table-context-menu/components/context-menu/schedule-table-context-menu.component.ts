@@ -29,7 +29,6 @@ import { binarySearch } from "../../../../../shared/utils/collection-utils";
 import { CalendarDay } from "../../../../../lib/ngx-schedule-table/model/calendar-day";
 import { TableManager } from "../../../../../services/collectors/schedule/table-manager";
 import { InitialData } from "../../../../../model/datasource/initial-data";
-import { DayType } from "../../../../../model/day-type";
 
 @Component({
   selector: 'app-schedule-table-context-menu',
@@ -45,18 +44,21 @@ export class ScheduleTableContextMenuComponent implements OnInit, OnDestroy {
   @ViewChild('tableHeaderMenu')
   tableHeaderMenu: ContextMenuComponent;
 
-  @Input() initData: InitialData;
+  private initialData: InitialData;
+
+  @Input() set initData(initData: InitialData) {
+    this.initialData = initData;
+
+    this.serviceDayTypes = initData.dayTypes
+      .filter(dayType => dayType.usePreviousValue)
+      .map(dayType => ({dayType: dayType} as DepartmentDayType));
+  };
+
   @Input() isEditableGroups: boolean = false;
   @Input() groups: ScheduleRowGroup[] = [];
 
   @Input() enterpriseId: number;
   @Input() departmentId: number;
-
-  @Input() set dayTypes(dayTypes: DayType[]) {
-    this.serviceDayTypes = dayTypes
-      .filter(dayType => dayType.usePreviousValue)
-      .map(dayType => ({dayType: dayType} as DepartmentDayType));
-  }
 
   patternDTOs:         BasicDTO<ShiftPattern, PatternUnit>[]   = [];
   departmentDayTypes:  DepartmentDayType[] = [];
@@ -142,7 +144,7 @@ export class ScheduleTableContextMenuComponent implements OnInit, OnDestroy {
   }
 
   openAddSubstitutionDialog(selectionData: SelectionData) {
-    this.tableManager.addSubstitutionDialog(selectionData, this.initData);
+    this.tableManager.addSubstitutionDialog(selectionData, this.initialData);
   }
 
   ngOnDestroy(): void {
