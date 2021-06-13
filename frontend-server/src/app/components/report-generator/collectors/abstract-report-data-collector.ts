@@ -61,7 +61,7 @@ export abstract class AbstractReportDataCollector implements ReportDataCollector
 
       positionIntervalsMap.forEach((intervals, positionId) => {
         const reportRowData = new ReportRow();
-        const positionName = binarySearch(initialData.positions, (mid => mid.id - positionId))?.shortName;
+        const positionName = initialData.positionsMap.get(positionId)?.shortName;
         reportRowData.reportCellData = this.collectRowCellData(dto,
           initialData.calendarDays, initialData.dayTypes, positionName,
           this.getSummationResults(initialData.summationDTOs, dto.parent.id, positionId), useReportLabel, intervals);

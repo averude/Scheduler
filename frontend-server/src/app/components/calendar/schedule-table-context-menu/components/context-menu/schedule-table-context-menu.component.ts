@@ -49,7 +49,7 @@ export class ScheduleTableContextMenuComponent implements OnInit, OnDestroy {
   @Input() set initData(initData: InitialData) {
     this.initialData = initData;
 
-    this.serviceDayTypes = initData.dayTypes
+    this.serviceDayTypes = initData?.dayTypes
       .filter(dayType => dayType.usePreviousValue)
       .map(dayType => ({dayType: dayType} as DepartmentDayType));
   };

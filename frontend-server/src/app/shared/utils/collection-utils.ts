@@ -81,8 +81,9 @@ export function lastIndexOfRepeatable<T>(arr: T[],
   return result;
 }
 
-export function binarySearchIndex(arr: any[], field, value): number {
-  if (!arr || !field || !value) {
+export function binarySearchIndex<T>(arr: T[],
+                                     comparator_fn: (mid: T) => number): number {
+  if (!arr || !comparator_fn) {
     return;
   }
 
@@ -94,11 +95,11 @@ export function binarySearchIndex(arr: any[], field, value): number {
   while (start <= end) {
     let mid = Math.floor((start + end) / 2);
 
-    if (arr[mid][field] === value) {
+    if (comparator_fn(arr[mid]) === 0) {
       result = mid;
       break;
     }
-    if (value < arr[mid][field]) {
+    if (comparator_fn(arr[mid]) > 0) {
       end = mid - 1;
     } else {
       start = mid + 1;
@@ -108,12 +109,11 @@ export function binarySearchIndex(arr: any[], field, value): number {
   return result;
 }
 
-export function binarySearchInsertIndex(arr: any[],
-                                        field,
-                                        value,
-                                        start_index?: number,
-                                        end_index?:number): number {
-  if (!arr || !field || !value) {
+export function binarySearchInsertIndex<T>(arr: T[],
+                                           comparator_fn: (mid: T) => number,
+                                           start_index?: number,
+                                           end_index?:number): number {
+  if (!arr || !comparator_fn) {
     return;
   }
 
@@ -134,18 +134,18 @@ export function binarySearchInsertIndex(arr: any[],
   while (start <= end) {
     mid = Math.floor((start + end) / 2);
 
-    if (arr[mid][field] === value) {
+    if (comparator_fn(arr[mid]) === 0) {
       return -1;
     }
 
-    if (value < arr[mid][field]) {
+    if (comparator_fn(arr[mid]) > 0) {
       end = mid - 1;
     } else {
       start = mid + 1;
     }
   }
 
-  let result = arr[mid][field] > value ? mid : mid + 1;
+  let result = comparator_fn(arr[mid]) > 0 ? mid : mid + 1;
 
   return result;
 }

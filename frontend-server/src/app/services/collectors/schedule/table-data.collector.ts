@@ -1,4 +1,3 @@
-import { WorkingNorm } from "../../../model/working-norm";
 import * as moment from "moment";
 import { ScheduleRow, ScheduleRowGroup, TableData } from "../../../model/ui/schedule-table/table-data";
 import { Injectable } from "@angular/core";
@@ -53,7 +52,6 @@ export class TableDataCollector {
         group.table = table;
         group.id    = shift.id;
         group.name  = shift.name;
-        group.rows  = [];
         return group;
       });
 
@@ -61,17 +59,13 @@ export class TableDataCollector {
 
       this.rowProcessor.fillRows(initialData, dto, dto.mainCompositions, false,
         (composition => table.findRowGroup(composition.shiftId)),
-        (composition => this.getWorkingNorm(initialData.workingNorms, composition.shiftId)));
+        (composition => initialData.workingNormsMap.get(composition.shiftId)?.hours || 0));
 
       this.rowProcessor.fillRows(initialData, dto, dto.substitutionCompositions, true,
         (composition => table.findRowGroup(composition.shiftId)),
-        (composition => this.getWorkingNorm(initialData.workingNorms, composition.mainComposition.shiftId)))
+        (composition => initialData.workingNormsMap.get(composition.mainComposition.shiftId)?.hours || 0))
     }
 
     return table;
-  }
-
-  private getWorkingNorm(workingNorms: WorkingNorm[], shiftId: number) {
-    return binarySearch(workingNorms, (mid => mid.shiftId - shiftId))?.hours || 0;
   }
 }

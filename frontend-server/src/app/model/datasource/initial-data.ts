@@ -11,8 +11,10 @@ export class InitialData {
   dayTypeMap:   Map<number, DayType>;
   shifts:       Shift[];
   positions:    Position[];
+  positionsMap: Map<number, Position>;
   employees:    Employee[];
   scheduleDTOs: EmployeeScheduleDTO[];
   workingNorms: WorkingNorm[];
+  workingNormsMap: Map<number, WorkingNorm>;
   calendarDays: CalendarDay[];
 }

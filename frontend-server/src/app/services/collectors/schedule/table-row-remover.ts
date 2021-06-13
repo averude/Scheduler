@@ -22,7 +22,6 @@ export class TableRowRemover {
             composition: Composition,
             dtos: EmployeeScheduleDTO[]) {
     const table = groupData.table;
-    const rows = groupData.rows;
 
     const dto = binarySearch(dtos, (mid => mid.parent.id - composition.employeeId));
 

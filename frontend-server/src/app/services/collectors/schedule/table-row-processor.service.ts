@@ -4,7 +4,6 @@ import { EmployeeScheduleDTO } from "../../../model/dto/employee-schedule-dto";
 import { CalendarDay } from "../../../lib/ngx-schedule-table/model/calendar-day";
 import { Composition } from "../../../model/composition";
 import { convertCompositionToInterval } from "../../../model/ui/schedule-table/row-interval";
-import { binarySearch, binarySearchLastRepeatableIndex } from "../../../shared/utils/collection-utils";
 import { CellEnabledSetter } from "./cell-enabled-setter";
 import { IntervalCreator } from "../../creator/interval-creator.service";
 import { CellCollector } from "../cell-collector";
@@ -26,7 +25,7 @@ export class TableRowProcessor {
                                   rowGroupConsumer:  (composition: T) => ScheduleRowGroup,
                                   workingNormConsumer: (composition: T) => number) {
     for (const composition of compositions) {
-      const position = binarySearch(initData.positions, (mid => mid.id - composition.positionId));
+      const position = initData.positionsMap.get(composition.positionId);
 
       const rowGroup = rowGroupConsumer(composition);
       if (rowGroup) {
@@ -73,43 +72,20 @@ export class TableRowProcessor {
                                workingNorm: number,
                                isSubstitution: boolean,
                                isUpdateOperationPredicate: (row: ScheduleRow) => boolean): ScheduleRow {
-    let processedRow;
-
-    const rows = <ScheduleRow[]> group.rows;
-
-    if (!rows) {
-      return;
-    }
-
-    const rowIndex = binarySearchLastRepeatableIndex(rows, (mid => mid.id - dto.parent.id), (value => value.id - dto.parent.id));
-    if (rowIndex >= 0) {
-
-      const row = rows[rowIndex];
-      if (this.isUpdateOperation(isUpdateOperationPredicate(row), row, isSubstitution, composition)) {
-
-        row.compositions.push(composition);
-        row.compositions.sort((a, b) => a.from.diff(b.from));
-        processedRow = row;
-
-      } else {
-
-        const newRow = this.createNewRow(group, calendarDays, dto, position, workingNorm, isSubstitution);
-        newRow.compositions = [composition];
-        rows.splice(rowIndex + 1, 0, newRow);
-        processedRow = newRow;
-
-      }
-
-    } else {
-
-      const newRow = this.createNewRow(group, calendarDays, dto, position, workingNorm, isSubstitution);
-      newRow.compositions = [composition];
-      group.addRow(newRow);
-      processedRow = newRow;
-
-    }
-
-    return processedRow;
+    return group.foo(
+      val => (val.id - dto.parent.id) + (val.position.id - composition.positionId),
+        row => this.isUpdateOperation(isUpdateOperationPredicate(row), row, isSubstitution, composition),
+        row => {
+          row.compositions.push(composition);
+          row.compositions.sort((a, b) => a.from.diff(b.from));
+          return row;
+        },
+      () => {
+          const newRow = this.createNewRow(group, calendarDays, dto, position, workingNorm, isSubstitution);
+          newRow.compositions = [composition];
+          return newRow;
+        }
+      );
   }
 
   updateRow(row: ScheduleRow,
@@ -141,7 +117,8 @@ export class TableRowProcessor {
                             isSubstitution: boolean,
                             composition: Composition) {
     return row && updateRows && !this.xor(row.isSubstitution, isSubstitution)
-      && row.group.id === composition.shiftId && row.id === composition.employeeId;
+      && row.group.id === composition.shiftId && row.id === composition.employeeId
+      && row.position.id === composition.positionId;
   }
 
   private createNewRow(group: ScheduleRowGroup,

@@ -9,7 +9,7 @@ import { ScheduleService } from "../../../services/http/schedule.service";
 import { WorkingNormService } from "../../../services/http/working-norm.service";
 import { InitialData } from "../../../model/datasource/initial-data";
 import { DayTypeService } from "../../../services/http/day-type.service";
-import { toIdMap } from "../utils/scheduler-utility";
+import { toIdMap, toNumMap } from "../utils/scheduler-utility";
 
 @Injectable()
 export class ScheduleTableDataSource {
@@ -74,11 +74,12 @@ export class ScheduleTableDataSource {
       .pipe(
         map(([dayTypes, positions, shifts, employees]) => {
           const initData = new InitialData();
-          initData.dayTypes   = dayTypes;
-          initData.dayTypeMap = toIdMap(dayTypes);
-          initData.positions  = positions;
-          initData.shifts     = shifts;
-          initData.employees  = employees;
+          initData.dayTypes     = dayTypes;
+          initData.dayTypeMap   = toIdMap(dayTypes);
+          initData.positions    = positions;
+          initData.positionsMap = toIdMap(positions);
+          initData.shifts       = shifts;
+          initData.employees    = employees;
           return initData;
         }),
         switchMap((initData) =>
@@ -92,7 +93,7 @@ export class ScheduleTableDataSource {
                 return forkJoin(sources).pipe(
                   map(([schedule, workingNorm]) => {
                     initData.scheduleDTOs = schedule;
-                    initData.workingNorms = workingNorm.sort((a, b) => a.shiftId - b.shiftId);
+                    initData.workingNormsMap = toNumMap(workingNorm, value => value.shiftId);
                     return initData;
                   })
                 );
