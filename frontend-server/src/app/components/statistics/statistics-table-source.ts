@@ -14,6 +14,7 @@ import { PaginationService } from "../../lib/ngx-schedule-table/service/paginati
 import { StatisticsTableDataCollector } from "./collector/statistics-table-data-collector";
 import { Injectable } from "@angular/core";
 import { UserAccountAuthority, UserAccountDTO } from "../../model/dto/user-account-dto";
+import { toIdMap } from "../calendar/utils/scheduler-utility";
 
 @Injectable()
 export class StatisticsTableSource {
@@ -21,7 +22,7 @@ export class StatisticsTableSource {
   summationColumns: SummationColumn[];
   summationDtos:    EmployeeWorkStatDTO[];
   shifts:           Shift[];
-  positions:        Position[];
+  positionMap:      Map<number, Position>;
 
   constructor(private collector: StatisticsTableDataCollector,
               private paginationService: PaginationService,
@@ -94,7 +95,7 @@ export class StatisticsTableSource {
     return forkJoin(sources1).pipe(
       switchMap(([shifts, positions, summationColumns]) => {
         this.shifts = shifts;
-        this.positions = positions;
+        this.positionMap = toIdMap(positions);
         this.summationColumns = summationColumns.map(value => value.parent);
         this.statisticsColumnCompositor.composeColumns(this.summationColumns);
 
@@ -105,7 +106,7 @@ export class StatisticsTableSource {
       this.statisticsColumnCompositor.cr(this.shifts, summationDTOs, this.summationColumns, workingNorms);
       this.summationDtos = summationDTOs;
 
-      return this.collector.getTableData(summationDTOs, this.shifts, this.positions);
+      return this.collector.getTableData(summationDTOs, this.shifts, this.positionMap);
     }));
 
   }

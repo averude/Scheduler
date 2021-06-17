@@ -133,7 +133,7 @@
   color: white;
 }
 
-.login-panel-bad-credentials {
+.login-panel-error {
   margin: 0 auto;
   padding: 12px 2px;
   font-family: 'MuseoSansRegular', 'Roboto', sans-serif;

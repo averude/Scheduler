@@ -11,6 +11,7 @@ import { forkJoin, Observable } from "rxjs";
 import { SummationMode } from "../../../model/dto/employee-work-stat-dto";
 import { map } from "rxjs/operators";
 import { ReportInitialData } from "../model/report-initial-data";
+import { toIdMap } from "../../calendar/utils/scheduler-utility";
 
 @Injectable()
 export class ReportDataSource {
@@ -33,8 +34,7 @@ export class ReportDataSource {
       this.workingNormService.getAllByDepartmentId(departmentId, from, to),
       this.specialCalendarDateService.getAllByEnterpriseId(enterpriseId, from, to),
       this.statisticsService.getSummationDTOByDepartmentId(SummationMode.PER_POSITION, departmentId, from, to,),
-      this.dayTypeService.getAllByEnterpriseId(enterpriseId)
-        .pipe(map(values => values.sort((a, b) => a.id - b.id))),
+      this.dayTypeService.getMapByEnterpriseId(enterpriseId),
       this.shiftService.getAllByDepartmentId(departmentId),
       this.positionService.getAllByDepartmentId(departmentId),
       this.reportSheetDTOService.getAllByDepartmentId(departmentId)
@@ -42,14 +42,15 @@ export class ReportDataSource {
 
     return forkJoin(sources).pipe(
       map(([schedule, workingNorms, specialCalendarDates,
-             summationDTO, dayTypes, shifts,
+             summationDTO, dayTypeMap, shifts,
              positions, reportSheets]) => ({
         scheduleDTOs:   schedule,
         workingNorms:   workingNorms,
         summationDTOs:  summationDTO,
-        dayTypes:       dayTypes,
+        dayTypeMap:     dayTypeMap,
         shifts:         shifts,
         positions:      positions,
+        positionMap:    toIdMap(positions),
         reportSheets:   reportSheets,
         specialCalendarDates:   specialCalendarDates,
       } as ReportInitialData))
@@ -66,22 +67,22 @@ export class ReportDataSource {
       this.workingNormService.getAllByDepartmentId(departmentId, from, to),
       this.specialCalendarDateService.getAllByEnterpriseId(enterpriseId, from, to),
       this.statisticsService.getSummationDTOByShiftIds(SummationMode.PER_POSITION, shiftIds, from, to,),
-      this.dayTypeService.getAllByEnterpriseId(enterpriseId)
-        .pipe(map(values => values.sort((a, b) => a.id - b.id))),
+      this.dayTypeService.getMapByEnterpriseId(enterpriseId),
       this.shiftService.getAllByShiftIds(shiftIds),
       this.positionService.getAllByDepartmentId(departmentId)
     ];
 
     return forkJoin(sources).pipe(
       map(([schedule, workingNorms, specialCalendarDates,
-             summationDTO, dayTypes, shifts,
+             summationDTO, dayTypeMap, shifts,
              positions, reportSheets]) => ({
         scheduleDTOs:   schedule,
         workingNorms:   workingNorms,
         summationDTOs:  summationDTO,
-        dayTypes:       dayTypes,
+        dayTypeMap:     dayTypeMap,
         shifts:         shifts,
         positions:      positions,
+        positionMap:    toIdMap(positions),
         reportSheets:   reportSheets,
         specialCalendarDates: specialCalendarDates
       } as ReportInitialData))

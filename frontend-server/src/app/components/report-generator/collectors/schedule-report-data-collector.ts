@@ -28,10 +28,10 @@ export class ScheduleReportDataCollector extends AbstractReportDataCollector {
 
   fillCellWithValue(cell: ReportCellData,
                     workDay: WorkDay,
-                    dayTypes: DayType[],
+                    dayTypeMap: Map<number, DayType>,
                     useReportLabel?: boolean): void {
     cell.style = this.getStyle(cell.date, false);
-    cell.value = workDay ? getCellValue(workDay, dayTypes, useReportLabel) : null;
+    cell.value = workDay ? getCellValue(workDay, dayTypeMap, useReportLabel) : null;
   }
 
   fillDisabledCell(cell: ReportCellData) {
@@ -80,7 +80,7 @@ export class ScheduleReportDataCollector extends AbstractReportDataCollector {
 
   collectRowCellData(dto: EmployeeScheduleDTO,
                      calendarDays: CalendarDay[],
-                     dayTypes: DayType[],
+                     dayTypesMap: Map<number, DayType>,
                      positionName: string,
                      summations: SummationResult[],
                      useReportLabel?: boolean,
@@ -104,7 +104,7 @@ export class ScheduleReportDataCollector extends AbstractReportDataCollector {
       }
     ]);
 
-    this.collectCells(dto, calendarDays, intervals, dayTypes, useReportLabel)
+    this.collectCells(dto, calendarDays, intervals, dayTypesMap, useReportLabel)
       .forEach(cell => result.push(cell));
 
     summations.forEach(sum =>

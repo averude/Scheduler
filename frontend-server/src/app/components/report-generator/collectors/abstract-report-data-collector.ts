@@ -61,10 +61,11 @@ export abstract class AbstractReportDataCollector implements ReportDataCollector
 
       positionIntervalsMap.forEach((intervals, positionId) => {
         const reportRowData = new ReportRow();
-        const positionName = initialData.positionsMap.get(positionId)?.shortName;
-        reportRowData.reportCellData = this.collectRowCellData(dto,
-          initialData.calendarDays, initialData.dayTypes, positionName,
-          this.getSummationResults(initialData.summationDTOs, dto.parent.id, positionId), useReportLabel, intervals);
+        const positionName = initialData.positionMap.get(positionId)?.shortName;
+        reportRowData.reportCellData = this.collectRowCellData(dto, initialData.calendarDays,
+          initialData.dayTypeMap, positionName,
+          this.getSummationResults(initialData.summationDTOs, dto.parent.id, positionId),
+          useReportLabel, intervals);
         rows.push(reportRowData);
       });
 
@@ -100,7 +101,7 @@ export abstract class AbstractReportDataCollector implements ReportDataCollector
 
   abstract collectRowCellData(dto: EmployeeScheduleDTO,
                               calendarDays: CalendarDay[],
-                              dayTypes: DayType[],
+                              dayTypeMap: Map<number, DayType>,
                               positionName: string,
                               summations: SummationResult[],
                               useReportLabel?: boolean,
@@ -108,7 +109,7 @@ export abstract class AbstractReportDataCollector implements ReportDataCollector
 
   abstract fillCellWithValue(cell: ReportCellData,
                              workDay: WorkDay,
-                             dayTypes: DayType[],
+                             dayTypeMap: Map<number, DayType>,
                              useReportLabel?: boolean): void;
 
   abstract fillDisabledCell(cell: ReportCellData);
@@ -118,7 +119,7 @@ export abstract class AbstractReportDataCollector implements ReportDataCollector
   collectCells(dto: EmployeeScheduleDTO,
                calendarDays: CalendarDay[],
                intervals: RowInterval[],
-               dayTypes: DayType[],
+               dayTypeMap: Map<number, DayType>,
                useReportLabel: boolean) {
     const cells = this.cellCollector.collectByFn(calendarDays, dto.collection, (date => {
       const cell = {date: date} as ReportCellData;
@@ -130,7 +131,7 @@ export abstract class AbstractReportDataCollector implements ReportDataCollector
     const to = moment.utc(calendarDays[calendarDays.length - 1].isoString);
 
     this.cellEnabledSetter.processCells(cells, intervals, from, to, (cell => {
-      this.fillCellWithValue(cell, cell.workDay, dayTypes, useReportLabel);
+      this.fillCellWithValue(cell, cell.workDay, dayTypeMap, useReportLabel);
     }));
 
     return cells;

@@ -13,7 +13,7 @@ import { RowGroup } from "../model/data/row-group";
 import { AfterDateColumnDef, BeforeDateColumnDef, PageableColumnDef } from "../directives/column";
 import { Subscription } from "rxjs";
 import { TableRenderer } from "../service/table-renderer.service";
-import { filter } from "rxjs/operators";
+import { debounceTime, filter } from "rxjs/operators";
 import { Row } from "../model/data/row";
 import { Options } from "../model/options";
 
@@ -57,7 +57,10 @@ export class TableRowGroupComponent implements OnInit, OnDestroy {
       });
 
     this.rowGroupRenderSub = this.tableRenderer.onRenderRowGroup
-      .pipe(filter(id => this.groupData.id === id))
+      .pipe(
+        filter(id => this.groupData.id === id),
+        debounceTime(50)
+      )
       .subscribe((id) => this.renderRows());
   }
 
@@ -74,7 +77,7 @@ export class TableRowGroupComponent implements OnInit, OnDestroy {
 
   renderRows() {
     if (this.groupData) {
-      this.cd.markForCheck();
+      this.cd.detectChanges();
     }
   }
 

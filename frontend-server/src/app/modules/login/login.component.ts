@@ -13,7 +13,9 @@ export class LoginComponent implements OnInit{
   loginForm: FormGroup;
 
   loading = false;
+  error = false;
   bad_credentials = false;
+  server_error = false;
 
   constructor(private fb: FormBuilder,
               private authService: AuthService,
@@ -64,7 +66,12 @@ export class LoginComponent implements OnInit{
         this.navigate(res).catch(() => this.loading = false);
       }, err => {
         this.loading = false;
-        this.bad_credentials = true;
+        this.error = true;
+        if (err.status >= 400 && err.status < 500) {
+          this.bad_credentials = true;
+        } else {
+          this.server_error = true;
+        }
         this.loginForm.patchValue({password: null})
       });
   }

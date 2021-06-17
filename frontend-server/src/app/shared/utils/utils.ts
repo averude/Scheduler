@@ -3,7 +3,6 @@ import { map } from "rxjs/operators";
 import { Employee } from "../../model/employee";
 import { WorkDay } from "../../model/workday";
 import { DayType } from "../../model/day-type";
-import { binarySearch } from "./collection-utils";
 import { HasTime } from "../../model/interface/has-time";
 
 export const MONTH_YEAR_DATE_FORMAT = {
@@ -45,6 +44,10 @@ export function isWeekend(date: Date): boolean {
   return date.getDay() === 0 || date.getDay() === 6;
 }
 
+export function xor(a: boolean, b: boolean): boolean {
+  return ( a || b ) && !( a && b );
+}
+
 /* Note that it doesn't work on IE because the Number.EPSILON is undefined there*/
 export function roundToTwo(num): number {
   return Math.round(num * 100 + Number.EPSILON)/100;
@@ -62,8 +65,10 @@ export function getWorkDayDayTypeId(workDay: WorkDay) {
   return workDay.actualDayTypeId ? workDay.actualDayTypeId : workDay.scheduledDayTypeId;
 }
 
-export function getCellValue(workDay: WorkDay, dayTypes: DayType[], useReportLabel?: boolean) {
-  return getCellValueExt(workDay, dayTypes, getWorkDayDayTypeId, useReportLabel);
+export function getCellValue(workDay: WorkDay,
+                             dayTypesMap: Map<number, DayType>,
+                             useReportLabel?: boolean) {
+  return getCellValueExt(workDay, dayTypesMap, getWorkDayDayTypeId, useReportLabel);
 }
 
 export function compareHasTime(a: HasTime,
@@ -136,12 +141,12 @@ export const timeValidationPattern: string = '^([01]?\\d|2[0-3]|24(?=:00?$)):([0
 export const passwordValidationPattern: string = '^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&-+=()])(?=\\S+$).{8,20}$';
 
 export function getCellValueExt(workDay: WorkDay,
-                                dayTypes: DayType[],
+                                dayTypesMap: Map<number, DayType>,
                                 fn: (workday: WorkDay) => number,
                                 useReportLabel?: boolean) {
   const dayTypeId = fn(workDay);
-  if (dayTypes && dayTypeId) {
-    const dayType = binarySearch(dayTypes, (mid => mid.id - dayTypeId));
+  if (dayTypesMap && dayTypeId) {
+    const dayType = dayTypesMap.get(dayTypeId);
 
     if (useReportLabel && dayType && dayType.reportLabel) {
       return dayType.reportLabel;

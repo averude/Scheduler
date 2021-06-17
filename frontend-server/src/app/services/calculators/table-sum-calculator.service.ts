@@ -14,7 +14,9 @@ export class TableSumCalculator {
     this.calculateRowSum(rows, this.calcNormHoursSum, rowId);
   }
 
-  private calculateRowGroupSum(rowGroupData: RowGroup[], fn: (row) => void, rowId?: number) {
+  private calculateRowGroupSum(rowGroupData: RowGroup[],
+                               fn: (row) => void,
+                               rowId?: number) {
     if (rowGroupData) {
       rowGroupData.forEach(group => {
         let rows = group.rows;
@@ -23,7 +25,9 @@ export class TableSumCalculator {
     }
   }
 
-  private calculateRowSum(rows: Row[], fn, rowId?: number) {
+  private calculateRowSum(rows: Row[],
+                          fn,
+                          rowId?: number) {
     if (rows) {
       if (rowId && rowId > 0) rows = rows.filter(row => row.id === rowId);
       rows.forEach(row => fn(row));

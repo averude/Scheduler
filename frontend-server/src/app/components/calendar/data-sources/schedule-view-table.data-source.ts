@@ -5,7 +5,6 @@ import { InitialData } from "../../../model/datasource/initial-data";
 import { map, switchMap } from "rxjs/operators";
 import { Injectable } from "@angular/core";
 import { DayTypeService } from "../../../services/http/day-type.service";
-import { toIdMap } from "../utils/scheduler-utility";
 
 @Injectable()
 export class ScheduleViewTableDataSource {
@@ -16,10 +15,9 @@ export class ScheduleViewTableDataSource {
 
   byViewId(enterpriseId: number, viewId: number): Observable<InitialData> {
     const initData = new InitialData();
-    return this.dayTypeService.getAllByEnterpriseId(enterpriseId)
-      .pipe(switchMap(dayTypes => {
-        initData.dayTypes = dayTypes;
-        initData.dayTypeMap = toIdMap(dayTypes);
+    return this.dayTypeService.getMapByEnterpriseId(enterpriseId)
+      .pipe(switchMap(dayTypeMap => {
+        initData.dayTypeMap = dayTypeMap;
 
         return this.paginationService.onValueChange
           .pipe(

@@ -26,7 +26,7 @@ export class ScheduleTableDataSource {
   byDepartmentId(enterpriseId: number,
                  departmentId: number): Observable<InitialData> {
     const obs: Observable<any>[] = [
-      this.dayTypeService.getAllByEnterpriseId(enterpriseId),
+      this.dayTypeService.getMapByEnterpriseId(enterpriseId),
       this.positionService.getAllByDepartmentId(departmentId),
       this.shiftService.getAllByDepartmentId(departmentId),
       this.employeeService.getAllByDepartmentId(departmentId)
@@ -49,7 +49,7 @@ export class ScheduleTableDataSource {
              departmentId: number,
              shiftIds: number[]): Observable<InitialData> {
     const obs: Observable<any>[] = [
-      this.dayTypeService.getAllByEnterpriseId(enterpriseId),
+      this.dayTypeService.getMapByEnterpriseId(enterpriseId),
       this.positionService.getAllByDepartmentId(departmentId),
       this.shiftService.getAllByDepartmentId(departmentId)
     ];
@@ -69,15 +69,13 @@ export class ScheduleTableDataSource {
 
   private getData(obs: Observable<any>[],
                   onPaginationFn: (daysInMonth) => Observable<any>[]): Observable<InitialData> {
-
     return forkJoin(obs)
       .pipe(
-        map(([dayTypes, positions, shifts, employees]) => {
+        map(([dayTypeMap, positions, shifts, employees]) => {
           const initData = new InitialData();
-          initData.dayTypes     = dayTypes;
-          initData.dayTypeMap   = toIdMap(dayTypes);
-          initData.positions    = positions;
-          initData.positionsMap = toIdMap(positions);
+          initData.dayTypeMap   = dayTypeMap;
+          initData.positionMap    = positions;
+          initData.positionMap  = toIdMap(positions);
           initData.shifts       = shifts;
           initData.employees    = employees;
           return initData;

@@ -15,14 +15,14 @@ export class StatisticsTableDataCollector {
 
   getTableData(dtos: EmployeeWorkStatDTO[],
                shifts: Shift[],
-               positions: Position[]) {
+               positionMap: Map<number, Position>) {
     const groups: StatisticsRowGroup[] = shifts
       .sort(((a, b) => a.id - b.id))
       .map(shift => ({
         id: shift.id,
         name: shift.name,
         rows: []
-      }));
+      } as StatisticsRowGroup));
 
     for (let dto of dtos) {
       const group = binarySearch(groups, (mid => mid.id - dto.shiftId));
@@ -33,7 +33,7 @@ export class StatisticsTableDataCollector {
         };
 
         dto.positionStats.forEach(pStat => {
-          employeeRow.rows.push(this.getPositionRow(positions, pStat));
+          employeeRow.rows.push(this.getPositionRow(positionMap, pStat));
         });
         group.rows.push(employeeRow);
       }
@@ -43,10 +43,10 @@ export class StatisticsTableDataCollector {
 
   }
 
-  private getPositionRow(positions: Position[],
+  private getPositionRow(positionMap: Map<number, Position>,
                          positionStat: EmployeePositionStat) {
     return {
-      position: binarySearch(positions, (mid => mid.id - positionStat.positionId)),
+      position: positionMap.get(positionStat.positionId),
       cells: positionStat.summations.map(summation => ({
         columnId: summation.summationColumnId,
         value: summation.type === SummationType.HOURS_SUM ? roundToTwo(summation.value / 60) : summation.value
@@ -55,7 +55,7 @@ export class StatisticsTableDataCollector {
   }
 }
 
-export class StatisticsRowGroup implements RowGroup {
+export class StatisticsRowGroup extends RowGroup {
   id: number;
   name: string;
   rows: StatisticsEmployeeRow[];

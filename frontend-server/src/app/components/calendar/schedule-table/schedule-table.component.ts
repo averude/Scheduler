@@ -1,6 +1,7 @@
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   OnDestroy,
   OnInit,
@@ -72,7 +73,8 @@ export class ScheduleTableComponent implements OnInit, AfterViewInit, OnDestroy 
   private rowRenderSub:     Subscription;
   private editableStateSub: Subscription;
 
-  constructor(private templateService: ToolbarTemplateService,
+  constructor(private cd: ChangeDetectorRef,
+              private templateService: ToolbarTemplateService,
               private activatedRoute: ActivatedRoute,
               private authService: AuthService,
               public  paginationStrategy: ScheduleTablePaginationStrategy,
@@ -99,7 +101,7 @@ export class ScheduleTableComponent implements OnInit, AfterViewInit, OnDestroy 
           this.departmentId = Number.parseInt(departmentId);
 
           this.proxyViewIsShown = true;
-          this.tableRenderer.renderTable();
+          this.cd.detectChanges();
 
           if (this.departmentId && this.departmentId > 0) {
 
@@ -136,7 +138,7 @@ export class ScheduleTableComponent implements OnInit, AfterViewInit, OnDestroy 
       .subscribe(tableData => {
         this.proxyViewIsShown = false;
         this.tableData = tableData;
-        this.tableRenderer.renderTable();
+        this.cd.detectChanges();
       });
 
     this.editableStateSub = this.state.editableGroupsState
@@ -171,7 +173,7 @@ export class ScheduleTableComponent implements OnInit, AfterViewInit, OnDestroy 
 
   onDateChange() {
     this.proxyViewIsShown = true;
-    this.tableRenderer?.renderTable();
+    this.cd.detectChanges();
   }
 
   setIsAble() {

@@ -11,6 +11,19 @@ export class SchedulerUtility {
   }
 }
 
+export function toArray<K, V>(map: Map<K, V>): V[] {
+  let result = [];
+  if (!map) {
+    return result;
+  }
+
+  for (let value of map.values()) {
+    result.push(value);
+  }
+
+  return result;
+}
+
 export function toIdMap<T extends IdEntity>(list: T[]):Map<number, T> {
   let result = new Map<number, T>();
   list.forEach(value => result.set(value.id, value));

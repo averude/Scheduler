@@ -80,7 +80,7 @@ export class TableRowComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.cd.markForCheck();
+    this.cd.detectChanges();
   }
 
   getContentPositioning() {

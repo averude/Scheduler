@@ -5,12 +5,9 @@ import { Moment } from "moment";
 import { Cell } from "../../../lib/ngx-schedule-table/model/data/cell";
 import { Row } from "../../../lib/ngx-schedule-table/model/data/row";
 import { RowGroup } from "../../../lib/ngx-schedule-table/model/data/row-group";
-import {
-  binarySearch,
-  binarySearchInsertIndex,
-  binarySearchLastRepeatableIndex
-} from "../../../shared/utils/collection-utils";
+import { binarySearch } from "../../../shared/utils/collection-utils";
 import { RowInterval } from "./row-interval";
+import { EmployeeScheduleDTO } from "../../dto/employee-schedule-dto";
 
 export class TableData {
   groups: ScheduleRowGroup[];
@@ -24,69 +21,22 @@ export class TableData {
   findRowGroup(groupId: number): ScheduleRowGroup {
     return binarySearch(this.groups, (mid => mid.id - groupId));
   }
+
+  forEachRow(callbackfn: (row: ScheduleRow) => void) {
+    this.groups.forEach((group => group.rows.forEach(callbackfn)));
+  }
+
 }
 
-export class ScheduleRowGroup implements RowGroup {
+export class ScheduleRowGroup extends RowGroup {
   table:  TableData;
   id:     number;
   name:   string;
   rows:   Row[];
-
-  constructor() {
-    this.rows = [];
-  }
-
-  addRow(row: ScheduleRow,
-         comparator: (val: ScheduleRow) => number) {
-    if (!this.rows) {
-      return;
-    }
-
-    const insertIndex = binarySearchInsertIndex(this.rows, comparator);
-    if (insertIndex >= 0) {
-      row.group = this;
-      this.rows.splice(insertIndex, 0, row);
-    } else {
-      this.rows.push(row);
-    }
-  }
-
-  foo(comparator: (val: ScheduleRow) => number,
-      isUpdateOperationPredicate: (row: ScheduleRow) => boolean,
-      updateRowFn: (row) => ScheduleRow,
-      createRowFn: () => ScheduleRow) {
-
-    let processedRow;
-
-    const rowIndex = binarySearchLastRepeatableIndex(this.rows, comparator, comparator);
-    if (rowIndex >= 0) {
-
-      const row = <ScheduleRow> this.rows[rowIndex];
-      if (isUpdateOperationPredicate(row)) {
-
-        processedRow = updateRowFn(row);
-
-      } else {
-
-        const newRow = createRowFn();
-        this.rows.splice(rowIndex + 1, 0, newRow);
-        processedRow = newRow;
-
-      }
-
-    } else {
-
-      const newRow = createRowFn();
-      this.addRow(newRow, comparator);
-      processedRow = newRow;
-
-    }
-
-    return processedRow;
-  }
 }
 
-export interface ScheduleRow extends Row {
+export class ScheduleRow implements Row {
+
   group:          ScheduleRowGroup;
   id:             number;
   employee:       Employee;
@@ -96,6 +46,23 @@ export interface ScheduleRow extends Row {
   cells:          Cell[];
   workingNorm:    number;
   intervals?:     RowInterval[];
+
+  static create(group: ScheduleRowGroup,
+                dto: EmployeeScheduleDTO,
+                position: Position,
+                workingNorm: number,
+                isSubstitution: boolean): ScheduleRow {
+    const row = {} as ScheduleRow;
+    row.group = group;
+    row.id = dto.parent.id;
+    row.employee = dto.parent;
+    row.position = position;
+    row.isSubstitution = isSubstitution;
+    row.cells = [];
+    row.workingNorm = workingNorm;
+    return row;
+  }
+
 }
 
 export interface ScheduleCell extends Cell {

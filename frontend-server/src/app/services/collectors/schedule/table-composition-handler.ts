@@ -80,14 +80,14 @@ export class TableCompositionHandler {
       if (composition.id) {
         compositionService.update(composition)
           .subscribe((res) => {
-            const position = initData.positionsMap.get(composition.positionId);
+            const position = initData.positionMap.get(composition.positionId);
             this.updateRow(initData, composition, position, rowGroup, row);
           });
       } else {
         compositionService.create(composition)
           .subscribe((res) => {
             composition = res;
-            const position = initData.positionsMap.get(composition.positionId);
+            const position = initData.positionMap.get(composition.positionId);
             this.createRow(initData, composition, position, rowGroup, isSubstitution, parentRow);
           });
       }

@@ -82,7 +82,7 @@ export class SchedulesTableComponent implements OnInit, OnDestroy {
       .subscribe(editableRowGroup => this.editableRowGroup = editableRowGroup);
 
     this.tableRenderSub = this.tableRenderer.onTableRender
-      .subscribe(() => this.cd.markForCheck());
+      .subscribe(() => this.cd.detectChanges());
   }
 
   ngOnDestroy(): void {

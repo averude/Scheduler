@@ -7,9 +7,14 @@
 
     <h1 class="scheduler-title"></h1>
 
-    <div *ngIf="bad_credentials"
-         class="login-panel-bad-credentials">
-      Wrong login or password<br />Try again
+    <div *ngIf="error"
+         class="login-panel-error">
+      <ng-container *ngIf="bad_credentials">
+        Wrong login or password<br />Try again
+      </ng-container>
+      <ng-container *ngIf="server_error">
+        Server error<br />Try again later
+      </ng-container>
     </div>
 
     <div class="inputs-panel"

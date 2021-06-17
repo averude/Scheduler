@@ -33,18 +33,18 @@ export class TimeSheetReportDataCollector extends AbstractReportDataCollector {
 
   fillCellWithValue(cell: ReportCellData,
                     workDay: WorkDay,
-                    dayTypes: DayType[],
+                    dayTypeMap: Map<number, DayType>,
                     useReportLabel?: boolean): void {
     cell.style  = this.getStyle(cell.date, false);
     cell.merge = false;
     const val = [];
     if (workDay) {
       if (workDay.actualDayTypeId) {
-        val[0] = getCellValueExt(workDay, dayTypes, (workDay) => workDay.actualDayTypeId, useReportLabel);
-        val[1] = getCellValueExt(workDay, dayTypes, (workDay) => workDay.scheduledDayTypeId, useReportLabel);
+        val[0] = getCellValueExt(workDay, dayTypeMap, (workDay) => workDay.actualDayTypeId, useReportLabel);
+        val[1] = getCellValueExt(workDay, dayTypeMap, (workDay) => workDay.scheduledDayTypeId, useReportLabel);
       } else {
         val[0] = calculateHoursByHasTime(workDay);
-        val[1] = getCellValue(workDay, dayTypes, useReportLabel);
+        val[1] = getCellValue(workDay, dayTypeMap, useReportLabel);
         if (val[0] == 0) val[0] = '';
       }
     }
@@ -59,7 +59,7 @@ export class TimeSheetReportDataCollector extends AbstractReportDataCollector {
 
   collectRowCellData(dto: EmployeeScheduleDTO,
                      calendarDays: CalendarDay[],
-                     dayTypes: DayType[],
+                     dayTypesMap: Map<number, DayType>,
                      positionName: string,
                      summations: SummationResult[],
                      useReportLabel?: boolean,
@@ -80,7 +80,7 @@ export class TimeSheetReportDataCollector extends AbstractReportDataCollector {
       }
     ]);
 
-    this.collectCells(dto, calendarDays, intervals, dayTypes, useReportLabel)
+    this.collectCells(dto, calendarDays, intervals, dayTypesMap, useReportLabel)
       .forEach(cell => result.push(cell));
 
     summations.forEach(cell =>

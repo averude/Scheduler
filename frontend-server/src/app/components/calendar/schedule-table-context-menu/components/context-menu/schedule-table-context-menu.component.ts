@@ -49,9 +49,14 @@ export class ScheduleTableContextMenuComponent implements OnInit, OnDestroy {
   @Input() set initData(initData: InitialData) {
     this.initialData = initData;
 
-    this.serviceDayTypes = initData?.dayTypes
-      .filter(dayType => dayType.usePreviousValue)
-      .map(dayType => ({dayType: dayType} as DepartmentDayType));
+    this.serviceDayTypes = [];
+    if (initData) {
+      for (let dayType of initData.dayTypeMap.values()) {
+        if (dayType.usePreviousValue) {
+          this.serviceDayTypes.push({dayType: dayType} as DepartmentDayType);
+        }
+      }
+    }
   };
 
   @Input() isEditableGroups: boolean = false;

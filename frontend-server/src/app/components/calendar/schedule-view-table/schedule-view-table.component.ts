@@ -1,10 +1,9 @@
-import { AfterViewInit, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { ToolbarTemplateService } from "../../../services/top-bar/toolbar-template.service";
 import { ActivatedRoute } from "@angular/router";
 import { AuthService } from "../../../services/http/auth.service";
 import { ScheduleTablePaginationStrategy } from "../../../shared/paginators/pagination-strategy/schedule-table-pagination-strategy";
 import { PaginationService } from "../../../lib/ngx-schedule-table/service/pagination.service";
-import { TableRenderer } from "../../../lib/ngx-schedule-table/service/table-renderer.service";
 import { SchedulerUtility } from "../utils/scheduler-utility";
 import { Options } from "../../../lib/ngx-schedule-table/model/options";
 import { UserAccessRights } from "../../../model/user";
@@ -44,12 +43,12 @@ export class ScheduleViewTableComponent implements OnInit, AfterViewInit, OnDest
 
   private routeSub: Subscription;
 
-  constructor(private templateService: ToolbarTemplateService,
+  constructor(private cd: ChangeDetectorRef,
+              private templateService: ToolbarTemplateService,
               private activatedRoute: ActivatedRoute,
               private authService: AuthService,
               public  paginationStrategy: ScheduleTablePaginationStrategy,
               private paginationService: PaginationService,
-              private tableRenderer: TableRenderer,
               private dataSource: ScheduleViewTableDataSource,
               private tableDataCollector: ScheduleViewDataCollector,
               public utility: SchedulerUtility) { }
@@ -67,7 +66,7 @@ export class ScheduleViewTableComponent implements OnInit, AfterViewInit, OnDest
           this.viewId = Number.parseInt(viewId);
 
           this.proxyViewIsShown = true;
-          this.tableRenderer.renderTable();
+          this.cd.detectChanges();
 
           if (this.viewId && this.viewId > 0) {
 
@@ -94,7 +93,7 @@ export class ScheduleViewTableComponent implements OnInit, AfterViewInit, OnDest
       .subscribe(rows => {
         this.proxyViewIsShown = false;
         this.rowData = rows;
-        this.tableRenderer.renderTable();
+        this.cd.detectChanges();
       });
 
     this.options = {
@@ -118,7 +117,7 @@ export class ScheduleViewTableComponent implements OnInit, AfterViewInit, OnDest
 
   onDateChange() {
     this.proxyViewIsShown = true;
-    this.tableRenderer?.renderTable();
+    this.cd.detectChanges();
   }
 
 }

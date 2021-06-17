@@ -11,7 +11,7 @@ import {
   QueryList
 } from "@angular/core";
 import { fromEvent, Observable, Subscription } from "rxjs";
-import { distinctUntilChanged, filter, map, throttleTime } from "rxjs/operators";
+import { debounceTime, distinctUntilChanged, filter, map } from "rxjs/operators";
 import { selectingLeft, selectingRight } from "../utils/table-selection-utils";
 import { SelectableCellDirective } from "./selectable-cell.directive";
 import { Cell } from "../model/data/cell";
@@ -103,7 +103,7 @@ export const compFunction = (a, b) => a - b <= 3 && b - a <= 3;
 export function getMouseMove() {
   return fromEvent<MouseEvent>(document, 'mousemove')
     .pipe(
-      throttleTime(5),
+      debounceTime(5),
       filter(event => event.buttons === 1),
       map(event => event.clientX),
       distinctUntilChanged((a, b) => a - b <= 3 && b - a <= 3)

@@ -1,6 +1,7 @@
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   OnDestroy,
   OnInit,
@@ -69,7 +70,8 @@ export class WorkingNormTableComponent implements OnInit, AfterViewInit, OnDestr
   private selectionEndSub:  Subscription;
   private rowRenderSub:     Subscription;
 
-  constructor(private authService: AuthService,
+  constructor(private cd: ChangeDetectorRef,
+              private authService: AuthService,
               private activatedRoute: ActivatedRoute,
               private templateService: ToolbarTemplateService,
               private dialog: MatDialog,
@@ -95,7 +97,7 @@ export class WorkingNormTableComponent implements OnInit, AfterViewInit, OnDestr
         this.departmentId = Number.parseInt(departmentId);
 
         this.proxyViewIsShown = true;
-        this.tableRenderer.renderTable();
+        this.cd.detectChanges();
 
         if (this.departmentId && this.departmentId > 0) {
           return this.paginationService.onValueChange
@@ -114,7 +116,7 @@ export class WorkingNormTableComponent implements OnInit, AfterViewInit, OnDestr
       this.generationUnits = getGenerationUnits(this.shifts);
       this.rowData = this.dataCollector.getRowData(this.months, dtos, this.shiftPatterns);
       this.sumCalculator.calculateHoursNormSum(this.rowData);
-      this.tableRenderer.renderTable();
+      this.cd.detectChanges();
     });
 
     this.shiftPatternService.getAllByDepartmentId(this.departmentId)
@@ -185,7 +187,7 @@ export class WorkingNormTableComponent implements OnInit, AfterViewInit, OnDestr
 
   onDateChange() {
     this.proxyViewIsShown = true;
-    this.tableRenderer.renderTable();
+    this.cd.detectChanges();
   }
 
   getCellValue(value): string {

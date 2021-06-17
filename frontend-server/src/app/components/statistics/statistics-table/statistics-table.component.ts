@@ -80,7 +80,7 @@ export class StatisticsTableComponent implements OnInit, AfterViewInit, OnDestro
 
         this.summationColumns = this.tableSource.summationColumns;
         this.tableData = tableData;
-        this.cd.markForCheck();
+        this.cd.detectChanges();
       });
   }
 
@@ -101,7 +101,7 @@ export class StatisticsTableComponent implements OnInit, AfterViewInit, OnDestro
 
   onDateChange() {
     this.viewProxyShown = true;
-    this.cd.markForCheck();
+    this.cd.detectChanges();
   }
 
   changeMode() {
@@ -112,7 +112,7 @@ export class StatisticsTableComponent implements OnInit, AfterViewInit, OnDestro
     }
 
     this.viewProxyShown = true;
-    this.cd.markForCheck();
+    this.cd.detectChanges();
 
     if (this.dataSub) this.dataSub.unsubscribe();
     this.refresh(this.userAccount);
