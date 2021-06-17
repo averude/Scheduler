@@ -74,7 +74,7 @@ export class ScheduleTableDataSource {
         map(([dayTypeMap, positions, shifts, employees]) => {
           const initData = new InitialData();
           initData.dayTypeMap   = dayTypeMap;
-          initData.positionMap    = positions;
+          initData.positions    = positions;
           initData.positionMap  = toIdMap(positions);
           initData.shifts       = shifts;
           initData.employees    = employees;
