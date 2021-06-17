@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { from, Subscription } from "rxjs";
 import { TableStateService } from "../../../lib/ngx-schedule-table/service/table-state.service";
 import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
@@ -22,11 +22,14 @@ export class ScheduleTableConfigurationMenuComponent implements OnInit, OnDestro
   @Input() departmentId: number;
   @Input() initData: InitialData;
 
+  @Output() onChangeHiddenRowVisibility: EventEmitter<boolean> = new EventEmitter<boolean>();
+
   isAble: boolean = false;
 
   accessRights: UserAccessRights;
 
   cellsState: number = 0;
+  hiddenRowsIsShown: boolean = false;
 
   editableRowGroups: boolean = false;
 
@@ -65,6 +68,10 @@ export class ScheduleTableConfigurationMenuComponent implements OnInit, OnDestro
 
   changeEditableState() {
     this.tableStateService.changeEditableGroupsState(!this.editableRowGroups);
+  }
+
+  changeEmptyRowVisibility() {
+    this.onChangeHiddenRowVisibility.emit(this.hiddenRowsIsShown = !this.hiddenRowsIsShown);
   }
 
   openGenerateScheduleDialog() {

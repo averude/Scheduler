@@ -46,6 +46,7 @@ export class ScheduleRow implements Row {
   cells:          Cell[];
   workingNorm:    number;
   intervals?:     RowInterval[];
+  hidden?:        boolean;
 
   static create(group: ScheduleRowGroup,
                 dto: EmployeeScheduleDTO,

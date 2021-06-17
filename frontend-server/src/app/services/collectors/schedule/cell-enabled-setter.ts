@@ -33,7 +33,17 @@ export class CellEnabledSetter {
 
   processRow(row: ScheduleRow, from: Moment, to: Moment) {
     row.cells.forEach(cell => cell.enabled = false);
-    this.processCells(row.cells, row.intervals, from, to, (cell => cell.enabled = true));
+
+    let count = row.cells.length;
+
+    this.processCells(row.cells, row.intervals, from, to,
+      (cell => {
+        count--;
+        cell.enabled = true
+      })
+    );
+
+    row.hidden = (count === row.cells.length);
   }
 
   process(row: ScheduleRow) {

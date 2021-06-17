@@ -14,7 +14,6 @@ import { AfterDateColumnDef, BeforeDateColumnDef, PageableColumnDef } from "../d
 import { Subscription } from "rxjs";
 import { TableRenderer } from "../service/table-renderer.service";
 import { debounceTime, filter } from "rxjs/operators";
-import { Row } from "../model/data/row";
 import { Options } from "../model/options";
 
 @Component({
@@ -30,7 +29,8 @@ export class TableRowGroupComponent implements OnInit, OnDestroy {
 
   @Input() options: Options;
 
-  @Input() editableRowGroup: boolean;
+  @Input() editableRowGroup:  boolean;
+  @Input() showHiddenRows:    boolean;
 
   @Input() pageableColumns:   PageableColumnDef;
   @Input() beforeDateColumns: QueryList<BeforeDateColumnDef>;
@@ -79,9 +79,5 @@ export class TableRowGroupComponent implements OnInit, OnDestroy {
     if (this.groupData) {
       this.cd.detectChanges();
     }
-  }
-
-  isHidden(row: Row) {
-    return row.cells.filter(cell => cell.enabled).length == 0;
   }
 }

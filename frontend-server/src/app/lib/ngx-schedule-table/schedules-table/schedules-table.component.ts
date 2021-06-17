@@ -42,8 +42,9 @@ export class SchedulesTableComponent implements OnInit, OnDestroy {
 
   @Input() options: Options = DEFAULT_OPTIONS;
 
-  @Input() proxyViewIsShown: boolean = false;
-  @Input() editableRowGroup: boolean = false;
+  @Input() proxyViewIsShown:  boolean = false;
+  @Input() editableRowGroup:  boolean = false;
+  @Input() showHiddenRows:    boolean = true;
 
   @ContentChild(PaginatorDef, { read: TemplateRef })
   paginator: TemplateRef<any>;

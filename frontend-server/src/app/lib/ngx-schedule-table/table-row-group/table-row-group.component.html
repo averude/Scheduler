@@ -15,8 +15,7 @@
     </td>
   </tr>
   <ng-container *ngFor="let row of groupData.rows">
-    <tr *ngIf="!(options?.hideDisabledRow && isHidden(row))"
-        [hidden]="isHiddenGroup"
+    <tr [hidden]="isHiddenGroup || (!showHiddenRows && row.hidden)"
         class="row"
         [class.distinctByColor]="options?.distinctByColor"
         app-table-row

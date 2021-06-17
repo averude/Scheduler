@@ -21,6 +21,7 @@
       <ng-container *ngIf="options?.groupable">
         <tbody *ngFor="let group of rowGroupData"
                app-table-row-group
+               [showHiddenRows]="showHiddenRows"
                [editableRowGroup]="editableRowGroup"
                [options]="options"
                [trackByFn]="trackByFn"
@@ -33,6 +34,7 @@
       </ng-container>
       <ng-container>
         <tr class="row"
+            [hidden]="!showHiddenRows && row.hidden"
             [class.distinctByColor]="options?.distinctByColor"
             *ngFor="let row of rowData"
             app-table-row

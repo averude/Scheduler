@@ -7,6 +7,7 @@
                      [options]="options"
                      [rowGroupData]="tableData"
                      [proxyViewIsShown]="proxyViewIsShown"
+                     [showHiddenRows]="showHiddenRows"
                      (onAddRowClick)="isAble && isEditable && tableManager.newRow($event, initData)">
 
   <ng-template proxyViewDef>
@@ -33,7 +34,9 @@
     <th class="table-sticky-header th-null"
         *headerCellDef>
       <app-schedule-table-configuration-menu [departmentId]="departmentId"
-                                             [initData]="initData"></app-schedule-table-configuration-menu>
+                                             [initData]="initData"
+                                             (onChangeHiddenRowVisibility)="changeHiddenRowsVisibility($event)">
+      </app-schedule-table-configuration-menu>
     </th>
     <td class="td-name"
         [class.substitution]="rowData.isSubstitution"

@@ -61,6 +61,7 @@ export class ScheduleTableComponent implements OnInit, AfterViewInit, OnDestroy 
   accessRights:     UserAccessRights;
   isEditable:       boolean;
   proxyViewIsShown: boolean;
+  showHiddenRows:   boolean = false;
 
   @ViewChild('paginator', { read: TemplateRef })
   paginator: TemplateRef<any>;
@@ -178,5 +179,10 @@ export class ScheduleTableComponent implements OnInit, AfterViewInit, OnDestroy 
 
   setIsAble() {
     this.isAble = (this.accessRights?.isDepartmentLevel || this.accessRights?.isEnterpriseLevel) && this.accessRights?.isAdmin;
+  }
+
+  changeHiddenRowsVisibility(isShown: boolean) {
+    this.showHiddenRows = isShown;
+    this.cd.detectChanges();
   }
 }
