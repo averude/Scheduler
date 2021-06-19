@@ -43,15 +43,13 @@ export class TableDataCollector {
     table.from  = moment.utc(initialData.calendarDays[0].isoString);
     table.to    = moment.utc(initialData.calendarDays[initialData.calendarDays.length - 1].isoString);
 
-    table.groups = initialData.shifts
-      .sort((a, b) => a.id - b.id)
-      .map(shift => {
-        const group = new ScheduleRowGroup();
-        group.table = table;
-        group.id    = shift.id;
-        group.name  = shift.name;
-        return group;
-      });
+    initialData.shifts.forEach(shift => {
+      const group = new ScheduleRowGroup();
+      group.table = table;
+      group.id    = shift.id;
+      group.name  = shift.name;
+      table.addGroup(group, (value => value.id - group.id));
+    });
 
     for (let dto of initialData.scheduleDTOs) {
 
