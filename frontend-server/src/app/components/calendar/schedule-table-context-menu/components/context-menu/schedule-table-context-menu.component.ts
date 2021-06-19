@@ -46,6 +46,10 @@ export class ScheduleTableContextMenuComponent implements OnInit, OnDestroy {
 
   private initialData: InitialData;
 
+  get initData(): InitialData {
+    return this.initialData;
+  }
+
   @Input() set initData(initData: InitialData) {
     this.initialData = initData;
 
