@@ -104,7 +104,7 @@ export class ScheduleTableContextMenuComponent implements OnInit, OnDestroy {
       this.noServiceDepartmentDayTypes = values[1]
         .filter(departmentDayType => !departmentDayType.dayType.usePreviousValue);
 
-      this.cd.markForCheck();
+      this.cd.detectChanges();
     });
 
     this.selectionEndSub = this.selectionEndService.onSelectionEnd

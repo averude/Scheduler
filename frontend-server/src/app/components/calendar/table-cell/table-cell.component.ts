@@ -47,8 +47,7 @@ export class TableCellComponent implements OnInit, OnChanges, OnDestroy {
 
   constructor(private cd: ChangeDetectorRef,
               private cellLabelSetter: ScheduleCellLabelPipe,
-              private cellStateService: TableStateService) {
-  }
+              private cellStateService: TableStateService) {}
 
   ngOnInit() {
     this.cellStateSub = this.cellStateService.isCellShown.subscribe(state => {
@@ -78,6 +77,6 @@ export class TableCellComponent implements OnInit, OnChanges, OnDestroy {
   refreshLabel() {
     this.labelColor = "transparent";
     this.cellLabelSetter.setLabel(this, this.dayTypeMap);
-    this.cd.markForCheck();
+    this.cd.detectChanges();
   }
 }
