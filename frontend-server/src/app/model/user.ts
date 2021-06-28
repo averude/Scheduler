@@ -1,6 +1,7 @@
 export class UserSession {
   access_token?: string;
   roles: string[];
+  expired: number;
   accessRights: UserAccessRights;
 }
 

@@ -33,6 +33,7 @@ export class AuthService {
             const token_claims = decode(token.access_token);
             userSession.roles = token_claims.authorities;
             userSession.access_token = token.access_token;
+            userSession.expired = token_claims.exp;
             this.fillAccessRights(userSession);
             sessionStorage.setItem('currentUser', JSON.stringify(userSession));
 
