@@ -53,7 +53,6 @@ export class TableCompositionHandler {
     return forkJoin(obs);
   }
 
-  // TODO: Fix issue when removing one of sub comp
   remove(groupData: ScheduleRowGroup,
          row: ScheduleRow,
          initData: InitialData,
