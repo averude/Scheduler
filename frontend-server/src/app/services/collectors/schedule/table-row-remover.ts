@@ -101,14 +101,17 @@ export class TableRowRemover {
   removeCompositionAndInterval(row: ScheduleRow,
                                composition: Composition) {
     const group = row.group;
-    const rows = group.rows;
+    const rows = <ScheduleRow[]> group.rows;
 
     // Remove composition from row's compositions
     removeFromArray(row.compositions, value => value.id === composition.id);
 
     if (row.compositions.length == 0) {
       // If no compositions remain then remove row from group
-      removeFromArray(rows, value => value.id === row.id);
+      removeFromArray(rows, value => value.id === row.id
+        && value.isSubstitution === row.isSubstitution
+        && value.position.id === row.position.id
+      );
 
       this.tableRenderer.renderRowGroup(group.id);
     } else {
