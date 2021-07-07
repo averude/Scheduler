@@ -3,7 +3,7 @@
               (close)="clearSelection()">
 
   <ng-container *ngIf="isEditableGroups">
-    <ng-template contextMenuItem (execute)="openAddSubstitutionDialog($event.item)">
+    <ng-template contextMenuItem (execute)="openAddSubstitutionDialog($event.item)" ena>
       Substitution
     </ng-template>
   </ng-container>
@@ -21,7 +21,7 @@
 
       <ng-template *ngFor="let departmentDayType of departmentDayTypes"
                    contextMenuItem
-                   (execute)="scheduleGenerationService.generateScheduleByDepartmentDayType(departmentDayType, $event.item)">
+                   (execute)="byDepartmentDayType(departmentDayType, $event.item)">
         <app-context-menu-daytype-item [hasDayTypeAndTime]="departmentDayType">
         </app-context-menu-daytype-item>
       </ng-template>
@@ -32,13 +32,13 @@
 
     <context-menu #serviceDaySubMenu>
       <ng-template contextMenuItem
-                   (execute)="scheduleGenerationService.removeServiceDays($event.item)">
+                   (execute)="scheduleGenerationService.removeServiceDays(initData, $event.item)">
         <div class="sub-menu-item">Remove service days</div>
       </ng-template>
 
       <ng-template *ngFor="let departmentDayType of serviceDayTypes"
                    contextMenuItem
-                   (execute)="scheduleGenerationService.generateScheduleByDepartmentDayType(departmentDayType, $event.item)">
+                   (execute)="byDepartmentDayType(departmentDayType, $event.item)">
         <app-context-menu-daytype-item [hasDayTypeAndTime]="departmentDayType">
         </app-context-menu-daytype-item>
       </ng-template>
@@ -54,7 +54,7 @@
       <context-menu #patternsSubMenu>
         <ng-container *ngFor="let unit of dto.collection; index as i">
           <ng-template contextMenuItem
-                       (execute)="scheduleGenerationService.generateSchedule(dto, $event.item, i)">
+                       (execute)="byPattern(dto, $event.item, i)">
             <app-context-menu-daytype-item [hasDayTypeAndTime]="unit">
             </app-context-menu-daytype-item>
           </ng-template>

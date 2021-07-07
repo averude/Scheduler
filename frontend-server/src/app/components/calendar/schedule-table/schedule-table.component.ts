@@ -11,20 +11,18 @@ import {
 import { PaginationService } from "../../../lib/ngx-schedule-table/service/pagination.service";
 import { of, Subscription } from "rxjs";
 import { ScheduleTablePaginationStrategy } from "../../../shared/paginators/pagination-strategy/schedule-table-pagination-strategy";
-import { RowGroup } from "../../../lib/ngx-schedule-table/model/data/row-group";
 import { TableRenderer } from "../../../lib/ngx-schedule-table/service/table-renderer.service";
 import { TableSumCalculator } from "../../../services/calculators/table-sum-calculator.service";
 import { AuthService } from "../../../services/http/auth.service";
 import { ScheduleTableDataSource } from "../data-sources/schedule-table.data-source";
-import { SchedulerUtility } from "../utils/scheduler-utility";
+import { SchedulerUtility, TRACK_BY_FN } from "../utils/scheduler-utility";
 import { UserAccessRights } from "../../../model/user";
 import { TableStateService } from "../../../lib/ngx-schedule-table/service/table-state.service";
-import { ScheduleCell, ScheduleRow } from "../../../model/ui/schedule-table/table-data";
+import { ScheduleRow, TableData } from "../../../model/ui/schedule-table/table-data";
 import { TableManager } from "../../../services/collectors/schedule/table-manager";
 import { ActivatedRoute } from "@angular/router";
 import { UserAccountAuthority } from "../../../model/dto/user-account-dto";
 import { filter, map, switchMap } from "rxjs/operators";
-import { WorkDay } from "../../../model/workday";
 import { ToolbarTemplateService } from "../../../services/top-bar/toolbar-template.service";
 import { Options } from "../../../lib/ngx-schedule-table/model/options";
 import { InitialData } from "../../../model/datasource/initial-data";
@@ -39,19 +37,7 @@ import { TableDataCollector } from "../../../services/collectors/schedule/table-
 export class ScheduleTableComponent implements OnInit, AfterViewInit, OnDestroy {
   isAble: boolean = false;
 
-  trackByFn = (index: number, item: ScheduleCell) => {
-    const value = <WorkDay> item.value;
-    if (value) {
-      return item.enabled + ':' + value.actualDayTypeId + '-'
-        + value.scheduledDayTypeId
-        + '-' + value.startTime
-        + '-' + value.endTime
-        + '-' + value.breakStartTime
-        + '-' + value.breakEndTime;
-    } else {
-      return item.enabled;
-    }
-  };
+  trackByFn = TRACK_BY_FN;
 
   options: Options;
 
@@ -68,7 +54,7 @@ export class ScheduleTableComponent implements OnInit, AfterViewInit, OnDestroy 
 
   initData: InitialData;
 
-  tableData: RowGroup[];
+  tableData: TableData;
 
   private routeSub:         Subscription;
   private rowRenderSub:     Subscription;
@@ -132,7 +118,7 @@ export class ScheduleTableComponent implements OnInit, AfterViewInit, OnDestroy 
                 );
             }
 
-            return of([]);
+            return of(undefined);
           }
         })
       )
@@ -144,9 +130,6 @@ export class ScheduleTableComponent implements OnInit, AfterViewInit, OnDestroy 
 
     this.editableStateSub = this.state.editableGroupsState
       .subscribe(isEditable => this.isEditable = isEditable);
-
-    this.rowRenderSub = this.tableRenderer.onRenderRow
-      .subscribe(rowId => this.sumCalculator.calculateWorkHoursSum(this.tableData, rowId));
 
     this.options = {
       showSumColumns: this.accessRights?.isAdmin,
@@ -184,5 +167,17 @@ export class ScheduleTableComponent implements OnInit, AfterViewInit, OnDestroy 
   changeHiddenRowsVisibility(isShown: boolean) {
     this.showHiddenRows = isShown;
     this.cd.detectChanges();
+  }
+
+  newRow(rowGroup) {
+    if (this.isAble && this.isEditable) {
+      this.tableManager.newRow(rowGroup, this.initData);
+    }
+  }
+
+  updateRow(rowData) {
+    if (this.isRowEditable(rowData)) {
+      this.tableManager.editRow(rowData, this.initData);
+    }
   }
 }

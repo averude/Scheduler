@@ -42,8 +42,8 @@ export class TableRowComponent implements OnInit, OnDestroy {
   @ViewChild(SelectableRowDirective, { static: true })
   selectableRowDirective: SelectableRowDirective;
 
-  private rowRenderSub:     Subscription;
   private rowClearSub:      Subscription;
+  private rowCommandSub:    Subscription;
 
   constructor(public elementRef: ElementRef,
               private paginatorService: PaginationService,
@@ -53,16 +53,22 @@ export class TableRowComponent implements OnInit, OnDestroy {
               private rowClearSelection: ClearSelectionService) { }
 
   ngOnInit() {
-    this.rowRenderSub = this.tableRenderer.onRenderRow
-      .pipe(filter(rowDataId => this.rowData.id === rowDataId))
-      .subscribe(() => this.renderCells());
+    this.rowCommandSub = this.tableRenderer.onRowCommand()
+      .pipe(filter(command => command.rowId === this.rowData.id))
+      .subscribe(command => {
+        if (command.command) {
+          command.command(this.rowData);
+        }
+
+        this.renderCells();
+      });
 
     this.rowClearSub = this.rowClearSelection.onClearSelection()
       .subscribe(() => this.clearSelection());
   }
 
   ngOnDestroy(): void {
-    this.rowRenderSub.unsubscribe();
+    this.rowCommandSub.unsubscribe();
     this.rowClearSub.unsubscribe();
   }
 

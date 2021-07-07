@@ -5,10 +5,10 @@
 
 <app-schedules-table [trackByFn]="trackByFn"
                      [options]="options"
-                     [rowGroupData]="tableData"
+                     [rowGroupData]="tableData?.groups"
                      [proxyViewIsShown]="proxyViewIsShown"
                      [showHiddenRows]="showHiddenRows"
-                     (onAddRowClick)="isAble && isEditable && tableManager.newRow($event, initData)">
+                     (onAddRowClick)="newRow($event)">
 
   <ng-template proxyViewDef>
     <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
@@ -45,7 +45,7 @@
         [name]="utility.getEmployeeName(rowData.employee)"
         [info]="rowData.position.shortName"
         [isEditable]="isRowEditable(rowData)"
-        (click)="isRowEditable(rowData) && tableManager.editRow(rowData, initData)">
+        (click)="updateRow(rowData)">
     </td>
   </ng-container>
 
@@ -82,5 +82,5 @@
                                  [initData]="initData"
                                  [enterpriseId]="enterpriseId"
                                  [departmentId]="departmentId"
-                                 [groups]="tableData"
+                                 [groups]="tableData?.groups"
                                  [isEditableGroups]="isEditable"></app-schedule-table-context-menu>

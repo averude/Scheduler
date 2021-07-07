@@ -131,8 +131,8 @@ export class WorkingNormTableComponent implements OnInit, AfterViewInit, OnDestr
         });
     }
 
-    this.rowRenderSub = this.tableRenderer.onRenderRow
-      .subscribe(rowId => this.sumCalculator.calculateHoursNormSum(this.rowData, rowId));
+    this.rowRenderSub = this.tableRenderer.onRowCommand()
+      .subscribe(command => this.sumCalculator.calculateHoursNormSum(this.rowData, command.rowId));
 
     this.options = {
       groupable: false,
@@ -167,7 +167,7 @@ export class WorkingNormTableComponent implements OnInit, AfterViewInit, OnDestr
         const onSuccess = res => {
           workingNorm = res;
           this.cellUpdater.updateCellData(selectionData.row.cells, [workingNorm], getMonthCellIndex);
-          this.tableRenderer.renderRow(selectionData.row.id);
+          this.tableRenderer.nextRowCommand({rowId: selectionData.row.id});
           this.notificationsService.success('Success');
         };
 

@@ -36,6 +36,12 @@ export class TableData {
     this.groups.forEach((group => group.rows.forEach(callbackfn)));
   }
 
+  forEachRowWithId(rowId: number,
+                   fn: (row) => void) {
+    this.groups.forEach(group => {
+      group.findRows(rowId).forEach(fn);
+    });
+  }
 }
 
 export class ScheduleRowGroup extends RowGroup {
@@ -73,7 +79,6 @@ export class ScheduleRow implements Row {
     row.workingNorm = workingNorm;
     return row;
   }
-
 }
 
 export interface ScheduleCell extends Cell {

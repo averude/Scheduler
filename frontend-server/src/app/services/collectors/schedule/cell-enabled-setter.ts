@@ -1,13 +1,13 @@
 import { ScheduleRow, TableData } from "../../../model/ui/schedule-table/table-data";
 import { Moment } from "moment";
 import { Injectable } from "@angular/core";
-import { RowInterval } from "../../../model/ui/schedule-table/row-interval";
+import { HasDuration } from "../../../model/composition";
 
 @Injectable()
 export class CellEnabledSetter {
 
   processCells<T>(cells: T[],
-                  intervals: RowInterval[],
+                  intervals: HasDuration[],
                   from: Moment,
                   to: Moment,
                   cellFn: (cell: T) => void) {
@@ -31,6 +31,10 @@ export class CellEnabledSetter {
     });
   }
 
+  process(row: ScheduleRow) {
+    this.processRow(row, row.group.table.from, row.group.table.to);
+  }
+
   processRow(row: ScheduleRow, from: Moment, to: Moment) {
     row.cells.forEach(cell => cell.enabled = false);
 
@@ -44,10 +48,6 @@ export class CellEnabledSetter {
     );
 
     row.hidden = (count === row.cells.length);
-  }
-
-  process(row: ScheduleRow) {
-    this.processRow(row, row.group.table.from, row.group.table.to);
   }
 
   processTable(table: TableData) {

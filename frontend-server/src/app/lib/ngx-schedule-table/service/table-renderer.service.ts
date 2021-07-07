@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Observable, Subject } from "rxjs";
+import { RowCommand } from "../model/row-command";
 
 @Injectable()
 export class TableRenderer {
@@ -10,8 +11,20 @@ export class TableRenderer {
   private renderRowGroupSubject:      Subject<number> = new Subject();
   private renderAllRowGroupsSubject:  Subject<void>   = new Subject();
   // rows
-  private renderRowSubject:           Subject<number> = new Subject();
   private renderAllRowsSubject:       Subject<void> = new Subject();
+
+  private rowCommandSubject:          Subject<RowCommand> = new Subject();
+
+  onRowCommand(): Observable<RowCommand> {
+    return this.rowCommandSubject.asObservable();
+  }
+
+  // TODO: Find solution for the case when the new row is
+  //  added and it lose event fire. Possible solution is usage of BehaviourSubject
+  //  but it fixes case when one row added.
+  nextRowCommand(command: RowCommand) {
+    this.rowCommandSubject.next(command);
+  }
 
   renderTable() {
     this.tableSubject.next();
@@ -19,14 +32,6 @@ export class TableRenderer {
 
   get onTableRender(): Observable<void> {
     return this.tableSubject.asObservable();
-  }
-
-  renderRow(rowEntityId: number) {
-    this.renderRowSubject.next(rowEntityId);
-  }
-
-  get onRenderRow(): Observable<number> {
-    return this.renderRowSubject.asObservable();
   }
 
   renderAllRows() {

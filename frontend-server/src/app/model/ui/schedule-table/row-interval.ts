@@ -1,7 +1,7 @@
 import { Moment } from "moment";
-import { MainComposition } from "../../composition";
+import { HasDuration, MainComposition } from "../../composition";
 
-export class RowInterval {
+export class RowInterval implements HasDuration {
   parentId:   number;
   from:       Moment;
   to:         Moment;

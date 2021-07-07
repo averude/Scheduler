@@ -2,6 +2,8 @@ import { Injectable } from "@angular/core";
 import { Employee } from "../../../model/employee";
 import { getEmployeeShortName } from "../../../shared/utils/utils";
 import { IdEntity } from "../../../model/interface/id-entity";
+import { ScheduleCell } from "../../../model/ui/schedule-table/table-data";
+import { WorkDay } from "../../../model/workday";
 
 @Injectable()
 export class SchedulerUtility {
@@ -10,6 +12,20 @@ export class SchedulerUtility {
     return getEmployeeShortName(employee);
   }
 }
+
+export const TRACK_BY_FN = (index: number, item: ScheduleCell) => {
+  const value = <WorkDay> item.value;
+  if (value) {
+    return item.enabled + ':' + value.actualDayTypeId + '-'
+      + value.scheduledDayTypeId
+      + '-' + value.startTime
+      + '-' + value.endTime
+      + '-' + value.breakStartTime
+      + '-' + value.breakEndTime;
+  } else {
+    return item.enabled;
+  }
+};
 
 export function toArray<K, V>(map: Map<K, V>): V[] {
   let result = [];

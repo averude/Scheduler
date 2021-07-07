@@ -69,4 +69,8 @@ export class RowGroup {
 
     return processedRow;
   }
+
+  findRows(rowId: number): Row[] {
+    return this.rows.filter(row => row.id === rowId);
+  }
 }

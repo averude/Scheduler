@@ -147,7 +147,7 @@ export class ScheduleTableContextMenuComponent implements OnInit, OnDestroy {
     this.dialog.open(CustomDaytypeDialogComponent, config)
       .afterClosed().subscribe(customDay => {
         if (customDay) {
-          this.scheduleGenerationService.generateScheduleByUnit(customDay, selectionData);
+          this.scheduleGenerationService.generateScheduleByUnit(this.initData, customDay, selectionData);
         }
     });
   }
@@ -179,7 +179,7 @@ export class ScheduleTableContextMenuComponent implements OnInit, OnDestroy {
         }
       }
 
-      this.scheduleGenerationService.generateForCells(departmentDayType, cells);
+      this.scheduleGenerationService.generateForCells(this.initData, departmentDayType, cells);
     }
   }
 
@@ -194,4 +194,13 @@ export class ScheduleTableContextMenuComponent implements OnInit, OnDestroy {
       }
     });
   }
+
+  byPattern(dto, event, offset) {
+    this.scheduleGenerationService.generateSchedule(this.initData, dto, event, offset);
+  }
+
+  byDepartmentDayType(departmentDayType, event) {
+    this.scheduleGenerationService.generateScheduleByDepartmentDayType(this.initData, departmentDayType, event);
+  }
+
 }

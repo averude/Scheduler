@@ -6,16 +6,16 @@ import { RowInterval } from "../../../model/ui/schedule-table/row-interval";
 import { CellEnabledSetter } from "./cell-enabled-setter";
 import { TableRenderer } from "../../../lib/ngx-schedule-table/service/table-renderer.service";
 import { IntervalCreator } from "../../creator/interval-creator.service";
-import { NotificationsService } from "angular2-notifications";
 import { Injectable } from "@angular/core";
+import { TableSumCalculator } from "../../calculators/table-sum-calculator.service";
 
 @Injectable()
 export class TableRowRemover {
 
   constructor(private cellEnabledSetter: CellEnabledSetter,
+              private sumCalculator: TableSumCalculator,
               private tableRenderer: TableRenderer,
-              private intervalCreator: IntervalCreator,
-              private notificationsService: NotificationsService) {}
+              private intervalCreator: IntervalCreator) {}
 
   removeRow(groupData: ScheduleRowGroup,
             row: ScheduleRow,
@@ -26,21 +26,30 @@ export class TableRowRemover {
     const dto = binarySearch(dtos, (mid => mid.parent.id - composition.employeeId));
 
     if (row.isSubstitution) {
-      const index = dto.substitutionCompositions.findIndex(value => value.id === composition.id);
-      dto.substitutionCompositions.splice(index, 1);
+      // Remove composition from initial data
+      removeFromArray(dto.substitutionCompositions, value => value.id === composition.id);
 
+      // Update related compositions
       this.updateRelatedMainCompositions(dto.mainCompositions, dto.substitutionCompositions, table);
     } else {
-      const mainIndex = dto.mainCompositions.findIndex(value => value.id === composition.id);
+      // Remove composition from initial data
+      removeFromArray(dto.mainCompositions, value => value.id === composition.id);
 
-      this.removeRelatedSubstitutionCompositions(dto.substitutionCompositions, dto.mainCompositions[mainIndex], table);
-
-      dto.mainCompositions.splice(mainIndex, 1);
+      // Remove all related sub compositions
+      this.removeRelatedSubstitutionCompositions(dto.substitutionCompositions, composition, table);
     }
 
+    // Update or completely remove row
     this.removeCompositionAndInterval(row, composition);
 
-    this.notificationsService.success('Removed');
+    // Update other rows
+    this.tableRenderer.nextRowCommand({
+      rowId: row.id,
+      command: (rowData: ScheduleRow) => {
+        this.sumCalculator.calculateSum(rowData, dto.mainCompositions, table.from, table.to);
+        this.cellEnabledSetter.processRow(rowData, table.from, table.to)
+      }
+    });
   }
 
   private updateRelatedMainCompositions(mainShiftCompositions: Composition[],
@@ -54,7 +63,6 @@ export class TableRowRemover {
 
         if (row.id === composition.employeeId && !row.isSubstitution) {
           row.intervals = this.intervalCreator.getEmployeeShiftIntervalsByArr(row.compositions, substitutionShiftCompositions);
-          this.cellEnabledSetter.processRow(row, table.from, table.to);
         }
 
       }
@@ -95,21 +103,17 @@ export class TableRowRemover {
     const group = row.group;
     const rows = group.rows;
 
-    const compositionIndex = row.compositions.findIndex(value => value.id === composition.id);
-    row.compositions.splice(compositionIndex, 1);
+    // Remove composition from row's compositions
+    removeFromArray(row.compositions, value => value.id === composition.id);
 
     if (row.compositions.length == 0) {
-      const rowIndex = rows.indexOf(row);
-      rows.splice(rowIndex, 1);
+      // If no compositions remain then remove row from group
+      removeFromArray(rows, value => value.id === row.id);
 
       this.tableRenderer.renderRowGroup(group.id);
     } else {
       this.removeCompositionIntervals(composition, row.intervals);
-
-      this.cellEnabledSetter.processRow(row, group.table.from, group.table.to);
     }
-
-    this.tableRenderer.renderRow(row.id);
   }
 
   private removeCompositionIntervals(composition: Composition,
@@ -127,4 +131,9 @@ export class TableRowRemover {
 
     }
   }
+}
+
+function removeFromArray<T>(arr: T[], comparator: (value: T) => boolean) {
+  const compositionIndex = arr.findIndex(comparator);
+  arr.splice(compositionIndex, 1);
 }

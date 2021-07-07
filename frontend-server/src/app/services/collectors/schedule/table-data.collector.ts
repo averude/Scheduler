@@ -21,20 +21,18 @@ export class TableDataCollector {
     const tableData = this.collect(initData);
 
     tableData.forEachRow(row => {
+      const dto = binarySearch(initData.scheduleDTOs, (mid => mid.parent.id - row.id));
+
       if (row.isSubstitution) {
         row.intervals = row.compositions.map(composition => convertCompositionToInterval(composition));
       } else {
-        const dto = binarySearch(initData.scheduleDTOs, (mid => mid.parent.id - row.id));
         row.intervals = this.intervalCreator.getEmployeeShiftIntervalsByArr(row.compositions, dto.substitutionCompositions);
       }
 
+      this.sumCalculator.calculateSum(row, dto.mainCompositions, tableData.from, tableData.to);
       this.cellEnabledSetter.processRow(row, tableData.from, tableData.to);
     });
-
-    const rowGroupData = tableData.groups;
-
-    this.sumCalculator.calculateWorkHoursSum(rowGroupData);
-    return rowGroupData;
+    return tableData;
   }
 
   collect(initialData: InitialData): TableData {

@@ -10,11 +10,13 @@ import { BasicDTO } from "../../../model/dto/basic-dto";
 import { ShiftPattern } from "../../../model/shift-pattern";
 import { HasDayTypeAndTime } from "../../../model/interface/has-day-type-and-time";
 import { CellUpdater } from "../../collectors/cell-updater";
-import { ScheduleCell } from "../../../model/ui/schedule-table/table-data";
+import { ScheduleCell, ScheduleRow } from "../../../model/ui/schedule-table/table-data";
 import { createOrUpdateCell } from "./schedule-generation-utils";
 import { forkJoin } from "rxjs";
 import { tap } from "rxjs/operators";
 import { Row } from "../../../lib/ngx-schedule-table/model/data/row";
+import { TableSumCalculator } from "../../calculators/table-sum-calculator.service";
+import { InitialData } from "../../../model/datasource/initial-data";
 
 @Injectable()
 export class ScheduleGenerationService {
@@ -22,60 +24,65 @@ export class ScheduleGenerationService {
   constructor(private cellUpdater: CellUpdater,
               private rowRenderer: TableRenderer,
               private scheduleService: ScheduleService,
+              private sumCalculator: TableSumCalculator,
               private notificationService: NotificationsService,
               private scheduleGenerator: ScheduleGenerator) {}
 
-  generateSchedule(dto: BasicDTO<ShiftPattern, PatternUnit>,
+  generateSchedule(initialData: InitialData,
+                   patternDTO: BasicDTO<ShiftPattern, PatternUnit>,
                    data: SelectionData,
                    offset: number) {
     this.scheduleGenerator.generateScheduleWithPattern(
       data.row,
       data.selectedCells,
-      dto.collection,
+      patternDTO.collection,
       offset,
-      this.scheduleGeneratedHandler,
+      this.getScheduleGeneratedHandler(initialData),
       this.error403Handler
     );
   }
 
-  generateScheduleByUnit(unit: HasDayTypeAndTime,
+  generateScheduleByUnit(initialData: InitialData,
+                         unit: HasDayTypeAndTime,
                          data: SelectionData) {
     this.scheduleGenerator
       .generateScheduleByUnit(
         data.row,
         data.selectedCells,
         unit,
-        this.scheduleGeneratedHandler,
+        this.getScheduleGeneratedHandler(initialData),
         this.error403Handler
       );
   }
 
-  generateScheduleByDepartmentDayType(departmentDayType: DepartmentDayType,
+  generateScheduleByDepartmentDayType(initialData: InitialData,
+                                      departmentDayType: DepartmentDayType,
                                       data: SelectionData) {
     this.scheduleGenerator
       .generateScheduleByDepartmentDayType(
         data.row,
         data.selectedCells,
         departmentDayType,
-        this.scheduleGeneratedHandler,
+        this.getScheduleGeneratedHandler(initialData),
         this.error403Handler
       );
   }
 
-  removeServiceDays(data: SelectionData) {
+  removeServiceDays(initialData: InitialData,
+                    data: SelectionData) {
     if (data) {
       const serviceCells = data.selectedCells
         .filter(cell => cell.value.actualDayTypeId);
       if (serviceCells.length > 0) {
         serviceCells.forEach(cell => cell.value.actualDayTypeId = undefined);
-        this.scheduleGeneratedHandler(data.row, data.selectedCells);
+        this.getScheduleGeneratedHandler(initialData)(data.row, data.selectedCells);
       } else {
         this.error403Handler('There are no service days');
       }
     }
   }
 
-  private get scheduleGeneratedHandler(): (row, selectedCells) => void {
+  private getScheduleGeneratedHandler(initialData: InitialData): (row, selectedCells) => void {
     return (row: Row, selectedCells: ScheduleCell[]) => {
 
       const createdSchedule = selectedCells
@@ -90,7 +97,10 @@ export class ScheduleGenerationService {
         this.scheduleService.create(createdSchedule)
           .subscribe(response => {
             this.cellUpdater.updateCellData(row.cells, response);
-            this.rowRenderer.renderRow(row.id);
+            this.rowRenderer.nextRowCommand({
+              rowId: row.id,
+              command: (rowData: ScheduleRow) => this.sumCalculator.cal(rowData, initialData.scheduleDTOs)
+            });
             this.notificationService.success(
               'Created',
               'Schedule sent successfully');
@@ -100,7 +110,10 @@ export class ScheduleGenerationService {
         this.scheduleService.update(updatedSchedule)
           .subscribe(res => {
             this.cellUpdater.updateCellData(row.cells, updatedSchedule);
-            this.rowRenderer.renderRow(row.id);
+            this.rowRenderer.nextRowCommand({
+              rowId: row.id,
+              command: (rowData: ScheduleRow) => this.sumCalculator.cal(rowData, initialData.scheduleDTOs)
+            });
             this.notificationService.success(
               'Updated',
               'Schedule sent successfully');
@@ -109,7 +122,9 @@ export class ScheduleGenerationService {
     };
   };
 
-  generateForCells(departmentDayType: DepartmentDayType, cells: ScheduleCell[]) {
+  generateForCells(initialData: InitialData,
+                   departmentDayType: DepartmentDayType,
+                   cells: ScheduleCell[]) {
     cells.forEach(cell =>
       createOrUpdateCell(false, departmentDayType, cell));
 
@@ -120,14 +135,19 @@ export class ScheduleGenerationService {
 
     if (updated && updated.length > 0) {
       obs.push(this.scheduleService.update(updated.map(value => value.value))
-        .pipe(tap(updatedSchedule => updated.forEach(cell =>
-          this.rowRenderer.renderRow(cell.row.id)))));
+        .pipe(tap(updatedSchedule => updated.forEach(cell =>{
+          // Probably should be replaced with render group
+          this.sumCalculator.cal(cell.row, initialData.scheduleDTOs);
+          this.rowRenderer.nextRowCommand({rowId: cell.row.id})
+        }))));
     }
 
     if (created && created.length > 0) {
       obs.push(this.scheduleService.create(created.map(value => value.value))
         .pipe(tap(createdSchedule => created.forEach((cell, index) => {
-          this.rowRenderer.renderRow(cell.row.id);
+          // Probably should be replaced with render group
+          this.sumCalculator.cal(cell.row, initialData.scheduleDTOs);
+          this.rowRenderer.nextRowCommand({rowId: cell.row.id});
           created[index].value.id = createdSchedule[index].id;
         }))));
     }

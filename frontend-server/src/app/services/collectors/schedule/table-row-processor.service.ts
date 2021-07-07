@@ -4,7 +4,6 @@ import { EmployeeScheduleDTO } from "../../../model/dto/employee-schedule-dto";
 import { CalendarDay } from "../../../lib/ngx-schedule-table/model/calendar-day";
 import { Composition } from "../../../model/composition";
 import { convertCompositionToInterval } from "../../../model/ui/schedule-table/row-interval";
-import { CellEnabledSetter } from "./cell-enabled-setter";
 import { IntervalCreator } from "../../creator/interval-creator.service";
 import { CellCollector } from "../cell-collector";
 import { Injectable } from "@angular/core";
@@ -15,8 +14,7 @@ import { xor } from "../../../shared/utils/utils";
 @Injectable()
 export class TableRowProcessor {
 
-  constructor(private cellEnabledSetter: CellEnabledSetter,
-              private intervalCreator: IntervalCreator,
+  constructor(private intervalCreator: IntervalCreator,
               private cellCollector: CellCollector) {}
 
   fillRows<T extends Composition>(table: TableData,

@@ -4,11 +4,7 @@ import { ScheduleRow, ScheduleRowGroup } from "../../../model/ui/schedule-table/
 import { binarySearch } from "../../../shared/utils/collection-utils";
 import { MainCompositionService } from "../../http/main-composition.service";
 import { SubstitutionShiftCompositionService } from "../../http/substitution-shift-composition.service";
-import { TableRenderer } from "../../../lib/ngx-schedule-table/service/table-renderer.service";
 import { TableRowProcessor } from "./table-row-processor.service";
-import { NotificationsService } from "angular2-notifications";
-import { CellEnabledSetter } from "./cell-enabled-setter";
-import { TableSumCalculator } from "../../calculators/table-sum-calculator.service";
 import { EmployeeScheduleDTO } from "../../../model/dto/employee-schedule-dto";
 import { Injectable } from "@angular/core";
 import { IntervalCreator } from "../../creator/interval-creator.service";
@@ -16,7 +12,11 @@ import { convertCompositionToInterval } from "../../../model/ui/schedule-table/r
 import { TableRowRemover } from "./table-row-remover";
 import { InitialData } from "../../../model/datasource/initial-data";
 import { CUDService } from "../../http/interface/cud-service";
+import { map, tap } from "rxjs/operators";
+import { forkJoin, Observable } from "rxjs";
+import { Row } from "../../../lib/ngx-schedule-table/model/data/row";
 
+// TODO: move to utils
 function putSorted<T extends Composition>(composition: T, compositions: T[]) {
   compositions.push(composition);
   compositions.sort((a, b) => (a.shiftId - b.shiftId) + (a.from.diff(b.from)));
@@ -25,48 +25,54 @@ function putSorted<T extends Composition>(composition: T, compositions: T[]) {
 @Injectable()
 export class TableCompositionHandler {
 
-  constructor(private tableRenderer: TableRenderer,
-              private rowRemover: TableRowRemover,
+  constructor(private rowRemover: TableRowRemover,
               private rowProcessor: TableRowProcessor,
               private intervalCreator: IntervalCreator,
-              private cellEnabledSetter: CellEnabledSetter,
-              private sumCalculator: TableSumCalculator,
               private mainShiftCompositionService: MainCompositionService,
-              private substitutionShiftCompositionService: SubstitutionShiftCompositionService,
-              private notificationsService: NotificationsService) {}
+              private substitutionShiftCompositionService: SubstitutionShiftCompositionService) {}
 
   createOrUpdate(compositions: Composition[],
-                            rowGroup: ScheduleRowGroup,
-                            row: ScheduleRow,
-                            parentRow: ScheduleRow,
-                            initData: InitialData,
-                            isSubstitution: boolean) {
-    if (compositions) {
-      if (isSubstitution) {
-        this.createOrUpdateComposition(this.substitutionShiftCompositionService, compositions, rowGroup,
-          row, parentRow, initData, isSubstitution);
-      } else {
-        this.createOrUpdateComposition(this.mainShiftCompositionService, compositions, rowGroup,
-          row, parentRow, initData, isSubstitution);
-      }
+                 rowGroup: ScheduleRowGroup,
+                 row: ScheduleRow,
+                 parentRow: ScheduleRow,
+                 initData: InitialData,
+                 isSubstitution: boolean): Observable<any[]> {
+    if (!compositions || compositions.length == 0) {
+      throw new Error("Wrong args");
     }
+
+    let obs: Observable<any>[];
+    if (isSubstitution) {
+      obs = this.createOrUpdateComposition(this.substitutionShiftCompositionService, compositions, rowGroup,
+        row, parentRow, initData, isSubstitution);
+    } else {
+      obs = this.createOrUpdateComposition(this.mainShiftCompositionService, compositions, rowGroup,
+        row, parentRow, initData, isSubstitution);
+    }
+
+    return forkJoin(obs);
   }
 
+  // TODO: Fix issue when removing one of sub comp
   remove(groupData: ScheduleRowGroup,
          row: ScheduleRow,
          initData: InitialData,
-         compositions: Composition[]) {
+         compositions: Composition[]): Observable<any[]> {
+    let obs: Observable<any>[] = [];
     compositions.forEach(composition => {
       if (composition.id) {
+        let observable: Observable<any>;
         if (row.isSubstitution) {
-          this.substitutionShiftCompositionService.delete(composition.id)
-            .subscribe(res => this.rowRemover.removeRow(groupData, row, composition, initData.scheduleDTOs));
+          observable = this.substitutionShiftCompositionService.delete(composition.id);
         } else {
-          this.mainShiftCompositionService.delete(composition.id)
-            .subscribe(res => this.rowRemover.removeRow(groupData, row, composition, initData.scheduleDTOs));
+          observable = this.mainShiftCompositionService.delete(composition.id);
         }
+        obs.push(observable.pipe(
+          tap(res => this.rowRemover.removeRow(groupData, row, composition, initData.scheduleDTOs))
+        ));
       }
     });
+    return forkJoin(obs);
   }
 
   private createOrUpdateComposition<T extends Composition>(compositionService: CUDService<T>,
@@ -75,23 +81,29 @@ export class TableCompositionHandler {
                                                            row: ScheduleRow,
                                                            parentRow: ScheduleRow,
                                                            initData: InitialData,
-                                                           isSubstitution: boolean) {
+                                                           isSubstitution: boolean): Observable<Row>[] {
+    let obs = [];
     compositions.forEach(composition => {
       if (composition.id) {
-        compositionService.update(composition)
-          .subscribe((res) => {
-            const position = initData.positionMap.get(composition.positionId);
-            this.updateRow(initData, composition, position, rowGroup, row);
-          });
+        obs.push(compositionService.update(composition)
+          .pipe(
+            map((res) => {
+              const position = initData.positionMap.get(composition.positionId);
+              return this.updateRow(initData, composition, position, rowGroup, row);
+            })
+          ));
       } else {
-        compositionService.create(composition)
-          .subscribe((res) => {
-            composition = res;
-            const position = initData.positionMap.get(composition.positionId);
-            this.createRow(initData, composition, position, rowGroup, isSubstitution, parentRow);
-          });
+        obs.push(compositionService.create(composition)
+          .pipe(
+            map((res) => {
+              composition = res;
+              const position = initData.positionMap.get(composition.positionId);
+              return this.createRow(initData, composition, position, rowGroup, isSubstitution, parentRow);
+            })
+          ));
       }
     });
+    return obs;
   }
 
   private createRow(initData: InitialData,
@@ -118,19 +130,13 @@ export class TableCompositionHandler {
       if (isSubstitution) {
         if (parentRow) {
           parentRow.intervals = this.intervalCreator.getEmployeeShiftIntervalsByArr(parentRow.compositions, dto.substitutionCompositions);
-          this.cellEnabledSetter.processRow(parentRow, group.table.from, group.table.to);
         }
         row.intervals = row.compositions.map(value => convertCompositionToInterval(value));
       } else {
         row.intervals = this.intervalCreator.getEmployeeShiftIntervalsByArr(row.compositions, dto.substitutionCompositions);
       }
 
-      this.cellEnabledSetter.processRow(row, group.table.from, group.table.to);
-      this.sumCalculator.calculateWorkHoursSum([group]);
-
-      this.tableRenderer.renderRowGroup(group.id);
-      this.tableRenderer.renderRow(row.id);
-      this.notificationsService.success('Created');
+      return row;
     }
   }
 
@@ -163,8 +169,6 @@ export class TableCompositionHandler {
           newRow.intervals    = [];
 
           this.transfer(row, newRow, composition, dto);
-
-          this.tableRenderer.renderRowGroup(group.id);
         }
       } else {
         this.rowProcessor.updateRow(row, composition, dto);
@@ -178,16 +182,11 @@ export class TableCompositionHandler {
 
           if (otherGroupMainRow.id === mainShiftComposition.employeeId && !otherGroupMainRow.isSubstitution) {
             otherGroupMainRow.intervals = this.intervalCreator.getEmployeeShiftIntervalsByArr(otherGroupMainRow.compositions, dto.substitutionCompositions);
-            this.cellEnabledSetter.processRow(otherGroupMainRow, group.table.from, group.table.to);
           }
         }
       }
 
-      this.cellEnabledSetter.processRow(row, group.table.from, group.table.to);
-      this.sumCalculator.calculateWorkHoursSum([group]);
-
-      this.tableRenderer.renderRow(row.id);
-      this.notificationsService.success('Updated');
+      return row;
     }
   }
 
@@ -203,8 +202,5 @@ export class TableCompositionHandler {
 
     this.intervalCreator.recalculate(from, dto);
     this.intervalCreator.recalculate(to, dto);
-
-    this.cellEnabledSetter.process(from);
-    this.cellEnabledSetter.process(to);
   }
 }
