@@ -8,6 +8,7 @@ import { TableRenderer } from "../../../lib/ngx-schedule-table/service/table-ren
 import { IntervalCreator } from "../../creator/interval-creator.service";
 import { Injectable } from "@angular/core";
 import { TableSumCalculator } from "../../calculators/table-sum-calculator.service";
+import { removeFromArray } from "../../utils";
 
 @Injectable()
 export class TableRowRemover {
@@ -134,9 +135,4 @@ export class TableRowRemover {
 
     }
   }
-}
-
-function removeFromArray<T>(arr: T[], comparator: (value: T) => boolean) {
-  const compositionIndex = arr.findIndex(comparator);
-  arr.splice(compositionIndex, 1);
 }

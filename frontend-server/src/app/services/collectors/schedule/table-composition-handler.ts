@@ -15,12 +15,7 @@ import { CUDService } from "../../http/interface/cud-service";
 import { map, tap } from "rxjs/operators";
 import { forkJoin, Observable } from "rxjs";
 import { Row } from "../../../lib/ngx-schedule-table/model/data/row";
-
-// TODO: move to utils
-function putSorted<T extends Composition>(composition: T, compositions: T[]) {
-  compositions.push(composition);
-  compositions.sort((a, b) => (a.shiftId - b.shiftId) + (a.from.diff(b.from)));
-}
+import { putSorted } from "../../utils";
 
 @Injectable()
 export class TableCompositionHandler {

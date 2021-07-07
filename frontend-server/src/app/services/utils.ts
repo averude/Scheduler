@@ -1,4 +1,5 @@
 import { EmployeeScheduleDTO } from "../model/dto/employee-schedule-dto";
+import { Composition } from "../model/composition";
 
 export function getMainShiftId(dto: EmployeeScheduleDTO) {
 
@@ -27,4 +28,14 @@ export function findMax<T>(arr: T[],
   }
 
   return maxVal;
+}
+
+export function putSorted<T extends Composition>(composition: T, compositions: T[]) {
+  compositions.push(composition);
+  compositions.sort((a, b) => (a.shiftId - b.shiftId) + (a.from.diff(b.from)));
+}
+
+export function removeFromArray<T>(arr: T[], comparator: (value: T) => boolean) {
+  const compositionIndex = arr.findIndex(comparator);
+  arr.splice(compositionIndex, 1);
 }
