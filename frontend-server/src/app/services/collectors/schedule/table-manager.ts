@@ -62,8 +62,6 @@ export class TableManager {
       });
   }
 
-  // TODO: Fix issue when updating position of one of the sub compositions
-  //  it disappears from one row but doesn't appear in another
   editRow(row: ScheduleRow, initData: InitialData) {
     if (!row || !row.group) {
       return;
@@ -150,7 +148,10 @@ export class TableManager {
 
                   this.tableRenderer.nextRowCommand({
                     rowId: row.id,
-                    command: (rowData: ScheduleRow) => this.sumCalculator.cal(rowData, data.initData.scheduleDTOs)
+                    command: (rowData: ScheduleRow) => {
+                      this.cellEnabledSetter.process(rowData);
+                      this.sumCalculator.cal(rowData, data.initData.scheduleDTOs);
+                    }
                   });
                 });
                 this.notificationsService.success('Updated');

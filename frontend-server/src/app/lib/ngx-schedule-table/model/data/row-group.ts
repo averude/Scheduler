@@ -1,5 +1,5 @@
 import { Row } from "./row";
-import { binarySearchInsertIndex, binarySearchLastRepeatableIndex } from "../../../../shared/utils/collection-utils";
+import { binarySearchInsertIndex, bsr } from "../../../../shared/utils/collection-utils";
 
 export class RowGroup {
   id:   number;
@@ -42,14 +42,15 @@ export class RowGroup {
     return result;
   }
 
-  createOrUpdateRow<T extends Row>(comparator: (val: T) => number,
+  createOrUpdateRow<T extends Row>(b_comparator: (val: T) => number,
+                                   l_comparator: (val: T) => boolean,
                                    isUpdateOperationPredicate: (row: T) => boolean,
                                    updateRowFn: (row: T) => T,
                                    createRowFn: () => T) {
 
     let processedRow;
 
-    const rowIndex = binarySearchLastRepeatableIndex(this.rows, comparator, comparator);
+    const rowIndex = bsr(this.rows, b_comparator, l_comparator);
     if (rowIndex >= 0) {
 
       const row = <T> this.rows[rowIndex];
@@ -63,7 +64,7 @@ export class RowGroup {
 
     } else {
       const newRow = createRowFn();
-      this.addRow(newRow, comparator);
+      this.addRow(newRow, b_comparator);
       processedRow = newRow;
     }
 

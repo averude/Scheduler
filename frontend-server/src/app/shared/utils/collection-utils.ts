@@ -30,6 +30,50 @@ export function binarySearch<T>(arr: T[],
   return result >= 0 ? arr[result] : undefined;
 }
 
+export function bsr<T>(arr: T[],
+                       binary_comp: (mid: T) => number,
+                       lin_comp: (mid: T) => boolean) {
+
+  let result = binarySearchIndex(arr, binary_comp, 0, arr.length - 1);
+
+  if (result >= 0) {
+
+    let i = result;
+    while (i < arr.length - 1) {
+
+      const b_comp_res = binary_comp(arr[i]) == 0;
+      const lin_comp_res = lin_comp(arr[i]);
+
+      if (b_comp_res && lin_comp_res) {
+        return i;
+      } else if (!b_comp_res) {
+        break;
+      } else {
+        i++;
+      }
+
+    }
+
+    i = result;
+    while (i >= 0) {
+
+      const b_comp_res = binary_comp(arr[i]) == 0;
+      const lin_comp_res = lin_comp(arr[i]);
+
+      if (b_comp_res && lin_comp_res) {
+        return i;
+      } else if (!b_comp_res) {
+        break;
+      } else {
+        i--;
+      }
+    }
+
+  }
+
+  return result;
+}
+
 export function binarySearchLastRepeatableIndex<T>(arr: T[],
                                                    binary_comparator_fn: (mid: T) => number,
                                                    linear_comparator_fn: (value: T) => number) {
@@ -82,15 +126,17 @@ export function lastIndexOfRepeatable<T>(arr: T[],
 }
 
 export function binarySearchIndex<T>(arr: T[],
-                                     comparator_fn: (mid: T) => number): number {
-  if (!arr || !comparator_fn) {
+                                     comparator_fn: (mid: T) => number,
+                                     start_idx: number,
+                                     end_idx: number): number {
+  if (!arr || !comparator_fn || start_idx > end_idx) {
     return;
   }
 
   let result = -1;
 
-  let start = 0;
-  let end = arr.length - 1;
+  let start = start_idx > 0 ? start_idx : 0;
+  let end = end_idx < arr.length - 1 ? end_idx : arr.length - 1;
 
   while (start <= end) {
     let mid = Math.floor((start + end) / 2);

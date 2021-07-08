@@ -9,7 +9,6 @@ import { CellCollector } from "../cell-collector";
 import { Injectable } from "@angular/core";
 import { WorkDay } from "../../../model/workday";
 import { InitialData } from "../../../model/datasource/initial-data";
-import { xor } from "../../../shared/utils/utils";
 
 @Injectable()
 export class TableRowProcessor {
@@ -55,7 +54,8 @@ export class TableRowProcessor {
                                isSubstitution: boolean,
                                isUpdateOperationPredicate: (row: ScheduleRow) => boolean): ScheduleRow {
     return group.createOrUpdateRow(
-      (val => (val.id - dto.parent.id) + (val.position.id - composition.positionId)),
+      (val => val.id - dto.parent.id),
+      (val => val.position.id === composition.positionId && val.isSubstitution === isSubstitution),
       (row => this.isUpdateOperation(isUpdateOperationPredicate(row), row, isSubstitution, composition)),
       (row => {
         row.compositions.push(composition);
@@ -98,7 +98,7 @@ export class TableRowProcessor {
                             row: ScheduleRow,
                             isSubstitution: boolean,
                             composition: Composition) {
-    return row && updateRows && !xor(row.isSubstitution, isSubstitution)
+    return row && updateRows && (row.isSubstitution === isSubstitution)
       && row.group.id === composition.shiftId && row.id === composition.employeeId
       && row.position.id === composition.positionId;
   }
