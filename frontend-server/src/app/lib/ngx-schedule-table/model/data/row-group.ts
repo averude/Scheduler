@@ -16,6 +16,7 @@ export class RowGroup {
       return;
     }
 
+    // TODO: change implementation of bs. Include repeatable values case
     const insertIndex = binarySearchInsertIndex(this.rows, comparator);
     if (insertIndex >= 0) {
       this.rows.splice(insertIndex, 0, row);

@@ -74,41 +74,6 @@ export function bsr<T>(arr: T[],
   return result;
 }
 
-export function binarySearchLastRepeatableIndex<T>(arr: T[],
-                                                   binary_comparator_fn: (mid: T) => number,
-                                                   linear_comparator_fn: (value: T) => number) {
-  if (!arr) {
-    return;
-  }
-
-  let result = -1;
-
-  let start = 0;
-  let end = arr.length - 1;
-
-  while (start <= end) {
-    let mid = Math.floor((start + end) / 2);
-
-    if (binary_comparator_fn(arr[mid]) === 0) {
-      result = mid;
-
-      const lastIndex = lastIndexOfRepeatable(arr, linear_comparator_fn, mid);
-      if (lastIndex > mid) {
-        result = lastIndex;
-      }
-
-      break;
-    }
-    if (binary_comparator_fn(arr[mid]) > 0) {
-      end = mid - 1;
-    } else {
-      start = mid + 1;
-    }
-  }
-
-  return result;
-}
-
 export function lastIndexOfRepeatable<T>(arr: T[],
                                          comparator_fn: (value) => number,
                                          start_idx?: number) {
