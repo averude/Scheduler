@@ -4,22 +4,33 @@ import com.averude.uksatse.scheduler.core.model.entity.SubstitutionComposition;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.QueryHints;
 
+import javax.persistence.QueryHint;
 import java.time.LocalDate;
 import java.util.List;
 
 public interface SubstitutionCompositionRepository extends JpaRepository<SubstitutionComposition, Long> {
 
+    @QueryHints(value = {
+            @QueryHint(name = org.hibernate.annotations.QueryHints.READ_ONLY, value = "true")
+    }, forCounting = false)
     @EntityGraph(value = "graph.SubstitutionComposition")
     List<SubstitutionComposition> findAllByShiftIdAndToGreaterThanEqualAndFromLessThanEqual(Long shiftId,
                                                                                             LocalDate from,
                                                                                             LocalDate to);
 
+    @QueryHints(value = {
+            @QueryHint(name = org.hibernate.annotations.QueryHints.READ_ONLY, value = "true")
+    }, forCounting = false)
     @EntityGraph(value = "graph.SubstitutionComposition")
     List<SubstitutionComposition> findAllByEmployeeIdInAndToGreaterThanEqualAndFromLessThanEqual(List<Long> employeeIds,
                                                                                                  LocalDate from,
                                                                                                  LocalDate to);
 
+    @QueryHints(value = {
+            @QueryHint(name = org.hibernate.annotations.QueryHints.READ_ONLY, value = "true")
+    }, forCounting = false)
     @Query("select sc " +
             "from SubstitutionComposition sc " +
             "left join MainComposition mc " +
@@ -31,6 +42,9 @@ public interface SubstitutionCompositionRepository extends JpaRepository<Substit
                                                                    LocalDate from,
                                                                    LocalDate to);
 
+    @QueryHints(value = {
+            @QueryHint(name = org.hibernate.annotations.QueryHints.READ_ONLY, value = "true")
+    }, forCounting = false)
     @Query("select sc " +
             "from SubstitutionComposition sc " +
             "where sc.departmentId = ?1 and ?2 <= sc.to and ?3 >= sc.from " +
@@ -40,6 +54,9 @@ public interface SubstitutionCompositionRepository extends JpaRepository<Substit
                                                                             LocalDate from,
                                                                             LocalDate to);
 
+    @QueryHints(value = {
+            @QueryHint(name = org.hibernate.annotations.QueryHints.READ_ONLY, value = "true")
+    }, forCounting = false)
     @Query("select sc " +
             "from SubstitutionComposition as sc " +
             "where sc.shiftId in ?1 " +
@@ -50,6 +67,9 @@ public interface SubstitutionCompositionRepository extends JpaRepository<Substit
                                                                     LocalDate from,
                                                                     LocalDate to);
 
+    @QueryHints(value = {
+            @QueryHint(name = org.hibernate.annotations.QueryHints.READ_ONLY, value = "true")
+    }, forCounting = false)
     @Query("select sc " +
             "from SubstitutionComposition as sc " +
             "where (sc.shiftId in ?1 or sc.mainComposition.id in ?2) " +
@@ -61,6 +81,9 @@ public interface SubstitutionCompositionRepository extends JpaRepository<Substit
                                                                                                  LocalDate from,
                                                                                                  LocalDate to);
 
+    @QueryHints(value = {
+            @QueryHint(name = org.hibernate.annotations.QueryHints.READ_ONLY, value = "true")
+    }, forCounting = false)
     @Query("select sc " +
             "from SubstitutionComposition as sc " +
             "where (sc.shiftId not in ?1 and sc.mainComposition.id in ?2) " +

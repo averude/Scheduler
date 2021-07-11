@@ -3,16 +3,24 @@ package com.averude.uksatse.scheduler.shared.repository;
 import com.averude.uksatse.scheduler.core.model.entity.WorkDay;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.QueryHints;
 
+import javax.persistence.QueryHint;
 import java.time.LocalDate;
 import java.util.List;
 
 public interface ScheduleRepository extends JpaRepository<WorkDay, Long> {
+    @QueryHints(value = {
+            @QueryHint(name = org.hibernate.annotations.QueryHints.READ_ONLY, value = "true")
+    }, forCounting = false)
     List<WorkDay> findAllByDepartmentIdAndEmployeeIdAndDateBetweenOrderByDateAsc(long departmentId,
                                                                                  long employeeId,
                                                                                  LocalDate from,
                                                                                  LocalDate to);
 
+    @QueryHints(value = {
+            @QueryHint(name = org.hibernate.annotations.QueryHints.READ_ONLY, value = "true")
+    }, forCounting = false)
     @Query("select wd " +
             "from WorkDay wd " +
             "where wd.departmentId = ?1 and wd.employeeId in ?2 and wd.date between ?3 and ?4 " +
@@ -22,6 +30,9 @@ public interface ScheduleRepository extends JpaRepository<WorkDay, Long> {
                                                      LocalDate from,
                                                      LocalDate to);
 
+    @QueryHints(value = {
+            @QueryHint(name = org.hibernate.annotations.QueryHints.READ_ONLY, value = "true")
+    }, forCounting = false)
     @Query("select wd " +
             "from WorkDay wd " +
             "where wd.departmentId = ?1 and wd.date between ?2 and ?3 " +
@@ -30,6 +41,9 @@ public interface ScheduleRepository extends JpaRepository<WorkDay, Long> {
                                                       LocalDate from,
                                                       LocalDate to);
 
+    @QueryHints(value = {
+            @QueryHint(name = org.hibernate.annotations.QueryHints.READ_ONLY, value = "true")
+    }, forCounting = false)
     @Query("select wd " +
             "from WorkDay wd " +
             "where wd.departmentId = ?1 " +

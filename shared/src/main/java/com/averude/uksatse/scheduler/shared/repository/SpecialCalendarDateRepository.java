@@ -3,14 +3,17 @@ package com.averude.uksatse.scheduler.shared.repository;
 import com.averude.uksatse.scheduler.core.model.entity.SpecialCalendarDate;
 import com.averude.uksatse.scheduler.shared.repository.interfaces.IByEnterpriseIdAndDateRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.QueryHints;
 
+import javax.persistence.QueryHint;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 public interface SpecialCalendarDateRepository extends IByEnterpriseIdAndDateRepository<SpecialCalendarDate, Long> {
-    Optional<SpecialCalendarDate> findByDate(LocalDate date);
 
+    @QueryHints(value = {
+            @QueryHint(name = org.hibernate.annotations.QueryHints.READ_ONLY, value = "true")
+    }, forCounting = false)
     @Query("select scd " +
             "from SpecialCalendarDate as scd " +
             "inner join Department as d " +
@@ -21,6 +24,9 @@ public interface SpecialCalendarDateRepository extends IByEnterpriseIdAndDateRep
                                                                   LocalDate from,
                                                                   LocalDate to);
 
+    @QueryHints(value = {
+            @QueryHint(name = org.hibernate.annotations.QueryHints.READ_ONLY, value = "true")
+    }, forCounting = false)
     @Query("select scd " +
             "from SpecialCalendarDate as scd " +
             "inner join Department as d " +
