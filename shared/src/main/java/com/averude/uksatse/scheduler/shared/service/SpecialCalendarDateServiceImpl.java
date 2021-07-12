@@ -22,7 +22,7 @@ public class SpecialCalendarDateServiceImpl
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public List<SpecialCalendarDate> findAllByEnterpriseIdAndDateBetween(Long enterpriseId, LocalDate from, LocalDate to) {
         return specialCalendarDateRepository.findAllByEnterpriseIdAndDateBetween(enterpriseId, from, to);
     }

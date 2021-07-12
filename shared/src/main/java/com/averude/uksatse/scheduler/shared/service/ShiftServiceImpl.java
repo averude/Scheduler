@@ -22,13 +22,13 @@ public class ShiftServiceImpl
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Shift> findAllByDepartmentId(Long departmentId) {
         return shiftRepository.findAllByDepartmentId(departmentId);
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Shift> findAllByShiftIds(List<Long> shiftIds) {
         return shiftRepository.findAllById(shiftIds);
     }

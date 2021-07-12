@@ -45,7 +45,7 @@ public class ShiftPatternServiceImpl
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public List<? extends BasicDto<ShiftPattern, PatternUnit>> findAllDtoByDepartmentId(Long departmentId) {
         var patterns = shiftPatternRepository.findAllByDepartmentId(departmentId)
                 .stream()
@@ -55,7 +55,7 @@ public class ShiftPatternServiceImpl
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public List<ShiftPattern> findAllByDepartmentId(Long departmentId) {
         return shiftPatternRepository.findAllByDepartmentId(departmentId);
     }

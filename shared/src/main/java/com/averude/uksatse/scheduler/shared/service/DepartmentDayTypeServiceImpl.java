@@ -22,7 +22,7 @@ public class DepartmentDayTypeServiceImpl
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public List<DepartmentDayType> findAllByDepartmentId(Long departmentId) {
         return departmentDayTypeRepository.findAllByDepartmentId(departmentId);
     }

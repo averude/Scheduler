@@ -23,13 +23,13 @@ public class MainCompositionServiceImpl
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public List<MainComposition> findAllByDepartmentIdAndDateBetween(Long departmentId, LocalDate from, LocalDate to) {
         return mainCompositionRepository.findAllByDepartmentIdAndDatesBetween(departmentId, from, to);
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public List<MainComposition> findAllByShiftIdsAndDateBetween(List<Long> shiftIds, LocalDate from, LocalDate to) {
         return mainCompositionRepository.findAllByShiftIdInAndToGreaterThanEqualAndFromLessThanEqualOrderByEmployeeId(shiftIds, from, to);
     }

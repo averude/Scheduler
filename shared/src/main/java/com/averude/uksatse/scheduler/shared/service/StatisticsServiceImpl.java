@@ -17,6 +17,7 @@ public class StatisticsServiceImpl implements StatisticsService {
         this.statisticsRepository = statisticsRepository;
     }
 
+    // TODO: Remove
     @Override
     @Transactional
     public List<CountDTO> countEmployeesByDepartmentId(Long departmentId) {

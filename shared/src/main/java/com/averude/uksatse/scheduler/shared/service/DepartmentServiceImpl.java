@@ -28,12 +28,13 @@ public class DepartmentServiceImpl
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Department> findAllByEnterpriseId(Long enterpriseId) {
         return departmentRepository.findAllByEnterpriseId(enterpriseId);
     }
 
     @Override
+    @Transactional
     public <S extends Department> S save(@Valid S department) {
         if (department.getId() == null) {
             var savedDepartment = super.save(department);
@@ -45,12 +46,14 @@ public class DepartmentServiceImpl
     }
 
     @Override
+    @Transactional
     public void deleteById(Long departmentId) {
         partitionManager.removePartition(departmentId);
         super.deleteById(departmentId);
     }
 
     @Override
+    @Transactional
     public void delete(Department department) {
         partitionManager.removePartition(department.getId());
         super.delete(department);

@@ -22,7 +22,7 @@ public class EmployeeServiceImpl
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Employee> findAllByDepartmentId(Long departmentId) {
         return this.employeeRepository.findAllByDepartmentId(departmentId);
     }

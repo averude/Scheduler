@@ -22,7 +22,7 @@ public class DayTypeServiceImpl
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public List<DayType> findAllByEnterpriseId(Long enterpriseId) {
         return dayTypeRepository.findAllByEnterpriseId(enterpriseId);
     }

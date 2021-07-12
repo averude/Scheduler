@@ -54,7 +54,7 @@ public class ScheduleServiceImpl
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public List<EmployeeScheduleDTO> findAllDTOByDepartmentIdAndDate(Long departmentId,
                                                                      LocalDate from,
                                                                      LocalDate to) {
@@ -67,7 +67,7 @@ public class ScheduleServiceImpl
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public List<EmployeeScheduleDTO> findScheduleDTOByShiftIdsAndDate(List<Long> shiftIds,
                                                                       LocalDate from,
                                                                       LocalDate to) {

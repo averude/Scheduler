@@ -28,7 +28,7 @@ public class ReportSheetServiceImpl
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public List<ReportSheetDTO> findAllByDepartmentId(Long departmentId) {
         var reportSheets = reportSheetRepository.findAllByDepartmentId(departmentId);
         return reportSheets.stream()
