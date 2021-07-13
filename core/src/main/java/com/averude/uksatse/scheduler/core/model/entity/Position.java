@@ -2,19 +2,16 @@ package com.averude.uksatse.scheduler.core.model.entity;
 
 import com.averude.uksatse.scheduler.core.interfaces.entity.HasDepartmentId;
 import com.averude.uksatse.scheduler.core.interfaces.entity.HasId;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 import java.util.Objects;
-import java.util.Set;
 import java.util.StringJoiner;
 
 @NoArgsConstructor
@@ -55,12 +52,6 @@ public class Position implements HasId, HasDepartmentId {
     @Column(name = "department_id",
             nullable = false)
     private Long departmentId;
-
-    @JsonIgnore
-    @OneToMany( mappedBy = "position",
-                cascade = CascadeType.ALL,
-                fetch = FetchType.LAZY)
-    private Set<@NotNull @Valid Employee> employees;
 
     public Position(@NotNull(message = "{position.name.null}")
                     @Size(max = 256,

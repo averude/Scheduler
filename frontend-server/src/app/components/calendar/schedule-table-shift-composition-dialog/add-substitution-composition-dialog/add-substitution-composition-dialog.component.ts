@@ -47,7 +47,7 @@ export class AddSubstitutionCompositionDialogComponent implements OnInit {
     this.substitutionCompositionForm = this.fb.group({
       departmentId:         [this.employee.departmentId],
       shiftId:              [null,                      Validators.required],
-      mainComposition:      [this.mainComposition, Validators.required],
+      mainComposition:      [this.mainComposition,      Validators.required],
       employeeId:           [this.employee.id,          Validators.required],
       positionId:           [this.mainComposition.positionId, Validators.required],
       from:                 [this.from,                 Validators.required],

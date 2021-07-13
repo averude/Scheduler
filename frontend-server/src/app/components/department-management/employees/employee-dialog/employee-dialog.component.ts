@@ -1,6 +1,5 @@
 import { Component, Inject } from '@angular/core';
 import { Employee } from "../../../../model/employee";
-import { Position } from "../../../../model/position";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { FormBuilder, Validators } from "@angular/forms";
 import { DialogBaseComponent } from "../../../../shared/abstract-components/dialog-base/dialog-base.component";
@@ -12,14 +11,12 @@ import { DialogBaseComponent } from "../../../../shared/abstract-components/dial
 })
 export class EmployeeDialogComponent extends DialogBaseComponent<Employee> {
 
-  positions:  Position[];
   private readonly departmentId: number;
 
   constructor(private fb: FormBuilder,
               private dialogRef: MatDialogRef<EmployeeDialogComponent>,
               @Inject(MAT_DIALOG_DATA) data) {
     super(data.employee, dialogRef);
-    this.positions    = data.positions;
     this.departmentId = data.departmentId;
   }
 
@@ -38,8 +35,7 @@ export class EmployeeDialogComponent extends DialogBaseComponent<Employee> {
       patronymic: ['', [Validators.required,
         Validators.minLength(3),
         Validators.maxLength(32)]
-      ],
-      position:   [null, [Validators.required]]
+      ]
     });
   }
 
@@ -49,8 +45,7 @@ export class EmployeeDialogComponent extends DialogBaseComponent<Employee> {
       departmentId: employee.departmentId,
       firstName:    employee.firstName,
       secondName:   employee.secondName,
-      patronymic:   employee.patronymic,
-      position:     employee.position
+      patronymic:   employee.patronymic
     });
   }
 }

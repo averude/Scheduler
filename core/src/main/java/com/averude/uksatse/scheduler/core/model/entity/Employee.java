@@ -2,18 +2,15 @@ package com.averude.uksatse.scheduler.core.model.entity;
 
 import com.averude.uksatse.scheduler.core.interfaces.entity.HasDepartmentId;
 import com.averude.uksatse.scheduler.core.interfaces.entity.HasId;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
-import java.util.List;
 import java.util.Objects;
 import java.util.StringJoiner;
 
@@ -30,14 +27,9 @@ import java.util.StringJoiner;
                         columnNames = {
                                 "first_name",
                                 "second_name",
-                                "patronymic",
-                                "position_id"
+                                "patronymic"
                         })
         }
-)
-@NamedEntityGraph(
-        name = "graph.Employee.position",
-        attributeNodes = @NamedAttributeNode("position")
 )
 public class Employee implements HasId, HasDepartmentId {
 
@@ -70,29 +62,12 @@ public class Employee implements HasId, HasDepartmentId {
     @Column(name = "second_name", nullable = false)
     private String secondName;
 
-    @NotNull(message = "{employee.position.null}")
-    @ManyToOne
-    @JoinColumn(name = "position_id",
-                referencedColumnName = "id",
-                nullable = false)
-    private Position position;
-
-    @OneToMany( mappedBy = "employeeId",
-                cascade = CascadeType.ALL,
-                fetch = FetchType.LAZY)
-    private List<@NotNull @Valid WorkDay> schedule;
-
     public Employee(String secondName,
                     String firstName,
                     String patronymic) {
         this.firstName = firstName;
         this.patronymic = patronymic;
         this.secondName = secondName;
-    }
-
-    @JsonIgnore // Don't know why, but in this case field annotation doesn't work.
-    public List<WorkDay> getSchedule() {
-        return schedule;
     }
 
     @Override
@@ -104,13 +79,12 @@ public class Employee implements HasId, HasDepartmentId {
                 Objects.equals(departmentId, employee.departmentId) &&
                 Objects.equals(firstName, employee.firstName) &&
                 Objects.equals(patronymic, employee.patronymic) &&
-                Objects.equals(secondName, employee.secondName) &&
-                Objects.equals(position, employee.position);
+                Objects.equals(secondName, employee.secondName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstName, patronymic, secondName, position);
+        return Objects.hash(id, departmentId, firstName, patronymic, secondName);
     }
 
     @Override
@@ -121,7 +95,6 @@ public class Employee implements HasId, HasDepartmentId {
                 .add("firstName='" + firstName + "'")
                 .add("patronymic='" + patronymic + "'")
                 .add("secondName='" + secondName + "'")
-                .add("position=" + position)
                 .toString();
     }
 }

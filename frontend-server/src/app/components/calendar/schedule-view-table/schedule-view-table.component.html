@@ -34,8 +34,7 @@
         [class.substitution]="rowData.isSubstitution"
         *cellDef="let rowData"
         name-info-cell
-        [name]="utility.getEmployeeName(rowData.employee)"
-        [info]="rowData.employee.position.shortName">
+        [name]="utility.getEmployeeName(rowData.employee)">
     </td>
   </ng-container>
 </app-schedules-table>

@@ -70,7 +70,8 @@ export class AddMainShiftCompositionDialogComponent extends DialogBaseComponent<
       const composition = new MainComposition();
       composition.departmentId = employee.departmentId;
       composition.employeeId = employee.id;
-      composition.positionId = employee.position.id;
+      // TODO: Rework getting position
+      // composition.positionId = employee.position.id;
       composition.shiftId = dialogResult.shiftId;
       composition.from = dialogResult.from;
       composition.to = dialogResult.to;

@@ -22,18 +22,6 @@
     <mat-error *ngIf="isControlInvalid('patronymic')">{{getErrorMessage()}}</mat-error>
   </mat-form-field>
 
-  <mat-form-field>
-    <mat-select placeholder="Position"
-                [compareWith]="compareIdEntities"
-                formControlName="position">
-      <mat-option *ngFor="let position of positions"
-                  [value]="position">
-        {{position.name}}
-      </mat-option>
-    </mat-select>
-    <mat-error *ngIf="isControlInvalid('position')">{{getErrorMessage()}}</mat-error>
-  </mat-form-field>
-
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">

@@ -192,16 +192,14 @@ CREATE TABLE IF NOT EXISTS report_sheets_shifts (
 CREATE TABLE IF NOT EXISTS employees (
   id            SERIAL,
   department_id INTEGER       NOT NULL,
-  position_id   INTEGER       NOT NULL,
   first_name    VARCHAR (64)  NOT NULL,
   second_name   VARCHAR (64)  NOT NULL,
   patronymic    VARCHAR (64)  NOT NULL,
 
-  UNIQUE (first_name, second_name, patronymic, position_id),
+  UNIQUE (first_name, second_name, patronymic),
 
   PRIMARY KEY (id),
-  FOREIGN KEY (department_id) REFERENCES departments(id) ON DELETE CASCADE ON UPDATE CASCADE,
-  FOREIGN KEY (position_id)   REFERENCES positions(id) ON DELETE CASCADE ON UPDATE CASCADE
+  FOREIGN KEY (department_id) REFERENCES departments(id) ON DELETE CASCADE ON UPDATE CASCAD
 );
 
 CREATE TABLE IF NOT EXISTS main_compositions (
