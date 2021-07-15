@@ -23,7 +23,7 @@ const routes: Routes = [
           authorities: [UserAccountAuthority.ENTERPRISE_ADMIN],
           roles: [UserAccountRole.ADMIN]
         },
-        loadChildren: () => import('../../components/enterprise-management/enterprise-management.module')
+        loadChildren: () => import('../../components/management/enterprise/enterprise-management.module')
           .then(mod => mod.EnterpriseManagementModule)
       },
       {
@@ -58,7 +58,7 @@ const routes: Routes = [
               authorities: [UserAccountAuthority.ENTERPRISE_ADMIN, UserAccountAuthority.DEPARTMENT_ADMIN],
               roles: [UserAccountRole.ADMIN]
             },
-            loadChildren: () => import('../../components/department-management/department-management.module')
+            loadChildren: () => import('../../components/management/department/department-management.module')
               .then(mod => mod.DepartmentManagementModule)
           },
         ]
