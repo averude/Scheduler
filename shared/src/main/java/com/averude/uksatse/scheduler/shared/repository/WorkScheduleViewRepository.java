@@ -10,12 +10,11 @@ import java.util.List;
 import java.util.Optional;
 
 public interface WorkScheduleViewRepository extends JpaRepository<WorkScheduleView, Long> {
-    @Override
     @QueryHints(value = {
             @QueryHint(name = org.hibernate.annotations.QueryHints.READ_ONLY, value = "true")
     }, forCounting = false)
     @EntityGraph("graph.WorkScheduleView.viewDayTypes")
-    Optional<WorkScheduleView> findById(Long aLong);
+    Optional<WorkScheduleView> getById(Long id);
 
     @QueryHints(value = {
             @QueryHint(name = org.hibernate.annotations.QueryHints.READ_ONLY, value = "true")

@@ -22,7 +22,7 @@ public class ScheduleViewSecurity {
         if (accessMapSecurityChecker.checkAccess(account, mapName)) {
 
             if (account.getAuthority().equals(DEPARTMENT_ADMIN)) {
-                return workScheduleViewRepository.findById(viewId)
+                return workScheduleViewRepository.getById(viewId)
                         .map(view -> account.getAccountDepartments().stream()
                                 .anyMatch(userAccountDepartment ->
                                         userAccountDepartment.getDepartmentId().equals(view.getDepartmentId())))
@@ -30,7 +30,7 @@ public class ScheduleViewSecurity {
             }
 
             if (account.getAuthority().equals(ENTERPRISE_ADMIN)) {
-                return workScheduleViewRepository.findById(viewId)
+                return workScheduleViewRepository.getById(viewId)
                         .map(view -> account.getEnterpriseId().equals(view.getEnterpriseId()))
                         .orElse(false);
             }

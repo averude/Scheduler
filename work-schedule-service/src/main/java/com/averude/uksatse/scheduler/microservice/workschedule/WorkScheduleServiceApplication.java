@@ -4,6 +4,7 @@ import com.averude.uksatse.scheduler.security.filter.CustomCorsFilter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -16,7 +17,7 @@ import org.springframework.web.filter.CorsFilter;
 @EnableAspectJAutoProxy
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @EntityScan("com.averude.uksatse.scheduler.core.model.entity")
-@SpringBootApplication
+@SpringBootApplication(exclude = UserDetailsServiceAutoConfiguration.class)
 @ComponentScan(basePackages = {
         "com.averude.uksatse.scheduler.microservice.workschedule",
         "com.averude.uksatse.scheduler.core.configuration",

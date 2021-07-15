@@ -28,8 +28,7 @@ export class EmployeesTableComponent extends HasDepartmentTableComponent<Employe
     this.dataSource.filterPredicate = ((data, filter) => {
       return data.secondName.toLowerCase().includes(filter)
         || data.firstName.toLowerCase().includes(filter)
-        || data.patronymic.toLowerCase().includes(filter)
-        || data.position.name.toLowerCase().includes(filter);
+        || data.patronymic.toLowerCase().includes(filter);
     });
   }
 

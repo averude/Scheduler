@@ -96,7 +96,7 @@ public class ScheduleServiceImpl
     @Override
     @Transactional(readOnly = true)
     public List<EmployeeScheduleDTO> findScheduleDTOByViewIdAndDate(Long viewId, LocalDate from, LocalDate to) {
-        var view = workScheduleViewRepository.findById(viewId).orElseThrow();
+        var view = workScheduleViewRepository.getById(viewId).orElseThrow();
 
         var dayTypeIds = view.getViewDayTypes()
                 .stream()
