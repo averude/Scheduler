@@ -7,7 +7,6 @@ import { MainComposition } from "../../../../model/composition";
 import { AbstractControl, FormArray, FormBuilder, Validators } from "@angular/forms";
 import { MAT_DATE_FORMATS } from "@angular/material/core";
 import { Shift } from "../../../../model/shift";
-import { EMPLOYEES, POSITIONS } from "./mocks";
 import * as moment from 'moment';
 import { SidePanelStepperComponent } from "../../../../lib/side-panel-stepper/side-panel-stepper.component";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
