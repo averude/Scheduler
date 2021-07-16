@@ -1,0 +1,114 @@
+<div class="container">
+
+  <h2 class="caption">Add to {{shift?.name}}</h2>
+
+  <side-panel-stepper>
+
+    <cdk-step>
+
+      <div class="first-step-container" [formGroup]="dialogForm">
+
+        <mat-form-field>
+          <mat-label>Enter a date range</mat-label>
+          <mat-date-range-input [rangePicker]="picker">
+            <input matStartDate placeholder="Start date"  formControlName="from">
+            <input matEndDate   placeholder="End date"    formControlName="to">
+          </mat-date-range-input>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-date-range-picker #picker startView="multi-year"></mat-date-range-picker>
+        </mat-form-field>
+
+        <div class="table-container">
+          <table (mouseleave)="hoveredIndex = -1">
+
+            <tr *ngFor="let unit of getUnits().controls; index as i"
+                (mouseover)="hoveredIndex = i">
+
+              <td>
+                <p>{{getEmployeeShortName(unit.get('employee').value)}}</p>
+              </td>
+
+              <td>
+                {{unit.get('position').value?.name}}
+              </td>
+
+              <td>
+                <img [hidden]="hoveredIndex != i"
+                     src="assets/img/pencil.svg"
+                     class="action-img"
+                     (click)="editUnit(i)"/>
+              </td>
+
+              <td>
+                <img [hidden]="hoveredIndex != i"
+                     src="assets/img/remove.svg"
+                     class="action-img"
+                     (click)="removeUnit(i)"/>
+              </td>
+
+            </tr>
+
+          </table>
+        </div>
+
+      </div>
+
+      <div class="buttons-container" align="end">
+        <button class="scheduler-dialog-action-button align-left add-button"
+                (click)="addUnit()">+</button>
+        <button class="scheduler-dialog-action-button"
+                (click)="close()">Close</button>
+        <button class="scheduler-dialog-action-button primary-button"
+                type="submit"
+                [disabled]="dialogForm.invalid"
+                (click)="submit()">Save</button>
+      </div>
+    </cdk-step>
+
+    <cdk-step>
+
+      <ng-container [formGroup]="secondaryForm">
+
+        <div class="second-step-container">
+
+          <mat-form-field>
+            <mat-select placeholder="Employee"
+                        [compareWith]="compareIdEntities"
+                        formControlName="employee">
+              <mat-option *ngFor="let employee of employees"
+                          [value]="employee">
+                {{getEmployeeFullName(employee)}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Employee's position</mat-label>
+            <mat-select formControlName="position">
+              <mat-option *ngFor="let position of positions"
+                          [value]="position">
+                {{position.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+      </ng-container>
+
+      <div class="buttons-container" align="end">
+        <button class="scheduler-dialog-action-button"
+                (click)="prevStep()">Back</button>
+        <button *ngIf="secondaryFormOperation === 'add'"
+                class="scheduler-dialog-action-button primary-button"
+                type="submit"
+                [disabled]="secondaryForm.invalid"
+                (click)="addToArray(secondaryForm)">
+          Add
+        </button>
+      </div>
+
+    </cdk-step>
+
+  </side-panel-stepper>
+
+</div>

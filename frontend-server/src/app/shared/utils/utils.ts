@@ -61,6 +61,14 @@ export function getEmployeeShortName(employee: Employee): string {
   }
 }
 
+export function getEmployeeFullName(employee: Employee): string {
+  if (employee && employee.secondName && employee.firstName && employee.patronymic) {
+    return employee.secondName + ' '
+      + employee.firstName + ' '
+      + employee.patronymic;
+  }
+}
+
 export function getWorkDayDayTypeId(workDay: WorkDay) {
   return workDay.actualDayTypeId ? workDay.actualDayTypeId : workDay.scheduledDayTypeId;
 }

@@ -14,13 +14,13 @@ import { SimpleNotificationsModule } from "angular2-notifications";
 import { MatMenuModule } from "@angular/material/menu";
 import { ChangeUserAccountPasswordDialogModule } from "../../components/change-user-account-password-dialog/change-user-account-password-dialog.module";
 import { NgxMaskModule } from "ngx-mask";
-import { SidePanelStepperComponent } from '../../lib/side-panel-stepper/side-panel-stepper.component';
 import { CdkStepperModule } from "@angular/cdk/stepper";
 import { MatExpansionModule } from "@angular/material/expansion";
 import { SimpleAccordionModule } from "../../lib/simple-accordion/simple-accordion.module";
 import { ToolbarTemplateService } from "../../services/top-bar/toolbar-template.service";
 import { ToolbarRowComponent } from './toolbar-row.component';
 import { UserInfoComponent } from './user-info/user-info.component';
+import { SidePanelStepperModule } from "../../lib/side-panel-stepper/side-panel-stepper.module";
 
 @NgModule({
   imports: [
@@ -34,6 +34,7 @@ import { UserInfoComponent } from './user-info/user-info.component';
     StatisticsModule,
     WorkingNormModule,
     ReportsModule,
+    SidePanelStepperModule,
     CdkStepperModule,
     SimpleAccordionModule,
     ChangeUserAccountPasswordDialogModule,
@@ -42,11 +43,11 @@ import { UserInfoComponent } from './user-info/user-info.component';
   ],
   declarations: [
     AdminComponent,
-    SidePanelStepperComponent,
+    // SidePanelStepperComponent,
     ToolbarRowComponent,
     UserInfoComponent
   ],
-  entryComponents: [SidePanelStepperComponent],
+  // entryComponents: [SidePanelStepperComponent],
   providers: [
     CellCollector,
     CellUpdater,

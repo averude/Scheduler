@@ -1,5 +1,4 @@
 import { ScheduleRow, ScheduleRowGroup } from "../../../model/ui/schedule-table/table-data";
-import { AddMainShiftCompositionDialogComponent } from "../../../components/calendar/schedule-table-shift-composition-dialog/add-main-shift-composition-dialog/add-main-shift-composition-dialog.component";
 import { Composition, MainComposition } from "../../../model/composition";
 import { getEmployeeShortName } from "../../../shared/utils/utils";
 import { EditCompositionsDialogComponent } from "../../../components/calendar/schedule-table-shift-composition-dialog/edit-compositions-dialog/edit-compositions-dialog.component";
@@ -14,6 +13,7 @@ import { NotificationsService } from "angular2-notifications";
 import { TableRenderer } from "../../../lib/ngx-schedule-table/service/table-renderer.service";
 import { TableSumCalculator } from "../../calculators/table-sum-calculator.service";
 import { CellEnabledSetter } from "./cell-enabled-setter";
+import { AddMainCompositionDialogComponent } from "../../../components/calendar/schedule-table-shift-composition-dialog/add-main-composition-dialog/add-main-composition-dialog.component";
 
 @Injectable()
 export class TableManager {
@@ -28,11 +28,11 @@ export class TableManager {
 
   newRow(rowGroup: ScheduleRowGroup, initData: InitialData) {
     const data = {
-      shiftId:  rowGroup.id,
+      shift:    rowGroup.shift,
       initData: initData
     };
 
-    return this.dialog.open(AddMainShiftCompositionDialogComponent, {data: data})
+    return this.dialog.open(AddMainCompositionDialogComponent, {data: data})
       .afterClosed()
       .pipe(
         switchMap((mainShiftCompositions: MainComposition[]) => {

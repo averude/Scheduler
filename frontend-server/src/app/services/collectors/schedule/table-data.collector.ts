@@ -45,6 +45,7 @@ export class TableDataCollector {
       const group = new ScheduleRowGroup();
       group.table = table;
       group.id    = shift.id;
+      group.shift = shift;
       group.name  = shift.name;
       table.addGroup(group, (value => value.id - group.id));
     });

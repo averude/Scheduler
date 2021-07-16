@@ -14,8 +14,13 @@ body { margin: 0; font-family: 'MuseoSansRegular', 'Roboto', sans-serif; }
   outline: none;
 }
 
+.primary-button {
+  color: #0000a9;
+}
+
 .scheduler-dialog-action-button:disabled {
   cursor: not-allowed;
+  color: lightgrey;
 }
 
 .scheduler-dialog-action-button:first-child {

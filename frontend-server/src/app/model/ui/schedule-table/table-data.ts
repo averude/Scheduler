@@ -8,6 +8,7 @@ import { RowGroup } from "../../../lib/ngx-schedule-table/model/data/row-group";
 import { binarySearch, binarySearchInsertIndex } from "../../../shared/utils/collection-utils";
 import { RowInterval } from "./row-interval";
 import { EmployeeScheduleDTO } from "../../dto/employee-schedule-dto";
+import { Shift } from "../../shift";
 
 export class TableData {
   groups: ScheduleRowGroup[];
@@ -48,6 +49,7 @@ export class ScheduleRowGroup extends RowGroup {
   table:  TableData;
   id:     number;
   name:   string;
+  shift:  Shift;
   rows:   Row[];
 }
 

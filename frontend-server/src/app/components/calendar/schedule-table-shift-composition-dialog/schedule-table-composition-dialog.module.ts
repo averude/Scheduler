@@ -11,9 +11,11 @@ import { MatSelectModule } from "@angular/material/select";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MatMomentDateModule } from "@angular/material-moment-adapter";
-import { AddMainShiftCompositionDialogComponent } from './add-main-shift-composition-dialog/add-main-shift-composition-dialog.component';
 import { EditCompositionsDialogComponent } from './edit-compositions-dialog/edit-compositions-dialog.component';
 import { AddSubstitutionCompositionDialogComponent } from './add-substitution-composition-dialog/add-substitution-composition-dialog.component';
+import { SidePanelStepperModule } from "../../../lib/side-panel-stepper/side-panel-stepper.module";
+import { CdkStepperModule } from "@angular/cdk/stepper";
+import { AddMainCompositionDialogComponent } from "./add-main-composition-dialog/add-main-composition-dialog.component";
 
 @NgModule({
   imports: [
@@ -29,12 +31,15 @@ import { AddSubstitutionCompositionDialogComponent } from './add-substitution-co
     MatCheckboxModule,
     MatDatepickerModule,
     MatMomentDateModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    SidePanelStepperModule,
+    CdkStepperModule,
   ],
   declarations: [
-    AddMainShiftCompositionDialogComponent,
+    // AddMainShiftCompositionDialogComponent,
+    AddMainCompositionDialogComponent,
     EditCompositionsDialogComponent,
-    AddSubstitutionCompositionDialogComponent
+    AddSubstitutionCompositionDialogComponent,
   ],
   providers: [
     {
