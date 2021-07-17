@@ -57,8 +57,8 @@ export class AddMainCompositionDialogComponent extends DialogBaseComponent<MainC
   initTheForm() {
     this.dialogForm = this.fb.group({
       shiftId:  [this.shift.id, [Validators.required]],
-      from:     [moment(this.calendarDays[0].isoString).startOf("month"), [Validators.required]],
-      to:       [moment(this.calendarDays[0].isoString).endOf("month"), [Validators.required]],
+      from:     [moment.utc(this.calendarDays[0].isoString).startOf("month"), [Validators.required]],
+      to:       [moment.utc(this.calendarDays[0].isoString).endOf("month"), [Validators.required]],
       units:    this.fb.array([], Validators.required)
     });
 
