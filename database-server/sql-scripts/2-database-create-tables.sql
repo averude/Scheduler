@@ -157,6 +157,7 @@ CREATE TABLE IF NOT EXISTS shifts (
   department_id INTEGER       NOT NULL,
   pattern_id    INTEGER,
   name          VARCHAR (128) NOT NULL,
+  ui_priority   INTEGER       DEFAULT 0,
 
   UNIQUE (department_id, name),
 

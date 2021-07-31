@@ -57,8 +57,8 @@ export class WorkingNormTableComponent implements OnInit, AfterViewInit, OnDestr
 
   departmentId: number;
 
-  rowData:                Row[]           = [];
-  shifts:         Shift[]         = [];
+  rowData:  Row[]   = [];
+  shifts:   Shift[] = [];
   private shiftPatterns:  ShiftPattern[]  = [];
 
   generationUnits: ShiftGenerationUnit[] = [];

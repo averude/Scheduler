@@ -6,12 +6,11 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.StringJoiner;
-
-import static com.averude.uksatse.scheduler.security.details.AccountUtils.getUserAccount;
 
 @Slf4j
 @Aspect
@@ -34,12 +33,20 @@ public class ControllerLoggingAspect {
 
         var authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null) {
-            UserAccount userAccount = getUserAccount(authentication);
-            user = new StringJoiner(", ", UserAccount.class.getSimpleName() + "[", "]")
-                    .add("username='" + userAccount.getUsername() + "'")
-                    .add("authority='" + userAccount.getAuthority() + "'")
-                    .add("role='" + userAccount.getRole() + "'")
-                    .toString();
+
+            if (authentication.getPrincipal() instanceof Jwt) {
+                var jwt = (Jwt) authentication.getPrincipal();
+
+                user = new StringJoiner(", ", UserAccount.class.getSimpleName() + "[", "]")
+                        .add("username='" + jwt.getClaimAsString("user_name") + "'")
+                        .add("level='" + jwt.getClaimAsString("level") + "'")
+                        .add("role='" + jwt.getClaimAsString("role") + "'")
+                        .toString();
+            }
+
+            if (authentication.getPrincipal() instanceof String) {
+                user = (String) authentication.getPrincipal();
+            }
         }
         return user;
     }

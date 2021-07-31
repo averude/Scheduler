@@ -1,5 +1,6 @@
 import { Row } from "./row";
-import { binarySearchInsertIndex, bsr } from "../../../../shared/utils/collection-utils";
+import { binarySearchInsertIndex, bsr } from "../../utils/collection-utils";
+import { removeFromArray } from "../../../../services/utils";
 
 export class RowGroup {
   id:   number;
@@ -72,7 +73,11 @@ export class RowGroup {
     return processedRow;
   }
 
-  findRows(rowId: number): Row[] {
-    return this.rows.filter(row => row.id === rowId);
+  findRows(comparatorFn: (row: Row) => boolean): Row[] {
+    return this.rows.filter(comparatorFn);
+  }
+
+  removeRows(comparatorFn: (row: Row) => boolean) {
+    removeFromArray(this.rows, comparatorFn);
   }
 }

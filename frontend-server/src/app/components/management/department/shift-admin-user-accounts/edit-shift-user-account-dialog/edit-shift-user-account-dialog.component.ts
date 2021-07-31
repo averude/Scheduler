@@ -1,8 +1,8 @@
 import { Component, Inject } from '@angular/core';
 import {
   NewUserAccountDTO,
-  UserAccountAuthority,
   UserAccountDTO,
+  UserAccountLevel,
   UserAccountRole
 } from "../../../../../model/dto/user-account-dto";
 import { Shift } from "../../../../../model/shift";
@@ -43,7 +43,7 @@ export class EditShiftUserAccountDialogComponent extends DialogBaseComponent<Use
                           Validators.maxLength(128)]],
       name:           ['',  Validators.maxLength(128)],
       role:           [null,  [Validators.required]],
-      authority:      [UserAccountAuthority.SHIFT_ADMIN, [Validators.required]],
+      authority:      [UserAccountLevel.SHIFT, [Validators.required]],
       enterpriseId:   [this.enterpriseId],
       departmentIds:  [[this.departmentId]],
       shiftIds:       [[], Validators.required]

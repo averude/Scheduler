@@ -8,34 +8,81 @@
         <graylogPort>${GRAYLOG_GELF_PORT}</graylogPort>
     </appender>
 
-    <appender name="ErrorFile"
+    <appender name="DebugFile"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LOGS}/auth-server-errors.log</file>
+
+        <file>${LOGS}/auth-server-debug.log</file>
+
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>DEBUG</level>
         </filter>
+
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <Pattern>%d %p %C{1.} [%t] - %m%n</Pattern>
         </encoder>
 
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <!-- rollover daily and when the file reaches 10 MegaBytes -->
-            <fileNamePattern>${LOGS}/archived/auth-server-errors-%d{yyyy-MM-dd}.%i.log
-            </fileNamePattern>
+
+            <fileNamePattern>${LOGS}/archived/auth-server-debug-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+
             <timeBasedFileNamingAndTriggeringPolicy
                     class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <maxFileSize>10MB</maxFileSize>
             </timeBasedFileNamingAndTriggeringPolicy>
+
+        </rollingPolicy>
+
+    </appender>
+
+    <appender name="ErrorFile"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+
+        <file>${LOGS}/auth-server-errors.log</file>
+
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>%d %p %C{1.} [%t] - %m%n</Pattern>
+        </encoder>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+
+            <fileNamePattern>${LOGS}/archived/auth-server-errors-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+
         </rollingPolicy>
     </appender>
 
-    <root level="info">
-        <appender-ref ref="ErrorFile" />
-        <appender-ref ref="GELF"/>
-    </root>
+    <springProfile name="prod">
 
-    <logger name="com.averude.uksatse.scheduler" level="debug" additivity="false">
-        <appender-ref ref="GELF"/>
-    </logger>
+        <root level="info">
+            <appender-ref ref="ErrorFile" />
+            <appender-ref ref="GELF"/>
+        </root>
+
+        <logger name="com.averude.uksatse.scheduler" level="debug" additivity="false">
+            <appender-ref ref="GELF"/>
+        </logger>
+
+    </springProfile>
+
+    <springProfile name="dev">
+
+        <root level="info">
+            <appender-ref ref="DebugFile" />
+        </root>
+
+        <logger name="com.averude.uksatse.scheduler" level="debug" additivity="false">
+            <appender-ref ref="DebugFile"/>
+        </logger>
+
+    </springProfile>
+
 
 </configuration>

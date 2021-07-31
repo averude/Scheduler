@@ -18,13 +18,6 @@ export class UserAccountService {
     );
   }
 
-  current(): Observable<any> {
-    return this.http.get(
-      `${this.config.baseUrl}/uaa/current/full_name`,
-      {responseType: 'text'}
-      );
-  }
-
   changePassword(passwordChangeDTO: PasswordChangeDTO): Observable<any> {
     return this.http.post<any>(
       `${this.config.baseUrl}/uaa/current/password`,

@@ -3,12 +3,12 @@ package com.averude.uksatse.scheduler.security.controller.special;
 import com.averude.uksatse.scheduler.core.interfaces.entity.Composition;
 import com.averude.uksatse.scheduler.core.model.entity.MainComposition;
 import com.averude.uksatse.scheduler.core.model.entity.WorkDay;
-import com.averude.uksatse.scheduler.security.authority.Authorities;
-import com.averude.uksatse.scheduler.security.model.entity.UserAccountShift;
+import com.averude.uksatse.scheduler.security.details.UserLevels;
 import com.averude.uksatse.scheduler.shared.repository.MainCompositionRepository;
 import com.averude.uksatse.scheduler.shared.repository.SubstitutionCompositionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 import static com.averude.uksatse.scheduler.core.util.IntervalUtils.isBetween;
-import static com.averude.uksatse.scheduler.security.details.AccountUtils.getUserAccount;
+import static com.averude.uksatse.scheduler.security.utils.SecurityUtils.getLongListClaim;
 import static java.util.stream.Collectors.toList;
 
 @Component
@@ -32,13 +32,11 @@ public class EmployeeShiftChecker {
             return false;
         }
 
-        var userAccount = getUserAccount(authentication);
+        var jwt = (Jwt) authentication.getPrincipal();
+        var level = jwt.getClaimAsString("level");
 
-        if (userAccount.getAuthority().equals(Authorities.SHIFT_ADMIN)) {
-            var shiftIds = userAccount.getAccountShifts()
-                    .stream()
-                    .map(UserAccountShift::getShiftId)
-                    .collect(toList());
+        if (level.equals(UserLevels.SHIFT)) {
+            var shiftIds = getLongListClaim(jwt, "shiftIds");
 
             var date = workDays.get(0).getDate();
             var from = date.with(TemporalAdjusters.firstDayOfMonth());

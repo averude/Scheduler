@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from "@angular/router";
 import { AuthService } from "../services/http/auth.service";
 import { Observable } from "rxjs";
-import { UserAccountAuthority, UserAccountRole } from "../model/dto/user-account-dto";
+import { UserAccountLevel, UserAccountRole } from "../model/dto/user-account-dto";
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +15,7 @@ export class SecurityGuardService implements CanActivate {
               state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
     const userAccount = this.authService.currentUserAccount;
 
-    const authorities: UserAccountAuthority[] = route.data.authorities;
+    const authorities: UserAccountLevel[] = route.data.authorities;
     const roles: UserAccountRole[]            = route.data.roles;
 
     if (userAccount) {

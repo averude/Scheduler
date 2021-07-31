@@ -12,14 +12,14 @@ const routes: Routes = [
   {
     path: 'global_admin',
     canActivate: [RoleGuard],
-    data: {roles: ['GLOBAL_ADMIN']},
+    data: {roles: ['GLOBAL']},
     loadChildren: () => import('./modules/global-admin/global-admin.module')
       .then(mod => mod.GlobalAdminModule)
   },
   {
     path: 'admin',
     canActivate: [RoleGuard],
-    data: {roles: ['ENTERPRISE_ADMIN', 'DEPARTMENT_ADMIN', 'SHIFT_ADMIN']},
+    data: {roles: ['ENTERPRISE', 'DEPARTMENT', 'SHIFT']},
     loadChildren: () => import('./modules/admin/admin.module')
       .then(mod => mod.AdminModule)
   },

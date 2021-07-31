@@ -20,6 +20,14 @@
     <mat-error *ngIf="isControlInvalid('shiftPatternId')">{{getErrorMessage()}}</mat-error>
   </mat-form-field>
 
+  <mat-form-field>
+    <input matInput
+           type="number"
+           placeholder="UI Priority"
+           formControlName="uiPriority">
+    <mat-error *ngIf="isControlInvalid('uiPriority')">{{getErrorMessage()}}</mat-error>
+  </mat-form-field>
+
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">

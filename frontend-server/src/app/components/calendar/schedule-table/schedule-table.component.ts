@@ -18,15 +18,17 @@ import { ScheduleTableDataSource } from "../data-sources/schedule-table.data-sou
 import { SchedulerUtility, TRACK_BY_FN } from "../utils/scheduler-utility";
 import { UserAccessRights } from "../../../model/user";
 import { TableStateService } from "../../../lib/ngx-schedule-table/service/table-state.service";
-import { ScheduleRow, TableData } from "../../../model/ui/schedule-table/table-data";
+import { ScheduleRow } from "../../../model/ui/schedule-table/table-data";
 import { TableManager } from "../../../services/collectors/schedule/table-manager";
 import { ActivatedRoute } from "@angular/router";
-import { UserAccountAuthority } from "../../../model/dto/user-account-dto";
+import { UserAccountLevel } from "../../../model/dto/user-account-dto";
 import { filter, map, switchMap } from "rxjs/operators";
 import { ToolbarTemplateService } from "../../../services/top-bar/toolbar-template.service";
 import { Options } from "../../../lib/ngx-schedule-table/model/options";
 import { InitialData } from "../../../model/datasource/initial-data";
 import { TableDataCollector } from "../../../services/collectors/schedule/table-data.collector";
+import { TableData } from "../../../lib/ngx-schedule-table/model/data/table";
+import { ScheduleSortingStrategy } from "../utils/schedule-sorting-strategy";
 
 @Component({
   selector: 'app-schedule-table-component',
@@ -65,6 +67,7 @@ export class ScheduleTableComponent implements OnInit, AfterViewInit, OnDestroy 
               private activatedRoute: ActivatedRoute,
               private authService: AuthService,
               public  paginationStrategy: ScheduleTablePaginationStrategy,
+              private sortingStrategy: ScheduleSortingStrategy,
               private paginationService: PaginationService,
               private tableRenderer: TableRenderer,
               private sumCalculator: TableSumCalculator,
@@ -94,8 +97,8 @@ export class ScheduleTableComponent implements OnInit, AfterViewInit, OnDestroy 
 
             const userAccount = this.authService.currentUserAccount;
 
-            if (userAccount.authority === UserAccountAuthority.DEPARTMENT_ADMIN
-              || userAccount.authority === UserAccountAuthority.ENTERPRISE_ADMIN) {
+            if (userAccount.authority === UserAccountLevel.DEPARTMENT
+              || userAccount.authority === UserAccountLevel.ENTERPRISE) {
 
               return this.dataSource.byDepartmentId(this.enterpriseId, this.departmentId)
                 .pipe(
@@ -106,7 +109,7 @@ export class ScheduleTableComponent implements OnInit, AfterViewInit, OnDestroy 
                 );
             }
 
-            if (userAccount.authority === UserAccountAuthority.SHIFT_ADMIN
+            if (userAccount.authority === UserAccountLevel.SHIFT
               && userAccount.departmentIds.indexOf(this.departmentId) >= 0 ) {
 
               return this.dataSource.byShiftIds(this.enterpriseId, this.departmentId, userAccount.shiftIds)
@@ -122,8 +125,9 @@ export class ScheduleTableComponent implements OnInit, AfterViewInit, OnDestroy 
           }
         })
       )
-      .subscribe(tableData => {
+      .subscribe((tableData: TableData) => {
         this.proxyViewIsShown = false;
+        tableData.sortingStrategy = this.sortingStrategy;
         this.tableData = tableData;
         this.cd.detectChanges();
       });

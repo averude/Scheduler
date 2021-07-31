@@ -9,7 +9,7 @@ import { Options } from "../../../lib/ngx-schedule-table/model/options";
 import { UserAccessRights } from "../../../model/user";
 import { InitialData } from "../../../model/datasource/initial-data";
 import { filter, map, switchMap } from "rxjs/operators";
-import { UserAccountAuthority } from "../../../model/dto/user-account-dto";
+import { UserAccountLevel } from "../../../model/dto/user-account-dto";
 import { of, Subscription } from "rxjs";
 import { ScheduleViewTableDataSource } from "../data-sources/schedule-view-table.data-source";
 import { ScheduleViewDataCollector } from "./schedule-view-data.collector";
@@ -72,8 +72,8 @@ export class ScheduleViewTableComponent implements OnInit, AfterViewInit, OnDest
 
             const userAccount = this.authService.currentUserAccount;
 
-            if (userAccount.authority === UserAccountAuthority.DEPARTMENT_ADMIN
-              || userAccount.authority === UserAccountAuthority.ENTERPRISE_ADMIN) {
+            if (userAccount.authority === UserAccountLevel.DEPARTMENT
+              || userAccount.authority === UserAccountLevel.ENTERPRISE) {
 
               return this.dataSource.byViewId(this.enterpriseId, this.viewId)
                 .pipe(

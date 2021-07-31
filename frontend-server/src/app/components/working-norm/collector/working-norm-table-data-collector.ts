@@ -17,11 +17,11 @@ export class WorkingNormTableDataCollector {
     return workingNormDTOs.map(dto => {
       let row = new WorkingNormRow();
       row.id = dto.parent.id;
-      row.shiftName = dto.parent.name;
+      row.value = dto.parent;
       row.patternName = this.getPatternName(dto.parent, shiftPatterns);
       row.cells = this.cellCollector.collect(dates, dto.collection, true);
       return row;
-    });
+    }).sort((a, b) => (b.value.uiPriority - a.value.uiPriority) || (a.id - b.id));
   }
 
   getPatternName(shift: Shift,

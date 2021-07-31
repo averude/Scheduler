@@ -1,29 +1,6 @@
-security:
-  oauth2:
-    client:
-      clientId: ${BACKEND_SERVER_ID}
-      clientSecret: ${BACKEND_SERVER_PASSWORD}
-      accessTokenUri: ${ACCESS_TOKEN_URI}
-      grant-type: client_credentials
-      scope: server
-    resource:
-      user-info-uri: ${USER_INFO_URI}
 spring:
+  profiles:
+    active: ${PROFILE}
+
   application:
     name: scheduler-work-schedule-service
-  datasource:
-    url: ${DB_URL}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWD}
-    driver-class-name: ${DB_DRIVER_CLASS_NAME}
-  jpa:
-    open-in-view: false
-  jackson:
-    date-format: "yyyy-MM-dd"
-
-  main:
-    allow-bean-definition-overriding: true
-server:
-  compression:
-    enabled: true
-    mime-types: application/json,application/xml,text/html,text/xml,text/plain

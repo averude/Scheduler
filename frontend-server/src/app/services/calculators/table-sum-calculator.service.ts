@@ -4,7 +4,7 @@ import { Row } from "../../lib/ngx-schedule-table/model/data/row";
 import { Composition } from "../../model/composition";
 import { CellEnabledSetter } from "../collectors/schedule/cell-enabled-setter";
 import { Moment } from "moment";
-import { TableData } from "../../model/ui/schedule-table/table-data";
+import { TableData } from "../../lib/ngx-schedule-table/model/data/table";
 import { EmployeeScheduleDTO } from "../../model/dto/employee-schedule-dto";
 import { binarySearch } from "../../shared/utils/collection-utils";
 

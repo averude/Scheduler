@@ -1,20 +1,21 @@
 package com.averude.uksatse.scheduler.server.auth.config;
 
 import com.averude.uksatse.scheduler.server.auth.service.UserAccountDetailsService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+@RequiredArgsConstructor
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    UserAccountDetailsService userAccountDetailsService;
+    private final UserAccountDetailsService userAccountDetailsService;
 
     @Bean
     public static BCryptPasswordEncoder passwordEncoder() {
@@ -23,10 +24,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.antMatcher("/**").authorizeRequests()
+        http.authorizeRequests()
+                .antMatchers("/.well-known/*")
+                .permitAll()
                 .anyRequest().authenticated()
                 .and().cors()
-                .and().csrf().disable();
+                .and().csrf().disable()
+                .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
     }
 
     @Override

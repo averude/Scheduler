@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.validation.Valid;
 import java.util.List;
 
-import static com.averude.uksatse.scheduler.security.authority.Authorities.DEPARTMENT_ADMIN;
+import static com.averude.uksatse.scheduler.security.details.UserLevels.DEPARTMENT;
 import static com.averude.uksatse.scheduler.security.model.dto.AccountDTO.convertToDTO;
 
 @Service
@@ -28,7 +28,7 @@ public class DepartmentUserAccountServiceImpl implements DepartmentUserAccountSe
 
     @Override
     public List<UserAccountDTO> findAllByEnterpriseId(Long enterpriseId) {
-        var accounts = userAccountRepository.findAllByEnterpriseIdAndAuthority(enterpriseId, DEPARTMENT_ADMIN);
+        var accounts = userAccountRepository.findAllByEnterpriseIdAndAuthority(enterpriseId, DEPARTMENT);
         return convertToDTO(accounts);
     }
 

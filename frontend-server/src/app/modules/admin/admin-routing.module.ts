@@ -6,7 +6,7 @@ import { StatisticsTableComponent } from "../../components/statistics/statistics
 import { WorkingNormTableComponent } from "../../components/working-norm/working-norm-table/working-norm-table.component";
 import { ReportGeneratorFormComponent } from "../../components/report-generator/report-generator-form/report-generator-form.component";
 import { SecurityGuardService } from "../../guards/security-guard.service";
-import { UserAccountAuthority, UserAccountRole } from "../../model/dto/user-account-dto";
+import { UserAccountLevel, UserAccountRole } from "../../model/dto/user-account-dto";
 import { ScheduleViewTableComponent } from "../../components/calendar/schedule-view-table/schedule-view-table.component";
 
 const routes: Routes = [
@@ -17,10 +17,10 @@ const routes: Routes = [
       {
         path: 'enterprise/:enterpriseId/management',
         // canActivate: [RoleGuard],
-        // data: {roles: ['ENTERPRISE_ADMIN'], perm: 'ROLE_ADMIN'},
+        // data: {roles: ['ENTERPRISE'], perm: 'ROLE_ADMIN'},
         canActivate: [SecurityGuardService],
         data: {
-          authorities: [UserAccountAuthority.ENTERPRISE_ADMIN],
+          authorities: [UserAccountLevel.ENTERPRISE],
           roles: [UserAccountRole.ADMIN]
         },
         loadChildren: () => import('../../components/management/enterprise/enterprise-management.module')
@@ -52,10 +52,10 @@ const routes: Routes = [
           {
             path: ':departmentId/management',
             // canActivate: [RoleGuard],
-            // data: {roles: ['ENTERPRISE_ADMIN','DEPARTMENT_ADMIN'], perm: 'ROLE_ADMIN'},
+            // data: {roles: ['ENTERPRISE','DEPARTMENT'], perm: 'ROLE_ADMIN'},
             canActivate: [SecurityGuardService],
             data: {
-              authorities: [UserAccountAuthority.ENTERPRISE_ADMIN, UserAccountAuthority.DEPARTMENT_ADMIN],
+              authorities: [UserAccountLevel.ENTERPRISE, UserAccountLevel.DEPARTMENT],
               roles: [UserAccountRole.ADMIN]
             },
             loadChildren: () => import('../../components/management/department/department-management.module')

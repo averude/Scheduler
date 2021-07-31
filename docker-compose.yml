@@ -22,10 +22,15 @@ services:
 
   auth-server:
     environment:
+      PROFILE: $PROFILE
+      KEY_STORE_FILE: $KEY_STORE_FILE
+      KEY_STORE_PASSWORD: $KEY_STORE_PASSWORD
+      KEY_ALIAS: $KEY_ALIAS
+      JWK_KID: $JWK_KID
+      VALIDITY_SECONDS: $VALIDITY_SECONDS
       GRAYLOG_HOST: $GRAYLOG_HOST
       GRAYLOG_GELF_PORT: $GRAYLOG_GELF_PORT
-      BACKEND_SERVER_ID: $BACKEND_SERVER_ID
-      BACKEND_SERVER_PASSWORD: $BACKEND_SERVER_PASSWORD
+      JWT_SET_URI: $JWT_SET_URI
       DB_DRIVER_CLASS_NAME: $DB_DRIVER_CLASS_NAME
       DB_URL: $DB_URL
       DB_USERNAME: $DB_USERNAME
@@ -40,40 +45,13 @@ services:
       - ${LOG_VOLUME_PATH}:/logs
     ports:
       - 5000:5000
-#
-#  backend-server:
-#    environment:
-#      GRAYLOG_HOST: $GRAYLOG_HOST
-#      GRAYLOG_GELF_PORT: $GRAYLOG_GELF_PORT
-#      USER_INFO_URI: $USER_INFO_URI
-#      ACCESS_TOKEN_URI: $ACCESS_TOKEN_URI
-#      BACKEND_SERVER_ID: $BACKEND_SERVER_ID
-#      BACKEND_SERVER_PASSWORD: $BACKEND_SERVER_PASSWORD
-#      DB_DRIVER_CLASS_NAME: $DB_DRIVER_CLASS_NAME
-#      DB_URL: $DB_URL
-#      DB_USERNAME: $DB_USERNAME
-#      DB_PASSWD: $DB_PASSWD
-#    build:
-#      context: ./backend-server
-#      dockerfile: Dockerfile
-#    image: backend-server
-#    hostname: backend-server
-#    restart: always
-#    volumes:
-#      - ${LOG_VOLUME_PATH}:/logs
-#    depends_on:
-#      - auth-server
-#    ports:
-#      - 8080:8080
 
   work-schedule-service:
     environment:
+      PROFILE: $PROFILE
       GRAYLOG_HOST: $GRAYLOG_HOST
       GRAYLOG_GELF_PORT: $GRAYLOG_GELF_PORT
-      USER_INFO_URI: $USER_INFO_URI
-      ACCESS_TOKEN_URI: $ACCESS_TOKEN_URI
-      BACKEND_SERVER_ID: $BACKEND_SERVER_ID
-      BACKEND_SERVER_PASSWORD: $BACKEND_SERVER_PASSWORD
+      JWT_SET_URI: $JWT_SET_URI
       DB_DRIVER_CLASS_NAME: $DB_DRIVER_CLASS_NAME
       DB_URL: $DB_URL
       DB_USERNAME: $DB_USERNAME

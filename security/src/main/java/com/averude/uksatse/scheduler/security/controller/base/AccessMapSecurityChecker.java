@@ -1,8 +1,8 @@
 package com.averude.uksatse.scheduler.security.controller.base;
 
-import com.averude.uksatse.scheduler.security.model.entity.UserAccount;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -20,20 +20,23 @@ public class AccessMapSecurityChecker {
                 || mapName == null || mapName.isBlank();
     }
 
-    public final boolean checkAccess(UserAccount user, String mapName) {
+    public final boolean checkAccess(Jwt jwt, String mapName) {
+
+        var level = jwt.getClaimAsString("level");
+        var role = jwt.getClaimAsString("role");
 
         var authorityMap = accessMap.get(mapName);
         if (authorityMap == null) {
             throw new RuntimeException("No authority map with name [" + mapName + "] found");
         }
 
-        var grantedRoles = authorityMap.get(user.getAuthority());
+        var grantedRoles = authorityMap.get(level);
         if (grantedRoles == null || grantedRoles.isEmpty()) {
             return false;
         }
 
         return grantedRoles
                 .stream()
-                .anyMatch(role -> role.equals(user.getRole()));
+                .anyMatch(grantedRole -> grantedRole.equals(role));
     }
 }

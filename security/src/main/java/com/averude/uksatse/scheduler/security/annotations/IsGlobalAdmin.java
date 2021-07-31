@@ -9,6 +9,7 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-@PreAuthorize("hasAuthority('GLOBAL_ADMIN') and hasRole('ADMIN')")
+@PreAuthorize("@userRoleLevelChecker.hasLevel('GLOBAL') " +
+        "and @userRoleLevelChecker.hasRole('ADMIN')")
 public @interface IsGlobalAdmin {
 }

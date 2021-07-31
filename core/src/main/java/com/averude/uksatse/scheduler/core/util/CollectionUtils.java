@@ -66,6 +66,10 @@ public class CollectionUtils {
         }
     }
 
+    public static boolean containsAllLong(Collection<Long> tArr, Collection<Long> uArr) {
+        return containsAll(tArr, uArr, Long::equals);
+    }
+
     public static <T, U> boolean containsAll(Collection<T> tArr,
                                              Collection<U> uArr,
                                              BiPredicate<T, U> equalsPredicate) {

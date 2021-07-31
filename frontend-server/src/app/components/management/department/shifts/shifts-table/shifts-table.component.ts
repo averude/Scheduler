@@ -15,7 +15,7 @@ import { ActivatedRoute } from "@angular/router";
   styleUrls: ['../../../../../shared/common/table.common.css','./shifts-table.component.css']
 })
 export class ShiftsTableComponent extends HasDepartmentTableComponent<Shift> implements OnInit {
-  displayedColumns = ['select', 'name', 'pattern', 'control'];
+  displayedColumns = ['select', 'name', 'pattern', 'uiPriority', 'control'];
 
   patterns: ShiftPattern[] = [];
 

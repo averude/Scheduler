@@ -31,7 +31,7 @@ export class AuthService {
           if (token && token.access_token) {
             const userSession = new UserSession();
             const token_claims = decode(token.access_token);
-            userSession.roles = token_claims.authorities;
+            userSession.roles = [`ROLE_${token_claims.role}`, token_claims.level];
             userSession.access_token = token.access_token;
             userSession.expired = token_claims.exp;
             this.fillAccessRights(userSession);
@@ -84,15 +84,15 @@ export class AuthService {
           user.accessRights.isAdmin = true;
           break;
         }
-        case 'ENTERPRISE_ADMIN': {
+        case 'ENTERPRISE': {
           user.accessRights.isEnterpriseLevel = true;
           break;
         }
-        case 'DEPARTMENT_ADMIN': {
+        case 'DEPARTMENT': {
           user.accessRights.isDepartmentLevel = true;
           break;
         }
-        case 'SHIFT_ADMIN': {
+        case 'SHIFT': {
           user.accessRights.isShiftLevel = true;
           break;
         }

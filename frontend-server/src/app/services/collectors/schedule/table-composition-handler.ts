@@ -170,14 +170,13 @@ export class TableCompositionHandler {
 
       if (row.isSubstitution) {
         const mainShiftComposition = (<SubstitutionComposition> composition).mainComposition;
-        const rows = <ScheduleRow[]> group.table.findRowGroup(mainShiftComposition.shiftId).rows;
 
-        for (let otherGroupMainRow of rows) {
-
-          if (otherGroupMainRow.id === mainShiftComposition.employeeId && !otherGroupMainRow.isSubstitution) {
-            otherGroupMainRow.intervals = this.intervalCreator.getEmployeeShiftIntervalsByArr(otherGroupMainRow.compositions, dto.substitutionCompositions);
-          }
-        }
+        group.table.forEachRowInGroup(mainShiftComposition.shiftId,
+          (row: ScheduleRow) => {
+            if (row.id === mainShiftComposition.employeeId && !row.isSubstitution) {
+              row.intervals = this.intervalCreator.getEmployeeShiftIntervalsByArr(row.compositions, dto.substitutionCompositions);
+            }
+          });
       }
 
       return row;

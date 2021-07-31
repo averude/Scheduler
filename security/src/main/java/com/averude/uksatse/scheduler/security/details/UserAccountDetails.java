@@ -5,10 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.StringJoiner;
 
@@ -22,8 +20,6 @@ public class UserAccountDetails implements UserDetails {
 
     public UserAccountDetails(UserAccount userAccount) {
         this.userAccount = userAccount;
-        this.authorities = Arrays.asList(new SimpleGrantedAuthority(userAccount.getAuthority()),
-                new SimpleGrantedAuthority("ROLE_" + userAccount.getRole()));
     }
 
     @Override

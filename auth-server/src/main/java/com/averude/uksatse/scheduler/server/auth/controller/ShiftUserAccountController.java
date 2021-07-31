@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RequestMapping("/users/shift_admins")
+@RequestMapping("/users/shifts")
 @RestController
 @RequiredArgsConstructor
 public class ShiftUserAccountController {

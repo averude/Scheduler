@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { DialogBaseComponent } from "../../../../../shared/abstract-components/dialog-base/dialog-base.component";
-import { NewUserAccountDTO, UserAccountAuthority, UserAccountRole } from "../../../../../model/dto/user-account-dto";
+import { NewUserAccountDTO, UserAccountLevel, UserAccountRole } from "../../../../../model/dto/user-account-dto";
 import { Shift } from "../../../../../model/shift";
 import { FormBuilder, Validators } from "@angular/forms";
 import { AuthService } from "../../../../../services/http/auth.service";
@@ -43,7 +43,7 @@ export class AddShiftUserAccountDialogComponent extends DialogBaseComponent<NewU
                           Validators.minLength(3),
                           Validators.maxLength(128)]],
       role:           [null,  [Validators.required]],
-      authority:      [UserAccountAuthority.SHIFT_ADMIN, [Validators.required]],
+      authority:      [UserAccountLevel.SHIFT, [Validators.required]],
       enterpriseId:   [this.enterpriseId],
       departmentIds:  [[this.departmentId]],
       shiftIds:       [[], Validators.required]

@@ -25,4 +25,9 @@ public class PasswordChangeDTO extends PasswordResetDTO implements PasswordChang
         super(newPassword, confirmPassword);
         this.oldPassword = oldPassword;
     }
+
+    @Override
+    public String toString() {
+        return "[PROTECTED]";
+    }
 }

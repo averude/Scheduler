@@ -1,9 +1,10 @@
 import { Row } from "../../../lib/ngx-schedule-table/model/data/row";
 import { Cell } from "../../../lib/ngx-schedule-table/model/data/cell";
+import { Shift } from "../../shift";
 
 export class WorkingNormRow implements Row {
   id:           number;
-  shiftName:    string;
+  value:        Shift;
   patternName:  string;
   cells:        Cell[];
 }

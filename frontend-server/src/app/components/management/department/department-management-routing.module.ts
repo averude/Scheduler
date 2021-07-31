@@ -15,7 +15,7 @@ const routes: Routes = [
     component: DepartmentManagementComponent,
     children: [
       {
-        path: 'shift_admin_user_accounts',
+        path: 'shift_user_accounts',
         component: UserAccountsTableComponent
       },
       {

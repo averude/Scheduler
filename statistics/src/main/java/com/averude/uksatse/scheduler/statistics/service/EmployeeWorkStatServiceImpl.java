@@ -155,6 +155,7 @@ public class EmployeeWorkStatServiceImpl implements EmployeeWorkStatService {
         return positionWorkStat;
     }
 
+    // TODO: Rewrite with the usage of last time rather than position in array
     private Long getPositionId(EmployeeScheduleDTO dto) {
         Long result = null;
 
@@ -176,6 +177,7 @@ public class EmployeeWorkStatServiceImpl implements EmployeeWorkStatService {
         return result;
     }
 
+    // TODO: Rewrite with the usage of last time rather than position in array
     private Long getShiftId(EmployeeScheduleDTO dto) {
         Long result = null;
 

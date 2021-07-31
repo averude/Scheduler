@@ -7,8 +7,14 @@
 # MacOS files
 *._.DS_Store
 
+# Key Store files
+*.jks
+
 # Reports test files
 *.xls
+
+#Environment files
+.env
 
 # Custom scripts directory
 /scripts/*

@@ -36,6 +36,6 @@ export function putSorted<T extends Composition>(composition: T, compositions: T
 }
 
 export function removeFromArray<T>(arr: T[], comparator: (value: T) => boolean) {
-  const compositionIndex = arr.findIndex(comparator);
-  arr.splice(compositionIndex, 1);
+  const index = arr.findIndex(comparator);
+  arr.splice(index, 1);
 }

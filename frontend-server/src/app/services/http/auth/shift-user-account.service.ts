@@ -15,7 +15,7 @@ export class ShiftUserAccountService
 
   constructor(private config: RestConfig,
               http: HttpClient) {
-    super(`${config.baseUrl}/uaa/users/shift_admins`, http);
+    super(`${config.baseUrl}/uaa/users/shifts`, http);
   }
 
   getAllByDepartmentId(departmentId: number): Observable<UserAccountDTO[]> {

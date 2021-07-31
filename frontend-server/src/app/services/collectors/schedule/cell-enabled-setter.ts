@@ -1,4 +1,4 @@
-import { ScheduleRow, TableData } from "../../../model/ui/schedule-table/table-data";
+import { ScheduleRow } from "../../../model/ui/schedule-table/table-data";
 import { Moment } from "moment";
 import { Injectable } from "@angular/core";
 import { HasDuration } from "../../../model/composition";
@@ -48,11 +48,5 @@ export class CellEnabledSetter {
     );
 
     row.hidden = (count === row.cells.length);
-  }
-
-  processTable(table: TableData) {
-    table.groups.forEach(group => {
-      group.rows.forEach((row: ScheduleRow) => this.processRow(row, table.from, table.to));
-    });
   }
 }

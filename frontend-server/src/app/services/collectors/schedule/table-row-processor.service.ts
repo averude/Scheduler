@@ -1,4 +1,4 @@
-import { ScheduleCell, ScheduleRow, ScheduleRowGroup, TableData } from "../../../model/ui/schedule-table/table-data";
+import { ScheduleCell, ScheduleRow, ScheduleRowGroup } from "../../../model/ui/schedule-table/table-data";
 import { Position } from "../../../model/position";
 import { EmployeeScheduleDTO } from "../../../model/dto/employee-schedule-dto";
 import { CalendarDay } from "../../../lib/ngx-schedule-table/model/calendar-day";
@@ -9,6 +9,7 @@ import { CellCollector } from "../cell-collector";
 import { Injectable } from "@angular/core";
 import { WorkDay } from "../../../model/workday";
 import { InitialData } from "../../../model/datasource/initial-data";
+import { TableData } from "../../../lib/ngx-schedule-table/model/data/table";
 
 @Injectable()
 export class TableRowProcessor {

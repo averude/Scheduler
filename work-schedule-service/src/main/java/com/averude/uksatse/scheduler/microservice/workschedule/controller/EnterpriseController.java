@@ -1,21 +1,20 @@
 package com.averude.uksatse.scheduler.microservice.workschedule.controller;
 
 import com.averude.uksatse.scheduler.core.model.entity.structure.Enterprise;
-import com.averude.uksatse.scheduler.security.annotations.IsAnyUser;
 import com.averude.uksatse.scheduler.security.annotations.IsGlobalAdmin;
 import com.averude.uksatse.scheduler.security.logging.Logged;
-import com.averude.uksatse.scheduler.security.model.entity.UserAccount;
 import com.averude.uksatse.scheduler.shared.service.EnterpriseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
-import static com.averude.uksatse.scheduler.security.details.AccountUtils.getUserAccount;
+import static com.averude.uksatse.scheduler.security.utils.SecurityUtils.getLongClaim;
 
 @RequestMapping("/enterprises")
 @RestController
@@ -32,14 +31,9 @@ public class EnterpriseController {
     }
 
     @Logged
-    @IsAnyUser
     @GetMapping("/current")
     public Optional<Enterprise> getCurrent() {
-        var userAccount = getUser();
-
-        var enterpriseId = userAccount.getEnterpriseId();
-        if (enterpriseId == null) throw new RuntimeException();
-
+        var enterpriseId = getCurrentUserEnterpriseId();
         return enterpriseService.findById(enterpriseId);
     }
 
@@ -71,8 +65,9 @@ public class EnterpriseController {
         enterpriseService.deleteById(id);
     }
 
-    private UserAccount getUser() {
+    private Long getCurrentUserEnterpriseId() {
         var authentication = SecurityContextHolder.getContext().getAuthentication();
-        return getUserAccount(authentication);
+        var jwt = (Jwt) authentication.getPrincipal();
+        return getLongClaim(jwt, "enterpriseId");
     }
 }

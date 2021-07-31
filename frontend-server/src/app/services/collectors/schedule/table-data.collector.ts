@@ -1,5 +1,5 @@
 import * as moment from "moment";
-import { ScheduleRowGroup, TableData } from "../../../model/ui/schedule-table/table-data";
+import { ScheduleRowGroup } from "../../../model/ui/schedule-table/table-data";
 import { Injectable } from "@angular/core";
 import { IntervalCreator } from "../../creator/interval-creator.service";
 import { binarySearch } from "../../../shared/utils/collection-utils";
@@ -8,6 +8,7 @@ import { InitialData } from "../../../model/datasource/initial-data";
 import { convertCompositionToInterval } from "../../../model/ui/schedule-table/row-interval";
 import { CellEnabledSetter } from "./cell-enabled-setter";
 import { TableSumCalculator } from "../../calculators/table-sum-calculator.service";
+import { TableData } from "../../../lib/ngx-schedule-table/model/data/table";
 
 @Injectable()
 export class TableDataCollector {
@@ -17,7 +18,7 @@ export class TableDataCollector {
               private sumCalculator: TableSumCalculator,
               private rowProcessor: TableRowProcessor) {}
 
-  handleData(initData: InitialData) {
+  handleData(initData: InitialData): TableData {
     const tableData = this.collect(initData);
 
     tableData.forEachRow(row => {

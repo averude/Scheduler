@@ -7,4 +7,5 @@ export class Shift implements IdEntity, HasName, HasDepartmentId {
   departmentId:   number;
   name:           string;
   shiftPatternId: number;
+  uiPriority:     number;
 }

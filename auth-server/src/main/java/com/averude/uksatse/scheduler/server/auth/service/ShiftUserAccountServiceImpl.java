@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.validation.Valid;
 import java.util.List;
 
-import static com.averude.uksatse.scheduler.security.authority.Authorities.SHIFT_ADMIN;
+import static com.averude.uksatse.scheduler.security.details.UserLevels.SHIFT;
 import static com.averude.uksatse.scheduler.security.model.dto.AccountDTO.convertToDTO;
 
 @Service
@@ -30,7 +30,7 @@ public class ShiftUserAccountServiceImpl implements ShiftUserAccountService {
 
     @Override
     public List<UserAccountDTO> findAllByDepartmentId(Long departmentId) {
-        var accounts = userAccountRepository.findAllByDepartmentIdAndAuthority(departmentId, SHIFT_ADMIN);
+        var accounts = userAccountRepository.findAllByDepartmentIdAndAuthority(departmentId, SHIFT);
         return convertToDTO(accounts);
     }
 

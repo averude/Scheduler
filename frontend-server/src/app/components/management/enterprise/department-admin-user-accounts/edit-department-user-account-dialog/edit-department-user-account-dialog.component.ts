@@ -1,8 +1,8 @@
 import { Component, Inject } from '@angular/core';
 import {
   NewUserAccountDTO,
-  UserAccountAuthority,
   UserAccountDTO,
+  UserAccountLevel,
   UserAccountRole
 } from "../../../../../model/dto/user-account-dto";
 import { FormBuilder, Validators } from "@angular/forms";
@@ -40,7 +40,7 @@ export class EditDepartmentUserAccountDialogComponent extends DialogBaseComponen
                             Validators.maxLength(128)]],
       name:           ['',  Validators.maxLength(128)],
       role:           [null,  [Validators.required]],
-      authority:      [UserAccountAuthority.DEPARTMENT_ADMIN, [Validators.required]],
+      authority:      [UserAccountLevel.DEPARTMENT, [Validators.required]],
       enterpriseId:   [this.enterpriseId],
       departmentIds:  [null,  [Validators.required]]
     });

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from "../../services/http/auth.service";
 import { Router } from "@angular/router";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { UserAccountAuthority, UserAccountDTO } from "../../model/dto/user-account-dto";
+import { UserAccountDTO, UserAccountLevel } from "../../model/dto/user-account-dto";
 
 @Component({
   selector: 'app-login',
@@ -80,15 +80,15 @@ export class LoginComponent implements OnInit{
     let promise;
     switch (user.authority) {
 
-      case UserAccountAuthority.GLOBAL_ADMIN:
+      case UserAccountLevel.GLOBAL:
         promise = this.router.navigate(['/global_admin']);
         break;
 
-      case UserAccountAuthority.ENTERPRISE_ADMIN:
+      case UserAccountLevel.ENTERPRISE:
         promise = this.router.navigate(['/admin']);
         break;
 
-      case UserAccountAuthority.DEPARTMENT_ADMIN:
+      case UserAccountLevel.DEPARTMENT:
         if (user.departmentIds.length > 1) {
           promise = this.router.navigate(['/admin']);
         } else {
@@ -96,7 +96,7 @@ export class LoginComponent implements OnInit{
         }
         break;
 
-      case UserAccountAuthority.SHIFT_ADMIN:
+      case UserAccountLevel.SHIFT:
         promise = this.router.navigate([`/admin/department/${user.departmentIds[0]}/calendar`]);
         break;
 

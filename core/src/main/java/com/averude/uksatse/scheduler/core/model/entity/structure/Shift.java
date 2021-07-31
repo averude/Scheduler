@@ -54,6 +54,9 @@ public class Shift implements HasId, HasDepartmentId {
     @Column(name = "pattern_id")
     private Long shiftPatternId;
 
+    @Column(name = "ui_priority")
+    private Long uiPriority;
+
     @JsonIgnore
     @OneToMany( mappedBy = "shiftId",
                 cascade = CascadeType.ALL,

@@ -14,7 +14,7 @@ export class EnterpriseUserAccountService
 
   constructor(private config: RestConfig,
               http: HttpClient) {
-    super(`${config.baseUrl}/uaa/users/enterprise_admins`, http);
+    super(`${config.baseUrl}/uaa/users/enterprises`, http);
   }
 
   create(userAccountDTO: NewUserAccountDTO): Observable<any> {

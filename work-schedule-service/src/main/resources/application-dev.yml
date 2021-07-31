@@ -1,0 +1,27 @@
+spring:
+
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWD}
+    driver-class-name: ${DB_DRIVER_CLASS_NAME}
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: ${JWT_SET_URI}
+
+  jpa:
+    open-in-view: false
+
+  jackson:
+    date-format: "yyyy-MM-dd"
+
+  main:
+    allow-bean-definition-overriding: true
+
+server:
+  compression:
+    enabled: true
+    mime-types: application/json,application/xml,text/html,text/xml,text/plain

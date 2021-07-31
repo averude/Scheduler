@@ -14,12 +14,15 @@ import { DayTypeGroup } from "../../../../../model/day-type-group";
 export class DayTypeDialogComponent extends DialogBaseComponent<DayType> {
   dayTypeGroups:  DayTypeGroup[]  = [];
 
+  private readonly enterpriseId: number;
+
   constructor(private fb: FormBuilder,
               private authService: AuthService,
               private dialogRef: MatDialogRef<DayTypeDialogComponent>,
               @Inject(MAT_DIALOG_DATA) data) {
     super(data.dayType, dialogRef);
     this.dayTypeGroups  = data.dayTypeGroups;
+    this.enterpriseId   = data.enterpriseId;
   }
 
   initTheForm() {
@@ -29,6 +32,7 @@ export class DayTypeDialogComponent extends DialogBaseComponent<DayType> {
       name:             ['',    [Validators.required,
                                  Validators.minLength(3),
                                  Validators.maxLength(64)]],
+      enterpriseId:     [this.enterpriseId],
       label:            [null,  [Validators.maxLength(5)]],
       reportLabel:      [null,  [Validators.maxLength(5)]],
       usePreviousValue: [false]
@@ -40,6 +44,7 @@ export class DayTypeDialogComponent extends DialogBaseComponent<DayType> {
       id:               dayType.id,
       dayTypeGroup:     dayType.dayTypeGroup,
       name:             dayType.name,
+      enterpriseId:     dayType.enterpriseId,
       label:            dayType.label,
       reportLabel:      dayType.reportLabel,
       usePreviousValue: dayType.usePreviousValue

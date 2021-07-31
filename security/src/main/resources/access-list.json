@@ -1,29 +1,29 @@
 {
   "MAP1": {
-    "ENTERPRISE_ADMIN": ["ADMIN", "USER"],
-    "DEPARTMENT_ADMIN": ["ADMIN", "USER"]
+    "ENTERPRISE": ["ADMIN", "USER"],
+    "DEPARTMENT": ["ADMIN", "USER"]
   },
   "MAP2": {
-    "ENTERPRISE_ADMIN": ["ADMIN", "USER"],
-    "DEPARTMENT_ADMIN": ["ADMIN", "USER"],
-    "SHIFT_ADMIN":      ["ADMIN", "USER"]
+    "ENTERPRISE": ["ADMIN", "USER"],
+    "DEPARTMENT": ["ADMIN", "USER"],
+    "SHIFT":      ["ADMIN", "USER"]
   },
   "MAP3": {
-    "ENTERPRISE_ADMIN": ["ADMIN"],
-    "DEPARTMENT_ADMIN": ["ADMIN"]
+    "ENTERPRISE": ["ADMIN"],
+    "DEPARTMENT": ["ADMIN"]
   },
   "MAP4": {
-    "ENTERPRISE_ADMIN": ["ADMIN"],
-    "DEPARTMENT_ADMIN": ["ADMIN"],
-    "SHIFT_ADMIN":      ["ADMIN"]
+    "ENTERPRISE": ["ADMIN"],
+    "DEPARTMENT": ["ADMIN"],
+    "SHIFT":      ["ADMIN"]
   },
   "MAP5": {
-    "SHIFT_ADMIN": ["ADMIN", "USER"]
+    "SHIFT": ["ADMIN", "USER"]
   },
   "MAP6": {
-    "ENTERPRISE_ADMIN": ["ADMIN"]
+    "ENTERPRISE": ["ADMIN"]
   },
   "MAP7": {
-    "ENTERPRISE_ADMIN": ["ADMIN", "USER"]
+    "ENTERPRISE": ["ADMIN", "USER"]
   }
 }

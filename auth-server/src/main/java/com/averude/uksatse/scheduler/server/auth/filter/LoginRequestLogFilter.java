@@ -50,6 +50,11 @@ public class LoginRequestLogFilter implements Filter {
     private String getUsername(Map<String, String[]> parameters) {
         StringBuilder username = new StringBuilder();
         var usernameParamValues = parameters.get("username");
+
+        if (usernameParamValues == null) {
+            return "ANONYMOUS";
+        }
+
         if (usernameParamValues.length > 0) {
             for (var value : usernameParamValues) {
                 username.append(value);

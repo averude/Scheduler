@@ -96,10 +96,10 @@ export class TableManager {
       .pipe(
         switchMap(value => {
           if (value) {
-            const group = mainCompositionRow.group.table.findRowGroup(value.shiftId);
+            const destinationGroup = mainCompositionRow.group.table.findRowGroup(value.shiftId);
 
             return this.tableCompositionHandler
-              .createOrUpdate([value], group, null,
+              .createOrUpdate([value], destinationGroup, null,
                 mainCompositionRow, data.initData, true);
           }
         })

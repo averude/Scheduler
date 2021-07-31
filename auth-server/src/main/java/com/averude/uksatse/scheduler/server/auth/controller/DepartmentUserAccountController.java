@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RequestMapping("/users/department_admins")
+@RequestMapping("/users/departments")
 @RestController
 @RequiredArgsConstructor
 public class DepartmentUserAccountController {

@@ -5,7 +5,7 @@ export class UserAccountDTO implements IdEntity {
   username:       string;
   name:           string;
   role:           UserAccountRole;
-  authority:      UserAccountAuthority;
+  authority:      UserAccountLevel;
   enterpriseId:   number;
   departmentIds:  number[];
   shiftIds:       number[];
@@ -26,9 +26,9 @@ export enum UserAccountRole {
   USER  = 'USER'
 }
 
-export enum UserAccountAuthority {
-  GLOBAL_ADMIN      = 'GLOBAL_ADMIN',
-  ENTERPRISE_ADMIN  = 'ENTERPRISE_ADMIN',
-  DEPARTMENT_ADMIN  = 'DEPARTMENT_ADMIN',
-  SHIFT_ADMIN       = 'SHIFT_ADMIN'
+export enum UserAccountLevel {
+  GLOBAL      = 'GLOBAL',
+  ENTERPRISE  = 'ENTERPRISE',
+  DEPARTMENT  = 'DEPARTMENT',
+  SHIFT       = 'SHIFT'
 }

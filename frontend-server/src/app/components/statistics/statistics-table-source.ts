@@ -13,7 +13,7 @@ import { Position } from "../../model/position";
 import { PaginationService } from "../../lib/ngx-schedule-table/service/pagination.service";
 import { StatisticsTableDataCollector } from "./collector/statistics-table-data-collector";
 import { Injectable } from "@angular/core";
-import { UserAccountAuthority, UserAccountDTO } from "../../model/dto/user-account-dto";
+import { UserAccountDTO, UserAccountLevel } from "../../model/dto/user-account-dto";
 import { toIdMap } from "../calendar/utils/scheduler-utility";
 
 @Injectable()
@@ -39,7 +39,7 @@ export class StatisticsTableSource {
                mode: SummationMode) {
     let obs;
 
-    if (userAccount.authority === UserAccountAuthority.SHIFT_ADMIN) {
+    if (userAccount.authority === UserAccountLevel.SHIFT) {
       obs = this.byShiftIds(enterpriseId, departmentId, userAccount.shiftIds, mode);
     } else {
       obs = this.byDepartmentId(enterpriseId, departmentId, mode);

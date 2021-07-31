@@ -32,7 +32,8 @@ export class ShiftDialogComponent extends DialogBaseComponent<Shift> {
       name:           ['',    [Validators.required,
                         Validators.minLength(3),
                         Validators.maxLength(64)]],
-      shiftPatternId: []
+      shiftPatternId: [],
+      uiPriority:     [0]
     })
   }
 
@@ -41,7 +42,8 @@ export class ShiftDialogComponent extends DialogBaseComponent<Shift> {
       id:             shift.id,
       departmentId:   shift.departmentId,
       name:           shift.name,
-      shiftPatternId: shift.shiftPatternId
+      shiftPatternId: shift.shiftPatternId,
+      uiPriority:     shift.uiPriority
     })
   }
 }

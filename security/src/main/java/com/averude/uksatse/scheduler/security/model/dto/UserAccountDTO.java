@@ -1,18 +1,14 @@
 package com.averude.uksatse.scheduler.security.model.dto;
 
 import com.averude.uksatse.scheduler.security.model.entity.UserAccount;
-import com.averude.uksatse.scheduler.security.model.entity.UserAccountDepartment;
-import com.averude.uksatse.scheduler.security.model.entity.UserAccountShift;
+import com.averude.uksatse.scheduler.security.utils.SecurityUtils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
-
-import static java.util.stream.Collectors.toList;
 
 @Data
 @AllArgsConstructor
@@ -49,24 +45,11 @@ public class UserAccountDTO implements AccountDTO {
         this.enterpriseId = userAccount.getEnterpriseId();
 
         if (userAccount.getAccountDepartments() != null) {
-            this.departmentIds = getDepartmentIds(userAccount.getAccountDepartments());
+            this.departmentIds = SecurityUtils.getDepartmentIds(userAccount.getAccountDepartments());
         }
         if (userAccount.getAccountShifts() != null) {
-            this.shiftIds = getShiftIds(userAccount.getAccountShifts());
+            this.shiftIds = SecurityUtils.getShiftIds(userAccount.getAccountShifts());
         }
     }
 
-    private List<Long> getDepartmentIds(Collection<UserAccountDepartment> accountDepartments) {
-        return accountDepartments
-                .stream()
-                .map(UserAccountDepartment::getDepartmentId)
-                .collect(toList());
-    }
-
-    private List<Long> getShiftIds(Collection<UserAccountShift> accountShifts) {
-        return accountShifts
-                .stream()
-                .map(UserAccountShift::getShiftId)
-                .collect(toList());
-    }
 }

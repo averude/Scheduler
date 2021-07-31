@@ -21,6 +21,7 @@ export class StatisticsTableDataCollector {
       .map(shift => ({
         id: shift.id,
         name: shift.name,
+        shift: shift,
         rows: []
       } as StatisticsRowGroup));
 
@@ -39,7 +40,7 @@ export class StatisticsTableDataCollector {
       }
     }
 
-    return groups;
+    return groups.sort((a, b) => b.shift.uiPriority - a.shift.uiPriority || a.id - b.id);
 
   }
 
@@ -58,6 +59,7 @@ export class StatisticsTableDataCollector {
 export class StatisticsRowGroup extends RowGroup {
   id: number;
   name: string;
+  shift: Shift;
   rows: StatisticsEmployeeRow[];
 }
 

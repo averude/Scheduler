@@ -1,4 +1,4 @@
-import { ScheduleRow, ScheduleRowGroup, TableData } from "../../../model/ui/schedule-table/table-data";
+import { ScheduleRow, ScheduleRowGroup } from "../../../model/ui/schedule-table/table-data";
 import { Composition, SubstitutionComposition } from "../../../model/composition";
 import { EmployeeScheduleDTO } from "../../../model/dto/employee-schedule-dto";
 import { binarySearch } from "../../../shared/utils/collection-utils";
@@ -9,6 +9,7 @@ import { IntervalCreator } from "../../creator/interval-creator.service";
 import { Injectable } from "@angular/core";
 import { TableSumCalculator } from "../../calculators/table-sum-calculator.service";
 import { removeFromArray } from "../../utils";
+import { TableData } from "../../../lib/ngx-schedule-table/model/data/table";
 
 @Injectable()
 export class TableRowRemover {
@@ -58,15 +59,12 @@ export class TableRowRemover {
                                         table: TableData) {
     mainShiftCompositions.forEach(composition => {
 
-      const rows = <ScheduleRow[]> table.findRowGroup(composition.shiftId).rows;
-
-      for (let row of rows) {
-
-        if (row.id === composition.employeeId && !row.isSubstitution) {
-          row.intervals = this.intervalCreator.getEmployeeShiftIntervalsByArr(row.compositions, substitutionShiftCompositions);
-        }
-
-      }
+      table.forEachRowInGroup(composition.shiftId,
+        (row: ScheduleRow) => {
+          if (row.id === composition.employeeId && !row.isSubstitution) {
+            row.intervals = this.intervalCreator.getEmployeeShiftIntervalsByArr(row.compositions, substitutionShiftCompositions);
+          }
+        });
 
     });
   }
@@ -82,13 +80,12 @@ export class TableRowRemover {
 
       if (composition.mainComposition.id === mainComposition.id) {
 
-        const rows = <ScheduleRow[]> table.findRowGroup(composition.shiftId).rows;
-
-        for (let row of rows) {
-          if (row.id === composition.employeeId && row.isSubstitution) {
-            this.removeCompositionAndInterval(row, composition);
-          }
-        }
+        table.forEachRowInGroup(composition.shiftId,
+          (row: ScheduleRow) => {
+            if (row.id === composition.employeeId && row.isSubstitution) {
+              this.removeCompositionAndInterval(row, composition);
+            }
+          });
 
         substitutionShiftCompositions.splice(index, 1);
 
@@ -102,17 +99,15 @@ export class TableRowRemover {
   removeCompositionAndInterval(row: ScheduleRow,
                                composition: Composition) {
     const group = row.group;
-    const rows = <ScheduleRow[]> group.rows;
 
     // Remove composition from row's compositions
     removeFromArray(row.compositions, value => value.id === composition.id);
 
     if (row.compositions.length == 0) {
       // If no compositions remain then remove row from group
-      removeFromArray(rows, value => value.id === row.id
-        && value.isSubstitution === row.isSubstitution
-        && value.position.id === row.position.id
-      );
+      group.removeRows((val: ScheduleRow) => val.id === row.id
+        && val.isSubstitution === row.isSubstitution
+        && val.position.id === row.position.id);
 
       this.tableRenderer.renderRowGroup(group.id);
     } else {

@@ -1,49 +1,13 @@
 import { Composition } from "../../composition";
 import { Employee } from "../../employee";
 import { Position } from "../../position";
-import { Moment } from "moment";
 import { Cell } from "../../../lib/ngx-schedule-table/model/data/cell";
 import { Row } from "../../../lib/ngx-schedule-table/model/data/row";
 import { RowGroup } from "../../../lib/ngx-schedule-table/model/data/row-group";
-import { binarySearch, binarySearchInsertIndex } from "../../../shared/utils/collection-utils";
 import { RowInterval } from "./row-interval";
 import { EmployeeScheduleDTO } from "../../dto/employee-schedule-dto";
 import { Shift } from "../../shift";
-
-export class TableData {
-  groups: ScheduleRowGroup[];
-  from:   Moment;
-  to:     Moment;
-
-  constructor() {
-    this.groups = [];
-  }
-
-  addGroup(group: ScheduleRowGroup,
-           comparator: (group: ScheduleRowGroup) => number) {
-    const insertIndex = binarySearchInsertIndex(this.groups, comparator);
-    if (insertIndex >= 0) {
-      this.groups.splice(insertIndex, 0, group);
-    } else {
-      this.groups.push(group);
-    }
-  }
-
-  findRowGroup(groupId: number): ScheduleRowGroup {
-    return binarySearch(this.groups, (mid => mid.id - groupId));
-  }
-
-  forEachRow(callbackfn: (row: ScheduleRow) => void) {
-    this.groups.forEach((group => group.rows.forEach(callbackfn)));
-  }
-
-  forEachRowWithId(rowId: number,
-                   fn: (row) => void) {
-    this.groups.forEach(group => {
-      group.findRows(rowId).forEach(fn);
-    });
-  }
-}
+import { TableData } from "../../../lib/ngx-schedule-table/model/data/table";
 
 export class ScheduleRowGroup extends RowGroup {
   table:  TableData;

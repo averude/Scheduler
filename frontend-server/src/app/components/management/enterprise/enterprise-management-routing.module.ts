@@ -26,7 +26,7 @@ const routes = [
         component: SummationColumnsTableComponent
       },
       {
-        path: 'department_admin_user_accounts',
+        path: 'department_user_accounts',
         component: UserAccountsTableComponent
       },
       {

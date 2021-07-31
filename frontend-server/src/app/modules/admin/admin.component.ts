@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { AuthService } from "../../services/http/auth.service";
-import { UserAccountAuthority, UserAccountDTO } from "../../model/dto/user-account-dto";
+import { UserAccountDTO, UserAccountLevel } from "../../model/dto/user-account-dto";
 import { UserAccessRights } from "../../model/user";
 import { SidePanelStepperComponent } from "../../lib/side-panel-stepper/side-panel-stepper.component";
 import { DepartmentService } from "../../services/http/department.service";
@@ -75,8 +75,8 @@ export class AdminComponent implements OnInit {
       this.departmentService.getByIds(this.userAccount.departmentIds)
         .subscribe(departments => this.departments = departments.sort((a, b) => a.name.localeCompare(b.name)));
 
-    } else if (this.userAccount.authority === UserAccountAuthority.DEPARTMENT_ADMIN
-      || this.userAccount.authority === UserAccountAuthority.SHIFT_ADMIN) {
+    } else if (this.userAccount.authority === UserAccountLevel.DEPARTMENT
+      || this.userAccount.authority === UserAccountLevel.SHIFT) {
 
       this.departmentService.getByIds(this.userAccount.departmentIds)
         .subscribe(department => {

@@ -1,14 +1,16 @@
 package com.averude.uksatse.scheduler.security.controller.base;
 
 import com.averude.uksatse.scheduler.core.interfaces.entity.HasEnterpriseId;
-import com.averude.uksatse.scheduler.security.model.entity.UserAccount;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Component;
 
-import static com.averude.uksatse.scheduler.security.authority.Authorities.*;
-import static com.averude.uksatse.scheduler.security.details.AccountUtils.getUserAccount;
+import java.text.ParseException;
+
+import static com.averude.uksatse.scheduler.security.details.UserLevels.*;
+import static com.averude.uksatse.scheduler.security.utils.SecurityUtils.getLongClaim;
 
 @Slf4j
 @Component
@@ -22,12 +24,12 @@ public class EnterpriseLevelSecurity {
             return false;
         }
 
-        var account = getUserAccount(authentication);
+        Jwt jwtToken = (Jwt) authentication.getPrincipal();
 
-        return accessMapSecurityChecker.checkAccess(account, mapName) && checkEnterpriseId(account, enterpriseId);
+        return accessMapSecurityChecker.checkAccess(jwtToken, mapName) && checkEnterpriseId(jwtToken, enterpriseId);
     }
 
-    public boolean hasPermission(Authentication authentication, String mapName, HasEnterpriseId hasEnterpriseId) {
+    public boolean hasPermission(Authentication authentication, String mapName, HasEnterpriseId hasEnterpriseId) throws ParseException {
         if (hasEnterpriseId == null) {
             return false;
         }
@@ -35,11 +37,13 @@ public class EnterpriseLevelSecurity {
         return hasPermission(authentication, mapName, hasEnterpriseId.getEnterpriseId());
     }
 
-    private boolean checkEnterpriseId(UserAccount account, Long enterpriseId) {
-        if (account.getAuthority().equals(ENTERPRISE_ADMIN)
-                || account.getAuthority().equals(DEPARTMENT_ADMIN)
-                || account.getAuthority().equals(SHIFT_ADMIN)) {
-            return account.getEnterpriseId().equals(enterpriseId);
+    private boolean checkEnterpriseId(Jwt jwt, Long enterpriseId) {
+        var level = jwt.getClaimAsString("level");
+
+        if (level.equals(ENTERPRISE) ||
+                level.equals(DEPARTMENT) ||
+                level.equals(SHIFT)) {
+            return getLongClaim(jwt, "enterpriseId").equals(enterpriseId);
         }
 
         log.error("No required authority found during check");

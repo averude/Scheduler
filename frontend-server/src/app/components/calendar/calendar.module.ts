@@ -27,6 +27,7 @@ import { TableManager } from "../../services/collectors/schedule/table-manager";
 import { TableCellComponent } from "./table-cell/table-cell.component";
 import { NameInfoCellModule } from "../shared/name-info-cell/name-info-cell.module";
 import { ScheduleViewTableComponent } from "./schedule-view-table/schedule-view-table.component";
+import { ScheduleSortingStrategy } from "./utils/schedule-sorting-strategy";
 
 @NgModule({
   imports: [
@@ -61,7 +62,8 @@ import { ScheduleViewTableComponent } from "./schedule-view-table/schedule-view-
     ScheduleTableDataSource,
     TableManager,
     TableCompositionHandler,
-    SchedulerUtility
+    SchedulerUtility,
+    ScheduleSortingStrategy
   ]
 })
 export class CalendarModule {

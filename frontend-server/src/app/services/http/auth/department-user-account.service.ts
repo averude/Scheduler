@@ -15,7 +15,7 @@ export class DepartmentUserAccountService
 
   constructor(private config: RestConfig,
               http: HttpClient) {
-    super(`${config.baseUrl}/uaa/users/department_admins`, http);
+    super(`${config.baseUrl}/uaa/users/departments`, http);
   }
 
   getAllByEnterpriseId(enterpriseId: number): Observable<UserAccountDTO[]> {

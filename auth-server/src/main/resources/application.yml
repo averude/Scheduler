@@ -1,34 +1,6 @@
 spring:
+  profiles:
+    active: ${PROFILE}
+
   application:
     name: scheduler-auth-server
-  datasource:
-    url: ${DB_URL}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWD}
-    driver-class-name: ${DB_DRIVER_CLASS_NAME}
-  jackson:
-    date-format: "yyyy-MM-dd"
-  jpa:
-    open-in-view: false
-    properties:
-      javax:
-        persistence:
-          sharedCache:
-            mode: ENABLE_SELECTIVE
-      hibernate:
-        javax:
-          cache:
-            missing_cache_strategy: fail
-            provider: org.ehcache.jsr107.EhcacheCachingProvider
-            uri: ehcache.xml
-        cache:
-          use_second_level_cache: true
-          region:
-            factory_class: org.hibernate.cache.jcache.JCacheRegionFactory
-server:
-  port: 5000
-  servlet:
-    context-path: /
-  compression:
-    enabled: true
-    mime-types: application/json,application/xml,text/html,text/xml,text/plain

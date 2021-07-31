@@ -3,12 +3,15 @@ package com.averude.uksatse.scheduler.security.controller.special;
 import com.averude.uksatse.scheduler.security.controller.base.AccessMapSecurityChecker;
 import com.averude.uksatse.scheduler.shared.repository.WorkScheduleViewRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Component;
 
-import static com.averude.uksatse.scheduler.security.authority.Authorities.DEPARTMENT_ADMIN;
-import static com.averude.uksatse.scheduler.security.authority.Authorities.ENTERPRISE_ADMIN;
-import static com.averude.uksatse.scheduler.security.details.AccountUtils.getUserAccount;
+import static com.averude.uksatse.scheduler.security.details.UserLevels.DEPARTMENT;
+import static com.averude.uksatse.scheduler.security.details.UserLevels.ENTERPRISE;
+import static com.averude.uksatse.scheduler.security.utils.SecurityUtils.getLongClaim;
+import static com.averude.uksatse.scheduler.security.utils.SecurityUtils.getLongListClaim;
 
 @Component
 @RequiredArgsConstructor
@@ -17,21 +20,26 @@ public class ScheduleViewSecurity {
     private final WorkScheduleViewRepository    workScheduleViewRepository;
     private final AccessMapSecurityChecker      accessMapSecurityChecker;
 
+    @SneakyThrows
     public boolean hasPermission(Authentication authentication, String mapName, Long viewId) {
-        var account = getUserAccount(authentication);
-        if (accessMapSecurityChecker.checkAccess(account, mapName)) {
+        var jwt = (Jwt) authentication.getPrincipal();
 
-            if (account.getAuthority().equals(DEPARTMENT_ADMIN)) {
+        var level = jwt.getClaimAsString("level");
+        var enterpriseId = getLongClaim(jwt, "enterpriseId");
+        var departmentIds = getLongListClaim(jwt, "departmentIds");
+
+        if (accessMapSecurityChecker.checkAccess(jwt, mapName)) {
+
+            if (level.equals(DEPARTMENT)) {
                 return workScheduleViewRepository.getById(viewId)
-                        .map(view -> account.getAccountDepartments().stream()
-                                .anyMatch(userAccountDepartment ->
-                                        userAccountDepartment.getDepartmentId().equals(view.getDepartmentId())))
+                        .map(view -> departmentIds.stream()
+                                .anyMatch(accDepartmentId -> accDepartmentId.equals(view.getDepartmentId())))
                         .orElse(false);
             }
 
-            if (account.getAuthority().equals(ENTERPRISE_ADMIN)) {
+            if (level.equals(ENTERPRISE)) {
                 return workScheduleViewRepository.getById(viewId)
-                        .map(view -> account.getEnterpriseId().equals(view.getEnterpriseId()))
+                        .map(view -> enterpriseId.equals(view.getEnterpriseId()))
                         .orElse(false);
             }
 

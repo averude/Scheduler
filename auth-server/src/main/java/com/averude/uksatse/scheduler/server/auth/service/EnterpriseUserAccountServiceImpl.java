@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.validation.Valid;
 import java.util.List;
 
-import static com.averude.uksatse.scheduler.security.authority.Authorities.ENTERPRISE_ADMIN;
+import static com.averude.uksatse.scheduler.security.details.UserLevels.ENTERPRISE;
 import static com.averude.uksatse.scheduler.security.model.dto.AccountDTO.convertToDTO;
 
 @Service
@@ -26,13 +26,13 @@ public class EnterpriseUserAccountServiceImpl implements EnterpriseUserAccountSe
 
     @Override
     public List<UserAccountDTO> findAllEnterpriseUserAccounts() {
-        var accounts = userAccountRepository.findAllByAuthority(ENTERPRISE_ADMIN);
+        var accounts = userAccountRepository.findAllByAuthority(ENTERPRISE);
         return convertToDTO(accounts);
     }
 
     @Override
     @Transactional
-    public UserAccountDTO create(@Valid NewUserAccountDTO accountDTO, UserAccount originator) {
+    public UserAccountDTO create(@Valid NewUserAccountDTO accountDTO) {
         var userAccount = new UserAccount(accountDTO);
         userAccount.setPassword(encoder.encode(accountDTO.getPassword()));
         userAccountRepository.save(userAccount);
@@ -54,13 +54,13 @@ public class EnterpriseUserAccountServiceImpl implements EnterpriseUserAccountSe
 
     @Override
     @Transactional
-    public void delete(Long accountId, UserAccount originator) {
+    public void delete(Long accountId) {
         userAccountRepository.findById(accountId).ifPresent(userAccountRepository::delete);
     }
 
     @Override
     @Transactional
-    public void resetPassword(Long accountId, PasswordResetDTO passwordResetDTO, UserAccount originator) {
+    public void resetPassword(Long accountId, PasswordResetDTO passwordResetDTO) {
         userAccountRepository.findById(accountId)
                 .ifPresent(account -> account.setPassword(encoder.encode(passwordResetDTO.getNewPassword())));
     }
