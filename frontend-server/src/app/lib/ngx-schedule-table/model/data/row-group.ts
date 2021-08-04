@@ -3,9 +3,10 @@ import { binarySearchInsertIndex, bsr } from "../../utils/collection-utils";
 import { removeFromArray } from "../../../../services/utils";
 
 export class RowGroup {
-  id:   number;
-  name: string;
-  rows: Row[];
+  id:     number;
+  name:   string;
+  value:  any;
+  rows:   Row[];
 
   constructor() {
     this.rows = [];

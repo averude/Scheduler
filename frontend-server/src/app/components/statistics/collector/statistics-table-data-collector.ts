@@ -1,6 +1,5 @@
 import { Employee } from "../../../model/employee";
 import { Position } from "../../../model/position";
-import { binarySearch } from "../../../shared/utils/collection-utils";
 import { roundToTwo } from "../../../shared/utils/utils";
 import { SummationType } from "../../../model/summation-column";
 import { Shift } from "../../../model/shift";
@@ -9,14 +8,21 @@ import { Injectable } from "@angular/core";
 import { RowGroup } from "../../../lib/ngx-schedule-table/model/data/row-group";
 import { Row } from "../../../lib/ngx-schedule-table/model/data/row";
 import { Cell } from "../../../lib/ngx-schedule-table/model/data/cell";
+import { TableData } from "../../../lib/ngx-schedule-table/model/data/table";
+import { UIPrioritySortingStrategy } from "../../calendar/utils/ui-priority-sorting-strategy";
 
 @Injectable()
 export class StatisticsTableDataCollector {
 
+  constructor(private sortingStrategy: UIPrioritySortingStrategy) {}
+
   getTableData(dtos: EmployeeWorkStatDTO[],
                shifts: Shift[],
                positionMap: Map<number, Position>) {
-    const groups: StatisticsRowGroup[] = shifts
+    const table = new TableData();
+    table.sortingStrategy = this.sortingStrategy;
+
+    table.groups =  shifts
       .sort(((a, b) => a.id - b.id))
       .map(shift => ({
         id: shift.id,
@@ -26,7 +32,7 @@ export class StatisticsTableDataCollector {
       } as StatisticsRowGroup));
 
     for (let dto of dtos) {
-      const group = binarySearch(groups, (mid => mid.id - dto.shiftId));
+      const group = table.findRowGroup(dto.shiftId);
       if (group) {
         const employeeRow: StatisticsEmployeeRow = <StatisticsEmployeeRow> {
           employee: dto.employee,
@@ -40,8 +46,7 @@ export class StatisticsTableDataCollector {
       }
     }
 
-    return groups.sort((a, b) => b.shift.uiPriority - a.shift.uiPriority || a.id - b.id);
-
+    return table.groups;
   }
 
   private getPositionRow(positionMap: Map<number, Position>,
@@ -64,7 +69,6 @@ export class StatisticsRowGroup extends RowGroup {
 }
 
 export class StatisticsEmployeeRow implements Row {
-  // group:    StatisticsRowGroup;
   id:       number;
   employee: Employee;
   rows:     StatisticsPositionRow[];
@@ -72,14 +76,12 @@ export class StatisticsEmployeeRow implements Row {
 }
 
 export class StatisticsPositionRow implements Row {
-  // row:      StatisticsEmployeeRow;
   id:       number;
   position: Position;
   cells:    StatisticsCell[];
 }
 
 export class StatisticsCell implements Cell {
-  // row:      StatisticsPositionRow;
   value:    any;
   date: any;
   enabled: boolean;

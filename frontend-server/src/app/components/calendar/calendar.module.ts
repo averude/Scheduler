@@ -27,7 +27,7 @@ import { TableManager } from "../../services/collectors/schedule/table-manager";
 import { TableCellComponent } from "./table-cell/table-cell.component";
 import { NameInfoCellModule } from "../shared/name-info-cell/name-info-cell.module";
 import { ScheduleViewTableComponent } from "./schedule-view-table/schedule-view-table.component";
-import { ScheduleSortingStrategy } from "./utils/schedule-sorting-strategy";
+import { UIPrioritySortingStrategy } from "./utils/ui-priority-sorting-strategy";
 
 @NgModule({
   imports: [
@@ -63,7 +63,7 @@ import { ScheduleSortingStrategy } from "./utils/schedule-sorting-strategy";
     TableManager,
     TableCompositionHandler,
     SchedulerUtility,
-    ScheduleSortingStrategy
+    UIPrioritySortingStrategy
   ]
 })
 export class CalendarModule {

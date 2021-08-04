@@ -1,25 +1,27 @@
 import { Moment } from "moment";
 import { binarySearch } from "../../../../shared/utils/collection-utils";
-import { ScheduleRow, ScheduleRowGroup } from "../../../../model/ui/schedule-table/table-data";
 import { SortingStrategy } from "./sorting-strategy";
 import { binarySearchInsertIndex } from "../../utils/collection-utils";
+import { RowGroup } from "./row-group";
+import { Row } from "./row";
 
 export class TableData {
 
-  private _groups: ScheduleRowGroup[];
+  private _groups: RowGroup[];
+
   from: Moment;
-  to: Moment;
-  sortingStrategy: SortingStrategy<ScheduleRowGroup>;
+  to:   Moment;
+  sortingStrategy: SortingStrategy<RowGroup>;
 
   constructor() {
     this._groups = [];
   }
 
-  set groups(value: ScheduleRowGroup[]) {
+  set groups(value: RowGroup[]) {
     this._groups = value;
   }
 
-  get groups(): ScheduleRowGroup[] {
+  get groups(): RowGroup[] {
     if (this.sortingStrategy) {
       return this.sortingStrategy.sort(this._groups);
     } else {
@@ -27,8 +29,8 @@ export class TableData {
     }
   }
 
-  addGroup(group: ScheduleRowGroup,
-           comparator: (group: ScheduleRowGroup) => number) {
+  addGroup(group: RowGroup,
+           comparator: (group: RowGroup) => number) {
     const insertIndex = binarySearchInsertIndex(this._groups, comparator);
     if (insertIndex >= 0) {
       this._groups.splice(insertIndex, 0, group);
@@ -37,15 +39,15 @@ export class TableData {
     }
   }
 
-  findRowGroup(groupId: number): ScheduleRowGroup {
+  findRowGroup(groupId: number): RowGroup {
     return binarySearch(this._groups, (mid => mid.id - groupId));
   }
 
-  forEachRowInGroup(groupId: number, callbackfn: (row: ScheduleRow) => void) {
+  forEachRowInGroup(groupId: number, callbackfn: (row: Row) => void) {
     this.findRowGroup(groupId).rows.forEach(callbackfn);
   }
 
-  forEachRow(callbackfn: (row: ScheduleRow) => void) {
+  forEachRow(callbackfn: (row: Row) => void) {
     this._groups.forEach((group => group.rows.forEach(callbackfn)));
   }
 

@@ -28,7 +28,7 @@ import { Options } from "../../../lib/ngx-schedule-table/model/options";
 import { InitialData } from "../../../model/datasource/initial-data";
 import { TableDataCollector } from "../../../services/collectors/schedule/table-data.collector";
 import { TableData } from "../../../lib/ngx-schedule-table/model/data/table";
-import { ScheduleSortingStrategy } from "../utils/schedule-sorting-strategy";
+import { UIPrioritySortingStrategy } from "../utils/ui-priority-sorting-strategy";
 
 @Component({
   selector: 'app-schedule-table-component',
@@ -67,7 +67,7 @@ export class ScheduleTableComponent implements OnInit, AfterViewInit, OnDestroy 
               private activatedRoute: ActivatedRoute,
               private authService: AuthService,
               public  paginationStrategy: ScheduleTablePaginationStrategy,
-              private sortingStrategy: ScheduleSortingStrategy,
+              private sortingStrategy: UIPrioritySortingStrategy,
               private paginationService: PaginationService,
               private tableRenderer: TableRenderer,
               private sumCalculator: TableSumCalculator,
