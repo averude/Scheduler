@@ -27,7 +27,7 @@ export class StatisticsTableDataCollector {
       .map(shift => ({
         id: shift.id,
         name: shift.name,
-        shift: shift,
+        value: shift,
         rows: []
       } as StatisticsRowGroup));
 
