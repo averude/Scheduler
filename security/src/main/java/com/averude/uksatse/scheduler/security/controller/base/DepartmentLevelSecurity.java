@@ -1,7 +1,7 @@
 package com.averude.uksatse.scheduler.security.controller.base;
 
 import com.averude.uksatse.scheduler.core.interfaces.entity.HasDepartmentId;
-import com.averude.uksatse.scheduler.shared.repository.common.DepartmentRepository;
+import com.averude.uksatse.scheduler.shared.repository.DepartmentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;

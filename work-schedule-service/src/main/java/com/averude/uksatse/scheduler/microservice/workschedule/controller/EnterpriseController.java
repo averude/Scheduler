@@ -1,9 +1,9 @@
 package com.averude.uksatse.scheduler.microservice.workschedule.controller;
 
 import com.averude.uksatse.scheduler.core.model.entity.structure.Enterprise;
+import com.averude.uksatse.scheduler.microservice.workschedule.service.EnterpriseService;
 import com.averude.uksatse.scheduler.security.annotations.IsGlobalAdmin;
 import com.averude.uksatse.scheduler.security.logging.Logged;
-import com.averude.uksatse.scheduler.shared.service.EnterpriseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;

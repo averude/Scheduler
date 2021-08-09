@@ -1,9 +1,9 @@
 package com.averude.uksatse.scheduler.microservice.workschedule.controller;
 
 import com.averude.uksatse.scheduler.core.model.entity.SpecialCalendarDate;
+import com.averude.uksatse.scheduler.microservice.workschedule.service.SpecialCalendarDateService;
 import com.averude.uksatse.scheduler.security.annotations.IsEnterpriseAdmin;
 import com.averude.uksatse.scheduler.security.logging.Logged;
-import com.averude.uksatse.scheduler.shared.service.SpecialCalendarDateService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.prepost.PreAuthorize;

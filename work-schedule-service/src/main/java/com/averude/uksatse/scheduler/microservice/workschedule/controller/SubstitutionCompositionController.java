@@ -1,9 +1,9 @@
 package com.averude.uksatse.scheduler.microservice.workschedule.controller;
 
 import com.averude.uksatse.scheduler.core.model.entity.SubstitutionComposition;
+import com.averude.uksatse.scheduler.microservice.workschedule.service.SubstitutionCompositionService;
 import com.averude.uksatse.scheduler.security.annotations.IsEnterpriseOrDepartmentAdmin;
 import com.averude.uksatse.scheduler.security.logging.Logged;
-import com.averude.uksatse.scheduler.shared.service.SubstitutionCompositionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;

@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
@@ -14,6 +15,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.web.filter.CorsFilter;
 
+@EnableCaching
 @EnableAspectJAutoProxy
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @EntityScan("com.averude.uksatse.scheduler.core.model.entity")
@@ -33,7 +35,10 @@ import org.springframework.web.filter.CorsFilter;
         "com.averude.uksatse.scheduler.shared.service",
         "com.averude.uksatse.scheduler.shared.utils",
 })
-@EnableJpaRepositories("com.averude.uksatse.scheduler.shared.repository")
+@EnableJpaRepositories(basePackages = {
+        "com.averude.uksatse.scheduler.shared.repository",
+        "com.averude.uksatse.scheduler.microservice.workschedule.repository"
+})
 public class WorkScheduleServiceApplication {
 
     @Bean

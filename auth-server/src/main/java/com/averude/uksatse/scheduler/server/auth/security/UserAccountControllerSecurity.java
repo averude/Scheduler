@@ -6,7 +6,7 @@ import com.averude.uksatse.scheduler.security.controller.base.DepartmentLevelSec
 import com.averude.uksatse.scheduler.security.model.dto.AccountDTO;
 import com.averude.uksatse.scheduler.security.model.entity.UserAccount;
 import com.averude.uksatse.scheduler.server.auth.repository.UserAccountRepository;
-import com.averude.uksatse.scheduler.shared.repository.common.ShiftRepository;
+import com.averude.uksatse.scheduler.shared.repository.ShiftRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.jwt.Jwt;

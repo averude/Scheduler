@@ -1,9 +1,9 @@
 package com.averude.uksatse.scheduler.microservice.workschedule.controller;
 
 import com.averude.uksatse.scheduler.core.model.entity.DayTypeGroup;
+import com.averude.uksatse.scheduler.microservice.workschedule.service.DayTypeGroupService;
 import com.averude.uksatse.scheduler.security.annotations.IsGlobalAdmin;
 import com.averude.uksatse.scheduler.security.logging.Logged;
-import com.averude.uksatse.scheduler.shared.service.DayTypeGroupService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

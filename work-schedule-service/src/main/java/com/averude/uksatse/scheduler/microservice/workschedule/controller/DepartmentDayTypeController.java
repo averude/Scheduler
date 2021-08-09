@@ -1,9 +1,9 @@
 package com.averude.uksatse.scheduler.microservice.workschedule.controller;
 
 import com.averude.uksatse.scheduler.core.model.entity.DepartmentDayType;
+import com.averude.uksatse.scheduler.microservice.workschedule.service.DepartmentDayTypeService;
 import com.averude.uksatse.scheduler.security.annotations.IsEnterpriseOrDepartmentAdmin;
 import com.averude.uksatse.scheduler.security.logging.Logged;
-import com.averude.uksatse.scheduler.shared.service.DepartmentDayTypeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;

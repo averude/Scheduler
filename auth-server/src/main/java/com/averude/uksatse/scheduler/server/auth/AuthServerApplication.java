@@ -24,7 +24,7 @@ import org.springframework.web.filter.CorsFilter;
 })
 @EnableJpaRepositories({
         "com.averude.uksatse.scheduler.server.auth.repository",
-        "com.averude.uksatse.scheduler.shared.repository.common"
+        "com.averude.uksatse.scheduler.shared.repository"
 })
 public class AuthServerApplication {
     public static void main(String[] args) {

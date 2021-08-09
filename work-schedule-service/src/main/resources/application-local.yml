@@ -1,0 +1,32 @@
+spring:
+
+
+  datasource:
+    url: jdbc:postgresql://192.168.134.2:5432/schedulerdb
+    username: scheduler
+    password: scheduler
+    driver-class-name: org.postgresql.Driver
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://192.168.134.2:4000/api/v1/uaa/.well-known/jwks.json
+
+  jpa:
+    open-in-view: false
+
+  jackson:
+    date-format: "yyyy-MM-dd"
+
+  main:
+    allow-bean-definition-overriding: true
+
+server:
+  compression:
+    enabled: true
+    mime-types: application/json,application/xml,text/html,text/xml,text/plain
+
+logging:
+  level:
+    org.hibernate.SQL: debug

@@ -2,5 +2,9 @@ spring:
   profiles:
     active: ${PROFILE}
 
+  cache:
+    jcache:
+      config: classpath:ehcache.xml
+
   application:
     name: scheduler-work-schedule-service

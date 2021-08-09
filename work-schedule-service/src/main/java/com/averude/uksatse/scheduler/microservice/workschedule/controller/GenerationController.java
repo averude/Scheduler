@@ -1,9 +1,9 @@
 package com.averude.uksatse.scheduler.microservice.workschedule.controller;
 
 import com.averude.uksatse.scheduler.core.model.dto.GenerationDTO;
+import com.averude.uksatse.scheduler.microservice.workschedule.service.ScheduleGenerationService;
+import com.averude.uksatse.scheduler.microservice.workschedule.service.WorkingNormGenerationService;
 import com.averude.uksatse.scheduler.security.logging.Logged;
-import com.averude.uksatse.scheduler.shared.service.ScheduleGenerationService;
-import com.averude.uksatse.scheduler.shared.service.WorkingNormGenerationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

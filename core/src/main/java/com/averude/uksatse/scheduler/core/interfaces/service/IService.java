@@ -15,19 +15,12 @@ public interface IService<T extends Serializable, ID> {
 
     Optional<T> findById(ID var1);
 
-    boolean existsById(ID var1);
-
     List<T> findAll();
 
     List<T> findAllById(Iterable<ID> var1);
-
-    long count();
 
     void deleteById(ID var1);
 
     void delete(T var1);
 
-    void deleteAll(Iterable<? extends T> var1);
-
-    void deleteAll();
 }
