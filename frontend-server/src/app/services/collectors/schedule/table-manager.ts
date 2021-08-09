@@ -28,7 +28,7 @@ export class TableManager {
 
   newRow(rowGroup: ScheduleRowGroup, initData: InitialData) {
     const data = {
-      shift:    rowGroup.shift,
+      shift:    rowGroup.value,
       initData: initData
     };
 
@@ -96,7 +96,7 @@ export class TableManager {
       .pipe(
         switchMap(value => {
           if (value) {
-            const destinationGroup = mainCompositionRow.group.table.findRowGroup(value.shiftId);
+            const destinationGroup = <ScheduleRowGroup> mainCompositionRow.group.table.findRowGroup(value.shiftId);
 
             return this.tableCompositionHandler
               .createOrUpdate([value], destinationGroup, null,

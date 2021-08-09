@@ -1,5 +1,5 @@
 import * as moment from "moment";
-import { ScheduleRowGroup } from "../../../model/ui/schedule-table/table-data";
+import { ScheduleRow, ScheduleRowGroup } from "../../../model/ui/schedule-table/table-data";
 import { Injectable } from "@angular/core";
 import { IntervalCreator } from "../../creator/interval-creator.service";
 import { binarySearch } from "../../../shared/utils/collection-utils";
@@ -21,7 +21,7 @@ export class TableDataCollector {
   handleData(initData: InitialData): TableData {
     const tableData = this.collect(initData);
 
-    tableData.forEachRow(row => {
+    tableData.forEachRow((row: ScheduleRow) => {
       const dto = binarySearch(initData.scheduleDTOs, (mid => mid.parent.id - row.id));
 
       if (row.isSubstitution) {
@@ -46,7 +46,7 @@ export class TableDataCollector {
       const group = new ScheduleRowGroup();
       group.table = table;
       group.id    = shift.id;
-      group.shift = shift;
+      group.value = shift;
       group.name  = shift.name;
       table.addGroup(group, (value => value.id - group.id));
     });

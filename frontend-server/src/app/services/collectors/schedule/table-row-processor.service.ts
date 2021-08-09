@@ -26,7 +26,7 @@ export class TableRowProcessor {
     for (const composition of compositions) {
       const position = initData.positionMap.get(composition.positionId);
 
-      const rowGroup = table.findRowGroup(composition.shiftId);
+      const rowGroup = <ScheduleRowGroup> table.findRowGroup(composition.shiftId);
       if (rowGroup) {
         const workingNorm = workingNormConsumer(composition);
 

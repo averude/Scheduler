@@ -6,14 +6,12 @@ import { Row } from "../../../lib/ngx-schedule-table/model/data/row";
 import { RowGroup } from "../../../lib/ngx-schedule-table/model/data/row-group";
 import { RowInterval } from "./row-interval";
 import { EmployeeScheduleDTO } from "../../dto/employee-schedule-dto";
-import { Shift } from "../../shift";
 import { TableData } from "../../../lib/ngx-schedule-table/model/data/table";
 
 export class ScheduleRowGroup extends RowGroup {
   table:  TableData;
   id:     number;
   name:   string;
-  shift:  Shift;
   rows:   Row[];
 }
 
