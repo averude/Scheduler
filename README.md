@@ -25,6 +25,6 @@ Employee rostering and work scheduling web service
 * Docker
 
 ## UI example
-![Picture one](../media/images/1.png?raw=true)  
-![Picture two](../media/images/2.png?raw=true)  
-![Picture three](../media/images/3.png?raw=true)  
+![Picture one](../media/images/1.png)  
+![Picture two](../media/images/2.png)  
+![Picture three](../media/images/3.png)  
