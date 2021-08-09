@@ -64,7 +64,6 @@ export class StatisticsTableDataCollector {
 export class StatisticsRowGroup extends RowGroup {
   id: number;
   name: string;
-  shift: Shift;
   rows: StatisticsEmployeeRow[];
 }
 
