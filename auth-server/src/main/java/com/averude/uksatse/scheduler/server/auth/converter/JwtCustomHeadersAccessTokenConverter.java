@@ -17,7 +17,7 @@ public class JwtCustomHeadersAccessTokenConverter extends JwtAccessTokenConverte
 
     private Map<String, String> customHeaders = new HashMap<>();
     private JsonParser objectMapper = JsonParserFactory.create();
-    final RsaSigner signer;
+    private final RsaSigner signer;
 
     public JwtCustomHeadersAccessTokenConverter(Map<String, String> customHeaders, KeyPair keyPair) {
         super();

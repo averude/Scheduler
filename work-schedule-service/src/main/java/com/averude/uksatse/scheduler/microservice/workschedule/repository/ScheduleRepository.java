@@ -10,9 +10,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface ScheduleRepository extends JpaRepository<WorkDay, Long> {
-    @QueryHints(value = {
-            @QueryHint(name = org.hibernate.annotations.QueryHints.READ_ONLY, value = "true")
-    }, forCounting = false)
+
     List<WorkDay> findAllByDepartmentIdAndEmployeeIdAndDateBetweenOrderByDateAsc(long departmentId,
                                                                                  long employeeId,
                                                                                  LocalDate from,
