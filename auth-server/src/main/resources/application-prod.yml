@@ -17,21 +17,6 @@ spring:
 
   jpa:
     open-in-view: false
-    properties:
-      javax:
-        persistence:
-          sharedCache:
-            mode: ENABLE_SELECTIVE
-      hibernate:
-        javax:
-          cache:
-            missing_cache_strategy: fail
-            provider: org.ehcache.jsr107.EhcacheCachingProvider
-            uri: ehcache.xml
-        cache:
-          use_second_level_cache: true
-          region:
-            factory_class: org.hibernate.cache.jcache.JCacheRegionFactory
 
 server:
   port: 5000

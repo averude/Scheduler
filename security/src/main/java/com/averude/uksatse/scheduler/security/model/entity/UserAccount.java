@@ -5,8 +5,6 @@ import com.averude.uksatse.scheduler.security.model.dto.NewUserAccountDTO;
 import com.averude.uksatse.scheduler.security.model.dto.UserAccountDTO;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -15,8 +13,6 @@ import java.util.Set;
 
 @Data
 @NoArgsConstructor
-@Cacheable
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Entity(name = "user_accounts")
 @NamedEntityGraph(
         name = "graph.UserAccount.accountShifts",
