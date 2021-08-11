@@ -39,7 +39,7 @@ export class StatisticsTableSource {
                mode: SummationMode) {
     let obs;
 
-    if (userAccount.authority === UserAccountLevel.SHIFT) {
+    if (userAccount.level === UserAccountLevel.SHIFT) {
       obs = this.byShiftIds(enterpriseId, departmentId, userAccount.shiftIds, mode);
     } else {
       obs = this.byDepartmentId(enterpriseId, departmentId, mode);

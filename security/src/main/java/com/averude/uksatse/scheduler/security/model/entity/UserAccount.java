@@ -39,7 +39,7 @@ public class UserAccount implements HasId {
     private boolean enabled = true;
 
     @NotNull
-    private String authority;
+    private String level;
 
     @NotNull
     private String role;
@@ -64,7 +64,7 @@ public class UserAccount implements HasId {
 
     public UserAccount(NewUserAccountDTO accountDTO) {
         this.username = accountDTO.getUsername().toLowerCase();
-        this.authority = accountDTO.getAuthority();
+        this.level = accountDTO.getLevel();
         this.role = accountDTO.getRole();
         this.name = accountDTO.getName();
         this.enterpriseId = accountDTO.getEnterpriseId();

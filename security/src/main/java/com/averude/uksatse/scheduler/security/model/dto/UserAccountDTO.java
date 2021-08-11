@@ -23,7 +23,7 @@ public class UserAccountDTO implements AccountDTO {
     private String name;
 
     @NotNull
-    private String authority;
+    private String level;
 
     @NotNull
     private String role;
@@ -40,8 +40,8 @@ public class UserAccountDTO implements AccountDTO {
         this.id = userAccount.getId();
         this.username = userAccount.getUsername();
         this.name = userAccount.getName();
-        this.authority = userAccount.getAuthority();
-        this.role= userAccount.getRole();
+        this.level = userAccount.getLevel();
+        this.role = userAccount.getRole();
         this.enterpriseId = userAccount.getEnterpriseId();
 
         if (userAccount.getAccountDepartments() != null) {

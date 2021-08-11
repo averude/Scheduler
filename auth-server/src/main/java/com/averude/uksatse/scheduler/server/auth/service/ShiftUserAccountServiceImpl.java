@@ -30,7 +30,7 @@ public class ShiftUserAccountServiceImpl implements ShiftUserAccountService {
 
     @Override
     public List<UserAccountDTO> findAllByDepartmentId(Long departmentId) {
-        var accounts = userAccountRepository.findAllByDepartmentIdAndAuthority(departmentId, SHIFT);
+        var accounts = userAccountRepository.findAllByDepartmentIdAndLevel(departmentId, SHIFT);
         return convertToDTO(accounts);
     }
 

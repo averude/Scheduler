@@ -46,7 +46,7 @@ public class EnterpriseLevelSecurity {
             return getLongClaim(jwt, "enterpriseId").equals(enterpriseId);
         }
 
-        log.error("No required authority found during check");
+        log.error("No required level found during check");
         return false;
     }
 }

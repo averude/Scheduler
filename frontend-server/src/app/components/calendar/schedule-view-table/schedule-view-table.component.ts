@@ -72,8 +72,8 @@ export class ScheduleViewTableComponent implements OnInit, AfterViewInit, OnDest
 
             const userAccount = this.authService.currentUserAccount;
 
-            if (userAccount.authority === UserAccountLevel.DEPARTMENT
-              || userAccount.authority === UserAccountLevel.ENTERPRISE) {
+            if (userAccount.level === UserAccountLevel.DEPARTMENT
+              || userAccount.level === UserAccountLevel.ENTERPRISE) {
 
               return this.dataSource.byViewId(this.enterpriseId, this.viewId)
                 .pipe(

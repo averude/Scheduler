@@ -22,7 +22,7 @@ export class EnterpriseService
   getAll(from?: string, to?: string): Observable<Enterprise[]> {
     const userAccount = this.authService.currentUserAccount;
 
-    if (userAccount.authority === UserAccountLevel.GLOBAL) {
+    if (userAccount.level === UserAccountLevel.GLOBAL) {
       return super.getAll();
     }
   }

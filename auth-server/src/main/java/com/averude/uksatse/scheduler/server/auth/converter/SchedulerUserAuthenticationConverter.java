@@ -16,7 +16,7 @@ public class SchedulerUserAuthenticationConverter extends DefaultUserAuthenticat
 
         var userAccount = getUserAccount(authentication);
 
-        map.put("level", userAccount.getAuthority());
+        map.put("level", userAccount.getLevel());
         map.put("role", userAccount.getRole());
         map.put("enterpriseId", userAccount.getEnterpriseId());
         map.put("departmentIds", SecurityUtils.getDepartmentIds(userAccount.getAccountDepartments()));

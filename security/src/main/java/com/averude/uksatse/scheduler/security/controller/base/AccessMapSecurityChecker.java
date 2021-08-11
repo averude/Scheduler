@@ -25,12 +25,12 @@ public class AccessMapSecurityChecker {
         var level = jwt.getClaimAsString("level");
         var role = jwt.getClaimAsString("role");
 
-        var authorityMap = accessMap.get(mapName);
-        if (authorityMap == null) {
-            throw new RuntimeException("No authority map with name [" + mapName + "] found");
+        var levelMap = accessMap.get(mapName);
+        if (levelMap == null) {
+            throw new RuntimeException("No level map with name [" + mapName + "] found");
         }
 
-        var grantedRoles = authorityMap.get(level);
+        var grantedRoles = levelMap.get(level);
         if (grantedRoles == null || grantedRoles.isEmpty()) {
             return false;
         }

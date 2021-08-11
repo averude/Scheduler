@@ -78,7 +78,7 @@ export class LoginComponent implements OnInit{
 
   private navigate(user: UserAccountDTO): Promise<boolean> {
     let promise;
-    switch (user.authority) {
+    switch (user.level) {
 
       case UserAccountLevel.GLOBAL:
         promise = this.router.navigate(['/global_admin']);
@@ -101,7 +101,7 @@ export class LoginComponent implements OnInit{
         break;
 
       default:
-        throw new Error("Wrong authority of user account");
+        throw new Error("Wrong level of user account");
     }
     return promise;
   }

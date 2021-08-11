@@ -25,7 +25,7 @@ public class NewUserAccountDTO implements AccountDTO {
     private String role;
 
     @NotNull
-    private String authority;
+    private String level;
 
     private Long enterpriseId;
 
@@ -39,7 +39,7 @@ public class NewUserAccountDTO implements AccountDTO {
                 .add("username='" + username + "'")
                 .add("name='" + name + "'")
                 .add("role='" + role + "'")
-                .add("authority='" + authority + "'")
+                .add("level='" + level + "'")
                 .add("enterpriseId=" + enterpriseId)
                 .add("departmentIds=" + departmentIds)
                 .add("shiftIds=" + shiftIds)

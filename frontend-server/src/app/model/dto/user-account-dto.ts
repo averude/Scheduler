@@ -5,7 +5,7 @@ export class UserAccountDTO implements IdEntity {
   username:       string;
   name:           string;
   role:           UserAccountRole;
-  authority:      UserAccountLevel;
+  level:          UserAccountLevel;
   enterpriseId:   number;
   departmentIds:  number[];
   shiftIds:       number[];

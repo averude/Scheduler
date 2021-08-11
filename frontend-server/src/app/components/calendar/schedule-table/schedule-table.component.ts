@@ -97,8 +97,8 @@ export class ScheduleTableComponent implements OnInit, AfterViewInit, OnDestroy 
 
             const userAccount = this.authService.currentUserAccount;
 
-            if (userAccount.authority === UserAccountLevel.DEPARTMENT
-              || userAccount.authority === UserAccountLevel.ENTERPRISE) {
+            if (userAccount.level === UserAccountLevel.DEPARTMENT
+              || userAccount.level === UserAccountLevel.ENTERPRISE) {
 
               return this.dataSource.byDepartmentId(this.enterpriseId, this.departmentId)
                 .pipe(
@@ -109,7 +109,7 @@ export class ScheduleTableComponent implements OnInit, AfterViewInit, OnDestroy 
                 );
             }
 
-            if (userAccount.authority === UserAccountLevel.SHIFT
+            if (userAccount.level === UserAccountLevel.SHIFT
               && userAccount.departmentIds.indexOf(this.departmentId) >= 0 ) {
 
               return this.dataSource.byShiftIds(this.enterpriseId, this.departmentId, userAccount.shiftIds)

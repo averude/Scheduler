@@ -26,7 +26,7 @@ public class EnterpriseUserAccountServiceImpl implements EnterpriseUserAccountSe
 
     @Override
     public List<UserAccountDTO> findAllEnterpriseUserAccounts() {
-        var accounts = userAccountRepository.findAllByAuthority(ENTERPRISE);
+        var accounts = userAccountRepository.findAllByLevel(ENTERPRISE);
         return convertToDTO(accounts);
     }
 

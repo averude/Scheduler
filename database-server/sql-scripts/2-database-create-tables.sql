@@ -331,7 +331,7 @@ CREATE TABLE IF NOT EXISTS user_accounts (
   password        VARCHAR(64)     NOT NULL,
   name            VARCHAR(128),
   role            VARCHAR(64)     NOT NULL    DEFAULT 'USER',
-  authority       VARCHAR(64)     NOT NULL,
+  level           VARCHAR(64)     NOT NULL,
 
   enterprise_id   INTEGER,
 

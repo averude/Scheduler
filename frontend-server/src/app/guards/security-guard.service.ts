@@ -20,7 +20,7 @@ export class SecurityGuardService implements CanActivate {
 
     if (userAccount) {
 
-      if (authorities.indexOf(userAccount.authority) >= 0 &&
+      if (authorities.indexOf(userAccount.level) >= 0 &&
           roles.indexOf(userAccount.role) >= 0) {
         return true;
       }

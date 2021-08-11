@@ -30,7 +30,7 @@ public class UserAccountControllerSecurity {
     private final TransactionTemplate       transactionTemplate;
 
     public boolean canSaveShiftAccount(Authentication authentication, String mapName, AccountDTO dto){
-        if (!dto.getAuthority().equals(SHIFT)) {
+        if (!dto.getLevel().equals(SHIFT)) {
             return false;
         }
 

@@ -92,8 +92,7 @@ public class DepartmentLevelSecurity {
         var enterpriseId = getLongClaim(jwt, "enterpriseId");
         var departmentIds = getLongListClaim(jwt, "departmentIds");
 
-        if (level.equals(DEPARTMENT)
-                || level.equals(SHIFT)) {
+        if (level.equals(DEPARTMENT) || level.equals(SHIFT)) {
             return departmentIds.stream()
                     .anyMatch(accDep -> accDep.equals(departmentId));
         }
@@ -102,7 +101,7 @@ public class DepartmentLevelSecurity {
             return departmentRepository.existsByEnterpriseIdAndId(enterpriseId, departmentId);
         }
 
-        log.error("No required authority found during check");
+        log.error("No required level found during check");
         return false;
     }
 }

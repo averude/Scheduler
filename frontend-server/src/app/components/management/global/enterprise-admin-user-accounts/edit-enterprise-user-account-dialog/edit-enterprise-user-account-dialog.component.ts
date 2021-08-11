@@ -47,7 +47,7 @@ export class EditEnterpriseUserAccountDialogComponent extends DialogBaseComponen
       id:           accountDTO.id,
       username:     accountDTO.username,
       name:         accountDTO.name,
-      authority:    accountDTO.authority,
+      authority:    accountDTO.level,
       role:         accountDTO.role,
       enterpriseId: accountDTO.enterpriseId
     });

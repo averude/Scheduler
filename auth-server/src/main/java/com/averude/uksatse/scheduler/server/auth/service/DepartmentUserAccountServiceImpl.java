@@ -28,7 +28,7 @@ public class DepartmentUserAccountServiceImpl implements DepartmentUserAccountSe
 
     @Override
     public List<UserAccountDTO> findAllByEnterpriseId(Long enterpriseId) {
-        var accounts = userAccountRepository.findAllByEnterpriseIdAndAuthority(enterpriseId, DEPARTMENT);
+        var accounts = userAccountRepository.findAllByEnterpriseIdAndLevel(enterpriseId, DEPARTMENT);
         return convertToDTO(accounts);
     }
 

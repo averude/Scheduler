@@ -14,7 +14,7 @@ import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 
 public interface AccountDTO extends HasEnterpriseId {
-    String getAuthority();
+    String getLevel();
     String getRole();
 
     List<Long> getDepartmentIds();

@@ -75,8 +75,8 @@ export class AdminComponent implements OnInit {
       this.departmentService.getByIds(this.userAccount.departmentIds)
         .subscribe(departments => this.departments = departments.sort((a, b) => a.name.localeCompare(b.name)));
 
-    } else if (this.userAccount.authority === UserAccountLevel.DEPARTMENT
-      || this.userAccount.authority === UserAccountLevel.SHIFT) {
+    } else if (this.userAccount.level === UserAccountLevel.DEPARTMENT
+      || this.userAccount.level === UserAccountLevel.SHIFT) {
 
       this.departmentService.getByIds(this.userAccount.departmentIds)
         .subscribe(department => {

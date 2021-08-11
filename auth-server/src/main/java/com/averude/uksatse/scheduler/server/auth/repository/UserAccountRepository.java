@@ -14,15 +14,15 @@ public interface UserAccountRepository extends JpaRepository<UserAccount, Long> 
             "from com.averude.uksatse.scheduler.security.model.entity.UserAccount ua " +
             "left join com.averude.uksatse.scheduler.security.model.entity.UserAccountDepartment uad " +
             "on ua.id = uad.userAccountId " +
-            "where uad.departmentId = ?1 and ua.authority = ?2")
+            "where uad.departmentId = ?1 and ua.level = ?2")
     @EntityGraph(value = "graph.UserAccount.accountShifts")
-    List<UserAccount> findAllByDepartmentIdAndAuthority(Long departmentId, String authority);
+    List<UserAccount> findAllByDepartmentIdAndLevel(Long departmentId, String authority);
 
     @EntityGraph(value = "graph.UserAccount.accountShifts")
-    List<UserAccount> findAllByAuthority(String authority);
+    List<UserAccount> findAllByLevel(String level);
 
     @EntityGraph(value = "graph.UserAccount.accountShifts")
-    List<UserAccount> findAllByEnterpriseIdAndAuthority(Long enterpriseId, String authority);
+    List<UserAccount> findAllByEnterpriseIdAndLevel(Long enterpriseId, String level);
 
     @EntityGraph(value = "graph.UserAccount.accountShifts")
     Optional<UserAccount> findByUsername(String username);
