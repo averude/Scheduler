@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
 
-@RequestMapping("/statistics")
+@RequestMapping("/enterprises/{enterpriseId}/departments/{departmentId}")
 @RestController
 @RequiredArgsConstructor
 public class StatisticsController {
@@ -20,29 +20,31 @@ public class StatisticsController {
 
     @Logged
     @PreAuthorize("@departmentLevelSecurity.hasPermission(authentication, 'MAP1', #departmentId)")
-    @GetMapping("work_stats/mode/{mode}/departments/{departmentId}")
-    public List<EmployeeWorkStatDTO> getSummationDTOByDepartmentId(@PathVariable String mode,
+    @GetMapping("/statistics/work_stats/mode/{mode}")
+    public List<EmployeeWorkStatDTO> getSummationDTOByDepartmentId(@PathVariable Long enterpriseId,
                                                                    @PathVariable Long departmentId,
+                                                                   @PathVariable String mode,
                                                                    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
                                                                    @RequestParam(value = "from")
                                                                                LocalDate from,
                                                                    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
                                                                    @RequestParam(value = "to")
                                                                                LocalDate to) {
-        return employeeWorkStatService.findAllByDepartmentIdAndDateBetween(departmentId, from, to, mode);
+        return employeeWorkStatService.findAllByDepartmentIdAndDateBetween(enterpriseId, departmentId, from, to, mode);
     }
 
     @Logged
     @PreAuthorize("@departmentLevelSecurity.hasShiftsPermission(authentication, 'MAP5', #shiftIds)")
-    @GetMapping("work_stats/mode/{mode}/shifts/{shiftIds}")
-    public List<EmployeeWorkStatDTO> getSummationDTOByShiftIds(@PathVariable String mode,
+    @GetMapping("/shifts/{shiftIds}/statistics/work_stats/mode/{mode}")
+    public List<EmployeeWorkStatDTO> getSummationDTOByShiftIds(@PathVariable Long enterpriseId,
                                                                @PathVariable List<Long> shiftIds,
+                                                               @PathVariable String mode,
                                                                @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
                                                                @RequestParam(value = "from")
                                                                            LocalDate from,
                                                                @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
                                                                @RequestParam(value = "to")
                                                                            LocalDate to) {
-        return employeeWorkStatService.findAllByShiftIdsAndDateBetween(shiftIds, from, to, mode);
+        return employeeWorkStatService.findAllByShiftIdsAndDateBetween(enterpriseId, shiftIds, from, to, mode);
     }
 }

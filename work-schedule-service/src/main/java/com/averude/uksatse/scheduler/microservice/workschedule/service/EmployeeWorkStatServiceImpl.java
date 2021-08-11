@@ -32,33 +32,35 @@ public class EmployeeWorkStatServiceImpl implements EmployeeWorkStatService {
     private final PositionIntervalMapBuilder    intervalMapBuilder;
 
     @Override
-    public List<EmployeeWorkStatDTO> findAllByDepartmentIdAndDateBetween(Long departmentId,
+    public List<EmployeeWorkStatDTO> findAllByDepartmentIdAndDateBetween(Long enterpriseId,
+                                                                         Long departmentId,
                                                                          LocalDate from,
                                                                          LocalDate to,
                                                                          String mode) {
-        var specialCalendarDates = specialCalendarDateRepository.findAllByDepartmentIdAndDateBetween(departmentId, from, to);
-        var summationColumns = summationColumnRepository.findAllByDepartmentId(departmentId);
+        var specialCalendarDates = specialCalendarDateRepository.findAllByEnterpriseIdAndDateBetween(enterpriseId, from, to);
+        var summationColumns = summationColumnRepository.findAllByEnterpriseId(enterpriseId);
         if (summationColumns == null || summationColumns.isEmpty()) {
             return null;
         }
 
-        var scheduleDTO = (List<EmployeeScheduleDTO>) scheduleService.findAllDTOByDepartmentIdAndDate(departmentId, from, to);
+        var scheduleDTO = scheduleService.findAllDTOByDepartmentIdAndDate(departmentId, from, to);
 
         return getSummationDTOS(from, to, mode, specialCalendarDates, summationColumns, scheduleDTO);
     }
 
     @Override
-    public List<EmployeeWorkStatDTO> findAllByShiftIdsAndDateBetween(List<Long> shiftIds,
+    public List<EmployeeWorkStatDTO> findAllByShiftIdsAndDateBetween(Long enterpriseId,
+                                                                     List<Long> shiftIds,
                                                                      LocalDate from,
                                                                      LocalDate to,
                                                                      String mode) {
-        var specialCalendarDates = specialCalendarDateRepository.findAllByShiftIdAndDateBetween(shiftIds.get(0), from, to);
-        var summationColumns = summationColumnRepository.findAllByShiftId(shiftIds.get(0));
+        var specialCalendarDates = specialCalendarDateRepository.findAllByEnterpriseIdAndDateBetween(enterpriseId, from, to);
+        var summationColumns = summationColumnRepository.findAllByEnterpriseId(enterpriseId);
         if (summationColumns == null || summationColumns.isEmpty()) {
             return null;
         }
 
-        var scheduleDTO = (List<EmployeeScheduleDTO>) scheduleService.findScheduleDTOByShiftIdsAndDate(shiftIds, from, to);
+        var scheduleDTO = scheduleService.findScheduleDTOByShiftIdsAndDate(shiftIds, from, to);
 
         return getSummationDTOS(from, to, mode, specialCalendarDates, summationColumns, scheduleDTO);
     }

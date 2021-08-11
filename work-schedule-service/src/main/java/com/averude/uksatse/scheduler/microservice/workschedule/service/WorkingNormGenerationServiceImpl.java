@@ -18,15 +18,16 @@ import java.time.LocalDate;
 @Service
 public class WorkingNormGenerationServiceImpl implements WorkingNormGenerationService {
 
-    private final ShiftRepository shiftRepository;
-    private final ShiftPatternRepository shiftPatternRepository;
+    private final ShiftRepository               shiftRepository;
+    private final ShiftPatternRepository        shiftPatternRepository;
     private final SpecialCalendarDateRepository specialCalendarDateRepository;
-    private final WorkingNormGenerator workingNormGenerator;
-    private final WorkingNormRepository workingNormRepository;
+    private final WorkingNormGenerator          workingNormGenerator;
+    private final WorkingNormRepository         workingNormRepository;
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public void generateWorkingNorm(Long departmentId,
+    public void generateWorkingNorm(Long enterpriseId,
+                                    Long departmentId,
                                     Long shiftId,
                                     LocalDate from,
                                     LocalDate to,
@@ -35,7 +36,7 @@ public class WorkingNormGenerationServiceImpl implements WorkingNormGenerationSe
                 .filter(shift -> shift.getDepartmentId().equals(departmentId)) // make sure that shift is from required department
                 .ifPresent(shift -> {
                     var shiftPattern = shiftPatternRepository.getShiftPatternById(shift.getShiftPatternId()).orElseThrow();
-                    var specialCalendarDates = specialCalendarDateRepository.findAllByDepartmentIdAndDateBetween(departmentId, from, to);
+                    var specialCalendarDates = specialCalendarDateRepository.findAllByEnterpriseIdAndDateBetween(enterpriseId, from, to);
 
                     log.debug("Generating working norm for shift {} and period between {} and {}", shift, from, to);
                     var workingNormList = workingNormGenerator

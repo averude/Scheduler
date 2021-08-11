@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-@RequestMapping("/generation")
+@RequestMapping("/enterprises/{enterpriseId}/departments/{departmentId}/generation")
 @RestController
 @RequiredArgsConstructor
 public class GenerationController {
@@ -21,10 +21,12 @@ public class GenerationController {
 
     @Logged
     @PreAuthorize("@departmentLevelSecurity.hasPermission(authentication, 'MAP3', #departmentId)")
-    @PostMapping("/schedule/{departmentId}")
-    public ResponseEntity<?> generate(@PathVariable Long departmentId,
+    @PostMapping("/schedule")
+    public ResponseEntity<?> generate(@PathVariable Long enterpriseId,
+                                      @PathVariable Long departmentId,
                                       @RequestBody @Valid GenerationDTO generationDTO) {
         scheduleGenerationService.generate(
+                enterpriseId,
                 generationDTO.getShiftId(),
                 generationDTO.getFrom(),
                 generationDTO.getTo(),
@@ -35,10 +37,13 @@ public class GenerationController {
 
     @Logged
     @PreAuthorize("@departmentLevelSecurity.hasPermission(authentication, 'MAP3', #departmentId)")
-    @PostMapping("/working_norm/{departmentId}")
-    public void generateWorkingHoursNorm(@PathVariable Long departmentId,
+    @PostMapping("/working_norm")
+    public void generateWorkingHoursNorm(@PathVariable Long enterpriseId,
+                                         @PathVariable Long departmentId,
                                          @RequestBody @Valid GenerationDTO generationDTO) {
-        workingNormGenerationService.generateWorkingNorm(departmentId,
+        workingNormGenerationService.generateWorkingNorm(
+                enterpriseId,
+                departmentId,
                 generationDTO.getShiftId(),
                 generationDTO.getFrom(),
                 generationDTO.getTo(),

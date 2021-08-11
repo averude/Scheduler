@@ -12,20 +12,23 @@ export class StatisticsService {
               private config: RestConfig) {}
 
   getSummationDTOByDepartmentId(type: SummationMode,
+                                enterpriseId: number,
                                 departmentId: number,
                                 from: string,
                                 to: string): Observable<EmployeeWorkStatDTO[]> {
     return this.http.get<EmployeeWorkStatDTO[]>(
-      `${this.config.baseUrl}/statistics/work_stats/mode/${type}/departments/${departmentId}?from=${from}&to=${to}`
+      `${this.config.baseUrl}/enterprises/${enterpriseId}/departments/${departmentId}/statistics/work_stats/mode/${type}?from=${from}&to=${to}`
     );
   }
 
   getSummationDTOByShiftIds(type: SummationMode,
+                            enterpriseId: number,
+                            departmentId: number,
                             shiftIds: number[],
                             from: string,
                             to: string): Observable<EmployeeWorkStatDTO[]> {
     return this.http.get<EmployeeWorkStatDTO[]>(
-      `${this.config.baseUrl}/statistics/work_stats/mode/${type}/shifts/${shiftIds}?from=${from}&to=${to}`
+      `${this.config.baseUrl}/enterprises/${enterpriseId}/departments/${departmentId}/shifts/${shiftIds}/statistics/work_stats/mode/${type}?from=${from}&to=${to}`
     );
   }
 }

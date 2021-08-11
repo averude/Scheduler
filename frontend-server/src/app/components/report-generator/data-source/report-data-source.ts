@@ -33,7 +33,7 @@ export class ReportDataSource {
       this.scheduleService.getAllByDepartmentId(departmentId, from, to),
       this.workingNormService.getAllByDepartmentId(departmentId, from, to),
       this.specialCalendarDateService.getAllByEnterpriseId(enterpriseId, from, to),
-      this.statisticsService.getSummationDTOByDepartmentId(SummationMode.PER_POSITION, departmentId, from, to,),
+      this.statisticsService.getSummationDTOByDepartmentId(SummationMode.PER_POSITION, enterpriseId, departmentId, from, to,),
       this.dayTypeService.getMapByEnterpriseId(enterpriseId),
       this.shiftService.getAllByDepartmentId(departmentId),
       this.positionService.getAllByDepartmentId(departmentId),
@@ -66,7 +66,7 @@ export class ReportDataSource {
       this.scheduleService.getAllByShiftIds(shiftIds, from, to),
       this.workingNormService.getAllByDepartmentId(departmentId, from, to),
       this.specialCalendarDateService.getAllByEnterpriseId(enterpriseId, from, to),
-      this.statisticsService.getSummationDTOByShiftIds(SummationMode.PER_POSITION, shiftIds, from, to,),
+      this.statisticsService.getSummationDTOByShiftIds(SummationMode.PER_POSITION, enterpriseId, departmentId, shiftIds, from, to,),
       this.dayTypeService.getMapByEnterpriseId(enterpriseId),
       this.shiftService.getAllByShiftIds(shiftIds),
       this.positionService.getAllByDepartmentId(departmentId)

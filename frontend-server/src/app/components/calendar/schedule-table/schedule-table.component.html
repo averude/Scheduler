@@ -33,7 +33,8 @@
   <ng-container beforeDateColumnDef>
     <th class="table-sticky-header th-null"
         *headerCellDef>
-      <app-schedule-table-configuration-menu [departmentId]="departmentId"
+      <app-schedule-table-configuration-menu [enterpriseId]="enterpriseId"
+                                             [departmentId]="departmentId"
                                              [initData]="initData"
                                              (onChangeHiddenRowVisibility)="changeHiddenRowsVisibility($event)">
       </app-schedule-table-configuration-menu>

@@ -45,7 +45,8 @@ public class ScheduleGenerationServiceImpl implements ScheduleGenerationService 
 
     @Override
     @Transactional
-    public void generate(Long shiftId,
+    public void generate(Long enterpriseId,
+                         Long shiftId,
                          LocalDate from,
                          LocalDate to,
                          int offset) {
@@ -60,7 +61,7 @@ public class ScheduleGenerationServiceImpl implements ScheduleGenerationService 
         }
 
         var specialCalendarDates = specialCalendarDateRepository
-                .findAllByDepartmentIdAndDateBetween(shift.getDepartmentId(), from, to);
+                .findAllByEnterpriseIdAndDateBetween(enterpriseId, from, to);
         var specialCalendarDatesMap = getSpecialDateMap(specialCalendarDates);
 
         var mainCompositions = mainCompositionRepository

@@ -8,13 +8,15 @@ import java.util.List;
 
 public interface EmployeeWorkStatService {
     @Transactional
-    List<EmployeeWorkStatDTO> findAllByDepartmentIdAndDateBetween(Long departmentId,
+    List<EmployeeWorkStatDTO> findAllByDepartmentIdAndDateBetween(Long enterpriseId,
+                                                                  Long departmentId,
                                                                   LocalDate from,
                                                                   LocalDate to,
                                                                   String mode);
 
     @Transactional
-    List<EmployeeWorkStatDTO> findAllByShiftIdsAndDateBetween(List<Long> shiftIds,
+    List<EmployeeWorkStatDTO> findAllByShiftIdsAndDateBetween(Long enterpriseId,
+                                                              List<Long> shiftIds,
                                                               LocalDate from,
                                                               LocalDate to,
                                                               String mode);

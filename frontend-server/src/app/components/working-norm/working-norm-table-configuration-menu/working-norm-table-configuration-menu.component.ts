@@ -19,6 +19,7 @@ import { Shift } from "../../../model/shift";
 })
 export class WorkingNormTableConfigurationMenuComponent implements OnInit, OnDestroy {
 
+  @Input() enterpriseId: number;
   @Input() departmentId: number;
   @Input() shifts: Shift[];
 
@@ -75,7 +76,7 @@ export class WorkingNormTableConfigurationMenuComponent implements OnInit, OnDes
 
     from(dtos).pipe(
       concatMap(generationDto =>
-        this.workingNormService.generateWorkingNorm(this.departmentId, generationDto))
+        this.workingNormService.generateWorkingNorm(this.enterpriseId, this.departmentId, generationDto))
     ).subscribe(res => this.notificationsService.success('Generated', res));
   }
 }

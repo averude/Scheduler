@@ -10,19 +10,21 @@ export class GenerationService {
   constructor(private config: RestConfig,
               private http: HttpClient){}
 
-  generateSchedule(departmentId: number,
+  generateSchedule(enterpriseId: number,
+                   departmentId: number,
                    generationDto: GenerationDto): Observable<any> {
     return this.http.post(
-      `${this.config.baseUrl}/generation/schedule/${departmentId}`,
+      `${this.config.baseUrl}/enterprises/${enterpriseId}/departments/${departmentId}/generation/schedule`,
       generationDto,
       {responseType: 'text'}
     );
   }
 
-  generateWorkingNorm(departmentId: number,
+  generateWorkingNorm(enterpriseId: number,
+                      departmentId: number,
                       generationDto: GenerationDto): Observable<any> {
     return this.http.post(
-      `${this.config.baseUrl}/generation/working_norm/${departmentId}`,
+      `${this.config.baseUrl}/enterprises/${enterpriseId}/departments/${departmentId}/generation/working_norm`,
       generationDto,
       {responseType: 'text'}
     );

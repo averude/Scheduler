@@ -61,7 +61,7 @@ export class StatisticsTableSource {
     const fn = monthPaginationObject =>
       forkJoin([
         this.statisticsService
-          .getSummationDTOByDepartmentId(mode, departmentId, monthPaginationObject.firstDayOfMonth, monthPaginationObject.lastDayOfMonth),
+          .getSummationDTOByDepartmentId(mode, enterpriseId, departmentId, monthPaginationObject.firstDayOfMonth, monthPaginationObject.lastDayOfMonth),
         this.workingNormService
           .getAllByDepartmentId(departmentId, monthPaginationObject.firstDayOfMonth, monthPaginationObject.lastDayOfMonth)
       ]);
@@ -82,7 +82,7 @@ export class StatisticsTableSource {
     const fn = monthPaginationObject =>
       forkJoin([
         this.statisticsService
-          .getSummationDTOByShiftIds(mode, shiftIds, monthPaginationObject.firstDayOfMonth, monthPaginationObject.lastDayOfMonth),
+          .getSummationDTOByShiftIds(mode, enterpriseId, departmentId, shiftIds, monthPaginationObject.firstDayOfMonth, monthPaginationObject.lastDayOfMonth),
         this.workingNormService
           .getAllByDepartmentId(departmentId, monthPaginationObject.firstDayOfMonth, monthPaginationObject.lastDayOfMonth)
       ]);

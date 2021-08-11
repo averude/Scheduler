@@ -55,6 +55,7 @@ export class WorkingNormTableComponent implements OnInit, AfterViewInit, OnDestr
   isAdmin: boolean = false;
   proxyViewIsShown: boolean = false;
 
+  enterpriseId: number;
   departmentId: number;
 
   rowData:  Row[]   = [];
@@ -89,6 +90,7 @@ export class WorkingNormTableComponent implements OnInit, AfterViewInit, OnDestr
 
   ngOnInit() {
     this.isAdmin = this.authService.isAdmin();
+    this.enterpriseId = this.authService.currentUserAccount.enterpriseId;
 
     this.routeSub = this.activatedRoute.params.pipe(
       filter(value => value.departmentId),

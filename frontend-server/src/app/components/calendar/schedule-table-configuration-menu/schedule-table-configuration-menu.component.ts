@@ -19,6 +19,7 @@ import { InitialData } from "../../../model/datasource/initial-data";
 })
 export class ScheduleTableConfigurationMenuComponent implements OnInit, OnDestroy {
 
+  @Input() enterpriseId: number;
   @Input() departmentId: number;
   @Input() initData: InitialData;
 
@@ -94,7 +95,7 @@ export class ScheduleTableConfigurationMenuComponent implements OnInit, OnDestro
 
     from(dtos).pipe(
       concatMap(generationDto =>
-        this.generationService.generateSchedule(this.departmentId, generationDto))
+        this.generationService.generateSchedule(this.enterpriseId, this.departmentId, generationDto))
     ).subscribe(res => this.notificationsService.success('Generated', res));
   }
 
