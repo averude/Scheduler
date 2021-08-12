@@ -57,4 +57,4 @@ import { TableRowRemover } from "./processor/table-row-remover";
     SubstitutionCompositionHandler
   ]
 })
-export class ScheduleTableCompositionDialogModule {}
+export class ScheduleTableCompositionManagementModule {}

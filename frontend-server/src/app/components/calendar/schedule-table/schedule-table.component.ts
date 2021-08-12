@@ -19,7 +19,7 @@ import { SchedulerUtility, TRACK_BY_FN } from "../utils/scheduler-utility";
 import { UserAccessRights } from "../../../model/user";
 import { TableStateService } from "../../../lib/ngx-schedule-table/service/table-state.service";
 import { ScheduleRow } from "../../../model/ui/schedule-table/table-data";
-import { TableManager } from "../schedule-table-composition-dialog/manager/table-manager";
+import { TableManager } from "../schedule-table-composition-management/manager/table-manager";
 import { ActivatedRoute } from "@angular/router";
 import { UserAccountLevel } from "../../../model/dto/user-account-dto";
 import { filter, map, switchMap } from "rxjs/operators";

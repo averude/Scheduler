@@ -13,7 +13,7 @@ import { MonthYearPaginatorModule } from "../../shared/paginators/month-year-pag
 import { ScheduleCellLabelPipe } from "./utils/schedule-cell-label-pipe";
 import { IntervalCreator } from "../../services/creator/interval-creator.service";
 import { TableSumCalculator } from "../../services/calculators/table-sum-calculator.service";
-import { ScheduleTableCompositionDialogModule } from "./schedule-table-composition-dialog/schedule-table-composition-dialog.module";
+import { ScheduleTableCompositionManagementModule } from "./schedule-table-composition-management/schedule-table-composition-management.module";
 import { SchedulerUtility } from "./utils/scheduler-utility";
 import { ScheduleTableDataSource } from "./data-sources/schedule-table.data-source";
 import { CellEnabledSetter } from "../../services/collectors/schedule/cell-enabled-setter";
@@ -38,7 +38,7 @@ import { TableRowFiller } from "../../services/collectors/schedule/table-row-fil
     NameInfoCellModule,
     ScheduleTableContextMenuModule,
     ScheduleTableModule,
-    ScheduleTableCompositionDialogModule,
+    ScheduleTableCompositionManagementModule,
     ScheduleTableConfigurationMenuModule
   ],
   declarations: [
