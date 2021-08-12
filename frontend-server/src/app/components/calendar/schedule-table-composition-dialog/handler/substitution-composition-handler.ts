@@ -31,7 +31,7 @@ export class SubstitutionCompositionHandler extends AbstractCompositionHandler<S
     if (initData.scheduleDTOs && initData.calendarDays) {
 
       const dto = binarySearch(initData.scheduleDTOs, (mid => mid.parent.id - composition.employeeId));
-      const norm = initData.workingNormsMap.get(group.id)?.hours || 0;
+      const norm = initData.workingNormsMap.get(composition.mainComposition.shiftId)?.hours || 0;
 
       putSorted(<SubstitutionComposition>composition, dto.substitutionCompositions);
 
