@@ -19,7 +19,7 @@
     </ng-container>
     <ng-container *ngIf="!proxyViewIsShown">
       <ng-container *ngIf="options?.groupable">
-        <tbody *ngFor="let group of rowGroupData"
+        <tbody *ngFor="let group of tableData.groups"
                app-table-row-group
                [showHiddenRows]="showHiddenRows"
                [editableRowGroup]="editableRowGroup"
@@ -32,19 +32,21 @@
                [onAddRowClick]="onAddRowClick">
         </tbody>
       </ng-container>
-      <ng-container>
-        <tr class="row"
-            [hidden]="!showHiddenRows && row.hidden"
-            [class.distinctByColor]="options?.distinctByColor"
-            *ngFor="let row of rowData"
-            app-table-row
-            [options]="options"
-            [trackByFn]="trackByFn"
-            [beforeDateColumns]="beforeDateColumns"
-            [pageableColumns]="pageableColumns"
-            [afterDateColumns]="afterDateColumns"
-            [rowData]="row">
-        </tr>
+      <ng-container *ngIf="!options?.groupable">
+        <ng-container *ngFor="let group of tableData.groups">
+          <tr class="row"
+              [hidden]="!showHiddenRows && row.hidden"
+              [class.distinctByColor]="options?.distinctByColor"
+              *ngFor="let row of group.rows"
+              app-table-row
+              [options]="options"
+              [trackByFn]="trackByFn"
+              [beforeDateColumns]="beforeDateColumns"
+              [pageableColumns]="pageableColumns"
+              [afterDateColumns]="afterDateColumns"
+              [rowData]="row">
+          </tr>
+        </ng-container>
       </ng-container>
     </ng-container>
   </table>

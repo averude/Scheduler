@@ -12,7 +12,6 @@ import { YearPaginationStrategy } from "../../../shared/paginators/pagination-st
 import { PaginationService } from "../../../lib/ngx-schedule-table/service/pagination.service";
 import { Subscription } from "rxjs";
 import { WorkingNormService } from "../../../services/http/working-norm.service";
-import { Row } from "../../../lib/ngx-schedule-table/model/data/row";
 import { WorkingNormTableDataCollector } from "../collector/working-norm-table-data-collector";
 import { ClearSelectionService } from "../../../lib/ngx-schedule-table/service/clear-selection.service";
 import { SelectionEndService } from "../../../lib/ngx-schedule-table/service/selection-end.service";
@@ -35,6 +34,7 @@ import { NotificationsService } from "angular2-notifications";
 import { ToolbarTemplateService } from "../../../services/top-bar/toolbar-template.service";
 import { filter, map, switchMap } from "rxjs/operators";
 import { Options } from "../../../lib/ngx-schedule-table/model/options";
+import { TableData } from "../../../lib/ngx-schedule-table/model/data/table";
 
 @Component({
   selector: 'app-working-norm-table',
@@ -58,7 +58,8 @@ export class WorkingNormTableComponent implements OnInit, AfterViewInit, OnDestr
   enterpriseId: number;
   departmentId: number;
 
-  rowData:  Row[]   = [];
+  tableData: TableData;
+
   shifts:   Shift[] = [];
   private shiftPatterns:  ShiftPattern[]  = [];
 
@@ -116,8 +117,8 @@ export class WorkingNormTableComponent implements OnInit, AfterViewInit, OnDestr
       this.proxyViewIsShown = false;
       this.shifts = dtos.map(dto => dto.parent);
       this.generationUnits = getGenerationUnits(this.shifts);
-      this.rowData = this.dataCollector.getRowData(this.months, dtos, this.shiftPatterns);
-      this.sumCalculator.calculateHoursNormSum(this.rowData);
+      this.tableData = this.dataCollector.getTableData(this.months, dtos, this.shiftPatterns);
+      this.sumCalculator.calculateTableHoursNormSum(this.tableData);
       this.cd.detectChanges();
     });
 
@@ -134,7 +135,7 @@ export class WorkingNormTableComponent implements OnInit, AfterViewInit, OnDestr
     }
 
     this.rowRenderSub = this.tableRenderer.onRowCommand()
-      .subscribe(command => this.sumCalculator.calculateHoursNormSum(this.rowData, command.rowId));
+      .subscribe(command => this.sumCalculator.calculateTableHoursNormSum(this.tableData, command.rowId));
 
     this.options = {
       groupable: false,

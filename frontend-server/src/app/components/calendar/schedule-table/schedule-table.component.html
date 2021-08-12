@@ -5,7 +5,7 @@
 
 <app-schedules-table [trackByFn]="trackByFn"
                      [options]="options"
-                     [rowGroupData]="tableData?.groups"
+                     [tableData]="tableData"
                      [proxyViewIsShown]="proxyViewIsShown"
                      [showHiddenRows]="showHiddenRows"
                      (onAddRowClick)="newRow($event)">

@@ -22,6 +22,7 @@ import { Subscription } from "rxjs";
 import { ProxyViewDef } from "../directives/proxy-view";
 import { TableRenderer } from "../service/table-renderer.service";
 import { Options } from "../model/options";
+import { TableData } from "../model/data/table";
 
 const DEFAULT_OPTIONS: Options = {
   selectionEnabled: false,
@@ -64,9 +65,8 @@ export class SchedulesTableComponent implements OnInit, OnDestroy {
   @ContentChild(ProxyViewDef, {read: TemplateRef})
   proxyViewDef: TemplateRef<any>;
 
-  @Input() rowGroupData:  RowGroup[];
-
-  @Input() rowData:       Row[];
+  @Input() tableData: TableData;
+  @Input() rowData:   Row[];
 
   @Output() onAddRowClick: EventEmitter<RowGroup> = new EventEmitter();
 

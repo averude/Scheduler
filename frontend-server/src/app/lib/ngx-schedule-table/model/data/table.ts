@@ -30,13 +30,16 @@ export class TableData {
   }
 
   addGroup(group: RowGroup,
-           comparator: (group: RowGroup) => number) {
-    const insertIndex = binarySearchInsertIndex(this._groups, comparator);
-    if (insertIndex >= 0) {
-      this._groups.splice(insertIndex, 0, group);
-    } else {
-      this._groups.push(group);
+           comparator?: (group: RowGroup) => number) {
+    if (comparator) {
+      const insertIndex = binarySearchInsertIndex(this._groups, comparator);
+      if (insertIndex >= 0) {
+        this._groups.splice(insertIndex, 0, group);
+        return;
+      }
     }
+
+    this._groups.push(group);
   }
 
   findRowGroup(groupId: number): RowGroup {

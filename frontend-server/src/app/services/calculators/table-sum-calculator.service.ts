@@ -13,16 +13,13 @@ export class TableSumCalculator {
 
   constructor(private cellEnabledSetter: CellEnabledSetter) {}
 
-  calculateHoursNormSum(rows: Row[], rowId?: number) {
-    this.calculateRowSum(rows, this.calcNormHoursSum, rowId);
-  }
-
-  private calculateRowSum(rows: Row[],
-                          fn,
-                          rowId?: number) {
-    if (rows) {
-      if (rowId && rowId > 0) rows = rows.filter(row => row.id === rowId);
-      rows.forEach(row => fn(row));
+  calculateTableHoursNormSum(tableData: TableData, rowId?: number) {
+    if (rowId && rowId > 0) {
+      tableData.forEachRowWithId(rowId, (row) => {
+        this.calcNormHoursSum(row);
+      });
+    } else {
+      tableData.forEachRow(row => this.calcNormHoursSum(row));
     }
   }
 
