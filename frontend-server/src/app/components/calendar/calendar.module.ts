@@ -19,13 +19,12 @@ import { ScheduleTableDataSource } from "./data-sources/schedule-table.data-sour
 import { CellEnabledSetter } from "../../services/collectors/schedule/cell-enabled-setter";
 import { ScheduleTableConfigurationMenuModule } from "./schedule-table-configuration-menu/schedule-table-configuration-menu.module";
 import { TableDataCollector } from "../../services/collectors/schedule/table-data.collector";
-import { TableRowProcessor } from "../../services/collectors/schedule/table-row-processor.service";
-import { TableRowRemover } from "../../services/collectors/schedule/table-row-remover";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { TableCellComponent } from "./table-cell/table-cell.component";
 import { NameInfoCellModule } from "../shared/name-info-cell/name-info-cell.module";
 import { ScheduleViewTableComponent } from "./schedule-view-table/schedule-view-table.component";
 import { UIPrioritySortingStrategy } from "./utils/ui-priority-sorting-strategy";
+import { TableRowFiller } from "../../services/collectors/schedule/table-row-filler";
 
 @NgModule({
   imports: [
@@ -54,18 +53,13 @@ import { UIPrioritySortingStrategy } from "./utils/ui-priority-sorting-strategy"
     IntervalCreator,
     TableSumCalculator,
     TableDataCollector,
-    TableRowProcessor,
-    TableRowRemover,
+    TableRowFiller,
     CellEnabledSetter,
     ScheduleTableDataSource,
     SchedulerUtility,
     UIPrioritySortingStrategy
   ]
 })
-export class CalendarModule {
-
-  constructor(s: ScheduleCellLabelPipe) {
-  }
-}
+export class CalendarModule {}
 
 

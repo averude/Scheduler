@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { MainComposition } from "../../../../model/composition";
-import { TableRowRemover } from "../../../../services/collectors/schedule/table-row-remover";
-import { TableRowProcessor } from "../../../../services/collectors/schedule/table-row-processor.service";
+import { TableRowRemover } from "../processor/table-row-remover";
+import { TableRowProcessor } from "../processor/table-row-processor.service";
 import { IntervalCreator } from "../../../../services/creator/interval-creator.service";
 import { MainCompositionService } from "../../../../services/http/main-composition.service";
 import { InitialData } from "../../../../model/datasource/initial-data";

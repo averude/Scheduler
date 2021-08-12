@@ -1,15 +1,15 @@
-import { ScheduleRow, ScheduleRowGroup } from "../../../model/ui/schedule-table/table-data";
-import { Composition, SubstitutionComposition } from "../../../model/composition";
-import { EmployeeScheduleDTO } from "../../../model/dto/employee-schedule-dto";
-import { binarySearch } from "../../../shared/utils/collection-utils";
-import { RowInterval } from "../../../model/ui/schedule-table/row-interval";
-import { CellEnabledSetter } from "./cell-enabled-setter";
-import { TableRenderer } from "../../../lib/ngx-schedule-table/service/table-renderer.service";
-import { IntervalCreator } from "../../creator/interval-creator.service";
+import { ScheduleRow, ScheduleRowGroup } from "../../../../model/ui/schedule-table/table-data";
+import { Composition, SubstitutionComposition } from "../../../../model/composition";
+import { EmployeeScheduleDTO } from "../../../../model/dto/employee-schedule-dto";
+import { binarySearch } from "../../../../shared/utils/collection-utils";
+import { RowInterval } from "../../../../model/ui/schedule-table/row-interval";
+import { CellEnabledSetter } from "../../../../services/collectors/schedule/cell-enabled-setter";
+import { TableRenderer } from "../../../../lib/ngx-schedule-table/service/table-renderer.service";
+import { IntervalCreator } from "../../../../services/creator/interval-creator.service";
 import { Injectable } from "@angular/core";
-import { TableSumCalculator } from "../../calculators/table-sum-calculator.service";
-import { removeFromArray } from "../../utils";
-import { TableData } from "../../../lib/ngx-schedule-table/model/data/table";
+import { TableSumCalculator } from "../../../../services/calculators/table-sum-calculator.service";
+import { removeFromArray } from "../../../../services/utils";
+import { TableData } from "../../../../lib/ngx-schedule-table/model/data/table";
 
 @Injectable()
 export class TableRowRemover {

@@ -19,6 +19,8 @@ import { AddMainCompositionDialogComponent } from "./add-main-composition-dialog
 import { TableManager } from "./manager/table-manager";
 import { MainCompositionHandler } from "./handler/main-composition-handler";
 import { SubstitutionCompositionHandler } from "./handler/substitution-composition-handler";
+import { TableRowProcessor } from "./processor/table-row-processor.service";
+import { TableRowRemover } from "./processor/table-row-remover";
 
 @NgModule({
   imports: [
@@ -48,6 +50,8 @@ import { SubstitutionCompositionHandler } from "./handler/substitution-compositi
       provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS,
       useValue: { useUtc: true }
     },
+    TableRowProcessor,
+    TableRowRemover,
     TableManager,
     MainCompositionHandler,
     SubstitutionCompositionHandler

@@ -3,12 +3,12 @@ import { ScheduleRow, ScheduleRowGroup } from "../../../model/ui/schedule-table/
 import { Injectable } from "@angular/core";
 import { IntervalCreator } from "../../creator/interval-creator.service";
 import { binarySearch } from "../../../shared/utils/collection-utils";
-import { TableRowProcessor } from "./table-row-processor.service";
 import { InitialData } from "../../../model/datasource/initial-data";
 import { convertCompositionToInterval } from "../../../model/ui/schedule-table/row-interval";
 import { CellEnabledSetter } from "./cell-enabled-setter";
 import { TableSumCalculator } from "../../calculators/table-sum-calculator.service";
 import { TableData } from "../../../lib/ngx-schedule-table/model/data/table";
+import { TableRowFiller } from "./table-row-filler";
 
 @Injectable()
 export class TableDataCollector {
@@ -16,7 +16,7 @@ export class TableDataCollector {
   constructor(private intervalCreator: IntervalCreator,
               private cellEnabledSetter: CellEnabledSetter,
               private sumCalculator: TableSumCalculator,
-              private rowProcessor: TableRowProcessor) {}
+              private rowFiller: TableRowFiller) {}
 
   handleData(initData: InitialData): TableData {
     const tableData = this.collect(initData);
@@ -53,10 +53,10 @@ export class TableDataCollector {
 
     for (let dto of initialData.scheduleDTOs) {
 
-      this.rowProcessor.fillRows(table, initialData, dto, dto.mainCompositions, false,
+      this.rowFiller.fill(table, initialData, dto, dto.mainCompositions, false,
         (composition => initialData.workingNormsMap.get(composition.shiftId)?.hours || 0));
 
-      this.rowProcessor.fillRows(table, initialData, dto, dto.substitutionCompositions, true,
+      this.rowFiller.fill(table, initialData, dto, dto.substitutionCompositions, true,
         (composition => initialData.workingNormsMap.get(composition.mainComposition.shiftId)?.hours || 0))
     }
 

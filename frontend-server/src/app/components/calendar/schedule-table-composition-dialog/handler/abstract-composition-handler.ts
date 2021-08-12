@@ -1,5 +1,5 @@
-import { TableRowRemover } from "../../../../services/collectors/schedule/table-row-remover";
-import { TableRowProcessor } from "../../../../services/collectors/schedule/table-row-processor.service";
+import { TableRowRemover } from "../processor/table-row-remover";
+import { TableRowProcessor } from "../processor/table-row-processor.service";
 import { IntervalCreator } from "../../../../services/creator/interval-creator.service";
 import { Composition } from "../../../../model/composition";
 import { ScheduleRow, ScheduleRowGroup } from "../../../../model/ui/schedule-table/table-data";

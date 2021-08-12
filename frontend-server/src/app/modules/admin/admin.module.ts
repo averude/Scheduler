@@ -43,11 +43,9 @@ import { SidePanelStepperModule } from "../../lib/side-panel-stepper/side-panel-
   ],
   declarations: [
     AdminComponent,
-    // SidePanelStepperComponent,
     ToolbarRowComponent,
     UserInfoComponent
   ],
-  // entryComponents: [SidePanelStepperComponent],
   providers: [
     CellCollector,
     CellUpdater,
