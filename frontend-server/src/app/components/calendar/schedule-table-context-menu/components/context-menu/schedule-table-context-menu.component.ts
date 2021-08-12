@@ -27,7 +27,7 @@ import { TableStateService } from "../../../../../lib/ngx-schedule-table/service
 import { ScheduleRowGroup } from "../../../../../model/ui/schedule-table/table-data";
 import { binarySearch } from "../../../../../shared/utils/collection-utils";
 import { CalendarDay } from "../../../../../lib/ngx-schedule-table/model/calendar-day";
-import { TableManager } from "../../../../../services/collectors/schedule/table-manager";
+import { TableManager } from "../../../schedule-table-composition-dialog/manager/table-manager";
 import { InitialData } from "../../../../../model/datasource/initial-data";
 
 @Component({

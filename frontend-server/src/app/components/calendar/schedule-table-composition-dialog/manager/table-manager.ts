@@ -1,19 +1,21 @@
-import { ScheduleRow, ScheduleRowGroup } from "../../../model/ui/schedule-table/table-data";
-import { Composition, MainComposition } from "../../../model/composition";
-import { getEmployeeShortName } from "../../../shared/utils/utils";
-import { EditCompositionsDialogComponent } from "../../../components/calendar/schedule-table-shift-composition-dialog/edit-compositions-dialog/edit-compositions-dialog.component";
-import { SelectionData } from "../../../lib/ngx-schedule-table/model/selection-data";
-import { AddSubstitutionCompositionDialogComponent } from "../../../components/calendar/schedule-table-shift-composition-dialog/add-substitution-composition-dialog/add-substitution-composition-dialog.component";
+import { ScheduleRow, ScheduleRowGroup } from "../../../../model/ui/schedule-table/table-data";
+import { Composition, MainComposition } from "../../../../model/composition";
+import { getEmployeeShortName } from "../../../../shared/utils/utils";
+import { EditCompositionsDialogComponent } from "../edit-compositions-dialog/edit-compositions-dialog.component";
+import { SelectionData } from "../../../../lib/ngx-schedule-table/model/selection-data";
+import { AddSubstitutionCompositionDialogComponent } from "../add-substitution-composition-dialog/add-substitution-composition-dialog.component";
 import { MatDialog } from "@angular/material/dialog";
-import { TableCompositionHandler } from "./table-composition-handler";
 import { Injectable } from "@angular/core";
-import { InitialData } from "../../../model/datasource/initial-data";
+import { InitialData } from "../../../../model/datasource/initial-data";
 import { switchMap } from "rxjs/operators";
 import { NotificationsService } from "angular2-notifications";
-import { TableRenderer } from "../../../lib/ngx-schedule-table/service/table-renderer.service";
-import { TableSumCalculator } from "../../calculators/table-sum-calculator.service";
-import { CellEnabledSetter } from "./cell-enabled-setter";
-import { AddMainCompositionDialogComponent } from "../../../components/calendar/schedule-table-shift-composition-dialog/add-main-composition-dialog/add-main-composition-dialog.component";
+import { TableRenderer } from "../../../../lib/ngx-schedule-table/service/table-renderer.service";
+import { TableSumCalculator } from "../../../../services/calculators/table-sum-calculator.service";
+import { CellEnabledSetter } from "../../../../services/collectors/schedule/cell-enabled-setter";
+import { AddMainCompositionDialogComponent } from "../add-main-composition-dialog/add-main-composition-dialog.component";
+import { CompositionHandler } from "../handler/composition-handler";
+import { MainCompositionHandler } from "../handler/main-composition-handler";
+import { SubstitutionCompositionHandler } from "../handler/substitution-composition-handler";
 
 @Injectable()
 export class TableManager {
@@ -23,12 +25,13 @@ export class TableManager {
               private cellEnabledSetter: CellEnabledSetter,
               private sumCalculator: TableSumCalculator,
               private notificationsService: NotificationsService,
-              private tableCompositionHandler: TableCompositionHandler) {
+              private mainCompositionHandler: MainCompositionHandler,
+              private substitutionCompositionHandler: SubstitutionCompositionHandler) {
   }
 
   newRow(rowGroup: ScheduleRowGroup, initData: InitialData) {
     const data = {
-      shift:    rowGroup.value,
+      shift: rowGroup.value,
       initData: initData
     };
 
@@ -40,9 +43,9 @@ export class TableManager {
             return;
           }
 
-          return this.tableCompositionHandler
+          return this.mainCompositionHandler
             .createOrUpdate(mainShiftCompositions, rowGroup, null,
-              null, data.initData, false);
+              null, data.initData);
         })
       )
       .subscribe(res => {
@@ -70,19 +73,24 @@ export class TableManager {
     const groupData = row.group;
     const data = {
       compositions: row.compositions,
-      initData:     initData,
+      initData: initData,
       employeeName: getEmployeeShortName(row.employee)
     };
 
-    this.openDialog(data, groupData, row);
+    if (row.isSubstitution) {
+      this.openDialog(data, groupData, row, this.substitutionCompositionHandler);
+    } else {
+      this.openDialog(data, groupData, row, this.mainCompositionHandler);
+    }
+
   }
 
   addSubstitutionDialog(selectionData: SelectionData, initData: InitialData) {
-    const mainCompositionRow = <ScheduleRow> selectionData.row;
+    const mainCompositionRow = <ScheduleRow>selectionData.row;
 
     const data = {
       from: selectionData.selectedCells[0].date.isoString,
-      to:   selectionData.selectedCells[selectionData.selectedCells.length - 1].date.isoString,
+      to: selectionData.selectedCells[selectionData.selectedCells.length - 1].date.isoString,
       initData: initData,
       employee: mainCompositionRow.employee,
       // TODO: Has to be reworked.
@@ -96,11 +104,11 @@ export class TableManager {
       .pipe(
         switchMap(value => {
           if (value) {
-            const destinationGroup = <ScheduleRowGroup> mainCompositionRow.group.table.findRowGroup(value.shiftId);
+            const destinationGroup = <ScheduleRowGroup>mainCompositionRow.group.table.findRowGroup(value.shiftId);
 
-            return this.tableCompositionHandler
+            return this.substitutionCompositionHandler
               .createOrUpdate([value], destinationGroup, null,
-                mainCompositionRow, data.initData, true);
+                mainCompositionRow, data.initData);
           }
         })
       )
@@ -117,14 +125,16 @@ export class TableManager {
           this.tableRenderer.renderRowGroup(row.group.id);
           this.tableRenderer.nextRowCommand({
             rowId: row.id,
-            command: rowData => this.cellEnabledSetter.process(<ScheduleRow> rowData)
+            command: rowData => this.cellEnabledSetter.process(<ScheduleRow>rowData)
           });
         });
         this.notificationsService.success('Created');
       });
   }
 
-  private openDialog(data, rowGroup: ScheduleRowGroup, row: ScheduleRow) {
+  private openDialog(data, rowGroup: ScheduleRowGroup,
+                     row: ScheduleRow,
+                     compositionHandler: CompositionHandler<Composition>) {
     this.dialog.open(EditCompositionsDialogComponent, {data: data})
       .afterClosed()
       .subscribe((dialogResult) => {
@@ -136,9 +146,9 @@ export class TableManager {
         switch (dialogResult.command) {
 
           case 'save' : {
-            this.tableCompositionHandler
-              .createOrUpdate(compositions, rowGroup, row, null,
-                data.initData, row.isSubstitution)
+
+            compositionHandler
+              .createOrUpdate(compositions, rowGroup, row, null, data.initData)
               .subscribe(res => {
 
                 // TODO: Make distinct by id
@@ -161,7 +171,7 @@ export class TableManager {
           }
 
           case 'delete' : {
-            this.tableCompositionHandler
+            compositionHandler
               .remove(rowGroup, row, data.initData, compositions)
               .subscribe(res => {
                 this.notificationsService.success('Removed');

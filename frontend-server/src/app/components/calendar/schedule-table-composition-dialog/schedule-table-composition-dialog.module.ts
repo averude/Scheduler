@@ -16,6 +16,9 @@ import { AddSubstitutionCompositionDialogComponent } from './add-substitution-co
 import { SidePanelStepperModule } from "../../../lib/side-panel-stepper/side-panel-stepper.module";
 import { CdkStepperModule } from "@angular/cdk/stepper";
 import { AddMainCompositionDialogComponent } from "./add-main-composition-dialog/add-main-composition-dialog.component";
+import { TableManager } from "./manager/table-manager";
+import { MainCompositionHandler } from "./handler/main-composition-handler";
+import { SubstitutionCompositionHandler } from "./handler/substitution-composition-handler";
 
 @NgModule({
   imports: [
@@ -36,7 +39,6 @@ import { AddMainCompositionDialogComponent } from "./add-main-composition-dialog
     CdkStepperModule,
   ],
   declarations: [
-    // AddMainShiftCompositionDialogComponent,
     AddMainCompositionDialogComponent,
     EditCompositionsDialogComponent,
     AddSubstitutionCompositionDialogComponent,
@@ -45,7 +47,10 @@ import { AddMainCompositionDialogComponent } from "./add-main-composition-dialog
     {
       provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS,
       useValue: { useUtc: true }
-    }
+    },
+    TableManager,
+    MainCompositionHandler,
+    SubstitutionCompositionHandler
   ]
 })
 export class ScheduleTableCompositionDialogModule {}

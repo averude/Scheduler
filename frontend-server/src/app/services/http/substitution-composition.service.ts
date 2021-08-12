@@ -12,7 +12,7 @@ import { convertDateStringToMoment } from "./schedule.service";
 @Injectable({
   providedIn: "root"
 })
-export class SubstitutionShiftCompositionService
+export class SubstitutionCompositionService
   extends ACrudService<SubstitutionComposition> implements CUDService<SubstitutionComposition> {
 
   constructor(authService: AuthService,
