@@ -7,7 +7,6 @@ import { NotificationsService } from "angular2-notifications";
 import { Shift } from "../../../../../model/shift";
 import { ReportSheetDialogComponent } from "../report-sheet-dialog/report-sheet-dialog.component";
 import { ShiftService } from "../../../../../services/http/shift.service";
-import { binarySearch } from "../../../../../shared/utils/collection-utils";
 import { ActivatedRoute } from "@angular/router";
 
 @Component({
@@ -20,6 +19,7 @@ export class ReportSheetTableComponent extends HasDepartmentTableComponent<Repor
   displayedColumns = ['select', 'name', 'shifts', 'control'];
 
   shifts: Shift[] = [];
+  shiftMap: Map<number, Shift>;
 
   constructor(matDialog: MatDialog,
               private reportSheetDTOService: ReportSheetDTOService,
@@ -29,8 +29,13 @@ export class ReportSheetTableComponent extends HasDepartmentTableComponent<Repor
     super(matDialog, Number.parseInt(activatedRoute.parent.snapshot.params.departmentId),
       reportSheetDTOService, notification);
 
-    this.shiftService.getAllByDepartmentId(this.departmentId).subscribe(shifts =>
-      this.shifts = shifts.sort((a,b) => a.id - b.id));
+    this.shiftService.getAllByDepartmentId(this.departmentId)
+      .subscribe(shifts => {
+        this.shiftMap = new Map<number, Shift>();
+        shifts.forEach(shift => this.shiftMap.set(shift.id, shift));
+
+        this.shifts = shifts.sort((a,b) => a.id - b.id);
+      });
   }
 
   openDialog(dto: ReportSheetDTO) {
@@ -78,6 +83,6 @@ export class ReportSheetTableComponent extends HasDepartmentTableComponent<Repor
   }
 
   getShift(shiftId: number): Shift {
-    return binarySearch(this.shifts, mid => mid.id - shiftId);
+    return this.shiftMap.get(shiftId);
   }
 }

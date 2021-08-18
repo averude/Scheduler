@@ -6,7 +6,6 @@ import { Department } from "../../../../../model/department";
 import { DepartmentService } from "../../../../../services/http/department.service";
 import { DepartmentUserAccountService } from "../../../../../services/http/auth/department-user-account.service";
 import { UserAccountDTO } from "../../../../../model/dto/user-account-dto";
-import { binarySearch } from "../../../../../shared/utils/collection-utils";
 import { AddDepartmentUserAccountDialogComponent } from "../add-department-user-account-dialog/add-department-user-account-dialog.component";
 import { EditDepartmentUserAccountDialogComponent } from "../edit-department-user-account-dialog/edit-department-user-account-dialog.component";
 import { ResetUserAccountPasswordDialogComponent } from "../../../../reset-user-account-password-dialog/reset-user-account-password-dialog.component";
@@ -22,6 +21,7 @@ export class UserAccountsTableComponent extends HasEnterpriseTableComponent<User
   displayedColumns = ['select', 'username', 'name', 'departments', 'role', 'resetPass', 'control'];
 
   departments: Department[] = [];
+  departmentMap: Map<number, Department>;
 
   constructor(dialog: MatDialog,
               departmentUserAccountService: DepartmentUserAccountService,
@@ -32,7 +32,11 @@ export class UserAccountsTableComponent extends HasEnterpriseTableComponent<User
       departmentUserAccountService, notificationsService);
 
     this.departmentService.getAllByEnterpriseId(this.enterpriseId)
-      .subscribe(departments => this.departments = departments.sort((a, b) => a.id - b.id));
+      .subscribe(departments => {
+        this.departmentMap = new Map<number, Department>();
+        departments.forEach(department => this.departmentMap.set(department.id, department));
+        this.departments = departments.sort((a, b) => a.id - b.id)
+      });
   }
 
   openDialog(t: UserAccountDTO) {
@@ -78,9 +82,9 @@ export class UserAccountsTableComponent extends HasEnterpriseTableComponent<User
     if (ids && ids.length > 0) {
       return ids.sort()
         .map((id, index) => {
-          const shift = binarySearch(this.departments, mid => mid.id - id);
-          if (shift) {
-            return `${shift.name}${index < ids.length - 1 ? ', ' : ''}`
+          const department = this.departmentMap.get(id);
+          if (department) {
+            return `${department.name}${index < ids.length - 1 ? ', ' : ''}`
           }
         })
         .reduce(((previousValue, currentValue) => previousValue?.concat(currentValue)));

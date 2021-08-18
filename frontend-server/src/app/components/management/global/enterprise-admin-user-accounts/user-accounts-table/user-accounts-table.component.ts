@@ -6,7 +6,6 @@ import { EnterpriseService } from "../../../../../services/http/enterprise.servi
 import { Enterprise } from "../../../../../model/enterprise";
 import { EnterpriseUserAccountService } from "../../../../../services/http/auth/enterprise-user-account.service";
 import { UserAccountDTO } from "../../../../../model/dto/user-account-dto";
-import { binarySearch } from "../../../../../shared/utils/collection-utils";
 import { AddEnterpriseUserAccountDialogComponent } from "../add-enterprise-user-account-dialog/add-enterprise-user-account-dialog.component";
 import { EditEnterpriseUserAccountDialogComponent } from "../edit-enterprise-user-account-dialog/edit-enterprise-user-account-dialog.component";
 import { ResetUserAccountPasswordDialogComponent } from "../../../../reset-user-account-password-dialog/reset-user-account-password-dialog.component";
@@ -21,6 +20,7 @@ export class UserAccountsTableComponent extends TableBaseIdEntityComponent<UserA
   displayedColumns = ['select', 'username', 'name', 'enterprise', 'role', 'resetPass', 'control'];
 
   enterprises: Enterprise[] = [];
+  enterpriseMap: Map<number, Enterprise>;
 
   constructor(dialog: MatDialog,
               userAccountService: EnterpriseUserAccountService,
@@ -29,7 +29,11 @@ export class UserAccountsTableComponent extends TableBaseIdEntityComponent<UserA
     super(dialog, userAccountService, notificationsService);
 
     this.enterpriseService.getAll()
-      .subscribe(enterprises => this.enterprises = enterprises.sort((a, b) => a.id - b.id));
+      .subscribe(enterprises => {
+        this.enterpriseMap = new Map<number, Enterprise>();
+        enterprises.forEach(enterprise => this.enterpriseMap.set(enterprise.id, enterprise));
+        this.enterprises = enterprises.sort((a, b) => a.id - b.id);
+      });
   }
 
   openDialog(t: UserAccountDTO) {
@@ -91,6 +95,6 @@ export class UserAccountsTableComponent extends TableBaseIdEntityComponent<UserA
   }
 
   getEnterpriseById(id: number): Enterprise {
-    return binarySearch(this.enterprises, mid => mid.id - id);
+    return this.enterpriseMap.get(id);
   }
 }

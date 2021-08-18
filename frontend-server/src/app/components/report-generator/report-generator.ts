@@ -4,8 +4,9 @@ import { Buffer } from "exceljs";
 import { ReportCreator } from "./creator/report-creator";
 import { ReportDecorator } from "./decorator/report-decorator";
 import { Injectable } from "@angular/core";
-import { binarySearch } from "../../shared/utils/collection-utils";
 import { ReportSheetDTO } from "../../model/dto/report-sheet-dto";
+import { TableData } from "../../lib/ngx-schedule-table/model/data/table";
+import { inline, validate } from "./utils/utils";
 
 @Injectable()
 export class ReportGenerator {
@@ -15,7 +16,7 @@ export class ReportGenerator {
            reportData: ReportData,
            reportSheets: ReportSheetDTO[],
            divideBySubDep: boolean): Promise<Buffer> {
-    if (this.validate(reportData)) {
+    if (validate(reportData)) {
       return Promise.reject('Empty data');
     }
 
@@ -34,27 +35,18 @@ export class ReportGenerator {
     } else {
       const worksheet = workbook.addWorksheet('Schedule');
 
-      reportDecorator.decorate(worksheet, reportData, reportData.tableData.length, null);
-      const rows = this.inline(reportData.tableData);
+      reportDecorator.decorate(worksheet, reportData, reportData.tableData.groups.length, null);
+      const rows = inline(reportData.tableData);
       reportCreator.create(worksheet, reportData, rows);
     }
 
     return workbook.xlsx.writeBuffer();
   }
 
-  private validate(reportData: ReportData): boolean {
-    return !reportData || !reportData.tableData || reportData.tableData.length == 0
-      || !reportData.headerData || reportData.headerData.length == 0;
-  }
-
-  private inline(groups: ReportGroup[]): ReportRow[] {
-    return groups.map(group => group.rows)
-      .reduce((previousValue, currentValue) => previousValue.concat(currentValue));
-  }
-
   private splitIntoSheets(sheets: ReportSheetDTO[],
-                          shiftGroups: ReportGroup[]) {
+                          tableData: TableData) {
     const groups: ReportGroup[] = [];
+
     sheets.forEach(dto => {
       const group = new ReportGroup();
       group.id    = dto.reportSheet.id;
@@ -62,9 +54,9 @@ export class ReportGenerator {
       group.rows  = [];
 
       dto.shiftIds.forEach(shiftId => {
-        const reportGroupData = binarySearch(shiftGroups, (mid => mid.id - shiftId));
+        const reportGroupData = tableData.findRowGroup(shiftId);
         if (reportGroupData) {
-          group.rows = group.rows.concat(reportGroupData.rows);
+          group.rows = group.rows.concat(<ReportRow[]> reportGroupData.rows);
         }
       });
 

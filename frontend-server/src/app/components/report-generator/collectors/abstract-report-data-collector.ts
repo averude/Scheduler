@@ -16,6 +16,7 @@ import { WorkDay } from "../../../model/workday";
 import { CellEnabledSetter } from "../../../services/collectors/schedule/cell-enabled-setter";
 import { CellCollector } from "../../../services/collectors/cell-collector";
 import { ReportInitialData } from "../model/report-initial-data";
+import { TableData } from "../../../lib/ngx-schedule-table/model/data/table";
 
 export abstract class AbstractReportDataCollector implements ReportDataCollector {
 
@@ -38,15 +39,18 @@ export abstract class AbstractReportDataCollector implements ReportDataCollector
   }
 
   private collectGroup(initialData: ReportInitialData,
-                       useReportLabel?: boolean) {
+                       useReportLabel?: boolean): TableData {
 
-    const groups: ReportGroup[] = initialData.shifts
+    const tableData = new TableData();
+
+    tableData.groups = initialData.shifts
       .sort((a, b) => a.id - b.id)
       .map(shift => ({
         id: shift.id,
         name: shift.name,
+        value: shift,
         rows: []
-      }));
+      } as ReportGroup));
 
     for (let dto of initialData.scheduleDTOs) {
       const shiftId = getMainShiftId(dto);
@@ -70,15 +74,15 @@ export abstract class AbstractReportDataCollector implements ReportDataCollector
       });
 
       if (shiftId > 0) {
-        const reportGroupData = binarySearch(groups, (mid => mid.id - shiftId));
-        if (reportGroupData && reportGroupData.rows) {
-          reportGroupData.rows = reportGroupData.rows.concat(rows);
+        const rowGroup = tableData.findRowGroup(shiftId);
+        if (rowGroup && rowGroup.rows) {
+          rowGroup.rows = rowGroup.rows.concat(rows);
         }
       }
 
     }
 
-    return groups;
+    return tableData;
   }
 
   private getSummationResults(employeeWorkStats: EmployeeWorkStatDTO[],

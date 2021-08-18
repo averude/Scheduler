@@ -24,11 +24,10 @@ import { DepartmentDayTypeService } from "../../../../../services/http/departmen
 import { ShiftPattern } from "../../../../../model/shift-pattern";
 import { DayTypeService } from "../../../../../services/http/day-type.service";
 import { TableStateService } from "../../../../../lib/ngx-schedule-table/service/table-state.service";
-import { ScheduleRowGroup } from "../../../../../model/ui/schedule-table/table-data";
-import { binarySearch } from "../../../../../shared/utils/collection-utils";
 import { CalendarDay } from "../../../../../lib/ngx-schedule-table/model/calendar-day";
 import { TableManager } from "../../../schedule-table-composition-management/manager/table-manager";
 import { InitialData } from "../../../../../model/datasource/initial-data";
+import { TableData } from "../../../../../lib/ngx-schedule-table/model/data/table";
 
 @Component({
   selector: 'app-schedule-table-context-menu',
@@ -64,7 +63,7 @@ export class ScheduleTableContextMenuComponent implements OnInit, OnDestroy {
   };
 
   @Input() isEditableGroups: boolean = false;
-  @Input() groups: ScheduleRowGroup[] = [];
+  @Input() tableData: TableData;
 
   @Input() enterpriseId: number;
   @Input() departmentId: number;
@@ -168,7 +167,7 @@ export class ScheduleTableContextMenuComponent implements OnInit, OnDestroy {
   generateForShift(shiftId: number,
                    departmentDayType: DepartmentDayType,
                    day: CalendarDay) {
-    const rowGroup = binarySearch(this.groups, (mid => mid.id - shiftId));
+    const rowGroup = this.tableData.findRowGroup(shiftId);
     if (rowGroup) {
       const cells = [];
 

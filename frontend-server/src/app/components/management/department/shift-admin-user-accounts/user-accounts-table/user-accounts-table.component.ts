@@ -4,7 +4,6 @@ import { MatDialog } from "@angular/material/dialog";
 import { NotificationsService } from "angular2-notifications";
 import { ShiftService } from "../../../../../services/http/shift.service";
 import { Component } from "@angular/core";
-import { binarySearch } from "../../../../../shared/utils/collection-utils";
 import { ShiftUserAccountService } from "../../../../../services/http/auth/shift-user-account.service";
 import { UserAccountDTO } from "../../../../../model/dto/user-account-dto";
 import { AddShiftUserAccountDialogComponent } from "../add-shift-user-account-dialog/add-shift-user-account-dialog.component";
@@ -24,6 +23,7 @@ export class UserAccountsTableComponent extends HasDepartmentTableComponent<User
   displayedColumns = ['select', 'username', 'name', 'shifts', 'role', 'resetPass', 'control'];
 
   shifts: Shift[] = [];
+  shiftMap: Map<number, Shift>;
 
   private readonly enterpriseId;
 
@@ -39,7 +39,11 @@ export class UserAccountsTableComponent extends HasDepartmentTableComponent<User
     this.enterpriseId = authService.currentUserAccount.enterpriseId;
 
     this.shiftService.getAllByDepartmentId(this.departmentId)
-      .subscribe(shifts => this.shifts = shifts);
+      .subscribe(shifts => {
+        this.shiftMap = new Map<number, Shift>();
+        shifts.forEach(shift => this.shiftMap.set(shift.id, shift));
+        this.shifts = shifts;
+      });
   }
 
   openDialog(t: UserAccountDTO) {
@@ -87,7 +91,7 @@ export class UserAccountsTableComponent extends HasDepartmentTableComponent<User
     if (shiftIds && shiftIds.length > 0) {
       return shiftIds.sort()
         .map((shiftId, index) => {
-          const shift = binarySearch(this.shifts, mid => mid.id - shiftId);
+          const shift = this.shiftMap.get(shiftId);
           if (shift) {
             return `${shift.name}${index < shiftIds.length - 1 ? ', ' : ''}`
           }
