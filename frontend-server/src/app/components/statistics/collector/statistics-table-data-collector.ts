@@ -1,15 +1,12 @@
-import { Employee } from "../../../model/employee";
 import { Position } from "../../../model/position";
 import { roundToTwo } from "../../../shared/utils/utils";
 import { SummationType } from "../../../model/summation-column";
 import { Shift } from "../../../model/shift";
 import { EmployeePositionStat, EmployeeWorkStatDTO } from "../../../model/dto/employee-work-stat-dto";
 import { Injectable } from "@angular/core";
-import { RowGroup } from "../../../lib/ngx-schedule-table/model/data/row-group";
-import { Row } from "../../../lib/ngx-schedule-table/model/data/row";
-import { Cell } from "../../../lib/ngx-schedule-table/model/data/cell";
 import { TableData } from "../../../lib/ngx-schedule-table/model/data/table";
 import { UIPrioritySortingStrategy } from "../../calendar/utils/ui-priority-sorting-strategy";
+import { StatisticsEmployeeRow, StatisticsPositionRow, StatisticsRowGroup } from "../model/data.model";
 
 @Injectable()
 export class StatisticsTableDataCollector {
@@ -18,26 +15,29 @@ export class StatisticsTableDataCollector {
 
   getTableData(dtos: EmployeeWorkStatDTO[],
                shifts: Shift[],
-               positionMap: Map<number, Position>) {
+               positionMap: Map<number, Position>): TableData {
     const table = new TableData();
     table.sortingStrategy = this.sortingStrategy;
 
-    table.groups =  shifts
-      .sort(((a, b) => a.id - b.id))
-      .map(shift => ({
-        id: shift.id,
-        name: shift.name,
-        value: shift,
-        rows: []
-      } as StatisticsRowGroup));
+    shifts.forEach(shift => {
+      const group = {
+        id:     shift.id,
+        name:   shift.name,
+        value:  shift,
+        rows:   []
+      } as StatisticsRowGroup;
+
+      table.addGroup(group);
+    });
+
 
     for (let dto of dtos) {
       const group = table.findRowGroup(dto.shiftId);
       if (group) {
-        const employeeRow: StatisticsEmployeeRow = <StatisticsEmployeeRow> {
+        const employeeRow = {
           employee: dto.employee,
           rows: []
-        };
+        } as StatisticsEmployeeRow;
 
         dto.positionStats.forEach(pStat => {
           employeeRow.rows.push(this.getPositionRow(positionMap, pStat));
@@ -46,7 +46,7 @@ export class StatisticsTableDataCollector {
       }
     }
 
-    return table.groups;
+    return table;
   }
 
   private getPositionRow(positionMap: Map<number, Position>,
@@ -59,29 +59,4 @@ export class StatisticsTableDataCollector {
       }))
     } as unknown as StatisticsPositionRow;
   }
-}
-
-export class StatisticsRowGroup extends RowGroup {
-  id: number;
-  name: string;
-  rows: StatisticsEmployeeRow[];
-}
-
-export class StatisticsEmployeeRow implements Row {
-  id:       number;
-  employee: Employee;
-  rows:     StatisticsPositionRow[];
-  cells:    any;
-}
-
-export class StatisticsPositionRow implements Row {
-  id:       number;
-  position: Position;
-  cells:    StatisticsCell[];
-}
-
-export class StatisticsCell implements Cell {
-  value:    any;
-  date: any;
-  enabled: boolean;
 }

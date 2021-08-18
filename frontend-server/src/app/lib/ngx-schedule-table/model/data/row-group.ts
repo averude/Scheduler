@@ -1,8 +1,10 @@
 import { Row } from "./row";
 import { binarySearchInsertIndex, bsr } from "../../utils/collection-utils";
 import { removeFromArray } from "../../../../services/utils";
+import { TableData } from "./table";
 
 export class RowGroup {
+  parent: TableData;
   id:     number;
   name:   string;
   value:  any;

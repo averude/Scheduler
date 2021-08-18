@@ -9,15 +9,17 @@ import { EmployeeScheduleDTO } from "../../dto/employee-schedule-dto";
 import { TableData } from "../../../lib/ngx-schedule-table/model/data/table";
 
 export class ScheduleRowGroup extends RowGroup {
-  table:  TableData;
+
+  parent: TableData;
   id:     number;
   name:   string;
   rows:   Row[];
+
 }
 
-export class ScheduleRow implements Row {
+export class ScheduleRow extends Row {
 
-  group:          ScheduleRowGroup;
+  parent:         ScheduleRowGroup;
   id:             number;
   employee:       Employee;
   position:       Position;
@@ -34,7 +36,7 @@ export class ScheduleRow implements Row {
                 workingNorm: number,
                 isSubstitution: boolean): ScheduleRow {
     const row = {} as ScheduleRow;
-    row.group = group;
+    row.parent = group;
     row.id = dto.parent.id;
     row.employee = dto.parent;
     row.position = position;
@@ -46,7 +48,7 @@ export class ScheduleRow implements Row {
 }
 
 export interface ScheduleCell extends Cell {
-  row:      ScheduleRow;
+  parent:   ScheduleRow;
   value:    any;
   date:     any;
   enabled:  boolean;

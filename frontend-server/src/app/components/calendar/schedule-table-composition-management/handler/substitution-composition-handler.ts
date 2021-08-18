@@ -53,7 +53,7 @@ export class SubstitutionCompositionHandler extends AbstractCompositionHandler<S
                   composition: SubstitutionComposition) {
     const mainShiftComposition = (<SubstitutionComposition>composition).mainComposition;
 
-    group.table.forEachRowInGroup(mainShiftComposition.shiftId,
+    group.parent.forEachRowInGroup(mainShiftComposition.shiftId,
       (row: ScheduleRow) => {
         if (row.id === mainShiftComposition.employeeId && !row.isSubstitution) {
           row.intervals = this.intervalCreator.getEmployeeShiftIntervalsByArr(row.compositions, dto.substitutionCompositions);

@@ -23,7 +23,7 @@ export class TableRowRemover {
             row: ScheduleRow,
             composition: Composition,
             dtos: EmployeeScheduleDTO[]) {
-    const table = groupData.table;
+    const table = groupData.parent;
 
     const dto = binarySearch(dtos, (mid => mid.parent.id - composition.employeeId));
 
@@ -98,7 +98,7 @@ export class TableRowRemover {
 
   removeCompositionAndInterval(row: ScheduleRow,
                                composition: Composition) {
-    const group = row.group;
+    const group = row.parent;
 
     // Remove composition from row's compositions
     removeFromArray(row.compositions, value => value.id === composition.id);

@@ -1,6 +1,8 @@
 import { Cell } from "./cell";
+import { RowGroup } from "./row-group";
 
-export interface Row {
+export class Row {
+  parent: RowGroup;
   id:     number;
   value?: any;
   rows?:  Row[];

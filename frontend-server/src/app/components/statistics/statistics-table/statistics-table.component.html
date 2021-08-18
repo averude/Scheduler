@@ -54,8 +54,7 @@
 
       <ng-container *ngIf="!viewProxyShown">
 
-        <ng-container *ngFor="let group of tableData">
-
+        <ng-container *ngFor="let group of tableData?.groups">
 
           <ng-container *ngIf="group.rows.length > 0">
 

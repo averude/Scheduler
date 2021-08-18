@@ -32,7 +32,7 @@ export class CellEnabledSetter {
   }
 
   process(row: ScheduleRow) {
-    this.processRow(row, row.group.table.from, row.group.table.to);
+    this.processRow(row, row.parent.parent.from, row.parent.parent.to);
   }
 
   processRow(row: ScheduleRow, from: Moment, to: Moment) {

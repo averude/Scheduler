@@ -66,11 +66,11 @@ export class TableManager {
   }
 
   editRow(row: ScheduleRow, initData: InitialData) {
-    if (!row || !row.group) {
+    if (!row || !row.parent) {
       return;
     }
 
-    const groupData = row.group;
+    const groupData = row.parent;
     const data = {
       compositions: row.compositions,
       initData: initData,
@@ -104,7 +104,7 @@ export class TableManager {
       .pipe(
         switchMap(value => {
           if (value) {
-            const destinationGroup = <ScheduleRowGroup>mainCompositionRow.group.table.findRowGroup(value.shiftId);
+            const destinationGroup = <ScheduleRowGroup>mainCompositionRow.parent.parent.findRowGroup(value.shiftId);
 
             return this.substitutionCompositionHandler
               .createOrUpdate([value], destinationGroup, null,

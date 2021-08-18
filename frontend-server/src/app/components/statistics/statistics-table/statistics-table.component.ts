@@ -15,13 +15,13 @@ import { SummationColumn } from "../../../model/summation-column";
 import { SimplePaginationStrategy } from "../../../shared/paginators/pagination-strategy/simple-pagination-strategy";
 import { Employee } from "../../../model/employee";
 import { getEmployeeShortName } from "../../../shared/utils/utils";
-import { StatisticsRowGroup } from "../collector/statistics-table-data-collector";
 import { ActivatedRoute } from "@angular/router";
 import { filter, map } from "rxjs/operators";
 import { AuthService } from "../../../services/http/auth.service";
 import { UserAccountDTO } from "../../../model/dto/user-account-dto";
 import { ToolbarTemplateService } from "../../../services/top-bar/toolbar-template.service";
 import { StatisticsTableSource } from "../statistics-table-source";
+import { TableData } from "../../../lib/ngx-schedule-table/model/data/table";
 
 @Component({
   selector: 'app-statistics-table',
@@ -42,7 +42,7 @@ export class StatisticsTableComponent implements OnInit, AfterViewInit, OnDestro
 
   paginatorMode: 'single' | 'range' = 'single';
 
-  tableData: StatisticsRowGroup[] = [];
+  tableData: TableData;
 
   private userAccount: UserAccountDTO;
   private enterpriseId: number;

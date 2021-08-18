@@ -98,7 +98,7 @@ export abstract class AbstractCompositionHandler<T extends Composition> implemen
 
       if (row.position.id !== composition.positionId) {
 
-        const group = row.group;
+        const group = row.parent;
         const rowToMerge = <ScheduleRow> group.rows
           .find((value: ScheduleRow) => value.id === composition.employeeId
             && value.position.id === composition.positionId

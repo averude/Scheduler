@@ -18,22 +18,25 @@ export class WorkingNormTableDataCollector {
                shiftPatterns: ShiftPattern[]) {
     const tableData = new TableData();
     const rowGroup = new RowGroup();
-    rowGroup.rows = this.getRowData(dates, workingNormDTOs, shiftPatterns);
+    rowGroup.rows = this.getRowData(rowGroup, dates, workingNormDTOs, shiftPatterns);
     tableData.addGroup(rowGroup);
     return tableData;
   }
 
-  getRowData(dates: any,
+  getRowData(parent: RowGroup,
+             dates: any,
              workingNormDTOs: BasicDTO<Shift, WorkingNorm>[],
-             shiftPatterns: ShiftPattern[]) {
+             shiftPatterns: ShiftPattern[]): WorkingNormRow[] {
     return workingNormDTOs.map(dto => {
-      let row = new WorkingNormRow();
-      row.id = dto.parent.id;
-      row.value = dto.parent;
+      let row     = new WorkingNormRow();
+      row.parent  = parent;
+      row.id      = dto.parent.id;
+      row.value   = dto.parent;
       row.patternName = this.getPatternName(dto.parent, shiftPatterns);
-      row.cells = this.cellCollector.collect(dates, dto.collection, true);
+      row.cells   = this.cellCollector.collect(dates, dto.collection, true);
       return row;
-    }).sort((a, b) => (b.value.uiPriority - a.value.uiPriority) || (a.id - b.id));
+    }) // TODO: move to strategy?
+      .sort((a, b) => (b.value.uiPriority - a.value.uiPriority) || (a.id - b.id));
   }
 
   getPatternName(shift: Shift,

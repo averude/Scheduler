@@ -11,6 +11,7 @@ export class TableData {
 
   from: Moment;
   to:   Moment;
+
   sortingStrategy: SortingStrategy<RowGroup>;
 
   constructor() {
@@ -31,6 +32,8 @@ export class TableData {
 
   addGroup(group: RowGroup,
            comparator?: (group: RowGroup) => number) {
+    group.parent = this;
+
     if (comparator) {
       const insertIndex = binarySearchInsertIndex(this._groups, comparator);
       if (insertIndex >= 0) {

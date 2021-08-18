@@ -15,7 +15,7 @@ export function createNewRow(cellCollector: CellCollector,
                              isSubstitution: boolean) {
   const row = ScheduleRow.create(group, dto, position, workingNorm, isSubstitution);
   row.cells = cellCollector.collect<WorkDay, ScheduleCell>(calendarDays, dto.collection, false);
-  row.cells.forEach((cell: ScheduleCell) => cell.row = row);
+  row.cells.forEach((cell: ScheduleCell) => cell.parent = row);
   return row;
 }
 
@@ -24,7 +24,7 @@ export function isUpdateOperation(updateRows: boolean,
                                   isSubstitution: boolean,
                                   composition: Composition) {
   return row && updateRows && (row.isSubstitution === isSubstitution)
-    && row.group.id === composition.shiftId && row.id === composition.employeeId
+    && row.parent.id === composition.shiftId && row.id === composition.employeeId
     && row.position.id === composition.positionId;
 }
 

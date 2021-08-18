@@ -44,7 +44,7 @@ export class TableDataCollector {
 
     initialData.shifts.forEach(shift => {
       const group = new ScheduleRowGroup();
-      group.table = table;
+      group.parent = table;
       group.id    = shift.id;
       group.value = shift;
       group.name  = shift.name;

@@ -137,8 +137,8 @@ export class ScheduleGenerationService {
       obs.push(this.scheduleService.update(updated.map(value => value.value))
         .pipe(tap(updatedSchedule => updated.forEach(cell =>{
           // Probably should be replaced with render group
-          this.sumCalculator.cal(cell.row, initialData.scheduleDTOs);
-          this.rowRenderer.nextRowCommand({rowId: cell.row.id})
+          this.sumCalculator.cal(cell.parent, initialData.scheduleDTOs);
+          this.rowRenderer.nextRowCommand({rowId: cell.parent.id})
         }))));
     }
 
@@ -146,8 +146,8 @@ export class ScheduleGenerationService {
       obs.push(this.scheduleService.create(created.map(value => value.value))
         .pipe(tap(createdSchedule => created.forEach((cell, index) => {
           // Probably should be replaced with render group
-          this.sumCalculator.cal(cell.row, initialData.scheduleDTOs);
-          this.rowRenderer.nextRowCommand({rowId: cell.row.id});
+          this.sumCalculator.cal(cell.parent, initialData.scheduleDTOs);
+          this.rowRenderer.nextRowCommand({rowId: cell.parent.id});
           created[index].value.id = createdSchedule[index].id;
         }))));
     }
