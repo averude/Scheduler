@@ -18,6 +18,7 @@ import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { WorkingNormTableConfigurationMenuModule } from "./working-norm-table-configuration-menu/working-norm-table-configuration-menu.module";
 import { NameInfoCellModule } from "../shared/name-info-cell/name-info-cell.module";
 import { WorkingNormDataSource } from "./data-source/working-norm.data-source";
+import { WorkingNormRoutingModule } from "./working-norm-routing.module";
 
 @NgModule({
   imports: [
@@ -35,7 +36,8 @@ import { WorkingNormDataSource } from "./data-source/working-norm.data-source";
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
-    NameInfoCellModule
+    NameInfoCellModule,
+    WorkingNormRoutingModule
   ],
   declarations: [
     WorkingNormTableComponent,

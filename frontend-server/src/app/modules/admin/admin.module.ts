@@ -8,11 +8,10 @@ import { CellCollector } from "../../services/collectors/cell-collector";
 import { CellUpdater } from "../../services/collectors/cell-updater";
 import { CalendarModule } from "../../components/calendar/calendar.module";
 import { StatisticsModule } from "../../components/statistics/statistics.module";
-import { WorkingNormModule } from "../../components/working-norm/working-norm.module";
 import { ReportsModule } from "../../components/report-generator/reports.module";
 import { SimpleNotificationsModule } from "angular2-notifications";
 import { MatMenuModule } from "@angular/material/menu";
-import { ChangeUserAccountPasswordDialogModule } from "../../components/change-user-account-password-dialog/change-user-account-password-dialog.module";
+import { ChangeUserAccountPasswordDialogModule } from "../../components/user-account-password/change-user-account-password-dialog/change-user-account-password-dialog.module";
 import { NgxMaskModule } from "ngx-mask";
 import { CdkStepperModule } from "@angular/cdk/stepper";
 import { MatExpansionModule } from "@angular/material/expansion";
@@ -34,7 +33,6 @@ import { CalendarDaysCalculator } from "../../services/collectors/calendar-days-
     MatExpansionModule,
     CalendarModule,
     StatisticsModule,
-    WorkingNormModule,
     ReportsModule,
     SidePanelStepperModule,
     CdkStepperModule,
