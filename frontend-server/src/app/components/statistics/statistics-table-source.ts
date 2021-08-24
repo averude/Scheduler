@@ -58,12 +58,12 @@ export class StatisticsTableSource {
       this.summationColumnDtoService.getAllByEnterpriseId(enterpriseId),
     ];
 
-    const fn = monthPaginationObject =>
+    const fn = dateInterval =>
       forkJoin([
         this.statisticsService
-          .getSummationDTOByDepartmentId(mode, enterpriseId, departmentId, monthPaginationObject.firstDayOfMonth, monthPaginationObject.lastDayOfMonth),
+          .getSummationDTOByDepartmentId(mode, enterpriseId, departmentId, dateInterval.from, dateInterval.to),
         this.workingNormService
-          .getAllByDepartmentId(departmentId, monthPaginationObject.firstDayOfMonth, monthPaginationObject.lastDayOfMonth)
+          .getAllByDepartmentId(departmentId, dateInterval.from, dateInterval.to)
       ]);
 
     return this.getData(sources, fn);
@@ -79,12 +79,12 @@ export class StatisticsTableSource {
       this.summationColumnDtoService.getAllByEnterpriseId(enterpriseId)
     ];
 
-    const fn = monthPaginationObject =>
+    const fn = dateInterval =>
       forkJoin([
         this.statisticsService
-          .getSummationDTOByShiftIds(mode, enterpriseId, departmentId, shiftIds, monthPaginationObject.firstDayOfMonth, monthPaginationObject.lastDayOfMonth),
+          .getSummationDTOByShiftIds(mode, enterpriseId, departmentId, shiftIds, dateInterval.from, dateInterval.to),
         this.workingNormService
-          .getAllByDepartmentId(departmentId, monthPaginationObject.firstDayOfMonth, monthPaginationObject.lastDayOfMonth)
+          .getAllByDepartmentId(departmentId, dateInterval.from, dateInterval.to)
       ]);
 
     return this.getData(sources, fn);

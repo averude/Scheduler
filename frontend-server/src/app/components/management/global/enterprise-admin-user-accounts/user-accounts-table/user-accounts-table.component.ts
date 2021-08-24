@@ -8,7 +8,7 @@ import { EnterpriseUserAccountService } from "../../../../../services/http/auth/
 import { UserAccountDTO } from "../../../../../model/dto/user-account-dto";
 import { AddEnterpriseUserAccountDialogComponent } from "../add-enterprise-user-account-dialog/add-enterprise-user-account-dialog.component";
 import { EditEnterpriseUserAccountDialogComponent } from "../edit-enterprise-user-account-dialog/edit-enterprise-user-account-dialog.component";
-import { ResetUserAccountPasswordDialogComponent } from "../../../../reset-user-account-password-dialog/reset-user-account-password-dialog.component";
+import { ResetUserAccountPasswordDialogComponent } from "../../../../user-account-password/reset-user-account-password-dialog/reset-user-account-password-dialog.component";
 
 @Component({
   selector: 'app-user-accounts-table',

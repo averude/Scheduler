@@ -11,8 +11,8 @@ export class SimplePaginationStrategy implements PaginationStrategy {
                       firstDay: Moment,
                       lastDay: Moment): any {
     return {
-      firstDayOfMonth: firstDay.format("YYYY-MM-DD"),
-      lastDayOfMonth: lastDay.format("YYYY-MM-DD")
+      from: firstDay.format("YYYY-MM-DD"),
+      to:   lastDay.format("YYYY-MM-DD")
     };
   }
 }

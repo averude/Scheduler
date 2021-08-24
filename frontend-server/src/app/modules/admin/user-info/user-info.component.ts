@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ChangeUserAccountPasswordDialogComponent } from "../../../components/change-user-account-password-dialog/change-user-account-password-dialog.component";
+import { ChangeUserAccountPasswordDialogComponent } from "../../../components/user-account-password/change-user-account-password-dialog/change-user-account-password-dialog.component";
 import { MatDialog } from "@angular/material/dialog";
 import { UserAccountService } from "../../../services/http/user-account.service";
 import { NotificationsService } from "angular2-notifications";

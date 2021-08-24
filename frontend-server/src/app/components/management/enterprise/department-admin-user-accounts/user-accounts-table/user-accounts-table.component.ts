@@ -8,7 +8,7 @@ import { DepartmentUserAccountService } from "../../../../../services/http/auth/
 import { UserAccountDTO } from "../../../../../model/dto/user-account-dto";
 import { AddDepartmentUserAccountDialogComponent } from "../add-department-user-account-dialog/add-department-user-account-dialog.component";
 import { EditDepartmentUserAccountDialogComponent } from "../edit-department-user-account-dialog/edit-department-user-account-dialog.component";
-import { ResetUserAccountPasswordDialogComponent } from "../../../../reset-user-account-password-dialog/reset-user-account-password-dialog.component";
+import { ResetUserAccountPasswordDialogComponent } from "../../../../user-account-password/reset-user-account-password-dialog/reset-user-account-password-dialog.component";
 import { ActivatedRoute } from "@angular/router";
 
 @Component({

@@ -28,10 +28,10 @@ export class ScheduleViewTableDataSource {
 
           return this.paginationService.onValueChange
             .pipe(
-              switchMap(value => {
+              switchMap(dateInterval => {
 
-                const from = value.firstDayOfMonth;
-                const to = value.lastDayOfMonth;
+                const from = dateInterval.from;
+                const to = dateInterval.to;
 
                 const obs: Observable<any>[] = [
                   this.specialCalendarDateService.getAllByEnterpriseId(enterpriseId, from, to),

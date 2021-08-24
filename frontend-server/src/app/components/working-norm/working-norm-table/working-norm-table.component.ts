@@ -94,8 +94,8 @@ export class WorkingNormTableComponent implements OnInit, AfterViewInit, OnDestr
         if (this.departmentId && this.departmentId > 0) {
           return this.paginationService.onValueChange
             .pipe(
-              switchMap(value => this.dataSource
-                .byDepartmentId(this.departmentId, value.firstDayOfMonth, value.lastDayOfMonth)),
+              switchMap(dateInterval => this.dataSource
+                .byDepartmentId(this.departmentId, dateInterval.from, dateInterval.to)),
             )
         }
       })

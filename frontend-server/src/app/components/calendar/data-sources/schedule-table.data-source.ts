@@ -82,10 +82,10 @@ export class ScheduleTableDataSource {
         switchMap((initData) =>
           this.paginationService.onValueChange
             .pipe(
-              switchMap((value) => {
+              switchMap((dateInterval) => {
 
-                const startDate = value.firstDayOfMonth;
-                const endDate = value.lastDayOfMonth;
+                const startDate = dateInterval.from;
+                const endDate = dateInterval.to;
 
                 const sources: Observable<any>[] = onPaginationFn(startDate, endDate);
 

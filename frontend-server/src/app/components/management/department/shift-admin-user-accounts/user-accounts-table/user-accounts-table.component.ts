@@ -8,7 +8,7 @@ import { ShiftUserAccountService } from "../../../../../services/http/auth/shift
 import { UserAccountDTO } from "../../../../../model/dto/user-account-dto";
 import { AddShiftUserAccountDialogComponent } from "../add-shift-user-account-dialog/add-shift-user-account-dialog.component";
 import { EditShiftUserAccountDialogComponent } from "../edit-shift-user-account-dialog/edit-shift-user-account-dialog.component";
-import { ResetUserAccountPasswordDialogComponent } from "../../../../reset-user-account-password-dialog/reset-user-account-password-dialog.component";
+import { ResetUserAccountPasswordDialogComponent } from "../../../../user-account-password/reset-user-account-password-dialog/reset-user-account-password-dialog.component";
 import { ActivatedRoute } from "@angular/router";
 import { AuthService } from "../../../../../services/http/auth.service";
 
