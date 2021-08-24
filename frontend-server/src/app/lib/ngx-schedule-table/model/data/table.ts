@@ -9,6 +9,7 @@ export class TableData {
 
   private _groups: RowGroup[];
 
+  headerData: any[];
   from: Moment;
   to:   Moment;
 

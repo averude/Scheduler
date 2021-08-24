@@ -3,10 +3,10 @@ import { MatDialog } from "@angular/material/dialog";
 import { NotificationsService } from "angular2-notifications";
 import { SpecialCalendarDatesDialogComponent } from "../special-calendar-dates-dialog/special-calendar-dates-dialog.component";
 import { HasEnterprisePageableTable } from "../../../../../shared/abstract-components/table-base/pageable-table-base.component";
-import { PaginationService } from "../../../../../lib/ngx-schedule-table/service/pagination.service";
 import { SpecialCalendarDate } from "../../../../../model/special-calendar-date";
 import { SpecialCalendarDateService } from "../../../../../services/http/special-calendar-date.service";
 import { ActivatedRoute } from "@angular/router";
+import { PaginationService } from "../../../../../shared/paginators/pagination.service";
 
 @Component({
   selector: 'app-special-calendar-dates-table',

@@ -12,15 +12,16 @@ export class ScheduleViewDataCollector {
   }
 
   collect(initialData: InitialData): TableData {
-
     const result = new TableData();
     const group = new ScheduleRowGroup();
-    group.rows = initialData.scheduleDTOs.map(dto => {
-      const row = {} as ScheduleRow;
-      row.employee = dto.parent;
-      row.cells = this.cellCollector.collect<WorkDay, ScheduleCell>(initialData.calendarDays, dto.collection, true);
-      return row;
-    });
+    group.rows = initialData.scheduleDTOs
+      .map(dto => {
+        const row = {} as ScheduleRow;
+        row.employee = dto.parent;
+        row.cells = this.cellCollector.collect<WorkDay, ScheduleCell>(initialData.calendarDays, dto.collection, true);
+        return row;
+      })
+      .sort((a: ScheduleRow, b: ScheduleRow) => a.employee.secondName.localeCompare(b.employee.secondName));
 
     result.groups = [group];
     return result;

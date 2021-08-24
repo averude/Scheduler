@@ -15,7 +15,6 @@
 .table-base {
   font-family: 'MuseoSansRegular';
   user-select: none;
-  border: 1px solid #e5e9f0;
   font-size: 12px;
   margin: 0 auto 20px;
   border-radius: 3px;
@@ -139,6 +138,7 @@
   justify-content: center;
   align-items: center;
   padding: 14vh 0;
+  background-color: #fafbfd
 }
 
 .menu-button {

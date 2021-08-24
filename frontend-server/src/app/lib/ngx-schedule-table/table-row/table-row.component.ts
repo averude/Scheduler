@@ -16,7 +16,6 @@ import { ClearSelectionService } from "../service/clear-selection.service";
 import { SelectableRowDirective } from "../directives/selectable-row.directive";
 import { Row } from "../model/data/row";
 import { Cell } from "../model/data/cell";
-import { PaginationService } from "../service/pagination.service";
 import { SelectionEndService } from "../service/selection-end.service";
 import { AfterDateColumnDef, BeforeDateColumnDef, PageableColumnDef } from "../directives/column";
 import { Options } from "../model/options";
@@ -46,7 +45,6 @@ export class TableRowComponent implements OnInit, OnDestroy {
   private rowCommandSub:    Subscription;
 
   constructor(public elementRef: ElementRef,
-              private paginatorService: PaginationService,
               private cd: ChangeDetectorRef,
               private tableRenderer: TableRenderer,
               private selectionEndService: SelectionEndService,

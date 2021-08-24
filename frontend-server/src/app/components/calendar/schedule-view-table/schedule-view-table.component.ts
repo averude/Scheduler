@@ -2,19 +2,16 @@ import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, Templat
 import { ToolbarTemplateService } from "../../../services/top-bar/toolbar-template.service";
 import { ActivatedRoute } from "@angular/router";
 import { AuthService } from "../../../services/http/auth.service";
-import { ScheduleTablePaginationStrategy } from "../../../shared/paginators/pagination-strategy/schedule-table-pagination-strategy";
-import { PaginationService } from "../../../lib/ngx-schedule-table/service/pagination.service";
 import { SchedulerUtility } from "../utils/scheduler-utility";
 import { Options } from "../../../lib/ngx-schedule-table/model/options";
 import { UserAccessRights } from "../../../model/user";
 import { InitialData } from "../../../model/datasource/initial-data";
 import { filter, map, switchMap } from "rxjs/operators";
 import { UserAccountLevel } from "../../../model/dto/user-account-dto";
-import { of, Subscription } from "rxjs";
+import { Subscription } from "rxjs";
 import { ScheduleViewTableDataSource } from "../data-sources/schedule-view-table.data-source";
 import { ScheduleViewDataCollector } from "./schedule-view-data.collector";
-import { Row } from "../../../lib/ngx-schedule-table/model/data/row";
-import { ScheduleRow } from "../../../model/ui/schedule-table/table-data";
+import { TableData } from "../../../lib/ngx-schedule-table/model/data/table";
 
 @Component({
   selector: 'app-schedule-view-table',
@@ -35,11 +32,10 @@ export class ScheduleViewTableComponent implements OnInit, AfterViewInit, OnDest
   proxyViewIsShown: boolean;
 
   @ViewChild('paginator', { read: TemplateRef })
-  paginator: TemplateRef<any>;
+  paginator:  TemplateRef<any>;
 
-  initData: InitialData;
-
-  rowData: Row[];
+  initData:   InitialData;
+  tableData:  TableData;
 
   private routeSub: Subscription;
 
@@ -47,8 +43,6 @@ export class ScheduleViewTableComponent implements OnInit, AfterViewInit, OnDest
               private templateService: ToolbarTemplateService,
               private activatedRoute: ActivatedRoute,
               private authService: AuthService,
-              public  paginationStrategy: ScheduleTablePaginationStrategy,
-              private paginationService: PaginationService,
               private dataSource: ScheduleViewTableDataSource,
               private tableDataCollector: ScheduleViewDataCollector,
               public utility: SchedulerUtility) { }
@@ -79,20 +73,16 @@ export class ScheduleViewTableComponent implements OnInit, AfterViewInit, OnDest
                 .pipe(
                   map(initData => {
                     this.initData = initData;
-                    return this.tableDataCollector.collect(initData)
-                      .groups[0]
-                      .rows.sort((a: ScheduleRow, b: ScheduleRow) => a.employee.secondName.localeCompare(b.employee.secondName));
+                    return this.tableDataCollector.collect(initData);
                   })
                 );
             }
-
-            return of([]);
           }
         })
       )
-      .subscribe(rows => {
+      .subscribe(tableData => {
         this.proxyViewIsShown = false;
-        this.rowData = rows;
+        this.tableData = tableData;
         this.cd.detectChanges();
       });
 
@@ -111,7 +101,6 @@ export class ScheduleViewTableComponent implements OnInit, AfterViewInit, OnDest
 
   ngOnDestroy(): void {
     this.templateService.changeTemplate(null);
-    this.paginationService.clearStoredValue();
     this.routeSub.unsubscribe();
   }
 

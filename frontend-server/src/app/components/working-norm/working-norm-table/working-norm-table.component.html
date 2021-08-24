@@ -1,6 +1,5 @@
 <ng-template #paginator paginatorDef>
-  <app-month-year-paginator [paginationStrategy]="paginationStrategy"
-                            (onDateChange)="onDateChange()"
+  <app-month-year-paginator (onDateChange)="onDateChange()"
                             [dateUnit]="'year'"></app-month-year-paginator>
 </ng-template>
 
@@ -31,7 +30,7 @@
         *headerCellDef>
       <app-working-norm-table-configuration-menu [enterpriseId]="enterpriseId"
                                                  [departmentId]="departmentId"
-                                                 [shifts]="shifts"></app-working-norm-table-configuration-menu>
+                                                 [shifts]="initData?.shifts"></app-working-norm-table-configuration-menu>
     </th>
     <td class="td-name"
         *cellDef="let rowData"

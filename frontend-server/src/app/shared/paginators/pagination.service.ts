@@ -1,7 +1,7 @@
-import { Injectable } from "@angular/core";
+import { ClearableBehaviorSubject } from "./clearable-behavior-subject";
 import { Observable } from "rxjs";
-import { filter } from "rxjs/operators";
-import { ClearableBehaviorSubject } from "../../../shared/paginators/clearable-behavior-subject";
+import { debounceTime, filter } from "rxjs/operators";
+import { Injectable } from "@angular/core";
 
 @Injectable()
 export class PaginationService {
@@ -13,7 +13,10 @@ export class PaginationService {
 
   get onValueChange(): Observable<any> {
     return this.subject.asObservable()
-      .pipe(filter(value => !!value));
+      .pipe(
+        filter(value => !!value),
+        debounceTime(400)
+      );
   }
 
   clearStoredValue() {

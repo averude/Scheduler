@@ -2,12 +2,7 @@
   <div class="dummy"></div>
 
   <table class="table-base">
-    <thead app-table-header
-           [options]="options"
-           [pageableColumns]="pageableColumns"
-           [beforeDateColumns]="beforeDateColumns"
-           [afterDateColumns]="afterDateColumns">
-    </thead>
+
     <ng-container *ngIf="proxyViewIsShown">
       <tr>
         <td [attr.colspan]="100">
@@ -17,8 +12,19 @@
         </td>
       </tr>
     </ng-container>
+
     <ng-container *ngIf="!proxyViewIsShown">
+
+      <thead app-table-header
+             [options]="options"
+             [headerData]="tableData?.headerData"
+             [pageableColumns]="pageableColumns"
+             [beforeDateColumns]="beforeDateColumns"
+             [afterDateColumns]="afterDateColumns">
+      </thead>
+
       <ng-container *ngIf="options?.groupable">
+
         <tbody *ngFor="let group of tableData.groups"
                app-table-row-group
                [showHiddenRows]="showHiddenRows"
@@ -31,8 +37,11 @@
                [groupData]="group"
                [onAddRowClick]="onAddRowClick">
         </tbody>
+
       </ng-container>
+
       <ng-container *ngIf="!options?.groupable">
+
         <ng-container *ngFor="let group of tableData.groups">
           <tr class="row"
               [hidden]="!showHiddenRows && row.hidden"
@@ -47,7 +56,10 @@
               [rowData]="row">
           </tr>
         </ng-container>
+
       </ng-container>
+
     </ng-container>
+
   </table>
 </div>

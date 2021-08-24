@@ -1,6 +1,5 @@
 <ng-template #paginator paginatorDef>
-  <app-month-year-paginator [paginationStrategy]="paginationStrategy"
-                            (onDateChange)="onDateChange()"></app-month-year-paginator>
+  <app-month-year-paginator (onDateChange)="onDateChange()"></app-month-year-paginator>
 </ng-template>
 
 <app-schedules-table [trackByFn]="trackByFn"

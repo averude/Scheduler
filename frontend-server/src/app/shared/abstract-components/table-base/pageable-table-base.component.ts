@@ -5,9 +5,9 @@ import { NotificationsService } from "angular2-notifications";
 import { switchMap } from "rxjs/operators";
 import { Subscription } from "rxjs";
 import { CUDService } from "../../../services/http/interface/cud-service";
-import { PaginationService } from "../../../lib/ngx-schedule-table/service/pagination.service";
 import { Directive } from "@angular/core";
 import { HasEnterpriseIdService } from "../../../services/http/interface/has-enterprise-id.service";
+import { PaginationService } from "../../paginators/pagination.service";
 
 @Directive()
 export abstract class HasEnterprisePageableTable<T extends IdEntity> extends TableBaseIdEntityComponent<T> {

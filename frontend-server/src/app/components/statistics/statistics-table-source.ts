@@ -10,11 +10,11 @@ import { SummationColumn } from "../../model/summation-column";
 import { EmployeeWorkStatDTO, SummationMode } from "../../model/dto/employee-work-stat-dto";
 import { Shift } from "../../model/shift";
 import { Position } from "../../model/position";
-import { PaginationService } from "../../lib/ngx-schedule-table/service/pagination.service";
 import { StatisticsTableDataCollector } from "./collector/statistics-table-data-collector";
 import { Injectable } from "@angular/core";
 import { UserAccountDTO, UserAccountLevel } from "../../model/dto/user-account-dto";
 import { toIdMap } from "../calendar/utils/scheduler-utility";
+import { PaginationService } from "../../shared/paginators/pagination.service";
 
 @Injectable()
 export class StatisticsTableSource {

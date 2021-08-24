@@ -4,7 +4,6 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { SharedModule } from "../../shared/shared.module";
 import { ScheduleTableModule } from "../../lib/ngx-schedule-table/schedule-table.module";
 import { MonthYearPaginatorModule } from "../../shared/paginators/month-year-paginator/month-year-paginator.module";
-import { YearPaginationStrategy } from "../../shared/paginators/pagination-strategy/year-pagination-strategy";
 import { WorkingNormTableDataCollector } from "./collector/working-norm-table-data-collector";
 import { WorkingNormTableComponent } from "./working-norm-table/working-norm-table.component";
 import { WorkingNormDialogComponent } from './working-norm-dialog/working-norm-dialog.component';
@@ -18,6 +17,7 @@ import { TableSumCalculator } from "../../services/calculators/table-sum-calcula
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { WorkingNormTableConfigurationMenuModule } from "./working-norm-table-configuration-menu/working-norm-table-configuration-menu.module";
 import { NameInfoCellModule } from "../shared/name-info-cell/name-info-cell.module";
+import { WorkingNormDataSource } from "./data-source/working-norm.data-source";
 
 @NgModule({
   imports: [
@@ -42,7 +42,7 @@ import { NameInfoCellModule } from "../shared/name-info-cell/name-info-cell.modu
     WorkingNormDialogComponent
   ],
   providers: [
-    YearPaginationStrategy,
+    WorkingNormDataSource,
     WorkingNormTableDataCollector,
     TableSumCalculator
   ]

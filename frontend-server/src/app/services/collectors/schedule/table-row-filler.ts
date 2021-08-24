@@ -32,7 +32,7 @@ export class TableRowFiller {
             return row;
           }),
           (() => {
-            const newRow = createNewRow(this.cellCollector, rowGroup, initData.calendarDays, dto, position, workingNorm, isSubstitution);
+            const newRow = createNewRow(this.cellCollector, rowGroup, table.headerData, dto, position, workingNorm, isSubstitution);
             newRow.compositions = [composition];
             return newRow;
           })

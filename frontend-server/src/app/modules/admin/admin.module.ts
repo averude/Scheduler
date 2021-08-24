@@ -21,6 +21,8 @@ import { ToolbarTemplateService } from "../../services/top-bar/toolbar-template.
 import { ToolbarRowComponent } from './toolbar-row.component';
 import { UserInfoComponent } from './user-info/user-info.component';
 import { SidePanelStepperModule } from "../../lib/side-panel-stepper/side-panel-stepper.module";
+import { MonthYearPaginatorModule } from "../../shared/paginators/month-year-paginator/month-year-paginator.module";
+import { CalendarDaysCalculator } from "../../services/collectors/calendar-days-calculator";
 
 @NgModule({
   imports: [
@@ -37,6 +39,7 @@ import { SidePanelStepperModule } from "../../lib/side-panel-stepper/side-panel-
     SidePanelStepperModule,
     CdkStepperModule,
     SimpleAccordionModule,
+    MonthYearPaginatorModule.forRoot(),
     ChangeUserAccountPasswordDialogModule,
     SimpleNotificationsModule,
     NgxMaskModule.forRoot()
@@ -49,7 +52,8 @@ import { SidePanelStepperModule } from "../../lib/side-panel-stepper/side-panel-
   providers: [
     CellCollector,
     CellUpdater,
-    ToolbarTemplateService
+    ToolbarTemplateService,
+    CalendarDaysCalculator
   ]
 })
 export class AdminModule {

@@ -1,6 +1,4 @@
-import { Component, Input, OnDestroy, OnInit, QueryList } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { PaginationService } from "../service/pagination.service";
+import { Component, Input, OnInit, QueryList } from '@angular/core';
 import { AfterDateColumnDef, BeforeDateColumnDef, PageableColumnDef } from "../directives/column";
 import { Options } from "../model/options";
 
@@ -9,7 +7,7 @@ import { Options } from "../model/options";
   templateUrl: './table-header.component.html',
   styleUrls: ['./table-header.component.css']
 })
-export class TableHeaderComponent implements OnInit, OnDestroy {
+export class TableHeaderComponent implements OnInit {
 
   @Input() options: Options;
 
@@ -17,17 +15,10 @@ export class TableHeaderComponent implements OnInit, OnDestroy {
   @Input() beforeDateColumns: QueryList<BeforeDateColumnDef>;
   @Input() afterDateColumns:  QueryList<AfterDateColumnDef>;
 
-  dates: any[] = [];
-  private sub: Subscription;
+  @Input() headerData: any[] = [];
 
-  constructor(private paginatorService: PaginationService) { }
+  constructor() { }
 
   ngOnInit() {
-    this.sub = this.paginatorService.onValueChange
-      .subscribe(dates => this.dates = dates);
-  }
-
-  ngOnDestroy(): void {
-    this.sub.unsubscribe();
   }
 }

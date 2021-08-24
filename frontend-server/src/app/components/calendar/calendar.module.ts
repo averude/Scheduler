@@ -8,7 +8,6 @@ import { SharedModule } from "../../shared/shared.module";
 import { FormsModule } from "@angular/forms";
 import { CommonModule } from "@angular/common";
 import { ScheduleGenerationService } from "../../services/generators/schedule/schedule-generation.service";
-import { ScheduleTablePaginationStrategy } from "../../shared/paginators/pagination-strategy/schedule-table-pagination-strategy";
 import { MonthYearPaginatorModule } from "../../shared/paginators/month-year-paginator/month-year-paginator.module";
 import { ScheduleCellLabelPipe } from "./utils/schedule-cell-label-pipe";
 import { IntervalCreator } from "../../services/creator/interval-creator.service";
@@ -48,7 +47,6 @@ import { TableRowFiller } from "../../services/collectors/schedule/table-row-fil
   ],
   providers: [
     ScheduleGenerationService,
-    ScheduleTablePaginationStrategy,
     ScheduleCellLabelPipe,
     IntervalCreator,
     TableSumCalculator,

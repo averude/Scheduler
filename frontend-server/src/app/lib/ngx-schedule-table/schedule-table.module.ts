@@ -9,7 +9,6 @@ import { TableRowGroupComponent } from "./table-row-group/table-row-group.compon
 import { TableRenderer } from "./service/table-renderer.service";
 import { ClearSelectionService } from "./service/clear-selection.service";
 import { TableStateService } from "./service/table-state.service";
-import { PaginationService } from "./service/pagination.service";
 import { SelectionEndService } from "./service/selection-end.service";
 import { TableTopItemDirective } from './directives/table-top-item.directive';
 import { CellDef, HeaderCellDef } from "./directives/cell";
@@ -52,7 +51,6 @@ import { ProxyViewDef } from "./directives/proxy-view";
     CellDef
   ],
   providers: [
-    PaginationService,
     TableRenderer,
     ClearSelectionService,
     SelectionEndService,

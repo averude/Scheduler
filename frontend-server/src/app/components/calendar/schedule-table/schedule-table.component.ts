@@ -8,11 +8,8 @@ import {
   TemplateRef,
   ViewChild,
 } from '@angular/core';
-import { PaginationService } from "../../../lib/ngx-schedule-table/service/pagination.service";
 import { of, Subscription } from "rxjs";
-import { ScheduleTablePaginationStrategy } from "../../../shared/paginators/pagination-strategy/schedule-table-pagination-strategy";
 import { TableRenderer } from "../../../lib/ngx-schedule-table/service/table-renderer.service";
-import { TableSumCalculator } from "../../../services/calculators/table-sum-calculator.service";
 import { AuthService } from "../../../services/http/auth.service";
 import { ScheduleTableDataSource } from "../data-sources/schedule-table.data-source";
 import { SchedulerUtility, TRACK_BY_FN } from "../utils/scheduler-utility";
@@ -54,9 +51,8 @@ export class ScheduleTableComponent implements OnInit, AfterViewInit, OnDestroy 
   @ViewChild('paginator', { read: TemplateRef })
   paginator: TemplateRef<any>;
 
-  initData: InitialData;
-
-  tableData: TableData;
+  initData:   InitialData;
+  tableData:  TableData;
 
   private routeSub:         Subscription;
   private rowRenderSub:     Subscription;
@@ -66,11 +62,8 @@ export class ScheduleTableComponent implements OnInit, AfterViewInit, OnDestroy 
               private templateService: ToolbarTemplateService,
               private activatedRoute: ActivatedRoute,
               private authService: AuthService,
-              public  paginationStrategy: ScheduleTablePaginationStrategy,
               private sortingStrategy: UIPrioritySortingStrategy,
-              private paginationService: PaginationService,
               private tableRenderer: TableRenderer,
-              private sumCalculator: TableSumCalculator,
               public state: TableStateService,
               private dataSource: ScheduleTableDataSource,
               private tableDataCollector: TableDataCollector,
@@ -149,7 +142,6 @@ export class ScheduleTableComponent implements OnInit, AfterViewInit, OnDestroy 
 
   ngOnDestroy(): void {
     this.templateService.changeTemplate(null);
-    this.paginationService.clearStoredValue();
     this.routeSub.unsubscribe();
     if (this.rowRenderSub) this.rowRenderSub.unsubscribe();
     if (this.editableStateSub) this.editableStateSub.unsubscribe();

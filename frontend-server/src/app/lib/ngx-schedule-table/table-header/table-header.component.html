@@ -1,7 +1,7 @@
 <tr>
   <ng-container *ngFor="let column of beforeDateColumns"
                 [ngTemplateOutlet]="column.headerCell"></ng-container>
-  <ng-container *ngFor="let date of dates"
+  <ng-container *ngFor="let date of headerData"
                 [ngTemplateOutlet]="pageableColumns.headerCell"
                 [ngTemplateOutletContext]="{$implicit: date}"></ng-container>
   <ng-container *ngIf="options?.showSumColumns">

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AuthService } from "../../services/http/auth.service";
 import { UserAccountDTO, UserAccountLevel } from "../../model/dto/user-account-dto";
 import { UserAccessRights } from "../../model/user";
@@ -10,13 +10,14 @@ import { Enterprise } from "../../model/enterprise";
 import { MatSidenav } from "@angular/material/sidenav";
 import { WorkScheduleViewDTOService } from "../../services/http/work-schedule-view-dto.service";
 import { WorkScheduleView } from "../../model/work-schedule-view";
+import { PaginationService } from "../../shared/paginators/pagination.service";
 
 @Component({
   selector: 'app-admin',
   templateUrl: './admin.component.html',
   styleUrls: ['./admin.component.css'],
 })
-export class AdminComponent implements OnInit {
+export class AdminComponent implements OnInit, OnDestroy {
 
   @ViewChild(SidePanelStepperComponent)
   stepper: SidePanelStepperComponent;
@@ -40,6 +41,7 @@ export class AdminComponent implements OnInit {
   isEnterpriseOrMultiDepartmentLevel: boolean;
 
   constructor(private authService: AuthService,
+              private paginationService: PaginationService,
               private enterpriseService: EnterpriseService,
               private departmentService: DepartmentService,
               private scheduleViewService: WorkScheduleViewDTOService) { }
@@ -87,6 +89,10 @@ export class AdminComponent implements OnInit {
         });
     }
 
+  }
+
+  ngOnDestroy(): void {
+    this.paginationService.clearStoredValue();
   }
 
   logout() {

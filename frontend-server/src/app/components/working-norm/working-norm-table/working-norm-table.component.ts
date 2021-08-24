@@ -8,24 +8,17 @@ import {
   TemplateRef,
   ViewChild
 } from '@angular/core';
-import { YearPaginationStrategy } from "../../../shared/paginators/pagination-strategy/year-pagination-strategy";
-import { PaginationService } from "../../../lib/ngx-schedule-table/service/pagination.service";
 import { Subscription } from "rxjs";
 import { WorkingNormService } from "../../../services/http/working-norm.service";
 import { WorkingNormTableDataCollector } from "../collector/working-norm-table-data-collector";
 import { ClearSelectionService } from "../../../lib/ngx-schedule-table/service/clear-selection.service";
 import { SelectionEndService } from "../../../lib/ngx-schedule-table/service/selection-end.service";
 import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
-import { Shift } from "../../../model/shift";
 import { WorkingNormDialogComponent } from "../working-norm-dialog/working-norm-dialog.component";
 import { SelectionData } from "../../../lib/ngx-schedule-table/model/selection-data";
 import { TableRenderer } from "../../../lib/ngx-schedule-table/service/table-renderer.service";
-import { ShiftGenerationUnit } from "../../../model/ui/shift-generation-unit";
-import { getGenerationUnits } from "../../../lib/avr-entity-generation/util/utils";
 import { TableSumCalculator } from "../../../services/calculators/table-sum-calculator.service";
 import { AuthService } from "../../../services/http/auth.service";
-import { ShiftPatternService } from "../../../services/http/shift-pattern.service";
-import { ShiftPattern } from "../../../model/shift-pattern";
 import { CellUpdater, getMonthCellIndex } from "../../../services/collectors/cell-updater";
 import { ActivatedRoute } from "@angular/router";
 import { Cell } from "../../../lib/ngx-schedule-table/model/data/cell";
@@ -35,6 +28,9 @@ import { ToolbarTemplateService } from "../../../services/top-bar/toolbar-templa
 import { filter, map, switchMap } from "rxjs/operators";
 import { Options } from "../../../lib/ngx-schedule-table/model/options";
 import { TableData } from "../../../lib/ngx-schedule-table/model/data/table";
+import { WorkingNormDataSource } from "../data-source/working-norm.data-source";
+import { WorkingNormInitialData } from "../../../model/datasource/initial-data";
+import { PaginationService } from "../../../shared/paginators/pagination.service";
 
 @Component({
   selector: 'app-working-norm-table',
@@ -50,20 +46,14 @@ export class WorkingNormTableComponent implements OnInit, AfterViewInit, OnDestr
 
   options: Options;
 
-  private months;
-
   isAdmin: boolean = false;
   proxyViewIsShown: boolean = false;
 
   enterpriseId: number;
   departmentId: number;
 
+  initData: WorkingNormInitialData;
   tableData: TableData;
-
-  shifts:   Shift[] = [];
-  private shiftPatterns:  ShiftPattern[]  = [];
-
-  generationUnits: ShiftGenerationUnit[] = [];
 
   @ViewChild('paginator', {read: TemplateRef})
   paginator: TemplateRef<any>;
@@ -82,10 +72,9 @@ export class WorkingNormTableComponent implements OnInit, AfterViewInit, OnDestr
               private selectionEndService: SelectionEndService,
               private tableRenderer: TableRenderer,
               private sumCalculator: TableSumCalculator,
-              public paginationStrategy: YearPaginationStrategy,
+              private dataSource: WorkingNormDataSource,
               private dataCollector: WorkingNormTableDataCollector,
               private paginationService: PaginationService,
-              private shiftPatternService: ShiftPatternService,
               private workingNormService: WorkingNormService,
               private notificationsService: NotificationsService) { }
 
@@ -104,26 +93,19 @@ export class WorkingNormTableComponent implements OnInit, AfterViewInit, OnDestr
 
         if (this.departmentId && this.departmentId > 0) {
           return this.paginationService.onValueChange
-            .pipe(switchMap(months => {
-                this.months = months;
-                return this.workingNormService
-                  .getAllDTOByDepartmentId(this.departmentId,
-                    months[0].isoString, months[months.length - 1].isoString);
-              }),
+            .pipe(
+              switchMap(value => this.dataSource
+                .byDepartmentId(this.departmentId, value.firstDayOfMonth, value.lastDayOfMonth)),
             )
         }
       })
-    ).subscribe(dtos => {
+    ).subscribe(initData => {
       this.proxyViewIsShown = false;
-      this.shifts = dtos.map(dto => dto.parent);
-      this.generationUnits = getGenerationUnits(this.shifts);
-      this.tableData = this.dataCollector.getTableData(this.months, dtos, this.shiftPatterns);
+      this.initData = initData;
+      this.tableData = this.dataCollector.getTableData(initData);
       this.sumCalculator.calculateTableHoursNormSum(this.tableData);
       this.cd.detectChanges();
     });
-
-    this.shiftPatternService.getAllByDepartmentId(this.departmentId)
-      .subscribe(shiftPatterns => this.shiftPatterns = shiftPatterns);
 
     if (this.isAdmin) {
       this.selectionEndSub = this.selectionEndService.onSelectionEnd
@@ -152,7 +134,6 @@ export class WorkingNormTableComponent implements OnInit, AfterViewInit, OnDestr
 
   ngOnDestroy() {
     this.templateService.changeTemplate(null);
-    this.paginationService.clearStoredValue();
     if (this.routeSub) this.routeSub.unsubscribe();
     if (this.selectionEndSub) this.selectionEndSub.unsubscribe();
     if (this.rowRenderSub) this.rowRenderSub.unsubscribe();

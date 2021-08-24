@@ -1,4 +1,3 @@
-import * as moment from "moment";
 import { ScheduleRow, ScheduleRowGroup } from "../../../model/ui/schedule-table/table-data";
 import { Injectable } from "@angular/core";
 import { IntervalCreator } from "../../creator/interval-creator.service";
@@ -9,17 +8,22 @@ import { CellEnabledSetter } from "./cell-enabled-setter";
 import { TableSumCalculator } from "../../calculators/table-sum-calculator.service";
 import { TableData } from "../../../lib/ngx-schedule-table/model/data/table";
 import { TableRowFiller } from "./table-row-filler";
+import { CalendarDaysCalculator } from "../calendar-days-calculator";
 
 @Injectable()
 export class TableDataCollector {
 
   constructor(private intervalCreator: IntervalCreator,
               private cellEnabledSetter: CellEnabledSetter,
+              private calendarDaysCalculator: CalendarDaysCalculator,
               private sumCalculator: TableSumCalculator,
               private rowFiller: TableRowFiller) {}
 
   handleData(initData: InitialData): TableData {
-    const tableData = this.collect(initData);
+    const tableData: TableData = new TableData();
+
+    this.collectHeaderData(initData, tableData);
+    this.collectBodyData(initData, tableData);
 
     tableData.forEachRow((row: ScheduleRow) => {
       const dto = binarySearch(initData.scheduleDTOs, (mid => mid.parent.id - row.id));
@@ -36,30 +40,38 @@ export class TableDataCollector {
     return tableData;
   }
 
-  collect(initialData: InitialData): TableData {
-    const table: TableData = new TableData();
-
-    table.from  = moment.utc(initialData.calendarDays[0].isoString);
-    table.to    = moment.utc(initialData.calendarDays[initialData.calendarDays.length - 1].isoString);
+  collectBodyData(initialData: InitialData, tableData: TableData): TableData {
+    tableData.from  = initialData.from;
+    tableData.to    = initialData.to;
 
     initialData.shifts.forEach(shift => {
       const group = new ScheduleRowGroup();
-      group.parent = table;
+      group.parent = tableData;
       group.id    = shift.id;
       group.value = shift;
       group.name  = shift.name;
-      table.addGroup(group, (value => value.id - group.id));
+      tableData.addGroup(group, (value => value.id - group.id));
     });
 
     for (let dto of initialData.scheduleDTOs) {
 
-      this.rowFiller.fill(table, initialData, dto, dto.mainCompositions, false,
+      this.rowFiller.fill(tableData, initialData, dto, dto.mainCompositions, false,
         (composition => initialData.workingNormsMap.get(composition.shiftId)?.hours || 0));
 
-      this.rowFiller.fill(table, initialData, dto, dto.substitutionCompositions, true,
+      this.rowFiller.fill(tableData, initialData, dto, dto.substitutionCompositions, true,
         (composition => initialData.workingNormsMap.get(composition.mainComposition.shiftId)?.hours || 0))
     }
 
-    return table;
+    return tableData;
+  }
+
+  collectHeaderData(initialData: InitialData,
+                    tableData: TableData) {
+    const calendarDays = this.calendarDaysCalculator.calculateCalendarDays(
+      initialData.from,
+      initialData.to,
+      initialData.specialCalendarDates);
+
+    tableData.headerData = calendarDays;
   }
 }

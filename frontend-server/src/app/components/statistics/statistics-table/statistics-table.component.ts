@@ -9,10 +9,8 @@ import {
   ViewChild
 } from '@angular/core';
 import { SummationMode } from "../../../model/dto/employee-work-stat-dto";
-import { PaginationService } from "../../../lib/ngx-schedule-table/service/pagination.service";
 import { Subscription } from "rxjs";
 import { SummationColumn } from "../../../model/summation-column";
-import { SimplePaginationStrategy } from "../../../shared/paginators/pagination-strategy/simple-pagination-strategy";
 import { Employee } from "../../../model/employee";
 import { getEmployeeShortName } from "../../../shared/utils/utils";
 import { ActivatedRoute } from "@angular/router";
@@ -51,13 +49,11 @@ export class StatisticsTableComponent implements OnInit, AfterViewInit, OnDestro
   private dataSub: Subscription;
   private routeSub: Subscription;
 
-  constructor(public paginationStrategy: SimplePaginationStrategy,
-              private tableSource: StatisticsTableSource,
+  constructor(private tableSource: StatisticsTableSource,
               private cd: ChangeDetectorRef,
               private authService: AuthService,
               private activatedRoute: ActivatedRoute,
-              private templateService: ToolbarTemplateService,
-              private paginationService: PaginationService) { }
+              private templateService: ToolbarTemplateService) { }
 
   ngOnInit() {
     this.userAccount = this.authService.currentUserAccount;
@@ -74,6 +70,10 @@ export class StatisticsTableComponent implements OnInit, AfterViewInit, OnDestro
   }
 
   private refresh(userAccount: UserAccountDTO) {
+    if (this.dataSub) {
+      this.dataSub.unsubscribe();
+    }
+
     this.dataSub = this.tableSource.getTableData(userAccount, this.enterpriseId, this.departmentId, this.currentMode)
       .subscribe((tableData) => {
         this.viewProxyShown = false;
@@ -90,7 +90,6 @@ export class StatisticsTableComponent implements OnInit, AfterViewInit, OnDestro
 
   ngOnDestroy(): void {
     this.templateService.changeTemplate(null);
-    this.paginationService.clearStoredValue();
     this.dataSub.unsubscribe();
     this.routeSub.unsubscribe();
   }

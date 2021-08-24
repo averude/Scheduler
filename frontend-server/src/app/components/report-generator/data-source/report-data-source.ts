@@ -12,11 +12,14 @@ import { SummationMode } from "../../../model/dto/employee-work-stat-dto";
 import { map } from "rxjs/operators";
 import { ReportInitialData } from "../model/report-initial-data";
 import { toIdMap } from "../../calendar/utils/scheduler-utility";
+import { CalendarDaysCalculator } from "../../../services/collectors/calendar-days-calculator";
+import * as moment from "moment";
 
 @Injectable()
 export class ReportDataSource {
 
   constructor(private specialCalendarDateService: SpecialCalendarDateService,
+              private calendarDaysCalculator: CalendarDaysCalculator,
               private scheduleService: ScheduleService,
               private dayTypeService: DayTypeService,
               private reportSheetDTOService: ReportSheetDTOService,
@@ -40,21 +43,7 @@ export class ReportDataSource {
       this.reportSheetDTOService.getAllByDepartmentId(departmentId)
     ];
 
-    return forkJoin(sources).pipe(
-      map(([schedule, workingNorms, specialCalendarDates,
-             summationDTO, dayTypeMap, shifts,
-             positions, reportSheets]) => ({
-        scheduleDTOs:   schedule,
-        workingNorms:   workingNorms,
-        summationDTOs:  summationDTO,
-        dayTypeMap:     dayTypeMap,
-        shifts:         shifts,
-        positions:      positions,
-        positionMap:    toIdMap(positions),
-        reportSheets:   reportSheets,
-        specialCalendarDates:   specialCalendarDates,
-      } as ReportInitialData))
-    );
+    return this.getObservable(from, to, sources);
   }
 
   getForShifts(enterpriseId:  number,
@@ -72,20 +61,37 @@ export class ReportDataSource {
       this.positionService.getAllByDepartmentId(departmentId)
     ];
 
-    return forkJoin(sources).pipe(
-      map(([schedule, workingNorms, specialCalendarDates,
-             summationDTO, dayTypeMap, shifts,
-             positions, reportSheets]) => ({
-        scheduleDTOs:   schedule,
-        workingNorms:   workingNorms,
-        summationDTOs:  summationDTO,
-        dayTypeMap:     dayTypeMap,
-        shifts:         shifts,
-        positions:      positions,
-        positionMap:    toIdMap(positions),
-        reportSheets:   reportSheets,
-        specialCalendarDates: specialCalendarDates
-      } as ReportInitialData))
+    return this.getObservable(from, to, sources);
+  }
+
+  private getObservable(from: string,
+                        to: string,
+                        sources: Observable<any>[]): Observable<ReportInitialData> {
+    return forkJoin(sources)
+      .pipe(
+        map((
+          [
+            schedule, workingNorms,
+            specialCalendarDates,
+            summationDTO, dayTypeMap, shifts,
+            positions, reportSheets
+          ]
+          ) => (
+               {
+                 scheduleDTOs: schedule,
+                 workingNorms: workingNorms,
+                 summationDTOs: summationDTO,
+                 dayTypeMap: dayTypeMap,
+                 shifts: shifts,
+                 positions: positions,
+                 positionMap: toIdMap(positions),
+                 reportSheets: reportSheets,
+                 specialCalendarDates: specialCalendarDates,
+                 calendarDays: this.calendarDaysCalculator
+                   .calculateCalendarDays(moment.utc(from), moment.utc(to), specialCalendarDates)
+               } as ReportInitialData
+          )
+        )
     );
   }
 

@@ -8,7 +8,6 @@ import {
   OnInit,
   QueryList,
 } from '@angular/core';
-import { PaginationService } from "../service/pagination.service";
 import { RowGroup } from "../model/data/row-group";
 import { AfterDateColumnDef, BeforeDateColumnDef, PageableColumnDef } from "../directives/column";
 import { Subscription } from "rxjs";
@@ -40,21 +39,15 @@ export class TableRowGroupComponent implements OnInit, OnDestroy {
 
   @Input() onAddRowClick:     EventEmitter<RowGroup>;
 
-  private paginatorSub: Subscription;
   private rowGroupRenderSub: Subscription;
 
   isHiddenGroup: boolean = false;
 
-  constructor(private paginatorService: PaginationService,
-              private tableRenderer: TableRenderer,
+  constructor(private tableRenderer: TableRenderer,
               private cd: ChangeDetectorRef) {}
 
   ngOnInit() {
-
-    this.paginatorSub = this.paginatorService.onValueChange
-      .subscribe(daysInMonth => {
-        this.colspan = this.beforeDateColumns?.length + daysInMonth.length + this.afterDateColumns?.length;
-      });
+    this.colspan = 99;
 
     this.rowGroupRenderSub = this.tableRenderer.onRenderRowGroup
       .pipe(
@@ -71,7 +64,6 @@ export class TableRowGroupComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.paginatorSub.unsubscribe();
     this.rowGroupRenderSub.unsubscribe();
   }
 

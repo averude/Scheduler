@@ -13,8 +13,6 @@ import { UserAccessRights } from "../../../model/user";
 import { ActivatedRoute } from "@angular/router";
 import { ReportDataSource } from "../data-source/report-data-source";
 import { ReportService } from "../report.service";
-import { ScheduleTablePaginationStrategy } from "../../../shared/paginators/pagination-strategy/schedule-table-pagination-strategy";
-import { tap } from "rxjs/operators";
 
 @Component({
   selector: 'app-report-generator-form',
@@ -47,7 +45,6 @@ export class ReportGeneratorFormComponent implements OnInit {
   constructor(private fb: FormBuilder,
               private authService: AuthService,
               private activatedRoute: ActivatedRoute,
-              private paginationStrategy: ScheduleTablePaginationStrategy,
               private reportDataSource: ReportDataSource,
               private statisticsColumnCompositor: StatisticsColumnCompositor,
               private reportService: ReportService,
@@ -132,12 +129,9 @@ export class ReportGeneratorFormComponent implements OnInit {
     const from = this.date.clone().startOf('month').format('YYYY-MM-DD');
     const to   = this.date.clone().endOf('month').format('YYYY-MM-DD');
 
-    const reportDataObservable = this.getReportDataObservable(from, to)
-      .pipe(tap(data => data.calendarDays = this.paginationStrategy
-        .calcDaysInMonth(this.date, data.specialCalendarDates)));
+    const reportDataObservable = this.getReportDataObservable(from, to);
 
-    this.reportService.generate(reportDataObservable,
-      this.decorationDataForm.value, this.reportType,
+    this.reportService.generate(reportDataObservable, this.decorationDataForm.value, this.reportType,
       {useReportLabel: this.useReportLabel, divideBySubDep: this.splitIntoSheets},
       this.selectedSummationColumns
     ).subscribe(buffer => fileSaver.saveAs(new Blob([buffer]), reportName));

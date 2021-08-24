@@ -1,8 +1,6 @@
 import { NgModule } from "@angular/core";
 import { StatisticsTableComponent } from './statistics-table/statistics-table.component';
 import { CommonModule } from "@angular/common";
-import { PaginationService } from "../../lib/ngx-schedule-table/service/pagination.service";
-import { SimplePaginationStrategy } from "../../shared/paginators/pagination-strategy/simple-pagination-strategy";
 import { MonthYearPaginatorModule } from "../../shared/paginators/month-year-paginator/month-year-paginator.module";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { MatMenuModule } from "@angular/material/menu";
@@ -23,9 +21,7 @@ import { ScheduleTableModule } from "../../lib/ngx-schedule-table/schedule-table
   ],
   providers: [
     StatisticsTableSource,
-    StatisticsTableDataCollector,
-    SimplePaginationStrategy,
-    PaginationService
+    StatisticsTableDataCollector
   ]
 })
 export class StatisticsModule {}

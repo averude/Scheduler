@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { PaginationService } from "../../../lib/ngx-schedule-table/service/pagination.service";
+import { PaginationService } from "../pagination.service";
 
 @Component({
   selector: 'app-simple-paginator',
@@ -14,6 +14,7 @@ export class SimplePaginatorComponent implements OnInit, OnChanges {
   constructor(private paginationService: PaginationService) { }
 
   ngOnInit() {
+    this.paginationService.clearStoredValue();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
