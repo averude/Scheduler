@@ -1,7 +1,6 @@
 import { ScheduleRow, ScheduleRowGroup } from "../../../model/ui/schedule-table/table-data";
 import { Injectable } from "@angular/core";
 import { IntervalCreator } from "../../creator/interval-creator.service";
-import { binarySearch } from "../../../shared/utils/collection-utils";
 import { InitialData } from "../../../model/datasource/initial-data";
 import { convertCompositionToInterval } from "../../../model/ui/schedule-table/row-interval";
 import { CellEnabledSetter } from "./cell-enabled-setter";
@@ -26,7 +25,7 @@ export class TableDataCollector {
     this.collectBodyData(initData, tableData);
 
     tableData.forEachRow((row: ScheduleRow) => {
-      const dto = binarySearch(initData.scheduleDTOs, (mid => mid.parent.id - row.id));
+      const dto = initData.scheduleDTOMap.get(row.id);
 
       if (row.isSubstitution) {
         row.intervals = row.compositions.map(composition => convertCompositionToInterval(composition));
@@ -53,7 +52,7 @@ export class TableDataCollector {
       tableData.addGroup(group, (value => value.id - group.id));
     });
 
-    for (let dto of initialData.scheduleDTOs) {
+    for (let [employeeId, dto] of initialData.scheduleDTOMap) {
 
       this.rowFiller.fill(tableData, initialData, dto, dto.mainCompositions, false,
         (composition => initialData.workingNormsMap.get(composition.shiftId)?.hours || 0));
@@ -67,11 +66,6 @@ export class TableDataCollector {
 
   collectHeaderData(initialData: InitialData,
                     tableData: TableData) {
-    const calendarDays = this.calendarDaysCalculator.calculateCalendarDays(
-      initialData.from,
-      initialData.to,
-      initialData.specialCalendarDates);
-
-    tableData.headerData = calendarDays;
+    tableData.headerData = initialData.calendarDays;
   }
 }

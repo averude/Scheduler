@@ -12,11 +12,13 @@ import { toIdMap, toNumMap } from "../utils/scheduler-utility";
 import { SpecialCalendarDateService } from "../../../services/http/special-calendar-date.service";
 import * as moment from "moment";
 import { PaginationService } from "../../../shared/paginators/pagination.service";
+import { CalendarDaysCalculator } from "../../../services/collectors/calendar-days-calculator";
 
 @Injectable()
 export class ScheduleTableDataSource {
 
   constructor(private paginationService: PaginationService,
+              private calendarDaysCalculator: CalendarDaysCalculator,
               private specialCalendarDateService: SpecialCalendarDateService,
               private dayTypeService: DayTypeService,
               private employeeService: EmployeeService,
@@ -92,11 +94,15 @@ export class ScheduleTableDataSource {
                 initData.from = moment.utc(startDate);
                 initData.to = moment.utc(endDate);
 
+
                 return forkJoin(sources).pipe(
                   map(([schedule, workingNorm, specialCalendarDates]) => {
                     initData.scheduleDTOs = schedule;
+                    initData.scheduleDTOMap = toNumMap(schedule, value => value.parent.id);
                     initData.workingNormsMap = toNumMap(workingNorm, value => value.shiftId);
                     initData.specialCalendarDates = specialCalendarDates;
+                    initData.calendarDays = this.calendarDaysCalculator
+                      .calculateCalendarDays(initData.from, initData.to, specialCalendarDates);
                     return initData;
                   })
                 );

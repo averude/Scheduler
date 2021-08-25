@@ -18,11 +18,12 @@ export class IData {
   scheduleDTOs: EmployeeScheduleDTO[];
   workingNorms: WorkingNorm[];
   workingNormsMap: Map<number, WorkingNorm>;
-  calendarDays: CalendarDay[];
+  calendarDays: CalendarDay[]; // TODO: check possible issue
   specialCalendarDates: SpecialCalendarDate[];
 }
 
 export class InitialData extends IData {
+  scheduleDTOMap: Map<number, EmployeeScheduleDTO>;
   employees:    Employee[];
   from:         Moment;
   to:           Moment;

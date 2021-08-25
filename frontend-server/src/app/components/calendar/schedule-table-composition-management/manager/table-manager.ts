@@ -53,11 +53,11 @@ export class TableManager {
 
         res.forEach(row => {
           this.cellEnabledSetter.process(row);
-          this.sumCalculator.cal(row, initData.scheduleDTOs);
+          this.sumCalculator.cal(row, initData.scheduleDTOMap);
 
           this.tableRenderer.nextRowCommand({
             rowId: row.id,
-            command: (rowData: ScheduleRow) => this.sumCalculator.cal(rowData, initData.scheduleDTOs)
+            command: (rowData: ScheduleRow) => this.sumCalculator.cal(rowData, initData.scheduleDTOMap)
           });
         });
 
@@ -86,7 +86,7 @@ export class TableManager {
   }
 
   addSubstitutionDialog(selectionData: SelectionData, initData: InitialData) {
-    const mainCompositionRow = <ScheduleRow>selectionData.row;
+    const mainCompositionRow = <ScheduleRow> selectionData.row;
 
     const data = {
       from: selectionData.selectedCells[0].date.isoString,
@@ -120,9 +120,9 @@ export class TableManager {
           // TODO: It seems like this operation isn't needed
           //  because substitution compositions doesn't play any role
           //  in changing overall row sum
-          this.sumCalculator.cal(row, initData.scheduleDTOs);
+          this.sumCalculator.cal(row, initData.scheduleDTOMap);
 
-          this.tableRenderer.renderRowGroup(row.group.id);
+          this.tableRenderer.renderRowGroup(row.parent.id);
           this.tableRenderer.nextRowCommand({
             rowId: row.id,
             command: rowData => this.cellEnabledSetter.process(<ScheduleRow>rowData)
@@ -154,13 +154,13 @@ export class TableManager {
                 // TODO: Make distinct by id
                 res.forEach(row => {
                   this.cellEnabledSetter.process(row);
-                  this.sumCalculator.cal(row, data.initData.scheduleDTOs);
+                  this.sumCalculator.cal(row, data.initData.scheduleDTOMap);
 
                   this.tableRenderer.nextRowCommand({
                     rowId: row.id,
                     command: (rowData: ScheduleRow) => {
                       this.cellEnabledSetter.process(rowData);
-                      this.sumCalculator.cal(rowData, data.initData.scheduleDTOs);
+                      this.sumCalculator.cal(rowData, data.initData.scheduleDTOMap);
                     }
                   });
                 });

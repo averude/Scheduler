@@ -1,7 +1,6 @@
 import { ScheduleRow, ScheduleRowGroup } from "../../../../model/ui/schedule-table/table-data";
 import { Composition, SubstitutionComposition } from "../../../../model/composition";
 import { EmployeeScheduleDTO } from "../../../../model/dto/employee-schedule-dto";
-import { binarySearch } from "../../../../shared/utils/collection-utils";
 import { RowInterval } from "../../../../model/ui/schedule-table/row-interval";
 import { CellEnabledSetter } from "../../../../services/collectors/schedule/cell-enabled-setter";
 import { TableRenderer } from "../../../../lib/ngx-schedule-table/service/table-renderer.service";
@@ -22,10 +21,9 @@ export class TableRowRemover {
   removeRow(groupData: ScheduleRowGroup,
             row: ScheduleRow,
             composition: Composition,
-            dtos: EmployeeScheduleDTO[]) {
+            dtoMap: Map<number, EmployeeScheduleDTO>) {
     const table = groupData.parent;
-
-    const dto = binarySearch(dtos, (mid => mid.parent.id - composition.employeeId));
+    const dto = dtoMap.get(composition.employeeId);
 
     if (row.isSubstitution) {
       // Remove composition from initial data

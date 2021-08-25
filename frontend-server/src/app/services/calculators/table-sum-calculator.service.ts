@@ -6,7 +6,6 @@ import { CellEnabledSetter } from "../collectors/schedule/cell-enabled-setter";
 import { Moment } from "moment";
 import { TableData } from "../../lib/ngx-schedule-table/model/data/table";
 import { EmployeeScheduleDTO } from "../../model/dto/employee-schedule-dto";
-import { binarySearch } from "../../shared/utils/collection-utils";
 
 @Injectable()
 export class TableSumCalculator {
@@ -31,20 +30,10 @@ export class TableSumCalculator {
       .reduce((prev, curr) => prev + curr, 0);
   }
 
-  cal(row: any, dtos: EmployeeScheduleDTO[]) {
-    const table = <TableData> row.group.table;
-    const dto = binarySearch(dtos, mid => mid.parent.id - row.id);
+  cal(row: any, dtoMap: Map<number, EmployeeScheduleDTO>) {
+    const table = <TableData> row.parent.parent;
+    const dto = dtoMap.get(row.id);
     this.calculateSum(row, dto.mainCompositions, table.from, table.to);
-  }
-
-  calc(tableData: TableData,
-       dtos: EmployeeScheduleDTO[],
-       rowId: number) {
-
-    const dto = binarySearch(dtos, mid => mid.parent.id - rowId);
-    tableData.forEachRowWithId(rowId, (row => {
-      this.calculateSum(row, dto.mainCompositions, tableData.from, tableData.to);
-    }));
   }
 
   calculateSum(row: any,

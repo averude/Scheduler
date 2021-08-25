@@ -7,7 +7,6 @@ import { SubstitutionCompositionService } from "../../../../services/http/substi
 import { InitialData } from "../../../../model/datasource/initial-data";
 import { Position } from "../../../../model/position";
 import { ScheduleRow, ScheduleRowGroup } from "../../../../model/ui/schedule-table/table-data";
-import { binarySearch } from "../../../../shared/utils/collection-utils";
 import { putSorted } from "../../../../services/utils";
 import { convertCompositionToInterval } from "../../../../model/ui/schedule-table/row-interval";
 import { EmployeeScheduleDTO } from "../../../../model/dto/employee-schedule-dto";
@@ -28,9 +27,9 @@ export class SubstitutionCompositionHandler extends AbstractCompositionHandler<S
             position: Position,
             group: ScheduleRowGroup,
             parentRow: ScheduleRow) {
-    if (initData.scheduleDTOs && initData.calendarDays) {
+    if (initData.scheduleDTOMap && initData.calendarDays) {
 
-      const dto = binarySearch(initData.scheduleDTOs, (mid => mid.parent.id - composition.employeeId));
+      const dto = initData.scheduleDTOMap.get(composition.employeeId);
       const norm = initData.workingNormsMap.get(composition.mainComposition.shiftId)?.hours || 0;
 
       putSorted(<SubstitutionComposition>composition, dto.substitutionCompositions);

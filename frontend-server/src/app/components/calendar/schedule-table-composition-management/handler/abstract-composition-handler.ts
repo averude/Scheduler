@@ -9,7 +9,6 @@ import { map, tap } from "rxjs/operators";
 import { CUDService } from "../../../../services/http/interface/cud-service";
 import { Row } from "../../../../lib/ngx-schedule-table/model/data/row";
 import { Position } from "../../../../model/position";
-import { binarySearch } from "../../../../shared/utils/collection-utils";
 import { EmployeeScheduleDTO } from "../../../../model/dto/employee-schedule-dto";
 import { CompositionHandler } from "./composition-handler";
 
@@ -41,7 +40,7 @@ export abstract class AbstractCompositionHandler<T extends Composition> implemen
       if (composition.id) {
         obs.push(this.compositionService.delete(composition.id)
           .pipe(
-            tap(res => this.rowRemover.removeRow(groupData, row, composition, initData.scheduleDTOs))
+            tap(res => this.rowRemover.removeRow(groupData, row, composition, initData.scheduleDTOMap))
           )
         );
       }
@@ -93,8 +92,10 @@ export abstract class AbstractCompositionHandler<T extends Composition> implemen
       throw new Error("No row provided");
     }
 
-    if (initData.scheduleDTOs && initData.calendarDays) {
-      const dto = binarySearch(initData.scheduleDTOs, (mid => mid.parent.id - composition.employeeId));
+    if (initData.scheduleDTOMap && initData.calendarDays) {
+      // const dto = binarySearch(initData.scheduleDTOs, (mid => mid.parent.id - composition.employeeId));
+
+      const dto = initData.scheduleDTOMap.get(composition.employeeId);
 
       if (row.position.id !== composition.positionId) {
 
