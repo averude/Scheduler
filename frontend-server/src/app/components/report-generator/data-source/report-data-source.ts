@@ -28,10 +28,10 @@ export class ReportDataSource {
               private statisticsService: StatisticsService,
               private workingNormService: WorkingNormService){}
 
-  getForDepartment(enterpriseId: number,
-                   departmentId: number,
-                   from: string,
-                   to: string): Observable<ReportInitialData> {
+  byDepartmentId(enterpriseId: number,
+                 departmentId: number,
+                 from: string,
+                 to: string): Observable<ReportInitialData> {
     const sources: Observable<any>[] = [
       this.scheduleService.getAllByDepartmentId(departmentId, from, to),
       this.workingNormService.getAllByDepartmentId(departmentId, from, to),
@@ -46,11 +46,11 @@ export class ReportDataSource {
     return this.getObservable(from, to, sources);
   }
 
-  getForShifts(enterpriseId:  number,
-               departmentId:  number,
-               shiftIds:      number[],
-               from:          string,
-               to:            string): Observable<ReportInitialData> {
+  byShiftIds(enterpriseId:  number,
+             departmentId:  number,
+             shiftIds:      number[],
+             from:          string,
+             to:            string): Observable<ReportInitialData> {
     const sources: Observable<any>[] = [
       this.scheduleService.getAllByShiftIds(shiftIds, from, to),
       this.workingNormService.getAllByDepartmentId(departmentId, from, to),

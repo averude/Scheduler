@@ -141,10 +141,10 @@ export class ReportGeneratorFormComponent implements OnInit {
     if (this.userAccessRights.isShiftLevel) {
       const shiftIds = this.authService.currentUserAccount.shiftIds;
       return this.reportDataSource
-        .getForShifts(this.enterpriseId, this.departmentId, shiftIds, from, to);
+        .byShiftIds(this.enterpriseId, this.departmentId, shiftIds, from, to);
     } else {
       return this.reportDataSource
-        .getForDepartment(this.enterpriseId, this.departmentId, from, to);
+        .byDepartmentId(this.enterpriseId, this.departmentId, from, to);
     }
   }
 
