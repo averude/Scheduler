@@ -200,7 +200,7 @@ CREATE TABLE IF NOT EXISTS employees (
   UNIQUE (first_name, second_name, patronymic),
 
   PRIMARY KEY (id),
-  FOREIGN KEY (department_id) REFERENCES departments(id) ON DELETE CASCADE ON UPDATE CASCAD
+  FOREIGN KEY (department_id) REFERENCES departments(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS main_compositions (
