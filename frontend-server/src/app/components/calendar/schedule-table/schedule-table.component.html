@@ -2,6 +2,10 @@
   <app-month-year-paginator (onDateChange)="onDateChange()"></app-month-year-paginator>
 </ng-template>
 
+<ng-template #tableFilter>
+  <app-schedule-table-filter [tableData]="tableData"></app-schedule-table-filter>
+</ng-template>
+
 <app-schedules-table [trackByFn]="trackByFn"
                      [options]="options"
                      [tableData]="tableData"

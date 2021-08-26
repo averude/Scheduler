@@ -24,6 +24,7 @@ import { NameInfoCellModule } from "../shared/name-info-cell/name-info-cell.modu
 import { ScheduleViewTableComponent } from "./schedule-view-table/schedule-view-table.component";
 import { UIPrioritySortingStrategy } from "./utils/ui-priority-sorting-strategy";
 import { TableRowFiller } from "../../services/collectors/schedule/table-row-filler";
+import { ScheduleTableFilterModule } from "./schedule-table-filter/schedule-table-filter.module";
 
 @NgModule({
   imports: [
@@ -37,6 +38,7 @@ import { TableRowFiller } from "../../services/collectors/schedule/table-row-fil
     NameInfoCellModule,
     ScheduleTableContextMenuModule,
     ScheduleTableModule,
+    ScheduleTableFilterModule,
     ScheduleTableCompositionManagementModule,
     ScheduleTableConfigurationMenuModule
   ],

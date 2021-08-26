@@ -176,4 +176,5 @@ export class ScheduleTableComponent implements OnInit, AfterViewInit, OnDestroy 
       this.tableManager.editRow(rowData, this.initData);
     }
   }
+
 }
