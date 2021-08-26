@@ -9,7 +9,6 @@ import { PositionsModule } from './positions/positions.module';
 import { ShiftsModule } from './shifts/shifts.module';
 import { PatternsModule } from './patterns/patterns.module';
 import { RemoveDialogModule } from "../../../shared/abstract-components/remove-dialog/remove-dialog.module";
-import { WorkingNormModule } from "../../working-norm/working-norm.module";
 import { DepartmentDayTypesModule } from "./department-day-types/department-day-types.module";
 import { AvrSideBarModule } from "../../../lib/avr-side-bar/avr-side-bar.module";
 import { ShiftAdminUserAccountsModule } from "./shift-admin-user-accounts/shift-admin-user-accounts.module";
@@ -27,7 +26,6 @@ import { ReportSheetModule } from "./report-sheets/report-sheet.module";
     ShiftsModule,
     ShiftAdminUserAccountsModule,
     PatternsModule,
-    WorkingNormModule,
     MatSidenavModule,
     DepartmentManagementRoutingModule,
     RemoveDialogModule
