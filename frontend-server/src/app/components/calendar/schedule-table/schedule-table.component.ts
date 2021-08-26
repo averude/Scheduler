@@ -15,7 +15,7 @@ import { ScheduleTableDataSource } from "../data-sources/schedule-table.data-sou
 import { SchedulerUtility, TRACK_BY_FN } from "../utils/scheduler-utility";
 import { UserAccessRights } from "../../../model/user";
 import { TableStateService } from "../../../lib/ngx-schedule-table/service/table-state.service";
-import { ScheduleRow } from "../../../model/ui/schedule-table/table-data";
+import { ScheduleRow, ScheduleRowGroup } from "../../../model/ui/schedule-table/table-data";
 import { TableManager } from "../schedule-table-composition-management/manager/table-manager";
 import { ActivatedRoute } from "@angular/router";
 import { UserAccountLevel } from "../../../model/dto/user-account-dto";
@@ -35,8 +35,6 @@ import { UIPrioritySortingStrategy } from "../utils/ui-priority-sorting-strategy
 })
 export class ScheduleTableComponent implements OnInit, AfterViewInit, OnDestroy {
   isAble: boolean = false;
-
-  trackByFn = TRACK_BY_FN;
 
   options: Options;
 
@@ -126,13 +124,22 @@ export class ScheduleTableComponent implements OnInit, AfterViewInit, OnDestroy 
       });
 
     this.editableStateSub = this.state.editableGroupsState
-      .subscribe(isEditable => this.isEditable = isEditable);
+      .subscribe(isEditable => {
+        this.isEditable = isEditable;
+        this.tableRenderer.renderAllRowGroups();
+      });
 
     this.options = {
       showSumColumns: this.accessRights?.isAdmin,
       multipleSelect: true,
       selectionEnabled: this.accessRights?.isAdmin,
-      groupable: true
+      groupable: true,
+      trackByFn: TRACK_BY_FN,
+      groupIsShownFn: ((group: ScheduleRowGroup) => {
+        return this.isEditable || (group?.rows
+          && group?.rows.length > 0
+          && group.rows.some((row: any) => !row.hidden));
+      })
     };
   }
 
@@ -165,7 +172,11 @@ export class ScheduleTableComponent implements OnInit, AfterViewInit, OnDestroy 
     this.cd.detectChanges();
   }
 
-  newRow(rowGroup) {
+  newRow(event: MouseEvent,
+         rowGroup: ScheduleRowGroup) {
+    event.preventDefault();
+    event.stopPropagation();
+
     if (this.isAble && this.isEditable) {
       this.tableManager.newRow(rowGroup, this.initData);
     }

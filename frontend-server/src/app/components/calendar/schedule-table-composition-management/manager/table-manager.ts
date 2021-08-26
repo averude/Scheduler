@@ -7,7 +7,7 @@ import { AddSubstitutionCompositionDialogComponent } from "../add-substitution-c
 import { MatDialog } from "@angular/material/dialog";
 import { Injectable } from "@angular/core";
 import { InitialData } from "../../../../model/datasource/initial-data";
-import { switchMap } from "rxjs/operators";
+import { filter, switchMap } from "rxjs/operators";
 import { NotificationsService } from "angular2-notifications";
 import { TableRenderer } from "../../../../lib/ngx-schedule-table/service/table-renderer.service";
 import { TableSumCalculator } from "../../../../services/calculators/table-sum-calculator.service";
@@ -38,15 +38,10 @@ export class TableManager {
     return this.dialog.open(AddMainCompositionDialogComponent, {data: data})
       .afterClosed()
       .pipe(
-        switchMap((mainShiftCompositions: MainComposition[]) => {
-          if (!mainShiftCompositions) {
-            return;
-          }
-
-          return this.mainCompositionHandler
-            .createOrUpdate(mainShiftCompositions, rowGroup, null,
-              null, data.initData);
-        })
+        filter(value => !!value),
+        switchMap((mainShiftCompositions: MainComposition[]) => this.mainCompositionHandler
+          .createOrUpdate(mainShiftCompositions, rowGroup, null,
+            null, data.initData))
       )
       .subscribe(res => {
         this.tableRenderer.renderRowGroup(rowGroup.id);

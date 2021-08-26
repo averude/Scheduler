@@ -6,7 +6,6 @@ import { TableData } from "./table";
 export class RowGroup {
   parent: TableData;
   id:     number;
-  name:   string;
   value:  any;
   rows:   Row[];
 

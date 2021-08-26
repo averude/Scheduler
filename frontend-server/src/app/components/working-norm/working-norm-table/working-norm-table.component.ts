@@ -39,11 +39,6 @@ import { PaginationService } from "../../../shared/paginators/pagination.service
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WorkingNormTableComponent implements OnInit, AfterViewInit, OnDestroy {
-  trackByFn = (index: number, item: Cell) => {
-    const value = <WorkingNorm> item.value;
-    return `${value?.hours} + ${value?.days}`;
-  };
-
   options: Options;
 
   isAdmin: boolean = false;
@@ -124,7 +119,11 @@ export class WorkingNormTableComponent implements OnInit, AfterViewInit, OnDestr
       selectionEnabled: !this.isAdmin,
       multipleSelect: false,
       showSumColumns: true,
-      distinctByColor: true
+      distinctByColor: true,
+      trackByFn: (index: number, item: Cell) => {
+        const value = <WorkingNorm> item.value;
+        return `${value?.hours} + ${value?.days}`;
+      }
     };
   }
 

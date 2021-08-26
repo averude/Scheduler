@@ -1,11 +1,16 @@
 <div class="table-wrap">
-  <div class="dummy"></div>
+  <ng-template #dummy>
+    <div class="dummy"></div>
+  </ng-template>
+
+  <ng-container [ngTemplateOutlet]="topItem ? topItem : dummy">
+  </ng-container>
 
   <table class="table-base">
 
     <ng-container *ngIf="proxyViewIsShown">
       <tr>
-        <td [attr.colspan]="100">
+        <td>
           <div class="table-proxy-view">
             <ng-container [ngTemplateOutlet]="proxyViewDef"></ng-container>
           </div>
@@ -28,14 +33,12 @@
         <tbody *ngFor="let group of tableData.groups"
                app-table-row-group
                [showHiddenRows]="showHiddenRows"
-               [editableRowGroup]="editableRowGroup"
                [options]="options"
-               [trackByFn]="trackByFn"
                [beforeDateColumns]="beforeDateColumns"
                [afterDateColumns]="afterDateColumns"
                [pageableColumns]="pageableColumns"
                [groupData]="group"
-               [onAddRowClick]="onAddRowClick">
+               [rowGroupLabel]="groupLabel">
         </tbody>
 
       </ng-container>
@@ -49,7 +52,6 @@
               *ngFor="let row of group.rows"
               app-table-row
               [options]="options"
-              [trackByFn]="trackByFn"
               [beforeDateColumns]="beforeDateColumns"
               [pageableColumns]="pageableColumns"
               [afterDateColumns]="afterDateColumns"

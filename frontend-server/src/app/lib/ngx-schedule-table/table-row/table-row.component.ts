@@ -28,7 +28,6 @@ import { Options } from "../model/options";
 })
 export class TableRowComponent implements OnInit, OnDestroy {
 
-  @Input() trackByFn;
   @Input() options: Options;
 
   @Input() pageableColumns:   PageableColumnDef;

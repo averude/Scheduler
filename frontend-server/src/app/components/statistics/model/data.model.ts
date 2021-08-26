@@ -6,7 +6,6 @@ import { Cell } from "../../../lib/ngx-schedule-table/model/data/cell";
 
 export class StatisticsRowGroup extends RowGroup {
   id: number;
-  name: string;
   rows: StatisticsEmployeeRow[];
 }
 

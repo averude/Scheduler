@@ -8,7 +8,6 @@ import { SummationColumn, SummationType } from "../../../model/summation-column"
 import { EmployeeScheduleDTO } from "../../../model/dto/employee-schedule-dto";
 import { IntervalCreator } from "../../../services/creator/interval-creator.service";
 import * as moment from "moment";
-import { binarySearch } from "../../../shared/utils/collection-utils";
 import { RowInterval } from "../../../model/ui/schedule-table/row-interval";
 import { roundToTwo } from "../../../shared/utils/utils";
 import { getMainShiftId } from "../../../services/utils";
@@ -47,8 +46,7 @@ export abstract class AbstractReportDataCollector implements ReportDataCollector
       .sort((a, b) => a.id - b.id)
       .map(shift => ({
         id: shift.id,
-        name: shift.name,
-        value: shift,
+        value: shift.name,
         rows: []
       } as ReportGroup));
 
@@ -68,7 +66,7 @@ export abstract class AbstractReportDataCollector implements ReportDataCollector
         const positionName = initialData.positionMap.get(positionId)?.shortName;
         reportRowData.reportCellData = this.collectRowCellData(dto, initialData.calendarDays,
           initialData.dayTypeMap, positionName,
-          this.getSummationResults(initialData.summationDTOs, dto.parent.id, positionId),
+          this.getSummationResults(initialData.summationDTOMap, dto.parent.id, positionId),
           useReportLabel, intervals);
         rows.push(reportRowData);
       });
@@ -85,10 +83,10 @@ export abstract class AbstractReportDataCollector implements ReportDataCollector
     return tableData;
   }
 
-  private getSummationResults(employeeWorkStats: EmployeeWorkStatDTO[],
+  private getSummationResults(employeeWorkStatMap: Map<number,EmployeeWorkStatDTO>,
                               employeeId: number,
                               positionId: number) {
-    const statDTO = binarySearch(employeeWorkStats, (mid => mid.employee.id - employeeId));
+    const statDTO = employeeWorkStatMap.get(employeeId);
     if (statDTO && statDTO.positionStats) {
       return statDTO.positionStats
         .find(value => value.positionId === positionId)

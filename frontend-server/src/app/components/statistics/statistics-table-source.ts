@@ -7,7 +7,7 @@ import { SummationColumnDtoService } from "../../services/http/summation-column-
 import { StatisticsService } from "../../services/http/statistics.service";
 import { WorkingNormService } from "../../services/http/working-norm.service";
 import { SummationColumn } from "../../model/summation-column";
-import { EmployeeWorkStatDTO, SummationMode } from "../../model/dto/employee-work-stat-dto";
+import { SummationMode } from "../../model/dto/employee-work-stat-dto";
 import { Shift } from "../../model/shift";
 import { Position } from "../../model/position";
 import { StatisticsTableDataCollector } from "./collector/statistics-table-data-collector";
@@ -20,7 +20,6 @@ import { PaginationService } from "../../shared/paginators/pagination.service";
 export class StatisticsTableSource {
 
   summationColumns: SummationColumn[];
-  summationDtos:    EmployeeWorkStatDTO[];
   shifts:           Shift[];
   positionMap:      Map<number, Position>;
 
@@ -61,7 +60,7 @@ export class StatisticsTableSource {
     const fn = dateInterval =>
       forkJoin([
         this.statisticsService
-          .getSummationDTOByDepartmentId(mode, enterpriseId, departmentId, dateInterval.from, dateInterval.to),
+          .getSummationDTOMapByDepartmentId(mode, enterpriseId, departmentId, dateInterval.from, dateInterval.to),
         this.workingNormService
           .getAllByDepartmentId(departmentId, dateInterval.from, dateInterval.to)
       ]);
@@ -82,7 +81,7 @@ export class StatisticsTableSource {
     const fn = dateInterval =>
       forkJoin([
         this.statisticsService
-          .getSummationDTOByShiftIds(mode, enterpriseId, departmentId, shiftIds, dateInterval.from, dateInterval.to),
+          .getSummationDTOMapByShiftIds(mode, enterpriseId, departmentId, shiftIds, dateInterval.from, dateInterval.to),
         this.workingNormService
           .getAllByDepartmentId(departmentId, dateInterval.from, dateInterval.to)
       ]);
@@ -102,11 +101,10 @@ export class StatisticsTableSource {
         return this.paginationService.onValueChange
           .pipe(switchMap(fn));
       })
-    ).pipe(map(([summationDTOs, workingNorms]) => {
-      this.statisticsColumnCompositor.cr(this.shifts, summationDTOs, this.summationColumns, workingNorms);
-      this.summationDtos = summationDTOs;
+    ).pipe(map(([summationDTOMap, workingNorms]) => {
+      this.statisticsColumnCompositor.cr(this.shifts, summationDTOMap, this.summationColumns, workingNorms)
 
-      return this.collector.getTableData(summationDTOs, this.shifts, this.positionMap);
+      return this.collector.getTableData(summationDTOMap, this.shifts, this.positionMap);
     }));
 
   }

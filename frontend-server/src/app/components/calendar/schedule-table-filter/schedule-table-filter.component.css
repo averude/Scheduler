@@ -1,0 +1,21 @@
+.filter-input {
+  display: block;
+  border: none;
+  font-size: 18px;
+  max-width: 1600px;
+  width: 95%;
+  height: 1.5em;
+  border-bottom: 1px solid lightsteelblue;
+  margin: 0 auto;
+  user-select: none;
+  outline: none;
+}
+
+.container {
+  width: 100%;
+  margin: 0 auto;
+  background-color: white;
+  position: sticky;
+  top: 0;
+  padding: 10px 0;
+}

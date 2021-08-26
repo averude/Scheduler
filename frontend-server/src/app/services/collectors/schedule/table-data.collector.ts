@@ -48,7 +48,6 @@ export class TableDataCollector {
       group.parent = tableData;
       group.id    = shift.id;
       group.value = shift;
-      group.name  = shift.name;
       tableData.addGroup(group, (value => value.id - group.id));
     });
 
