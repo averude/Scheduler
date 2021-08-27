@@ -37,7 +37,6 @@ export class CellEnabledSetter {
 
   processRow(row: ScheduleRow, from: Moment, to: Moment) {
     row.cells.forEach(cell => cell.enabled = false);
-
     row.enabledCellCount = 0;
 
     this.processCells(row.cells, row.intervals, from, to,
@@ -46,7 +45,5 @@ export class CellEnabledSetter {
         cell.enabled = true;
       })
     );
-
-    row.hidden = (row.enabledCellCount === 0);
   }
 }

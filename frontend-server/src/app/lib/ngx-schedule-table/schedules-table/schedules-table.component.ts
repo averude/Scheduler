@@ -13,7 +13,6 @@ import {
 import { TableTopItemDirective } from "../directives/table-top-item.directive";
 import { AfterDateColumnDef, BeforeDateColumnDef, PageableColumnDef } from "../directives/column";
 import { PaginatorDef } from "../directives/paginator";
-import { Row } from "../model/data/row";
 import { Subscription } from "rxjs";
 import { ProxyViewDef } from "../directives/proxy-view";
 import { TableRenderer } from "../service/table-renderer.service";
@@ -38,9 +37,8 @@ const DEFAULT_OPTIONS: Options = {
 export class SchedulesTableComponent implements OnInit, OnDestroy {
 
   @Input() options: Options = DEFAULT_OPTIONS;
-
+  @Input() tableData: TableData;
   @Input() proxyViewIsShown:  boolean = false;
-  @Input() showHiddenRows:    boolean = true;
 
   @ContentChild(TableTopItemDirective, { read: TemplateRef })
   topItem: TemplateRef<any>;
@@ -66,8 +64,7 @@ export class SchedulesTableComponent implements OnInit, OnDestroy {
   @ContentChild(ProxyViewDef, {read: TemplateRef})
   proxyViewDef: TemplateRef<any>;
 
-  @Input() tableData: TableData;
-  @Input() rowData:   Row[];
+
 
   private tableRenderSub: Subscription;
 

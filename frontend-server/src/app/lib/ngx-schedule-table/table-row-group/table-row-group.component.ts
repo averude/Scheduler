@@ -11,7 +11,7 @@ import { RowGroup } from "../model/data/row-group";
 import { AfterDateColumnDef, BeforeDateColumnDef, PageableColumnDef } from "../directives/column";
 import { Subscription } from "rxjs";
 import { TableRenderer } from "../service/table-renderer.service";
-import { debounceTime, filter } from "rxjs/operators";
+import { filter } from "rxjs/operators";
 import { Options } from "../model/options";
 import { GroupLabelDef } from "../directives/group-label";
 
@@ -24,17 +24,12 @@ import { GroupLabelDef } from "../directives/group-label";
 export class TableRowGroupComponent implements OnInit, OnDestroy {
   groupIsShown: boolean;
 
-  colspan:  number;
-
-  @Input() options: Options;
-
-  @Input() showHiddenRows:    boolean;
-
+  @Input() colspan:           number;
+  @Input() options:           Options;
   @Input() pageableColumns:   PageableColumnDef;
   @Input() beforeDateColumns: QueryList<BeforeDateColumnDef>;
   @Input() afterDateColumns:  QueryList<AfterDateColumnDef>;
   @Input() rowGroupLabel:     GroupLabelDef;
-
   @Input() groupData:         RowGroup;
 
   private rowGroupRenderSub:      Subscription;
@@ -46,7 +41,6 @@ export class TableRowGroupComponent implements OnInit, OnDestroy {
               private cd: ChangeDetectorRef) {}
 
   ngOnInit() {
-    this.colspan = 99;
 
     this.groupIsShown = this.getGroupIsShown();
 
@@ -57,9 +51,6 @@ export class TableRowGroupComponent implements OnInit, OnDestroy {
       .subscribe((id) => this.renderRows());
 
     this.allRowGroupsRenderSub = this.tableRenderer.onRenderAllRowGroups
-      .pipe(
-        debounceTime(50)
-      )
       .subscribe(() => this.renderRows());
   }
 
@@ -77,6 +68,10 @@ export class TableRowGroupComponent implements OnInit, OnDestroy {
       this.groupIsShown = this.getGroupIsShown();
       this.cd.detectChanges();
     }
+  }
+
+  isHidden(row) {
+    return this.isHiddenGroup || !this.options?.rowIsShownFn(row);
   }
 
 }

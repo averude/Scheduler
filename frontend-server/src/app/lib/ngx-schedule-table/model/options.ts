@@ -6,4 +6,5 @@ export class Options {
   groupable?:         boolean;
   trackByFn?:         (value, index) => any;
   groupIsShownFn?:    (group) => boolean;
+  rowIsShownFn?:      (row) => boolean;
 }

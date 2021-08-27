@@ -46,7 +46,7 @@ export class TableFilterComponent implements OnInit, OnDestroy {
       this.filterableData.clearFilter();
       this.isDirty = false;
     } else {
-      this.filterableData.filter(value);
+      this.filterableData.filter(value.trim());
     }
 
     this.tableRenderer.renderAllRowGroups();

@@ -149,6 +149,13 @@ export class ScheduleTableComponent implements OnInit, AfterViewInit, OnDestroy 
         return this.isEditable || (group?.rows
           && group?.rows.length > 0
           && group.rows.some((row: any) => !row.hidden));
+      }),
+      rowIsShownFn: ((row: ScheduleRow) => {
+        if (this.filterIsShown) {
+          return !row.hidden;
+        } else {
+          return row.enabledCellCount > 0 || this.showHiddenRows;
+        }
       })
     };
   }
@@ -180,7 +187,7 @@ export class ScheduleTableComponent implements OnInit, AfterViewInit, OnDestroy 
 
   changeHiddenRowsVisibility(isShown: boolean) {
     this.showHiddenRows = isShown;
-    this.cd.detectChanges();
+    this.tableRenderer.renderAllRowGroups();
   }
 
   newRow(event: MouseEvent,

@@ -19,11 +19,13 @@ export class ScheduleFilteringStrategy implements FilteringStrategy {
   }
 
   private filterRow(row: ScheduleRow, value: string) {
-    return row.employee.secondName.toLowerCase().includes(value.toLowerCase())
-      || row.employee.firstName.toLowerCase().includes(value.toLowerCase())
-      || row.employee.patronymic.toLowerCase().includes(value.toLowerCase())
-      || row.position.name.toLowerCase().includes(value.toLowerCase())
-      || row.position.shortName.toLowerCase().includes(value.toLowerCase());
+    const filterStr = value.toLowerCase();
+
+    return row.employee.secondName.toLowerCase().includes(filterStr)
+      || row.employee.firstName.toLowerCase().includes(filterStr)
+      || row.employee.patronymic.toLowerCase().includes(filterStr)
+      || row.position.name.toLowerCase().includes(filterStr)
+      || row.position.shortName.toLowerCase().includes(filterStr);
   }
 
 }

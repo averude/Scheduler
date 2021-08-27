@@ -32,7 +32,7 @@
 
           <tbody *ngFor="let group of tableData.groups"
                  app-table-row-group
-                 [showHiddenRows]="showHiddenRows"
+                 [colspan]="99"
                  [options]="options"
                  [beforeDateColumns]="beforeDateColumns"
                  [afterDateColumns]="afterDateColumns"
@@ -47,7 +47,7 @@
 
           <ng-container *ngFor="let group of tableData.groups">
             <tr class="row"
-                [hidden]="!showHiddenRows && row.hidden"
+                [hidden]="row.hidden"
                 [class.distinctByColor]="options?.distinctByColor"
                 *ngFor="let row of group.rows"
                 app-table-row

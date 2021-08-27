@@ -8,7 +8,7 @@
     </td>
   </tr>
   <ng-container *ngFor="let row of groupData.rows">
-    <tr [hidden]="isHiddenGroup || (!showHiddenRows && row.hidden)"
+    <tr [hidden]="isHidden(row)"
         [class.distinctByColor]="options?.distinctByColor"
         app-table-row
         [options]="options"
