@@ -7,14 +7,12 @@
   width: 95%;
   height: 1.5em;
   margin: 0 auto;
+  padding-bottom: 0.25em;
   padding-left: 15px;
   box-sizing: border-box;
   border: none;
   border-bottom: 1px solid lightsteelblue;
-  user-select: none;
   outline: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
 }
 
 .container {

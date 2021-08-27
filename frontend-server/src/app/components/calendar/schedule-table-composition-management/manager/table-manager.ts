@@ -1,4 +1,4 @@
-import { ScheduleRow, ScheduleRowGroup } from "../../../../model/ui/schedule-table/table-data";
+import { ScheduleRow } from "../../../../model/ui/schedule-table/table-data";
 import { Composition, MainComposition } from "../../../../model/composition";
 import { getEmployeeShortName } from "../../../../shared/utils/utils";
 import { EditCompositionsDialogComponent } from "../edit-compositions-dialog/edit-compositions-dialog.component";
@@ -16,6 +16,7 @@ import { AddMainCompositionDialogComponent } from "../add-main-composition-dialo
 import { CompositionHandler } from "../handler/composition-handler";
 import { MainCompositionHandler } from "../handler/main-composition-handler";
 import { SubstitutionCompositionHandler } from "../handler/substitution-composition-handler";
+import { RowGroup } from "../../../../lib/ngx-schedule-table/model/data/row-group";
 
 @Injectable()
 export class TableManager {
@@ -29,7 +30,7 @@ export class TableManager {
               private substitutionCompositionHandler: SubstitutionCompositionHandler) {
   }
 
-  newRow(rowGroup: ScheduleRowGroup, initData: InitialData) {
+  newRow(rowGroup: RowGroup, initData: InitialData) {
     const data = {
       shift: rowGroup.value,
       initData: initData
@@ -99,7 +100,7 @@ export class TableManager {
       .pipe(
         switchMap(value => {
           if (value) {
-            const destinationGroup = <ScheduleRowGroup>mainCompositionRow.parent.parent.findRowGroup(value.shiftId);
+            const destinationGroup = mainCompositionRow.parent.parent.findRowGroup(value.shiftId);
 
             return this.substitutionCompositionHandler
               .createOrUpdate([value], destinationGroup, null,
@@ -127,7 +128,8 @@ export class TableManager {
       });
   }
 
-  private openDialog(data, rowGroup: ScheduleRowGroup,
+  private openDialog(data,
+                     rowGroup: RowGroup,
                      row: ScheduleRow,
                      compositionHandler: CompositionHandler<Composition>) {
     this.dialog.open(EditCompositionsDialogComponent, {data: data})

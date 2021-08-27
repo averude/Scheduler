@@ -6,11 +6,12 @@ import { IntervalCreator } from "../../../../services/creator/interval-creator.s
 import { SubstitutionCompositionService } from "../../../../services/http/substitution-composition.service";
 import { InitialData } from "../../../../model/datasource/initial-data";
 import { Position } from "../../../../model/position";
-import { ScheduleRow, ScheduleRowGroup } from "../../../../model/ui/schedule-table/table-data";
+import { ScheduleRow } from "../../../../model/ui/schedule-table/table-data";
 import { putSorted } from "../../../../services/utils";
 import { convertCompositionToInterval } from "../../../../model/ui/schedule-table/row-interval";
 import { EmployeeScheduleDTO } from "../../../../model/dto/employee-schedule-dto";
 import { AbstractCompositionHandler } from "./abstract-composition-handler";
+import { RowGroup } from "../../../../lib/ngx-schedule-table/model/data/row-group";
 
 @Injectable()
 export class SubstitutionCompositionHandler extends AbstractCompositionHandler<SubstitutionComposition> {
@@ -25,7 +26,7 @@ export class SubstitutionCompositionHandler extends AbstractCompositionHandler<S
   createRow(initData: InitialData,
             composition: SubstitutionComposition,
             position: Position,
-            group: ScheduleRowGroup,
+            group: RowGroup,
             parentRow: ScheduleRow) {
     if (initData.scheduleDTOMap && initData.calendarDays) {
 
@@ -47,7 +48,7 @@ export class SubstitutionCompositionHandler extends AbstractCompositionHandler<S
     }
   }
 
-  afterRowUpdated(group: ScheduleRowGroup,
+  afterRowUpdated(group: RowGroup,
                   dto: EmployeeScheduleDTO,
                   composition: SubstitutionComposition) {
     const mainShiftComposition = (<SubstitutionComposition>composition).mainComposition;

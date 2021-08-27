@@ -1,4 +1,4 @@
-import { ScheduleRow, ScheduleRowGroup } from "../../../../model/ui/schedule-table/table-data";
+import { ScheduleRow } from "../../../../model/ui/schedule-table/table-data";
 import { Composition, SubstitutionComposition } from "../../../../model/composition";
 import { EmployeeScheduleDTO } from "../../../../model/dto/employee-schedule-dto";
 import { RowInterval } from "../../../../model/ui/schedule-table/row-interval";
@@ -9,6 +9,7 @@ import { Injectable } from "@angular/core";
 import { TableSumCalculator } from "../../../../services/calculators/table-sum-calculator.service";
 import { removeFromArray } from "../../../../services/utils";
 import { TableData } from "../../../../lib/ngx-schedule-table/model/data/table";
+import { RowGroup } from "../../../../lib/ngx-schedule-table/model/data/row-group";
 
 @Injectable()
 export class TableRowRemover {
@@ -18,7 +19,7 @@ export class TableRowRemover {
               private tableRenderer: TableRenderer,
               private intervalCreator: IntervalCreator) {}
 
-  removeRow(groupData: ScheduleRowGroup,
+  removeRow(groupData: RowGroup,
             row: ScheduleRow,
             composition: Composition,
             dtoMap: Map<number, EmployeeScheduleDTO>) {

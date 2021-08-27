@@ -16,7 +16,9 @@
           (click)="changeEditableState()">
     {{editableRowGroups ? "Disable" : "Enable"}} edit mode
   </button>
-  <button mat-menu-item (click)="changeEmptyRowVisibility()">
+  <button mat-menu-item
+          *ngIf="!filterIsShown"
+          (click)="changeEmptyRowVisibility()">
     {{hiddenRowsIsShown ? "Hide hidden rows" : "Show hidden rows"}}
   </button>
   <button mat-menu-item

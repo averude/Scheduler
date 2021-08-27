@@ -6,9 +6,10 @@ import { IntervalCreator } from "../../../../services/creator/interval-creator.s
 import { MainCompositionService } from "../../../../services/http/main-composition.service";
 import { InitialData } from "../../../../model/datasource/initial-data";
 import { Position } from "../../../../model/position";
-import { ScheduleRow, ScheduleRowGroup } from "../../../../model/ui/schedule-table/table-data";
+import { ScheduleRow } from "../../../../model/ui/schedule-table/table-data";
 import { putSorted } from "../../../../services/utils";
 import { AbstractCompositionHandler } from "./abstract-composition-handler";
+import { RowGroup } from "../../../../lib/ngx-schedule-table/model/data/row-group";
 
 @Injectable()
 export class MainCompositionHandler extends AbstractCompositionHandler<MainComposition> {
@@ -23,7 +24,7 @@ export class MainCompositionHandler extends AbstractCompositionHandler<MainCompo
   createRow(initData: InitialData,
             composition: MainComposition,
             position: Position,
-            group: ScheduleRowGroup,
+            group: RowGroup,
             parentRow: ScheduleRow) {
     if (initData.scheduleDTOMap && initData.calendarDays) {
 

@@ -82,6 +82,12 @@ export class ScheduleTableConfigurationMenuComponent implements OnInit, OnDestro
     this.onChangeHiddenRowVisibility.emit(this.hiddenRowsIsShown = !this.hiddenRowsIsShown);
   }
 
+  changeFilterVisibility() {
+    this.onChangeHiddenRowVisibility.emit(!this.filterIsShown);
+    this.hiddenRowsIsShown = !this.filterIsShown;
+    this.tableStateService.filterShown(this.hiddenRowsIsShown);
+  }
+
   openGenerateScheduleDialog() {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = false;
@@ -109,9 +115,5 @@ export class ScheduleTableConfigurationMenuComponent implements OnInit, OnDestro
   setAbleFlag() {
     this.isAble = (this.accessRights?.isDepartmentLevel || this.accessRights?.isEnterpriseLevel)
       && this.accessRights?.isAdmin;
-  }
-
-  changeFilterVisibility() {
-    this.tableStateService.filterShown(!this.filterIsShown);
   }
 }

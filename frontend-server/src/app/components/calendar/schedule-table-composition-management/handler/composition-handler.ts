@@ -1,17 +1,18 @@
 import { Composition } from "../../../../model/composition";
-import { ScheduleRow, ScheduleRowGroup } from "../../../../model/ui/schedule-table/table-data";
+import { ScheduleRow } from "../../../../model/ui/schedule-table/table-data";
 import { InitialData } from "../../../../model/datasource/initial-data";
 import { Observable } from "rxjs";
+import { RowGroup } from "../../../../lib/ngx-schedule-table/model/data/row-group";
 
 export interface CompositionHandler<T extends Composition> {
 
   createOrUpdate(compositions: T[],
-                 rowGroup: ScheduleRowGroup,
+                 rowGroup: RowGroup,
                  row: ScheduleRow,
                  parentRow: ScheduleRow,
                  initData: InitialData): Observable<any[]>;
 
-  remove(groupData: ScheduleRowGroup,
+  remove(groupData: RowGroup,
          row: ScheduleRow,
          initData: InitialData,
          compositions: T[]): Observable<any[]>;

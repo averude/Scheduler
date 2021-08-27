@@ -24,7 +24,8 @@ import { NameInfoCellModule } from "../shared/name-info-cell/name-info-cell.modu
 import { ScheduleViewTableComponent } from "./schedule-view-table/schedule-view-table.component";
 import { UIPrioritySortingStrategy } from "./utils/ui-priority-sorting-strategy";
 import { TableRowFiller } from "../../services/collectors/schedule/table-row-filler";
-import { ScheduleTableFilterModule } from "./schedule-table-filter/schedule-table-filter.module";
+import { TableFilterModule } from "./table-filter/table-filter.module";
+import { ScheduleFilteringStrategy } from "./utils/schedule-filtering-strategy";
 
 @NgModule({
   imports: [
@@ -38,7 +39,7 @@ import { ScheduleTableFilterModule } from "./schedule-table-filter/schedule-tabl
     NameInfoCellModule,
     ScheduleTableContextMenuModule,
     ScheduleTableModule,
-    ScheduleTableFilterModule,
+    TableFilterModule,
     ScheduleTableCompositionManagementModule,
     ScheduleTableConfigurationMenuModule
   ],
@@ -57,7 +58,8 @@ import { ScheduleTableFilterModule } from "./schedule-table-filter/schedule-tabl
     CellEnabledSetter,
     ScheduleTableDataSource,
     SchedulerUtility,
-    UIPrioritySortingStrategy
+    UIPrioritySortingStrategy,
+    ScheduleFilteringStrategy
   ]
 })
 export class CalendarModule {}

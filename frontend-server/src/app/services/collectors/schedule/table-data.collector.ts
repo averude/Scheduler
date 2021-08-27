@@ -1,4 +1,4 @@
-import { ScheduleRow, ScheduleRowGroup } from "../../../model/ui/schedule-table/table-data";
+import { ScheduleRow } from "../../../model/ui/schedule-table/table-data";
 import { Injectable } from "@angular/core";
 import { IntervalCreator } from "../../creator/interval-creator.service";
 import { InitialData } from "../../../model/datasource/initial-data";
@@ -8,6 +8,7 @@ import { TableSumCalculator } from "../../calculators/table-sum-calculator.servi
 import { TableData } from "../../../lib/ngx-schedule-table/model/data/table";
 import { TableRowFiller } from "./table-row-filler";
 import { CalendarDaysCalculator } from "../calendar-days-calculator";
+import { RowGroup } from "../../../lib/ngx-schedule-table/model/data/row-group";
 
 @Injectable()
 export class TableDataCollector {
@@ -44,7 +45,7 @@ export class TableDataCollector {
     tableData.to    = initialData.to;
 
     initialData.shifts.forEach(shift => {
-      const group = new ScheduleRowGroup();
+      const group = new RowGroup();
       group.parent = tableData;
       group.id    = shift.id;
       group.value = shift;

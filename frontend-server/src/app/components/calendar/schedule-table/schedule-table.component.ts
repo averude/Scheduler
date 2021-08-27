@@ -15,7 +15,7 @@ import { ScheduleTableDataSource } from "../data-sources/schedule-table.data-sou
 import { SchedulerUtility, TRACK_BY_FN } from "../utils/scheduler-utility";
 import { UserAccessRights } from "../../../model/user";
 import { TableStateService } from "../../../lib/ngx-schedule-table/service/table-state.service";
-import { ScheduleRow, ScheduleRowGroup } from "../../../model/ui/schedule-table/table-data";
+import { ScheduleRow } from "../../../model/ui/schedule-table/table-data";
 import { TableManager } from "../schedule-table-composition-management/manager/table-manager";
 import { ActivatedRoute } from "@angular/router";
 import { UserAccountLevel } from "../../../model/dto/user-account-dto";
@@ -26,6 +26,8 @@ import { InitialData } from "../../../model/datasource/initial-data";
 import { TableDataCollector } from "../../../services/collectors/schedule/table-data.collector";
 import { TableData } from "../../../lib/ngx-schedule-table/model/data/table";
 import { UIPrioritySortingStrategy } from "../utils/ui-priority-sorting-strategy";
+import { ScheduleFilteringStrategy } from "../utils/schedule-filtering-strategy";
+import { RowGroup } from "../../../lib/ngx-schedule-table/model/data/row-group";
 
 @Component({
   selector: 'app-schedule-table-component',
@@ -62,6 +64,7 @@ export class ScheduleTableComponent implements OnInit, AfterViewInit, OnDestroy 
               private activatedRoute: ActivatedRoute,
               private authService: AuthService,
               private sortingStrategy: UIPrioritySortingStrategy,
+              private filteringStrategy: ScheduleFilteringStrategy,
               private tableRenderer: TableRenderer,
               public state: TableStateService,
               private dataSource: ScheduleTableDataSource,
@@ -122,6 +125,7 @@ export class ScheduleTableComponent implements OnInit, AfterViewInit, OnDestroy 
       .subscribe((tableData: TableData) => {
         this.proxyViewIsShown = false;
         tableData.sortingStrategy = this.sortingStrategy;
+        tableData.filteringStrategy = this.filteringStrategy;
         this.tableData = tableData;
         this.cd.detectChanges();
       });
@@ -141,7 +145,7 @@ export class ScheduleTableComponent implements OnInit, AfterViewInit, OnDestroy 
       selectionEnabled: this.accessRights?.isAdmin,
       groupable: true,
       trackByFn: TRACK_BY_FN,
-      groupIsShownFn: ((group: ScheduleRowGroup) => {
+      groupIsShownFn: ((group: RowGroup) => {
         return this.isEditable || (group?.rows
           && group?.rows.length > 0
           && group.rows.some((row: any) => !row.hidden));
@@ -180,7 +184,7 @@ export class ScheduleTableComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   newRow(event: MouseEvent,
-         rowGroup: ScheduleRowGroup) {
+         rowGroup: RowGroup) {
     event.preventDefault();
     event.stopPropagation();
 

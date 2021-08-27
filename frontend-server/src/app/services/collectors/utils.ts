@@ -1,13 +1,14 @@
-import { ScheduleCell, ScheduleRow, ScheduleRowGroup } from "../../model/ui/schedule-table/table-data";
+import { ScheduleCell, ScheduleRow } from "../../model/ui/schedule-table/table-data";
 import { CalendarDay } from "../../lib/ngx-schedule-table/model/calendar-day";
 import { EmployeeScheduleDTO } from "../../model/dto/employee-schedule-dto";
 import { Position } from "../../model/position";
 import { WorkDay } from "../../model/workday";
 import { Composition } from "../../model/composition";
 import { CellCollector } from "./cell-collector";
+import { RowGroup } from "../../lib/ngx-schedule-table/model/data/row-group";
 
 export function createNewRow(cellCollector: CellCollector,
-                             group: ScheduleRowGroup,
+                             group: RowGroup,
                              calendarDays: CalendarDay[],
                              dto: EmployeeScheduleDTO,
                              position: Position,

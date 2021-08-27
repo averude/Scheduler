@@ -4,7 +4,6 @@ import { InitialData } from "../../../model/datasource/initial-data";
 import { EmployeeScheduleDTO } from "../../../model/dto/employee-schedule-dto";
 import { CellCollector } from "../cell-collector";
 import { createNewRow, isUpdateOperation } from "../utils";
-import { ScheduleRowGroup } from "../../../model/ui/schedule-table/table-data";
 import { Injectable } from "@angular/core";
 
 @Injectable()
@@ -21,7 +20,7 @@ export class TableRowFiller {
     for (const composition of compositions) {
       const position = initData.positionMap.get(composition.positionId);
 
-      const rowGroup = <ScheduleRowGroup> table.findRowGroup(composition.shiftId);
+      const rowGroup = table.findRowGroup(composition.shiftId);
       if (rowGroup) {
         const workingNorm = workingNormConsumer(composition);
 
