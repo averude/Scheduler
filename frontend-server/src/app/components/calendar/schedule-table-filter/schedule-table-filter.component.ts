@@ -27,6 +27,8 @@ export class ScheduleTableFilterComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.onFilter(null);
+
     this.filterSubscription.unsubscribe();
   }
 
@@ -37,9 +39,7 @@ export class ScheduleTableFilterComponent implements OnInit, OnDestroy {
   private onFilter(value: string) {
 
     if (!value) {
-      this.tableData.forEachRow((row: ScheduleRow) => {
-        row.hidden = false;
-      });
+      this.clear();
     } else {
       this.tableData.forEachRow((row: ScheduleRow) => {
         row.hidden = !this.filter(row, value);
@@ -57,4 +57,9 @@ export class ScheduleTableFilterComponent implements OnInit, OnDestroy {
       || row.position.shortName.toLowerCase().includes(value.toLowerCase());
   }
 
+  private clear() {
+    this.tableData.forEachRow((row: ScheduleRow) => {
+      row.hidden = false;
+    });
+  }
 }

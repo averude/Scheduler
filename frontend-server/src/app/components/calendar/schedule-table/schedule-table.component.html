@@ -8,7 +8,8 @@
                      [showHiddenRows]="showHiddenRows">
 
   <ng-template table-top-item>
-    <app-schedule-table-filter [tableData]="tableData"></app-schedule-table-filter>
+    <app-schedule-table-filter *ngIf="filterIsShown"
+                               [tableData]="tableData"></app-schedule-table-filter>
   </ng-template>
 
   <ng-template proxyViewDef>

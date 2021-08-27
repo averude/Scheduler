@@ -8,6 +8,10 @@
     Show {{cellsState > 0 ? "labels" : "hours"}}
   </button>
   <button mat-menu-item
+          (click)="changeFilterVisibility()">
+    {{filterIsShown ? "Hide" : "Show"}} filter
+  </button>
+  <button mat-menu-item
           *ngIf="isAble"
           (click)="changeEditableState()">
     {{editableRowGroups ? "Disable" : "Enable"}} edit mode

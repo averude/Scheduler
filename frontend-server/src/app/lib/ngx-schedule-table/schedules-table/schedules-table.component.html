@@ -1,67 +1,70 @@
-<div class="table-wrap">
-  <ng-template #dummy>
-    <div class="dummy"></div>
-  </ng-template>
+<div class="container">
 
-  <ng-container [ngTemplateOutlet]="topItem ? topItem : dummy">
-  </ng-container>
-
-  <table class="table-base">
-
-    <ng-container *ngIf="proxyViewIsShown">
-      <tr>
-        <td>
-          <div class="table-proxy-view">
-            <ng-container [ngTemplateOutlet]="proxyViewDef"></ng-container>
-          </div>
-        </td>
-      </tr>
+  <div class="header">
+    <ng-container [ngTemplateOutlet]="topItem">
     </ng-container>
+  </div>
 
-    <ng-container *ngIf="!proxyViewIsShown">
+  <div class="content">
+    <table class="table-base">
 
-      <thead app-table-header
-             [options]="options"
-             [headerData]="tableData?.headerData"
-             [pageableColumns]="pageableColumns"
-             [beforeDateColumns]="beforeDateColumns"
-             [afterDateColumns]="afterDateColumns">
-      </thead>
-
-      <ng-container *ngIf="options?.groupable">
-
-        <tbody *ngFor="let group of tableData.groups"
-               app-table-row-group
-               [showHiddenRows]="showHiddenRows"
-               [options]="options"
-               [beforeDateColumns]="beforeDateColumns"
-               [afterDateColumns]="afterDateColumns"
-               [pageableColumns]="pageableColumns"
-               [groupData]="group"
-               [rowGroupLabel]="groupLabel">
-        </tbody>
-
+      <ng-container *ngIf="proxyViewIsShown">
+        <tr>
+          <td>
+            <div class="table-proxy-view">
+              <ng-container [ngTemplateOutlet]="proxyViewDef"></ng-container>
+            </div>
+          </td>
+        </tr>
       </ng-container>
 
-      <ng-container *ngIf="!options?.groupable">
+      <ng-container *ngIf="!proxyViewIsShown">
 
-        <ng-container *ngFor="let group of tableData.groups">
-          <tr class="row"
-              [hidden]="!showHiddenRows && row.hidden"
-              [class.distinctByColor]="options?.distinctByColor"
-              *ngFor="let row of group.rows"
-              app-table-row
-              [options]="options"
-              [beforeDateColumns]="beforeDateColumns"
-              [pageableColumns]="pageableColumns"
-              [afterDateColumns]="afterDateColumns"
-              [rowData]="row">
-          </tr>
+        <thead app-table-header
+               [options]="options"
+               [headerData]="tableData?.headerData"
+               [pageableColumns]="pageableColumns"
+               [beforeDateColumns]="beforeDateColumns"
+               [afterDateColumns]="afterDateColumns">
+        </thead>
+
+        <ng-container *ngIf="options?.groupable">
+
+          <tbody *ngFor="let group of tableData.groups"
+                 app-table-row-group
+                 [showHiddenRows]="showHiddenRows"
+                 [options]="options"
+                 [beforeDateColumns]="beforeDateColumns"
+                 [afterDateColumns]="afterDateColumns"
+                 [pageableColumns]="pageableColumns"
+                 [groupData]="group"
+                 [rowGroupLabel]="groupLabel">
+          </tbody>
+
+        </ng-container>
+
+        <ng-container *ngIf="!options?.groupable">
+
+          <ng-container *ngFor="let group of tableData.groups">
+            <tr class="row"
+                [hidden]="!showHiddenRows && row.hidden"
+                [class.distinctByColor]="options?.distinctByColor"
+                *ngFor="let row of group.rows"
+                app-table-row
+                [options]="options"
+                [beforeDateColumns]="beforeDateColumns"
+                [pageableColumns]="pageableColumns"
+                [afterDateColumns]="afterDateColumns"
+                [rowData]="row">
+            </tr>
+          </ng-container>
+
         </ng-container>
 
       </ng-container>
 
-    </ng-container>
+    </table>
+  </div>
 
-  </table>
 </div>
+

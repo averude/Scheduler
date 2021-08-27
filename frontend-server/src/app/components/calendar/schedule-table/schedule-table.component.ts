@@ -44,6 +44,7 @@ export class ScheduleTableComponent implements OnInit, AfterViewInit, OnDestroy 
   accessRights:     UserAccessRights;
   isEditable:       boolean;
   proxyViewIsShown: boolean;
+  filterIsShown:    boolean;
   showHiddenRows:   boolean = false;
 
   @ViewChild('paginator', { read: TemplateRef })
@@ -67,6 +68,8 @@ export class ScheduleTableComponent implements OnInit, AfterViewInit, OnDestroy 
               private tableDataCollector: TableDataCollector,
               public tableManager: TableManager,
               public utility: SchedulerUtility) {}
+
+  private filterShownSub: Subscription;
 
   ngOnInit() {
     this.accessRights = this.authService.currentUserValue.accessRights;
@@ -129,6 +132,9 @@ export class ScheduleTableComponent implements OnInit, AfterViewInit, OnDestroy 
         this.tableRenderer.renderAllRowGroups();
       });
 
+    this.filterShownSub = this.state.isFilterIsShown()
+      .subscribe(filterIsShown => this.filterIsShown = filterIsShown);
+
     this.options = {
       showSumColumns: this.accessRights?.isAdmin,
       multipleSelect: true,
@@ -150,6 +156,7 @@ export class ScheduleTableComponent implements OnInit, AfterViewInit, OnDestroy 
   ngOnDestroy(): void {
     this.templateService.changeTemplate(null);
     this.routeSub.unsubscribe();
+    this.filterShownSub.unsubscribe();
     if (this.rowRenderSub) this.rowRenderSub.unsubscribe();
     if (this.editableStateSub) this.editableStateSub.unsubscribe();
   }

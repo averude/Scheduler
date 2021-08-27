@@ -1,15 +1,23 @@
-.table-wrap {
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.header {
+  margin-top: 20px;
+  flex-grow: 0;
+  background-color: white;
+}
+
+.content {
+  flex-grow: 1;
   position: relative;
   width: 100%;
   max-width: 100%;
-}
-
-.dummy {
-  height: 28px;
-  position: sticky;
-  top: 0;
-  width: 100%;
-  background-color: #ffffff;
+  overflow: auto;
+  height: 100%;
+  background-color: white;
 }
 
 .table-base {
