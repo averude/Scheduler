@@ -38,7 +38,6 @@ export class SchedulesTableComponent implements OnInit, OnDestroy {
 
   @Input() options: Options = DEFAULT_OPTIONS;
   @Input() tableData: TableData;
-  @Input() proxyViewIsShown:  boolean = false;
 
   @ContentChild(TableTopItemDirective, { read: TemplateRef })
   topItem: TemplateRef<any>;
