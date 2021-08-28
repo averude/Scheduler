@@ -1,10 +1,11 @@
-import { Component, ContentChild, Input, OnInit, TemplateRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ContentChild, Input, OnInit, TemplateRef } from '@angular/core';
 import { ContentDef, HeaderDef } from "./directives";
 
 @Component({
   selector: 'app-calendar-container',
   templateUrl: './calendar-container.component.html',
-  styleUrls: ['./calendar-container.component.css']
+  styleUrls: ['./calendar-container.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CalendarContainerComponent implements OnInit {
 
