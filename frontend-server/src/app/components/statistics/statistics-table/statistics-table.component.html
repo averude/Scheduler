@@ -4,14 +4,11 @@
                             (onDateChange)="onDateChange()"></app-month-year-paginator>
 </ng-template>
 
-<div class="container">
-  <div class="header"></div>
+<app-calendar-container [proxyViewShown]="viewProxyShown">
 
-  <div class="content">
+  <ng-template contentDef>
 
-    <app-proxy-view *ngIf="viewProxyShown"></app-proxy-view>
-
-    <table *ngIf="!viewProxyShown" class="table-base">
+    <table class="table-base">
 
       <thead>
 
@@ -98,5 +95,6 @@
 
     </table>
 
-  </div>
-</div>
+  </ng-template>
+
+</app-calendar-container>

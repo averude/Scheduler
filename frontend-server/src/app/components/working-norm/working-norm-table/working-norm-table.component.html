@@ -3,49 +3,52 @@
                             [dateUnit]="'year'"></app-month-year-paginator>
 </ng-template>
 
-<app-schedules-table [options]="options"
-                     [tableData]="tableData"
-                     [proxyViewIsShown]="proxyViewIsShown">
+<app-calendar-container [proxyViewShown]="proxyViewIsShown">
 
-  <ng-template proxyViewDef>
-    <app-proxy-view></app-proxy-view>
+  <ng-template contentDef>
+
+    <app-schedules-table [options]="options"
+                         [tableData]="tableData">
+
+      <ng-container pageableColumnDef>
+        <th *headerCellDef="let date"
+            class="table-sticky-header month-header">
+          {{date.monthName}}
+        </th>
+        <div *cellDef="let cell"
+             class="cell">
+          <p align="center">
+            {{getCellValue(cell.value)}}
+          </p>
+        </div>
+      </ng-container>
+
+      <ng-container beforeDateColumnDef>
+        <th class="table-sticky-header th-null"
+            *headerCellDef>
+          <app-working-norm-table-configuration-menu [enterpriseId]="enterpriseId"
+                                                     [departmentId]="departmentId"
+                                                     [shifts]="initData?.shifts"></app-working-norm-table-configuration-menu>
+        </th>
+        <td class="td-name"
+            *cellDef="let rowData"
+            name-info-cell
+            [name]="rowData.value.name"
+            [info]="rowData.patternName">
+        </td>
+      </ng-container>
+
+      <ng-container afterDateColumnDef>
+        <th class="table-sticky-header th-sum"
+            *headerCellDef>Sum</th>
+        <td class="sum"
+            *cellDef="let rowData">
+          <p align="center">{{rowData.sum}}</p>
+        </td>
+      </ng-container>
+
+    </app-schedules-table>
+
   </ng-template>
 
-  <ng-container pageableColumnDef>
-    <th *headerCellDef="let date"
-        class="table-sticky-header month-header">
-      {{date.monthName}}
-    </th>
-    <div *cellDef="let cell"
-         class="cell">
-      <p align="center">
-        {{getCellValue(cell.value)}}
-      </p>
-    </div>
-  </ng-container>
-
-  <ng-container beforeDateColumnDef>
-    <th class="table-sticky-header th-null"
-        *headerCellDef>
-      <app-working-norm-table-configuration-menu [enterpriseId]="enterpriseId"
-                                                 [departmentId]="departmentId"
-                                                 [shifts]="initData?.shifts"></app-working-norm-table-configuration-menu>
-    </th>
-    <td class="td-name"
-        *cellDef="let rowData"
-        name-info-cell
-        [name]="rowData.value.name"
-        [info]="rowData.patternName">
-    </td>
-  </ng-container>
-
-  <ng-container afterDateColumnDef>
-    <th class="table-sticky-header th-sum"
-        *headerCellDef>Sum</th>
-    <td class="sum"
-        *cellDef="let rowData">
-      <p align="center">{{rowData.sum}}</p>
-    </td>
-  </ng-container>
-
-</app-schedules-table>
+</app-calendar-container>

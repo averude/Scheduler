@@ -2,38 +2,43 @@
   <app-month-year-paginator (onDateChange)="onDateChange()"></app-month-year-paginator>
 </ng-template>
 
-<app-schedules-table [options]="options"
-                     [tableData]="tableData"
-                     [proxyViewIsShown]="proxyViewIsShown">
+<app-calendar-container [proxyViewShown]="proxyViewIsShown">
 
-  <ng-template proxyViewDef>
-    <app-proxy-view></app-proxy-view>
+  <ng-template contentDef>
+
+    <app-schedules-table [options]="options"
+                         [tableData]="tableData">
+
+      <ng-container pageableColumnDef
+                    cellContentPosition="TOP">
+        <th *headerCellDef="let date"
+            class="table-sticky-header month-header"
+            [class.weekend]="date.weekend"
+            [class.holiday]="date.holiday"
+            [class.current-day]="date.isNow">
+          {{date.dayOfMonth}}
+        </th>
+        <app-table-cell *cellDef="let cell"
+                        [cellData]="cell"
+                        [dayTypeMap]="initData.dayTypeMap"
+                        [value]="cell.value"></app-table-cell>
+      </ng-container>
+
+      <ng-container beforeDateColumnDef>
+        <th class="table-sticky-header th-null"
+            *headerCellDef>
+        </th>
+        <td class="td-name"
+            [class.substitution]="rowData.value.isSubstitution"
+            *cellDef="let rowData"
+            name-info-cell
+            [name]="utility.getEmployeeName(rowData.value.employee)">
+        </td>
+      </ng-container>
+
+    </app-schedules-table>
+
   </ng-template>
 
-  <ng-container pageableColumnDef
-                cellContentPosition="TOP">
-    <th *headerCellDef="let date"
-        class="table-sticky-header month-header"
-        [class.weekend]="date.weekend"
-        [class.holiday]="date.holiday"
-        [class.current-day]="date.isNow">
-      {{date.dayOfMonth}}
-    </th>
-    <app-table-cell *cellDef="let cell"
-                    [cellData]="cell"
-                    [dayTypeMap]="initData.dayTypeMap"
-                    [value]="cell.value"></app-table-cell>
-  </ng-container>
+</app-calendar-container>
 
-  <ng-container beforeDateColumnDef>
-    <th class="table-sticky-header th-null"
-        *headerCellDef>
-    </th>
-    <td class="td-name"
-        [class.substitution]="rowData.value.isSubstitution"
-        *cellDef="let rowData"
-        name-info-cell
-        [name]="utility.getEmployeeName(rowData.value.employee)">
-    </td>
-  </ng-container>
-</app-schedules-table>

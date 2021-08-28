@@ -5,12 +5,12 @@ import { MonthYearPaginatorModule } from "../../shared/paginators/month-year-pag
 import { MatMenuModule } from "@angular/material/menu";
 import { StatisticsTableSource } from "./statistics-table-source";
 import { StatisticsTableDataCollector } from "./collector/statistics-table-data-collector";
-import { ProxyViewModule } from "../proxy-view/proxy-view.module";
+import { CalendarContainerModule } from "../../lib/calendar-container/calendar-container.module";
 
 @NgModule({
   imports: [
     CommonModule,
-    ProxyViewModule,
+    CalendarContainerModule,
     MatMenuModule,
     MonthYearPaginatorModule
   ],

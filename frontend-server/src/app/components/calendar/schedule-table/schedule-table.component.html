@@ -2,102 +2,108 @@
   <app-month-year-paginator (onDateChange)="onDateChange()"></app-month-year-paginator>
 </ng-template>
 
-<app-schedules-table [options]="options"
-                     [tableData]="tableData"
-                     [proxyViewIsShown]="proxyViewIsShown">
+<app-calendar-container [proxyViewShown]="proxyViewIsShown">
 
-  <ng-template table-top-item>
+  <ng-template headerDef>
+
     <div class="filter-container"
          @fadeOut
          *ngIf="filterIsShown">
       <app-table-filter [filterableData]="tableData"
                         [applyFilterOnDataChange]="true"></app-table-filter>
     </div>
+
   </ng-template>
 
-  <ng-template proxyViewDef>
-    <app-proxy-view></app-proxy-view>
+  <ng-template contentDef>
+
+    <app-schedules-table [options]="options"
+                         [tableData]="tableData">
+
+      <ng-template groupLabelDef
+                   let-groupData
+                   let-isHiddenGroup="isHiddenGroup">
+        <div class="group-label-container">
+          <div class="group-label group-control-element">
+            {{groupData.value.name + ' ' + (isHiddenGroup ? "▸" : "▾")}}
+          </div>
+          <div *ngIf="isEditable"
+               class="group-control">
+            <div class="group-control-element"
+                 (click)="newRow($event, groupData)">Add</div>
+          </div>
+        </div>
+      </ng-template>
+
+      <ng-container pageableColumnDef
+                    cellContentPosition="TOP">
+        <th *headerCellDef="let date"
+            class="table-sticky-header month-header"
+            [class.weekend]="date.weekend"
+            [class.holiday]="date.holiday"
+            [class.current-day]="date.isNow"
+            (click)="state.clickHeaderCell({value: date, event: $event})">
+          {{date.dayOfMonth}}
+        </th>
+        <app-table-cell *cellDef="let cell"
+                        [cellData]="cell"
+                        [dayTypeMap]="initData.dayTypeMap"
+                        [value]="cell.value"></app-table-cell>
+      </ng-container>
+
+      <ng-container beforeDateColumnDef>
+        <th class="table-sticky-header th-null"
+            *headerCellDef>
+          <app-schedule-table-configuration-menu [enterpriseId]="enterpriseId"
+                                                 [departmentId]="departmentId"
+                                                 [initData]="initData"
+                                                 (onChangeHiddenRowVisibility)="changeHiddenRowsVisibility($event)">
+          </app-schedule-table-configuration-menu>
+        </th>
+        <td class="td-name"
+            [class.substitution]="rowData.value.isSubstitution"
+            *cellDef="let rowData"
+            name-info-cell
+            [name]="utility.getEmployeeName(rowData.value.employee)"
+            [info]="rowData.value.position.shortName"
+            [isEditable]="isRowEditable(rowData)"
+            (click)="updateRow(rowData)">
+        </td>
+      </ng-container>
+
+      <ng-container afterDateColumnDef>
+        <th class="table-sticky-header th-sum"
+            *headerCellDef>Sum</th>
+        <td class="sum"
+            *cellDef="let rowData">
+          <p align="center">{{rowData.value.sum}}</p>
+        </td>
+      </ng-container>
+
+      <ng-container afterDateColumnDef>
+        <th class="table-sticky-header th-sum"
+            *headerCellDef>Norm</th>
+        <td class="sum"
+            *cellDef="let rowData">
+          <p align="center">{{rowData.value.workingNorm}}</p>
+        </td>
+      </ng-container>
+
+      <ng-container afterDateColumnDef>
+        <th class="table-sticky-header th-sum"
+            *headerCellDef>Diff</th>
+        <td class="sum"
+            *cellDef="let rowData"
+            [class.notEqual]="rowData.value.diff !== 0">
+          <p align="center">{{rowData.value.diff}}</p>
+        </td>
+      </ng-container>
+    </app-schedules-table>
+
   </ng-template>
 
-  <ng-template groupLabelDef
-               let-groupData
-               let-isHiddenGroup="isHiddenGroup">
-    <div class="group-label-container">
-      <div class="group-label group-control-element">
-        {{groupData.value.name + ' ' + (isHiddenGroup ? "▸" : "▾")}}
-      </div>
-      <div *ngIf="isEditable"
-           class="group-control">
-        <div class="group-control-element"
-             (click)="newRow($event, groupData)">Add</div>
-      </div>
-    </div>
-  </ng-template>
+</app-calendar-container>
 
-  <ng-container pageableColumnDef
-                cellContentPosition="TOP">
-    <th *headerCellDef="let date"
-        class="table-sticky-header month-header"
-        [class.weekend]="date.weekend"
-        [class.holiday]="date.holiday"
-        [class.current-day]="date.isNow"
-        (click)="state.clickHeaderCell({value: date, event: $event})">
-      {{date.dayOfMonth}}
-    </th>
-    <app-table-cell *cellDef="let cell"
-                    [cellData]="cell"
-                    [dayTypeMap]="initData.dayTypeMap"
-                    [value]="cell.value"></app-table-cell>
-  </ng-container>
-
-  <ng-container beforeDateColumnDef>
-    <th class="table-sticky-header th-null"
-        *headerCellDef>
-      <app-schedule-table-configuration-menu [enterpriseId]="enterpriseId"
-                                             [departmentId]="departmentId"
-                                             [initData]="initData"
-                                             (onChangeHiddenRowVisibility)="changeHiddenRowsVisibility($event)">
-      </app-schedule-table-configuration-menu>
-    </th>
-    <td class="td-name"
-        [class.substitution]="rowData.value.isSubstitution"
-        *cellDef="let rowData"
-        name-info-cell
-        [name]="utility.getEmployeeName(rowData.value.employee)"
-        [info]="rowData.value.position.shortName"
-        [isEditable]="isRowEditable(rowData)"
-        (click)="updateRow(rowData)">
-    </td>
-  </ng-container>
-
-  <ng-container afterDateColumnDef>
-    <th class="table-sticky-header th-sum"
-        *headerCellDef>Sum</th>
-    <td class="sum"
-        *cellDef="let rowData">
-      <p align="center">{{rowData.value.sum}}</p>
-    </td>
-  </ng-container>
-
-  <ng-container afterDateColumnDef>
-    <th class="table-sticky-header th-sum"
-        *headerCellDef>Norm</th>
-    <td class="sum"
-        *cellDef="let rowData">
-      <p align="center">{{rowData.value.workingNorm}}</p>
-    </td>
-  </ng-container>
-
-  <ng-container afterDateColumnDef>
-    <th class="table-sticky-header th-sum"
-        *headerCellDef>Diff</th>
-    <td class="sum"
-        *cellDef="let rowData"
-        [class.notEqual]="rowData.value.diff !== 0">
-      <p align="center">{{rowData.value.diff}}</p>
-    </td>
-  </ng-container>
-</app-schedules-table>
 
 <app-schedule-table-context-menu *ngIf="accessRights?.isAdmin"
                                  [initData]="initData"

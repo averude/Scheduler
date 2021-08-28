@@ -1,0 +1,16 @@
+<div class="container">
+
+  <div class="header">
+    <ng-container [ngTemplateOutlet]="header">
+    </ng-container>
+  </div>
+
+  <div class="content">
+
+    <app-proxy-view *ngIf="proxyViewShown"></app-proxy-view>
+
+    <ng-container *ngIf="!proxyViewShown"
+                  [ngTemplateOutlet]="content"></ng-container>
+  </div>
+
+</div>

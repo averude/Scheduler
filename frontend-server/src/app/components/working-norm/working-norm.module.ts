@@ -18,7 +18,7 @@ import { WorkingNormTableConfigurationMenuModule } from "./working-norm-table-co
 import { NameInfoCellModule } from "../shared/name-info-cell/name-info-cell.module";
 import { WorkingNormDataSource } from "./data-source/working-norm.data-source";
 import { WorkingNormRoutingModule } from "./working-norm-routing.module";
-import { ProxyViewModule } from "../proxy-view/proxy-view.module";
+import { CalendarContainerModule } from "../../lib/calendar-container/calendar-container.module";
 
 @NgModule({
   imports: [
@@ -31,7 +31,7 @@ import { ProxyViewModule } from "../proxy-view/proxy-view.module";
     WorkingNormTableConfigurationMenuModule,
     MonthYearPaginatorModule,
     MatDialogModule,
-    ProxyViewModule,
+    CalendarContainerModule,
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,

@@ -25,7 +25,7 @@ import { UIPrioritySortingStrategy } from "./utils/ui-priority-sorting-strategy"
 import { TableRowFiller } from "../../services/collectors/schedule/table-row-filler";
 import { TableFilterModule } from "./table-filter/table-filter.module";
 import { ScheduleFilteringStrategy } from "./utils/schedule-filtering-strategy";
-import { ProxyViewModule } from "../proxy-view/proxy-view.module";
+import { CalendarContainerModule } from "../../lib/calendar-container/calendar-container.module";
 
 @NgModule({
   imports: [
@@ -34,7 +34,7 @@ import { ProxyViewModule } from "../proxy-view/proxy-view.module";
     SharedModule,
     MonthYearPaginatorModule,
     MatFormFieldModule,
-    ProxyViewModule,
+    CalendarContainerModule,
     MatInputModule,
     NameInfoCellModule,
     ScheduleTableContextMenuModule,

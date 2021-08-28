@@ -8,28 +8,6 @@
   }
 }
 
-.container {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-
-.header {
-  margin-top: 20px;
-  flex-grow: 0;
-  background-color: white;
-}
-
-.content {
-  flex-grow: 1;
-  position: relative;
-  width: 100%;
-  max-width: 100%;
-  overflow: auto;
-  height: 100%;
-  background-color: white;
-}
-
 .table-base {
   font-family: 'MuseoSansRegular';
   user-select: none;
