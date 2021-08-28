@@ -67,7 +67,7 @@ export class ScheduleTableComponent implements OnInit, AfterViewInit, OnDestroy 
               public state: TableStateService,
               private dataSource: ScheduleTableDataSource,
               private tableDataCollector: TableDataCollector,
-              public tableManager: TableManager,
+              private tableManager: TableManager,
               public utility: SchedulerUtility) {}
 
   private filterShownSub: Subscription;

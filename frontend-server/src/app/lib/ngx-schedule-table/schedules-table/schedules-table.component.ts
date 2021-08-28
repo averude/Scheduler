@@ -10,11 +10,8 @@ import {
   QueryList,
   TemplateRef
 } from "@angular/core";
-import { TableTopItemDirective } from "../directives/table-top-item.directive";
 import { AfterDateColumnDef, BeforeDateColumnDef, PageableColumnDef } from "../directives/column";
-import { PaginatorDef } from "../directives/paginator";
 import { Subscription } from "rxjs";
-import { ProxyViewDef } from "../directives/proxy-view";
 import { TableRenderer } from "../service/table-renderer.service";
 import { Options } from "../model/options";
 import { TableData } from "../model/data/table";
@@ -39,17 +36,8 @@ export class SchedulesTableComponent implements OnInit, OnDestroy {
   @Input() options: Options = DEFAULT_OPTIONS;
   @Input() tableData: TableData;
 
-  @ContentChild(TableTopItemDirective, { read: TemplateRef })
-  topItem: TemplateRef<any>;
-
-  @ContentChild(PaginatorDef, { read: TemplateRef })
-  paginator: TemplateRef<any>;
-
   @ContentChild(GroupLabelDef, {read: TemplateRef})
   groupLabel: TemplateRef<any>;
-
-  @ContentChildren(TableTopItemDirective, {read: TemplateRef})
-  topItems: QueryList<TemplateRef<any>>;
 
   @ContentChildren(BeforeDateColumnDef)
   beforeDateColumns: QueryList<BeforeDateColumnDef>;
@@ -59,9 +47,6 @@ export class SchedulesTableComponent implements OnInit, OnDestroy {
 
   @ContentChildren(AfterDateColumnDef)
   afterDateColumns: QueryList<AfterDateColumnDef>;
-
-  @ContentChild(ProxyViewDef, {read: TemplateRef})
-  proxyViewDef: TemplateRef<any>;
 
   private tableRenderSub: Subscription;
 

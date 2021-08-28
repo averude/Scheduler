@@ -10,12 +10,9 @@ import { TableRenderer } from "./service/table-renderer.service";
 import { ClearSelectionService } from "./service/clear-selection.service";
 import { TableStateService } from "./service/table-state.service";
 import { SelectionEndService } from "./service/selection-end.service";
-import { TableTopItemDirective } from './directives/table-top-item.directive';
 import { CellDef, HeaderCellDef } from "./directives/cell";
 import { AfterDateColumnDef, BeforeDateColumnDef, PageableColumnDef } from "./directives/column";
-import { PaginatorDef } from "./directives/paginator";
 import { SelectableCellDirective } from "./directives/selectable-cell.directive";
-import { ProxyViewDef } from "./directives/proxy-view";
 import { GroupLabelDef } from "./directives/group-label";
 
 @NgModule({
@@ -30,9 +27,6 @@ import { GroupLabelDef } from "./directives/group-label";
     TableRowGroupComponent,
     SelectableCellDirective,
     SelectableRowDirective,
-    TableTopItemDirective,
-    PaginatorDef,
-    ProxyViewDef,
     BeforeDateColumnDef,
     AfterDateColumnDef,
     PageableColumnDef,
@@ -43,9 +37,6 @@ import { GroupLabelDef } from "./directives/group-label";
   exports: [
     SchedulesTableComponent,
     SelectableCellDirective,
-    TableTopItemDirective,
-    PaginatorDef,
-    ProxyViewDef,
     BeforeDateColumnDef,
     AfterDateColumnDef,
     PageableColumnDef,
