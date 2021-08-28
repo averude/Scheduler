@@ -26,19 +26,10 @@ import { InitialData } from "../../../model/datasource/initial-data";
 import { TableDataCollector } from "../../../services/collectors/schedule/table-data.collector";
 import { TableData } from "../../../lib/ngx-schedule-table/model/data/table";
 import { RowGroup } from "../../../lib/ngx-schedule-table/model/data/row-group";
-import { animate, state, style, transition, trigger } from "@angular/animations";
+import { fadeOutAnimation } from "../utils/animations";
 
 @Component({
-  animations: [
-    trigger('fadeOut', [
-      state('void', style({
-        opacity: '0',
-        width: '0',
-        display: 'none'
-      })),
-      transition('* => void', animate('400ms ease-in'))
-    ])
-  ],
+  animations: [fadeOutAnimation],
   selector: 'app-schedule-table-component',
   templateUrl: './schedule-table.component.html',
   styleUrls: ['./schedule-table.component.css'],
