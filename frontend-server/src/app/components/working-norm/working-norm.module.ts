@@ -14,11 +14,11 @@ import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
 import { AvrEntityGenerationModule } from "../../lib/avr-entity-generation/avr-entity-generation.module";
 import { TableSumCalculator } from "../../services/calculators/table-sum-calculator.service";
-import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { WorkingNormTableConfigurationMenuModule } from "./working-norm-table-configuration-menu/working-norm-table-configuration-menu.module";
 import { NameInfoCellModule } from "../shared/name-info-cell/name-info-cell.module";
 import { WorkingNormDataSource } from "./data-source/working-norm.data-source";
 import { WorkingNormRoutingModule } from "./working-norm-routing.module";
+import { ProxyViewModule } from "../proxy-view/proxy-view.module";
 
 @NgModule({
   imports: [
@@ -31,7 +31,7 @@ import { WorkingNormRoutingModule } from "./working-norm-routing.module";
     WorkingNormTableConfigurationMenuModule,
     MonthYearPaginatorModule,
     MatDialogModule,
-    MatProgressSpinnerModule,
+    ProxyViewModule,
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,

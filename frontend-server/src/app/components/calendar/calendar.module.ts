@@ -18,7 +18,6 @@ import { ScheduleTableDataSource } from "./data-sources/schedule-table.data-sour
 import { CellEnabledSetter } from "../../services/collectors/schedule/cell-enabled-setter";
 import { ScheduleTableConfigurationMenuModule } from "./schedule-table-configuration-menu/schedule-table-configuration-menu.module";
 import { TableDataCollector } from "../../services/collectors/schedule/table-data.collector";
-import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { TableCellComponent } from "./table-cell/table-cell.component";
 import { NameInfoCellModule } from "../shared/name-info-cell/name-info-cell.module";
 import { ScheduleViewTableComponent } from "./schedule-view-table/schedule-view-table.component";
@@ -26,6 +25,7 @@ import { UIPrioritySortingStrategy } from "./utils/ui-priority-sorting-strategy"
 import { TableRowFiller } from "../../services/collectors/schedule/table-row-filler";
 import { TableFilterModule } from "./table-filter/table-filter.module";
 import { ScheduleFilteringStrategy } from "./utils/schedule-filtering-strategy";
+import { ProxyViewModule } from "../proxy-view/proxy-view.module";
 
 @NgModule({
   imports: [
@@ -34,7 +34,7 @@ import { ScheduleFilteringStrategy } from "./utils/schedule-filtering-strategy";
     SharedModule,
     MonthYearPaginatorModule,
     MatFormFieldModule,
-    MatProgressSpinnerModule,
+    ProxyViewModule,
     MatInputModule,
     NameInfoCellModule,
     ScheduleTableContextMenuModule,

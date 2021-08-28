@@ -8,106 +8,96 @@
   <div class="header"></div>
 
   <div class="content">
-    <table class="table-base">
 
-      <ng-container *ngIf="viewProxyShown">
-        <tr>
-          <td colspan="100">
-            <div class="table-proxy-view">
-              <mat-progress-spinner mode="indeterminate">
-              </mat-progress-spinner>
-            </div>
-          </td>
-        </tr>
-      </ng-container>
+    <app-proxy-view *ngIf="viewProxyShown"></app-proxy-view>
 
-      <ng-container *ngIf="!viewProxyShown">
+    <table *ngIf="!viewProxyShown" class="table-base">
 
-        <thead>
+      <thead>
 
-        <tr>
-          <th class="table-sticky-header th-null">
-            <div class="name-container">
-              <button class="menu-button"
-                      [matMenuTriggerFor]="menu">
-                <img src="assets/img/settings.svg" class="config-icon">
+      <tr>
+        <th class="table-sticky-header th-null">
+          <div class="name-container">
+            <button class="menu-button"
+                    [matMenuTriggerFor]="menu">
+              <img src="assets/img/settings.svg" class="config-icon">
+            </button>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item (click)="changeMode()">
+                Show {{currentMode == 'per_position' ?  'overall' : 'per position'}}
               </button>
-              <mat-menu #menu="matMenu">
-                <button mat-menu-item (click)="changeMode()">
-                  Show {{currentMode == 'per_position' ?  'overall' : 'per position'}}
-                </button>
-                <button mat-menu-item (click)="changePaginatorMode()">
-                  {{paginatorMode == 'single' ? 'Change to date range' : 'Change to single date'}}
-                </button>
-              </mat-menu>
+              <button mat-menu-item (click)="changePaginatorMode()">
+                {{paginatorMode == 'single' ? 'Change to date range' : 'Change to single date'}}
+              </button>
+            </mat-menu>
 
-              <p>Name</p>
-            </div>
-          </th>
-          <th class="table-sticky-header th-null">
-            <p>Position</p>
-          </th>
-          <th class="table-sticky-header"
-              [class.norm-column]="column.id < 0"
-              *ngFor="let column of summationColumns">
-            {{column.name}}
-          </th>
-        </tr>
+            <p>Name</p>
+          </div>
+        </th>
+        <th class="table-sticky-header th-null">
+          <p>Position</p>
+        </th>
+        <th class="table-sticky-header"
+            [class.norm-column]="column.id < 0"
+            *ngFor="let column of summationColumns">
+          {{column.name}}
+        </th>
+      </tr>
 
-        </thead>
+      </thead>
 
-        <tbody>
+      <tbody>
 
-        <ng-container *ngFor="let group of tableData?.groups">
+      <ng-container *ngFor="let group of tableData?.groups">
 
-          <ng-container *ngIf="group.rows.length > 0">
+        <ng-container *ngIf="group.rows.length > 0">
 
-            <tr class="group-label-row">
-              <td colspan="100" class="group-label">{{group.value.name}}</td>
+          <tr class="group-label-row">
+            <td colspan="100" class="group-label">{{group.value.name}}</td>
+          </tr>
+
+          <ng-container *ngFor="let employeeRow of group.rows">
+
+            <tr>
+              <td [rowSpan]="employeeRow.rows.length"
+                  class="td-name name">
+                {{getEmployeeShortName(employeeRow.employee)}}
+              </td>
+
+              <td class="td-position name">
+                {{employeeRow.rows[0].position?.shortName}}
+              </td>
+
+              <td *ngFor="let cell of employeeRow.rows[0].cells"
+                  class="sum">
+                <p align="center">{{cell.value}}</p>
+              </td>
             </tr>
 
-            <ng-container *ngFor="let employeeRow of group.rows">
-
-              <tr>
-                <td [rowSpan]="employeeRow.rows.length"
-                    class="td-name name">
-                  {{getEmployeeShortName(employeeRow.employee)}}
-                </td>
+            <ng-container *ngFor="let positionRow of employeeRow.rows; let i = index">
+              <tr *ngIf="i!=0">
 
                 <td class="td-position name">
-                  {{employeeRow.rows[0].position?.shortName}}
+                  {{positionRow.position?.shortName}}
                 </td>
 
-                <td *ngFor="let cell of employeeRow.rows[0].cells"
+                <td *ngFor="let cell of positionRow.cells"
                     class="sum">
                   <p align="center">{{cell.value}}</p>
                 </td>
               </tr>
-
-              <ng-container *ngFor="let positionRow of employeeRow.rows; let i = index">
-                <tr *ngIf="i!=0">
-
-                  <td class="td-position name">
-                    {{positionRow.position?.shortName}}
-                  </td>
-
-                  <td *ngFor="let cell of positionRow.cells"
-                      class="sum">
-                    <p align="center">{{cell.value}}</p>
-                  </td>
-                </tr>
-              </ng-container>
-
             </ng-container>
 
           </ng-container>
 
         </ng-container>
 
-        </tbody>
-
       </ng-container>
 
+      </tbody>
+
     </table>
+
+    <ng-container [ngTemplateOutlet]="viewProxyShown ? proxyView : tableView"></ng-container>
   </div>
 </div>
