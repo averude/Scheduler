@@ -6,20 +6,10 @@ import { Row } from "../../../lib/ngx-schedule-table/model/data/row";
 import { RowGroup } from "../../../lib/ngx-schedule-table/model/data/row-group";
 import { RowInterval } from "./row-interval";
 import { EmployeeScheduleDTO } from "../../dto/employee-schedule-dto";
-import { TableData } from "../../../lib/ngx-schedule-table/model/data/table";
-
-export class ScheduleRowGroup extends RowGroup {
-
-  parent: TableData;
-  id:     number;
-  name:   string;
-  rows:   Row[];
-
-}
 
 export class ScheduleRow extends Row {
 
-  parent:         ScheduleRowGroup;
+  parent:         RowGroup;
   id:             number;
   employee:       Employee;
   position:       Position;
@@ -30,7 +20,9 @@ export class ScheduleRow extends Row {
   intervals?:     RowInterval[];
   hidden?:        boolean;
 
-  static create(group: ScheduleRowGroup,
+  enabledCellCount: number;
+
+  static create(group: RowGroup,
                 dto: EmployeeScheduleDTO,
                 position: Position,
                 workingNorm: number,

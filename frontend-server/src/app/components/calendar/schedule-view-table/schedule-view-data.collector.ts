@@ -1,9 +1,10 @@
 import { InitialData } from "../../../model/datasource/initial-data";
-import { ScheduleCell, ScheduleRow, ScheduleRowGroup } from "../../../model/ui/schedule-table/table-data";
+import { ScheduleCell, ScheduleRow } from "../../../model/ui/schedule-table/table-data";
 import { CellCollector } from "../../../services/collectors/cell-collector";
 import { WorkDay } from "../../../model/workday";
 import { Injectable } from "@angular/core";
 import { TableData } from "../../../lib/ngx-schedule-table/model/data/table";
+import { RowGroup } from "../../../lib/ngx-schedule-table/model/data/row-group";
 
 @Injectable()
 export class ScheduleViewDataCollector {
@@ -13,7 +14,7 @@ export class ScheduleViewDataCollector {
 
   collect(initialData: InitialData): TableData {
     const result = new TableData();
-    const group = new ScheduleRowGroup();
+    const group = new RowGroup();
     group.rows = initialData.scheduleDTOs
       .map(dto => {
         const row = {} as ScheduleRow;

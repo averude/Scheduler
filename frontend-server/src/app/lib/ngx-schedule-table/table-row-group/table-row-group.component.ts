@@ -2,7 +2,6 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  EventEmitter,
   Input,
   OnDestroy,
   OnInit,
@@ -12,8 +11,9 @@ import { RowGroup } from "../model/data/row-group";
 import { AfterDateColumnDef, BeforeDateColumnDef, PageableColumnDef } from "../directives/column";
 import { Subscription } from "rxjs";
 import { TableRenderer } from "../service/table-renderer.service";
-import { debounceTime, filter } from "rxjs/operators";
+import { filter } from "rxjs/operators";
 import { Options } from "../model/options";
+import { GroupLabelDef } from "../directives/group-label";
 
 @Component({
   selector: '[app-table-row-group]',
@@ -22,24 +22,18 @@ import { Options } from "../model/options";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TableRowGroupComponent implements OnInit, OnDestroy {
-  colspan:  number;
+  groupIsShown: boolean;
 
-  @Input() trackByFn;
-
-  @Input() options: Options;
-
-  @Input() editableRowGroup:  boolean;
-  @Input() showHiddenRows:    boolean;
-
+  @Input() colspan:           number;
+  @Input() options:           Options;
   @Input() pageableColumns:   PageableColumnDef;
   @Input() beforeDateColumns: QueryList<BeforeDateColumnDef>;
   @Input() afterDateColumns:  QueryList<AfterDateColumnDef>;
-
+  @Input() rowGroupLabel:     GroupLabelDef;
   @Input() groupData:         RowGroup;
 
-  @Input() onAddRowClick:     EventEmitter<RowGroup>;
-
-  private rowGroupRenderSub: Subscription;
+  private rowGroupRenderSub:      Subscription;
+  private allRowGroupsRenderSub:  Subscription;
 
   isHiddenGroup: boolean = false;
 
@@ -47,29 +41,37 @@ export class TableRowGroupComponent implements OnInit, OnDestroy {
               private cd: ChangeDetectorRef) {}
 
   ngOnInit() {
-    this.colspan = 99;
+
+    this.groupIsShown = this.getGroupIsShown();
 
     this.rowGroupRenderSub = this.tableRenderer.onRenderRowGroup
       .pipe(
         filter(id => this.groupData.id === id),
-        debounceTime(50)
       )
       .subscribe((id) => this.renderRows());
+
+    this.allRowGroupsRenderSub = this.tableRenderer.onRenderAllRowGroups
+      .subscribe(() => this.renderRows());
   }
 
-  addRowToGroup() {
-    if (this.onAddRowClick) {
-      this.onAddRowClick.emit(this.groupData);
-    }
+  private getGroupIsShown() {
+    return this.options.groupIsShownFn ? this.options.groupIsShownFn(this.groupData) : true;
   }
 
   ngOnDestroy(): void {
     this.rowGroupRenderSub.unsubscribe();
+    this.allRowGroupsRenderSub.unsubscribe();
   }
 
   renderRows() {
     if (this.groupData) {
+      this.groupIsShown = this.getGroupIsShown();
       this.cd.detectChanges();
     }
   }
+
+  isHidden(row) {
+    return this.isHiddenGroup || !this.options?.rowIsShownFn(row);
+  }
+
 }

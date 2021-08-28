@@ -3,5 +3,8 @@ export class Options {
   multipleSelect?:    boolean;
   showSumColumns?:    boolean;
   distinctByColor?:   boolean;
-  groupable?:         boolean
+  groupable?:         boolean;
+  trackByFn?:         (value, index) => any;
+  groupIsShownFn?:    (group) => boolean;
+  rowIsShownFn?:      (row) => boolean;
 }

@@ -4,8 +4,10 @@ import { SortingStrategy } from "./sorting-strategy";
 import { binarySearchInsertIndex } from "../../utils/collection-utils";
 import { RowGroup } from "./row-group";
 import { Row } from "./row";
+import { FilteringStrategy } from "./filtering-strategy";
+import { Filterable } from "./filterable";
 
-export class TableData {
+export class TableData implements Filterable {
 
   private _groups: RowGroup[];
 
@@ -14,6 +16,7 @@ export class TableData {
   to:   Moment;
 
   sortingStrategy: SortingStrategy<RowGroup>;
+  filteringStrategy: FilteringStrategy;
 
   constructor() {
     this._groups = [];
@@ -59,9 +62,17 @@ export class TableData {
   }
 
   forEachRowWithId(rowId: number,
-                   fn: (row) => void) {
+                   callbackfn: (row) => void) {
     this._groups.forEach(group => {
-      group.findRows(row => row.id === rowId).forEach(fn);
+      group.findRows(row => row.id === rowId).forEach(callbackfn);
     });
+  }
+
+  filter(value: string) {
+    this.filteringStrategy?.filter(this, value);
+  }
+
+  clearFilter() {
+    this.filteringStrategy?.clear(this);
   }
 }

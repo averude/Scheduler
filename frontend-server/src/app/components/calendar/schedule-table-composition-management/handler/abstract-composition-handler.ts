@@ -2,7 +2,7 @@ import { TableRowRemover } from "../processor/table-row-remover";
 import { TableRowProcessor } from "../processor/table-row-processor.service";
 import { IntervalCreator } from "../../../../services/creator/interval-creator.service";
 import { Composition } from "../../../../model/composition";
-import { ScheduleRow, ScheduleRowGroup } from "../../../../model/ui/schedule-table/table-data";
+import { ScheduleRow } from "../../../../model/ui/schedule-table/table-data";
 import { InitialData } from "../../../../model/datasource/initial-data";
 import { forkJoin, Observable } from "rxjs";
 import { map, tap } from "rxjs/operators";
@@ -11,6 +11,7 @@ import { Row } from "../../../../lib/ngx-schedule-table/model/data/row";
 import { Position } from "../../../../model/position";
 import { EmployeeScheduleDTO } from "../../../../model/dto/employee-schedule-dto";
 import { CompositionHandler } from "./composition-handler";
+import { RowGroup } from "../../../../lib/ngx-schedule-table/model/data/row-group";
 
 export abstract class AbstractCompositionHandler<T extends Composition> implements CompositionHandler<T> {
 
@@ -20,7 +21,7 @@ export abstract class AbstractCompositionHandler<T extends Composition> implemen
                         protected compositionService: CUDService<T>) {}
 
   createOrUpdate(compositions: T[],
-                 rowGroup: ScheduleRowGroup,
+                 rowGroup: RowGroup,
                  row: ScheduleRow,
                  parentRow: ScheduleRow,
                  initData: InitialData): Observable<any[]> {
@@ -31,7 +32,7 @@ export abstract class AbstractCompositionHandler<T extends Composition> implemen
     return forkJoin(this.createOrUpdateComposition(compositions, rowGroup, row, parentRow, initData));
   }
 
-  remove(groupData: ScheduleRowGroup,
+  remove(groupData: RowGroup,
          row: ScheduleRow,
          initData: InitialData,
          compositions: T[]): Observable<any[]> {
@@ -49,7 +50,7 @@ export abstract class AbstractCompositionHandler<T extends Composition> implemen
   }
 
   private createOrUpdateComposition(compositions: T[],
-                                    rowGroup: ScheduleRowGroup,
+                                    rowGroup: RowGroup,
                                     row: ScheduleRow,
                                     parentRow: ScheduleRow,
                                     initData: InitialData): Observable<Row>[] {
@@ -80,13 +81,13 @@ export abstract class AbstractCompositionHandler<T extends Composition> implemen
   abstract createRow(initData: InitialData,
                      composition: T,
                      position: Position,
-                     group: ScheduleRowGroup,
+                     group: RowGroup,
                      parentRow: ScheduleRow);
 
   protected updateRow(initData: InitialData,
                       composition: T,
                       position: Position,
-                      group: ScheduleRowGroup,
+                      group: RowGroup,
                       row: ScheduleRow) {
     if (!row) {
       throw new Error("No row provided");
@@ -125,7 +126,7 @@ export abstract class AbstractCompositionHandler<T extends Composition> implemen
     }
   }
 
-  protected afterRowUpdated(group: ScheduleRowGroup,
+  protected afterRowUpdated(group: RowGroup,
                             dto: EmployeeScheduleDTO,
                             composition: T) {
 

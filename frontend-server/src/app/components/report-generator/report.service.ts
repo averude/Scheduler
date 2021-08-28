@@ -34,7 +34,7 @@ export class ReportService {
     if (reportDataCollector && reportCreator && reportDecorator) {
 
       return reportDataObservable.pipe(mergeMap(data => {
-        this.statisticsColumnCompositor.composeResults(data.summationDTOs, summationColumns, data.workingNorms);
+        this.statisticsColumnCompositor.composeResults(data.summationDTOMap, summationColumns, data.workingNorms);
 
         const collectedData = reportDataCollector.collect(data, summationColumns, reportOptions.useReportLabel);
         collectedData.decorationData = decorationData;

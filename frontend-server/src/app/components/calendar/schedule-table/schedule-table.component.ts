@@ -25,9 +25,11 @@ import { Options } from "../../../lib/ngx-schedule-table/model/options";
 import { InitialData } from "../../../model/datasource/initial-data";
 import { TableDataCollector } from "../../../services/collectors/schedule/table-data.collector";
 import { TableData } from "../../../lib/ngx-schedule-table/model/data/table";
-import { UIPrioritySortingStrategy } from "../utils/ui-priority-sorting-strategy";
+import { RowGroup } from "../../../lib/ngx-schedule-table/model/data/row-group";
+import { fadeOutAnimation } from "../utils/animations";
 
 @Component({
+  animations: [fadeOutAnimation],
   selector: 'app-schedule-table-component',
   templateUrl: './schedule-table.component.html',
   styleUrls: ['./schedule-table.component.css'],
@@ -35,8 +37,6 @@ import { UIPrioritySortingStrategy } from "../utils/ui-priority-sorting-strategy
 })
 export class ScheduleTableComponent implements OnInit, AfterViewInit, OnDestroy {
   isAble: boolean = false;
-
-  trackByFn = TRACK_BY_FN;
 
   options: Options;
 
@@ -46,6 +46,7 @@ export class ScheduleTableComponent implements OnInit, AfterViewInit, OnDestroy 
   accessRights:     UserAccessRights;
   isEditable:       boolean;
   proxyViewIsShown: boolean;
+  filterIsShown:    boolean;
   showHiddenRows:   boolean = false;
 
   @ViewChild('paginator', { read: TemplateRef })
@@ -62,13 +63,14 @@ export class ScheduleTableComponent implements OnInit, AfterViewInit, OnDestroy 
               private templateService: ToolbarTemplateService,
               private activatedRoute: ActivatedRoute,
               private authService: AuthService,
-              private sortingStrategy: UIPrioritySortingStrategy,
               private tableRenderer: TableRenderer,
               public state: TableStateService,
               private dataSource: ScheduleTableDataSource,
               private tableDataCollector: TableDataCollector,
               public tableManager: TableManager,
               public utility: SchedulerUtility) {}
+
+  private filterShownSub: Subscription;
 
   ngOnInit() {
     this.accessRights = this.authService.currentUserValue.accessRights;
@@ -120,19 +122,37 @@ export class ScheduleTableComponent implements OnInit, AfterViewInit, OnDestroy 
       )
       .subscribe((tableData: TableData) => {
         this.proxyViewIsShown = false;
-        tableData.sortingStrategy = this.sortingStrategy;
         this.tableData = tableData;
         this.cd.detectChanges();
       });
 
     this.editableStateSub = this.state.editableGroupsState
-      .subscribe(isEditable => this.isEditable = isEditable);
+      .subscribe(isEditable => {
+        this.isEditable = isEditable;
+        this.tableRenderer.renderAllRowGroups();
+      });
+
+    this.filterShownSub = this.state.isFilterIsShown()
+      .subscribe(filterIsShown => this.filterIsShown = filterIsShown);
 
     this.options = {
       showSumColumns: this.accessRights?.isAdmin,
       multipleSelect: true,
       selectionEnabled: this.accessRights?.isAdmin,
-      groupable: true
+      groupable: true,
+      trackByFn: TRACK_BY_FN,
+      groupIsShownFn: ((group: RowGroup) => {
+        return this.isEditable || (group?.rows
+          && group?.rows.length > 0
+          && group.rows.some((row: any) => !row.hidden));
+      }),
+      rowIsShownFn: ((row: ScheduleRow) => {
+        if (this.filterIsShown) {
+          return !row.hidden;
+        } else {
+          return row.enabledCellCount > 0 || this.showHiddenRows;
+        }
+      })
     };
   }
 
@@ -143,6 +163,7 @@ export class ScheduleTableComponent implements OnInit, AfterViewInit, OnDestroy 
   ngOnDestroy(): void {
     this.templateService.changeTemplate(null);
     this.routeSub.unsubscribe();
+    this.filterShownSub.unsubscribe();
     if (this.rowRenderSub) this.rowRenderSub.unsubscribe();
     if (this.editableStateSub) this.editableStateSub.unsubscribe();
   }
@@ -162,10 +183,14 @@ export class ScheduleTableComponent implements OnInit, AfterViewInit, OnDestroy 
 
   changeHiddenRowsVisibility(isShown: boolean) {
     this.showHiddenRows = isShown;
-    this.cd.detectChanges();
+    this.tableRenderer.renderAllRowGroups();
   }
 
-  newRow(rowGroup) {
+  newRow(event: MouseEvent,
+         rowGroup: RowGroup) {
+    event.preventDefault();
+    event.stopPropagation();
+
     if (this.isAble && this.isEditable) {
       this.tableManager.newRow(rowGroup, this.initData);
     }
@@ -176,4 +201,5 @@ export class ScheduleTableComponent implements OnInit, AfterViewInit, OnDestroy 
       this.tableManager.editRow(rowData, this.initData);
     }
   }
+
 }

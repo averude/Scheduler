@@ -7,6 +7,7 @@ export class TableStateService {
   private showSumColumnsSubject:  BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   private cellStateSubject:       BehaviorSubject<number> = new BehaviorSubject<number>(0);
   private editableGroupsSubject:  BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  private filterShownSubject:     BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   private headerCellClick:        Subject<any> = new Subject();
 
@@ -46,5 +47,13 @@ export class TableStateService {
 
   onHeaderCellClick(): Observable<any> {
     return this.headerCellClick.asObservable();
+  }
+
+  filterShown(value: boolean) {
+    this.filterShownSubject.next(value);
+  }
+
+  isFilterIsShown(): Observable<boolean> {
+    return this.filterShownSubject.asObservable();
   }
 }

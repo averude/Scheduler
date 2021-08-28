@@ -1,26 +1,17 @@
-<ng-container *ngIf="(groupData?.rows && groupData?.rows.length > 0) || editableRowGroup">
-  <tr class="group-label-row">
+<ng-container *ngIf="groupIsShown">
+  <tr class="group-label-row"
+      (click)="isHiddenGroup = !isHiddenGroup">
     <td [attr.colspan]="colspan">
-      <div class="group-label-container">
-        <div class="group-label group-control-element"
-             (click)="isHiddenGroup = !isHiddenGroup">
-          {{groupData.name + ' ' + (isHiddenGroup ? "▸" : "▾")}}
-        </div>
-        <div class="group-control">
-          <div class="group-control-element"
-               *ngIf="editableRowGroup"
-               (click)="addRowToGroup()">Add</div>
-        </div>
-      </div>
+      <ng-container [ngTemplateOutlet]="rowGroupLabel"
+                    [ngTemplateOutletContext]="{$implicit: groupData, isHiddenGroup: isHiddenGroup}">
+      </ng-container>
     </td>
   </tr>
   <ng-container *ngFor="let row of groupData.rows">
-    <tr [hidden]="isHiddenGroup || (!showHiddenRows && row.hidden)"
-        class="row"
+    <tr [hidden]="isHidden(row)"
         [class.distinctByColor]="options?.distinctByColor"
         app-table-row
         [options]="options"
-        [trackByFn]="trackByFn"
         [pageableColumns]="pageableColumns"
         [beforeDateColumns]="beforeDateColumns"
         [afterDateColumns]="afterDateColumns"

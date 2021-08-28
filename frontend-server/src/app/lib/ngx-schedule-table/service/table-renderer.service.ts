@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Observable, Subject } from "rxjs";
 import { RowCommand } from "../model/row-command";
+import { debounceTime } from "rxjs/operators";
 
 @Injectable()
 export class TableRenderer {
@@ -47,7 +48,9 @@ export class TableRenderer {
   }
 
   get onRenderRowGroup(): Observable<number> {
-    return this.renderRowGroupSubject.asObservable();
+    return this.renderRowGroupSubject
+      .asObservable()
+      .pipe(debounceTime(50));
   }
 
   renderAllRowGroups() {
@@ -55,6 +58,8 @@ export class TableRenderer {
   }
 
   get onRenderAllRowGroups() {
-    return this.renderAllRowGroupsSubject.asObservable();
+    return this.renderAllRowGroupsSubject
+      .asObservable()
+      .pipe(debounceTime(50));
   }
 }

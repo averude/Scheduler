@@ -8,10 +8,10 @@ import { Shift } from "../../model/shift";
 @Injectable({providedIn: 'root'})
 export class StatisticsColumnCompositor {
 
-  composeResults(dtos: EmployeeWorkStatDTO[],
+  composeResults(dtoMap: Map<number, EmployeeWorkStatDTO>,
                  summationColumns: SummationColumn[],
                  workingNorms: WorkingNorm[]) {
-    dtos.forEach(dto => {
+    dtoMap.forEach(dto => {
       const shiftId = dto.shiftId;
       const norm = workingNorms.find(value => value.shiftId === shiftId);
 
@@ -25,7 +25,7 @@ export class StatisticsColumnCompositor {
   }
 
   cr(shifts: Shift[],
-     dtos: EmployeeWorkStatDTO[],
+     dtoMap: Map<number, EmployeeWorkStatDTO>,
      summationColumns: SummationColumn[],
      workingNorms: WorkingNorm[]) {
 
@@ -49,7 +49,7 @@ export class StatisticsColumnCompositor {
 
     });
 
-    this.composeResults(dtos, summationColumns, rangeWorkingNorms);
+    this.composeResults(dtoMap, summationColumns, rangeWorkingNorms);
   }
 
   composeColumns(summationColumns: SummationColumn[]) {

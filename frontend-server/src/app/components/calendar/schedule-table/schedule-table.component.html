@@ -2,15 +2,36 @@
   <app-month-year-paginator (onDateChange)="onDateChange()"></app-month-year-paginator>
 </ng-template>
 
-<app-schedules-table [trackByFn]="trackByFn"
-                     [options]="options"
+<app-schedules-table [options]="options"
                      [tableData]="tableData"
-                     [proxyViewIsShown]="proxyViewIsShown"
-                     [showHiddenRows]="showHiddenRows"
-                     (onAddRowClick)="newRow($event)">
+                     [proxyViewIsShown]="proxyViewIsShown">
+
+  <ng-template table-top-item>
+    <div class="filter-container"
+         @fadeOut
+         *ngIf="filterIsShown">
+      <app-table-filter [filterableData]="tableData"
+                        [applyFilterOnDataChange]="true"></app-table-filter>
+    </div>
+  </ng-template>
 
   <ng-template proxyViewDef>
     <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+  </ng-template>
+
+  <ng-template groupLabelDef
+               let-groupData
+               let-isHiddenGroup="isHiddenGroup">
+    <div class="group-label-container">
+      <div class="group-label group-control-element">
+        {{groupData.value.name + ' ' + (isHiddenGroup ? "▸" : "▾")}}
+      </div>
+      <div *ngIf="isEditable"
+           class="group-control">
+        <div class="group-control-element"
+             (click)="newRow($event, groupData)">Add</div>
+      </div>
+    </div>
   </ng-template>
 
   <ng-container pageableColumnDef

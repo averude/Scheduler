@@ -16,6 +16,7 @@ import { AfterDateColumnDef, BeforeDateColumnDef, PageableColumnDef } from "./di
 import { PaginatorDef } from "./directives/paginator";
 import { SelectableCellDirective } from "./directives/selectable-cell.directive";
 import { ProxyViewDef } from "./directives/proxy-view";
+import { GroupLabelDef } from "./directives/group-label";
 
 @NgModule({
   imports: [
@@ -37,6 +38,7 @@ import { ProxyViewDef } from "./directives/proxy-view";
     PageableColumnDef,
     HeaderCellDef,
     CellDef,
+    GroupLabelDef
   ],
   exports: [
     SchedulesTableComponent,
@@ -48,7 +50,8 @@ import { ProxyViewDef } from "./directives/proxy-view";
     AfterDateColumnDef,
     PageableColumnDef,
     HeaderCellDef,
-    CellDef
+    CellDef,
+    GroupLabelDef
   ],
   providers: [
     TableRenderer,

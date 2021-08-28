@@ -4,25 +4,21 @@ import {
   Component,
   ContentChild,
   ContentChildren,
-  EventEmitter,
   Input,
   OnDestroy,
   OnInit,
-  Output,
   QueryList,
   TemplateRef
 } from "@angular/core";
-import { RowGroup } from "../model/data/row-group";
 import { TableTopItemDirective } from "../directives/table-top-item.directive";
 import { AfterDateColumnDef, BeforeDateColumnDef, PageableColumnDef } from "../directives/column";
 import { PaginatorDef } from "../directives/paginator";
-import { Row } from "../model/data/row";
-import { TableStateService } from "../service/table-state.service";
 import { Subscription } from "rxjs";
 import { ProxyViewDef } from "../directives/proxy-view";
 import { TableRenderer } from "../service/table-renderer.service";
 import { Options } from "../model/options";
 import { TableData } from "../model/data/table";
+import { GroupLabelDef } from "../directives/group-label";
 
 const DEFAULT_OPTIONS: Options = {
   selectionEnabled: false,
@@ -39,16 +35,19 @@ const DEFAULT_OPTIONS: Options = {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SchedulesTableComponent implements OnInit, OnDestroy {
-  @Input() trackByFn;
 
   @Input() options: Options = DEFAULT_OPTIONS;
-
+  @Input() tableData: TableData;
   @Input() proxyViewIsShown:  boolean = false;
-  @Input() editableRowGroup:  boolean = false;
-  @Input() showHiddenRows:    boolean = true;
+
+  @ContentChild(TableTopItemDirective, { read: TemplateRef })
+  topItem: TemplateRef<any>;
 
   @ContentChild(PaginatorDef, { read: TemplateRef })
   paginator: TemplateRef<any>;
+
+  @ContentChild(GroupLabelDef, {read: TemplateRef})
+  groupLabel: TemplateRef<any>;
 
   @ContentChildren(TableTopItemDirective, {read: TemplateRef})
   topItems: QueryList<TemplateRef<any>>;
@@ -65,29 +64,18 @@ export class SchedulesTableComponent implements OnInit, OnDestroy {
   @ContentChild(ProxyViewDef, {read: TemplateRef})
   proxyViewDef: TemplateRef<any>;
 
-  @Input() tableData: TableData;
-  @Input() rowData:   Row[];
-
-  @Output() onAddRowClick: EventEmitter<RowGroup> = new EventEmitter();
-
-  private tableStateSub: Subscription;
   private tableRenderSub: Subscription;
 
-  constructor(private tableStateService: TableStateService,
-              private tableRenderer: TableRenderer,
+  constructor(private tableRenderer: TableRenderer,
               private cd: ChangeDetectorRef) {
   }
 
   ngOnInit() {
-    this.tableStateSub = this.tableStateService.editableGroupsState
-      .subscribe(editableRowGroup => this.editableRowGroup = editableRowGroup);
-
     this.tableRenderSub = this.tableRenderer.onTableRender
       .subscribe(() => this.cd.detectChanges());
   }
 
   ngOnDestroy(): void {
-    if (this.tableStateSub) this.tableStateSub.unsubscribe();
     if (this.tableRenderSub) this.tableRenderSub.unsubscribe();
   }
 }

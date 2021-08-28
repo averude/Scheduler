@@ -30,9 +30,10 @@ export class ScheduleTableConfigurationMenuComponent implements OnInit, OnDestro
   accessRights: UserAccessRights;
 
   cellsState: number = 0;
-  hiddenRowsIsShown: boolean = false;
 
+  hiddenRowsIsShown: boolean = false;
   editableRowGroups: boolean = false;
+  filterIsShown:     boolean;
 
   private cellStateSub:     Subscription;
   private editableStateSub: Subscription;
@@ -43,12 +44,17 @@ export class ScheduleTableConfigurationMenuComponent implements OnInit, OnDestro
               private generationService: GenerationService,
               private notificationsService: NotificationsService) { }
 
+  private filterIsShownSub: Subscription;
+
   ngOnInit() {
     this.cellStateSub = this.tableStateService.isCellShown
       .subscribe(status => this.cellsState = status);
 
     this.editableStateSub = this.tableStateService.editableGroupsState
       .subscribe(editableRowGroups => this.editableRowGroups = editableRowGroups);
+
+    this.filterIsShownSub = this.tableStateService.isFilterIsShown()
+      .subscribe(filterIsShown => this.filterIsShown = filterIsShown);
 
     this.accessRights = this.authService.currentUserValue.accessRights;
 
@@ -57,6 +63,7 @@ export class ScheduleTableConfigurationMenuComponent implements OnInit, OnDestro
 
   ngOnDestroy(): void {
     if (this.cellStateSub) this.cellStateSub.unsubscribe();
+    this.filterIsShownSub.unsubscribe();
     if (this.editableStateSub) {
       this.tableStateService.resetEditableState();
       this.editableStateSub.unsubscribe();
@@ -73,6 +80,12 @@ export class ScheduleTableConfigurationMenuComponent implements OnInit, OnDestro
 
   changeEmptyRowVisibility() {
     this.onChangeHiddenRowVisibility.emit(this.hiddenRowsIsShown = !this.hiddenRowsIsShown);
+  }
+
+  changeFilterVisibility() {
+    this.onChangeHiddenRowVisibility.emit(!this.filterIsShown);
+    this.hiddenRowsIsShown = !this.filterIsShown;
+    this.tableStateService.filterShown(this.hiddenRowsIsShown);
   }
 
   openGenerateScheduleDialog() {

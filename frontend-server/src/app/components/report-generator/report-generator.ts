@@ -26,7 +26,7 @@ export class ReportGenerator {
       this.splitIntoSheets(reportSheets, reportData.tableData)
         .forEach((group, index) => {
         if (group.rows && group.rows.length > 0) {
-          const worksheet = workbook.addWorksheet(group.name);
+          const worksheet = workbook.addWorksheet(group.value);
 
           reportDecorator.decorate(worksheet, reportData, group.rows.length, reportSheets[index].reportSheet);
           reportCreator.create(worksheet, reportData, group.rows);
@@ -50,7 +50,7 @@ export class ReportGenerator {
     sheets.forEach(dto => {
       const group = new ReportGroup();
       group.id    = dto.reportSheet.id;
-      group.name  = dto.reportSheet.name;
+      group.value = dto.reportSheet.name;
       group.rows  = [];
 
       dto.shiftIds.forEach(shiftId => {

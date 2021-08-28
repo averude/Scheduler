@@ -1,0 +1,9 @@
+/*:host ::ng-deep th {*/
+  /*position: sticky;*/
+  /*top: 28px;*/
+/*}*/
+
+.sticky-header {
+  position: sticky;
+  top: 28px;
+}

@@ -13,7 +13,7 @@ export class StatisticsTableDataCollector {
 
   constructor(private sortingStrategy: UIPrioritySortingStrategy) {}
 
-  getTableData(dtos: EmployeeWorkStatDTO[],
+  getTableData(dtoMap: Map<number, EmployeeWorkStatDTO>,
                shifts: Shift[],
                positionMap: Map<number, Position>): TableData {
     const table = new TableData();
@@ -22,7 +22,6 @@ export class StatisticsTableDataCollector {
     shifts.forEach(shift => {
       const group = {
         id:     shift.id,
-        name:   shift.name,
         value:  shift,
         rows:   []
       } as StatisticsRowGroup;
@@ -31,7 +30,7 @@ export class StatisticsTableDataCollector {
     });
 
 
-    for (let dto of dtos) {
+    dtoMap.forEach(dto => {
       const group = table.findRowGroup(dto.shiftId);
       if (group) {
         const employeeRow = {
@@ -44,7 +43,7 @@ export class StatisticsTableDataCollector {
         });
         group.rows.push(employeeRow);
       }
-    }
+    });
 
     return table;
   }

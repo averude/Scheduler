@@ -9,7 +9,7 @@
   <td class="cell"
       [ngClass]="getContentPositioning()"
       [class.selection-enabled]="options?.selectionEnabled"
-      *ngFor="let cell of rowData.cells;trackBy:trackByFn"
+      *ngFor="let cell of rowData.cells;trackBy:options?.trackByFn"
       selectableCell
       [options]="options"
       [data]="cell"

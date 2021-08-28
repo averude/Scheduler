@@ -1,4 +1,4 @@
-import { ScheduleRow, ScheduleRowGroup } from "../../../../model/ui/schedule-table/table-data";
+import { ScheduleRow } from "../../../../model/ui/schedule-table/table-data";
 import { Position } from "../../../../model/position";
 import { EmployeeScheduleDTO } from "../../../../model/dto/employee-schedule-dto";
 import { CalendarDay } from "../../../../lib/ngx-schedule-table/model/calendar-day";
@@ -8,6 +8,7 @@ import { IntervalCreator } from "../../../../services/creator/interval-creator.s
 import { CellCollector } from "../../../../services/collectors/cell-collector";
 import { Injectable } from "@angular/core";
 import { createNewRow, exchangeComposition, isUpdateOperation } from "../../../../services/collectors/utils";
+import { RowGroup } from "../../../../lib/ngx-schedule-table/model/data/row-group";
 
 @Injectable()
 export class TableRowProcessor {
@@ -15,7 +16,7 @@ export class TableRowProcessor {
   constructor(private intervalCreator: IntervalCreator,
               private cellCollector: CellCollector) {}
 
-  insertNewOrUpdateExistingRow(group: ScheduleRowGroup,
+  insertNewOrUpdateExistingRow(group: RowGroup,
                                dto: EmployeeScheduleDTO,
                                calendarDays: CalendarDay[],
                                composition: Composition,

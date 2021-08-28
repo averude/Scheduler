@@ -15,7 +15,6 @@ export class ReportData {
 
 export class ReportGroup extends RowGroup {
   id:   number;
-  name: string;
   rows: ReportRow[];
 }
 

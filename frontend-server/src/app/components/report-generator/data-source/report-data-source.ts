@@ -36,7 +36,7 @@ export class ReportDataSource {
       this.scheduleService.getAllByDepartmentId(departmentId, from, to),
       this.workingNormService.getAllByDepartmentId(departmentId, from, to),
       this.specialCalendarDateService.getAllByEnterpriseId(enterpriseId, from, to),
-      this.statisticsService.getSummationDTOByDepartmentId(SummationMode.PER_POSITION, enterpriseId, departmentId, from, to,),
+      this.statisticsService.getSummationDTOMapByDepartmentId(SummationMode.PER_POSITION, enterpriseId, departmentId, from, to,),
       this.dayTypeService.getMapByEnterpriseId(enterpriseId),
       this.shiftService.getAllByDepartmentId(departmentId),
       this.positionService.getAllByDepartmentId(departmentId),
@@ -55,7 +55,7 @@ export class ReportDataSource {
       this.scheduleService.getAllByShiftIds(shiftIds, from, to),
       this.workingNormService.getAllByDepartmentId(departmentId, from, to),
       this.specialCalendarDateService.getAllByEnterpriseId(enterpriseId, from, to),
-      this.statisticsService.getSummationDTOByShiftIds(SummationMode.PER_POSITION, enterpriseId, departmentId, shiftIds, from, to,),
+      this.statisticsService.getSummationDTOMapByShiftIds(SummationMode.PER_POSITION, enterpriseId, departmentId, shiftIds, from, to,),
       this.dayTypeService.getMapByEnterpriseId(enterpriseId),
       this.shiftService.getAllByShiftIds(shiftIds),
       this.positionService.getAllByDepartmentId(departmentId)
@@ -73,14 +73,14 @@ export class ReportDataSource {
           [
             schedule, workingNorms,
             specialCalendarDates,
-            summationDTO, dayTypeMap, shifts,
+            summationDTOMap, dayTypeMap, shifts,
             positions, reportSheets
           ]
           ) => (
                {
                  scheduleDTOs: schedule,
                  workingNorms: workingNorms,
-                 summationDTOs: summationDTO,
+                 summationDTOMap: summationDTOMap,
                  dayTypeMap: dayTypeMap,
                  shifts: shifts,
                  positions: positions,
