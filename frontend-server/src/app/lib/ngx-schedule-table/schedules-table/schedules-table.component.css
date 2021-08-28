@@ -40,7 +40,7 @@
   width: 95%;
   border-spacing: 0;
   border-collapse: collapse;
-  animation: fade-in-2 400ms;
+  animation: fade-in-2 ease-out 700ms;
 }
 
 .table-top-buttons-container {
