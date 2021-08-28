@@ -23,7 +23,7 @@
 
       <ng-container *ngIf="!viewProxyShown">
 
-        <thead class="thead-border">
+        <thead>
 
           <tr>
             <th class="table-sticky-header th-null">
@@ -47,7 +47,7 @@
             <th class="table-sticky-header th-null">
               <p>Position</p>
             </th>
-            <th class="table-sticky-header th-sum"
+            <th class="table-sticky-header"
                 [class.norm-column]="column.id < 0"
                 *ngFor="let column of summationColumns">
               {{column.name}}

@@ -24,25 +24,6 @@
   border-collapse: collapse;
 }
 
-.thead-border {
-  border: 1px solid #e5e9f0;
-  border-radius: 5px;
-}
-
-.first-step-container {
-  background-color: white;
-  position: sticky;
-  top: 0;
-  z-index: 999;
-  padding-top: 25px;
-  padding-bottom: 25px;
-}
-
-.date-selector {
-  margin: 0 auto;
-  width: fit-content;
-}
-
 .td-name {
   border: 1px solid #e5e9f0;
   height: 32px;
@@ -63,18 +44,6 @@
   font-size: 14px;
 }
 
-.position {
-  color: #2b3944;
-  font-family: 'MuseoSansMedium';
-  font-size: 12px;
-}
-
-.info {
-  padding-top: 4px;
-  font-size: 11px;
-  color: #7d8c9f;
-}
-
 .table-sticky-header {
   min-width: 40px;
   max-width: 60px;
@@ -84,13 +53,13 @@
   position: sticky;
   top: 28px;
   background-color: #F5F7F9;
+  border: 1px solid #e5e9f0;
   box-shadow: 0 -1px 1px 0px #e5e9f0;
 }
 
 .th-null {
   height: 39px;
   min-width: 150px;
-  border: 1px solid #e5e9f0;
 }
 
 .name-container {
@@ -106,10 +75,6 @@
 
 .norm-column {
   background-color: #F5F7F9;
-}
-
-.th-sum {
-  border: 1px solid #e5e9f0;
 }
 
 .sum {
