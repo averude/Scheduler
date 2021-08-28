@@ -19,7 +19,7 @@ export class ScheduleFilteringStrategy implements FilteringStrategy {
   }
 
   private filterRow(row: ScheduleRow, value: string) {
-    const filterStr = value.toLowerCase();
+    const filterStr = value.toLowerCase().trim();
 
     return row.employee.secondName.toLowerCase().includes(filterStr)
       || row.employee.firstName.toLowerCase().includes(filterStr)

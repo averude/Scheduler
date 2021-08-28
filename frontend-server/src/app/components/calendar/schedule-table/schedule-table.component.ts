@@ -28,8 +28,19 @@ import { TableData } from "../../../lib/ngx-schedule-table/model/data/table";
 import { UIPrioritySortingStrategy } from "../utils/ui-priority-sorting-strategy";
 import { ScheduleFilteringStrategy } from "../utils/schedule-filtering-strategy";
 import { RowGroup } from "../../../lib/ngx-schedule-table/model/data/row-group";
+import { animate, state, style, transition, trigger } from "@angular/animations";
 
 @Component({
+  animations: [
+    trigger('fadeOut', [
+      state('void', style({
+        opacity: '0',
+        width: '0',
+        display: 'none'
+      })),
+      transition('* => void', animate('400ms ease-in'))
+    ])
+  ],
   selector: 'app-schedule-table-component',
   templateUrl: './schedule-table.component.html',
   styleUrls: ['./schedule-table.component.css'],

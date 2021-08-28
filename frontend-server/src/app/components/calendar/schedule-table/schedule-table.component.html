@@ -7,8 +7,12 @@
                      [proxyViewIsShown]="proxyViewIsShown">
 
   <ng-template table-top-item>
-    <app-table-filter *ngIf="filterIsShown"
-                      [filterableData]="tableData"></app-table-filter>
+    <div class="filter-container"
+         @fadeOut
+         *ngIf="filterIsShown">
+      <app-table-filter [filterableData]="tableData"
+                        [applyFilterOnDataChange]="true"></app-table-filter>
+    </div>
   </ng-template>
 
   <ng-template proxyViewDef>

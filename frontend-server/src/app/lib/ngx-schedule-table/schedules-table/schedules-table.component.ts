@@ -64,8 +64,6 @@ export class SchedulesTableComponent implements OnInit, OnDestroy {
   @ContentChild(ProxyViewDef, {read: TemplateRef})
   proxyViewDef: TemplateRef<any>;
 
-
-
   private tableRenderSub: Subscription;
 
   constructor(private tableRenderer: TableRenderer,
