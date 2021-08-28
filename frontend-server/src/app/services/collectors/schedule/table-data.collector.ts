@@ -9,11 +9,15 @@ import { TableData } from "../../../lib/ngx-schedule-table/model/data/table";
 import { TableRowFiller } from "./table-row-filler";
 import { CalendarDaysCalculator } from "../calendar-days-calculator";
 import { RowGroup } from "../../../lib/ngx-schedule-table/model/data/row-group";
+import { UIPrioritySortingStrategy } from "../../../components/calendar/utils/ui-priority-sorting-strategy";
+import { ScheduleFilteringStrategy } from "../../../components/calendar/utils/schedule-filtering-strategy";
 
 @Injectable()
 export class TableDataCollector {
 
   constructor(private intervalCreator: IntervalCreator,
+              private sortingStrategy: UIPrioritySortingStrategy,
+              private filteringStrategy: ScheduleFilteringStrategy,
               private cellEnabledSetter: CellEnabledSetter,
               private calendarDaysCalculator: CalendarDaysCalculator,
               private sumCalculator: TableSumCalculator,
@@ -21,6 +25,8 @@ export class TableDataCollector {
 
   handleData(initData: InitialData): TableData {
     const tableData: TableData = new TableData();
+    tableData.sortingStrategy = this.sortingStrategy;
+    tableData.filteringStrategy = this.filteringStrategy;
 
     this.collectHeaderData(initData, tableData);
     this.collectBodyData(initData, tableData);

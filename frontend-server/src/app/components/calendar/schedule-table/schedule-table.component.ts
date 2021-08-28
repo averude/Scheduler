@@ -25,8 +25,6 @@ import { Options } from "../../../lib/ngx-schedule-table/model/options";
 import { InitialData } from "../../../model/datasource/initial-data";
 import { TableDataCollector } from "../../../services/collectors/schedule/table-data.collector";
 import { TableData } from "../../../lib/ngx-schedule-table/model/data/table";
-import { UIPrioritySortingStrategy } from "../utils/ui-priority-sorting-strategy";
-import { ScheduleFilteringStrategy } from "../utils/schedule-filtering-strategy";
 import { RowGroup } from "../../../lib/ngx-schedule-table/model/data/row-group";
 import { animate, state, style, transition, trigger } from "@angular/animations";
 
@@ -74,8 +72,6 @@ export class ScheduleTableComponent implements OnInit, AfterViewInit, OnDestroy 
               private templateService: ToolbarTemplateService,
               private activatedRoute: ActivatedRoute,
               private authService: AuthService,
-              private sortingStrategy: UIPrioritySortingStrategy,
-              private filteringStrategy: ScheduleFilteringStrategy,
               private tableRenderer: TableRenderer,
               public state: TableStateService,
               private dataSource: ScheduleTableDataSource,
@@ -135,8 +131,6 @@ export class ScheduleTableComponent implements OnInit, AfterViewInit, OnDestroy 
       )
       .subscribe((tableData: TableData) => {
         this.proxyViewIsShown = false;
-        tableData.sortingStrategy = this.sortingStrategy;
-        tableData.filteringStrategy = this.filteringStrategy;
         this.tableData = tableData;
         this.cd.detectChanges();
       });
