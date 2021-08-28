@@ -9,7 +9,26 @@
   position: sticky;
   top: 0px;
   background-color: #F5F7F9;
+  border: 1px solid #e5e9f0;
   box-shadow: 0 -1px 1px 0px #e5e9f0;
+}
+
+.table-sticky-header:after,
+.table-sticky-header:before {
+  content: '';
+  position: absolute;
+  left: 0;
+  width: 100%;
+}
+
+.table-sticky-header:before {
+  top: -1px;
+  border-top: 1px solid #e5e9f0;
+}
+
+.table-sticky-header:after {
+  bottom: -1px;
+  border-bottom: 1px solid #e5e9f0;
 }
 
 .th-null {
@@ -18,7 +37,6 @@
 
 .th-sum {
   width: 50px;
-  border: 1px solid #e5e9f0;
 }
 
 .sum {
@@ -37,7 +55,6 @@
 .month-header {
   width: 7%;
   height: 39px;
-  border:  1px solid #e5e9f0;
 }
 
 .cell {
