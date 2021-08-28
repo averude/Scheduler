@@ -39,7 +39,7 @@ export class CellEnabledSetter {
     row.cells.forEach(cell => cell.enabled = false);
     row.enabledCellCount = 0;
 
-    this.processCells(row.cells, row.intervals, from, to,
+    this.processCells(row.cells, row.value.intervals, from, to,
       (cell => {
         row.enabledCellCount++;
         cell.enabled = true;

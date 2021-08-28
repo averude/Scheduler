@@ -34,10 +34,10 @@ export class TableDataCollector {
     tableData.forEachRow((row: ScheduleRow) => {
       const dto = initData.scheduleDTOMap.get(row.id);
 
-      if (row.isSubstitution) {
-        row.intervals = row.compositions.map(composition => convertCompositionToInterval(composition));
+      if (row.value.isSubstitution) {
+        row.value.intervals = row.value.compositions.map(composition => convertCompositionToInterval(composition));
       } else {
-        row.intervals = this.intervalCreator.getEmployeeShiftIntervalsByArr(row.compositions, dto.substitutionCompositions);
+        row.value.intervals = this.intervalCreator.getEmployeeShiftIntervalsByArr(row.value.compositions, dto.substitutionCompositions);
       }
 
       this.sumCalculator.calculateSum(row, dto.mainCompositions, tableData.from, tableData.to);

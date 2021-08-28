@@ -132,10 +132,10 @@ export class IntervalCreator {
   }
 
   recalculate(row: ScheduleRow, dto: EmployeeScheduleDTO) {
-    if (row.isSubstitution) {
-      row.intervals = row.compositions.map(value => convertCompositionToInterval(value));
+    if (row.value.isSubstitution) {
+      row.value.intervals = row.value.compositions.map(value => convertCompositionToInterval(value));
     } else {
-      row.intervals = this.getEmployeeShiftIntervalsByArr(row.compositions, dto.substitutionCompositions);
+      row.value.intervals = this.getEmployeeShiftIntervalsByArr(row.value.compositions, dto.substitutionCompositions);
     }
   }
 }

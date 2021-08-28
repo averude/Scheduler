@@ -7,7 +7,7 @@
                      [proxyViewIsShown]="proxyViewIsShown">
 
   <ng-template proxyViewDef>
-    <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+    <app-proxy-view></app-proxy-view>
   </ng-template>
 
   <ng-container pageableColumnDef
@@ -30,10 +30,10 @@
         *headerCellDef>
     </th>
     <td class="td-name"
-        [class.substitution]="rowData.isSubstitution"
+        [class.substitution]="rowData.value.isSubstitution"
         *cellDef="let rowData"
         name-info-cell
-        [name]="utility.getEmployeeName(rowData.employee)">
+        [name]="utility.getEmployeeName(rowData.value.employee)">
     </td>
   </ng-container>
 </app-schedules-table>

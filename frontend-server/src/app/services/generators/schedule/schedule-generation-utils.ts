@@ -17,7 +17,7 @@ export function createOrUpdateCell(usePreviousValue: boolean,
 function createWorkDayInCell(cell: Cell,
                              unit: HasDayTypeAndTime) {
   const scheduleCell  = <ScheduleCell> cell;
-  const employee      = scheduleCell.parent.employee;
+  const employee      = scheduleCell.parent.value.employee;
 
   cell.value                    = new WorkDay();
   cell.value.departmentId       = employee.departmentId;

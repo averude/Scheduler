@@ -68,12 +68,12 @@ export class TableManager {
 
     const groupData = row.parent;
     const data = {
-      compositions: row.compositions,
+      compositions: row.value.compositions,
       initData: initData,
-      employeeName: getEmployeeShortName(row.employee)
+      employeeName: getEmployeeShortName(row.value.employee)
     };
 
-    if (row.isSubstitution) {
+    if (row.value.isSubstitution) {
       this.openDialog(data, groupData, row, this.substitutionCompositionHandler);
     } else {
       this.openDialog(data, groupData, row, this.mainCompositionHandler);
@@ -88,11 +88,11 @@ export class TableManager {
       from: selectionData.selectedCells[0].date.isoString,
       to: selectionData.selectedCells[selectionData.selectedCells.length - 1].date.isoString,
       initData: initData,
-      employee: mainCompositionRow.employee,
+      employee: mainCompositionRow.value.employee,
       // TODO: Has to be reworked.
       //  Add ability to check whether date interval of selected data
       //  is within composition's interval
-      mainComposition: mainCompositionRow.compositions[0]
+      mainComposition: mainCompositionRow.value.compositions[0]
     };
 
     this.dialog.open(AddSubstitutionCompositionDialogComponent, {data: data})

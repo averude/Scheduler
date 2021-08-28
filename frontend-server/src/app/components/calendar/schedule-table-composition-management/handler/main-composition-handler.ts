@@ -35,9 +35,9 @@ export class MainCompositionHandler extends AbstractCompositionHandler<MainCompo
 
       const row = this.rowProcessor.insertNewOrUpdateExistingRow(group, dto, initData.calendarDays,
         composition, position, norm, false,
-        (row) => row.position.id === composition.positionId);
+        (row) => row.value.position.id === composition.positionId);
 
-      row.intervals = this.intervalCreator.getEmployeeShiftIntervalsByArr(row.compositions, dto.substitutionCompositions);
+      row.value.intervals = this.intervalCreator.getEmployeeShiftIntervalsByArr(row.value.compositions, dto.substitutionCompositions);
 
       return row;
     }

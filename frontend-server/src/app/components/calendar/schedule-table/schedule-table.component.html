@@ -60,11 +60,11 @@
       </app-schedule-table-configuration-menu>
     </th>
     <td class="td-name"
-        [class.substitution]="rowData.isSubstitution"
+        [class.substitution]="rowData.value.isSubstitution"
         *cellDef="let rowData"
         name-info-cell
-        [name]="utility.getEmployeeName(rowData.employee)"
-        [info]="rowData.position.shortName"
+        [name]="utility.getEmployeeName(rowData.value.employee)"
+        [info]="rowData.value.position.shortName"
         [isEditable]="isRowEditable(rowData)"
         (click)="updateRow(rowData)">
     </td>
@@ -75,7 +75,7 @@
         *headerCellDef>Sum</th>
     <td class="sum"
         *cellDef="let rowData">
-      <p align="center">{{rowData.sum}}</p>
+      <p align="center">{{rowData.value.sum}}</p>
     </td>
   </ng-container>
 
@@ -84,7 +84,7 @@
         *headerCellDef>Norm</th>
     <td class="sum"
         *cellDef="let rowData">
-      <p align="center">{{rowData.workingNorm}}</p>
+      <p align="center">{{rowData.value.workingNorm}}</p>
     </td>
   </ng-container>
 
@@ -93,8 +93,8 @@
         *headerCellDef>Diff</th>
     <td class="sum"
         *cellDef="let rowData"
-        [class.notEqual]="rowData.diff !== 0">
-      <p align="center">{{rowData.diff}}</p>
+        [class.notEqual]="rowData.value.diff !== 0">
+      <p align="center">{{rowData.value.diff}}</p>
     </td>
   </ng-container>
 </app-schedules-table>

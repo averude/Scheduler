@@ -37,12 +37,12 @@ export class SubstitutionCompositionHandler extends AbstractCompositionHandler<S
 
       const row = this.rowProcessor.insertNewOrUpdateExistingRow(group, dto, initData.calendarDays,
         composition, position, norm, true,
-        (row) => row.position.id === composition.positionId);
+        (row) => row.value.position.id === composition.positionId);
 
       if (parentRow) {
-        parentRow.intervals = this.intervalCreator.getEmployeeShiftIntervalsByArr(parentRow.compositions, dto.substitutionCompositions);
+        parentRow.value.intervals = this.intervalCreator.getEmployeeShiftIntervalsByArr(parentRow.value.compositions, dto.substitutionCompositions);
       }
-      row.intervals = row.compositions.map(value => convertCompositionToInterval(value));
+      row.value.intervals = row.value.compositions.map(value => convertCompositionToInterval(value));
 
       return row;
     }
@@ -55,8 +55,8 @@ export class SubstitutionCompositionHandler extends AbstractCompositionHandler<S
 
     group.parent.forEachRowInGroup(mainShiftComposition.shiftId,
       (row: ScheduleRow) => {
-        if (row.id === mainShiftComposition.employeeId && !row.isSubstitution) {
-          row.intervals = this.intervalCreator.getEmployeeShiftIntervalsByArr(row.compositions, dto.substitutionCompositions);
+        if (row.id === mainShiftComposition.employeeId && !row.value.isSubstitution) {
+          row.value.intervals = this.intervalCreator.getEmployeeShiftIntervalsByArr(row.value.compositions, dto.substitutionCompositions);
         }
       });
   }

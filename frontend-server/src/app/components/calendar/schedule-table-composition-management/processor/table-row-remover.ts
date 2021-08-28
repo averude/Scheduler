@@ -26,7 +26,7 @@ export class TableRowRemover {
     const table = groupData.parent;
     const dto = dtoMap.get(composition.employeeId);
 
-    if (row.isSubstitution) {
+    if (row.value.isSubstitution) {
       // Remove composition from initial data
       removeFromArray(dto.substitutionCompositions, value => value.id === composition.id);
 
@@ -60,8 +60,8 @@ export class TableRowRemover {
 
       table.forEachRowInGroup(composition.shiftId,
         (row: ScheduleRow) => {
-          if (row.id === composition.employeeId && !row.isSubstitution) {
-            row.intervals = this.intervalCreator.getEmployeeShiftIntervalsByArr(row.compositions, substitutionShiftCompositions);
+          if (row.id === composition.employeeId && !row.value.isSubstitution) {
+            row.value.intervals = this.intervalCreator.getEmployeeShiftIntervalsByArr(row.value.compositions, substitutionShiftCompositions);
           }
         });
 
@@ -81,7 +81,7 @@ export class TableRowRemover {
 
         table.forEachRowInGroup(composition.shiftId,
           (row: ScheduleRow) => {
-            if (row.id === composition.employeeId && row.isSubstitution) {
+            if (row.id === composition.employeeId && row.value.isSubstitution) {
               this.removeCompositionAndInterval(row, composition);
             }
           });
@@ -100,17 +100,17 @@ export class TableRowRemover {
     const group = row.parent;
 
     // Remove composition from row's compositions
-    removeFromArray(row.compositions, value => value.id === composition.id);
+    removeFromArray(row.value.compositions, value => value.id === composition.id);
 
-    if (row.compositions.length == 0) {
+    if (row.value.compositions.length == 0) {
       // If no compositions remain then remove row from group
       group.removeRows((val: ScheduleRow) => val.id === row.id
-        && val.isSubstitution === row.isSubstitution
-        && val.position.id === row.position.id);
+        && val.value.isSubstitution === row.value.isSubstitution
+        && val.value.position.id === row.value.position.id);
 
       this.tableRenderer.renderRowGroup(group.id);
     } else {
-      this.removeCompositionIntervals(composition, row.intervals);
+      this.removeCompositionIntervals(composition, row.value.intervals);
     }
   }
 

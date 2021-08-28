@@ -46,7 +46,7 @@ export class TableSumCalculator {
       (cell => sum += calculateHoursByHasTime(cell.value))
     );
 
-    row.sum = roundToTwo(sum);
-    row.diff = roundToTwo(row.sum - row.workingNorm);
+    row.value.sum = roundToTwo(sum);
+    row.value.diff = roundToTwo(row.value.sum - row.value.workingNorm);
   }
 }

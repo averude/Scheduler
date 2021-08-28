@@ -25,14 +25,14 @@ export class TableRowFiller {
         const workingNorm = workingNormConsumer(composition);
 
         rowGroup.init(
-          (row => isUpdateOperation(row?.position.id === composition.positionId, row, isSubstitution, composition)),
+          (row => isUpdateOperation(row?.value.position.id === composition.positionId, row, isSubstitution, composition)),
           (row => {
-            row.compositions.push(composition);
+            row.value.compositions.push(composition);
             return row;
           }),
           (() => {
             const newRow = createNewRow(this.cellCollector, rowGroup, table.headerData, dto, position, workingNorm, isSubstitution);
-            newRow.compositions = [composition];
+            newRow.value.compositions = [composition];
             return newRow;
           })
         );

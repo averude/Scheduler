@@ -26,16 +26,16 @@ export class TableRowProcessor {
                                isUpdateOperationPredicate: (row: ScheduleRow) => boolean): ScheduleRow {
     return group.createOrUpdateRow(
       (val => val.id - dto.parent.id),
-      (val => val.position.id === composition.positionId && val.isSubstitution === isSubstitution),
+      (val => val.value.position.id === composition.positionId && val.value.isSubstitution === isSubstitution),
       (row => isUpdateOperation(isUpdateOperationPredicate(row), row, isSubstitution, composition)),
       (row => {
-        row.compositions.push(composition);
-        row.compositions.sort((a, b) => a.from.diff(b.from));
+        row.value.compositions.push(composition);
+        row.value.compositions.sort((a, b) => a.from.diff(b.from));
         return row;
       }),
       (() => {
         const newRow = createNewRow(this.cellCollector, group, calendarDays, dto, position, workingNorm, isSubstitution);
-        newRow.compositions = [composition];
+        newRow.value.compositions = [composition];
         return newRow;
       })
     );
@@ -44,14 +44,14 @@ export class TableRowProcessor {
   updateRow(row: ScheduleRow,
             composition: Composition,
             dto: EmployeeScheduleDTO) {
-    exchangeComposition(row.compositions, composition);
+    exchangeComposition(row.value.compositions, composition);
 
-    if (row.isSubstitution) {
+    if (row.value.isSubstitution) {
       exchangeComposition(dto.substitutionCompositions, composition);
-      row.intervals = row.compositions.map(value => convertCompositionToInterval(value));
+      row.value.intervals = row.value.compositions.map(value => convertCompositionToInterval(value));
     } else {
       exchangeComposition(dto.mainCompositions, composition);
-      row.intervals = this.intervalCreator.getEmployeeShiftIntervalsByArr(row.compositions, dto.substitutionCompositions);
+      row.value.intervals = this.intervalCreator.getEmployeeShiftIntervalsByArr(row.value.compositions, dto.substitutionCompositions);
     }
   }
 }

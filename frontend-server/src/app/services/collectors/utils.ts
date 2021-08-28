@@ -24,9 +24,9 @@ export function isUpdateOperation(updateRows: boolean,
                                   row: ScheduleRow,
                                   isSubstitution: boolean,
                                   composition: Composition) {
-  return row && updateRows && (row.isSubstitution === isSubstitution)
+  return row && updateRows && (row.value.isSubstitution === isSubstitution)
     && row.parent.id === composition.shiftId && row.id === composition.employeeId
-    && row.position.id === composition.positionId;
+    && row.value.position.id === composition.positionId;
 }
 
 export function exchangeComposition(compositions: Composition[],

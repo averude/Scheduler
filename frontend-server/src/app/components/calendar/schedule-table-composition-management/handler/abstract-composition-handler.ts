@@ -94,25 +94,23 @@ export abstract class AbstractCompositionHandler<T extends Composition> implemen
     }
 
     if (initData.scheduleDTOMap && initData.calendarDays) {
-      // const dto = binarySearch(initData.scheduleDTOs, (mid => mid.parent.id - composition.employeeId));
-
       const dto = initData.scheduleDTOMap.get(composition.employeeId);
 
-      if (row.position.id !== composition.positionId) {
+      if (row.value.position.id !== composition.positionId) {
 
         const group = row.parent;
         const rowToMerge = <ScheduleRow> group.rows
           .find((value: ScheduleRow) => value.id === composition.employeeId
-            && value.position.id === composition.positionId
-            && value.isSubstitution === row.isSubstitution);
+            && value.value.position.id === composition.positionId
+            && value.value.isSubstitution === row.value.isSubstitution);
 
         if (rowToMerge) {
           this.transfer(row, rowToMerge, composition, dto);
         } else {
           const newRow = this.rowProcessor.insertNewOrUpdateExistingRow(group, dto, initData.calendarDays, composition,
-            position, row.workingNorm, row.isSubstitution, () => false);
-          newRow.compositions = [];
-          newRow.intervals    = [];
+            position, row.value.workingNorm, row.value.isSubstitution, () => false);
+          newRow.value.compositions = [];
+          newRow.value.intervals    = [];
 
           this.transfer(row, newRow, composition, dto);
         }
@@ -139,8 +137,8 @@ export abstract class AbstractCompositionHandler<T extends Composition> implemen
 
     this.rowRemover.removeCompositionAndInterval(from, composition);
 
-    to.compositions.push(composition);
-    to.compositions.sort((a, b) => a.from.diff(b.from));
+    to.value.compositions.push(composition);
+    to.value.compositions.sort((a, b) => a.from.diff(b.from));
 
     this.intervalCreator.recalculate(from, dto);
     this.intervalCreator.recalculate(to, dto);
