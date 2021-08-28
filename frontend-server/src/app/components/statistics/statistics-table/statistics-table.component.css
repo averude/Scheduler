@@ -1,15 +1,23 @@
-.table-wrap {
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.header {
+  margin-top: 20px;
+  flex-grow: 0;
+  background-color: white;
+}
+
+.content {
+  flex-grow: 1;
   position: relative;
   width: 100%;
   max-width: 100%;
-}
-
-.dummy {
-  height: 28px;
-  position: sticky;
-  top: 0;
-  width: 100%;
-  background-color: #ffffff;
+  overflow: auto;
+  height: 100%;
+  background-color: white;
 }
 
 .table-base {
@@ -51,10 +59,28 @@
   font-size: 13px;
   color: #000;
   position: sticky;
-  top: 28px;
+  top: 0;
   background-color: #F5F7F9;
   border: 1px solid #e5e9f0;
   box-shadow: 0 -1px 1px 0px #e5e9f0;
+}
+
+.table-sticky-header:after,
+.table-sticky-header:before {
+  content: '';
+  position: absolute;
+  left: 0;
+  width: 100%;
+}
+
+.table-sticky-header:before {
+  top: -1px;
+  border-top: 1px solid #e5e9f0;
+}
+
+.table-sticky-header:after {
+  bottom: -1px;
+  border-bottom: 1px solid #e5e9f0;
 }
 
 .th-null {
