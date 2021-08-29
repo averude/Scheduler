@@ -1,4 +1,4 @@
-import { WorkingNormRow } from "../../../model/ui/working-norm-table/working-norm-row-data";
+import { WorkingNormRow, WorkingNormRowValue } from "../../../model/ui/working-norm-table/working-norm-row-data";
 import { Shift } from "../../../model/shift";
 import { Injectable } from "@angular/core";
 import { CellCollector } from "../../../services/collectors/cell-collector";
@@ -30,12 +30,13 @@ export class WorkingNormTableDataCollector {
       let row     = new WorkingNormRow();
       row.parent  = parent;
       row.id      = dto.parent.id;
-      row.value   = dto.parent;
-      row.patternName = this.getPatternName(dto.parent, initData.shiftPatterns);
+      row.value   = new WorkingNormRowValue();
+      row.value.shift       = dto.parent;
+      row.value.patternName = this.getPatternName(dto.parent, initData.shiftPatterns);
       row.cells   = this.cellCollector.collect(tableData.headerData, dto.collection, true);
       return row;
     }) // TODO: move to strategy?
-      .sort((a, b) => (b.value.uiPriority - a.value.uiPriority) || (a.id - b.id));
+      .sort((a, b) => (b.value.shift.uiPriority - a.value.shift.uiPriority) || (a.id - b.id));
   }
 
   getHeaderData(tableData: TableData) {

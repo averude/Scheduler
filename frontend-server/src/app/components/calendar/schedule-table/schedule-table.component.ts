@@ -12,7 +12,7 @@ import { of, Subscription } from "rxjs";
 import { TableRenderer } from "../../../lib/ngx-schedule-table/service/table-renderer.service";
 import { AuthService } from "../../../services/http/auth.service";
 import { ScheduleTableDataSource } from "../data-sources/schedule-table.data-source";
-import { SchedulerUtility, TRACK_BY_FN } from "../utils/scheduler-utility";
+import { CELL_TRACK_BY_FN, SchedulerUtility } from "../utils/scheduler-utility";
 import { UserAccessRights } from "../../../model/user";
 import { TableStateService } from "../../../lib/ngx-schedule-table/service/table-state.service";
 import { ScheduleRow } from "../../../model/ui/schedule-table/table-data";
@@ -140,7 +140,7 @@ export class ScheduleTableComponent implements OnInit, AfterViewInit, OnDestroy 
       multipleSelect: true,
       selectionEnabled: this.accessRights?.isAdmin,
       groupable: true,
-      trackByFn: TRACK_BY_FN,
+      trackByFn: CELL_TRACK_BY_FN,
       groupIsShownFn: ((group: RowGroup) => {
         return this.isEditable || (group?.rows
           && group?.rows.length > 0

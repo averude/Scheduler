@@ -13,7 +13,7 @@ export class SchedulerUtility {
   }
 }
 
-export const TRACK_BY_FN = (index: number, item: ScheduleCell) => {
+export const CELL_TRACK_BY_FN = (index: number, item: ScheduleCell) => {
   const value = <WorkDay> item.value;
   if (value) {
     return item.enabled + ':' + value.actualDayTypeId + '-'

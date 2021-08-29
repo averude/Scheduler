@@ -1,7 +1,6 @@
 import { Moment } from "moment";
-import { binarySearch } from "../../../../shared/utils/collection-utils";
+import { binarySearch, binarySearchInsertIndex } from "../../utils/collection-utils";
 import { SortingStrategy } from "./sorting-strategy";
-import { binarySearchInsertIndex } from "../../utils/collection-utils";
 import { RowGroup } from "./row-group";
 import { Row } from "./row";
 import { FilteringStrategy } from "./filtering-strategy";

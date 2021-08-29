@@ -7,7 +7,7 @@ import { RowGroup } from "../../../lib/ngx-schedule-table/model/data/row-group";
 import { RowInterval } from "./row-interval";
 import { EmployeeScheduleDTO } from "../../dto/employee-schedule-dto";
 
-export class ScheduleRowData {
+export class ScheduleRowValue {
   employee:       Employee;
   position:       Position;
   compositions:   Composition[];
@@ -18,7 +18,7 @@ export class ScheduleRowData {
 
 export class ScheduleRow extends Row {
 
-  value:          ScheduleRowData;
+  value:          ScheduleRowValue;
   hidden?:        boolean;
 
   enabledCellCount: number;
@@ -31,7 +31,7 @@ export class ScheduleRow extends Row {
     const row = {} as ScheduleRow;
     row.parent = group;
     row.id = dto.parent.id;
-    row.value = new ScheduleRowData();
+    row.value = new ScheduleRowValue();
     row.value.employee = dto.parent;
     row.value.position = position;
     row.value.isSubstitution = isSubstitution;

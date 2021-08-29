@@ -1,31 +1,3 @@
-export function binarySearch<T>(arr: T[],
-                                comparator_fn: (mid: T) => number): T {
-  if (!arr) {
-    return;
-  }
-
-  let result = -1;
-
-  let start = 0;
-  let end = arr.length - 1;
-
-  while (start <= end) {
-    let mid = Math.floor((start + end) / 2);
-
-    if (comparator_fn(arr[mid]) === 0) {
-      result = mid;
-      break;
-    }
-    if (comparator_fn(arr[mid]) > 0) {
-      end = mid - 1;
-    } else {
-      start = mid + 1;
-    }
-  }
-
-  return result >= 0 ? arr[result] : undefined;
-}
-
 export function uniqById<T>(arr: T[],
                             fn: (element: T) => number): T[] {
   const seen = {};
