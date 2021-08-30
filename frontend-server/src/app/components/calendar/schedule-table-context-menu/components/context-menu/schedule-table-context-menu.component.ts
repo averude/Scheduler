@@ -1,14 +1,6 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  Input,
-  OnDestroy,
-  OnInit,
-  ViewChild
-} from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { ContextMenuComponent } from "../../../../../lib/ngx-contextmenu/contextMenu.component";
-import { forkJoin, Subscription } from "rxjs";
+import { Subscription } from "rxjs";
 import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
 import { ScheduleGenerationService } from "../../../../../services/generators/schedule/schedule-generation.service";
 import { ClearSelectionService } from "../../../../../lib/ngx-schedule-table/service/clear-selection.service";
@@ -17,12 +9,6 @@ import { ContextMenuService } from "../../../../../lib/ngx-contextmenu/contextMe
 import { CustomDaytypeDialogComponent } from "../custom-daytype-dialog/custom-daytype-dialog.component";
 import { SelectionData } from "../../../../../lib/ngx-schedule-table/model/selection-data";
 import { DepartmentDayType } from "../../../../../model/department-day-type";
-import { BasicDTO } from "../../../../../model/dto/basic-dto";
-import { PatternUnit } from "../../../../../model/pattern-unit";
-import { ShiftPatternDtoService } from "../../../../../services/http/shift-pattern-dto.service";
-import { DepartmentDayTypeService } from "../../../../../services/http/department-day-type.service";
-import { ShiftPattern } from "../../../../../model/shift-pattern";
-import { DayTypeService } from "../../../../../services/http/day-type.service";
 import { TableStateService } from "../../../../../lib/ngx-schedule-table/service/table-state.service";
 import { CalendarDay } from "../../../../../lib/ngx-schedule-table/model/calendar-day";
 import { TableManager } from "../../../schedule-table-composition-management/manager/table-manager";
@@ -45,6 +31,9 @@ export class ScheduleTableContextMenuComponent implements OnInit, OnDestroy {
 
   private initialData: InitialData;
 
+  serviceDayTypes:     DepartmentDayType[] = [];
+  noServiceDepartmentDayTypes: DepartmentDayType[] = [];
+
   get initData(): InitialData {
     return this.initialData;
   }
@@ -53,36 +42,27 @@ export class ScheduleTableContextMenuComponent implements OnInit, OnDestroy {
     this.initialData = initData;
 
     this.serviceDayTypes = [];
+
     if (initData) {
       for (let dayType of initData.dayTypeMap.values()) {
         if (dayType.usePreviousValue) {
           this.serviceDayTypes.push({dayType: dayType} as DepartmentDayType);
         }
       }
+
+      this.noServiceDepartmentDayTypes = initData.departmentDayTypes
+        .filter(departmentDayType => !departmentDayType.dayType.usePreviousValue);
     }
   };
 
   @Input() isEditableGroups: boolean = false;
   @Input() tableData: TableData;
 
-  @Input() enterpriseId: number;
-  @Input() departmentId: number;
-
-  patternDTOs:         BasicDTO<ShiftPattern, PatternUnit>[]   = [];
-  departmentDayTypes:  DepartmentDayType[] = [];
-  serviceDayTypes:     DepartmentDayType[] = [];
-
-  noServiceDepartmentDayTypes: DepartmentDayType[] = [];
-
   private selectionEndSub: Subscription;
   private headerCellClickSub: Subscription;
 
   constructor(private dialog: MatDialog,
-              private cd: ChangeDetectorRef,
               private tableManager: TableManager,
-              private shiftPatternDtoService: ShiftPatternDtoService,
-              private dayTypeService: DayTypeService,
-              private departmentDayTypeService: DepartmentDayTypeService,
               public  scheduleGenerationService: ScheduleGenerationService,
               private rowClearSelection: ClearSelectionService,
               private selectionEndService: SelectionEndService,
@@ -90,22 +70,6 @@ export class ScheduleTableContextMenuComponent implements OnInit, OnDestroy {
               private contextMenuService: ContextMenuService) { }
 
   ngOnInit() {
-    if (!this.departmentId) {
-      return;
-    }
-
-    forkJoin([
-      this.shiftPatternDtoService.getAllByDepartmentId(this.departmentId),
-      this.departmentDayTypeService.getAllByDepartmentId(this.departmentId),
-    ]).subscribe(values => {
-      this.patternDTOs = values[0];
-      this.departmentDayTypes = values[1];
-      this.noServiceDepartmentDayTypes = values[1]
-        .filter(departmentDayType => !departmentDayType.dayType.usePreviousValue);
-
-      this.cd.detectChanges();
-    });
-
     this.selectionEndSub = this.selectionEndService.onSelectionEnd
       .subscribe(selectionData => {
         const selectedCells = selectionData.selectedCells;

@@ -13,6 +13,8 @@ import { SpecialCalendarDateService } from "../../../services/http/special-calen
 import * as moment from "moment";
 import { PaginationService } from "../../../shared/paginators/pagination.service";
 import { CalendarDaysCalculator } from "../../../services/collectors/calendar-days-calculator";
+import { ShiftPatternDtoService } from "../../../services/http/shift-pattern-dto.service";
+import { DepartmentDayTypeService } from "../../../services/http/department-day-type.service";
 
 @Injectable()
 export class ScheduleTableDataSource {
@@ -24,6 +26,8 @@ export class ScheduleTableDataSource {
               private employeeService: EmployeeService,
               private shiftService: ShiftService,
               private positionService: PositionService,
+              private shiftPatternDtoService: ShiftPatternDtoService,
+              private departmentDayTypeService: DepartmentDayTypeService,
               private scheduleService: ScheduleService,
               private workingNormService: WorkingNormService) {
   }
@@ -34,7 +38,9 @@ export class ScheduleTableDataSource {
       this.dayTypeService.getMapByEnterpriseId(enterpriseId),
       this.positionService.getAllByDepartmentId(departmentId),
       this.shiftService.getAllByDepartmentId(departmentId),
-      this.employeeService.getAllByDepartmentId(departmentId)
+      this.employeeService.getAllByDepartmentId(departmentId),
+      this.shiftPatternDtoService.getAllByDepartmentId(departmentId),
+      this.departmentDayTypeService.getAllByDepartmentId(departmentId),
     ];
 
     const fn = (startDate, endDate) => {
@@ -54,7 +60,9 @@ export class ScheduleTableDataSource {
     const obs: Observable<any>[] = [
       this.dayTypeService.getMapByEnterpriseId(enterpriseId),
       this.positionService.getAllByDepartmentId(departmentId),
-      this.shiftService.getAllByDepartmentId(departmentId)
+      this.shiftService.getAllByDepartmentId(departmentId),
+      this.shiftPatternDtoService.getAllByDepartmentId(departmentId),
+      this.departmentDayTypeService.getAllByDepartmentId(departmentId),
     ];
 
     const fn = (startDate, endDate) => {
@@ -72,13 +80,16 @@ export class ScheduleTableDataSource {
                   onPaginationFn: (startDate, endDate) => Observable<any>[]): Observable<InitialData> {
     return forkJoin(obs)
       .pipe(
-        map(([dayTypeMap, positions, shifts, employees]) => {
+        map(([dayTypeMap, positions, shifts,
+               employees, patternDTOs, departmentDayTypes]) => {
           const initData = new InitialData();
           initData.dayTypeMap   = dayTypeMap;
           initData.positions    = positions;
           initData.positionMap  = toIdMap(positions);
           initData.shifts       = shifts;
           initData.employees    = employees;
+          initData.patternDTOs  = patternDTOs;
+          initData.departmentDayTypes = departmentDayTypes;
           return initData;
         }),
         switchMap((initData) =>

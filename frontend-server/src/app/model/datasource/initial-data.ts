@@ -9,6 +9,8 @@ import { SpecialCalendarDate } from "../special-calendar-date";
 import { Moment } from "moment";
 import { BasicDTO } from "../dto/basic-dto";
 import { ShiftPattern } from "../shift-pattern";
+import { DepartmentDayType } from "../department-day-type";
+import { PatternUnit } from "../pattern-unit";
 
 export class IData {
   dayTypeMap:   Map<number, DayType>;
@@ -23,10 +25,12 @@ export class IData {
 }
 
 export class InitialData extends IData {
-  scheduleDTOMap: Map<number, EmployeeScheduleDTO>;
-  employees:    Employee[];
-  from:         Moment;
-  to:           Moment;
+  from:               Moment;
+  to:                 Moment;
+  scheduleDTOMap:     Map<number, EmployeeScheduleDTO>;
+  employees:          Employee[];
+  departmentDayTypes: DepartmentDayType[];
+  patternDTOs:        BasicDTO<ShiftPattern, PatternUnit>[];
 }
 
 export class WorkingNormInitialData extends InitialData {

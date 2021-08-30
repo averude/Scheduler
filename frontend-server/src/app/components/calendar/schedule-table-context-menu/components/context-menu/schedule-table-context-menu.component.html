@@ -19,7 +19,7 @@
         <div class="sub-menu-item">Custom day</div>
       </ng-template>
 
-      <ng-template *ngFor="let departmentDayType of departmentDayTypes"
+      <ng-template *ngFor="let departmentDayType of initData?.departmentDayTypes"
                    contextMenuItem
                    (execute)="byDepartmentDayType(departmentDayType, $event.item)">
         <app-context-menu-daytype-item [hasDayTypeAndTime]="departmentDayType">
@@ -50,7 +50,7 @@
     <ng-template contextMenuItem
                  [divider]="true"></ng-template>
 
-    <ng-container *ngFor="let dto of patternDTOs">
+    <ng-container *ngFor="let dto of initData?.patternDTOs">
       <context-menu #patternsSubMenu>
         <ng-container *ngFor="let unit of dto.collection; index as i">
           <ng-template contextMenuItem
@@ -80,7 +80,7 @@
         <div class="sub-menu-item">Custom day</div>
       </ng-template>
 
-      <ng-template *ngFor="let departmentDayType of departmentDayTypes"
+      <ng-template *ngFor="let departmentDayType of initData?.departmentDayTypes"
                    contextMenuItem
                    (execute)="generateForShift(shift.id, departmentDayType, $event.item)">
         <app-context-menu-daytype-item [hasDayTypeAndTime]="departmentDayType">
