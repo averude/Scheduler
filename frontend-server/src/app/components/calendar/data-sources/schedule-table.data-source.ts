@@ -15,6 +15,7 @@ import { PaginationService } from "../../../shared/paginators/pagination.service
 import { CalendarDaysCalculator } from "../../../services/collectors/calendar-days-calculator";
 import { ShiftPatternDtoService } from "../../../services/http/shift-pattern-dto.service";
 import { DepartmentDayTypeService } from "../../../services/http/department-day-type.service";
+import { UserAccountRole } from "../../../model/dto/user-account-dto";
 
 @Injectable()
 export class ScheduleTableDataSource {
@@ -33,15 +34,21 @@ export class ScheduleTableDataSource {
   }
 
   byDepartmentId(enterpriseId: number,
-                 departmentId: number): Observable<InitialData> {
+                 departmentId: number,
+                 role: UserAccountRole): Observable<InitialData> {
     const obs: Observable<any>[] = [
       this.dayTypeService.getMapByEnterpriseId(enterpriseId),
       this.positionService.getAllByDepartmentId(departmentId),
       this.shiftService.getAllByDepartmentId(departmentId),
       this.employeeService.getAllByDepartmentId(departmentId),
-      this.shiftPatternDtoService.getAllByDepartmentId(departmentId),
-      this.departmentDayTypeService.getAllByDepartmentId(departmentId),
     ];
+
+    if (role === UserAccountRole.ADMIN) {
+      obs.push(
+        this.shiftPatternDtoService.getAllByDepartmentId(departmentId),
+        this.departmentDayTypeService.getAllByDepartmentId(departmentId)
+      );
+    }
 
     const fn = (startDate, endDate) => {
       return [
@@ -56,14 +63,20 @@ export class ScheduleTableDataSource {
 
   byShiftIds(enterpriseId: number,
              departmentId: number,
-             shiftIds: number[]): Observable<InitialData> {
+             shiftIds: number[],
+             role: UserAccountRole): Observable<InitialData> {
     const obs: Observable<any>[] = [
       this.dayTypeService.getMapByEnterpriseId(enterpriseId),
       this.positionService.getAllByDepartmentId(departmentId),
-      this.shiftService.getAllByDepartmentId(departmentId),
-      this.shiftPatternDtoService.getAllByDepartmentId(departmentId),
-      this.departmentDayTypeService.getAllByDepartmentId(departmentId),
+      this.shiftService.getAllByDepartmentId(departmentId)
     ];
+
+    if (role === UserAccountRole.ADMIN) {
+      obs.push(
+        this.shiftPatternDtoService.getAllByDepartmentId(departmentId),
+        this.departmentDayTypeService.getAllByDepartmentId(departmentId)
+      );
+    }
 
     const fn = (startDate, endDate) => {
       return [
