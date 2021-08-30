@@ -56,11 +56,11 @@ export abstract class AbstractCompositionHandler<T extends Composition> implemen
                                     initData: InitialData): Observable<Row>[] {
     let obs = [];
     compositions.forEach(composition => {
+      const position = initData.positionMap.get(composition.positionId);
       if (composition.id) {
         obs.push(this.compositionService.update(composition)
           .pipe(
             map((res) => {
-              const position = initData.positionMap.get(composition.positionId);
               return this.updateRow(initData, composition, position, rowGroup, row);
             })
           ));
@@ -69,7 +69,6 @@ export abstract class AbstractCompositionHandler<T extends Composition> implemen
           .pipe(
             map((res) => {
               composition = res;
-              const position = initData.positionMap.get(composition.positionId);
               return this.createRow(initData, composition, position, rowGroup, parentRow);
             })
           ));
