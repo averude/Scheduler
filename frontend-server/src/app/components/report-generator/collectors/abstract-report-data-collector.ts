@@ -1,4 +1,4 @@
-import { ReportData, ReportRow } from "../model/report-row";
+import { ReportData } from "../model/report-row";
 import { DayType } from "../../../model/day-type";
 import { EmployeeWorkStatDTO, SummationResult } from "../../../model/dto/employee-work-stat-dto";
 import { CalendarDay } from "../../../lib/ngx-schedule-table/model/calendar-day";
@@ -17,6 +17,8 @@ import { CellCollector } from "../../../services/collectors/cell-collector";
 import { ReportInitialData } from "../model/report-initial-data";
 import { TableData } from "../../../lib/ngx-schedule-table/model/data/table";
 import { RowGroup } from "../../../lib/ngx-schedule-table/model/data/row-group";
+import { Cell } from "../../../lib/ngx-schedule-table/model/data/cell";
+import { Row } from "../../../lib/ngx-schedule-table/model/data/row";
 
 export abstract class AbstractReportDataCollector implements ReportDataCollector {
 
@@ -63,16 +65,23 @@ export abstract class AbstractReportDataCollector implements ReportDataCollector
         dto.mainCompositions,
         dto.substitutionCompositions);
 
-      const rows: ReportRow[] = [];
+      const rows: Row[] = [];
 
       positionIntervalsMap.forEach((intervals, positionId) => {
-        const reportRowData = new ReportRow();
+        const reportRow = new Row();
         const positionName = initialData.positionMap.get(positionId)?.shortName;
-        reportRowData.reportCellData = this.collectRowCellData(dto, initialData.calendarDays,
+        reportRow.cells = this.collectRowCellData(dto, initialData.calendarDays,
           initialData.dayTypeMap, positionName,
           this.getSummationResults(initialData.summationDTOMap, dto.parent.id, positionId),
-          useReportLabel, intervals);
-        rows.push(reportRowData);
+          useReportLabel, intervals)
+          // temporary
+          .map(value => {
+            return {
+              date: value.date,
+              value: value
+            } as Cell;
+          });
+        rows.push(reportRow);
       });
 
       if (shiftId > 0) {

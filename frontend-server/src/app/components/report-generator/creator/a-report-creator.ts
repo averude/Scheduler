@@ -1,5 +1,6 @@
 import { Row, Worksheet } from "exceljs";
-import { ReportData, ReportRow } from "../model/report-row";
+import { Row as ReportRow } from "../../../lib/ngx-schedule-table/model/data/row";
+import { ReportData } from "../model/report-row";
 import { CellFiller } from "../core/cell-filler";
 import { topMediumBorders } from "../styles/report-styles";
 import { ReportMarkup } from "../model/report-markup";
@@ -14,9 +15,9 @@ export abstract class AReportCreator implements ReportCreator {
 
   create(sheet: Worksheet,
          reportData: ReportData,
-         reportRowData: ReportRow[]) {
+         reportRows: ReportRow[]) {
     this.createHeader(sheet, reportData.tableData.headerData, reportData.reportMarkup);
-    this.createDataSection(sheet, reportRowData, reportData.reportMarkup);
+    this.createDataSection(sheet, reportRows, reportData.reportMarkup);
   }
 
   createHeader(sheet: Worksheet,
@@ -65,13 +66,14 @@ export abstract class AReportCreator implements ReportCreator {
       const rowData = data[row_data_idx];
       let col_idx = reportMarkup.sheet_col_start_num;
 
-      if (rowData && rowData.reportCellData) {
-        rowData.reportCellData.forEach(cell => {
-          if (cell.merge && cell.value.length > 1) {
-            this.cellFiller.fillWithMerge(sheet, row_idx, row_idx + cell.value.length - 1,
-              rows, col_idx++, cell.value, cell.style);
+      if (rowData && rowData.cells) {
+        rowData.cells.forEach(cell => {
+          const cellValue = cell.value;
+          if (cellValue.merge && cellValue.value.length > 1) {
+            this.cellFiller.fillWithMerge(sheet, row_idx, row_idx + cellValue.value.length - 1,
+              rows, col_idx++, cellValue.value, cellValue.style);
           } else {
-            this.cellFiller.fill(rows, col_idx++, cell.value, cell.style);
+            this.cellFiller.fill(rows, col_idx++, cellValue.value, cellValue.style);
           }
         });
       }
@@ -94,7 +96,7 @@ export abstract class AReportCreator implements ReportCreator {
             data: ReportRow[],
             colStartNum: number) {
     let firstReportRow = data[data.length - 1];
-    let table_cols_num = colStartNum + firstReportRow.reportCellData.length;
+    let table_cols_num = colStartNum + firstReportRow.cells.length;
     for (let idx = colStartNum; idx < table_cols_num; idx++) {
       rows[0].getCell(idx).style.border = topMediumBorders;
     }

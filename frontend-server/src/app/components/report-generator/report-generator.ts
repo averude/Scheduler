@@ -1,4 +1,4 @@
-import { ReportData, ReportRow } from "./model/report-row";
+import { ReportData } from "./model/report-row";
 import * as ExcelJS from "exceljs";
 import { Buffer } from "exceljs";
 import { ReportCreator } from "./creator/report-creator";
@@ -30,7 +30,7 @@ export class ReportGenerator {
           const worksheet = workbook.addWorksheet(group.value);
 
           reportDecorator.decorate(worksheet, reportData, group.rows.length, reportSheets[index].reportSheet);
-          reportCreator.create(worksheet, reportData, <ReportRow[]> group.rows);
+          reportCreator.create(worksheet, reportData, group.rows);
         }
       });
     } else {
@@ -57,7 +57,7 @@ export class ReportGenerator {
       dto.shiftIds.forEach(shiftId => {
         const reportGroupData = tableData.findRowGroup(shiftId);
         if (reportGroupData) {
-          group.rows = group.rows.concat(<ReportRow[]> reportGroupData.rows);
+          group.rows = group.rows.concat(reportGroupData.rows);
         }
       });
 

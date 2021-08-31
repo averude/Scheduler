@@ -1,18 +1,14 @@
-import { ReportData, ReportRow } from "../model/report-row";
+import { ReportData } from "../model/report-row";
 import { TableData } from "../../../lib/ngx-schedule-table/model/data/table";
+import { Row } from "../../../lib/ngx-schedule-table/model/data/row";
 
 export function validate(reportData: ReportData): boolean {
   return !reportData || !reportData.tableData
     || !reportData.tableData.headerData || reportData.tableData.headerData.length == 0;
 }
 
-// export function inline(groups: ReportGroup[]): ReportRow[] {
-//   return groups.map(group => group.rows)
-//     .reduce((previousValue, currentValue) => previousValue.concat(currentValue));
-// }
-
-export function inline(tableData: TableData): ReportRow[] {
-  return <ReportRow[]> tableData.groups
+export function inline(tableData: TableData): Row[] {
+  return tableData.groups
     .map(group => group.rows)
     .reduce((previousValue, currentValue) => previousValue.concat(currentValue));
 }
