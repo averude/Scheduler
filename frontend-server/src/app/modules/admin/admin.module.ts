@@ -7,7 +7,6 @@ import { MatSidenavModule } from "@angular/material/sidenav";
 import { CellCollector } from "../../services/collectors/cell-collector";
 import { CellUpdater } from "../../services/collectors/cell-updater";
 import { CalendarModule } from "../../components/calendar/calendar.module";
-import { StatisticsModule } from "../../components/statistics/statistics.module";
 import { SimpleNotificationsModule } from "angular2-notifications";
 import { MatMenuModule } from "@angular/material/menu";
 import { ChangeUserAccountPasswordDialogModule } from "../../components/user-account-password/change-user-account-password-dialog/change-user-account-password-dialog.module";
@@ -29,7 +28,6 @@ import { CalendarDaysCalculator } from "../../services/collectors/calendar-days-
     MatSidenavModule,
     MatMenuModule,
     CalendarModule,
-    StatisticsModule,
     SidePanelStepperModule,
     CdkStepperModule,
     SimpleAccordionModule,
