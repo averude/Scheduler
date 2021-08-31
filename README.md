@@ -37,9 +37,10 @@ Employee rostering and work scheduling web service
 `git clone https://github.com/averude/Scheduler.git`
 
 ####Compile and build
-1. Generate JKS and put it into `./auth-server/src/main/resources/jks` folder
+1. Generate JKS and put it into the `./auth-server/src/main/resources/jks` folder
 2. In the root of the project folder run `mvn package`   
-3. Inside the `./frontend-server` folder run `ng build` or `ng serve` (for local run)  
+3. In `./frontend-server/src/environments` files change the IP address in the base URL to the address of your REST server (Linux host)
+4. Inside the `./frontend-server` folder run `ng build --prod` or `ng serve` (for local run)  
 
 ####Configure
 In the project folder create environment file `.env` with the next sections:
@@ -83,11 +84,13 @@ In the project folder create environment file `.env` with the next sections:
     # Database      #
     #################
     DB_DRIVER_CLASS_NAME=org.postgresql.Driver  
-    DB_URL=jdbc:postgresql://database-server:5432/schedulerdb  
+    DB_URL=jdbc:postgresql://database-server:5432  
+    DB_NAME=schedulerdb
     DB_USERNAME=scheduler
     DB_PASSWD=scheduler  
     DB_VOLUME_PATH=/app/scheduler/database  
     POSTGRES_PASSWORD=postgres  
+    GLOBAL_ADMIN_PASS_HASH=some_hash
     
     #################
     # Backend       #
@@ -102,12 +105,12 @@ In the project folder create environment file `.env` with the next sections:
     FRONTEND_VOLUME_PATH=/app/scheduler/frontend-server/dist
 
 ####Start
-`docker-compose up --build -d`
+Up containers via `docker-compose up -d` and then in browser 
+open link according to the way you deployed blah blah blah
 
     login: global-admin
-    pass:  admin
+    pass:  according_to_your_hash
     
-For prod password should be changed
 
 ## UI example
 ![Picture one](../media/images/1.png?raw=true)  
