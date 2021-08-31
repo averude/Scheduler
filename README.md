@@ -43,7 +43,7 @@ Employee rostering and work scheduling web service
 
 ####Configure
 In the project folder create environment file `.env` with the next sections:
-1. Profile (prod or dev)
+1. Profile (`prod` or `dev`)
 2. Database section: 
    1. DB volume path 
    2. Path to DB
@@ -56,9 +56,10 @@ In the project folder create environment file `.env` with the next sections:
    2. Path
    3. ...and so on
 4. Backend section
+   1. Path to logs volume
 5. Frontend section
-   1. Path to dist
-
+   1. Path to dist volume
+  
 ####Start
 docker-compose up --build -d
 
