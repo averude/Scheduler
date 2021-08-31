@@ -60,9 +60,49 @@ In the project folder create environment file `.env` with the next sections:
    1. Path to logs volume
 5. Frontend section
    1. Path to dist volume
-  
+
+`.env` file example
+
+    #######################
+    # APPLICATION PROFILE #
+    # VALUES: dev or prod #
+    #######################
+    PROFILE=prod  
+
+    #################
+    # Security      #
+    #################
+    JWT_SET_URI=http://auth-server:5000/.well-known/jwks.json  
+    KEY_STORE_FILE=scheduler-jwt.jks  
+    KEY_STORE_PASSWORD=scheduler  
+    KEY_ALIAS=scheduler-oauth-jwt  
+    JWK_KID=scheduler-key-id  
+    VALIDITY_SECONDS=21600  
+    
+    #################
+    # Database      #
+    #################
+    DB_DRIVER_CLASS_NAME=org.postgresql.Driver  
+    DB_URL=jdbc:postgresql://database-server:5432/schedulerdb  
+    DB_USERNAME=scheduler
+    DB_PASSWD=scheduler  
+    DB_VOLUME_PATH=/app/scheduler/database  
+    POSTGRES_PASSWORD=postgres  
+    
+    #################
+    # Backend       #
+    #################
+    LOG_VOLUME_PATH=/app/scheduler/logs  
+    #GRAYLOG_HOST=your_graylog_addr  
+    #GRAYLOG_GELF_PORT=your_graylog_port
+    
+    #################
+    # Frontend      #
+    #################
+    FRONTEND_VOLUME_PATH=/app/scheduler/frontend-server/dist
+
 ####Start
-docker-compose up --build -d
+`docker-compose up --build -d`
 
     login: global-admin
     pass:  admin
