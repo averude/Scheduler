@@ -153,6 +153,7 @@ export class TableManager {
                   this.cellEnabledSetter.process(row);
                   this.sumCalculator.cal(row, data.initData.scheduleDTOMap);
 
+                  this.tableRenderer.renderRowGroup(row.parent.id);
                   this.tableRenderer.nextRowCommand({
                     rowId: row.id,
                     command: (rowData: ScheduleRow) => {

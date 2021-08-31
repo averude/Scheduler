@@ -88,38 +88,41 @@ export abstract class AbstractCompositionHandler<T extends Composition> implemen
                       position: Position,
                       group: RowGroup,
                       row: ScheduleRow) {
-    if (!row) {
+    let updatedRow: ScheduleRow = row;
+    if (!updatedRow) {
       throw new Error("No row provided");
     }
 
     if (initData.scheduleDTOMap && initData.calendarDays) {
       const dto = initData.scheduleDTOMap.get(composition.employeeId);
 
-      if (row.value.position.id !== composition.positionId) {
+      if (updatedRow.value.position.id !== composition.positionId) {
 
-        const group = row.parent;
+        const group = updatedRow.parent;
         const rowToMerge = <ScheduleRow> group.rows
           .find((value: ScheduleRow) => value.id === composition.employeeId
             && value.value.position.id === composition.positionId
-            && value.value.isSubstitution === row.value.isSubstitution);
+            && value.value.isSubstitution === updatedRow.value.isSubstitution);
 
         if (rowToMerge) {
-          this.transfer(row, rowToMerge, composition, dto);
+          this.transfer(updatedRow, rowToMerge, composition, dto);
+          updatedRow = rowToMerge;
         } else {
           const newRow = this.rowProcessor.insertNewOrUpdateExistingRow(group, dto, initData.calendarDays, composition,
-            position, row.value.workingNorm, row.value.isSubstitution, () => false);
+            position, updatedRow.value.workingNorm, updatedRow.value.isSubstitution, () => false);
           newRow.value.compositions = [];
           newRow.value.intervals    = [];
 
-          this.transfer(row, newRow, composition, dto);
+          this.transfer(updatedRow, newRow, composition, dto);
+          updatedRow = newRow;
         }
       } else {
-        this.rowProcessor.updateRow(row, composition, dto);
+        this.rowProcessor.updateRow(updatedRow, composition, dto);
       }
 
       this.afterRowUpdated(group, dto, composition);
 
-      return row;
+      return updatedRow;
     }
   }
 
