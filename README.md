@@ -53,7 +53,8 @@ In the project folder create environment file `.env` with the next sections:
    6. Postgres password
 3. Security section
    1. JWK
-   2. Path
+   2. JWT set URI
+   3. Validity seconds
    3. ...and so on
 4. Backend section
    1. Path to logs volume
