@@ -4,7 +4,7 @@ import { CellFiller } from "../core/cell-filler";
 import { topMediumBorders } from "../styles/report-styles";
 import { ReportMarkup } from "../model/report-markup";
 import { ReportCreator } from "./report-creator";
-import { ReportHeaderCell } from "../model/report-cell-data";
+import { ReportHeaderCell } from "../model/report-cell-value";
 
 export abstract class AReportCreator implements ReportCreator {
   abstract REPORT_TYPE: string;
@@ -15,7 +15,7 @@ export abstract class AReportCreator implements ReportCreator {
   create(sheet: Worksheet,
          reportData: ReportData,
          reportRowData: ReportRow[]) {
-    this.createHeader(sheet, reportData.headerData, reportData.reportMarkup);
+    this.createHeader(sheet, reportData.tableData.headerData, reportData.reportMarkup);
     this.createDataSection(sheet, reportRowData, reportData.reportMarkup);
   }
 

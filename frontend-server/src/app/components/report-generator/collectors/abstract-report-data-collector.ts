@@ -1,9 +1,9 @@
-import { ReportData, ReportGroup, ReportRow } from "../model/report-row";
+import { ReportData, ReportRow } from "../model/report-row";
 import { DayType } from "../../../model/day-type";
 import { EmployeeWorkStatDTO, SummationResult } from "../../../model/dto/employee-work-stat-dto";
 import { CalendarDay } from "../../../lib/ngx-schedule-table/model/calendar-day";
 import { ReportDataCollector } from "./report-data-collector";
-import { ReportCellData, ReportHeaderCell } from "../model/report-cell-data";
+import { ReportCellValue, ReportHeaderCell } from "../model/report-cell-value";
 import { SummationColumn, SummationType } from "../../../model/summation-column";
 import { EmployeeScheduleDTO } from "../../../model/dto/employee-schedule-dto";
 import { IntervalCreator } from "../../../services/creator/interval-creator.service";
@@ -16,6 +16,7 @@ import { CellEnabledSetter } from "../../../services/collectors/schedule/cell-en
 import { CellCollector } from "../../../services/collectors/cell-collector";
 import { ReportInitialData } from "../model/report-initial-data";
 import { TableData } from "../../../lib/ngx-schedule-table/model/data/table";
+import { RowGroup } from "../../../lib/ngx-schedule-table/model/data/row-group";
 
 export abstract class AbstractReportDataCollector implements ReportDataCollector {
 
@@ -29,18 +30,21 @@ export abstract class AbstractReportDataCollector implements ReportDataCollector
           summationColumns: SummationColumn[],
           useReportLabel: boolean) {
     const reportData = new ReportData();
-    reportData.headerData = this.getHeaders(initialData.calendarDays, summationColumns);
-    reportData.tableData = this.collectGroup(initialData, useReportLabel);
+
+    reportData.tableData = this.collectTableData(initialData, summationColumns, useReportLabel);
 
     this.afterDataInsert(reportData);
 
     return reportData;
   }
 
-  private collectGroup(initialData: ReportInitialData,
-                       useReportLabel?: boolean): TableData {
+  private collectTableData(initialData: ReportInitialData,
+                           summationColumns: SummationColumn[],
+                           useReportLabel: boolean): TableData {
 
     const tableData = new TableData();
+
+    tableData.headerData = this.getHeaders(initialData.calendarDays, summationColumns);
 
     tableData.groups = initialData.shifts
       .sort((a, b) => a.id - b.id)
@@ -48,7 +52,7 @@ export abstract class AbstractReportDataCollector implements ReportDataCollector
         id: shift.id,
         value: shift.name,
         rows: []
-      } as ReportGroup));
+      } as RowGroup));
 
     for (let dto of initialData.scheduleDTOs) {
       const shiftId = getMainShiftId(dto);
@@ -107,14 +111,14 @@ export abstract class AbstractReportDataCollector implements ReportDataCollector
                               positionName: string,
                               summations: SummationResult[],
                               useReportLabel?: boolean,
-                              intervals?: RowInterval[]): ReportCellData[];
+                              intervals?: RowInterval[]): ReportCellValue[];
 
-  abstract fillCellWithValue(cell: ReportCellData,
+  abstract fillCellWithValue(cell: ReportCellValue,
                              workDay: WorkDay,
                              dayTypeMap: Map<number, DayType>,
                              useReportLabel?: boolean): void;
 
-  abstract fillDisabledCell(cell: ReportCellData);
+  abstract fillDisabledCell(cell: ReportCellValue);
 
   abstract afterDataInsert(data: ReportData);
 
@@ -124,7 +128,7 @@ export abstract class AbstractReportDataCollector implements ReportDataCollector
                dayTypeMap: Map<number, DayType>,
                useReportLabel: boolean) {
     const cells = this.cellCollector.collectByFn(calendarDays, dto.collection, (date => {
-      const cell = {date: date} as ReportCellData;
+      const cell = {date: date} as ReportCellValue;
       this.fillDisabledCell(cell);
       return cell;
     }), ((cell, hasDate) => cell.workDay = hasDate));
