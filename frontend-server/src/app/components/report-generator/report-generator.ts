@@ -1,4 +1,4 @@
-import { ReportData, ReportGroup, ReportRow } from "./model/report-row";
+import { ReportData, ReportRow } from "./model/report-row";
 import * as ExcelJS from "exceljs";
 import { Buffer } from "exceljs";
 import { ReportCreator } from "./creator/report-creator";
@@ -7,6 +7,7 @@ import { Injectable } from "@angular/core";
 import { ReportSheetDTO } from "../../model/dto/report-sheet-dto";
 import { TableData } from "../../lib/ngx-schedule-table/model/data/table";
 import { inline, validate } from "./utils/utils";
+import { RowGroup } from "../../lib/ngx-schedule-table/model/data/row-group";
 
 @Injectable()
 export class ReportGenerator {
@@ -29,7 +30,7 @@ export class ReportGenerator {
           const worksheet = workbook.addWorksheet(group.value);
 
           reportDecorator.decorate(worksheet, reportData, group.rows.length, reportSheets[index].reportSheet);
-          reportCreator.create(worksheet, reportData, group.rows);
+          reportCreator.create(worksheet, reportData, <ReportRow[]> group.rows);
         }
       });
     } else {
@@ -45,10 +46,10 @@ export class ReportGenerator {
 
   private splitIntoSheets(sheets: ReportSheetDTO[],
                           tableData: TableData) {
-    const groups: ReportGroup[] = [];
+    const groups: RowGroup[] = [];
 
     sheets.forEach(dto => {
-      const group = new ReportGroup();
+      const group = new RowGroup();
       group.id    = dto.reportSheet.id;
       group.value = dto.reportSheet.name;
       group.rows  = [];

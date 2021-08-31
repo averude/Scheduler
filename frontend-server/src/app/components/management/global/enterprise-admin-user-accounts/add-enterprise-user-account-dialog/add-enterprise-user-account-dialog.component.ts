@@ -33,7 +33,7 @@ export class AddEnterpriseUserAccountDialogComponent extends DialogBaseComponent
                           Validators.minLength(3),
                           Validators.maxLength(128)]],
       role:         [null,  [Validators.required]],
-      authority:    [UserAccountLevel.ENTERPRISE, [Validators.required]],
+      level:        [UserAccountLevel.ENTERPRISE, [Validators.required]],
       enterpriseId: [null, Validators.required]
     });
   }

@@ -3,7 +3,7 @@ import { WorkDay } from "../../../model/workday";
 import { DayType } from "../../../model/day-type";
 import { getCellValue, getEmployeeShortName } from "../../../shared/utils/utils";
 import { SCHEDULE_REPORT } from "../model/report-types";
-import { ReportCellData, ReportHeaderCell } from "../model/report-cell-data";
+import { ReportCellValue, ReportHeaderCell } from "../model/report-cell-value";
 import { ScheduleReportStyles } from "../styles/schedule-report-styles";
 import { CalendarDay } from "../../../lib/ngx-schedule-table/model/calendar-day";
 import { SummationResult } from "../../../model/dto/employee-work-stat-dto";
@@ -26,7 +26,7 @@ export class ScheduleReportDataCollector extends AbstractReportDataCollector {
     super(intervalCreator, cellEnabledSetter, cellCollector);
   }
 
-  fillCellWithValue(cell: ReportCellData,
+  fillCellWithValue(cell: ReportCellValue,
                     workDay: WorkDay,
                     dayTypeMap: Map<number, DayType>,
                     useReportLabel?: boolean): void {
@@ -34,7 +34,7 @@ export class ScheduleReportDataCollector extends AbstractReportDataCollector {
     cell.value = workDay ? getCellValue(workDay, dayTypeMap, useReportLabel) : null;
   }
 
-  fillDisabledCell(cell: ReportCellData) {
+  fillDisabledCell(cell: ReportCellValue) {
     cell.style = this.getStyle(cell.date, true);
     cell.value = 'X';
   }
@@ -84,12 +84,12 @@ export class ScheduleReportDataCollector extends AbstractReportDataCollector {
                      positionName: string,
                      summations: SummationResult[],
                      useReportLabel?: boolean,
-                     intervals?: RowInterval[]): ReportCellData[] {
+                     intervals?: RowInterval[]): ReportCellValue[] {
     if (!calendarDays || calendarDays.length <= 0) {
       return;
     }
 
-    const result: ReportCellData[] = [].concat([
+    const result: ReportCellValue[] = [].concat([
       {
         value: 0,
         style: ScheduleReportStyles.idCellStyle

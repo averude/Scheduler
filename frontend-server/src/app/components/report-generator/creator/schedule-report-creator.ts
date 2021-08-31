@@ -5,7 +5,7 @@ import { SCHEDULE_REPORT } from "../model/report-types";
 import { CellFiller } from "../core/cell-filler";
 import { AReportCreator } from "./a-report-creator";
 import { ReportMarkup } from "../model/report-markup";
-import { ReportHeaderCell } from "../model/report-cell-data";
+import { ReportHeaderCell } from "../model/report-cell-value";
 import { ReportRow } from "../model/report-row";
 
 export class ScheduleReportCreator extends AReportCreator implements ReportCreator {

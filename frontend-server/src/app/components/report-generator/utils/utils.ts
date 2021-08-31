@@ -3,7 +3,7 @@ import { TableData } from "../../../lib/ngx-schedule-table/model/data/table";
 
 export function validate(reportData: ReportData): boolean {
   return !reportData || !reportData.tableData
-    || !reportData.headerData || reportData.headerData.length == 0;
+    || !reportData.tableData.headerData || reportData.tableData.headerData.length == 0;
 }
 
 // export function inline(groups: ReportGroup[]): ReportRow[] {

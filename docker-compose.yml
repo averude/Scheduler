@@ -4,6 +4,10 @@ services:
   database-server:
     environment:
       POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+      DB_NAME: $DB_NAME
+      DB_USERNAME: $DB_USERNAME
+      DB_PASSWD: $DB_PASSWD
+      GLOBAL_ADMIN_PASS_HASH: $GLOBAL_ADMIN_PASS_HASH
     build:
       context: ./database-server
       dockerfile: Dockerfile
@@ -33,6 +37,7 @@ services:
       JWT_SET_URI: $JWT_SET_URI
       DB_DRIVER_CLASS_NAME: $DB_DRIVER_CLASS_NAME
       DB_URL: $DB_URL
+      DB_NAME: $DB_NAME
       DB_USERNAME: $DB_USERNAME
       DB_PASSWD: $DB_PASSWD
     build:
@@ -54,6 +59,7 @@ services:
       JWT_SET_URI: $JWT_SET_URI
       DB_DRIVER_CLASS_NAME: $DB_DRIVER_CLASS_NAME
       DB_URL: $DB_URL
+      DB_NAME: $DB_NAME
       DB_USERNAME: $DB_USERNAME
       DB_PASSWD: $DB_PASSWD
     build:

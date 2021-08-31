@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { forkJoin, Observable } from "rxjs";
+import { forkJoin, Observable, of } from "rxjs";
 import { EmployeeService } from "../../../services/http/employee.service";
 import { ShiftService } from "../../../services/http/shift.service";
 import { map, switchMap } from "rxjs/operators";
@@ -68,7 +68,8 @@ export class ScheduleTableDataSource {
     const obs: Observable<any>[] = [
       this.dayTypeService.getMapByEnterpriseId(enterpriseId),
       this.positionService.getAllByDepartmentId(departmentId),
-      this.shiftService.getAllByDepartmentId(departmentId)
+      this.shiftService.getAllByDepartmentId(departmentId),
+      of([]) // temporary fix
     ];
 
     if (role === UserAccountRole.ADMIN) {

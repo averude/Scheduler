@@ -8,7 +8,7 @@ import {
   getCellValueExt,
   getEmployeeShortName
 } from "../../../shared/utils/utils";
-import { ReportCellData, ReportHeaderCell } from "../model/report-cell-data";
+import { ReportCellValue, ReportHeaderCell } from "../model/report-cell-value";
 import { TimeSheetStyles } from "../styles/time-sheet-styles";
 import { SummationResult } from "../../../model/dto/employee-work-stat-dto";
 import { CalendarDay } from "../../../lib/ngx-schedule-table/model/calendar-day";
@@ -31,7 +31,7 @@ export class TimeSheetReportDataCollector extends AbstractReportDataCollector {
     super(intervalCreator, cellEnabledSetter, cellCollector);
   }
 
-  fillCellWithValue(cell: ReportCellData,
+  fillCellWithValue(cell: ReportCellValue,
                     workDay: WorkDay,
                     dayTypeMap: Map<number, DayType>,
                     useReportLabel?: boolean): void {
@@ -51,7 +51,7 @@ export class TimeSheetReportDataCollector extends AbstractReportDataCollector {
     cell.value = val;
   }
 
-  fillDisabledCell(cell: ReportCellData) {
+  fillDisabledCell(cell: ReportCellValue) {
     cell.style  = this.getStyle(cell.date, true);
     cell.merge = true;
     cell.value = ['', 'X'];
@@ -63,12 +63,12 @@ export class TimeSheetReportDataCollector extends AbstractReportDataCollector {
                      positionName: string,
                      summations: SummationResult[],
                      useReportLabel?: boolean,
-                     intervals?: RowInterval[]): ReportCellData[] {
+                     intervals?: RowInterval[]): ReportCellValue[] {
     if (!calendarDays || calendarDays.length <= 0) {
       return;
     }
 
-    const result: ReportCellData[] = [].concat([
+    const result: ReportCellValue[] = [].concat([
       {
         merge: true,
         value: [null, 0],

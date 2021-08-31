@@ -21,7 +21,7 @@ export abstract class AReportDecorator implements ReportDecorator {
            dataRowsNum: number,
            reportSheet: ReportSheet) {
     const reportMarkup    = reportData.reportMarkup;
-    const numOfColumns    = reportData.headerData.length;
+    const numOfColumns    = reportData.tableData.headerData.length;
     const decorationData  = reportData.decorationData;
 
     this.decorateTop(sheet, reportData, reportSheet);
@@ -37,7 +37,7 @@ export abstract class AReportDecorator implements ReportDecorator {
   decorateTop(sheet: Worksheet,
               reportData: ReportData,
               reportSheet: ReportSheet): void {
-    const numberOfColumns = reportData.headerData.length;
+    const numberOfColumns = reportData.tableData.headerData.length;
     const reportMarkup    = reportData.reportMarkup;
     const decorationData  = reportData.decorationData;
 
