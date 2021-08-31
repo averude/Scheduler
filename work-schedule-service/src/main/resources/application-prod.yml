@@ -1,7 +1,7 @@
 spring:
 
   datasource:
-    url: ${DB_URL}
+    url: ${DB_URL}/${DB_NAME}
     username: ${DB_USERNAME}
     password: ${DB_PASSWD}
     driver-class-name: ${DB_DRIVER_CLASS_NAME}

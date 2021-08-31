@@ -332,6 +332,8 @@ CREATE TABLE IF NOT EXISTS user_accounts (
   name            VARCHAR(128),
   role            VARCHAR(64)     NOT NULL    DEFAULT 'USER',
   level           VARCHAR(64)     NOT NULL,
+  locked          BOOLEAN         NOT NULL    DEFAULT false,
+  enabled         BOOLEAN         NOT NULL    DEFAULT true,
 
   enterprise_id   INTEGER,
 
