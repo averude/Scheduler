@@ -37,9 +37,9 @@ Employee rostering and work scheduling web service
 `git clone https://github.com/averude/Scheduler.git`
 
 ####Compile and build
-1. In project folder run `mvn package`   
-2. Inside the `./frontend-server` folder run `ng build` or `ng serve` (for local run)  
-3. Generate JWK
+1. Generate JKS and put it into `./auth-server/src/main/resources/jks` folder
+2. In the root of the project folder run `mvn package`   
+3. Inside the `./frontend-server` folder run `ng build` or `ng serve` (for local run)  
 
 ####Configure
 In the project folder create environment file `.env` with the next sections:
