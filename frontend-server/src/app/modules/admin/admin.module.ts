@@ -13,7 +13,6 @@ import { MatMenuModule } from "@angular/material/menu";
 import { ChangeUserAccountPasswordDialogModule } from "../../components/user-account-password/change-user-account-password-dialog/change-user-account-password-dialog.module";
 import { NgxMaskModule } from "ngx-mask";
 import { CdkStepperModule } from "@angular/cdk/stepper";
-import { MatExpansionModule } from "@angular/material/expansion";
 import { SimpleAccordionModule } from "../../lib/simple-accordion/simple-accordion.module";
 import { ToolbarTemplateService } from "../../services/top-bar/toolbar-template.service";
 import { ToolbarRowComponent } from './toolbar-row.component';
@@ -29,7 +28,6 @@ import { CalendarDaysCalculator } from "../../services/collectors/calendar-days-
     MatToolbarModule,
     MatSidenavModule,
     MatMenuModule,
-    MatExpansionModule,
     CalendarModule,
     StatisticsModule,
     SidePanelStepperModule,
