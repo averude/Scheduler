@@ -119,7 +119,7 @@ In the project folder create environment file `.env` with the next sections:
 
 ####Start
 Up containers via `docker-compose up -d` and then in browser 
-open link according to the way you served frontend
+open link according to the way you served frontend (it might be `http://localhost:4200` for local run or `http://your_linux_host_ip` for serving with Nginx)
 
     login: global-admin
     pass:  according_to_the_hash_in_env
