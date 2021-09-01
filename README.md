@@ -88,15 +88,10 @@ In the project folder create environment file `.env` with the next sections:
 
 `.env` file example
 
-    #######################
-    # APPLICATION PROFILE #
-    # VALUES: dev or prod #
-    #######################
+    # dev or prod
     PROFILE=dev  
     
-    ##################
-    #    Database    #
-    ##################
+    # Database    
     DB_DRIVER_CLASS_NAME=org.postgresql.Driver  
     DB_URL=jdbc:postgresql://database-server:5432  
     DB_NAME=schedulerdb
@@ -106,9 +101,7 @@ In the project folder create environment file `.env` with the next sections:
     POSTGRES_PASSWORD=postgres  
     GLOBAL_ADMIN_PASS_HASH=some_hash
     
-    ##################
-    #    Security    #
-    ##################
+    # Security    
     JWT_SET_URI=http://auth-server:5000/.well-known/jwks.json  
     KEY_STORE_FILE=scheduler-jwt.jks  
     KEY_STORE_PASSWORD=scheduler  
@@ -116,16 +109,12 @@ In the project folder create environment file `.env` with the next sections:
     JWK_KID=scheduler-key-id  
     VALIDITY_SECONDS=21600      
     
-    ##################
-    #    Backend     #
-    ##################
+    # Backend     
     LOG_VOLUME_PATH=path_to_your_project_folder/logs  
     #GRAYLOG_HOST=your_graylog_addr  
     #GRAYLOG_GELF_PORT=your_graylog_port
-    
-    ##################
-    #    Frontend    #
-    ##################
+   
+    # Frontend    
     FRONTEND_VOLUME_PATH=path_to_your_project_folder/frontend-server/dist/scheduler
 
 ####Start
