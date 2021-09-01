@@ -37,7 +37,7 @@ Employee rostering and work scheduling web service
 `git clone https://github.com/averude/Scheduler.git`
 
 ####Compile and build
-1. Generate JKS and put it into the `./auth-server/src/main/resources/jks` folder
+1. [Generate JKS](https://www.baeldung.com/spring-security-oauth2-jws-jwk#5-creating-a-keystore-file) and put it into the `./auth-server/src/main/resources/jks` folder
 2. In the root of the project folder run `mvn package`   
 3. In `./frontend-server/src/environments` files change the IP address in the base URL to the address of your REST server (Linux host)
 4. Inside the `./frontend-server` folder run `ng build --prod` or `ng serve` (for local run)  
