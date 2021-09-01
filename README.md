@@ -97,7 +97,7 @@ In the project folder create environment file `.env` with the next sections:
     DB_NAME=schedulerdb
     DB_USERNAME=scheduler
     DB_PASSWD=scheduler  
-    DB_VOLUME_PATH=path_to_your_project_folder/database  
+    DB_VOLUME_PATH=path_to_project_folder/database  
     POSTGRES_PASSWORD=postgres  
     GLOBAL_ADMIN_PASS_HASH=some_hash
     
@@ -110,19 +110,19 @@ In the project folder create environment file `.env` with the next sections:
     VALIDITY_SECONDS=21600      
     
     # Backend     
-    LOG_VOLUME_PATH=path_to_your_project_folder/logs  
-    #GRAYLOG_HOST=your_graylog_addr  
-    #GRAYLOG_GELF_PORT=your_graylog_port
+    LOG_VOLUME_PATH=path_to_project_folder/logs  
+    #GRAYLOG_HOST=graylog_addr  
+    #GRAYLOG_GELF_PORT=graylog_port
    
     # Frontend    
-    FRONTEND_VOLUME_PATH=path_to_your_project_folder/frontend-server/dist/scheduler
+    FRONTEND_VOLUME_PATH=path_to_project_folder/frontend-server/dist/scheduler
 
 ####Start
 Up containers via `docker-compose up -d` and then in browser 
 open link according to the way you served frontend
 
     login: global-admin
-    pass:  according_to_your_hash
+    pass:  according_to_the_hash_in_env
     
 
 ## UI example
