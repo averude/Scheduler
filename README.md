@@ -77,7 +77,7 @@ In the project folder create environment file `.env` with the next sections:
    7. The `bcrypt`-ed hash of `global_admin` password  
    `GLOBAL_ADMIN_PASS_HASH`
 4. Backend section  
-   1. Path to logs volume
+   1. Path to logs volume  
    `LOG_VOLUME_PATH`
    2. (Available only on `prod` profile) Graylog host and GELF port  
    `GRAYLOG_HOST`  
