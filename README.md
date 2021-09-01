@@ -44,23 +44,47 @@ Employee rostering and work scheduling web service
 
 ####Configure
 In the project folder create environment file `.env` with the next sections:
-1. Profile (`prod` or `dev`)
+1. Profile  
+`PROFILE` - possible values `prod` or `dev`
 2. Database section: 
-   1. DB volume path 
-   2. Path to DB
-   3. DB driver
-   4. DB user
-   5. DB password
-   6. Postgres password
+   1. DB driver class name  
+   `DB_DRIVER_CLASS_NAME`
+   2. DB volume path  
+   `DB_VOLUME_PATH`
+   3. DB URL  
+   `DB_URL`
+   4. DB name  
+   `DB_NAME`
+   5. DB user  
+   `DB_USERNAME`
+   6. DB user password  
+   `DB_PASSWD`
+   7. Postgres password  
+   `POSTGRES_PASSWORD`
 3. Security section
-   1. JWK
-   2. JWT set URI
-   3. Validity seconds
-   3. ...and so on
-4. Backend section
+   1. JWT set URI  
+   `JWT_SET_URI`
+   2. Key store file  
+   `KEY_STORE_FILE`
+   3. Key store password  
+   `KEY_STORE_PASSWORD`
+   4. Key alias  
+   `KEY_ALIAS`
+   5. JWK kid  
+   `JWK_KID`
+   6. Token validity seconds  
+   `VALIDITY_SECONDS`
+   7. The `bcrypt`-ed hash of `global_admin` password  
+   `GLOBAL_ADMIN_PASS_HASH`
+4. Backend section  
    1. Path to logs volume
+   `LOG_VOLUME_PATH`
+   2. (Available only on `prod` profile) Graylog host and GELF port  
+   `GRAYLOG_HOST`  
+   `GRAYLOG_GELF_PORT`
 5. Frontend section
-   1. Path to dist volume
+   1. Path to dist volume  
+   `FRONTEND_VOLUME_PATH`
 
 `.env` file example
 
@@ -68,45 +92,45 @@ In the project folder create environment file `.env` with the next sections:
     # APPLICATION PROFILE #
     # VALUES: dev or prod #
     #######################
-    PROFILE=prod  
-
-    #################
-    # Security      #
-    #################
-    JWT_SET_URI=http://auth-server:5000/.well-known/jwks.json  
-    KEY_STORE_FILE=scheduler-jwt.jks  
-    KEY_STORE_PASSWORD=scheduler  
-    KEY_ALIAS=scheduler-oauth-jwt  
-    JWK_KID=scheduler-key-id  
-    VALIDITY_SECONDS=21600  
+    PROFILE=dev  
     
-    #################
-    # Database      #
-    #################
+    ##################
+    #    Database    #
+    ##################
     DB_DRIVER_CLASS_NAME=org.postgresql.Driver  
     DB_URL=jdbc:postgresql://database-server:5432  
     DB_NAME=schedulerdb
     DB_USERNAME=scheduler
     DB_PASSWD=scheduler  
-    DB_VOLUME_PATH=/app/scheduler/database  
+    DB_VOLUME_PATH=path_to_your_project_folder/database  
     POSTGRES_PASSWORD=postgres  
     GLOBAL_ADMIN_PASS_HASH=some_hash
     
-    #################
-    # Backend       #
-    #################
-    LOG_VOLUME_PATH=/app/scheduler/logs  
+    ##################
+    #    Security    #
+    ##################
+    JWT_SET_URI=http://auth-server:5000/.well-known/jwks.json  
+    KEY_STORE_FILE=scheduler-jwt.jks  
+    KEY_STORE_PASSWORD=scheduler  
+    KEY_ALIAS=scheduler-oauth-jwt  
+    JWK_KID=scheduler-key-id  
+    VALIDITY_SECONDS=21600      
+    
+    ##################
+    #    Backend     #
+    ##################
+    LOG_VOLUME_PATH=path_to_your_project_folder/logs  
     #GRAYLOG_HOST=your_graylog_addr  
     #GRAYLOG_GELF_PORT=your_graylog_port
     
-    #################
-    # Frontend      #
-    #################
-    FRONTEND_VOLUME_PATH=/app/scheduler/frontend-server/dist
+    ##################
+    #    Frontend    #
+    ##################
+    FRONTEND_VOLUME_PATH=path_to_your_project_folder/frontend-server/dist/scheduler
 
 ####Start
 Up containers via `docker-compose up -d` and then in browser 
-open link according to the way you deployed blah blah blah
+open link according to the way you served frontend
 
     login: global-admin
     pass:  according_to_your_hash
