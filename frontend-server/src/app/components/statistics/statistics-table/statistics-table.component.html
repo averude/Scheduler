@@ -58,11 +58,11 @@
             <tr>
               <td [rowSpan]="employeeRow.rows.length"
                   class="td-name name">
-                {{getEmployeeShortName(employeeRow.employee)}}
+                {{getEmployeeShortName(employeeRow.value)}}
               </td>
 
               <td class="td-position name">
-                {{employeeRow.rows[0].position?.shortName}}
+                {{employeeRow.rows[0].value?.shortName}}
               </td>
 
               <td *ngFor="let cell of employeeRow.rows[0].cells"
@@ -75,7 +75,7 @@
               <tr *ngIf="i!=0">
 
                 <td class="td-position name">
-                  {{positionRow.position?.shortName}}
+                  {{positionRow.value?.shortName}}
                 </td>
 
                 <td *ngFor="let cell of positionRow.cells"

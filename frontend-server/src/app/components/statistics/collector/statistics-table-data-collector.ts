@@ -6,7 +6,8 @@ import { EmployeePositionStat, EmployeeWorkStatDTO } from "../../../model/dto/em
 import { Injectable } from "@angular/core";
 import { TableData } from "../../../lib/ngx-schedule-table/model/data/table";
 import { UIPrioritySortingStrategy } from "../../calendar/utils/ui-priority-sorting-strategy";
-import { StatisticsEmployeeRow, StatisticsPositionRow, StatisticsRowGroup } from "../model/data.model";
+import { RowGroup } from "../../../lib/ngx-schedule-table/model/data/row-group";
+import { Row } from "../../../lib/ngx-schedule-table/model/data/row";
 
 @Injectable()
 export class StatisticsTableDataCollector {
@@ -24,7 +25,7 @@ export class StatisticsTableDataCollector {
         id:     shift.id,
         value:  shift,
         rows:   []
-      } as StatisticsRowGroup;
+      } as RowGroup;
 
       table.addGroup(group);
     });
@@ -34,9 +35,9 @@ export class StatisticsTableDataCollector {
       const group = table.findRowGroup(dto.shiftId);
       if (group) {
         const employeeRow = {
-          employee: dto.employee,
+          value: dto.employee,
           rows: []
-        } as StatisticsEmployeeRow;
+        } as Row;
 
         dto.positionStats.forEach(pStat => {
           employeeRow.rows.push(this.getPositionRow(positionMap, pStat));
@@ -51,11 +52,11 @@ export class StatisticsTableDataCollector {
   private getPositionRow(positionMap: Map<number, Position>,
                          positionStat: EmployeePositionStat) {
     return {
-      position: positionMap.get(positionStat.positionId),
+      value: positionMap.get(positionStat.positionId),
       cells: positionStat.summations.map(summation => ({
         columnId: summation.summationColumnId,
         value: summation.type === SummationType.HOURS_SUM ? roundToTwo(summation.value / 60) : summation.value
       }))
-    } as unknown as StatisticsPositionRow;
+    } as unknown as Row;
   }
 }
