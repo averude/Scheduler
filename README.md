@@ -26,23 +26,23 @@ Employee rostering and work scheduling web service
 
 ## Installation guide
 
-####Install
+#### Install
 
 1. [Docker](https://docs.docker.com/engine/install/)  
 2. [Docker-compose](https://docs.docker.com/compose/install/)  
 3. [Maven](https://maven.apache.org/install.html)  
 4. [Angular CLI](https://angular.io/guide/setup-local) 
 
-####Clone sources
+#### Clone sources
 `git clone https://github.com/averude/Scheduler.git`
 
-####Compile and build
+#### Compile and build
 1. [Generate JKS](https://www.baeldung.com/spring-security-oauth2-jws-jwk#5-creating-a-keystore-file) and put it into the `./auth-server/src/main/resources/jks` folder
 2. In the root of the project folder run `mvn package`   
 3. In `./frontend-server/src/environments` files change the IP address in the base URL to the address of your REST server (Linux host)
 4. Inside the `./frontend-server` folder run `ng build --prod` or `ng serve` (for local run)  
 
-####Configure
+#### Configure
 In the project folder create environment file `.env` with the next sections:
 1. Profile  
 `PROFILE` - possible values `prod` or `dev`
@@ -117,7 +117,7 @@ In the project folder create environment file `.env` with the next sections:
     # Frontend    
     FRONTEND_VOLUME_PATH=path_to_project_folder/frontend-server/dist/scheduler
 
-####Start
+#### Start
 Up containers via `docker-compose up -d` and then in browser 
 open link according to the way you served frontend (it might be `http://localhost:4200` for local run or `http://your_linux_host_ip` for serving with Nginx)
 
