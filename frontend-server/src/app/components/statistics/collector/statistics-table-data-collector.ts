@@ -8,6 +8,7 @@ import { TableData } from "../../../lib/ngx-schedule-table/model/data/table";
 import { UIPrioritySortingStrategy } from "../../calendar/utils/ui-priority-sorting-strategy";
 import { RowGroup } from "../../../lib/ngx-schedule-table/model/data/row-group";
 import { Row } from "../../../lib/ngx-schedule-table/model/data/row";
+import { Employee } from "../../../model/employee";
 
 @Injectable()
 export class StatisticsTableDataCollector {
@@ -18,7 +19,7 @@ export class StatisticsTableDataCollector {
                shifts: Shift[],
                positionMap: Map<number, Position>): TableData {
     const table = new TableData();
-    table.sortingStrategy = this.sortingStrategy;
+
 
     shifts.forEach(shift => {
       const group = {
@@ -46,6 +47,22 @@ export class StatisticsTableDataCollector {
       }
     });
 
+    // Temporary
+    table.groups
+      .forEach(group => group.rows = group.rows
+        .sort(((a, b) => {
+          const valA = <Employee> a.value;
+          const valB = <Employee> b.value;
+
+          let number = valA.secondName.localeCompare(valB.secondName);
+          if (number === 0) {
+            number = valA.firstName.localeCompare(valB.firstName);
+          }
+
+          return number;
+        })));
+
+    table.sortingStrategy = this.sortingStrategy;
     return table;
   }
 
