@@ -3,8 +3,9 @@ import { TableData } from "../../../lib/ngx-schedule-table/model/data/table";
 import { InitialData } from "../../../model/datasource/initial-data";
 import { EmployeeScheduleDTO } from "../../../model/dto/employee-schedule-dto";
 import { CellCollector } from "../cell-collector";
-import { createNewRow, isUpdateOperation } from "../utils";
 import { Injectable } from "@angular/core";
+import { ScheduleCell, ScheduleRow, ScheduleRowValue } from "../../../model/ui/schedule-table/table-data";
+import { WorkDay } from "../../../model/workday";
 
 @Injectable()
 export class TableRowFiller {
@@ -24,18 +25,20 @@ export class TableRowFiller {
       if (rowGroup) {
         const workingNorm = workingNormConsumer(composition);
 
-        rowGroup.init(
-          (row => isUpdateOperation(row?.value.position.id === composition.positionId, row, isSubstitution, composition)),
-          (row => {
+        const value           = new ScheduleRowValue();
+        value.employee        = dto.parent;
+        value.position        = position;
+        value.compositions    = [composition];
+        value.isSubstitution  = isSubstitution;
+        value.workingNorm     = workingNorm;
+
+        const result = <ScheduleRow> rowGroup.addOrMerge(value.employee.id, value,
+          ((row) => {
             row.value.compositions.push(composition);
-            return row;
-          }),
-          (() => {
-            const newRow = createNewRow(this.cellCollector, rowGroup, table.headerData, dto, position, workingNorm, isSubstitution);
-            newRow.value.compositions = [composition];
-            return newRow;
-          })
-        );
+            row.value.compositions.sort((a, b) => a.from.diff(b.from));
+          }));
+        result.cells = this.cellCollector.collect<WorkDay, ScheduleCell>(table.headerData, dto.collection, false);
+        result.cells.forEach((cell: ScheduleCell) => cell.parent = result);
       }
     }
   }

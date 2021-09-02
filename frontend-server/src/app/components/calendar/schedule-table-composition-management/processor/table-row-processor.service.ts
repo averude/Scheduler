@@ -1,4 +1,4 @@
-import { ScheduleRow } from "../../../../model/ui/schedule-table/table-data";
+import { ScheduleCell, ScheduleRow, ScheduleRowValue } from "../../../../model/ui/schedule-table/table-data";
 import { Position } from "../../../../model/position";
 import { EmployeeScheduleDTO } from "../../../../model/dto/employee-schedule-dto";
 import { CalendarDay } from "../../../../lib/ngx-schedule-table/model/calendar-day";
@@ -7,8 +7,9 @@ import { convertCompositionToInterval } from "../../../../model/ui/schedule-tabl
 import { IntervalCreator } from "../../../../services/creator/interval-creator.service";
 import { CellCollector } from "../../../../services/collectors/cell-collector";
 import { Injectable } from "@angular/core";
-import { createNewRow, exchangeComposition, isUpdateOperation } from "../../../../services/collectors/utils";
+import { exchangeComposition } from "../../../../services/collectors/utils";
 import { RowGroup } from "../../../../lib/ngx-schedule-table/model/data/row-group";
+import { WorkDay } from "../../../../model/workday";
 
 @Injectable()
 export class TableRowProcessor {
@@ -22,36 +23,38 @@ export class TableRowProcessor {
                                composition: Composition,
                                position:    Position,
                                workingNorm: number,
-                               isSubstitution: boolean,
-                               isUpdateOperationPredicate: (row: ScheduleRow) => boolean): ScheduleRow {
-    return group.createOrUpdateRow(
-      (val => val.id - dto.parent.id),
-      (val => val.value.position.id === composition.positionId && val.value.isSubstitution === isSubstitution),
-      (row => isUpdateOperation(isUpdateOperationPredicate(row), row, isSubstitution, composition)),
-      (row => {
-        row.value.compositions.push(composition);
-        row.value.compositions.sort((a, b) => a.from.diff(b.from));
-        return row;
-      }),
-      (() => {
-        const newRow = createNewRow(this.cellCollector, group, calendarDays, dto, position, workingNorm, isSubstitution);
-        newRow.value.compositions = [composition];
-        return newRow;
-      })
-    );
+                               isSubstitution: boolean): ScheduleRow {
+    const value = new ScheduleRowValue();
+    value.employee = dto.parent;
+    value.position = position;
+    value.compositions = [composition];
+    value.isSubstitution = isSubstitution;
+    value.workingNorm = workingNorm;
+
+    const result = <ScheduleRow> group.addOrMerge(value.employee.id, value, (row => {
+      row.value.compositions.push(composition);
+      row.value.compositions.sort((a, b) => a.from.diff(b.from));
+    }));
+
+    result.cells = this.cellCollector.collect<WorkDay, ScheduleCell>(calendarDays, dto.collection, false);
+    result.cells.forEach((cell: ScheduleCell) => cell.parent = result);
+
+    return result;
   }
 
   updateRow(row: ScheduleRow,
             composition: Composition,
             dto: EmployeeScheduleDTO) {
-    exchangeComposition(row.value.compositions, composition);
+    const rowValue = row.value;
 
-    if (row.value.isSubstitution) {
+    exchangeComposition(rowValue.compositions, composition);
+
+    if (rowValue.isSubstitution) {
       exchangeComposition(dto.substitutionCompositions, composition);
-      row.value.intervals = row.value.compositions.map(value => convertCompositionToInterval(value));
+      rowValue.intervals = rowValue.compositions.map(value => convertCompositionToInterval(value));
     } else {
       exchangeComposition(dto.mainCompositions, composition);
-      row.value.intervals = this.intervalCreator.getEmployeeShiftIntervalsByArr(row.value.compositions, dto.substitutionCompositions);
+      rowValue.intervals = this.intervalCreator.getEmployeeShiftIntervalsByArr(rowValue.compositions, dto.substitutionCompositions);
     }
   }
 }

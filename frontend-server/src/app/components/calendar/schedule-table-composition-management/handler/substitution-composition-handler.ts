@@ -36,8 +36,7 @@ export class SubstitutionCompositionHandler extends AbstractCompositionHandler<S
       putSorted(<SubstitutionComposition>composition, dto.substitutionCompositions);
 
       const row = this.rowProcessor.insertNewOrUpdateExistingRow(group, dto, initData.calendarDays,
-        composition, position, norm, true,
-        (row) => row.value.position.id === composition.positionId);
+        composition, position, norm, true);
 
       if (parentRow) {
         parentRow.value.intervals = this.intervalCreator.getEmployeeShiftIntervalsByArr(parentRow.value.compositions, dto.substitutionCompositions);

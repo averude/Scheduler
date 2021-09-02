@@ -1,33 +1,7 @@
-import { ScheduleCell, ScheduleRow } from "../../model/ui/schedule-table/table-data";
-import { CalendarDay } from "../../lib/ngx-schedule-table/model/calendar-day";
-import { EmployeeScheduleDTO } from "../../model/dto/employee-schedule-dto";
-import { Position } from "../../model/position";
-import { WorkDay } from "../../model/workday";
 import { Composition } from "../../model/composition";
-import { CellCollector } from "./cell-collector";
-import { RowGroup } from "../../lib/ngx-schedule-table/model/data/row-group";
-
-export function createNewRow(cellCollector: CellCollector,
-                             group: RowGroup,
-                             calendarDays: CalendarDay[],
-                             dto: EmployeeScheduleDTO,
-                             position: Position,
-                             workingNorm: number,
-                             isSubstitution: boolean) {
-  const row = ScheduleRow.create(group, dto, position, workingNorm, isSubstitution);
-  row.cells = cellCollector.collect<WorkDay, ScheduleCell>(calendarDays, dto.collection, false);
-  row.cells.forEach((cell: ScheduleCell) => cell.parent = row);
-  return row;
-}
-
-export function isUpdateOperation(updateRows: boolean,
-                                  row: ScheduleRow,
-                                  isSubstitution: boolean,
-                                  composition: Composition) {
-  return row && updateRows && (row.value.isSubstitution === isSubstitution)
-    && row.parent.id === composition.shiftId && row.id === composition.employeeId
-    && row.value.position.id === composition.positionId;
-}
+import { Row } from "../../lib/ngx-schedule-table/model/data/row";
+import { ScheduleRowValue } from "../../model/ui/schedule-table/table-data";
+import { binarySearch, binarySearchInsertIndex } from "../../lib/ngx-schedule-table/utils/collection-utils";
 
 export function exchangeComposition(compositions: Composition[],
                                     newComposition: Composition) {
@@ -39,3 +13,52 @@ export function exchangeComposition(compositions: Composition[],
     compositions.sort((a,b) => a.from.diff(b.from));
   }
 }
+
+export const MERGE_DECISION_FN = ((row: Row, value: ScheduleRowValue) => {
+  const oldValue = <ScheduleRowValue>row.value;
+
+  return oldValue.position.id === value.position.id
+    && oldValue.employee.id === value.employee.id
+    && oldValue.isSubstitution === value.isSubstitution
+    && row.parent.id === value.compositions[0].shiftId; // because there's only one composition
+});
+
+export const EXISTING_ROW_GETTER = ((rows: Row[],
+                                     value: ScheduleRowValue) => {
+  return binarySearch(rows, ((mid) => {
+    const rowVal = <ScheduleRowValue>mid.value;
+    let number = rowVal.position.id - value.position.id;
+
+    if (number === 0) {
+      const empVal = (rowVal).employee;
+      number = empVal.secondName.localeCompare(value.employee.secondName);
+      if (number === 0) {
+        number = empVal.firstName.localeCompare(value.employee.firstName);
+      }
+    }
+
+    return number;
+  }));
+
+});
+
+export const INSERT_INDEX_FINDER = ((rows: Row[],
+                                     value: ScheduleRowValue) => {
+  return binarySearchInsertIndex(rows, (mid => {
+    const rowVal = <ScheduleRowValue>mid.value;
+    let number = rowVal.position.id - value.position.id;
+
+    if (number === 0) {
+      const empVal = (rowVal).employee;
+      number = empVal.secondName.localeCompare(value.employee.secondName);
+      if (number === 0) {
+        number = empVal.firstName.localeCompare(value.employee.firstName);
+        if (number === 0) {
+          return rowVal.isSubstitution === value.isSubstitution ? 0 : 1;
+        }
+      }
+    }
+
+    return number;
+  }))
+});

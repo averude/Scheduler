@@ -1,5 +1,4 @@
 import { Row } from "./row";
-import { binarySearchInsertIndex, bsr } from "../../utils/collection-utils";
 import { removeFromArray } from "../../../../services/utils";
 import { TableData } from "./table";
 
@@ -9,70 +8,34 @@ export class RowGroup {
   value:  any;
   rows:   Row[];
 
+  decideMergeFn: (row: Row, value: any) => boolean;
+  getExistingRowFn: (rows: Row[], value) => Row = (arr) => arr[arr.length - 1];
+  findInsertIndexFn: (rows: Row[], value) => number;
+
   constructor() {
     this.rows = [];
   }
 
-  addRow<T extends Row>(row: T,
-                        comparator: (val: T) => number) {
-    if (!this.rows) {
-      return;
-    }
+  addOrMerge<T>(id: number,
+                value: T,
+                mergeFn: (row: Row) => void) {
+    const existingRow = this.getExistingRowFn(this.rows, value);
 
-    // TODO: change implementation of bs. Include repeatable values case
-    const insertIndex = binarySearchInsertIndex(this.rows, comparator);
-    if (insertIndex >= 0) {
-      this.rows.splice(insertIndex, 0, row);
+    if (existingRow && this.decideMergeFn(existingRow, value)) {
+      mergeFn(existingRow);
+      return existingRow;
     } else {
-      this.rows.push(row);
-    }
-  }
-
-  init<T extends Row>(isUpdateOperationPredicate: (row: T) => boolean,
-                      updateRowFn: (row: T) => T,
-                      createRowFn: () => T) {
-    let result;
-
-    const rowData = <T[]> this.rows;
-    const lastRow = rowData[rowData.length - 1];
-
-    if (isUpdateOperationPredicate(lastRow)) {
-      result = updateRowFn(lastRow);
-    } else {
-      result = createRowFn();
-      rowData.push(result);
+      const row = new Row();
+      row.parent = this;
+      row.id = id;
+      row.value = value;
+      row.cells = [];
+      row.rows = [];
+      const idx = this.findInsertIndexFn(this.rows, value);
+      this.rows.splice(idx, 0, row);
+      return row;
     }
 
-    return result;
-  }
-
-  createOrUpdateRow<T extends Row>(b_comparator: (val: T) => number,
-                                   l_comparator: (val: T) => boolean,
-                                   isUpdateOperationPredicate: (row: T) => boolean,
-                                   updateRowFn: (row: T) => T,
-                                   createRowFn: () => T) {
-
-    let processedRow;
-
-    const rowIndex = bsr(this.rows, b_comparator, l_comparator);
-    if (rowIndex >= 0) {
-
-      const row = <T> this.rows[rowIndex];
-      if (isUpdateOperationPredicate(row)) {
-        processedRow = updateRowFn(row);
-      } else {
-        const newRow = createRowFn();
-        this.rows.splice(rowIndex + 1, 0, newRow);
-        processedRow = newRow;
-      }
-
-    } else {
-      const newRow = createRowFn();
-      this.addRow(newRow, b_comparator);
-      processedRow = newRow;
-    }
-
-    return processedRow;
   }
 
   findRows(comparatorFn: (row: Row) => boolean): Row[] {
