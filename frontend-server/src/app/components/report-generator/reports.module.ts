@@ -19,6 +19,7 @@ import { MatListModule } from "@angular/material/list";
 import { CellFiller } from "./core/cell-filler";
 import { MatIconModule } from "@angular/material/icon";
 import { ReportDataSource } from "./data-source/report-data-source";
+import { ReportsRoutingModule } from "./reports-routing.module";
 
 @NgModule({
   imports: [
@@ -34,7 +35,8 @@ import { ReportDataSource } from "./data-source/report-data-source";
     MatStepperModule,
     MatButtonModule,
     MatCardModule,
-    MatListModule
+    MatListModule,
+    ReportsRoutingModule
   ],
   declarations: [
     ReportGeneratorFormComponent

@@ -6,7 +6,7 @@ import { CellFiller } from "../core/cell-filler";
 import { AReportCreator } from "./a-report-creator";
 import { ReportMarkup } from "../model/report-markup";
 import { ReportHeaderCell } from "../model/report-cell-value";
-import { ReportRow } from "../model/report-row";
+import { Row as ReportRow } from "../../../lib/ngx-schedule-table/model/data/row";
 
 export class ScheduleReportCreator extends AReportCreator implements ReportCreator {
   REPORT_TYPE: string = SCHEDULE_REPORT;
@@ -27,7 +27,7 @@ export class ScheduleReportCreator extends AReportCreator implements ReportCreat
   createDataSection(sheet: Worksheet,
                     data: ReportRow[],
                     reportMarkup: ReportMarkup): void {
-    data.forEach((row, index) => row.reportCellData[0].value = index + 1);
+    data.forEach((row, index) => row.cells[0].value.value = index + 1);
     super.createDataSection(sheet, data, reportMarkup);
   }
 

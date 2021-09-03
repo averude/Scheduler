@@ -6,13 +6,15 @@ import { MatMenuModule } from "@angular/material/menu";
 import { StatisticsTableSource } from "./statistics-table-source";
 import { StatisticsTableDataCollector } from "./collector/statistics-table-data-collector";
 import { CalendarContainerModule } from "../../lib/calendar-container/calendar-container.module";
+import { StatisticsRoutingModule } from "./statistics-routing.module";
 
 @NgModule({
   imports: [
     CommonModule,
     CalendarContainerModule,
     MatMenuModule,
-    MonthYearPaginatorModule
+    MonthYearPaginatorModule,
+    StatisticsRoutingModule
   ],
   declarations: [
     StatisticsTableComponent
