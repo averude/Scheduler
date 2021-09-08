@@ -3,6 +3,7 @@ import { Employee } from "../employee";
 export class EmployeeWorkStatDTO {
   employee: Employee;
   shiftId: number;
+  mainPositionId: number;
   positionStats: EmployeePositionStat[];
 }
 

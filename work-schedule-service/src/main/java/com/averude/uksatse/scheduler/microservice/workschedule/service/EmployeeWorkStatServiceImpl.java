@@ -1,5 +1,6 @@
 package com.averude.uksatse.scheduler.microservice.workschedule.service;
 
+import com.averude.uksatse.scheduler.core.interfaces.entity.Composition;
 import com.averude.uksatse.scheduler.core.model.dto.EmployeePositionStat;
 import com.averude.uksatse.scheduler.core.model.dto.EmployeeScheduleDTO;
 import com.averude.uksatse.scheduler.core.model.dto.EmployeeWorkStatDTO;
@@ -16,8 +17,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,15 +42,7 @@ public class EmployeeWorkStatServiceImpl implements EmployeeWorkStatService {
                                                                          LocalDate from,
                                                                          LocalDate to,
                                                                          String mode) {
-        var specialCalendarDates = specialCalendarDateRepository.findAllByEnterpriseIdAndDateBetween(enterpriseId, from, to);
-        var summationColumns = summationColumnRepository.findAllByEnterpriseId(enterpriseId);
-        if (summationColumns == null || summationColumns.isEmpty()) {
-            return null;
-        }
-
-        var scheduleDTO = scheduleService.findAllDTOByDepartmentIdAndDate(departmentId, from, to);
-
-        return getSummationDTOS(from, to, mode, specialCalendarDates, summationColumns, scheduleDTO);
+        return findAllByDateBetween(enterpriseId, from, to, mode, () -> scheduleService.findAllDTOByDepartmentIdAndDate(departmentId, from, to));
     }
 
     @Override
@@ -54,13 +51,21 @@ public class EmployeeWorkStatServiceImpl implements EmployeeWorkStatService {
                                                                      LocalDate from,
                                                                      LocalDate to,
                                                                      String mode) {
+        return findAllByDateBetween(enterpriseId, from, to, mode, () -> scheduleService.findScheduleDTOByShiftIdsAndDate(shiftIds, from, to));
+    }
+
+    private List<EmployeeWorkStatDTO> findAllByDateBetween(Long enterpriseId,
+                                                           LocalDate from,
+                                                           LocalDate to,
+                                                           String mode,
+                                                           Supplier<List<EmployeeScheduleDTO>> supplier) {
         var specialCalendarDates = specialCalendarDateRepository.findAllByEnterpriseIdAndDateBetween(enterpriseId, from, to);
         var summationColumns = summationColumnRepository.findAllByEnterpriseId(enterpriseId);
         if (summationColumns == null || summationColumns.isEmpty()) {
             return null;
         }
 
-        var scheduleDTO = scheduleService.findScheduleDTOByShiftIdsAndDate(shiftIds, from, to);
+        var scheduleDTO = supplier.get();
 
         return getSummationDTOS(from, to, mode, specialCalendarDates, summationColumns, scheduleDTO);
     }
@@ -97,42 +102,46 @@ public class EmployeeWorkStatServiceImpl implements EmployeeWorkStatService {
                                                                   List<SpecialCalendarDate> specialCalendarDates,
                                                                   List<SummationColumn> summationColumns,
                                                                   List<EmployeeScheduleDTO> dtos) {
-        var result = new LinkedList<EmployeeWorkStatDTO>();
+        return dtos.stream()
+                .filter(dto -> validCollection(dto.getMainCompositions()) || validCollection(dto.getSubstitutionCompositions()))
+                .map(dto -> {
+                    var mainComposition = getLatestMainComposition(dto);
 
-        for (var dto : dtos) {
-            var workStatDTO = new EmployeeWorkStatDTO();
-            workStatDTO.setEmployee(dto.getParent());
-            workStatDTO.setShiftId(getShiftId(dto));
-            workStatDTO.setPositionStats(new LinkedList<>());
+                    var workStatDTO = new EmployeeWorkStatDTO();
+                    workStatDTO.setEmployee(dto.getParent());
+                    workStatDTO.setShiftId(mainComposition.getShiftId());
+                    workStatDTO.setMainPositionId(mainComposition.getPositionId());
+                    workStatDTO.setPositionStats(new LinkedList<>());
 
-            var positionIntervalsMap = intervalMapBuilder
-                    .getPositionIntervalsMap(from, to, dto.getMainCompositions(), dto.getSubstitutionCompositions());
+                    var positionIntervalsMap = intervalMapBuilder
+                            .getPositionIntervalsMap(from, to, dto.getMainCompositions(), dto.getSubstitutionCompositions());
 
-            positionIntervalsMap.forEach(((positionId, generationIntervals) -> {
-                var positionStatistics = getPositionStatistics(dto, positionId, generationIntervals, specialCalendarDates, summationColumns);
-                workStatDTO.getPositionStats().add(positionStatistics);
-            }));
-
-            result.add(workStatDTO);
-        }
-
-        return result;
+                    positionIntervalsMap.forEach(((positionId, generationIntervals) -> {
+                        var positionStatistics = getPositionStatistics(dto, positionId, generationIntervals, specialCalendarDates, summationColumns);
+                        workStatDTO.getPositionStats().add(positionStatistics);
+                    }));
+                    return workStatDTO;
+                })
+                .collect(Collectors.toList());
     }
 
     private List<EmployeeWorkStatDTO> getOverallSummationDTOs(List<EmployeeScheduleDTO> dtos,
                                                               List<SummationColumn> summationColumns,
                                                               List<SpecialCalendarDate> specialCalendarDates) {
         return dtos.stream()
+                .filter(dto -> validCollection(dto.getMainCompositions()) || validCollection(dto.getSubstitutionCompositions()))
                 .map(dto -> {
+                    var mainComposition = getLatestMainComposition(dto);
                     var countMap = countMapBuilder.build(dto.getCollection(), specialCalendarDates);
                     var results = statisticsCalculator.calculateByCountMap(countMap, summationColumns);
 
                     var workStatDTO = new EmployeeWorkStatDTO();
                     workStatDTO.setEmployee(dto.getParent());
-                    workStatDTO.setShiftId(getShiftId(dto));
+                    workStatDTO.setShiftId(mainComposition.getShiftId());
+                    workStatDTO.setMainPositionId(mainComposition.getPositionId());
 
                     var positionStatistics = new EmployeePositionStat();
-                    positionStatistics.setPositionId(getPositionId(dto));
+                    positionStatistics.setPositionId(mainComposition.getPositionId());
                     positionStatistics.setSummations(results);
                     workStatDTO.setPositionStats(List.of(positionStatistics));
 
@@ -156,47 +165,23 @@ public class EmployeeWorkStatServiceImpl implements EmployeeWorkStatService {
         return positionWorkStat;
     }
 
-    // TODO: Rewrite with the usage of last time rather than position in array
-    private Long getPositionId(EmployeeScheduleDTO dto) {
-        Long result = null;
-
+    private Composition getLatestMainComposition(EmployeeScheduleDTO dto) {
         var mainCompositions = dto.getMainCompositions();
         var substitutionCompositions = dto.getSubstitutionCompositions();
 
-        int lastMainIndex = mainCompositions.size() - 1;
-        if (lastMainIndex >= 0) {
-            result =mainCompositions.get(lastMainIndex).getPositionId();
+        if (validCollection(mainCompositions)) {
+            return Collections
+                    .max(mainCompositions, (a, b) -> (int) a.getFrom().until(b.getFrom(), ChronoUnit.DAYS));
+        } else if (validCollection(substitutionCompositions)) {
+            return Collections
+                    .max(substitutionCompositions, (a, b) -> (int) a.getFrom().until(b.getFrom(), ChronoUnit.DAYS))
+                    .getMainComposition();
         } else {
-            int lastSubIndex = substitutionCompositions.size() - 1;
-            if (lastSubIndex >= 0) {
-                result = substitutionCompositions.get(lastSubIndex)
-                        .getMainComposition()
-                        .getPositionId();
-            }
+            throw new RuntimeException();
         }
-
-        return result;
     }
 
-    // TODO: Rewrite with the usage of last time rather than position in array
-    private Long getShiftId(EmployeeScheduleDTO dto) {
-        Long result = null;
-
-        var mainCompositions = dto.getMainCompositions();
-        var substitutionCompositions = dto.getSubstitutionCompositions();
-
-        int lastMainIndex = mainCompositions.size() - 1;
-        if (lastMainIndex >= 0) {
-            result = mainCompositions.get(lastMainIndex).getShiftId();
-        } else {
-            int lastSubIndex = substitutionCompositions.size() - 1;
-            if (lastSubIndex >= 0) {
-                result = substitutionCompositions.get(lastSubIndex)
-                        .getMainComposition()
-                        .getShiftId();
-            }
-        }
-
-        return result;
+    private boolean validCollection(Collection collection) {
+        return collection != null && !collection.isEmpty();
     }
 }

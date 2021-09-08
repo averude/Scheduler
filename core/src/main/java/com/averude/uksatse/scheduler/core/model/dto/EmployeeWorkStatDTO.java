@@ -13,5 +13,6 @@ import java.util.List;
 public class EmployeeWorkStatDTO {
     private Employee employee;
     private Long shiftId;
+    private Long mainPositionId;
     private List<EmployeePositionStat> positionStats;
 }

@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.function.BiFunction;
 
 import static com.averude.uksatse.scheduler.core.model.entity.SummationColumnType.HOURS_SUM;
 import static com.averude.uksatse.scheduler.core.util.CollectionUtils.binarySearch;
@@ -22,7 +21,7 @@ public class WorkDaysHoursCalculationStrategy implements CalculationStrategy {
 
     @Override
     public <T extends HasDayTypeId & HasTime, U extends HasDayTypeId & HasTimeDuration>
-    long getSum(T hasTime, List<U> ranges, BiFunction<T, U, Long> comparator) {
+    long getSum(T hasTime, List<U> ranges) {
         var sum = 0;
 
         if (ranges == null || ranges.isEmpty()) {

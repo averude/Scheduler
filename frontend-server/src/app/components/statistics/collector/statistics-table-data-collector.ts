@@ -8,7 +8,7 @@ import { TableData } from "../../../lib/ngx-schedule-table/model/data/table";
 import { UIPrioritySortingStrategy } from "../../calendar/utils/ui-priority-sorting-strategy";
 import { RowGroup } from "../../../lib/ngx-schedule-table/model/data/row-group";
 import { Row } from "../../../lib/ngx-schedule-table/model/data/row";
-import { Employee } from "../../../model/employee";
+import { EXISTING_ROW_GETTER, INSERT_INDEX_FN, MERGE_DECISION_FN } from "../../report-generator/utils/utils";
 
 @Injectable()
 export class StatisticsTableDataCollector {
@@ -21,11 +21,13 @@ export class StatisticsTableDataCollector {
     const table = new TableData();
 
     shifts.forEach(shift => {
-      const group = {
-        id:     shift.id,
-        value:  shift,
-        rows:   []
-      } as RowGroup;
+      const group = new RowGroup();
+      group.id =     shift.id;
+      group.value =  shift;
+      group.rows =   [];
+      group.findInsertIndexFn = INSERT_INDEX_FN;
+      group.decideMergeFn = MERGE_DECISION_FN;
+      group.getExistingRowFn = EXISTING_ROW_GETTER;
 
       table.addGroup(group);
     });
@@ -33,29 +35,17 @@ export class StatisticsTableDataCollector {
     dtoMap.forEach(dto => {
       const group = table.findRowGroup(dto.shiftId);
       if (group) {
-        const employeeRow = {
-          value: dto.employee,
-          rows: []
-        } as Row;
+        const rows = group.addOrMerge(dto.employee.id, {
+          employee: dto.employee,
+          mainPosition: positionMap.get(dto.mainPositionId)
+        }, null).rows;
 
         dto.positionStats.forEach(pStat => {
           const positionRow = this.getPositionRow(positionMap, pStat);
-          employeeRow.rows.push(positionRow);
+          rows.push(positionRow);
         });
-        group.rows.push(employeeRow);
       }
     });
-
-    // Temporary
-    table.groups
-      .forEach(group => group.rows = group.rows
-        .sort(((a, b) => {
-          const valA = <Employee> a.value;
-          const valB = <Employee> b.value;
-
-          return valA.secondName.localeCompare(valB.secondName)
-            || valA.firstName.localeCompare(valB.firstName);
-        })));
 
     table.sortingStrategy = this.sortingStrategy;
     return table;

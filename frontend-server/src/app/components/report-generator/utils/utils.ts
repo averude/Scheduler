@@ -18,7 +18,7 @@ export function inline(tableData: TableData): Row[] {
 export const INSERT_INDEX_FN = ((rows: Row[],
                                  value: HasEmployeePosition) => {
   return binarySearchInsertIndex(rows, (mid => {
-    const valA = <HasEmployeePosition>mid.value;
+    const valA = <HasEmployeePosition> mid.value;
     const valB = value;
 
     const employeeA = valA.employee;
@@ -34,7 +34,7 @@ export const INSERT_INDEX_FN = ((rows: Row[],
 export const EXISTING_ROW_GETTER = ((rows: Row[],
                                      value: HasEmployeePosition) => {
   return binarySearch(rows, ((mid) => {
-    const valA = <HasEmployeePosition>mid.value;
+    const valA = <HasEmployeePosition> mid.value;
     const valB = value;
 
     const employeeA = valA.employee;
@@ -49,7 +49,7 @@ export const EXISTING_ROW_GETTER = ((rows: Row[],
 });
 
 export const MERGE_DECISION_FN = ((row: Row, value: HasEmployeePosition) => {
-  const oldValue = <HasEmployeePosition>row.value;
+  const oldValue = <HasEmployeePosition> row.value;
 
   return oldValue.position.id === value.position.id
     && oldValue.employee.id === value.employee.id;
