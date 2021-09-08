@@ -10,7 +10,7 @@ import { IntervalCreator } from "../../../services/creator/interval-creator.serv
 import * as moment from "moment";
 import { RowInterval } from "../../../model/ui/schedule-table/row-interval";
 import { roundToTwo } from "../../../shared/utils/utils";
-import { getMainShiftId } from "../../../services/utils";
+import { getMainPositionId, getMainShiftId } from "../../../services/utils";
 import { WorkDay } from "../../../model/workday";
 import { CellEnabledSetter } from "../../../services/collectors/schedule/cell-enabled-setter";
 import { CellCollector } from "../../../services/collectors/cell-collector";
@@ -18,7 +18,16 @@ import { ReportInitialData } from "../model/report-initial-data";
 import { TableData } from "../../../lib/ngx-schedule-table/model/data/table";
 import { RowGroup } from "../../../lib/ngx-schedule-table/model/data/row-group";
 import { Cell } from "../../../lib/ngx-schedule-table/model/data/cell";
-import { Row } from "../../../lib/ngx-schedule-table/model/data/row";
+import { Employee } from "../../../model/employee";
+import { Position } from "../../../model/position";
+import { EXISTING_ROW_GETTER, INSERT_INDEX_FN, MERGE_DECISION_FN } from "../utils/utils";
+
+export interface HasEmployeePosition {
+  employee: Employee;
+  position: Position;
+  intervals: RowInterval[];
+  mainPosition: Position;
+}
 
 export abstract class AbstractReportDataCollector implements ReportDataCollector {
 
@@ -48,16 +57,29 @@ export abstract class AbstractReportDataCollector implements ReportDataCollector
 
     tableData.headerData = this.getHeaders(initialData.calendarDays, summationColumns);
 
-    tableData.groups = initialData.shifts
-      .sort((a, b) => a.id - b.id)
-      .map(shift => ({
-        id: shift.id,
-        value: shift.name,
-        rows: []
-      } as RowGroup));
+    initialData.shifts.forEach(shift => {
+      const group = new RowGroup();
+      group.id = shift.id;
+      group.value = shift;
+
+      group.decideMergeFn = MERGE_DECISION_FN;
+      group.getExistingRowFn = EXISTING_ROW_GETTER;
+      group.findInsertIndexFn = INSERT_INDEX_FN;
+
+      tableData.addGroup(group, (val => val.id - shift.id));
+    });
 
     for (let dto of initialData.scheduleDTOs) {
-      const shiftId = getMainShiftId(dto);
+      if (dto.mainCompositions.length == 0 && dto.substitutionCompositions.length == 0) {
+        continue;
+      }
+
+      const mainShiftId = getMainShiftId(dto);
+      if (!mainShiftId) {
+        throw new Error('No main shift id provided');
+      }
+
+      const mainPosition = initialData.positionMap.get(getMainPositionId(dto));
 
       const positionIntervalsMap = this.intervalCreator.getEmployeePositionIntervals(
         moment.utc(initialData.calendarDays[0].isoString),
@@ -65,31 +87,29 @@ export abstract class AbstractReportDataCollector implements ReportDataCollector
         dto.mainCompositions,
         dto.substitutionCompositions);
 
-      const rows: Row[] = [];
-
       positionIntervalsMap.forEach((intervals, positionId) => {
-        const reportRow = new Row();
-        const positionName = initialData.positionMap.get(positionId)?.shortName;
-        reportRow.cells = this.collectRowCellData(dto, initialData.calendarDays,
-          initialData.dayTypeMap, positionName,
-          this.getSummationResults(initialData.summationDTOMap, dto.parent.id, positionId),
-          useReportLabel, intervals)
-          // temporary
-          .map(value => {
-            return {
+        const position = initialData.positionMap.get(positionId);
+
+        const rowValue = {
+          employee: dto.parent,
+          position: position,
+          mainPosition: mainPosition,
+          intervals: intervals
+        } as HasEmployeePosition;
+
+        const positionName = position?.shortName;
+        const summationResults = this.getSummationResults(initialData.summationDTOMap, dto.parent.id, positionId);
+
+        tableData
+          .addOrMergeRow(mainShiftId, dto.parent.id, rowValue, () => {
+            throw new Error('Merge is not supported');
+          })
+          .cells = this.collectRowCellData(dto, initialData.calendarDays, initialData.dayTypeMap, positionName, summationResults, useReportLabel, intervals)
+          .map(value => ({
               date: value.date,
               value: value
-            } as Cell;
-          });
-        rows.push(reportRow);
+            } as Cell));
       });
-
-      if (shiftId > 0) {
-        const rowGroup = tableData.findRowGroup(shiftId);
-        if (rowGroup && rowGroup.rows) {
-          rowGroup.rows = rowGroup.rows.concat(rows);
-        }
-      }
 
     }
 

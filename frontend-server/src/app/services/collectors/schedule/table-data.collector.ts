@@ -11,7 +11,7 @@ import { CalendarDaysCalculator } from "../calendar-days-calculator";
 import { RowGroup } from "../../../lib/ngx-schedule-table/model/data/row-group";
 import { UIPrioritySortingStrategy } from "../../../components/calendar/utils/ui-priority-sorting-strategy";
 import { ScheduleFilteringStrategy } from "../../../components/calendar/utils/schedule-filtering-strategy";
-import { EXISTING_ROW_GETTER, INSERT_INDEX_FINDER, MERGE_DECISION_FN } from "../utils";
+import { CALENDAR_EXISTING_ROW_GETTER, CALENDAR_INSERT_INDEX_FINDER, CALENDAR_MERGE_DECISION_FN } from "../utils";
 
 @Injectable()
 export class TableDataCollector {
@@ -56,9 +56,9 @@ export class TableDataCollector {
       group.parent = tableData;
       group.id    = shift.id;
       group.value = shift;
-      group.decideMergeFn     = MERGE_DECISION_FN;
-      group.getExistingRowFn  = EXISTING_ROW_GETTER;
-      group.findInsertIndexFn = INSERT_INDEX_FINDER;
+      group.decideMergeFn     = CALENDAR_MERGE_DECISION_FN;
+      group.getExistingRowFn  = CALENDAR_EXISTING_ROW_GETTER;
+      group.findInsertIndexFn = CALENDAR_INSERT_INDEX_FINDER;
       tableData.addGroup(group, (value => value.id - group.id));
     });
 

@@ -14,8 +14,8 @@ export function exchangeComposition(compositions: Composition[],
   }
 }
 
-export const MERGE_DECISION_FN = ((row: Row, value: ScheduleRowValue) => {
-  const oldValue = <ScheduleRowValue>row.value;
+export const CALENDAR_MERGE_DECISION_FN = ((row: Row, value: ScheduleRowValue) => {
+  const oldValue = <ScheduleRowValue> row.value;
 
   return oldValue.position.id === value.position.id
     && oldValue.employee.id === value.employee.id
@@ -23,42 +23,24 @@ export const MERGE_DECISION_FN = ((row: Row, value: ScheduleRowValue) => {
     && row.parent.id === value.compositions[0].shiftId; // because there's only one composition
 });
 
-export const EXISTING_ROW_GETTER = ((rows: Row[],
-                                     value: ScheduleRowValue) => {
+export const CALENDAR_EXISTING_ROW_GETTER = ((rows: Row[],
+                                              value: ScheduleRowValue) => {
   return binarySearch(rows, ((mid) => {
-    const rowVal = <ScheduleRowValue>mid.value;
-    let number = rowVal.position.id - value.position.id;
+    const rowVal = <ScheduleRowValue> mid.value;
 
-    if (number === 0) {
-      const empVal = (rowVal).employee;
-      number = empVal.secondName.localeCompare(value.employee.secondName);
-      if (number === 0) {
-        number = empVal.firstName.localeCompare(value.employee.firstName);
-      }
-    }
-
-    return number;
+    return (rowVal.position.id - value.position.id)
+      || (rowVal.employee.secondName.localeCompare(value.employee.secondName))
+      || (rowVal.employee.firstName.localeCompare(value.employee.firstName));
   }));
-
 });
 
-export const INSERT_INDEX_FINDER = ((rows: Row[],
-                                     value: ScheduleRowValue) => {
+export const CALENDAR_INSERT_INDEX_FINDER = ((rows: Row[],
+                                              value: ScheduleRowValue) => {
   return binarySearchInsertIndex(rows, (mid => {
-    const rowVal = <ScheduleRowValue>mid.value;
-    let number = rowVal.position.id - value.position.id;
+    const rowVal = <ScheduleRowValue> mid.value;
 
-    if (number === 0) {
-      const empVal = (rowVal).employee;
-      number = empVal.secondName.localeCompare(value.employee.secondName);
-      if (number === 0) {
-        number = empVal.firstName.localeCompare(value.employee.firstName);
-        if (number === 0) {
-          return rowVal.isSubstitution === value.isSubstitution ? 0 : 1;
-        }
-      }
-    }
-
-    return number;
-  }))
+    return (rowVal.position.id - value.position.id)
+      || (rowVal.employee.secondName.localeCompare(value.employee.secondName))
+      || (rowVal.employee.firstName.localeCompare(value.employee.firstName));
+  }));
 });

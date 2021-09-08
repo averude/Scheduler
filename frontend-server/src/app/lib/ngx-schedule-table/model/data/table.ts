@@ -48,6 +48,18 @@ export class TableData implements Filterable {
     this._groups.push(group);
   }
 
+  addOrMergeRow<T>(groupId: number,
+                   rowId: number,
+                   value: T,
+                   mergeFn: (row: Row) => void): Row {
+    const rowGroup = this.findRowGroup(groupId);
+    if (!rowGroup) {
+      throw new Error(`No row group with id:${groupId} found`);
+    }
+
+    return rowGroup.addOrMerge(rowId, value, mergeFn);
+  }
+
   findRowGroup(groupId: number): RowGroup {
     return binarySearch(this._groups, (mid => mid.id - groupId));
   }

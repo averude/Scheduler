@@ -20,7 +20,6 @@ export class StatisticsTableDataCollector {
                positionMap: Map<number, Position>): TableData {
     const table = new TableData();
 
-
     shifts.forEach(shift => {
       const group = {
         id:     shift.id,
@@ -31,7 +30,6 @@ export class StatisticsTableDataCollector {
       table.addGroup(group);
     });
 
-
     dtoMap.forEach(dto => {
       const group = table.findRowGroup(dto.shiftId);
       if (group) {
@@ -41,7 +39,8 @@ export class StatisticsTableDataCollector {
         } as Row;
 
         dto.positionStats.forEach(pStat => {
-          employeeRow.rows.push(this.getPositionRow(positionMap, pStat));
+          const positionRow = this.getPositionRow(positionMap, pStat);
+          employeeRow.rows.push(positionRow);
         });
         group.rows.push(employeeRow);
       }
@@ -54,12 +53,8 @@ export class StatisticsTableDataCollector {
           const valA = <Employee> a.value;
           const valB = <Employee> b.value;
 
-          let number = valA.secondName.localeCompare(valB.secondName);
-          if (number === 0) {
-            number = valA.firstName.localeCompare(valB.firstName);
-          }
-
-          return number;
+          return valA.secondName.localeCompare(valB.secondName)
+            || valA.firstName.localeCompare(valB.firstName);
         })));
 
     table.sortingStrategy = this.sortingStrategy;

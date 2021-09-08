@@ -7,7 +7,17 @@ export function getMainShiftId(dto: EmployeeScheduleDTO) {
     return findMax(dto.mainCompositions, (prev, curr) => prev.from.isBefore(curr.from)).shiftId;
   } else {
     if (dto.substitutionCompositions.length > 0) {
-      return findMax(dto.substitutionCompositions, (prev, curr) => prev.from.isBefore(curr.from)).shiftId;
+      return findMax(dto.substitutionCompositions, (prev, curr) => prev.from.isBefore(curr.from)).mainComposition.shiftId;
+    }
+  }
+}
+
+export function getMainPositionId(dto: EmployeeScheduleDTO) {
+  if (dto.mainCompositions.length > 0) {
+    return findMax(dto.mainCompositions, (prev, curr) => prev.from.isBefore(curr.from)).positionId;
+  } else {
+    if (dto.substitutionCompositions.length > 0) {
+      return findMax(dto.substitutionCompositions, (prev, curr) => prev.from.isBefore(curr.from)).mainComposition.positionId;
     }
   }
 }
@@ -31,6 +41,7 @@ export function findMax<T>(arr: T[],
 }
 
 export function putSorted<T extends Composition>(composition: T, compositions: T[]) {
+  // TODO: write implementation with searching insert index
   compositions.push(composition);
   compositions.sort((a, b) => (a.shiftId - b.shiftId) + (a.from.diff(b.from)));
 }
