@@ -31,6 +31,7 @@ export class PositionDialogComponent extends DialogBaseComponent<Position>{
                           Validators.maxLength(256)]],
       shortName:    [null,[Validators.minLength(1),
                            Validators.maxLength(64)]],
+      uiPriority:   [0]
     });
   }
 
@@ -40,6 +41,7 @@ export class PositionDialogComponent extends DialogBaseComponent<Position>{
       departmentId: position.departmentId,
       name:         position.name,
       shortName:    position.shortName,
+      uiPriority:   position.uiPriority
     });
   }
 }

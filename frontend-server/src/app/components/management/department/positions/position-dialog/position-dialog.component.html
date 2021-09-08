@@ -15,6 +15,13 @@
     <mat-error *ngIf="isControlInvalid('shortName')">{{getErrorMessage()}}</mat-error>
   </mat-form-field>
 
+  <mat-form-field>
+    <input matInput
+           type="number"
+           placeholder="UI Priority"
+           formControlName="uiPriority">
+  </mat-form-field>
+
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">

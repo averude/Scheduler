@@ -2,6 +2,7 @@ package com.averude.uksatse.scheduler.core.model.entity;
 
 import com.averude.uksatse.scheduler.core.interfaces.entity.HasDepartmentId;
 import com.averude.uksatse.scheduler.core.interfaces.entity.HasId;
+import com.averude.uksatse.scheduler.core.interfaces.entity.HasUiPriority;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,7 +28,7 @@ import java.util.StringJoiner;
                         columnNames = {"name", "department_id"})
         }
 )
-public class Position implements HasId, HasDepartmentId {
+public class Position implements HasId, HasDepartmentId, HasUiPriority {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,6 +53,9 @@ public class Position implements HasId, HasDepartmentId {
     @Column(name = "department_id",
             nullable = false)
     private Long departmentId;
+
+    @Column(name = "ui_priority")
+    private Long uiPriority;
 
     public Position(@NotNull(message = "{position.name.null}")
                     @Size(max = 256,

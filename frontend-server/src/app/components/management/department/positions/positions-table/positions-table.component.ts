@@ -16,8 +16,8 @@ import { PositionService } from "../../../../../services/http/position.service";
   ]
 })
 export class PositionsTableComponent extends HasDepartmentTableComponent<Position> {
-  displayedColumns = ['select', 'name', 'shortName', 'control'];
-
+  displayedColumns = ['select', 'name', 'shortName', 'uiPriority', 'control'];
+s
   constructor(private dialog: MatDialog,
               private notificationsService: NotificationsService,
               private positionService: PositionService,

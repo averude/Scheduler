@@ -2,6 +2,7 @@ package com.averude.uksatse.scheduler.core.model.entity.structure;
 
 import com.averude.uksatse.scheduler.core.interfaces.entity.HasDepartmentId;
 import com.averude.uksatse.scheduler.core.interfaces.entity.HasId;
+import com.averude.uksatse.scheduler.core.interfaces.entity.HasUiPriority;
 import com.averude.uksatse.scheduler.core.model.entity.MainComposition;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
@@ -32,7 +33,7 @@ import java.util.StringJoiner;
                         columnNames = {"department_id", "name"})
         }
 )
-public class Shift implements HasId, HasDepartmentId {
+public class Shift implements HasId, HasDepartmentId, HasUiPriority {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

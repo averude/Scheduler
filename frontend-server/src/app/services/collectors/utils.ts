@@ -28,7 +28,8 @@ export const CALENDAR_EXISTING_ROW_GETTER = ((rows: Row[],
   return binarySearch(rows, ((mid) => {
     const rowVal = <ScheduleRowValue> mid.value;
 
-    return (rowVal.position.id - value.position.id)
+    return (value.position.uiPriority - rowVal.position.uiPriority)
+      || (rowVal.position.id - value.position.id)
       || (rowVal.employee.secondName.localeCompare(value.employee.secondName))
       || (rowVal.employee.firstName.localeCompare(value.employee.firstName));
   }));
@@ -39,7 +40,8 @@ export const CALENDAR_INSERT_INDEX_FINDER = ((rows: Row[],
   return binarySearchInsertIndex(rows, (mid => {
     const rowVal = <ScheduleRowValue> mid.value;
 
-    return (rowVal.position.id - value.position.id)
+    return (value.position.uiPriority - rowVal.position.uiPriority)
+      || (rowVal.position.id - value.position.id)
       || (rowVal.employee.secondName.localeCompare(value.employee.secondName))
       || (rowVal.employee.firstName.localeCompare(value.employee.firstName));
   }));

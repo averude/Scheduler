@@ -24,7 +24,7 @@ export const INSERT_INDEX_FN = ((rows: Row[],
     const employeeA = valA.employee;
     const employeeB = valB.employee;
 
-    return (valA.mainPosition.uiPriority - valB.mainPosition.uiPriority)
+    return (valB.mainPosition.uiPriority - valA.mainPosition.uiPriority)
       || (valA.mainPosition.id - valB.mainPosition.id)
       || employeeA.secondName.localeCompare(employeeB.secondName)
       || employeeA.firstName.localeCompare(employeeB.firstName);
@@ -40,7 +40,7 @@ export const EXISTING_ROW_GETTER = ((rows: Row[],
     const employeeA = valA.employee;
     const employeeB = valB.employee;
 
-    return (valA.mainPosition.uiPriority - valB.mainPosition.uiPriority)
+    return (valB.mainPosition.uiPriority - valA.mainPosition.uiPriority)
       || (valA.mainPosition.id - valB.mainPosition.id)
       || employeeA.secondName.localeCompare(employeeB.secondName)
       || employeeA.firstName.localeCompare(employeeB.firstName);

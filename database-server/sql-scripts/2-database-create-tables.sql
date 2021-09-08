@@ -25,6 +25,7 @@ CREATE TABLE IF NOT EXISTS positions (
   department_id INTEGER       NOT NULL,
   name          VARCHAR (256) NOT NULL,
   short_name    VARCHAR (64),
+  ui_priority   INTEGER       DEFAULT 0,
 
   UNIQUE (department_id, name),
 
