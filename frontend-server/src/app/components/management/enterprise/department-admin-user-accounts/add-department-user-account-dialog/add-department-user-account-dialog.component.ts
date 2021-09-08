@@ -37,7 +37,7 @@ export class AddDepartmentUserAccountDialogComponent extends DialogBaseComponent
                           Validators.minLength(3),
                           Validators.maxLength(128)]],
       role:           [null,  [Validators.required]],
-      authority:      [UserAccountLevel.DEPARTMENT, [Validators.required]],
+      level:          [UserAccountLevel.DEPARTMENT, [Validators.required]],
       enterpriseId:   [this.enterpriseId],
       departmentIds:  [null, Validators.required]
     });

@@ -40,7 +40,7 @@ export class EditDepartmentUserAccountDialogComponent extends DialogBaseComponen
                             Validators.maxLength(128)]],
       name:           ['',  Validators.maxLength(128)],
       role:           [null,  [Validators.required]],
-      authority:      [UserAccountLevel.DEPARTMENT, [Validators.required]],
+      level:          [UserAccountLevel.DEPARTMENT, [Validators.required]],
       enterpriseId:   [this.enterpriseId],
       departmentIds:  [null,  [Validators.required]]
     });
@@ -51,7 +51,7 @@ export class EditDepartmentUserAccountDialogComponent extends DialogBaseComponen
       id:             accountDTO.id,
       username:       accountDTO.username,
       name:           accountDTO.name,
-      authority:      accountDTO.level,
+      level:          accountDTO.level,
       role:           accountDTO.role,
       enterpriseId:   accountDTO.enterpriseId,
       departmentIds:  accountDTO.departmentIds

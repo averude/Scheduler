@@ -43,7 +43,7 @@ export class EditShiftUserAccountDialogComponent extends DialogBaseComponent<Use
                           Validators.maxLength(128)]],
       name:           ['',  Validators.maxLength(128)],
       role:           [null,  [Validators.required]],
-      authority:      [UserAccountLevel.SHIFT, [Validators.required]],
+      level:          [UserAccountLevel.SHIFT, [Validators.required]],
       enterpriseId:   [this.enterpriseId],
       departmentIds:  [[this.departmentId]],
       shiftIds:       [[], Validators.required]
@@ -55,7 +55,7 @@ export class EditShiftUserAccountDialogComponent extends DialogBaseComponent<Use
       id:             accountDTO.id,
       username:       accountDTO.username,
       name:           accountDTO.name,
-      authority:      accountDTO.level,
+      level:          accountDTO.level,
       role:           accountDTO.role,
       enterpriseId:   accountDTO.enterpriseId,
       departmentIds:  accountDTO.departmentIds,

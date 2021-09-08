@@ -43,7 +43,7 @@ export class AddShiftUserAccountDialogComponent extends DialogBaseComponent<NewU
                           Validators.minLength(3),
                           Validators.maxLength(128)]],
       role:           [null,  [Validators.required]],
-      authority:      [UserAccountLevel.SHIFT, [Validators.required]],
+      level:          [UserAccountLevel.SHIFT, [Validators.required]],
       enterpriseId:   [this.enterpriseId],
       departmentIds:  [[this.departmentId]],
       shiftIds:       [[], Validators.required]
