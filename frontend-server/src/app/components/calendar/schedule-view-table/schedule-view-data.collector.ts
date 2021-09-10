@@ -5,15 +5,17 @@ import { WorkDay } from "../../../model/workday";
 import { Injectable } from "@angular/core";
 import { TableData } from "../../../lib/ngx-schedule-table/model/data/table";
 import { RowGroup } from "../../../lib/ngx-schedule-table/model/data/row-group";
+import { ReportTableSortingStrategy } from "../../../services/foo/report-table-sorting-strategy";
 
 @Injectable()
 export class ScheduleViewDataCollector {
 
-  constructor(private cellCollector: CellCollector){
+  constructor(private cellCollector: CellCollector,
+              private tableSortingStrategy: ReportTableSortingStrategy){
   }
 
   collect(initialData: InitialData): TableData {
-    const result = new TableData();
+    const result = new TableData(this.tableSortingStrategy);
     result.headerData = initialData.calendarDays;
     const group = new RowGroup();
     group.rows = initialData.scheduleDTOs
