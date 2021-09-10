@@ -15,6 +15,7 @@ import { CellEnabledSetter } from "../../../services/collectors/schedule/cell-en
 import { RowInterval } from "../../../model/ui/schedule-table/row-interval";
 import { IntervalCreator } from "../../../services/creator/interval-creator.service";
 import { CellCollector } from "../../../services/collectors/cell-collector";
+import { ReportTableSortingStrategy } from "../../../services/foo/report-table-sorting-strategy";
 
 export class ScheduleReportDataCollector extends AbstractReportDataCollector {
 
@@ -22,8 +23,9 @@ export class ScheduleReportDataCollector extends AbstractReportDataCollector {
 
   constructor(intervalCreator: IntervalCreator,
               cellEnabledSetter: CellEnabledSetter,
-              cellCollector: CellCollector) {
-    super(intervalCreator, cellEnabledSetter, cellCollector);
+              cellCollector: CellCollector,
+              tableSortingStrategy: ReportTableSortingStrategy) {
+    super(intervalCreator, cellEnabledSetter, cellCollector, tableSortingStrategy);
   }
 
   fillCellWithValue(cell: ReportCellValue,

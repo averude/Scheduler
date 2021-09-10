@@ -6,20 +6,22 @@ import { ShiftPattern } from "../../../model/shift-pattern";
 import { TableData } from "../../../lib/ngx-schedule-table/model/data/table";
 import { RowGroup } from "../../../lib/ngx-schedule-table/model/data/row-group";
 import { WorkingNormInitialData } from "../../../model/datasource/initial-data";
+import { ReportTableSortingStrategy } from "../../../services/foo/report-table-sorting-strategy";
 
 @Injectable()
 export class WorkingNormTableDataCollector {
 
-  constructor(private cellCollector: CellCollector) {}
+  constructor(private cellCollector: CellCollector,
+              private tableSortingStrategy: ReportTableSortingStrategy) {}
 
   getTableData(initData: WorkingNormInitialData) {
-    const tableData = new TableData();
+    const tableData = new TableData(this.tableSortingStrategy);
     tableData.from = initData.from;
     tableData.to = initData.to;
     this.getHeaderData(tableData);
     const rowGroup = new RowGroup();
     rowGroup.rows = this.getRowData(rowGroup, tableData, initData);
-    tableData.addGroup(rowGroup);
+    tableData.groups.push(rowGroup);
     return tableData;
   }
 

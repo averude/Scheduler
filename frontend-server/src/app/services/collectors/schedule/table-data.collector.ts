@@ -8,16 +8,17 @@ import { TableSumCalculator } from "../../calculators/table-sum-calculator.servi
 import { TableData } from "../../../lib/ngx-schedule-table/model/data/table";
 import { TableRowFiller } from "./table-row-filler";
 import { CalendarDaysCalculator } from "../calendar-days-calculator";
+import { ScheduleFilteringStrategy } from "../../../components/calendar/utils/schedule-filtering-strategy";
+import { ScheduleTableSortingStrategy } from "../../foo/schedule-table-sorting-strategy";
 import { RowGroup } from "../../../lib/ngx-schedule-table/model/data/row-group";
 import { UIPrioritySortingStrategy } from "../../../components/calendar/utils/ui-priority-sorting-strategy";
-import { ScheduleFilteringStrategy } from "../../../components/calendar/utils/schedule-filtering-strategy";
-import { CALENDAR_EXISTING_ROW_GETTER, CALENDAR_INSERT_INDEX_FINDER, CALENDAR_MERGE_DECISION_FN } from "../utils";
 
 @Injectable()
 export class TableDataCollector {
 
   constructor(private intervalCreator: IntervalCreator,
               private sortingStrategy: UIPrioritySortingStrategy,
+              private tableSortingStrategy: ScheduleTableSortingStrategy,
               private filteringStrategy: ScheduleFilteringStrategy,
               private cellEnabledSetter: CellEnabledSetter,
               private calendarDaysCalculator: CalendarDaysCalculator,
@@ -25,8 +26,8 @@ export class TableDataCollector {
               private rowFiller: TableRowFiller) {}
 
   handleData(initData: InitialData): TableData {
-    const tableData: TableData = new TableData();
-    tableData.sortingStrategy = this.sortingStrategy;
+    const tableData: TableData = new TableData(this.tableSortingStrategy);
+    tableData.groupSortingStrategy = this.sortingStrategy;
     tableData.filteringStrategy = this.filteringStrategy;
 
     this.collectHeaderData(initData, tableData);
@@ -53,12 +54,8 @@ export class TableDataCollector {
 
     initialData.shifts.forEach(shift => {
       const group = new RowGroup();
-      group.parent = tableData;
       group.id    = shift.id;
       group.value = shift;
-      group.decideMergeFn     = CALENDAR_MERGE_DECISION_FN;
-      group.getExistingRowFn  = CALENDAR_EXISTING_ROW_GETTER;
-      group.findInsertIndexFn = CALENDAR_INSERT_INDEX_FINDER;
       tableData.addGroup(group, (value => value.id - group.id));
     });
 

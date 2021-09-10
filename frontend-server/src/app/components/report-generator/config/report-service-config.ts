@@ -12,6 +12,7 @@ import { CellFiller } from "../core/cell-filler";
 import { IntervalCreator } from "../../../services/creator/interval-creator.service";
 import { CellEnabledSetter } from "../../../services/collectors/schedule/cell-enabled-setter";
 import { CellCollector } from "../../../services/collectors/cell-collector";
+import { ReportTableSortingStrategy } from "../../../services/foo/report-table-sorting-strategy";
 
 @Injectable()
 export class ReportServiceConfig {
@@ -23,13 +24,14 @@ export class ReportServiceConfig {
   constructor(private cellFiller: CellFiller,
               private intervalCreator: IntervalCreator,
               private cellEnabledSetter: CellEnabledSetter,
-              private cellCollector: CellCollector){}
+              private cellCollector: CellCollector,
+              private tableSortingStrategy: ReportTableSortingStrategy){}
 
   get collectors(): Map<string, ReportDataCollector> {
     if (!this._collectorsMap) {
       this._collectorsMap = new Map<string, ReportDataCollector>();
-      const scheduleReportDataCollector = new ScheduleReportDataCollector(this.intervalCreator, this.cellEnabledSetter, this.cellCollector);
-      const timeSheetReportDataCollector = new TimeSheetReportDataCollector(this.intervalCreator, this.cellEnabledSetter, this.cellCollector);
+      const scheduleReportDataCollector = new ScheduleReportDataCollector(this.intervalCreator, this.cellEnabledSetter, this.cellCollector, this.tableSortingStrategy);
+      const timeSheetReportDataCollector = new TimeSheetReportDataCollector(this.intervalCreator, this.cellEnabledSetter, this.cellCollector, this.tableSortingStrategy);
       this._collectorsMap.set(scheduleReportDataCollector.REPORT_TYPE, scheduleReportDataCollector);
       this._collectorsMap.set(timeSheetReportDataCollector.REPORT_TYPE, timeSheetReportDataCollector);
     }

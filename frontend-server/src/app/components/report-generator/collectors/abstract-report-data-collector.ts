@@ -16,11 +16,11 @@ import { CellEnabledSetter } from "../../../services/collectors/schedule/cell-en
 import { CellCollector } from "../../../services/collectors/cell-collector";
 import { ReportInitialData } from "../model/report-initial-data";
 import { TableData } from "../../../lib/ngx-schedule-table/model/data/table";
-import { RowGroup } from "../../../lib/ngx-schedule-table/model/data/row-group";
 import { Cell } from "../../../lib/ngx-schedule-table/model/data/cell";
 import { Employee } from "../../../model/employee";
 import { Position } from "../../../model/position";
-import { EXISTING_ROW_GETTER, INSERT_INDEX_FN, MERGE_DECISION_FN } from "../utils/utils";
+import { ReportTableSortingStrategy } from "../../../services/foo/report-table-sorting-strategy";
+import { RowGroup } from "../../../lib/ngx-schedule-table/model/data/row-group";
 
 export interface HasEmployeePosition {
   employee: Employee;
@@ -35,7 +35,8 @@ export abstract class AbstractReportDataCollector implements ReportDataCollector
 
   constructor(private intervalCreator: IntervalCreator,
               private cellEnabledSetter: CellEnabledSetter,
-              private cellCollector: CellCollector) {}
+              private cellCollector: CellCollector,
+              private tableSortingStrategy: ReportTableSortingStrategy) {}
 
   collect(initialData: ReportInitialData,
           summationColumns: SummationColumn[],
@@ -53,7 +54,7 @@ export abstract class AbstractReportDataCollector implements ReportDataCollector
                            summationColumns: SummationColumn[],
                            useReportLabel: boolean): TableData {
 
-    const tableData = new TableData();
+    const tableData = new TableData(this.tableSortingStrategy);
 
     tableData.headerData = this.getHeaders(initialData.calendarDays, summationColumns);
 
@@ -61,10 +62,6 @@ export abstract class AbstractReportDataCollector implements ReportDataCollector
       const group = new RowGroup();
       group.id = shift.id;
       group.value = shift;
-
-      group.decideMergeFn = MERGE_DECISION_FN;
-      group.getExistingRowFn = EXISTING_ROW_GETTER;
-      group.findInsertIndexFn = INSERT_INDEX_FN;
 
       tableData.addGroup(group, (val => val.id - shift.id));
     });

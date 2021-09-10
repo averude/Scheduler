@@ -2,15 +2,21 @@ import { Row } from "./row";
 import { removeFromArray } from "../../../../services/utils";
 import { TableData } from "./table";
 
+export interface TableSortingStrategy {
+
+  decideMerge(row: Row, value: any): boolean;
+  getRow(rows: Row[], value: any): Row;
+  getRowGroup(groups: RowGroup[], value: any): RowGroup;
+  getRowInsertIndex(rows: Row[], value: any): number;
+  getRowGroupInsertIndex(groups: RowGroup[], value: any): number;
+
+}
+
 export class RowGroup {
   parent: TableData;
   id:     number;
   value:  any;
   rows:   Row[];
-
-  decideMergeFn: (row: Row, value: any) => boolean;
-  getExistingRowFn: (rows: Row[], value) => Row = (arr) => arr[arr.length - 1];
-  findInsertIndexFn: (rows: Row[], value) => number;
 
   constructor() {
     this.rows = [];
@@ -19,9 +25,11 @@ export class RowGroup {
   addOrMerge<T>(id: number,
                 value: T,
                 mergeFn: (row: Row) => void) {
-    const existingRow = this.getExistingRowFn(this.rows, value);
+    const sortingStrategy = this.parent.sortingStrategy;
 
-    if (existingRow && this.decideMergeFn(existingRow, value)) {
+    const existingRow = sortingStrategy.getRow(this.rows, value);
+
+    if (existingRow && sortingStrategy.decideMerge(existingRow, value)) {
       mergeFn(existingRow);
       return existingRow;
     } else {
@@ -31,7 +39,7 @@ export class RowGroup {
       row.value = value;
       row.cells = [];
       row.rows = [];
-      const idx = this.findInsertIndexFn(this.rows, value);
+      const idx = sortingStrategy.getRowInsertIndex(this.rows, value);
       this.rows.splice(idx, 0, row);
       return row;
     }

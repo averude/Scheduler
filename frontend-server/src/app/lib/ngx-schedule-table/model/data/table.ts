@@ -1,7 +1,7 @@
 import { Moment } from "moment";
 import { binarySearch, binarySearchInsertIndex } from "../../utils/collection-utils";
 import { SortingStrategy } from "./sorting-strategy";
-import { RowGroup } from "./row-group";
+import { RowGroup, TableSortingStrategy } from "./row-group";
 import { Row } from "./row";
 import { FilteringStrategy } from "./filtering-strategy";
 import { Filterable } from "./filterable";
@@ -14,11 +14,15 @@ export class TableData implements Filterable {
   from: Moment;
   to:   Moment;
 
-  sortingStrategy: SortingStrategy<RowGroup>;
+  groupSortingStrategy: SortingStrategy<RowGroup>;
   filteringStrategy: FilteringStrategy;
 
-  constructor() {
+  constructor(private tableSortingStrategy: TableSortingStrategy) {
     this._groups = [];
+
+    if (!tableSortingStrategy) {
+      throw new Error('Sorting strategy cannot be null');
+    }
   }
 
   set groups(value: RowGroup[]) {
@@ -26,11 +30,15 @@ export class TableData implements Filterable {
   }
 
   get groups(): RowGroup[] {
-    if (this.sortingStrategy) {
-      return this.sortingStrategy.sort(this._groups);
+    if (this.groupSortingStrategy) {
+      return this.groupSortingStrategy.sort(this._groups);
     } else {
       return this._groups;
     }
+  }
+
+  get sortingStrategy() {
+    return this.tableSortingStrategy;
   }
 
   addGroup(group: RowGroup,

@@ -8,28 +8,25 @@ import { TableData } from "../../../lib/ngx-schedule-table/model/data/table";
 import { UIPrioritySortingStrategy } from "../../calendar/utils/ui-priority-sorting-strategy";
 import { RowGroup } from "../../../lib/ngx-schedule-table/model/data/row-group";
 import { Row } from "../../../lib/ngx-schedule-table/model/data/row";
-import { EXISTING_ROW_GETTER, INSERT_INDEX_FN, MERGE_DECISION_FN } from "../../report-generator/utils/utils";
+import { ReportTableSortingStrategy } from "../../../services/foo/report-table-sorting-strategy";
 
 @Injectable()
 export class StatisticsTableDataCollector {
 
-  constructor(private sortingStrategy: UIPrioritySortingStrategy) {}
+  constructor(private sortingStrategy: UIPrioritySortingStrategy,
+              private tableSortingStrategy: ReportTableSortingStrategy) {}
 
   getTableData(dtoMap: Map<number, EmployeeWorkStatDTO>,
                shifts: Shift[],
                positionMap: Map<number, Position>): TableData {
-    const table = new TableData();
+    const table = new TableData(this.tableSortingStrategy);
 
     shifts.forEach(shift => {
       const group = new RowGroup();
       group.id =     shift.id;
       group.value =  shift;
-      group.rows =   [];
-      group.findInsertIndexFn = INSERT_INDEX_FN;
-      group.decideMergeFn = MERGE_DECISION_FN;
-      group.getExistingRowFn = EXISTING_ROW_GETTER;
 
-      table.addGroup(group);
+      table.addGroup(group, (val => val.id - shift.id));
     });
 
     dtoMap.forEach(dto => {
@@ -47,7 +44,7 @@ export class StatisticsTableDataCollector {
       }
     });
 
-    table.sortingStrategy = this.sortingStrategy;
+    table.groupSortingStrategy = this.sortingStrategy;
     return table;
   }
 
