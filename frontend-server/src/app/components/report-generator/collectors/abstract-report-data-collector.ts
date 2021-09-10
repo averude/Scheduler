@@ -19,7 +19,7 @@ import { TableData } from "../../../lib/ngx-schedule-table/model/data/table";
 import { Cell } from "../../../lib/ngx-schedule-table/model/data/cell";
 import { Employee } from "../../../model/employee";
 import { Position } from "../../../model/position";
-import { ReportTableSortingStrategy } from "../../../services/foo/report-table-sorting-strategy";
+import { ReportTableSortingStrategy } from "../../../shared/table-sorting-strategies/report-table-sorting-strategy";
 import { RowGroup } from "../../../lib/ngx-schedule-table/model/data/row-group";
 
 export interface HasEmployeePosition {

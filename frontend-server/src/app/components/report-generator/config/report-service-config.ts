@@ -12,7 +12,7 @@ import { CellFiller } from "../core/cell-filler";
 import { IntervalCreator } from "../../../services/creator/interval-creator.service";
 import { CellEnabledSetter } from "../../../services/collectors/schedule/cell-enabled-setter";
 import { CellCollector } from "../../../services/collectors/cell-collector";
-import { ReportTableSortingStrategy } from "../../../services/foo/report-table-sorting-strategy";
+import { ReportTableSortingStrategy } from "../../../shared/table-sorting-strategies/report-table-sorting-strategy";
 
 @Injectable()
 export class ReportServiceConfig {

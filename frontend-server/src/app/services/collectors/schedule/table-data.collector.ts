@@ -9,7 +9,7 @@ import { TableData } from "../../../lib/ngx-schedule-table/model/data/table";
 import { TableRowFiller } from "./table-row-filler";
 import { CalendarDaysCalculator } from "../calendar-days-calculator";
 import { ScheduleFilteringStrategy } from "../../../components/calendar/utils/schedule-filtering-strategy";
-import { ScheduleTableSortingStrategy } from "../../foo/schedule-table-sorting-strategy";
+import { ScheduleTableSortingStrategy } from "../../../shared/table-sorting-strategies/schedule-table-sorting-strategy";
 import { RowGroup } from "../../../lib/ngx-schedule-table/model/data/row-group";
 import { UIPrioritySortingStrategy } from "../../../components/calendar/utils/ui-priority-sorting-strategy";
 

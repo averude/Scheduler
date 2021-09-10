@@ -8,7 +8,7 @@ import { TableData } from "../../../lib/ngx-schedule-table/model/data/table";
 import { UIPrioritySortingStrategy } from "../../calendar/utils/ui-priority-sorting-strategy";
 import { RowGroup } from "../../../lib/ngx-schedule-table/model/data/row-group";
 import { Row } from "../../../lib/ngx-schedule-table/model/data/row";
-import { ReportTableSortingStrategy } from "../../../services/foo/report-table-sorting-strategy";
+import { ReportTableSortingStrategy } from "../../../shared/table-sorting-strategies/report-table-sorting-strategy";
 
 @Injectable()
 export class StatisticsTableDataCollector {

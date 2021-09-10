@@ -5,7 +5,7 @@ import { WorkDay } from "../../../model/workday";
 import { Injectable } from "@angular/core";
 import { TableData } from "../../../lib/ngx-schedule-table/model/data/table";
 import { RowGroup } from "../../../lib/ngx-schedule-table/model/data/row-group";
-import { ReportTableSortingStrategy } from "../../../services/foo/report-table-sorting-strategy";
+import { ReportTableSortingStrategy } from "../../../shared/table-sorting-strategies/report-table-sorting-strategy";
 
 @Injectable()
 export class ScheduleViewDataCollector {

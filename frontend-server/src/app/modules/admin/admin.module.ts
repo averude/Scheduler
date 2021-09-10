@@ -19,8 +19,8 @@ import { UserInfoComponent } from './user-info/user-info.component';
 import { SidePanelStepperModule } from "../../lib/side-panel-stepper/side-panel-stepper.module";
 import { MonthYearPaginatorModule } from "../../shared/paginators/month-year-paginator/month-year-paginator.module";
 import { CalendarDaysCalculator } from "../../services/collectors/calendar-days-calculator";
-import { ReportTableSortingStrategy } from "../../services/foo/report-table-sorting-strategy";
-import { ScheduleTableSortingStrategy } from "../../services/foo/schedule-table-sorting-strategy";
+import { ReportTableSortingStrategy } from "../../shared/table-sorting-strategies/report-table-sorting-strategy";
+import { ScheduleTableSortingStrategy } from "../../shared/table-sorting-strategies/schedule-table-sorting-strategy";
 
 @NgModule({
   imports: [
