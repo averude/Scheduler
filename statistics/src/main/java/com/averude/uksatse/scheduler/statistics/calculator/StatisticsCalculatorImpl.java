@@ -31,11 +31,21 @@ public class StatisticsCalculatorImpl implements StatisticsCalculator {
     public List<SummationResult> calculateByCountMap(Map<WorkDayWrapper, Integer> countMap,
                                                      List<SummationColumn> summationColumns) {
         return summationColumns.stream()
-                .map(column -> calculateSummationColumn(column, countMap))
+                .map(column -> {
+                    var strategy = hasNoSpecCalDates(column)
+                            ? noSpecialCalendarDateColumnSummationStrategy
+                            : defaultCalendarDateColumnSummationStrategy;
+                    return calculateSummationColumn(column, strategy, countMap);
+                })
                 .collect(Collectors.toList());
     }
 
+    private boolean hasNoSpecCalDates(SummationColumn column) {
+        return column.getSpecialCalendarDateTypes() == null || column.getSpecialCalendarDateTypes().isEmpty();
+    }
+
     private SummationResult calculateSummationColumn(SummationColumn summationColumn,
+                                                     CalendarDateColumnSummationStrategy columnSummationStrategy,
                                                      Map<WorkDayWrapper, Integer> countMap) {
         var calculationStrategy = calculationStrategies.get(summationColumn.getColumnType());
         if (calculationStrategy == null) {
@@ -43,21 +53,9 @@ public class StatisticsCalculatorImpl implements StatisticsCalculator {
         }
 
         var dayTypeRanges = summationColumn.getDayTypeRanges();
+        var summationColumnSum = columnSummationStrategy
+                .getSummationColumnSum(summationColumn, countMap, calculationStrategy, dayTypeRanges);
 
-        long summationColumnSum;
-
-        if (summationColumn.getSpecialCalendarDateTypes() == null || summationColumn.getSpecialCalendarDateTypes().isEmpty()) {
-            summationColumnSum = noSpecialCalendarDateColumnSummationStrategy.getSummationColumnSum(
-                    summationColumn, countMap, calculationStrategy, dayTypeRanges);
-        } else {
-            summationColumnSum = defaultCalendarDateColumnSummationStrategy.getSummationColumnSum(
-                    summationColumn, countMap, calculationStrategy, dayTypeRanges);
-        }
-
-        var summationResult = new SummationResult();
-        summationResult.setSummationColumnId(summationColumn.getId());
-        summationResult.setType(summationColumn.getColumnType());
-        summationResult.setValue(summationColumnSum);
-        return summationResult;
+        return new SummationResult(summationColumn.getId(), summationColumn.getColumnType(), summationColumnSum);
     }
 }
