@@ -13,7 +13,7 @@ import { TimeSheetStyles } from "../styles/time-sheet-styles";
 import { SummationResult } from "../../../model/dto/employee-work-stat-dto";
 import { CalendarDay } from "../../../lib/ngx-schedule-table/model/calendar-day";
 import { SummationColumn } from "../../../model/summation-column";
-import { ReportData } from "../model/report-row";
+import { ReportData } from "../model/report-data";
 import { ReportMarkup } from "../model/report-markup";
 import { EmployeeScheduleDTO } from "../../../model/dto/employee-schedule-dto";
 import { RowInterval } from "../../../model/ui/schedule-table/row-interval";

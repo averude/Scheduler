@@ -1,4 +1,4 @@
-import { ReportData } from "./model/report-row";
+import { ReportData } from "./model/report-data";
 import * as ExcelJS from "exceljs";
 import { Buffer } from "exceljs";
 import { ReportCreator } from "./creator/report-creator";

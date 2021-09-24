@@ -1,6 +1,6 @@
 import { Row, Worksheet } from "exceljs";
 import { Row as ReportRow } from "../../../lib/ngx-schedule-table/model/data/row";
-import { ReportData } from "../model/report-row";
+import { ReportData } from "../model/report-data";
 import { CellFiller } from "../core/cell-filler";
 import { topMediumBorders } from "../styles/report-styles";
 import { ReportMarkup } from "../model/report-markup";

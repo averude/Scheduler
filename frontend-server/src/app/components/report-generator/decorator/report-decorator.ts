@@ -1,5 +1,5 @@
 import { Worksheet } from "exceljs";
-import { ReportData } from "../model/report-row";
+import { ReportData } from "../model/report-data";
 import { ReportSheet } from "../../../model/report-sheet";
 
 export interface ReportDecorator {

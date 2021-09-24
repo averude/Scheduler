@@ -1,4 +1,4 @@
-import { ReportData } from "../model/report-row";
+import { ReportData } from "../model/report-data";
 import { DayType } from "../../../model/day-type";
 import { EmployeeWorkStatDTO, SummationResult } from "../../../model/dto/employee-work-stat-dto";
 import { CalendarDay } from "../../../lib/ngx-schedule-table/model/calendar-day";

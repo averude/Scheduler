@@ -1,4 +1,4 @@
-import { ReportData } from "../model/report-row";
+import { ReportData } from "../model/report-data";
 import { SummationColumn } from "../../../model/summation-column";
 import { ReportInitialData } from "../model/report-initial-data";
 

@@ -1,4 +1,4 @@
-import { ReportData } from "../model/report-row";
+import { ReportData } from "../model/report-data";
 import { TableData } from "../../../lib/ngx-schedule-table/model/data/table";
 import { Row } from "../../../lib/ngx-schedule-table/model/data/row";
 

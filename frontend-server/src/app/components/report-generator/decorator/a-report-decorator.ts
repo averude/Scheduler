@@ -1,5 +1,5 @@
 import { Worksheet } from "exceljs";
-import { ReportData } from "../model/report-row";
+import { ReportData } from "../model/report-data";
 import { DecorationData, HeaderSectionData } from "../model/decoration-data";
 import { ReportDecorator } from "./report-decorator";
 import {

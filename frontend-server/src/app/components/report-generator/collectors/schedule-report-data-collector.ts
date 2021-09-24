@@ -8,7 +8,7 @@ import { ScheduleReportStyles } from "../styles/schedule-report-styles";
 import { CalendarDay } from "../../../lib/ngx-schedule-table/model/calendar-day";
 import { SummationResult } from "../../../model/dto/employee-work-stat-dto";
 import { SummationColumn } from "../../../model/summation-column";
-import { ReportData } from "../model/report-row";
+import { ReportData } from "../model/report-data";
 import { ReportMarkup } from "../model/report-markup";
 import { EmployeeScheduleDTO } from "../../../model/dto/employee-schedule-dto";
 import { CellEnabledSetter } from "../../../services/collectors/schedule/cell-enabled-setter";

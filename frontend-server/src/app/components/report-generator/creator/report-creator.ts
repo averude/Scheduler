@@ -1,5 +1,5 @@
 import { Worksheet } from "exceljs";
-import { ReportData } from "../model/report-row";
+import { ReportData } from "../model/report-data";
 import { Row } from "../../../lib/ngx-schedule-table/model/data/row";
 
 export interface ReportCreator {
