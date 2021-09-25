@@ -9,11 +9,13 @@ import { ReportGenerator } from "./report-generator";
 import { StatisticsColumnCompositor } from "../../shared/compositor/statistics-column-compositor";
 import { ReportOptions } from "./model/report-options";
 import { ReportInitialData } from "./model/report-initial-data";
+import { DefaultReportDataCollector } from "./collectors/default-report-data-collector";
 
 @Injectable()
 export class ReportService {
 
-  constructor(private reportGenerator: ReportGenerator,
+  constructor(private defaultReportDataCollector: DefaultReportDataCollector,
+              private reportGenerator: ReportGenerator,
               private statisticsColumnCompositor: StatisticsColumnCompositor,
               private config: ReportServiceConfig){}
 
@@ -27,16 +29,16 @@ export class ReportService {
       return;
     }
 
-    const reportDataCollector = this.config.collectors.get(reportType);
+    const collectorStrategy   = this.config.collectorStrategies.get(reportType);
     const reportDecorator     = this.config.decorators.get(reportType);
     const reportCreator       = this.config.creators.get(reportType);
 
-    if (reportDataCollector && reportCreator && reportDecorator) {
+    if (collectorStrategy && reportCreator && reportDecorator) {
 
       return reportDataObservable.pipe(mergeMap(data => {
         this.statisticsColumnCompositor.composeResults(data.summationDTOMap, summationColumns, data.workingNorms);
 
-        const collectedData = reportDataCollector.collect(data, summationColumns, reportOptions.useReportLabel);
+        const collectedData = this.defaultReportDataCollector.collect(collectorStrategy, data, summationColumns, reportOptions.useReportLabel);
         collectedData.decorationData = decorationData;
 
         return this.reportGenerator

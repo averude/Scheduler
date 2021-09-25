@@ -1,7 +1,4 @@
 import { Injectable } from "@angular/core";
-import { ReportDataCollector } from "../collectors/report-data-collector";
-import { ScheduleReportDataCollector } from "../collectors/schedule-report-data-collector";
-import { TimeSheetReportDataCollector } from "../collectors/time-sheet-report-data-collector";
 import { ReportDecorator } from "../decorator/report-decorator";
 import { ReportCreator } from "../creator/report-creator";
 import { ScheduleReportDecorator } from "../decorator/schedule-report-decorator";
@@ -9,33 +6,30 @@ import { TimeSheetReportDecorator } from "../decorator/time-sheet-report-decorat
 import { ScheduleReportCreator } from "../creator/schedule-report-creator";
 import { TimeSheetReportCreator } from "../creator/time-sheet-report-creator";
 import { CellFiller } from "../core/cell-filler";
-import { IntervalCreator } from "../../../services/creator/interval-creator.service";
-import { CellEnabledSetter } from "../../../services/collectors/schedule/cell-enabled-setter";
-import { CellCollector } from "../../../services/collectors/cell-collector";
-import { ReportTableSortingStrategy } from "../../../shared/table-sorting-strategies/report-table-sorting-strategy";
+import { ReportCollectorStrategy } from "../collectors/strategy/report-collector-strategy";
+import { ScheduleReportCollectorStrategy } from "../collectors/strategy/schedule-report-collector-strategy";
+import { ReportCellCollector } from "../collectors/report-cell-collector";
+import { TimeSheetReportCollectorStrategy } from "../collectors/strategy/time-sheet-report-collector-strategy";
 
 @Injectable()
 export class ReportServiceConfig {
 
-  private _collectorsMap: Map<string, ReportDataCollector>;
   private _creatorsMap:   Map<string, ReportCreator>;
   private _decoratorsMap: Map<string, ReportDecorator>;
+  private _collectorStrategiesMap: Map<string, ReportCollectorStrategy>;
 
   constructor(private cellFiller: CellFiller,
-              private intervalCreator: IntervalCreator,
-              private cellEnabledSetter: CellEnabledSetter,
-              private cellCollector: CellCollector,
-              private tableSortingStrategy: ReportTableSortingStrategy){}
+              private reportCellCollector: ReportCellCollector){}
 
-  get collectors(): Map<string, ReportDataCollector> {
-    if (!this._collectorsMap) {
-      this._collectorsMap = new Map<string, ReportDataCollector>();
-      const scheduleReportDataCollector = new ScheduleReportDataCollector(this.intervalCreator, this.cellEnabledSetter, this.cellCollector, this.tableSortingStrategy);
-      const timeSheetReportDataCollector = new TimeSheetReportDataCollector(this.intervalCreator, this.cellEnabledSetter, this.cellCollector, this.tableSortingStrategy);
-      this._collectorsMap.set(scheduleReportDataCollector.REPORT_TYPE, scheduleReportDataCollector);
-      this._collectorsMap.set(timeSheetReportDataCollector.REPORT_TYPE, timeSheetReportDataCollector);
+  get collectorStrategies(): Map<string, ReportCollectorStrategy> {
+    if (!this._collectorStrategiesMap) {
+      this._collectorStrategiesMap = new Map<string, ReportCollectorStrategy>();
+      const scheduleReportCollectorStrategy = new ScheduleReportCollectorStrategy(this.reportCellCollector);
+      const timeSheetReportCollectorStrategy = new TimeSheetReportCollectorStrategy(this.reportCellCollector);
+      this._collectorStrategiesMap.set(scheduleReportCollectorStrategy.REPORT_TYPE, scheduleReportCollectorStrategy);
+      this._collectorStrategiesMap.set(timeSheetReportCollectorStrategy.REPORT_TYPE, timeSheetReportCollectorStrategy);
     }
-    return this._collectorsMap;
+    return this._collectorStrategiesMap;
   }
 
   get decorators(): Map<string, ReportDecorator> {

@@ -1,43 +1,35 @@
-import { AbstractReportDataCollector } from "./abstract-report-data-collector";
-import { WorkDay } from "../../../model/workday";
-import { DayType } from "../../../model/day-type";
-import { TIME_SHEET_REPORT } from "../model/report-types";
+import { TIME_SHEET_REPORT } from "../../model/report-types";
+import { ReportCellValue, ReportHeaderCell } from "../../model/report-cell-value";
+import { WorkDay } from "../../../../model/workday";
+import { DayType } from "../../../../model/day-type";
 import {
   calculateHoursByHasTime,
   getCellValue,
   getCellValueExt,
   getEmployeeShortName
-} from "../../../shared/utils/utils";
-import { ReportCellValue, ReportHeaderCell } from "../model/report-cell-value";
-import { TimeSheetStyles } from "../styles/time-sheet-styles";
-import { SummationResult } from "../../../model/dto/employee-work-stat-dto";
-import { CalendarDay } from "../../../lib/ngx-schedule-table/model/calendar-day";
-import { SummationColumn } from "../../../model/summation-column";
-import { ReportData } from "../model/report-data";
-import { ReportMarkup } from "../model/report-markup";
-import { EmployeeScheduleDTO } from "../../../model/dto/employee-schedule-dto";
-import { RowInterval } from "../../../model/ui/schedule-table/row-interval";
-import { CellEnabledSetter } from "../../../services/collectors/schedule/cell-enabled-setter";
-import { IntervalCreator } from "../../../services/creator/interval-creator.service";
-import { CellCollector } from "../../../services/collectors/cell-collector";
-import { ReportTableSortingStrategy } from "../../../shared/table-sorting-strategies/report-table-sorting-strategy";
+} from "../../../../shared/utils/utils";
+import { EmployeeScheduleDTO } from "../../../../model/dto/employee-schedule-dto";
+import { CalendarDay } from "../../../../lib/ngx-schedule-table/model/calendar-day";
+import { SummationResult } from "../../../../model/dto/employee-work-stat-dto";
+import { RowInterval } from "../../../../model/ui/schedule-table/row-interval";
+import { TimeSheetStyles } from "../../styles/time-sheet-styles";
+import { SummationColumn } from "../../../../model/summation-column";
+import { ReportData } from "../../model/report-data";
+import { ReportMarkup } from "../../model/report-markup";
+import { ReportCollectorStrategy } from "./report-collector-strategy";
+import { ReportCellCollector } from "../report-cell-collector";
 
-export class TimeSheetReportDataCollector extends AbstractReportDataCollector {
-
+export class TimeSheetReportCollectorStrategy implements ReportCollectorStrategy {
   REPORT_TYPE: string = TIME_SHEET_REPORT;
 
-  constructor(intervalCreator: IntervalCreator,
-              cellEnabledSetter: CellEnabledSetter,
-              cellCollector: CellCollector,
-              tableSortingStrategy: ReportTableSortingStrategy) {
-    super(intervalCreator, cellEnabledSetter, cellCollector, tableSortingStrategy);
+  constructor(private reportCellCollector: ReportCellCollector) {
   }
 
   fillCellWithValue(cell: ReportCellValue,
                     workDay: WorkDay,
                     dayTypeMap: Map<number, DayType>,
                     useReportLabel?: boolean): void {
-    cell.style  = this.getStyle(cell.date, false);
+    cell.style = this.getStyle(cell.date, false);
     cell.merge = false;
     const val = [];
     if (workDay) {
@@ -54,7 +46,7 @@ export class TimeSheetReportDataCollector extends AbstractReportDataCollector {
   }
 
   fillDisabledCell(cell: ReportCellValue) {
-    cell.style  = this.getStyle(cell.date, true);
+    cell.style = this.getStyle(cell.date, true);
     cell.merge = true;
     cell.value = ['', 'X'];
   }
@@ -82,7 +74,7 @@ export class TimeSheetReportDataCollector extends AbstractReportDataCollector {
       }
     ]);
 
-    this.collectCells(dto, calendarDays, intervals, dayTypesMap, useReportLabel)
+    this.reportCellCollector.collectCells(this, dto, calendarDays, intervals, dayTypesMap, useReportLabel)
       .forEach(cell => result.push(cell));
 
     summations.forEach(cell =>
@@ -159,4 +151,5 @@ export class TimeSheetReportDataCollector extends AbstractReportDataCollector {
     }
     return result;
   }
+
 }

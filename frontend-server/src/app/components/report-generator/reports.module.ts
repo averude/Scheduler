@@ -20,6 +20,8 @@ import { CellFiller } from "./core/cell-filler";
 import { MatIconModule } from "@angular/material/icon";
 import { ReportDataSource } from "./data-source/report-data-source";
 import { ReportsRoutingModule } from "./reports-routing.module";
+import { ReportCellCollector } from "./collectors/report-cell-collector";
+import { DefaultReportDataCollector } from "./collectors/default-report-data-collector";
 
 @NgModule({
   imports: [
@@ -45,6 +47,8 @@ import { ReportsRoutingModule } from "./reports-routing.module";
     MatMomentDateModule,
     ReportDataSource,
     CellFiller,
+    DefaultReportDataCollector,
+    ReportCellCollector,
     ReportServiceConfig,
     ReportService,
     ReportGenerator,

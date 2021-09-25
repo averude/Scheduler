@@ -1,7 +1,7 @@
 import { RowGroup, TableSortingStrategy } from "../../lib/ngx-schedule-table/model/data/row-group";
 import { Row } from "../../lib/ngx-schedule-table/model/data/row";
 import { binarySearch, binarySearchInsertIndex } from "../../lib/ngx-schedule-table/utils/collection-utils";
-import { HasEmployeePosition } from "../../components/report-generator/collectors/abstract-report-data-collector";
+import { HasEmployeePosition } from "../../components/report-generator/model/has-employee-position";
 import { Shift } from "../../model/shift";
 
 export class ReportTableSortingStrategy implements TableSortingStrategy {

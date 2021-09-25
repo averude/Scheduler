@@ -1,31 +1,23 @@
-import { AbstractReportDataCollector } from "./abstract-report-data-collector";
-import { WorkDay } from "../../../model/workday";
-import { DayType } from "../../../model/day-type";
-import { getCellValue, getEmployeeShortName } from "../../../shared/utils/utils";
-import { SCHEDULE_REPORT } from "../model/report-types";
-import { ReportCellValue, ReportHeaderCell } from "../model/report-cell-value";
-import { ScheduleReportStyles } from "../styles/schedule-report-styles";
-import { CalendarDay } from "../../../lib/ngx-schedule-table/model/calendar-day";
-import { SummationResult } from "../../../model/dto/employee-work-stat-dto";
-import { SummationColumn } from "../../../model/summation-column";
-import { ReportData } from "../model/report-data";
-import { ReportMarkup } from "../model/report-markup";
-import { EmployeeScheduleDTO } from "../../../model/dto/employee-schedule-dto";
-import { CellEnabledSetter } from "../../../services/collectors/schedule/cell-enabled-setter";
-import { RowInterval } from "../../../model/ui/schedule-table/row-interval";
-import { IntervalCreator } from "../../../services/creator/interval-creator.service";
-import { CellCollector } from "../../../services/collectors/cell-collector";
-import { ReportTableSortingStrategy } from "../../../shared/table-sorting-strategies/report-table-sorting-strategy";
+import { SCHEDULE_REPORT } from "../../model/report-types";
+import { ReportCellValue, ReportHeaderCell } from "../../model/report-cell-value";
+import { WorkDay } from "../../../../model/workday";
+import { DayType } from "../../../../model/day-type";
+import { getCellValue, getEmployeeShortName } from "../../../../shared/utils/utils";
+import { CalendarDay } from "../../../../lib/ngx-schedule-table/model/calendar-day";
+import { SummationColumn } from "../../../../model/summation-column";
+import { ScheduleReportStyles } from "../../styles/schedule-report-styles";
+import { EmployeeScheduleDTO } from "../../../../model/dto/employee-schedule-dto";
+import { SummationResult } from "../../../../model/dto/employee-work-stat-dto";
+import { RowInterval } from "../../../../model/ui/schedule-table/row-interval";
+import { ReportData } from "../../model/report-data";
+import { ReportMarkup } from "../../model/report-markup";
+import { ReportCollectorStrategy } from "./report-collector-strategy";
+import { ReportCellCollector } from "../report-cell-collector";
 
-export class ScheduleReportDataCollector extends AbstractReportDataCollector {
-
+export class ScheduleReportCollectorStrategy implements ReportCollectorStrategy {
   REPORT_TYPE: string = SCHEDULE_REPORT;
 
-  constructor(intervalCreator: IntervalCreator,
-              cellEnabledSetter: CellEnabledSetter,
-              cellCollector: CellCollector,
-              tableSortingStrategy: ReportTableSortingStrategy) {
-    super(intervalCreator, cellEnabledSetter, cellCollector, tableSortingStrategy);
+  constructor(private reportCellCollector: ReportCellCollector) {
   }
 
   fillCellWithValue(cell: ReportCellValue,
@@ -106,7 +98,7 @@ export class ScheduleReportDataCollector extends AbstractReportDataCollector {
       }
     ]);
 
-    this.collectCells(dto, calendarDays, intervals, dayTypesMap, useReportLabel)
+    this.reportCellCollector.collectCells(this, dto, calendarDays, intervals, dayTypesMap, useReportLabel)
       .forEach(cell => result.push(cell));
 
     summations.forEach(sum =>
