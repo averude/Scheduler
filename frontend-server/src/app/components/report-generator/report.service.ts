@@ -9,12 +9,12 @@ import { ReportGenerator } from "./report-generator";
 import { StatisticsColumnCompositor } from "../../shared/compositor/statistics-column-compositor";
 import { ReportOptions } from "./model/report-options";
 import { ReportInitialData } from "./model/report-initial-data";
-import { DefaultReportDataCollector } from "./collectors/default-report-data-collector";
+import { ReportDataCollector } from "./collectors/report-data-collector";
 
 @Injectable()
 export class ReportService {
 
-  constructor(private defaultReportDataCollector: DefaultReportDataCollector,
+  constructor(private defaultReportDataCollector: ReportDataCollector,
               private reportGenerator: ReportGenerator,
               private statisticsColumnCompositor: StatisticsColumnCompositor,
               private config: ReportServiceConfig){}

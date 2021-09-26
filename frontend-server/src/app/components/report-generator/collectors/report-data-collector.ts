@@ -15,7 +15,7 @@ import { ReportTableSortingStrategy } from "../../../shared/table-sorting-strate
 import { Injectable } from "@angular/core";
 
 @Injectable()
-export class DefaultReportDataCollector {
+export class ReportDataCollector {
 
   constructor(private intervalCreator: IntervalCreator,
               private tableSortingStrategy: ReportTableSortingStrategy) {}
