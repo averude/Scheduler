@@ -16,7 +16,7 @@ export abstract class HasEnterprisePageableTable<T extends IdEntity> extends Tab
 
   constructor(private datePaginationService: PaginationService,
               matDialog: MatDialog,
-              private enterpriseId: number,
+              protected enterpriseId: number,
               private hasEnterpriseIdService: CUDService<T> & HasEnterpriseIdService<T>,
               notification: NotificationsService) {
     super(matDialog, hasEnterpriseIdService, notification);

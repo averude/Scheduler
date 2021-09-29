@@ -33,7 +33,8 @@ export class SpecialCalendarDatesTableComponent extends HasEnterprisePageableTab
 
   openDialog(specialCalendarDate: SpecialCalendarDate) {
     const data = {
-      specialCalendarDate: specialCalendarDate
+      specialCalendarDate: specialCalendarDate,
+      enterpriseId:        this.enterpriseId
     };
 
     this.openAddOrEditDialog(specialCalendarDate, data, SpecialCalendarDatesDialogComponent);
