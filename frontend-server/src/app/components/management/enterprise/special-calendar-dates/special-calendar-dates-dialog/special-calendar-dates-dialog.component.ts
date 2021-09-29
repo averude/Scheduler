@@ -15,21 +15,24 @@ import { SPECIAL_CALENDAR_DATE_TYPES, SpecialCalendarDate } from "../../../../..
 export class SpecialCalendarDatesDialogComponent extends DialogBaseComponent<SpecialCalendarDate> {
 
   dateTypes: string[] = SPECIAL_CALENDAR_DATE_TYPES;
+  private readonly enterpriseId: number;
 
   constructor(private fb: FormBuilder,
               private dialogRef: MatDialogRef<SpecialCalendarDatesDialogComponent>,
               @Inject(MAT_DIALOG_DATA) data) {
     super(data.specialCalendarDate, dialogRef);
+    this.enterpriseId = data.enterpriseId;
   }
 
   initTheForm() {
     this.dialogForm = this.fb.group({
-      id:       [],
-      dateType: [null, Validators.required],
-      name:     [null, [Validators.required,
+      id:           [],
+      dateType:     [null, Validators.required],
+      enterpriseId: [this.enterpriseId],
+      name:         [null, [Validators.required,
                         Validators.minLength(3),
                         Validators.maxLength(255)]],
-      date:     [null, [Validators.required]]
+      date:         [null, [Validators.required]]
     });
   }
 
@@ -37,6 +40,7 @@ export class SpecialCalendarDatesDialogComponent extends DialogBaseComponent<Spe
     this.dialogForm.setValue({
       id:           specialCalendarDate.id,
       dateType:     specialCalendarDate.dateType,
+      enterpriseId: specialCalendarDate.enterpriseId,
       name:         specialCalendarDate.name,
       date:         specialCalendarDate.date
     });
