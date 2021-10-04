@@ -10,8 +10,6 @@ import { ReportCollectorStrategy } from "../collectors/strategy/report-collector
 import { ScheduleReportCollectorStrategy } from "../collectors/strategy/schedule-report-collector-strategy";
 import { ReportCellCollector } from "../collectors/report-cell-collector";
 import { TimeSheetReportCollectorStrategy } from "../collectors/strategy/time-sheet-report-collector-strategy";
-import { CollectorHandler } from "../../../shared/collectors/collector-handler";
-import { IntervalCreator } from "../../../services/creator/interval-creator.service";
 import { ReportMarkup } from "../model/report-markup";
 import { SCHEDULE_REPORT, TIME_SHEET_REPORT } from "../model/report-types";
 
@@ -22,10 +20,8 @@ export class ReportServiceConfig {
   private _creatorsMap:   Map<string, ReportCreator>;
   private _decoratorsMap: Map<string, ReportDecorator>;
   private _collectorStrategiesMap: Map<string, ReportCollectorStrategy>;
-  private _collectorHandlers: CollectorHandler[];
 
   constructor(private cellFiller: CellFiller,
-              private intervalCreator: IntervalCreator,
               private reportCellCollector: ReportCellCollector){}
 
   get collectorStrategies(): Map<string, ReportCollectorStrategy> {

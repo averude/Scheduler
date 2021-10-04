@@ -1,32 +1,22 @@
-import { CollectorHandler } from "../../../shared/collectors/collector-handler";
-import { IntervalCreator } from "../../../services/creator/interval-creator.service";
-import { ReportInitialData } from "../model/report-initial-data";
-import { TableData } from "../../../lib/ngx-schedule-table/model/data/table";
-import { RowGroup } from "../../../lib/ngx-schedule-table/model/data/row-group";
-import { getMainPositionId, getMainShiftId } from "../../../services/utils";
+import { Injectable } from "@angular/core";
+import { CollectorHandler } from "../../../../shared/collectors/collector-handler";
+import { IntervalCreator } from "../../../../services/creator/interval-creator.service";
+import { ReportInitialData } from "../../model/report-initial-data";
+import { TableData } from "../../../../lib/ngx-schedule-table/model/data/table";
+import { RowGroup } from "../../../../lib/ngx-schedule-table/model/data/row-group";
+import { getMainPositionId, getMainShiftId } from "../../../../services/utils";
 import * as moment from "moment";
-import { HasEmployeePosition } from "../model/has-employee-position";
-import { Cell } from "../../../lib/ngx-schedule-table/model/data/cell";
-import { EmployeeWorkStatDTO } from "../../../model/dto/employee-work-stat-dto";
-import { SummationType } from "../../../model/summation-column";
-import { roundToTwo } from "../../../shared/utils/utils";
-import { Injectable, InjectionToken } from "@angular/core";
-
-export const REPORT_COLLECTOR_HANDLERS = new InjectionToken<CollectorHandler>('Report collector handlers');
-
-@Injectable()
-export class ReportDataHeaderCollectorHandler implements CollectorHandler {
-
-  handle(initData: ReportInitialData, tableData: TableData) {
-    const collectorStrategy = initData.collectorStrategy;
-    tableData.headerData = collectorStrategy.getHeaders(initData.calendarDays, initData.summationColumns);
-  }
-}
+import { HasEmployeePosition } from "../../model/has-employee-position";
+import { Cell } from "../../../../lib/ngx-schedule-table/model/data/cell";
+import { EmployeeWorkStatDTO } from "../../../../model/dto/employee-work-stat-dto";
+import { SummationType } from "../../../../model/summation-column";
+import { roundToTwo } from "../../../../shared/utils/utils";
 
 @Injectable()
 export class ReportDataBodyCollectorHandler implements CollectorHandler {
 
-  constructor(private intervalCreator: IntervalCreator) {}
+  constructor(private intervalCreator: IntervalCreator) {
+  }
 
   handle(initData: ReportInitialData, tableData: TableData) {
     const collectorStrategy = initData.collectorStrategy;

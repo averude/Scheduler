@@ -3,6 +3,7 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  Inject,
   OnDestroy,
   OnInit,
   TemplateRef,
@@ -10,7 +11,6 @@ import {
 } from '@angular/core';
 import { Subscription } from "rxjs";
 import { WorkingNormService } from "../../../services/http/working-norm.service";
-import { WorkingNormTableDataCollector } from "../collector/working-norm-table-data-collector";
 import { ClearSelectionService } from "../../../lib/ngx-schedule-table/service/clear-selection.service";
 import { SelectionEndService } from "../../../lib/ngx-schedule-table/service/selection-end.service";
 import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
@@ -31,6 +31,10 @@ import { TableData } from "../../../lib/ngx-schedule-table/model/data/table";
 import { WorkingNormDataSource } from "../data-source/working-norm.data-source";
 import { WorkingNormInitialData } from "../../../model/datasource/initial-data";
 import { PaginationService } from "../../../shared/paginators/pagination.service";
+import { TableDataCollector } from "../../../shared/collectors/table-data-collector";
+import { WORKING_NORM_COLLECTOR_HANDLERS } from "../collector/working-norm-collector.module";
+import { CollectorHandler } from "../../../shared/collectors/collector-handler";
+import { ReportTableSortingStrategy } from "../../../shared/table-sorting-strategies/report-table-sorting-strategy";
 
 @Component({
   selector: 'app-working-norm-table',
@@ -68,7 +72,11 @@ export class WorkingNormTableComponent implements OnInit, AfterViewInit, OnDestr
               private tableRenderer: TableRenderer,
               private sumCalculator: TableSumCalculator,
               private dataSource: WorkingNormDataSource,
-              private dataCollector: WorkingNormTableDataCollector,
+              //
+              private dataCollector: TableDataCollector,
+              @Inject(WORKING_NORM_COLLECTOR_HANDLERS) private handlers: CollectorHandler[],
+              private tableSortingStrategy: ReportTableSortingStrategy,
+              //
               private paginationService: PaginationService,
               private workingNormService: WorkingNormService,
               private notificationsService: NotificationsService) { }
@@ -97,7 +105,7 @@ export class WorkingNormTableComponent implements OnInit, AfterViewInit, OnDestr
     ).subscribe(initData => {
       this.proxyViewIsShown = false;
       this.initData = initData;
-      this.tableData = this.dataCollector.getTableData(initData);
+      this.tableData = this.dataCollector.collect(initData, this.handlers, this.tableSortingStrategy);
       this.sumCalculator.calculateTableHoursNormSum(this.tableData);
       this.cd.detectChanges();
     });

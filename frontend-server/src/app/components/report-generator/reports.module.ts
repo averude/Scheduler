@@ -20,19 +20,13 @@ import { CellFiller } from "./core/cell-filler";
 import { MatIconModule } from "@angular/material/icon";
 import { ReportDataSource } from "./data-source/report-data-source";
 import { ReportsRoutingModule } from "./reports-routing.module";
-import { ReportCellCollector } from "./collectors/report-cell-collector";
-import {
-  REPORT_COLLECTOR_HANDLERS,
-  ReportDataBodyCollectorHandler,
-  ReportDataHeaderCollectorHandler
-} from "./collectors/collector-handlers";
-import { DataCollectorModule } from "../../shared/collectors/data-collector.module";
+import { ReportCollectorModule } from "./collectors/report-collector.module";
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
-    DataCollectorModule,
+    ReportCollectorModule,
     MatInputModule,
     MatDatepickerModule,
     MatMomentDateModule,
@@ -53,13 +47,10 @@ import { DataCollectorModule } from "../../shared/collectors/data-collector.modu
     MatMomentDateModule,
     ReportDataSource,
     CellFiller,
-    ReportCellCollector,
     ReportServiceConfig,
     ReportService,
     ReportGenerator,
     {provide: MAT_DATE_FORMATS, useValue: MONTH_YEAR_DATE_FORMAT},
-    {provide: REPORT_COLLECTOR_HANDLERS, useClass: ReportDataHeaderCollectorHandler, multi: true},
-    {provide: REPORT_COLLECTOR_HANDLERS, useClass: ReportDataBodyCollectorHandler, multi: true}
   ]
 })
 export class ReportsModule { }

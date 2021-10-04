@@ -10,7 +10,7 @@ import { StatisticsColumnCompositor } from "../../shared/compositor/statistics-c
 import { ReportOptions } from "./model/report-options";
 import { ReportInitialData } from "./model/report-initial-data";
 import { ReportData } from "./model/report-data";
-import { REPORT_COLLECTOR_HANDLERS } from "./collectors/collector-handlers";
+import { REPORT_COLLECTOR_HANDLERS } from "./collectors/report-collector.module";
 import { CollectorHandler } from "../../shared/collectors/collector-handler";
 import { ReportTableSortingStrategy } from "../../shared/table-sorting-strategies/report-table-sorting-strategy";
 import { TableDataCollector } from "../../shared/collectors/table-data-collector";

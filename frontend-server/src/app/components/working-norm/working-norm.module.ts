@@ -4,7 +4,6 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { SharedModule } from "../../shared/shared.module";
 import { ScheduleTableModule } from "../../lib/ngx-schedule-table/schedule-table.module";
 import { MonthYearPaginatorModule } from "../../shared/paginators/month-year-paginator/month-year-paginator.module";
-import { WorkingNormTableDataCollector } from "./collector/working-norm-table-data-collector";
 import { WorkingNormTableComponent } from "./working-norm-table/working-norm-table.component";
 import { WorkingNormDialogComponent } from './working-norm-dialog/working-norm-dialog.component';
 import { MatButtonModule } from "@angular/material/button";
@@ -19,12 +18,15 @@ import { NameInfoCellModule } from "../shared/name-info-cell/name-info-cell.modu
 import { WorkingNormDataSource } from "./data-source/working-norm.data-source";
 import { WorkingNormRoutingModule } from "./working-norm-routing.module";
 import { CalendarContainerModule } from "../../lib/calendar-container/calendar-container.module";
+import { CellUpdater } from "../../services/updater/cell-updater";
+import { WorkingNormCollectorModule } from "./collector/working-norm-collector.module";
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     SharedModule,
+    WorkingNormCollectorModule,
     AvrEntityGenerationModule,
     ReactiveFormsModule,
     ScheduleTableModule,
@@ -45,8 +47,8 @@ import { CalendarContainerModule } from "../../lib/calendar-container/calendar-c
   ],
   providers: [
     WorkingNormDataSource,
-    WorkingNormTableDataCollector,
-    TableSumCalculator
+    TableSumCalculator,
+    CellUpdater
   ]
 })
 export class WorkingNormModule {}
