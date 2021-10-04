@@ -28,6 +28,8 @@
     <mat-error *ngIf="isControlInvalid('uiPriority')">{{getErrorMessage()}}</mat-error>
   </mat-form-field>
 
+  <mat-checkbox formControlName="hidden">Hidden</mat-checkbox>
+
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">

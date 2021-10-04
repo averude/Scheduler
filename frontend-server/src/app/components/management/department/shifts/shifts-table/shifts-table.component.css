@@ -1,0 +1,25 @@
+.mat-column-hidden {
+  width: 2em;
+}
+
+.small-img {
+  padding-top: 0.2em;
+  width: 1.8em;
+  height: 1.8em;
+}
+
+.top-container {
+  display: flex;
+}
+
+.top-container > button {
+  border: none;
+  background-color: transparent;
+  font-family: MuseoSansMedium;
+  font-size: 14px;
+}
+
+.top-container > button:hover {
+  background-color: #f1f1f1;
+  cursor: pointer;
+}

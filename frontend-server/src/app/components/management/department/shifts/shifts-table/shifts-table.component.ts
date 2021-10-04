@@ -15,7 +15,9 @@ import { ActivatedRoute } from "@angular/router";
   styleUrls: ['../../../../../shared/common/table.common.css','./shifts-table.component.css']
 })
 export class ShiftsTableComponent extends HasDepartmentTableComponent<Shift> implements OnInit {
-  displayedColumns = ['select', 'name', 'pattern', 'uiPriority', 'control'];
+  displayedColumns = ['select', 'name', 'pattern', 'uiPriority', 'hidden', 'control'];
+
+  showHidden: boolean = false;
 
   patterns: ShiftPattern[] = [];
 
@@ -34,6 +36,7 @@ export class ShiftsTableComponent extends HasDepartmentTableComponent<Shift> imp
       return data.name.toLowerCase().includes(filter) ||
         this.getPatternName(data.shiftPatternId).toLowerCase().includes(filter)
     });
+
     this.shiftPatternService.getAllByDepartmentId(this.departmentId)
       .subscribe(patterns => this.patterns = patterns);
   }

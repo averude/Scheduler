@@ -92,7 +92,7 @@ export class ScheduleTableConfigurationMenuComponent implements OnInit, OnDestro
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = false;
     dialogConfig.autoFocus = true;
-    dialogConfig.data = getGenerationUnits(this.initData.shifts);
+    dialogConfig.data = getGenerationUnits(this.initData.shifts.filter(shift => !shift.hidden));
 
     this.dialog.open(AvrEntityGenerationDialogComponent, dialogConfig)
       .afterClosed()

@@ -55,6 +55,9 @@ public class Shift implements HasId, HasDepartmentId, HasUiPriority {
     @Column(name = "pattern_id")
     private Long shiftPatternId;
 
+    @NotNull
+    private Boolean hidden;
+
     @Column(name = "ui_priority")
     private Long uiPriority;
 

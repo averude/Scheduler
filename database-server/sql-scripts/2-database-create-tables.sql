@@ -158,6 +158,7 @@ CREATE TABLE IF NOT EXISTS shifts (
   department_id INTEGER       NOT NULL,
   pattern_id    INTEGER,
   name          VARCHAR (128) NOT NULL,
+  hidden        BOOLEAN       NOT NULL    DEFAULT FALSE,
   ui_priority   INTEGER       DEFAULT 0,
 
   UNIQUE (department_id, name),
@@ -232,7 +233,7 @@ CREATE TABLE IF NOT EXISTS substitution_compositions (
   shift_id              INTEGER       NOT NULL,
   employee_id           INTEGER       NOT NULL,
   position_id           INTEGER       NOT NULL,
-  main_composition_id  INTEGER       NOT NULL,
+  main_composition_id   INTEGER       NOT NULL,
   from_date             DATE          NOT NULL,
   to_date               DATE          NOT NULL,
 

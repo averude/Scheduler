@@ -36,7 +36,9 @@ export class AddSubstitutionCompositionDialogComponent implements OnInit {
               @Inject(MAT_DIALOG_DATA) data) {
     this.from       = data.from;
     this.to         = data.to;
-    this.shifts     = data.initData.shifts;
+    this.shifts     = data.initData.shifts
+      .filter(shift => !shift.hidden)
+      .sort((a, b) => b.uiPriority - a.uiPriority);
     this.positions  = data.initData.positions;
     this.employee   = data.employee;
 
