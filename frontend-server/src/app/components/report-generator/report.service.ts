@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Inject, Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { mergeMap } from "rxjs/operators";
 import { DecorationData } from "./model/decoration-data";
@@ -9,12 +9,18 @@ import { ReportGenerator } from "./report-generator";
 import { StatisticsColumnCompositor } from "../../shared/compositor/statistics-column-compositor";
 import { ReportOptions } from "./model/report-options";
 import { ReportInitialData } from "./model/report-initial-data";
-import { ReportDataCollector } from "./collectors/report-data-collector";
+import { ReportData } from "./model/report-data";
+import { HANDLERS } from "./collectors/collector-handlers";
+import { CollectorHandler } from "../../services/collectors/schedule/collector-handler";
+import { ReportTableSortingStrategy } from "../../shared/table-sorting-strategies/report-table-sorting-strategy";
+import { TableDataCollector } from "../../shared/collectors/table-data-collector";
 
 @Injectable()
 export class ReportService {
 
-  constructor(private defaultReportDataCollector: ReportDataCollector,
+  constructor(private tableDataCollector: TableDataCollector,
+              @Inject(HANDLERS) private handlers: CollectorHandler[],
+              private tableSortingStrategy: ReportTableSortingStrategy,
               private reportGenerator: ReportGenerator,
               private statisticsColumnCompositor: StatisticsColumnCompositor,
               private config: ReportServiceConfig){}
@@ -35,15 +41,20 @@ export class ReportService {
 
     if (collectorStrategy && reportCreator && reportDecorator) {
 
-      return reportDataObservable.pipe(mergeMap(data => {
-        this.statisticsColumnCompositor.composeResults(data.summationDTOMap, summationColumns, data.workingNorms);
+      return reportDataObservable.pipe(mergeMap(initData => {
+        this.statisticsColumnCompositor.composeResults(initData.summationDTOMap, summationColumns, initData.workingNorms);
+        initData.summationColumns   = summationColumns;
+        initData.useReportLabel     = reportOptions.useReportLabel;
+        initData.collectorStrategy  = collectorStrategy;
 
-        const collectedData = this.defaultReportDataCollector.collect(collectorStrategy, data, summationColumns, reportOptions.useReportLabel);
-        collectedData.decorationData = decorationData;
+        const reportData = new ReportData();
+        reportData.tableData = this.tableDataCollector.collect(initData, this.handlers, this.tableSortingStrategy);
+        reportData.decorationData = decorationData;
+        reportData.reportMarkup = this.config.reportMarkups.get(reportType);
 
         return this.reportGenerator
-          .generate(reportCreator, reportDecorator, collectedData,
-            data.reportSheets, reportOptions.divideBySubDep);
+          .generate(reportCreator, reportDecorator, reportData,
+            initData.reportSheets, reportOptions.divideBySubDep);
       }));
     }
   }

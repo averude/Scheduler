@@ -10,22 +10,16 @@ import { CommonModule } from "@angular/common";
 import { ScheduleGenerationService } from "../../services/generators/schedule/schedule-generation.service";
 import { MonthYearPaginatorModule } from "../../shared/paginators/month-year-paginator/month-year-paginator.module";
 import { ScheduleCellLabelPipe } from "./utils/schedule-cell-label-pipe";
-import { IntervalCreator } from "../../services/creator/interval-creator.service";
-import { TableSumCalculator } from "../../services/calculators/table-sum-calculator.service";
 import { ScheduleTableCompositionManagementModule } from "./schedule-table-composition-management/schedule-table-composition-management.module";
 import { SchedulerUtility } from "./utils/scheduler-utility";
 import { ScheduleTableDataSource } from "./data-sources/schedule-table.data-source";
-import { CellEnabledSetter } from "../../services/collectors/schedule/cell-enabled-setter";
 import { ScheduleTableConfigurationMenuModule } from "./schedule-table-configuration-menu/schedule-table-configuration-menu.module";
-import { TableDataCollector } from "../../services/collectors/schedule/table-data.collector";
 import { TableCellComponent } from "./table-cell/table-cell.component";
 import { NameInfoCellModule } from "../shared/name-info-cell/name-info-cell.module";
 import { ScheduleViewTableComponent } from "./schedule-view-table/schedule-view-table.component";
-import { UIPrioritySortingStrategy } from "./utils/ui-priority-sorting-strategy";
-import { TableRowFiller } from "../../services/collectors/schedule/table-row-filler";
 import { TableFilterModule } from "./table-filter/table-filter.module";
-import { ScheduleFilteringStrategy } from "./utils/schedule-filtering-strategy";
 import { CalendarContainerModule } from "../../lib/calendar-container/calendar-container.module";
+import { TableCollectorModule } from "../../services/collectors/schedule/table-collector.module";
 
 @NgModule({
   imports: [
@@ -41,7 +35,8 @@ import { CalendarContainerModule } from "../../lib/calendar-container/calendar-c
     ScheduleTableModule,
     TableFilterModule,
     ScheduleTableCompositionManagementModule,
-    ScheduleTableConfigurationMenuModule
+    ScheduleTableConfigurationMenuModule,
+    TableCollectorModule
   ],
   declarations: [
     ScheduleTableComponent,
@@ -51,15 +46,8 @@ import { CalendarContainerModule } from "../../lib/calendar-container/calendar-c
   providers: [
     ScheduleGenerationService,
     ScheduleCellLabelPipe,
-    IntervalCreator,
-    TableSumCalculator,
-    TableDataCollector,
-    TableRowFiller,
-    CellEnabledSetter,
     ScheduleTableDataSource,
     SchedulerUtility,
-    UIPrioritySortingStrategy,
-    ScheduleFilteringStrategy
   ]
 })
 export class CalendarModule {}

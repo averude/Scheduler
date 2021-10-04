@@ -24,8 +24,8 @@ export class WorkingNormDataSource {
       map(([shiftPatterns, dtos]) => {
         const initData = new WorkingNormInitialData();
         initData.shiftPatterns = shiftPatterns;
-        initData.shifts = dtos.map(dto => dto.parent);
-        initData.workingNormDTOs = dtos;
+        initData.shifts = dtos.map(dto => dto.parent).filter(shift => !shift.hidden);
+        initData.workingNormDTOs = dtos.filter(dto => !dto.parent.hidden);
         initData.from = moment.utc(from);
         initData.to = moment.utc(to);
         return initData;

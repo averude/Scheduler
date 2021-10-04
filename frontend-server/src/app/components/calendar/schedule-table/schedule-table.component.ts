@@ -3,6 +3,7 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  Inject,
   OnDestroy,
   OnInit,
   TemplateRef,
@@ -23,10 +24,14 @@ import { filter, map, switchMap } from "rxjs/operators";
 import { ToolbarTemplateService } from "../../../services/top-bar/toolbar-template.service";
 import { Options } from "../../../lib/ngx-schedule-table/model/options";
 import { InitialData } from "../../../model/datasource/initial-data";
-import { TableDataCollector } from "../../../services/collectors/schedule/table-data.collector";
 import { TableData } from "../../../lib/ngx-schedule-table/model/data/table";
 import { RowGroup } from "../../../lib/ngx-schedule-table/model/data/row-group";
 import { fadeOutAnimation } from "../utils/animations";
+import { TableDataCollector } from "../../../shared/collectors/table-data-collector";
+import { CollectorHandler, HANDLERS } from "../../../services/collectors/schedule/collector-handler";
+import { UIPrioritySortingStrategy } from "../utils/ui-priority-sorting-strategy";
+import { ScheduleTableSortingStrategy } from "../../../shared/table-sorting-strategies/schedule-table-sorting-strategy";
+import { ScheduleFilteringStrategy } from "../utils/schedule-filtering-strategy";
 
 @Component({
   animations: [fadeOutAnimation],
@@ -68,6 +73,12 @@ export class ScheduleTableComponent implements OnInit, AfterViewInit, OnDestroy 
               private dataSource: ScheduleTableDataSource,
               private tableDataCollector: TableDataCollector,
               private tableManager: TableManager,
+              // should be moved
+              @Inject(HANDLERS) private handlers: CollectorHandler[],
+              private sortingStrategy: UIPrioritySortingStrategy,
+              private tableSortingStrategy: ScheduleTableSortingStrategy,
+              private filteringStrategy: ScheduleFilteringStrategy,
+              //
               public utility: SchedulerUtility) {}
 
   private filterShownSub: Subscription;
@@ -100,7 +111,10 @@ export class ScheduleTableComponent implements OnInit, AfterViewInit, OnDestroy 
                 .pipe(
                   map(initData => {
                     this.initData = initData;
-                    return this.tableDataCollector.handleData(initData);
+                    const data = this.tableDataCollector.collect(initData, this.handlers, this.tableSortingStrategy);
+                    data.groupSortingStrategy = this.sortingStrategy;
+                    data.filteringStrategy = this.filteringStrategy;
+                    return data;
                   })
                 );
             }
@@ -113,7 +127,10 @@ export class ScheduleTableComponent implements OnInit, AfterViewInit, OnDestroy 
                 .pipe(
                   map(initData => {
                     this.initData = initData;
-                    return this.tableDataCollector.handleData(initData);
+                    const data = this.tableDataCollector.collect(initData, this.handlers, this.tableSortingStrategy);
+                    data.groupSortingStrategy = this.sortingStrategy;
+                    data.filteringStrategy = this.filteringStrategy;
+                    return data;
                   })
                 );
             }

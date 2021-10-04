@@ -14,8 +14,6 @@ import { SummationResult } from "../../../../model/dto/employee-work-stat-dto";
 import { RowInterval } from "../../../../model/ui/schedule-table/row-interval";
 import { TimeSheetStyles } from "../../styles/time-sheet-styles";
 import { SummationColumn } from "../../../../model/summation-column";
-import { ReportData } from "../../model/report-data";
-import { ReportMarkup } from "../../model/report-markup";
 import { ReportCollectorStrategy } from "./report-collector-strategy";
 import { ReportCellCollector } from "../report-cell-collector";
 
@@ -118,18 +116,6 @@ export class TimeSheetReportCollectorStrategy implements ReportCollectorStrategy
     }));
 
     return headers;
-  }
-
-  afterDataInsert(data: ReportData) {
-    data.reportMarkup = {
-      sheet_row_start_num: 2,
-      sheet_col_start_num: 2,
-      table_header_height: 1,
-      table_creator_interval: 3,
-      table_data_row_step: 2,
-      table_cols_before_data: 2,
-      table_report_label: 'ТАБЕЛЬ'
-    } as ReportMarkup;
   }
 
   private getHeaderStyle(day: CalendarDay) {

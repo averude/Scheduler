@@ -6,7 +6,6 @@ import { DayType } from "../../../../model/day-type";
 import { SummationResult } from "../../../../model/dto/employee-work-stat-dto";
 import { RowInterval } from "../../../../model/ui/schedule-table/row-interval";
 import { WorkDay } from "../../../../model/workday";
-import { ReportData } from "../../model/report-data";
 
 export interface ReportCollectorStrategy {
 
@@ -29,7 +28,5 @@ export interface ReportCollectorStrategy {
                     useReportLabel?: boolean): void;
 
   fillDisabledCell(cell: ReportCellValue);
-
-  afterDataInsert(data: ReportData);
 }
 

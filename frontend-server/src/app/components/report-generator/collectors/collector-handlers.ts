@@ -1,7 +1,6 @@
+import { CollectorHandler } from "../../../services/collectors/schedule/collector-handler";
+import { IntervalCreator } from "../../../services/creator/interval-creator.service";
 import { ReportInitialData } from "../model/report-initial-data";
-import { SummationColumn, SummationType } from "../../../model/summation-column";
-import { ReportData } from "../model/report-data";
-import { ReportCollectorStrategy } from "./strategy/report-collector-strategy";
 import { TableData } from "../../../lib/ngx-schedule-table/model/data/table";
 import { RowGroup } from "../../../lib/ngx-schedule-table/model/data/row-group";
 import { getMainPositionId, getMainShiftId } from "../../../services/utils";
@@ -9,40 +8,30 @@ import * as moment from "moment";
 import { HasEmployeePosition } from "../model/has-employee-position";
 import { Cell } from "../../../lib/ngx-schedule-table/model/data/cell";
 import { EmployeeWorkStatDTO } from "../../../model/dto/employee-work-stat-dto";
+import { SummationType } from "../../../model/summation-column";
 import { roundToTwo } from "../../../shared/utils/utils";
-import { IntervalCreator } from "../../../services/creator/interval-creator.service";
-import { ReportTableSortingStrategy } from "../../../shared/table-sorting-strategies/report-table-sorting-strategy";
-import { Injectable } from "@angular/core";
+import { Injectable, InjectionToken } from "@angular/core";
+
+export const HANDLERS = new InjectionToken<CollectorHandler>('CollectionHandler');
 
 @Injectable()
-export class ReportDataCollector {
+export class ReportDataHeaderCollectorHandler implements CollectorHandler {
 
-  constructor(private intervalCreator: IntervalCreator,
-              private tableSortingStrategy: ReportTableSortingStrategy) {}
-
-  collect(collectorStrategy: ReportCollectorStrategy,
-          initialData: ReportInitialData,
-          summationColumns: SummationColumn[],
-          useReportLabel: boolean): ReportData {
-    const reportData = new ReportData();
-
-    reportData.tableData = this.collectTableData(collectorStrategy, initialData, summationColumns, useReportLabel);
-
-    collectorStrategy.afterDataInsert(reportData);
-
-    return reportData;
+  handle(initData: ReportInitialData, tableData: TableData) {
+    const collectorStrategy = initData.collectorStrategy;
+    tableData.headerData = collectorStrategy.getHeaders(initData.calendarDays, initData.summationColumns);
   }
+}
 
-  private collectTableData(collectorStrategy: ReportCollectorStrategy,
-                           initialData: ReportInitialData,
-                           summationColumns: SummationColumn[],
-                           useReportLabel: boolean): TableData {
+@Injectable()
+export class ReportDataBodyCollectorHandler implements CollectorHandler {
 
-    const tableData = new TableData(this.tableSortingStrategy);
+  constructor(private intervalCreator: IntervalCreator) {}
 
-    tableData.headerData = collectorStrategy.getHeaders(initialData.calendarDays, summationColumns);
+  handle(initData: ReportInitialData, tableData: TableData) {
+    const collectorStrategy = initData.collectorStrategy;
 
-    initialData.shifts.forEach(shift => {
+    initData.shifts.forEach(shift => {
       const group = new RowGroup();
       group.id = shift.id;
       group.value = shift;
@@ -50,7 +39,7 @@ export class ReportDataCollector {
       tableData.addGroup(group, (val => val.id - shift.id));
     });
 
-    for (let dto of initialData.scheduleDTOs) {
+    for (let dto of initData.scheduleDTOs) {
       if (dto.mainCompositions.length == 0 && dto.substitutionCompositions.length == 0) {
         continue;
       }
@@ -60,16 +49,16 @@ export class ReportDataCollector {
         throw new Error('No main shift id provided');
       }
 
-      const mainPosition = initialData.positionMap.get(getMainPositionId(dto));
+      const mainPosition = initData.positionMap.get(getMainPositionId(dto));
 
       const positionIntervalsMap = this.intervalCreator.getEmployeePositionIntervals(
-        moment.utc(initialData.calendarDays[0].isoString),
-        moment.utc(initialData.calendarDays[initialData.calendarDays.length - 1].isoString),
+        moment.utc(initData.calendarDays[0].isoString),
+        moment.utc(initData.calendarDays[initData.calendarDays.length - 1].isoString),
         dto.mainCompositions,
         dto.substitutionCompositions);
 
       positionIntervalsMap.forEach((intervals, positionId) => {
-        const position = initialData.positionMap.get(positionId);
+        const position = initData.positionMap.get(positionId);
 
         const rowValue = {
           employee: dto.parent,
@@ -79,13 +68,14 @@ export class ReportDataCollector {
         } as HasEmployeePosition;
 
         const positionName = position?.shortName;
-        const summationResults = this.getSummationResults(initialData.summationDTOMap, dto.parent.id, positionId);
+        const summationResults = this.getSummationResults(initData.summationDTOMap, dto.parent.id, positionId);
 
         tableData
           .addOrMergeRow(mainShiftId, dto.parent.id, rowValue, () => {
             throw new Error('Merge is not supported');
           })
-          .cells = collectorStrategy.collectRowCellData(dto, initialData.calendarDays, initialData.dayTypeMap, positionName, summationResults, useReportLabel, intervals)
+          .cells = collectorStrategy.collectRowCellData(dto, initData.calendarDays,
+          initData.dayTypeMap, positionName, summationResults, initData.useReportLabel, intervals)
           .map(value => ({
             date: value.date,
             value: value
@@ -93,11 +83,9 @@ export class ReportDataCollector {
       });
 
     }
-
-    return tableData;
   }
 
-  private getSummationResults(employeeWorkStatMap: Map<number,EmployeeWorkStatDTO>,
+  private getSummationResults(employeeWorkStatMap: Map<number, EmployeeWorkStatDTO>,
                               employeeId: number,
                               positionId: number) {
     const statDTO = employeeWorkStatMap.get(employeeId);

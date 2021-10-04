@@ -9,8 +9,6 @@ import { ScheduleReportStyles } from "../../styles/schedule-report-styles";
 import { EmployeeScheduleDTO } from "../../../../model/dto/employee-schedule-dto";
 import { SummationResult } from "../../../../model/dto/employee-work-stat-dto";
 import { RowInterval } from "../../../../model/ui/schedule-table/row-interval";
-import { ReportData } from "../../model/report-data";
-import { ReportMarkup } from "../../model/report-markup";
 import { ReportCollectorStrategy } from "./report-collector-strategy";
 import { ReportCellCollector } from "../report-cell-collector";
 
@@ -108,18 +106,6 @@ export class ScheduleReportCollectorStrategy implements ReportCollectorStrategy 
       }));
 
     return result;
-  }
-
-  afterDataInsert(data: ReportData) {
-    data.reportMarkup = {
-      sheet_row_start_num: 2,
-      sheet_col_start_num: 2,
-      table_header_height: 2,
-      table_creator_interval: 4,
-      table_data_row_step: 1,
-      table_cols_before_data: 3,
-      table_report_label: 'ГРАФІК'
-    } as ReportMarkup;
   }
 
   private getHeaderStyle(day: CalendarDay) {

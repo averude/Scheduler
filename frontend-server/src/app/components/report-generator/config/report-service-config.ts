@@ -10,15 +10,22 @@ import { ReportCollectorStrategy } from "../collectors/strategy/report-collector
 import { ScheduleReportCollectorStrategy } from "../collectors/strategy/schedule-report-collector-strategy";
 import { ReportCellCollector } from "../collectors/report-cell-collector";
 import { TimeSheetReportCollectorStrategy } from "../collectors/strategy/time-sheet-report-collector-strategy";
+import { CollectorHandler } from "../../../services/collectors/schedule/collector-handler";
+import { IntervalCreator } from "../../../services/creator/interval-creator.service";
+import { ReportMarkup } from "../model/report-markup";
+import { SCHEDULE_REPORT, TIME_SHEET_REPORT } from "../model/report-types";
 
 @Injectable()
 export class ReportServiceConfig {
 
+  private _markupMap:     Map<string, ReportMarkup>;
   private _creatorsMap:   Map<string, ReportCreator>;
   private _decoratorsMap: Map<string, ReportDecorator>;
   private _collectorStrategiesMap: Map<string, ReportCollectorStrategy>;
+  private _collectorHandlers: CollectorHandler[];
 
   constructor(private cellFiller: CellFiller,
+              private intervalCreator: IntervalCreator,
               private reportCellCollector: ReportCellCollector){}
 
   get collectorStrategies(): Map<string, ReportCollectorStrategy> {
@@ -52,5 +59,32 @@ export class ReportServiceConfig {
       this._creatorsMap.set(timeSheetReportCreator.REPORT_TYPE, timeSheetReportCreator);
     }
     return this._creatorsMap;
+  }
+
+  get reportMarkups(): Map<string, ReportMarkup> {
+    if (!this._markupMap) {
+      this._markupMap = new Map<string, ReportMarkup>();
+
+      this._markupMap.set(SCHEDULE_REPORT, {
+        sheet_row_start_num: 2,
+        sheet_col_start_num: 2,
+        table_header_height: 2,
+        table_creator_interval: 4,
+        table_data_row_step: 1,
+        table_cols_before_data: 3,
+        table_report_label: 'ГРАФІК'
+      } as ReportMarkup);
+
+      this._markupMap.set(TIME_SHEET_REPORT, {
+        sheet_row_start_num: 2,
+        sheet_col_start_num: 2,
+        table_header_height: 1,
+        table_creator_interval: 3,
+        table_data_row_step: 2,
+        table_cols_before_data: 2,
+        table_report_label: 'ТАБЕЛЬ'
+      } as ReportMarkup);
+    }
+    return this._markupMap;
   }
 }

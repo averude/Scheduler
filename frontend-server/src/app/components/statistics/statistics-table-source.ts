@@ -93,7 +93,7 @@ export class StatisticsTableSource {
 
     return forkJoin(sources1).pipe(
       switchMap(([shifts, positions, summationColumns]) => {
-        this.shifts = shifts;
+        this.shifts = shifts.filter(shift => !shift.hidden);
         this.positionMap = toIdMap(positions);
         this.summationColumns = summationColumns.map(value => value.parent);
         this.statisticsColumnCompositor.composeColumns(this.summationColumns);

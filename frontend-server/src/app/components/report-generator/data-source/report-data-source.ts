@@ -82,7 +82,7 @@ export class ReportDataSource {
                  workingNorms: workingNorms,
                  summationDTOMap: summationDTOMap,
                  dayTypeMap: dayTypeMap,
-                 shifts: shifts,
+                 shifts: shifts.filter(shift => !shift.hidden),
                  positions: positions,
                  positionMap: toIdMap(positions),
                  reportSheets: reportSheets,
