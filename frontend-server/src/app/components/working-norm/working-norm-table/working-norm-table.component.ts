@@ -19,7 +19,7 @@ import { SelectionData } from "../../../lib/ngx-schedule-table/model/selection-d
 import { TableRenderer } from "../../../lib/ngx-schedule-table/service/table-renderer.service";
 import { TableSumCalculator } from "../../../services/calculators/table-sum-calculator.service";
 import { AuthService } from "../../../services/http/auth.service";
-import { CellUpdater, getMonthCellIndex } from "../../../services/collectors/cell-updater";
+import { CellUpdater, getMonthCellIndex } from "../../../services/updater/cell-updater";
 import { ActivatedRoute } from "@angular/router";
 import { Cell } from "../../../lib/ngx-schedule-table/model/data/cell";
 import { WorkingNorm } from "../../../model/working-norm";

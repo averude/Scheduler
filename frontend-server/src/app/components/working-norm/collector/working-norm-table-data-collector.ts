@@ -1,7 +1,7 @@
 import { WorkingNormRow, WorkingNormRowValue } from "../../../model/ui/working-norm-table/working-norm-row-data";
 import { Shift } from "../../../model/shift";
 import { Injectable } from "@angular/core";
-import { CellCollector } from "../../../services/collectors/cell-collector";
+import { CellCollector } from "../../../shared/collectors/cell-collector";
 import { ShiftPattern } from "../../../model/shift-pattern";
 import { TableData } from "../../../lib/ngx-schedule-table/model/data/table";
 import { RowGroup } from "../../../lib/ngx-schedule-table/model/data/row-group";

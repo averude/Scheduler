@@ -2,7 +2,7 @@ import { Composition } from "../../../model/composition";
 import { TableData } from "../../../lib/ngx-schedule-table/model/data/table";
 import { InitialData } from "../../../model/datasource/initial-data";
 import { EmployeeScheduleDTO } from "../../../model/dto/employee-schedule-dto";
-import { CellCollector } from "../cell-collector";
+import { CellCollector } from "../../../shared/collectors/cell-collector";
 import { Injectable } from "@angular/core";
 import { ScheduleCell, ScheduleRow, ScheduleRowValue } from "../../../model/ui/schedule-table/table-data";
 import { WorkDay } from "../../../model/workday";

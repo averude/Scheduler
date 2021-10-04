@@ -9,7 +9,7 @@ import { DepartmentDayType } from "../../../model/department-day-type";
 import { BasicDTO } from "../../../model/dto/basic-dto";
 import { ShiftPattern } from "../../../model/shift-pattern";
 import { HasDayTypeAndTime } from "../../../model/interface/has-day-type-and-time";
-import { CellUpdater } from "../../collectors/cell-updater";
+import { CellUpdater } from "../../updater/cell-updater";
 import { ScheduleCell, ScheduleRow } from "../../../model/ui/schedule-table/table-data";
 import { createOrUpdateCell } from "./schedule-generation-utils";
 import { forkJoin } from "rxjs";

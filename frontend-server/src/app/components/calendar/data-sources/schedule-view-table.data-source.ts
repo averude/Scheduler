@@ -5,7 +5,7 @@ import { map, switchMap } from "rxjs/operators";
 import { Injectable } from "@angular/core";
 import { DayTypeService } from "../../../services/http/day-type.service";
 import { PaginationService } from "../../../shared/paginators/pagination.service";
-import { CalendarDaysCalculator } from "../../../services/collectors/calendar-days-calculator";
+import { CalendarDaysCalculator } from "../../../services/calculators/calendar-days-calculator";
 import { SpecialCalendarDateService } from "../../../services/http/special-calendar-date.service";
 import * as moment from "moment";
 

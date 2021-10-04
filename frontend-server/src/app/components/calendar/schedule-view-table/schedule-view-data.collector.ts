@@ -1,6 +1,6 @@
 import { InitialData } from "../../../model/datasource/initial-data";
 import { ScheduleCell, ScheduleRow, ScheduleRowValue } from "../../../model/ui/schedule-table/table-data";
-import { CellCollector } from "../../../services/collectors/cell-collector";
+import { CellCollector } from "../../../shared/collectors/cell-collector";
 import { WorkDay } from "../../../model/workday";
 import { Injectable } from "@angular/core";
 import { TableData } from "../../../lib/ngx-schedule-table/model/data/table";

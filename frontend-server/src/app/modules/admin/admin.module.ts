@@ -4,8 +4,7 @@ import { CommonModule } from "@angular/common";
 import { AdminRoutingModule } from "./admin-routing.module";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatSidenavModule } from "@angular/material/sidenav";
-import { CellCollector } from "../../services/collectors/cell-collector";
-import { CellUpdater } from "../../services/collectors/cell-updater";
+import { CellUpdater } from "../../services/updater/cell-updater";
 import { CalendarModule } from "../../components/calendar/calendar.module";
 import { SimpleNotificationsModule } from "angular2-notifications";
 import { MatMenuModule } from "@angular/material/menu";
@@ -18,7 +17,7 @@ import { ToolbarRowComponent } from './toolbar-row.component';
 import { UserInfoComponent } from './user-info/user-info.component';
 import { SidePanelStepperModule } from "../../lib/side-panel-stepper/side-panel-stepper.module";
 import { MonthYearPaginatorModule } from "../../shared/paginators/month-year-paginator/month-year-paginator.module";
-import { CalendarDaysCalculator } from "../../services/collectors/calendar-days-calculator";
+import { CalendarDaysCalculator } from "../../services/calculators/calendar-days-calculator";
 import { ReportTableSortingStrategy } from "../../shared/table-sorting-strategies/report-table-sorting-strategy";
 import { ScheduleTableSortingStrategy } from "../../shared/table-sorting-strategies/schedule-table-sorting-strategy";
 
@@ -44,7 +43,6 @@ import { ScheduleTableSortingStrategy } from "../../shared/table-sorting-strateg
     UserInfoComponent
   ],
   providers: [
-    CellCollector,
     CellUpdater,
     ToolbarTemplateService,
     CalendarDaysCalculator,

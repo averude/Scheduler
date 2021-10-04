@@ -12,7 +12,7 @@ import { SummationMode } from "../../../model/dto/employee-work-stat-dto";
 import { map } from "rxjs/operators";
 import { ReportInitialData } from "../model/report-initial-data";
 import { toIdMap } from "../../calendar/utils/scheduler-utility";
-import { CalendarDaysCalculator } from "../../../services/collectors/calendar-days-calculator";
+import { CalendarDaysCalculator } from "../../../services/calculators/calendar-days-calculator";
 import * as moment from "moment";
 
 @Injectable()

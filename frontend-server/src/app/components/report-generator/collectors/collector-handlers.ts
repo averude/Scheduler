@@ -1,4 +1,4 @@
-import { CollectorHandler } from "../../../services/collectors/schedule/collector-handler";
+import { CollectorHandler } from "../../../shared/collectors/collector-handler";
 import { IntervalCreator } from "../../../services/creator/interval-creator.service";
 import { ReportInitialData } from "../model/report-initial-data";
 import { TableData } from "../../../lib/ngx-schedule-table/model/data/table";
@@ -12,7 +12,7 @@ import { SummationType } from "../../../model/summation-column";
 import { roundToTwo } from "../../../shared/utils/utils";
 import { Injectable, InjectionToken } from "@angular/core";
 
-export const HANDLERS = new InjectionToken<CollectorHandler>('CollectionHandler');
+export const REPORT_COLLECTOR_HANDLERS = new InjectionToken<CollectorHandler>('Report collector handlers');
 
 @Injectable()
 export class ReportDataHeaderCollectorHandler implements CollectorHandler {

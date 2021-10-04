@@ -22,16 +22,17 @@ import { ReportDataSource } from "./data-source/report-data-source";
 import { ReportsRoutingModule } from "./reports-routing.module";
 import { ReportCellCollector } from "./collectors/report-cell-collector";
 import {
-  HANDLERS,
+  REPORT_COLLECTOR_HANDLERS,
   ReportDataBodyCollectorHandler,
   ReportDataHeaderCollectorHandler
 } from "./collectors/collector-handlers";
-import { TableDataCollector } from "../../shared/collectors/table-data-collector";
+import { DataCollectorModule } from "../../shared/collectors/data-collector.module";
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
+    DataCollectorModule,
     MatInputModule,
     MatDatepickerModule,
     MatMomentDateModule,
@@ -52,14 +53,13 @@ import { TableDataCollector } from "../../shared/collectors/table-data-collector
     MatMomentDateModule,
     ReportDataSource,
     CellFiller,
-    TableDataCollector,
     ReportCellCollector,
     ReportServiceConfig,
     ReportService,
     ReportGenerator,
     {provide: MAT_DATE_FORMATS, useValue: MONTH_YEAR_DATE_FORMAT},
-    {provide: HANDLERS, useClass: ReportDataHeaderCollectorHandler, multi: true},
-    {provide: HANDLERS, useClass: ReportDataBodyCollectorHandler, multi: true}
+    {provide: REPORT_COLLECTOR_HANDLERS, useClass: ReportDataHeaderCollectorHandler, multi: true},
+    {provide: REPORT_COLLECTOR_HANDLERS, useClass: ReportDataBodyCollectorHandler, multi: true}
   ]
 })
 export class ReportsModule { }

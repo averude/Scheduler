@@ -10,7 +10,7 @@ import { ReportCollectorStrategy } from "../collectors/strategy/report-collector
 import { ScheduleReportCollectorStrategy } from "../collectors/strategy/schedule-report-collector-strategy";
 import { ReportCellCollector } from "../collectors/report-cell-collector";
 import { TimeSheetReportCollectorStrategy } from "../collectors/strategy/time-sheet-report-collector-strategy";
-import { CollectorHandler } from "../../../services/collectors/schedule/collector-handler";
+import { CollectorHandler } from "../../../shared/collectors/collector-handler";
 import { IntervalCreator } from "../../../services/creator/interval-creator.service";
 import { ReportMarkup } from "../model/report-markup";
 import { SCHEDULE_REPORT, TIME_SHEET_REPORT } from "../model/report-types";

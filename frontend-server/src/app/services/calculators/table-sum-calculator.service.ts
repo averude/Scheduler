@@ -2,7 +2,7 @@ import { calculateHoursByHasTime, roundToTwo } from "../../shared/utils/utils";
 import { Injectable } from "@angular/core"
 import { Row } from "../../lib/ngx-schedule-table/model/data/row";
 import { Composition } from "../../model/composition";
-import { CellEnabledSetter } from "../collectors/schedule/cell-enabled-setter";
+import { CellEnabledSetter } from "../../shared/collectors/cell-enabled-setter";
 import { Moment } from "moment";
 import { TableData } from "../../lib/ngx-schedule-table/model/data/table";
 import { EmployeeScheduleDTO } from "../../model/dto/employee-schedule-dto";

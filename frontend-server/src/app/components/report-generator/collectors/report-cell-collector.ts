@@ -1,5 +1,5 @@
-import { CellEnabledSetter } from "../../../services/collectors/schedule/cell-enabled-setter";
-import { CellCollector } from "../../../services/collectors/cell-collector";
+import { CellEnabledSetter } from "../../../shared/collectors/cell-enabled-setter";
+import { CellCollector } from "../../../shared/collectors/cell-collector";
 import { EmployeeScheduleDTO } from "../../../model/dto/employee-schedule-dto";
 import { CalendarDay } from "../../../lib/ngx-schedule-table/model/calendar-day";
 import { RowInterval } from "../../../model/ui/schedule-table/row-interval";

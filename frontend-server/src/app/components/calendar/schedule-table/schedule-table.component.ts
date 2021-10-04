@@ -28,10 +28,11 @@ import { TableData } from "../../../lib/ngx-schedule-table/model/data/table";
 import { RowGroup } from "../../../lib/ngx-schedule-table/model/data/row-group";
 import { fadeOutAnimation } from "../utils/animations";
 import { TableDataCollector } from "../../../shared/collectors/table-data-collector";
-import { CollectorHandler, HANDLERS } from "../../../services/collectors/schedule/collector-handler";
 import { UIPrioritySortingStrategy } from "../utils/ui-priority-sorting-strategy";
 import { ScheduleTableSortingStrategy } from "../../../shared/table-sorting-strategies/schedule-table-sorting-strategy";
 import { ScheduleFilteringStrategy } from "../utils/schedule-filtering-strategy";
+import { CollectorHandler } from "../../../shared/collectors/collector-handler";
+import { SCHEDULE_COLLECTOR_HANDLERS } from "../collector/table-collector.module";
 
 @Component({
   animations: [fadeOutAnimation],
@@ -74,7 +75,7 @@ export class ScheduleTableComponent implements OnInit, AfterViewInit, OnDestroy 
               private tableDataCollector: TableDataCollector,
               private tableManager: TableManager,
               // should be moved
-              @Inject(HANDLERS) private handlers: CollectorHandler[],
+              @Inject(SCHEDULE_COLLECTOR_HANDLERS) private handlers: CollectorHandler[],
               private sortingStrategy: UIPrioritySortingStrategy,
               private tableSortingStrategy: ScheduleTableSortingStrategy,
               private filteringStrategy: ScheduleFilteringStrategy,

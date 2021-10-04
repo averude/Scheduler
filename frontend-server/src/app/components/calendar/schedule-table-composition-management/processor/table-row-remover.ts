@@ -2,7 +2,7 @@ import { ScheduleRow } from "../../../../model/ui/schedule-table/table-data";
 import { Composition, SubstitutionComposition } from "../../../../model/composition";
 import { EmployeeScheduleDTO } from "../../../../model/dto/employee-schedule-dto";
 import { RowInterval } from "../../../../model/ui/schedule-table/row-interval";
-import { CellEnabledSetter } from "../../../../services/collectors/schedule/cell-enabled-setter";
+import { CellEnabledSetter } from "../../../../shared/collectors/cell-enabled-setter";
 import { TableRenderer } from "../../../../lib/ngx-schedule-table/service/table-renderer.service";
 import { IntervalCreator } from "../../../../services/creator/interval-creator.service";
 import { Injectable } from "@angular/core";

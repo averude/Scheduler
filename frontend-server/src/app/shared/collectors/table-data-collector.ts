@@ -1,7 +1,7 @@
-import { TableData } from "../../lib/ngx-schedule-table/model/data/table";
-import { CollectorHandler } from "../../services/collectors/schedule/collector-handler";
+import { TableData } from "../../lib/ngx-schedule-table/model/data/table"
 import { TableSortingStrategy } from "../../lib/ngx-schedule-table/model/data/row-group";
 import { Injectable } from "@angular/core";
+import { CollectorHandler } from "./collector-handler";
 
 @Injectable()
 export class TableDataCollector {

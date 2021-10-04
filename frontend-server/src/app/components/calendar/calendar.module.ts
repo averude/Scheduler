@@ -19,7 +19,7 @@ import { NameInfoCellModule } from "../shared/name-info-cell/name-info-cell.modu
 import { ScheduleViewTableComponent } from "./schedule-view-table/schedule-view-table.component";
 import { TableFilterModule } from "./table-filter/table-filter.module";
 import { CalendarContainerModule } from "../../lib/calendar-container/calendar-container.module";
-import { TableCollectorModule } from "../../services/collectors/schedule/table-collector.module";
+import { TableCollectorModule } from "./collector/table-collector.module";
 
 @NgModule({
   imports: [

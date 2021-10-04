@@ -5,9 +5,8 @@ import { CalendarDay } from "../../../../lib/ngx-schedule-table/model/calendar-d
 import { Composition } from "../../../../model/composition";
 import { convertCompositionToInterval } from "../../../../model/ui/schedule-table/row-interval";
 import { IntervalCreator } from "../../../../services/creator/interval-creator.service";
-import { CellCollector } from "../../../../services/collectors/cell-collector";
+import { CellCollector } from "../../../../shared/collectors/cell-collector";
 import { Injectable } from "@angular/core";
-import { exchangeComposition } from "../../../../services/collectors/utils";
 import { RowGroup } from "../../../../lib/ngx-schedule-table/model/data/row-group";
 import { WorkDay } from "../../../../model/workday";
 
@@ -56,5 +55,16 @@ export class TableRowProcessor {
       exchangeComposition(dto.mainCompositions, composition);
       rowValue.intervals = this.intervalCreator.getEmployeeShiftIntervalsByArr(rowValue.compositions, dto.substitutionCompositions);
     }
+  }
+}
+
+export function exchangeComposition(compositions: Composition[],
+                                    newComposition: Composition) {
+  const oldCompositionIndex = compositions.findIndex(composition => composition.id === newComposition.id);
+  if (oldCompositionIndex >= 0) {
+    compositions.splice(oldCompositionIndex, 1, newComposition);
+  } else {
+    compositions.push(newComposition);
+    compositions.sort((a,b) => a.from.diff(b.from));
   }
 }

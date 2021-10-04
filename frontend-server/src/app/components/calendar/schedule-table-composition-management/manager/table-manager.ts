@@ -11,7 +11,7 @@ import { filter, switchMap } from "rxjs/operators";
 import { NotificationsService } from "angular2-notifications";
 import { TableRenderer } from "../../../../lib/ngx-schedule-table/service/table-renderer.service";
 import { TableSumCalculator } from "../../../../services/calculators/table-sum-calculator.service";
-import { CellEnabledSetter } from "../../../../services/collectors/schedule/cell-enabled-setter";
+import { CellEnabledSetter } from "../../../../shared/collectors/cell-enabled-setter";
 import { AddMainCompositionDialogComponent } from "../add-main-composition-dialog/add-main-composition-dialog.component";
 import { CompositionHandler } from "../handler/composition-handler";
 import { MainCompositionHandler } from "../handler/main-composition-handler";

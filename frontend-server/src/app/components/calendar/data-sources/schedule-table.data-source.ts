@@ -12,7 +12,7 @@ import { toIdMap, toNumMap } from "../utils/scheduler-utility";
 import { SpecialCalendarDateService } from "../../../services/http/special-calendar-date.service";
 import * as moment from "moment";
 import { PaginationService } from "../../../shared/paginators/pagination.service";
-import { CalendarDaysCalculator } from "../../../services/collectors/calendar-days-calculator";
+import { CalendarDaysCalculator } from "../../../services/calculators/calendar-days-calculator";
 import { ShiftPatternDtoService } from "../../../services/http/shift-pattern-dto.service";
 import { DepartmentDayTypeService } from "../../../services/http/department-day-type.service";
 import { UserAccountRole } from "../../../model/dto/user-account-dto";

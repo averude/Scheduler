@@ -10,8 +10,8 @@ import { StatisticsColumnCompositor } from "../../shared/compositor/statistics-c
 import { ReportOptions } from "./model/report-options";
 import { ReportInitialData } from "./model/report-initial-data";
 import { ReportData } from "./model/report-data";
-import { HANDLERS } from "./collectors/collector-handlers";
-import { CollectorHandler } from "../../services/collectors/schedule/collector-handler";
+import { REPORT_COLLECTOR_HANDLERS } from "./collectors/collector-handlers";
+import { CollectorHandler } from "../../shared/collectors/collector-handler";
 import { ReportTableSortingStrategy } from "../../shared/table-sorting-strategies/report-table-sorting-strategy";
 import { TableDataCollector } from "../../shared/collectors/table-data-collector";
 
@@ -19,7 +19,7 @@ import { TableDataCollector } from "../../shared/collectors/table-data-collector
 export class ReportService {
 
   constructor(private tableDataCollector: TableDataCollector,
-              @Inject(HANDLERS) private handlers: CollectorHandler[],
+              @Inject(REPORT_COLLECTOR_HANDLERS) private handlers: CollectorHandler[],
               private tableSortingStrategy: ReportTableSortingStrategy,
               private reportGenerator: ReportGenerator,
               private statisticsColumnCompositor: StatisticsColumnCompositor,
