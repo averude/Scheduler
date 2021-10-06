@@ -32,9 +32,10 @@
       </div>
 
       <div class="options-container">
-        <mat-checkbox [(ngModel)]="useReportLabel">Use Report Labels</mat-checkbox>
+        <mat-checkbox [(ngModel)]="reportOptions.useReportLabel">Use Report Labels</mat-checkbox>
+        <mat-checkbox [(ngModel)]="reportOptions.highlightGroups">Highlight Shifts</mat-checkbox>
         <mat-checkbox *ngIf="isAble"
-                      [(ngModel)]="splitIntoSheets">Split into sheets</mat-checkbox>
+                      [(ngModel)]="reportOptions.divideBySubDep">Split into sheets</mat-checkbox>
       </div>
     </div>
 

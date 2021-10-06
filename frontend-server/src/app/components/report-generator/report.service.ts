@@ -53,8 +53,7 @@ export class ReportService {
         reportData.reportMarkup = this.config.reportMarkups.get(reportType);
 
         return this.reportGenerator
-          .generate(reportCreator, reportDecorator, reportData,
-            initData.reportSheets, reportOptions.divideBySubDep);
+          .generate(reportCreator, reportDecorator, reportData, initData.reportSheets, reportOptions);
       }));
     }
   }

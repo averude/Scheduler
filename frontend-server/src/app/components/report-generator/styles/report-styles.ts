@@ -4,6 +4,10 @@ export const topMediumBorders: Partial<Borders> = {
   top: {style: "medium"}
 };
 
+export const bottomDoubleBorders: Partial<Borders> = {
+  bottom: {style: "double"}
+};
+
 export const topMediumLeftRightDottedBorders: Partial<Borders> = {
   top: {style: "medium"},
   left: {style: "dotted"},

@@ -6,8 +6,8 @@ import { ReportDecorator } from "./decorator/report-decorator";
 import { Injectable } from "@angular/core";
 import { ReportSheetDTO } from "../../model/dto/report-sheet-dto";
 import { TableData } from "../../lib/ngx-schedule-table/model/data/table";
-import { inline, validate } from "./utils/utils";
-import { RowGroup } from "../../lib/ngx-schedule-table/model/data/row-group";
+import { validate } from "./utils/utils";
+import { ReportOptions } from "./model/report-options";
 
 @Injectable()
 export class ReportGenerator {
@@ -16,29 +16,31 @@ export class ReportGenerator {
            reportDecorator: ReportDecorator,
            reportData: ReportData,
            reportSheets: ReportSheetDTO[],
-           divideBySubDep: boolean): Promise<Buffer> {
+           reportOptions: ReportOptions): Promise<Buffer> {
     if (validate(reportData)) {
       return Promise.reject('Empty data');
     }
 
     const workbook = new ExcelJS.Workbook();
 
-    if (divideBySubDep) {
+    if (reportOptions.divideBySubDep) {
       this.splitIntoSheets(reportSheets, reportData.tableData)
-        .forEach((group, index) => {
-        if (group.rows && group.rows.length > 0) {
-          const worksheet = workbook.addWorksheet(group.value.name);
+        .forEach((sheet, index) => {
+          if (sheet.groups && sheet.groups.length > 0) {
+            const worksheet = workbook.addWorksheet(sheet.value.name);
 
-          reportDecorator.decorate(worksheet, reportData, group.rows.length, reportSheets[index].reportSheet);
-          reportCreator.create(worksheet, reportData, group.rows);
-        }
-      });
+            const numOfRows = this.calcNumOfRows(sheet);
+            reportDecorator.decorate(worksheet, reportData, numOfRows, reportSheets[index].reportSheet);
+            reportCreator.create(worksheet, reportData, sheet.groups, reportOptions);
+          }
+        });
     } else {
       const worksheet = workbook.addWorksheet('Schedule');
+      const groups = reportData.tableData.groups
+        .sort((a,b) => (b.value.uiPriority - a.value.uiPriority) || a.value.id - b.value.id);
 
       reportDecorator.decorate(worksheet, reportData, reportData.tableData.groups.length, null);
-      const rows = inline(reportData.tableData);
-      reportCreator.create(worksheet, reportData, rows);
+      reportCreator.create(worksheet, reportData, groups, reportOptions);
     }
 
     return workbook.xlsx.writeBuffer();
@@ -46,24 +48,32 @@ export class ReportGenerator {
 
   private splitIntoSheets(sheets: ReportSheetDTO[],
                           tableData: TableData) {
-    const groups: RowGroup[] = [];
+    const arr = [];
 
     sheets.forEach(dto => {
-      const group = new RowGroup();
-      group.id    = dto.reportSheet.id;
-      group.value = dto.reportSheet;
-      group.rows  = [];
+
+      const sheet = {
+        id: dto.reportSheet.id,
+        value: dto.reportSheet,
+        groups: []
+      };
 
       dto.shiftIds.forEach(shiftId => {
         const reportGroupData = tableData.findRowGroup(shiftId);
         if (reportGroupData) {
-          group.rows = group.rows.concat(reportGroupData.rows);
+          sheet.groups.push(reportGroupData);
         }
       });
 
-      groups.push(group);
+      arr.push(sheet);
     });
 
-    return groups;
+    return arr;
+  }
+
+  private calcNumOfRows(sheet) {
+    let result = 0;
+    sheet.groups.forEach(group => group.rows.forEach(row => result++));
+    return result;
   }
 }

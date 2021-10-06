@@ -1,11 +1,9 @@
 import { Row, Worksheet } from "exceljs";
-import { Row as ReportRow } from "../../../lib/ngx-schedule-table/model/data/row";
 import { ReportData } from "../model/report-data";
 import { CellFiller } from "../core/cell-filler";
-import { topMediumBorders } from "../styles/report-styles";
-import { ReportMarkup } from "../model/report-markup";
 import { ReportCreator } from "./report-creator";
-import { ReportHeaderCell } from "../model/report-cell-value";
+import { RowGroup } from "../../../lib/ngx-schedule-table/model/data/row-group";
+import { ReportOptions } from "../model/report-options";
 
 export abstract class AReportCreator implements ReportCreator {
   abstract REPORT_TYPE: string;
@@ -15,14 +13,18 @@ export abstract class AReportCreator implements ReportCreator {
 
   create(sheet: Worksheet,
          reportData: ReportData,
-         reportRows: ReportRow[]) {
-    this.createHeader(sheet, reportData.tableData.headerData, reportData.reportMarkup);
-    this.createDataSection(sheet, reportRows, reportData.reportMarkup);
+         rowGroups: RowGroup[],
+         reportOptions: ReportOptions) {
+    this.createHeader(sheet, reportData, reportOptions);
+    this.createDataSection(sheet, rowGroups, reportData, reportOptions);
   }
 
   createHeader(sheet: Worksheet,
-               headerCells: ReportHeaderCell[],
-               reportMarkup: ReportMarkup) {
+               reportData: ReportData,
+               reportOptions: ReportOptions) {
+    const headerCells = reportData.tableData.headerData;
+    const reportMarkup = reportData.reportMarkup;
+
     const last_header_row_number = reportMarkup.table_row_start_num + reportMarkup.table_header_height;
     let col_idx = reportMarkup.sheet_col_start_num;
 
@@ -37,13 +39,13 @@ export abstract class AReportCreator implements ReportCreator {
         column.width = headerCell.width;
       }
 
-      if (headerCell.merge) {
-        this.cellFiller.fillWithMerge(sheet, reportMarkup.table_row_start_num, last_header_row_number,
-          rows, col_idx++, headerCell.value, headerCell.style);
-      } else {
-        this.cellFiller.fill(rows, col_idx++, headerCell.value, headerCell.style);
-      }
-    });
+        if (headerCell.merge) {
+          this.cellFiller.fillWithMerge(sheet, reportMarkup.table_row_start_num, last_header_row_number,
+            rows, col_idx++, headerCell.value, headerCell.style);
+        } else {
+          this.cellFiller.fill(rows, col_idx++, headerCell.value, headerCell.style);
+        }
+      });
 
     rows.forEach(row => row.commit());
   }
@@ -51,34 +53,51 @@ export abstract class AReportCreator implements ReportCreator {
   abstract setHeaderRowsHeight(rows: Row[]);
 
   createDataSection(sheet: Worksheet,
-                    data: ReportRow[],
-                    reportMarkup: ReportMarkup): void {
+                    rowGroups: RowGroup[],
+                    reportData: ReportData,
+                    reportOptions: ReportOptions): void {
+    const reportMarkup = reportData.reportMarkup;
+    const colNum = reportData.tableData.headerData.length;
+
     let row_idx = reportMarkup.table_row_start_num + reportMarkup.table_header_height + 1;
 
-    for (let row_data_idx = 0; row_data_idx <= data.length; row_idx+=reportMarkup.table_data_row_step, row_data_idx++) {
-      const rows = this.getRows(row_idx, reportMarkup.table_data_row_step, sheet);
+    let lastRows;
 
-      if (row_data_idx == data.length) {
-        this.underline(rows, data, reportMarkup.sheet_col_start_num);
-        break;
+    for (let group_idx = 0; group_idx < rowGroups.length; group_idx++) {
+      const dataRows = rowGroups[group_idx].rows;
+      if (!dataRows || dataRows.length == 0) {
+        continue;
       }
 
-      const rowData = data[row_data_idx];
-      let col_idx = reportMarkup.sheet_col_start_num;
+      for (let row_data_idx = 0; row_data_idx < dataRows.length; row_idx+=reportMarkup.table_data_row_step, row_data_idx++) {
+        const rows = this.getRows(row_idx, reportMarkup.table_data_row_step, sheet);
 
-      if (rowData && rowData.cells) {
-        rowData.cells.forEach(cell => {
-          const cellValue = cell.value;
-          if (cellValue.merge && cellValue.value.length > 1) {
-            this.cellFiller.fillWithMerge(sheet, row_idx, row_idx + cellValue.value.length - 1,
-              rows, col_idx++, cellValue.value, cellValue.style);
-          } else {
-            this.cellFiller.fill(rows, col_idx++, cellValue.value, cellValue.style);
-          }
-        });
+        const rowData = dataRows[row_data_idx];
+        let col_idx = reportMarkup.sheet_col_start_num;
+
+        if (rowData && rowData.cells) {
+          rowData.cells.forEach(cell => {
+            const cellValue = cell.value;
+            if (cellValue.merge && cellValue.value.length > 1) {
+              this.cellFiller.fillWithMerge(sheet, row_idx, row_idx + cellValue.value.length - 1,
+                rows, col_idx++, cellValue.value, cellValue.style);
+            } else {
+              this.cellFiller.fill(rows, col_idx++, cellValue.value, cellValue.style);
+            }
+          });
+        }
+
+        if (row_data_idx === 0 && reportOptions.highlightGroups) {
+          this.topBorders(rows, colNum, reportMarkup.sheet_col_start_num);
+        }
+
+        rows.forEach(row => row.commit());
+        lastRows = rows;
       }
+    }
 
-      rows.forEach(row => row.commit());
+    if (lastRows) {
+      this.underline(lastRows, colNum, reportMarkup.sheet_col_start_num);
     }
   }
 
@@ -92,13 +111,40 @@ export abstract class AReportCreator implements ReportCreator {
     return rows;
   }
 
+  topBorders(rows: Row[],
+             colNum: number,
+             colStartNum: number) {
+    this.changeStyle(rows[0], colNum, colStartNum, (borderStyle => borderStyle.top = {style: 'medium'}));
+  }
+
   underline(rows: Row[],
-            data: ReportRow[],
+            colNum: number,
             colStartNum: number) {
-    let firstReportRow = data[data.length - 1];
-    let table_cols_num = colStartNum + firstReportRow.cells.length;
+    this.changeStyle(rows[rows.length - 1], colNum, colStartNum, (borderStyle => borderStyle.bottom = {style: 'medium'}));
+  }
+
+  private changeStyle(row: Row,
+                      colNum: number,
+                      colStartNum: number,
+                      fn: (borderStyle) => void) {
+    let table_cols_num = colStartNum + colNum;
+
+    let lastStyle;
+    let cachedCopy;
+
     for (let idx = colStartNum; idx < table_cols_num; idx++) {
-      rows[0].getCell(idx).style.border = topMediumBorders;
+      const cell = row.getCell(idx);
+      const oldStyle = cell.style;
+
+      if (oldStyle === lastStyle) {
+        cell.style = cachedCopy;
+      } else {
+        const newStyle = JSON.parse(JSON.stringify(oldStyle));
+        fn(newStyle.border);
+        cell.style = newStyle;
+        lastStyle = oldStyle;
+        cachedCopy = newStyle;
+      }
     }
   }
 }

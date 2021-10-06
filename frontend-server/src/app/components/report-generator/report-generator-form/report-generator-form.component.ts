@@ -13,6 +13,7 @@ import { UserAccessRights } from "../../../model/user";
 import { ActivatedRoute } from "@angular/router";
 import { ReportDataSource } from "../data-source/report-data-source";
 import { ReportService } from "../report.service";
+import { ReportOptions } from "../model/report-options";
 
 @Component({
   selector: 'app-report-generator-form',
@@ -36,11 +37,9 @@ export class ReportGeneratorFormComponent implements OnInit {
   selectedSummationColumns: SummationColumn[] = [];
 
   normCols: SummationColumn[] = [];
-  useReportLabel: boolean;
+  reportOptions: ReportOptions = new ReportOptions();
 
   private departmentId: number;
-
-  splitIntoSheets: boolean;
 
   constructor(private fb: FormBuilder,
               private authService: AuthService,
@@ -131,9 +130,8 @@ export class ReportGeneratorFormComponent implements OnInit {
 
     const reportDataObservable = this.getReportDataObservable(from, to);
 
-    this.reportService.generate(reportDataObservable, this.decorationDataForm.value, this.reportType,
-      {useReportLabel: this.useReportLabel, divideBySubDep: this.splitIntoSheets},
-      this.selectedSummationColumns
+    this.reportService.generate(reportDataObservable, this.decorationDataForm.value,
+      this.reportType, this.reportOptions, this.selectedSummationColumns
     ).subscribe(buffer => fileSaver.saveAs(new Blob([buffer]), reportName));
   }
 
