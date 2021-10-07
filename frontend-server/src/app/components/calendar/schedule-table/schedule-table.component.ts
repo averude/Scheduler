@@ -3,23 +3,20 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  Inject,
   OnDestroy,
   OnInit,
   TemplateRef,
   ViewChild,
 } from '@angular/core';
-import { of, Subscription } from "rxjs";
+import { Subscription } from "rxjs";
 import { TableRenderer } from "../../../lib/ngx-schedule-table/service/table-renderer.service";
 import { AuthService } from "../../../services/http/auth.service";
-import { ScheduleTableDataSource } from "../data-sources/schedule-table.data-source";
 import { CELL_TRACK_BY_FN, SchedulerUtility } from "../utils/scheduler-utility";
 import { UserAccessRights } from "../../../model/user";
 import { TableStateService } from "../../../lib/ngx-schedule-table/service/table-state.service";
 import { ScheduleRow } from "../../../model/ui/schedule-table/table-data";
 import { TableManager } from "../schedule-table-composition-management/manager/table-manager";
 import { ActivatedRoute } from "@angular/router";
-import { UserAccountLevel } from "../../../model/dto/user-account-dto";
 import { filter, map, switchMap } from "rxjs/operators";
 import { ToolbarTemplateService } from "../../../services/top-bar/toolbar-template.service";
 import { Options } from "../../../lib/ngx-schedule-table/model/options";
@@ -27,12 +24,7 @@ import { InitialData } from "../../../model/datasource/initial-data";
 import { TableData } from "../../../lib/ngx-schedule-table/model/data/table";
 import { RowGroup } from "../../../lib/ngx-schedule-table/model/data/row-group";
 import { fadeOutAnimation } from "../utils/animations";
-import { TableDataCollector } from "../../../shared/collectors/table-data-collector";
-import { UIPrioritySortingStrategy } from "../utils/ui-priority-sorting-strategy";
-import { ScheduleTableSortingStrategy } from "../../../shared/table-sorting-strategies/schedule-table-sorting-strategy";
-import { ScheduleFilteringStrategy } from "../utils/schedule-filtering-strategy";
-import { CollectorHandler } from "../../../shared/collectors/collector-handler";
-import { SCHEDULE_COLLECTOR_HANDLERS } from "../collector/table-collector.module";
+import { DataSourceFacade } from "../data-sources/data-source.facade";
 
 @Component({
   animations: [fadeOutAnimation],
@@ -71,15 +63,8 @@ export class ScheduleTableComponent implements OnInit, AfterViewInit, OnDestroy 
               private authService: AuthService,
               private tableRenderer: TableRenderer,
               public state: TableStateService,
-              private dataSource: ScheduleTableDataSource,
-              private tableDataCollector: TableDataCollector,
               private tableManager: TableManager,
-              // should be moved
-              @Inject(SCHEDULE_COLLECTOR_HANDLERS) private handlers: CollectorHandler[],
-              private sortingStrategy: UIPrioritySortingStrategy,
-              private tableSortingStrategy: ScheduleTableSortingStrategy,
-              private filteringStrategy: ScheduleFilteringStrategy,
-              //
+              private dataSourceFacade: DataSourceFacade,
               public utility: SchedulerUtility) {}
 
   private filterShownSub: Subscription;
@@ -101,47 +86,14 @@ export class ScheduleTableComponent implements OnInit, AfterViewInit, OnDestroy 
           this.cd.detectChanges();
 
           if (this.departmentId && this.departmentId > 0) {
-
             const userAccount = this.authService.currentUserAccount;
-
-            if (userAccount.level === UserAccountLevel.DEPARTMENT
-              || userAccount.level === UserAccountLevel.ENTERPRISE) {
-
-              return this.dataSource.byDepartmentId(this.enterpriseId, this.departmentId,
-                userAccount.role)
-                .pipe(
-                  map(initData => {
-                    this.initData = initData;
-                    const data = this.tableDataCollector.collect(initData, this.handlers, this.tableSortingStrategy);
-                    data.groupSortingStrategy = this.sortingStrategy;
-                    data.filteringStrategy = this.filteringStrategy;
-                    return data;
-                  })
-                );
-            }
-
-            if (userAccount.level === UserAccountLevel.SHIFT
-              && userAccount.departmentIds.indexOf(this.departmentId) >= 0 ) {
-
-              return this.dataSource.byShiftIds(this.enterpriseId, this.departmentId,
-                userAccount.shiftIds, userAccount.role)
-                .pipe(
-                  map(initData => {
-                    this.initData = initData;
-                    const data = this.tableDataCollector.collect(initData, this.handlers, this.tableSortingStrategy);
-                    data.groupSortingStrategy = this.sortingStrategy;
-                    data.filteringStrategy = this.filteringStrategy;
-                    return data;
-                  })
-                );
-            }
-
-            return of(undefined);
+            return this.dataSourceFacade.getData(this.enterpriseId, this.departmentId, userAccount);
           }
         })
       )
-      .subscribe((tableData: TableData) => {
+      .subscribe(([initData, tableData]: [InitialData, TableData]) => {
         this.proxyViewIsShown = false;
+        this.initData = initData;
         this.tableData = tableData;
         this.cd.detectChanges();
       });

@@ -20,6 +20,8 @@ import { ScheduleViewTableComponent } from "./schedule-view-table/schedule-view-
 import { TableFilterModule } from "./table-filter/table-filter.module";
 import { CalendarContainerModule } from "../../lib/calendar-container/calendar-container.module";
 import { TableCollectorModule } from "./collector/table-collector.module";
+import { SecurityConfiguration } from "./data-sources/security/security-configuration";
+import { DataSourceFacade } from "./data-sources/data-source.facade";
 
 @NgModule({
   imports: [
@@ -44,9 +46,11 @@ import { TableCollectorModule } from "./collector/table-collector.module";
     TableCellComponent
   ],
   providers: [
+    SecurityConfiguration,
     ScheduleGenerationService,
     ScheduleCellLabelPipe,
     ScheduleTableDataSource,
+    DataSourceFacade,
     SchedulerUtility,
   ]
 })
