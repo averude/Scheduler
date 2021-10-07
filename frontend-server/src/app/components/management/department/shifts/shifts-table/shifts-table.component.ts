@@ -17,8 +17,9 @@ import { ActivatedRoute } from "@angular/router";
 export class ShiftsTableComponent extends HasDepartmentTableComponent<Shift> implements OnInit {
   displayedColumns = ['select', 'name', 'pattern', 'uiPriority', 'hidden', 'control'];
 
-  showHidden: boolean = false;
+  showHidden: boolean = true;
 
+  shifts: Shift[] = [];
   patterns: ShiftPattern[] = [];
 
   constructor(private dialog: MatDialog,
@@ -39,6 +40,23 @@ export class ShiftsTableComponent extends HasDepartmentTableComponent<Shift> imp
 
     this.shiftPatternService.getAllByDepartmentId(this.departmentId)
       .subscribe(patterns => this.patterns = patterns);
+  }
+
+  initDataSourceValues() {
+    this.shiftService.getAllByDepartmentId(this.departmentId)
+      .subscribe(shifts => {
+        this.shifts = shifts.sort((a, b) => (b.uiPriority - a.uiPriority) || a.id - b.id);
+        this.toggle();
+      });
+  }
+
+  toggle() {
+    if (this.showHidden) {
+      this.dataSource.data = this.shifts.filter(shift => !shift.hidden);
+    } else {
+      this.dataSource.data = this.shifts;
+    }
+    this.showHidden = !this.showHidden;
   }
 
   openDialog(shift: Shift) {

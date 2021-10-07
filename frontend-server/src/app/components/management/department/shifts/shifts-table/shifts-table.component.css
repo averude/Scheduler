@@ -15,11 +15,14 @@
 .top-container > button {
   border: none;
   background-color: transparent;
+  color: #414858;
   font-family: MuseoSansMedium;
   font-size: 14px;
+  width: 7em;
 }
 
 .top-container > button:hover {
   background-color: #f1f1f1;
+  color: darkblue;
   cursor: pointer;
 }

@@ -1,8 +1,8 @@
 <div class="management-table-container">
 
   <div class="top-container">
-    <button (click)="showHidden = !showHidden">
-      {{showHidden ? 'Show hidden' : 'Show visible'}}
+    <button (click)="toggle()">
+      {{showHidden ? 'Show visible' : 'Show all'}}
     </button>
     <mat-form-field class="management-table-filter">
       <input matInput
@@ -49,7 +49,7 @@
     </ng-container>
 
     <ng-container matColumnDef="hidden">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Hidden</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Visibility</th>
       <td mat-cell *matCellDef="let shift">
         <ng-container>
           <img *ngIf="shift.hidden"
