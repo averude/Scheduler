@@ -11,6 +11,7 @@ import { BasicDTO } from "../dto/basic-dto";
 import { ShiftPattern } from "../shift-pattern";
 import { DepartmentDayType } from "../department-day-type";
 import { PatternUnit } from "../pattern-unit";
+import { RatioColumn } from "../ratio-column";
 
 export class IData {
   dayTypeMap:   Map<number, DayType>;
@@ -31,6 +32,7 @@ export class InitialData extends IData {
   employees:          Employee[];
   departmentDayTypes: DepartmentDayType[];
   patternDTOs:        BasicDTO<ShiftPattern, PatternUnit>[];
+  ratioColumn:        RatioColumn;
 }
 
 export class WorkingNormInitialData extends InitialData {
