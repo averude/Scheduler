@@ -49,11 +49,11 @@ export class TableManager {
 
         res.forEach(row => {
           this.cellEnabledSetter.process(row);
-          this.sumCalculator.cal(row, initData.scheduleDTOMap);
+          this.sumCalculator.calculate(row, initData);
 
           this.tableRenderer.nextRowCommand({
             rowId: row.id,
-            command: (rowData: ScheduleRow) => this.sumCalculator.cal(rowData, initData.scheduleDTOMap)
+            command: (rowData: ScheduleRow) => this.sumCalculator.calculate(rowData, initData)
           });
         });
 
@@ -116,7 +116,7 @@ export class TableManager {
           // TODO: It seems like this operation isn't needed
           //  because substitution compositions doesn't play any role
           //  in changing overall row sum
-          this.sumCalculator.cal(row, initData.scheduleDTOMap);
+          this.sumCalculator.calculate(row, initData);
 
           this.tableRenderer.renderRowGroup(row.parent.id);
           this.tableRenderer.nextRowCommand({
@@ -151,14 +151,14 @@ export class TableManager {
                 // TODO: Make distinct by id
                 res.forEach(row => {
                   this.cellEnabledSetter.process(row);
-                  this.sumCalculator.cal(row, data.initData.scheduleDTOMap);
+                  this.sumCalculator.calculate(row, data.initData);
 
                   this.tableRenderer.renderRowGroup(row.parent.id);
                   this.tableRenderer.nextRowCommand({
                     rowId: row.id,
                     command: (rowData: ScheduleRow) => {
                       this.cellEnabledSetter.process(rowData);
-                      this.sumCalculator.cal(rowData, data.initData.scheduleDTOMap);
+                      this.sumCalculator.calculate(rowData, data.initData);
                     }
                   });
                 });

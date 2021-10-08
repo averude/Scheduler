@@ -3,9 +3,8 @@ import { Injectable } from "@angular/core"
 import { Row } from "../../lib/ngx-schedule-table/model/data/row";
 import { Composition } from "../../model/composition";
 import { CellEnabledSetter } from "../../shared/collectors/cell-enabled-setter";
-import { Moment } from "moment";
 import { TableData } from "../../lib/ngx-schedule-table/model/data/table";
-import { EmployeeScheduleDTO } from "../../model/dto/employee-schedule-dto";
+import { InitialData } from "../../model/datasource/initial-data";
 
 @Injectable()
 export class TableSumCalculator {
@@ -30,19 +29,18 @@ export class TableSumCalculator {
       .reduce((prev, curr) => prev + curr, 0);
   }
 
-  cal(row: any, dtoMap: Map<number, EmployeeScheduleDTO>) {
-    const table = <TableData> row.parent.parent;
-    const dto = dtoMap.get(row.id);
-    this.calculateSum(row, dto.mainCompositions, table.from, table.to);
+  calculate(row: Row,
+            initData: InitialData) {
+    const dto = initData.scheduleDTOMap.get(row.id);
+    this.calculateRow(row, dto.mainCompositions, initData);
   }
 
-  calculateSum(row: any,
+  calculateRow(row: Row,
                mainCompositions: Composition[],
-               from: Moment,
-               to: Moment) {
+               initData: InitialData) {
     let sum = 0;
 
-    this.cellEnabledSetter.processCells((<Row> row).cells, mainCompositions, from, to,
+    this.cellEnabledSetter.processCells(row.cells, mainCompositions, initData.from, initData.to,
       (cell => sum += calculateHoursByHasTime(cell.value))
     );
 

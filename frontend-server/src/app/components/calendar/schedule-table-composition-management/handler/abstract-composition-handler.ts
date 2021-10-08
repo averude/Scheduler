@@ -41,7 +41,7 @@ export abstract class AbstractCompositionHandler<T extends Composition> implemen
       if (composition.id) {
         obs.push(this.compositionService.delete(composition.id)
           .pipe(
-            tap(res => this.rowRemover.removeRow(groupData, row, composition, initData.scheduleDTOMap))
+            tap(res => this.rowRemover.removeRow(groupData, row, composition, initData))
           )
         );
       }

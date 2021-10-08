@@ -1,6 +1,5 @@
 import { ScheduleRow } from "../../../../model/ui/schedule-table/table-data";
 import { Composition, SubstitutionComposition } from "../../../../model/composition";
-import { EmployeeScheduleDTO } from "../../../../model/dto/employee-schedule-dto";
 import { RowInterval } from "../../../../model/ui/schedule-table/row-interval";
 import { CellEnabledSetter } from "../../../../shared/collectors/cell-enabled-setter";
 import { TableRenderer } from "../../../../lib/ngx-schedule-table/service/table-renderer.service";
@@ -10,6 +9,7 @@ import { TableSumCalculator } from "../../../../services/calculators/table-sum-c
 import { removeFromArray } from "../../../../services/utils";
 import { TableData } from "../../../../lib/ngx-schedule-table/model/data/table";
 import { RowGroup } from "../../../../lib/ngx-schedule-table/model/data/row-group";
+import { InitialData } from "../../../../model/datasource/initial-data";
 
 @Injectable()
 export class TableRowRemover {
@@ -22,9 +22,9 @@ export class TableRowRemover {
   removeRow(groupData: RowGroup,
             row: ScheduleRow,
             composition: Composition,
-            dtoMap: Map<number, EmployeeScheduleDTO>) {
+            initData: InitialData) {
     const table = groupData.parent;
-    const dto = dtoMap.get(composition.employeeId);
+    const dto = initData.scheduleDTOMap.get(composition.employeeId);
 
     if (row.value.isSubstitution) {
       // Remove composition from initial data
@@ -47,7 +47,7 @@ export class TableRowRemover {
     this.tableRenderer.nextRowCommand({
       rowId: row.id,
       command: (rowData: ScheduleRow) => {
-        this.sumCalculator.calculateSum(rowData, dto.mainCompositions, table.from, table.to);
+        this.sumCalculator.calculateRow(rowData, dto.mainCompositions, initData);
         this.cellEnabledSetter.processRow(rowData, table.from, table.to)
       }
     });

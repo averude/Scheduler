@@ -26,7 +26,7 @@ export class AfterDataCollectedCollectorHandler implements CollectorHandler {
         row.value.intervals = this.intervalCreator.getEmployeeShiftIntervalsByArr(row.value.compositions, dto.substitutionCompositions);
       }
 
-      this.sumCalculator.calculateSum(row, dto.mainCompositions, tableData.from, tableData.to);
+      this.sumCalculator.calculateRow(row, dto.mainCompositions, initData);
       this.cellEnabledSetter.processRow(row, tableData.from, tableData.to);
     });
   }
