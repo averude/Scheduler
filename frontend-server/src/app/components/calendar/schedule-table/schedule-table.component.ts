@@ -56,6 +56,7 @@ export class ScheduleTableComponent implements OnInit, AfterViewInit, OnDestroy 
   private routeSub:         Subscription;
   private rowRenderSub:     Subscription;
   private editableStateSub: Subscription;
+  private filterShownSub:   Subscription;
 
   constructor(private cd: ChangeDetectorRef,
               private templateService: ToolbarTemplateService,
@@ -66,8 +67,6 @@ export class ScheduleTableComponent implements OnInit, AfterViewInit, OnDestroy 
               private tableManager: TableManager,
               private dataSourceFacade: DataSourceFacade,
               public utility: SchedulerUtility) {}
-
-  private filterShownSub: Subscription;
 
   ngOnInit() {
     this.accessRights = this.authService.currentUserValue.accessRights;
@@ -114,7 +113,7 @@ export class ScheduleTableComponent implements OnInit, AfterViewInit, OnDestroy 
       groupable: true,
       trackByFn: CELL_TRACK_BY_FN,
       groupIsShownFn: ((group: RowGroup) => {
-        return this.isEditable || (group?.rows
+        return this.isEditable && !group.value.hidden || (group?.rows
           && group?.rows.length > 0
           && group.rows.some((row: any) => !row.hidden));
       }),
