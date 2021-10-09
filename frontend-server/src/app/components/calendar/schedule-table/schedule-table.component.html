@@ -98,6 +98,16 @@
           <p align="center">{{rowData.value.diff}}</p>
         </td>
       </ng-container>
+
+      <ng-container afterDateColumnDef
+                    *ngFor="let ratioColumn of initData.ratioColumns; let i = index">
+        <th class="table-sticky-header th-sum"
+            *headerCellDef>{{ratioColumn.name}}</th>
+        <td class="sum"
+            *cellDef="let rowData">
+          <p align="center">{{rowData.value.userCols[i]}}</p>
+        </td>
+      </ng-container>
     </app-schedules-table>
 
   </ng-template>

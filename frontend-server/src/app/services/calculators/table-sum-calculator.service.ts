@@ -5,6 +5,8 @@ import { Composition } from "../../model/composition";
 import { CellEnabledSetter } from "../../shared/collectors/cell-enabled-setter";
 import { TableData } from "../../lib/ngx-schedule-table/model/data/table";
 import { InitialData } from "../../model/datasource/initial-data";
+import { WorkDay } from "../../model/workday";
+import { RatioColumn } from "../../model/ratio-column";
 
 @Injectable()
 export class TableSumCalculator {
@@ -39,12 +41,29 @@ export class TableSumCalculator {
                mainCompositions: Composition[],
                initData: InitialData) {
     let sum = 0;
+    const rowCells = row.cells;
+    const rowValue = row.value;
+    const workingNorm = rowValue.workingNorm;
 
-    this.cellEnabledSetter.processCells(row.cells, mainCompositions, initData.from, initData.to,
-      (cell => sum += calculateHoursByHasTime(cell.value))
-    );
+    this.cellEnabledSetter.processCells(rowCells, mainCompositions, initData.from, initData.to,
+      (cell => sum += calculateHoursByHasTime(cell.value)));
 
-    row.value.sum = roundToTwo(sum);
-    row.value.diff = roundToTwo(row.value.sum - row.value.workingNorm);
+    rowValue.sum = roundToTwo(sum);
+    rowValue.diff = roundToTwo(rowValue.sum - workingNorm);
+
+    const ratioColumns: RatioColumn[] = initData.ratioColumns;
+    if (ratioColumns && workingNorm) {
+      rowValue.userCols = ratioColumns.map(col => {
+        const ratioDayTypeId: number = col.dayTypeId;
+
+        let stsSum = 0;
+        const cells = rowCells
+          .filter(cell => (<WorkDay> cell.value)?.scheduledDayTypeId === ratioDayTypeId);
+        this.cellEnabledSetter.processCells(cells, mainCompositions, initData.from, initData.to,
+          (cell => stsSum += calculateHoursByHasTime(cell?.value)));
+
+        return roundToTwo((rowValue.sum - stsSum) / workingNorm);
+      });
+    }
   }
 }

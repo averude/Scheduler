@@ -16,6 +16,7 @@ import { CalendarDaysCalculator } from "../../../services/calculators/calendar-d
 import { ShiftPatternDtoService } from "../../../services/http/shift-pattern-dto.service";
 import { DepartmentDayTypeService } from "../../../services/http/department-day-type.service";
 import { UserAccountRole } from "../../../model/dto/user-account-dto";
+import { RatioColumnService } from "../../../services/http/ratio-column.service";
 
 @Injectable()
 export class ScheduleTableDataSource {
@@ -24,6 +25,7 @@ export class ScheduleTableDataSource {
               private calendarDaysCalculator: CalendarDaysCalculator,
               private specialCalendarDateService: SpecialCalendarDateService,
               private dayTypeService: DayTypeService,
+              private ratioColumnService: RatioColumnService,
               private employeeService: EmployeeService,
               private shiftService: ShiftService,
               private positionService: PositionService,
@@ -45,6 +47,10 @@ export class ScheduleTableDataSource {
 
     if (role === UserAccountRole.ADMIN) {
       obs.push(
+        // Temporary
+        [11, 16, 17, 18]
+          .indexOf(departmentId) >= 0 ? this.ratioColumnService.getAllByEnterpriseId(enterpriseId) : of([]),
+        //
         this.shiftPatternDtoService.getAllByDepartmentId(departmentId),
         this.departmentDayTypeService.getAllByDepartmentId(departmentId)
       );
@@ -74,6 +80,10 @@ export class ScheduleTableDataSource {
 
     if (role === UserAccountRole.ADMIN) {
       obs.push(
+        // Temporary
+        [11, 16, 17, 18]
+          .indexOf(departmentId) >= 0 ? this.ratioColumnService.getAllByEnterpriseId(enterpriseId) : of([]),
+        //
         this.shiftPatternDtoService.getAllByDepartmentId(departmentId),
         this.departmentDayTypeService.getAllByDepartmentId(departmentId)
       );
@@ -94,14 +104,15 @@ export class ScheduleTableDataSource {
                   onPaginationFn: (startDate, endDate) => Observable<any>[]): Observable<InitialData> {
     return forkJoin(obs)
       .pipe(
-        map(([dayTypeMap, positions, shifts,
-               employees, patternDTOs, departmentDayTypes]) => {
+        map(([dayTypeMap, positions, shifts, employees,
+               ratioColumns, patternDTOs, departmentDayTypes]) => {
           const initData = new InitialData();
           initData.dayTypeMap   = dayTypeMap;
           initData.positions    = positions;
           initData.positionMap  = toIdMap(positions);
           initData.shifts       = shifts;
           initData.employees    = employees;
+          initData.ratioColumns = ratioColumns;
           initData.patternDTOs  = patternDTOs;
           initData.departmentDayTypes = departmentDayTypes;
           return initData;
