@@ -52,7 +52,7 @@ export class TableSumCalculator {
     rowValue.diff = roundToTwo(rowValue.sum - workingNorm);
 
     const ratioColumns: RatioColumn[] = initData.ratioColumns;
-    if (ratioColumns && workingNorm) {
+    if (ratioColumns) {
       rowValue.userCols = ratioColumns.map(col => {
         const ratioDayTypeId: number = col.dayTypeId;
 

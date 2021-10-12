@@ -26,7 +26,7 @@ export class ReportGenerator {
     if (reportOptions.divideBySubDep) {
       this.splitIntoSheets(reportSheets, reportData.tableData)
         .forEach((sheet, index) => {
-          if (sheet.groups && sheet.groups.length > 0) {
+          if (sheet.groups && sheet.groups.length > 0 && sheet.groups.some(group => group.rows.length > 0)) {
             const worksheet = workbook.addWorksheet(sheet.value.name);
 
             const numOfRows = this.calcNumOfRows(sheet);
