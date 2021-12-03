@@ -18,6 +18,8 @@ import { DepartmentDayTypeService } from "../../../services/http/department-day-
 import { UserAccountRole } from "../../../model/dto/user-account-dto";
 import { RatioColumnService } from "../../../services/http/ratio-column.service";
 
+export const DEPARTMENTS: number[] = [11, 16, 17, 18, 19, 20];
+
 @Injectable()
 export class ScheduleTableDataSource {
 
@@ -48,7 +50,7 @@ export class ScheduleTableDataSource {
     if (role === UserAccountRole.ADMIN) {
       obs.push(
         // Temporary
-        [11, 16, 17, 18]
+        DEPARTMENTS
           .indexOf(departmentId) >= 0 ? this.ratioColumnService.getAllByEnterpriseId(enterpriseId) : of([]),
         //
         this.shiftPatternDtoService.getAllByDepartmentId(departmentId),
@@ -81,7 +83,7 @@ export class ScheduleTableDataSource {
     if (role === UserAccountRole.ADMIN) {
       obs.push(
         // Temporary
-        [11, 16, 17, 18]
+        DEPARTMENTS
           .indexOf(departmentId) >= 0 ? this.ratioColumnService.getAllByEnterpriseId(enterpriseId) : of([]),
         //
         this.shiftPatternDtoService.getAllByDepartmentId(departmentId),
