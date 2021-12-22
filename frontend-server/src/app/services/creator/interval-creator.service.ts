@@ -42,7 +42,7 @@ export class IntervalCreator {
         }
       }
 
-      if (to.isAfter(substitutionComposition.from)) {
+      if (to.isSameOrAfter(substitutionComposition.from)) {
         const interval = {
           parentId: mainComposition.id,
           from: from,
