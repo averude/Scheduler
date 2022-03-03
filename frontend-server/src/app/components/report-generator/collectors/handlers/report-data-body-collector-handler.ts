@@ -8,7 +8,6 @@ import { getMainPositionId, getMainShiftId } from "../../../../services/utils";
 import * as moment from "moment";
 import { HasEmployeePosition } from "../../model/has-employee-position";
 import { Cell } from "../../../../lib/ngx-schedule-table/model/data/cell";
-import { EmployeeWorkStatDTO } from "../../../../model/dto/employee-work-stat-dto";
 import { SummationType } from "../../../../model/summation-column";
 import { roundToTwo } from "../../../../shared/utils/utils";
 
@@ -25,7 +24,6 @@ export class ReportDataBodyCollectorHandler implements CollectorHandler {
       const group = new RowGroup();
       group.id = shift.id;
       group.value = shift;
-
       tableData.addGroup(group, (val => val.id - shift.id));
     });
 
@@ -40,32 +38,28 @@ export class ReportDataBodyCollectorHandler implements CollectorHandler {
       }
 
       const mainPosition = initData.positionMap.get(getMainPositionId(dto));
+      const from = moment.utc(initData.calendarDays[0].isoString);
+      const to = moment.utc(initData.calendarDays[initData.calendarDays.length - 1].isoString);
 
       const positionIntervalsMap = this.intervalCreator.getEmployeePositionIntervals(
-        moment.utc(initData.calendarDays[0].isoString),
-        moment.utc(initData.calendarDays[initData.calendarDays.length - 1].isoString),
-        dto.mainCompositions,
-        dto.substitutionCompositions);
+        from, to, dto.mainCompositions, dto.substitutionCompositions);
 
       positionIntervalsMap.forEach((intervals, positionId) => {
-        const position = initData.positionMap.get(positionId);
 
         const rowValue = {
           employee: dto.parent,
-          position: position,
+          position: initData.positionMap.get(positionId),
           mainPosition: mainPosition,
           intervals: intervals
         } as HasEmployeePosition;
 
-        const positionName = position?.shortName;
-        const summationResults = this.getSummationResults(initData.summationDTOMap, dto.parent.id, positionId);
+        const summationResults = this.getSummationResults(initData, dto.parent.id, positionId);
 
         tableData
           .addOrMergeRow(mainShiftId, dto.parent.id, rowValue, () => {
             throw new Error('Merge is not supported');
           })
-          .cells = collectorStrategy.collectRowCellData(dto, initData.calendarDays,
-          initData.dayTypeMap, positionName, summationResults, initData.useReportLabel, intervals)
+          .cells = collectorStrategy.collectRowCellData(dto, initData, rowValue, summationResults)
           .map(value => ({
             date: value.date,
             value: value
@@ -75,10 +69,10 @@ export class ReportDataBodyCollectorHandler implements CollectorHandler {
     }
   }
 
-  private getSummationResults(employeeWorkStatMap: Map<number, EmployeeWorkStatDTO>,
+  private getSummationResults(initData: ReportInitialData,
                               employeeId: number,
                               positionId: number) {
-    const statDTO = employeeWorkStatMap.get(employeeId);
+    const statDTO = initData.summationDTOMap.get(employeeId);
     if (statDTO && statDTO.positionStats) {
       return statDTO.positionStats
         .find(value => value.positionId === positionId)

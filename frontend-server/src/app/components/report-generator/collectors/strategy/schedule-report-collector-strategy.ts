@@ -1,16 +1,15 @@
 import { SCHEDULE_REPORT } from "../../model/report-types";
 import { ReportCellValue, ReportHeaderCell } from "../../model/report-cell-value";
 import { WorkDay } from "../../../../model/workday";
-import { DayType } from "../../../../model/day-type";
 import { getCellValue, getEmployeeShortName } from "../../../../shared/utils/utils";
 import { CalendarDay } from "../../../../lib/ngx-schedule-table/model/calendar-day";
-import { SummationColumn } from "../../../../model/summation-column";
 import { ScheduleReportStyles } from "../../styles/schedule-report-styles";
 import { EmployeeScheduleDTO } from "../../../../model/dto/employee-schedule-dto";
 import { SummationResult } from "../../../../model/dto/employee-work-stat-dto";
-import { RowInterval } from "../../../../model/ui/schedule-table/row-interval";
 import { ReportCollectorStrategy } from "./report-collector-strategy";
 import { ReportCellCollector } from "../report-cell-collector";
+import { ReportInitialData } from "../../model/report-initial-data";
+import { HasEmployeePosition } from "../../model/has-employee-position";
 
 export class ScheduleReportCollectorStrategy implements ReportCollectorStrategy {
   REPORT_TYPE: string = SCHEDULE_REPORT;
@@ -20,10 +19,9 @@ export class ScheduleReportCollectorStrategy implements ReportCollectorStrategy 
 
   fillCellWithValue(cell: ReportCellValue,
                     workDay: WorkDay,
-                    dayTypeMap: Map<number, DayType>,
-                    useReportLabel?: boolean): void {
+                    initData: ReportInitialData): void {
     cell.style = this.getStyle(cell.date, false);
-    cell.value = workDay ? getCellValue(workDay, dayTypeMap, useReportLabel) : null;
+    cell.value = workDay ? getCellValue(workDay, initData.dayTypeMap, initData.useReportLabel) : null;
   }
 
   fillDisabledCell(cell: ReportCellValue) {
@@ -31,8 +29,7 @@ export class ScheduleReportCollectorStrategy implements ReportCollectorStrategy 
     cell.value = 'X';
   }
 
-  public getHeaders(calendarDays: CalendarDay[],
-                    summationColumns: SummationColumn[]): ReportHeaderCell[] {
+  public getHeaders(initData: ReportInitialData): ReportHeaderCell[] {
     const headers: ReportHeaderCell[] = [].concat([
       {
         value: '№',
@@ -54,14 +51,14 @@ export class ScheduleReportCollectorStrategy implements ReportCollectorStrategy 
       },
     ]);
 
-    calendarDays.forEach(day => headers.push({
+    initData.calendarDays.forEach(day => headers.push({
       value: [null, null, day.dayOfMonth],
       style: this.getHeaderStyle(day),
       merge: false,
       width: 5
     }));
 
-    summationColumns.map(column => headers.push({
+    initData.summationColumns.map(column => headers.push({
       value: column.name,
       style: ScheduleReportStyles.sumHeaderCellStyle,
       merge: true
@@ -71,13 +68,10 @@ export class ScheduleReportCollectorStrategy implements ReportCollectorStrategy 
   }
 
   collectRowCellData(dto: EmployeeScheduleDTO,
-                     calendarDays: CalendarDay[],
-                     dayTypesMap: Map<number, DayType>,
-                     positionName: string,
-                     summations: SummationResult[],
-                     useReportLabel?: boolean,
-                     intervals?: RowInterval[]): ReportCellValue[] {
-    if (!calendarDays || calendarDays.length <= 0) {
+                     initData: ReportInitialData,
+                     rowValue: HasEmployeePosition,
+                     summations: SummationResult[]): ReportCellValue[] {
+    if (!initData.calendarDays || initData.calendarDays.length <= 0) {
       return;
     }
 
@@ -91,12 +85,12 @@ export class ScheduleReportCollectorStrategy implements ReportCollectorStrategy 
         style: ScheduleReportStyles.nameCellStyle
       },
       {
-        value: positionName,
+        value: rowValue.position?.shortName,
         style: ScheduleReportStyles.positionCellStyle
       }
     ]);
 
-    this.reportCellCollector.collectCells(this, dto, calendarDays, intervals, dayTypesMap, useReportLabel)
+    this.reportCellCollector.collectCells(this, dto, initData, rowValue.intervals)
       .forEach(cell => result.push(cell));
 
     summations.forEach(sum =>

@@ -8,6 +8,6 @@ export class ReportDataHeaderCollectorHandler implements CollectorHandler {
 
   handle(initData: ReportInitialData, tableData: TableData) {
     const collectorStrategy = initData.collectorStrategy;
-    tableData.headerData = collectorStrategy.getHeaders(initData.calendarDays, initData.summationColumns);
+    tableData.headerData = collectorStrategy.getHeaders(initData);
   }
 }
