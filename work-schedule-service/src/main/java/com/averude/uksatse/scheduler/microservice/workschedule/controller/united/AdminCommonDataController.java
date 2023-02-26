@@ -16,7 +16,7 @@ public class AdminCommonDataController {
     private final AdminCommonDataService adminCommonDataService;
 
     @Logged
-    @PreAuthorize("@departmentLevelSecurity.hasPermission(authentication, 'MAP1', #departmentId)")
+    @PreAuthorize("@departmentLevelSecurity.hasPermission(authentication, 'MAP4', #departmentId)")
     @GetMapping("/enterprises/{enterpriseId}/departments/{departmentId}/admin_common_data")
     public AdminCommonDataDTO getByEnterpriseIdAndDepartmentId(@PathVariable Long enterpriseId,
                                                                @PathVariable Long departmentId) {
