@@ -1,37 +1,30 @@
 import { Injectable } from "@angular/core";
-import { forkJoin, Observable } from "rxjs";
+import { Observable } from "rxjs";
 import { CalendarDataDTO } from "../../../model/dto/united/calendar-data-dto";
-import { ScheduleService } from "../schedule.service";
-import { WorkingNormService } from "../working-norm.service";
-import { SpecialCalendarDateService } from "../special-calendar-date.service";
-import { map } from "rxjs/operators";
+import { convertDateStringToMoment } from "../schedule.service";
+import { tap } from "rxjs/operators";
+import { HttpClient } from "@angular/common/http";
+import { RestConfig } from "../../../rest.config";
 
 @Injectable({
   providedIn: 'root'
 })
 export class CalendarDataService {
 
-  constructor(private scheduleService: ScheduleService,
-              private workingNormService: WorkingNormService,
-              private specialCalendarDateService: SpecialCalendarDateService) {}
+  constructor(private httpClient: HttpClient,
+              private config: RestConfig) {}
 
   getByEnterpriseIdAndDepartmentIdAndDate(enterpriseId: number,
                                           departmentId: number,
                                           startDate: string,
                                           endDate: string): Observable<CalendarDataDTO> {
-    const obs: Observable<any>[] = [
-      this.scheduleService.getAllByDepartmentId(departmentId, startDate, endDate),
-      this.workingNormService.getAllByDepartmentId(departmentId, startDate, endDate),
-      this.specialCalendarDateService.getAllByEnterpriseId(enterpriseId, startDate, endDate)
-    ];
-
-    return forkJoin(obs).pipe(
-      map(([schedule, workingNorms, specialCalendarDates]) => ({
-        schedule:             schedule,
-        workingNorms:         workingNorms,
-        specialCalendarDates: specialCalendarDates
-      }))
-    );
+    return this.httpClient.get<CalendarDataDTO>(
+      `${this.config.baseUrl}/enterprises/${enterpriseId}/departments/${departmentId}
+      /calendar_data?from=${startDate}&to=${endDate}`
+    ).pipe(tap(value => value.schedule.forEach(dto => {
+      dto.mainCompositions.forEach(convertDateStringToMoment);
+      dto.substitutionCompositions.forEach(convertDateStringToMoment);
+    })));
   }
 
   getByEnterpriseIdAndDepartmentIdAndShiftIdsAndDate(enterpriseId: number,
@@ -39,19 +32,13 @@ export class CalendarDataService {
                                                      shiftIds: number[],
                                                      startDate: string,
                                                      endDate: string): Observable<CalendarDataDTO> {
-    const obs: Observable<any>[] = [
-      this.scheduleService.getAllByShiftIds(shiftIds, startDate, endDate),
-      this.workingNormService.getAllByDepartmentId(departmentId, startDate, endDate),
-      this.specialCalendarDateService.getAllByEnterpriseId(enterpriseId, startDate, endDate)
-    ];
-
-    return forkJoin(obs).pipe(
-      map(([schedule, workingNorms, specialCalendarDates]) => ({
-        schedule:             schedule,
-        workingNorms:         workingNorms,
-        specialCalendarDates: specialCalendarDates
-      }))
-    );
+    return this.httpClient.get<CalendarDataDTO>(
+      `${this.config.baseUrl}/enterprises/${enterpriseId}/departments/${departmentId}/shifts/${shiftIds}
+      /calendar_data?from=${startDate}&to=${endDate}`
+    ).pipe(tap(value => value.schedule.forEach(dto => {
+      dto.mainCompositions.forEach(convertDateStringToMoment);
+      dto.substitutionCompositions.forEach(convertDateStringToMoment);
+    })));
   }
 
 }
