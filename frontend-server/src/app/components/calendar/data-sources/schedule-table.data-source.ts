@@ -1,28 +1,25 @@
 import { Injectable } from "@angular/core";
 import { forkJoin, Observable } from "rxjs";
 import { map, switchMap } from "rxjs/operators";
-import { ScheduleService } from "../../../services/http/schedule.service";
-import { WorkingNormService } from "../../../services/http/working-norm.service";
 import { InitialData } from "../../../model/datasource/initial-data";
 import { toIdMap, toNumMap } from "../utils/scheduler-utility";
-import { SpecialCalendarDateService } from "../../../services/http/special-calendar-date.service";
 import * as moment from "moment";
 import { PaginationService } from "../../../shared/paginators/pagination.service";
 import { CalendarDaysCalculator } from "../../../services/calculators/calendar-days-calculator";
 import { UserAccountRole } from "../../../model/dto/user-account-dto";
 import { CommonDataService } from "../../../services/http/ver2/common-data.service";
 import { AdminCommonDataService } from "../../../services/http/ver2/admin-common-data.service";
+import { CalendarDataService } from "../../../services/http/ver2/calendar-data.service";
+import { CalendarDataDTO } from "../../../model/dto/general/calendar-data-dto";
 
 @Injectable()
 export class ScheduleTableDataSource {
 
   constructor(private paginationService: PaginationService,
               private calendarDaysCalculator: CalendarDaysCalculator,
-              private specialCalendarDateService: SpecialCalendarDateService,
-              private scheduleService: ScheduleService,
-              private workingNormService: WorkingNormService,
               private commonDataService: CommonDataService,
-              private adminCommonDataService: AdminCommonDataService) {
+              private adminCommonDataService: AdminCommonDataService,
+              private calendarDataService: CalendarDataService) {
   }
 
   byDepartmentId(enterpriseId: number,
@@ -39,11 +36,8 @@ export class ScheduleTableDataSource {
     }
 
     const fn = (startDate, endDate) => {
-      return [
-        this.scheduleService.getAllByDepartmentId(departmentId, startDate, endDate),
-        this.workingNormService.getAllByDepartmentId(departmentId, startDate, endDate),
-        this.specialCalendarDateService.getAllByEnterpriseId(enterpriseId, startDate, endDate)
-      ];
+      return this.calendarDataService
+          .getByEnterpriseIdAndDepartmentIdAndDate(enterpriseId, departmentId, startDate, endDate);
     };
 
     return this.getData(obs, fn);
@@ -64,18 +58,16 @@ export class ScheduleTableDataSource {
     }
 
     const fn = (startDate, endDate) => {
-      return [
-        this.scheduleService.getAllByShiftIds(shiftIds, startDate, endDate),
-        this.workingNormService.getAllByDepartmentId(departmentId, startDate, endDate),
-        this.specialCalendarDateService.getAllByEnterpriseId(enterpriseId, startDate, endDate)
-      ];
+      return this.calendarDataService
+          .getByEnterpriseIdAndDepartmentIdAndShiftIdsAndDate(
+            enterpriseId, departmentId, shiftIds, startDate, endDate);
     };
 
     return this.getData(obs, fn);
   }
 
   private getData(obs: Observable<any>[],
-                  onPaginationFn: (startDate, endDate) => Observable<any>[]): Observable<InitialData> {
+                  onPaginationFn: (startDate, endDate) => Observable<CalendarDataDTO>): Observable<InitialData> {
     return forkJoin(obs)
       .pipe(
         map(([commonData, adminCommonData]) => {
@@ -98,20 +90,17 @@ export class ScheduleTableDataSource {
                 const startDate = dateInterval.from;
                 const endDate = dateInterval.to;
 
-                const sources: Observable<any>[] = onPaginationFn(startDate, endDate);
-
                 initData.from = moment.utc(startDate);
                 initData.to = moment.utc(endDate);
 
-
-                return forkJoin(sources).pipe(
-                  map(([schedule, workingNorm, specialCalendarDates]) => {
-                    initData.scheduleDTOs = schedule;
-                    initData.scheduleDTOMap = toNumMap(schedule, value => value.parent.id);
-                    initData.workingNormsMap = toNumMap(workingNorm, value => value.shiftId);
-                    initData.specialCalendarDates = specialCalendarDates;
+                return onPaginationFn(startDate, endDate).pipe(
+                  map((calendarData) => {
+                    initData.scheduleDTOs = calendarData.schedule;
+                    initData.scheduleDTOMap = toNumMap(calendarData.schedule, value => value.parent.id);
+                    initData.workingNormsMap = toNumMap(calendarData.workingNorms, value => value.shiftId);
+                    initData.specialCalendarDates = calendarData.specialCalendarDates;
                     initData.calendarDays = this.calendarDaysCalculator
-                      .calculateCalendarDays(initData.from, initData.to, specialCalendarDates);
+                      .calculateCalendarDays(initData.from, initData.to, calendarData.specialCalendarDates);
                     return initData;
                   })
                 );
