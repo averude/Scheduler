@@ -21,7 +21,7 @@ public class EmployeeController {
     private final EmployeeService employeeService;
 
     @Logged
-    @PreAuthorize("@departmentLevelSecurity.hasPermission(authentication, 'MAP1', #departmentId)")
+    @PreAuthorize("@departmentLevelSecurity.hasPermission(authentication, 'MAP2', #departmentId)")
     @GetMapping("/departments/{departmentId}")
     public List<Employee> getAllByDepartmentId(@PathVariable Long departmentId) {
         return employeeService.findAllByDepartmentId(departmentId);
