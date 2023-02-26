@@ -1,13 +1,9 @@
 import { Injectable } from "@angular/core";
 import { forkJoin, Observable, of } from "rxjs";
-import { EmployeeService } from "../../../services/http/employee.service";
-import { ShiftService } from "../../../services/http/shift.service";
 import { map, switchMap } from "rxjs/operators";
-import { PositionService } from "../../../services/http/position.service";
 import { ScheduleService } from "../../../services/http/schedule.service";
 import { WorkingNormService } from "../../../services/http/working-norm.service";
 import { InitialData } from "../../../model/datasource/initial-data";
-import { DayTypeService } from "../../../services/http/day-type.service";
 import { toIdMap, toNumMap } from "../utils/scheduler-utility";
 import { SpecialCalendarDateService } from "../../../services/http/special-calendar-date.service";
 import * as moment from "moment";
@@ -17,6 +13,7 @@ import { ShiftPatternDtoService } from "../../../services/http/shift-pattern-dto
 import { DepartmentDayTypeService } from "../../../services/http/department-day-type.service";
 import { UserAccountRole } from "../../../model/dto/user-account-dto";
 import { RatioColumnService } from "../../../services/http/ratio-column.service";
+import { CommonDataService } from "../../../services/http/ver2/common-data.service";
 
 export const DEPARTMENTS: number[] = [11, 16, 17, 18, 19, 20];
 
@@ -26,25 +23,19 @@ export class ScheduleTableDataSource {
   constructor(private paginationService: PaginationService,
               private calendarDaysCalculator: CalendarDaysCalculator,
               private specialCalendarDateService: SpecialCalendarDateService,
-              private dayTypeService: DayTypeService,
               private ratioColumnService: RatioColumnService,
-              private employeeService: EmployeeService,
-              private shiftService: ShiftService,
-              private positionService: PositionService,
               private shiftPatternDtoService: ShiftPatternDtoService,
               private departmentDayTypeService: DepartmentDayTypeService,
               private scheduleService: ScheduleService,
-              private workingNormService: WorkingNormService) {
+              private workingNormService: WorkingNormService,
+              private commonDataService: CommonDataService) {
   }
 
   byDepartmentId(enterpriseId: number,
                  departmentId: number,
                  role: UserAccountRole): Observable<InitialData> {
     const obs: Observable<any>[] = [
-      this.dayTypeService.getMapByEnterpriseId(enterpriseId),
-      this.positionService.getAllByDepartmentId(departmentId),
-      this.shiftService.getAllByDepartmentId(departmentId),
-      this.employeeService.getAllByDepartmentId(departmentId),
+      this.commonDataService.getByEnterpriseIdAndDepartmentId(enterpriseId, departmentId)
     ];
 
     if (role === UserAccountRole.ADMIN) {
@@ -74,10 +65,7 @@ export class ScheduleTableDataSource {
              shiftIds: number[],
              role: UserAccountRole): Observable<InitialData> {
     const obs: Observable<any>[] = [
-      this.dayTypeService.getMapByEnterpriseId(enterpriseId),
-      this.positionService.getAllByDepartmentId(departmentId),
-      this.shiftService.getAllByDepartmentId(departmentId),
-      of([]) // temporary fix
+      this.commonDataService.getByEnterpriseIdAndDepartmentId(enterpriseId, departmentId)
     ];
 
     if (role === UserAccountRole.ADMIN) {
@@ -106,14 +94,13 @@ export class ScheduleTableDataSource {
                   onPaginationFn: (startDate, endDate) => Observable<any>[]): Observable<InitialData> {
     return forkJoin(obs)
       .pipe(
-        map(([dayTypeMap, positions, shifts, employees,
-               ratioColumns, patternDTOs, departmentDayTypes]) => {
+        map(([commonData, ratioColumns, patternDTOs, departmentDayTypes]) => {
           const initData = new InitialData();
-          initData.dayTypeMap   = dayTypeMap;
-          initData.positions    = positions;
-          initData.positionMap  = toIdMap(positions);
-          initData.shifts       = shifts;
-          initData.employees    = employees;
+          initData.dayTypeMap   = toIdMap(commonData.dayTypes);
+          initData.positions    = commonData.positions;
+          initData.positionMap  = toIdMap(commonData.positions);
+          initData.shifts       = commonData.shifts;
+          initData.employees    = commonData.employees;
           initData.ratioColumns = ratioColumns;
           initData.patternDTOs  = patternDTOs;
           initData.departmentDayTypes = departmentDayTypes;
