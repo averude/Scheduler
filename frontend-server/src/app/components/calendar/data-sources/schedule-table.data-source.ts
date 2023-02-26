@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { forkJoin, Observable, of } from "rxjs";
+import { forkJoin, Observable } from "rxjs";
 import { map, switchMap } from "rxjs/operators";
 import { ScheduleService } from "../../../services/http/schedule.service";
 import { WorkingNormService } from "../../../services/http/working-norm.service";
@@ -9,13 +9,9 @@ import { SpecialCalendarDateService } from "../../../services/http/special-calen
 import * as moment from "moment";
 import { PaginationService } from "../../../shared/paginators/pagination.service";
 import { CalendarDaysCalculator } from "../../../services/calculators/calendar-days-calculator";
-import { ShiftPatternDtoService } from "../../../services/http/shift-pattern-dto.service";
-import { DepartmentDayTypeService } from "../../../services/http/department-day-type.service";
 import { UserAccountRole } from "../../../model/dto/user-account-dto";
-import { RatioColumnService } from "../../../services/http/ratio-column.service";
 import { CommonDataService } from "../../../services/http/ver2/common-data.service";
-
-export const DEPARTMENTS: number[] = [11, 16, 17, 18, 19, 20];
+import { AdminCommonDataService } from "../../../services/http/ver2/admin-common-data.service";
 
 @Injectable()
 export class ScheduleTableDataSource {
@@ -23,12 +19,10 @@ export class ScheduleTableDataSource {
   constructor(private paginationService: PaginationService,
               private calendarDaysCalculator: CalendarDaysCalculator,
               private specialCalendarDateService: SpecialCalendarDateService,
-              private ratioColumnService: RatioColumnService,
-              private shiftPatternDtoService: ShiftPatternDtoService,
-              private departmentDayTypeService: DepartmentDayTypeService,
               private scheduleService: ScheduleService,
               private workingNormService: WorkingNormService,
-              private commonDataService: CommonDataService) {
+              private commonDataService: CommonDataService,
+              private adminCommonDataService: AdminCommonDataService) {
   }
 
   byDepartmentId(enterpriseId: number,
@@ -40,12 +34,7 @@ export class ScheduleTableDataSource {
 
     if (role === UserAccountRole.ADMIN) {
       obs.push(
-        // Temporary
-        DEPARTMENTS
-          .indexOf(departmentId) >= 0 ? this.ratioColumnService.getAllByEnterpriseId(enterpriseId) : of([]),
-        //
-        this.shiftPatternDtoService.getAllByDepartmentId(departmentId),
-        this.departmentDayTypeService.getAllByDepartmentId(departmentId)
+        this.adminCommonDataService.getByEnterpriseAndDepartmentId(enterpriseId, departmentId)
       );
     }
 
@@ -70,12 +59,7 @@ export class ScheduleTableDataSource {
 
     if (role === UserAccountRole.ADMIN) {
       obs.push(
-        // Temporary
-        DEPARTMENTS
-          .indexOf(departmentId) >= 0 ? this.ratioColumnService.getAllByEnterpriseId(enterpriseId) : of([]),
-        //
-        this.shiftPatternDtoService.getAllByDepartmentId(departmentId),
-        this.departmentDayTypeService.getAllByDepartmentId(departmentId)
+        this.adminCommonDataService.getByEnterpriseAndDepartmentId(enterpriseId, departmentId)
       );
     }
 
@@ -94,16 +78,16 @@ export class ScheduleTableDataSource {
                   onPaginationFn: (startDate, endDate) => Observable<any>[]): Observable<InitialData> {
     return forkJoin(obs)
       .pipe(
-        map(([commonData, ratioColumns, patternDTOs, departmentDayTypes]) => {
+        map(([commonData, adminCommonData]) => {
           const initData = new InitialData();
-          initData.dayTypeMap   = toIdMap(commonData.dayTypes);
-          initData.positions    = commonData.positions;
-          initData.positionMap  = toIdMap(commonData.positions);
-          initData.shifts       = commonData.shifts;
-          initData.employees    = commonData.employees;
-          initData.ratioColumns = ratioColumns;
-          initData.patternDTOs  = patternDTOs;
-          initData.departmentDayTypes = departmentDayTypes;
+          initData.dayTypeMap         = toIdMap(commonData.dayTypes);
+          initData.positions          = commonData.positions;
+          initData.positionMap        = toIdMap(commonData.positions);
+          initData.shifts             = commonData.shifts;
+          initData.employees          = commonData.employees;
+          initData.ratioColumns       = adminCommonData.ratioColumns;
+          initData.patternDTOs        = adminCommonData.patternDTOs;
+          initData.departmentDayTypes = adminCommonData.departmentDayTypes;
           return initData;
         }),
         switchMap((initData) =>
