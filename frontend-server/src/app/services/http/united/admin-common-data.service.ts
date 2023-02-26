@@ -1,5 +1,5 @@
 import { forkJoin, Observable, of } from "rxjs";
-import { AdminCommonDataDTO } from "../../../model/dto/general/admin-common-data-dto";
+import { AdminCommonDataDTO } from "../../../model/dto/united/admin-common-data-dto";
 import { RatioColumnService } from "../ratio-column.service";
 import { ShiftPatternDtoService } from "../shift-pattern-dto.service";
 import { DepartmentDayTypeService } from "../department-day-type.service";

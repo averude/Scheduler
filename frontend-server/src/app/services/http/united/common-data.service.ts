@@ -1,5 +1,5 @@
 import { forkJoin, Observable } from "rxjs";
-import { CommonDataDTO } from "../../../model/dto/general/common-data-dto";
+import { CommonDataDTO } from "../../../model/dto/united/common-data-dto";
 import { Injectable } from "@angular/core";
 import { DayTypeService } from "../day-type.service";
 import { PositionService } from "../position.service";

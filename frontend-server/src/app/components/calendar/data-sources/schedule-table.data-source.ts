@@ -7,10 +7,10 @@ import * as moment from "moment";
 import { PaginationService } from "../../../shared/paginators/pagination.service";
 import { CalendarDaysCalculator } from "../../../services/calculators/calendar-days-calculator";
 import { UserAccountRole } from "../../../model/dto/user-account-dto";
-import { CommonDataService } from "../../../services/http/ver2/common-data.service";
-import { AdminCommonDataService } from "../../../services/http/ver2/admin-common-data.service";
-import { CalendarDataService } from "../../../services/http/ver2/calendar-data.service";
-import { CalendarDataDTO } from "../../../model/dto/general/calendar-data-dto";
+import { CommonDataService } from "../../../services/http/united/common-data.service";
+import { AdminCommonDataService } from "../../../services/http/united/admin-common-data.service";
+import { CalendarDataService } from "../../../services/http/united/calendar-data.service";
+import { CalendarDataDTO } from "../../../model/dto/united/calendar-data-dto";
 
 @Injectable()
 export class ScheduleTableDataSource {

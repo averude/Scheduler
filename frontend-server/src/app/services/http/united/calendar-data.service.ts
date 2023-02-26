@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { forkJoin, Observable } from "rxjs";
-import { CalendarDataDTO } from "../../../model/dto/general/calendar-data-dto";
+import { CalendarDataDTO } from "../../../model/dto/united/calendar-data-dto";
 import { ScheduleService } from "../schedule.service";
 import { WorkingNormService } from "../working-norm.service";
 import { SpecialCalendarDateService } from "../special-calendar-date.service";
