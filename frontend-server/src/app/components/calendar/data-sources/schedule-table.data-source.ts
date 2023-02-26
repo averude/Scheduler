@@ -77,9 +77,9 @@ export class ScheduleTableDataSource {
           initData.positionMap        = toIdMap(commonData.positions);
           initData.shifts             = commonData.shifts;
           initData.employees          = commonData.employees;
-          initData.ratioColumns       = adminCommonData.ratioColumns;
-          initData.patternDTOs        = adminCommonData.patternDTOs;
-          initData.departmentDayTypes = adminCommonData.departmentDayTypes;
+          initData.ratioColumns       = adminCommonData?.ratioColumns;
+          initData.patternDTOs        = adminCommonData?.patternDTOs;
+          initData.departmentDayTypes = adminCommonData?.departmentDayTypes;
           return initData;
         }),
         switchMap((initData) =>
