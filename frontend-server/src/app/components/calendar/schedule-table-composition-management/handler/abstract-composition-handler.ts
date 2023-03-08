@@ -108,7 +108,7 @@ export abstract class AbstractCompositionHandler<T extends Composition> implemen
           this.transfer(updatedRow, rowToMerge, composition, dto);
           updatedRow = rowToMerge;
         } else {
-          const newRow = this.rowProcessor.insertNewOrUpdateExistingRow(group, dto, initData.calendarDays, composition,
+          const newRow = this.rowProcessor.insertNewOrUpdateExistingRow(group, dto, initData, composition,
             position, updatedRow.value.workingNorm, updatedRow.value.isSubstitution);
           newRow.value.compositions = [];
           newRow.value.intervals    = [];

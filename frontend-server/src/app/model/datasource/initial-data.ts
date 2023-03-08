@@ -33,6 +33,7 @@ export class InitialData extends IData {
   departmentDayTypes: DepartmentDayType[];
   patternDTOs:        BasicDTO<ShiftPattern, PatternUnit>[];
   ratioColumns:       RatioColumn[];
+  employeeMap:        Map<number, Employee>;
 }
 
 export class WorkingNormInitialData extends InitialData {

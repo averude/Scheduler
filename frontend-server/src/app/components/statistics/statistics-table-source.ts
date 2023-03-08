@@ -15,12 +15,15 @@ import { Injectable } from "@angular/core";
 import { UserAccountDTO, UserAccountLevel } from "../../model/dto/user-account-dto";
 import { toIdMap } from "../calendar/utils/scheduler-utility";
 import { PaginationService } from "../../shared/paginators/pagination.service";
+import { EmployeeService } from "../../services/http/employee.service";
+import { Employee } from "../../model/employee";
 
 @Injectable()
 export class StatisticsTableSource {
 
   summationColumns: SummationColumn[];
   shifts:           Shift[];
+  employeeMap:      Map<number, Employee>;
   positionMap:      Map<number, Position>;
 
   constructor(private collector: StatisticsTableDataCollector,
@@ -28,6 +31,7 @@ export class StatisticsTableSource {
               private statisticsColumnCompositor: StatisticsColumnCompositor,
               private shiftService: ShiftService,
               private positionService: PositionService,
+              private employeeService: EmployeeService,
               private summationColumnDtoService: SummationColumnDtoService,
               private statisticsService: StatisticsService,
               private workingNormService: WorkingNormService) {}
@@ -54,16 +58,19 @@ export class StatisticsTableSource {
     const sources: Observable<any>[] = [
       this.shiftService.getAllByDepartmentId(departmentId),
       this.positionService.getAllByDepartmentId(departmentId),
+      this.employeeService.getAllByDepartmentId(departmentId),
       this.summationColumnDtoService.getAllByEnterpriseId(enterpriseId),
     ];
 
-    const fn = dateInterval =>
-      forkJoin([
+    const fn = dateInterval => {
+      const observables = [
         this.statisticsService
           .getSummationDTOMapByDepartmentId(mode, enterpriseId, departmentId, dateInterval.from, dateInterval.to),
         this.workingNormService
           .getAllByDepartmentId(departmentId, dateInterval.from, dateInterval.to)
-      ]);
+      ];
+      return forkJoin(observables);
+    };
 
     return this.getData(sources, fn);
   }
@@ -75,25 +82,28 @@ export class StatisticsTableSource {
     const sources: Observable<any>[] = [
       this.shiftService.getAllByShiftIds(shiftIds),
       this.positionService.getAllByDepartmentId(departmentId),
+      this.employeeService.getAllByDepartmentId(departmentId),
       this.summationColumnDtoService.getAllByEnterpriseId(enterpriseId)
     ];
 
-    const fn = dateInterval =>
-      forkJoin([
+    const fn = dateInterval => {
+      const observables = [
         this.statisticsService
           .getSummationDTOMapByShiftIds(mode, enterpriseId, departmentId, shiftIds, dateInterval.from, dateInterval.to),
         this.workingNormService
           .getAllByDepartmentId(departmentId, dateInterval.from, dateInterval.to)
-      ]);
+      ];
+      return forkJoin(observables);
+    };
 
     return this.getData(sources, fn);
   }
 
-  private getData(sources1: Observable<any>[], fn: (pag) => Observable<any>) {
-
-    return forkJoin(sources1).pipe(
-      switchMap(([shifts, positions, summationColumns]) => {
+  private getData(sources: Observable<any>[], fn: (pag) => Observable<any>) {
+    return forkJoin(sources).pipe(
+      switchMap(([shifts, positions, employees, summationColumns]) => {
         this.shifts = shifts.filter(shift => !shift.hidden);
+        this.employeeMap = toIdMap(employees);
         this.positionMap = toIdMap(positions);
         this.summationColumns = summationColumns.map(value => value.parent);
         this.statisticsColumnCompositor.composeColumns(this.summationColumns);
@@ -102,9 +112,9 @@ export class StatisticsTableSource {
           .pipe(switchMap(fn));
       })
     ).pipe(map(([summationDTOMap, workingNorms]) => {
-      this.statisticsColumnCompositor.cr(this.shifts, summationDTOMap, this.summationColumns, workingNorms)
+      this.statisticsColumnCompositor.cr(this.shifts, summationDTOMap, this.summationColumns, workingNorms);
 
-      return this.collector.getTableData(summationDTOMap, this.shifts, this.positionMap);
+      return this.collector.getTableData(summationDTOMap, this.shifts, this.employeeMap, this.positionMap);
     }));
 
   }

@@ -33,7 +33,7 @@ export class MainCompositionHandler extends AbstractCompositionHandler<MainCompo
 
       putSorted(<MainComposition>composition, dto.mainCompositions);
 
-      const row = this.rowProcessor.insertNewOrUpdateExistingRow(group, dto, initData.calendarDays,
+      const row = this.rowProcessor.insertNewOrUpdateExistingRow(group, dto, initData,
         composition, position, norm, false);
 
       row.value.intervals = this.intervalCreator.getEmployeeShiftIntervalsByArr(row.value.compositions, dto.substitutionCompositions);

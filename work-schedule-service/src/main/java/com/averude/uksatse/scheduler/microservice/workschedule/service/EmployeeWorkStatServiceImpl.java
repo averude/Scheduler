@@ -108,7 +108,7 @@ public class EmployeeWorkStatServiceImpl implements EmployeeWorkStatService {
                     var mainComposition = getLatestMainComposition(dto);
 
                     var workStatDTO = new EmployeeWorkStatDTO();
-                    workStatDTO.setEmployee(dto.getEmployee());
+                    workStatDTO.setEmployeeId(dto.getEmployeeId());
                     workStatDTO.setShiftId(mainComposition.getShiftId());
                     workStatDTO.setMainPositionId(mainComposition.getPositionId());
                     workStatDTO.setPositionStats(new LinkedList<>());
@@ -136,7 +136,7 @@ public class EmployeeWorkStatServiceImpl implements EmployeeWorkStatService {
                     var results = statisticsCalculator.calculateByCountMap(countMap, summationColumns);
 
                     var workStatDTO = new EmployeeWorkStatDTO();
-                    workStatDTO.setEmployee(dto.getEmployee());
+                    workStatDTO.setEmployeeId(dto.getEmployeeId());
                     workStatDTO.setShiftId(mainComposition.getShiftId());
                     workStatDTO.setMainPositionId(mainComposition.getPositionId());
 

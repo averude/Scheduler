@@ -38,6 +38,7 @@ public class DTOUtil {
         return result;
     }
 
+    @Deprecated
     public List<EmployeeScheduleDTO> createEmployeeScheduleDTOList(List<Employee> employees,
                                                                    List<WorkDay> schedule) {
         var result = new ArrayList<EmployeeScheduleDTO>(employees.size());
@@ -46,7 +47,7 @@ public class DTOUtil {
 
         for (var e : employees) {
 
-            var dto = new EmployeeScheduleDTO(e, null, null, new ArrayList<>());
+            var dto = new EmployeeScheduleDTO(e.getId(), null, null, new ArrayList<>());
 
             lastScheduleIndex = sequentialFill(e, schedule,
                     dto.getWorkDays(),lastScheduleIndex,
@@ -70,7 +71,7 @@ public class DTOUtil {
 
         for (var e : employees) {
 
-            var dto = new EmployeeScheduleDTO(e, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+            var dto = new EmployeeScheduleDTO(e.getId(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
 
             lastScheduleIndex = sequentialFill(e, schedule,
                     dto.getWorkDays(),lastScheduleIndex,

@@ -20,7 +20,7 @@ export class StatisticsService {
                                    to: string): Observable<Map<number, EmployeeWorkStatDTO>> {
     return this.http.get<EmployeeWorkStatDTO[]>(
       `${this.config.baseUrl}/enterprises/${enterpriseId}/departments/${departmentId}/statistics/work_stats/mode/${type}?from=${from}&to=${to}`
-    ).pipe(map((summationDTOs: EmployeeWorkStatDTO[]) => toNumMap(summationDTOs, value => value.employee.id)));
+    ).pipe(map((summationDTOs: EmployeeWorkStatDTO[]) => toNumMap(summationDTOs, value => value.employeeId)));
   }
 
   getSummationDTOMapByShiftIds(type: SummationMode,
@@ -31,6 +31,6 @@ export class StatisticsService {
                                to: string): Observable<Map<number, EmployeeWorkStatDTO>> {
     return this.http.get<EmployeeWorkStatDTO[]>(
       `${this.config.baseUrl}/enterprises/${enterpriseId}/departments/${departmentId}/shifts/${shiftIds}/statistics/work_stats/mode/${type}?from=${from}&to=${to}`
-    ).pipe(map((summationDTOs: EmployeeWorkStatDTO[]) => toNumMap(summationDTOs, value => value.employee.id)));
+    ).pipe(map((summationDTOs: EmployeeWorkStatDTO[]) => toNumMap(summationDTOs, value => value.employeeId)));
   }
 }

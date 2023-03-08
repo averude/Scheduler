@@ -1,7 +1,5 @@
-import { Employee } from "../employee";
-
 export class EmployeeWorkStatDTO {
-  employee: Employee;
+  employeeId: number;
   shiftId: number;
   mainPositionId: number;
   positionStats: EmployeePositionStat[];

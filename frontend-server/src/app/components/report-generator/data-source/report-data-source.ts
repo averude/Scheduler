@@ -14,6 +14,7 @@ import { ReportInitialData } from "../model/report-initial-data";
 import { toIdMap } from "../../calendar/utils/scheduler-utility";
 import { CalendarDaysCalculator } from "../../../services/calculators/calendar-days-calculator";
 import * as moment from "moment";
+import { EmployeeService } from "../../../services/http/employee.service";
 
 @Injectable()
 export class ReportDataSource {
@@ -25,6 +26,7 @@ export class ReportDataSource {
               private reportSheetDTOService: ReportSheetDTOService,
               private shiftService: ShiftService,
               private positionService: PositionService,
+              private employeeService: EmployeeService,
               private statisticsService: StatisticsService,
               private workingNormService: WorkingNormService){}
 
@@ -40,6 +42,7 @@ export class ReportDataSource {
       this.dayTypeService.getMapByEnterpriseId(enterpriseId),
       this.shiftService.getAllByDepartmentId(departmentId),
       this.positionService.getAllByDepartmentId(departmentId),
+      this.employeeService.getAllByDepartmentId(departmentId),
       this.reportSheetDTOService.getAllByDepartmentId(departmentId)
     ];
 
@@ -58,7 +61,8 @@ export class ReportDataSource {
       this.statisticsService.getSummationDTOMapByShiftIds(SummationMode.PER_POSITION, enterpriseId, departmentId, shiftIds, from, to,),
       this.dayTypeService.getMapByEnterpriseId(enterpriseId),
       this.shiftService.getAllByShiftIds(shiftIds),
-      this.positionService.getAllByDepartmentId(departmentId)
+      this.positionService.getAllByDepartmentId(departmentId),
+      this.employeeService.getAllByDepartmentId(departmentId)
     ];
 
     return this.getObservable(from, to, sources);
@@ -74,7 +78,7 @@ export class ReportDataSource {
             schedule, workingNorms,
             specialCalendarDates,
             summationDTOMap, dayTypeMap, shifts,
-            positions, reportSheets
+            positions, employees, reportSheets
           ]
           ) => (
                {
@@ -85,6 +89,7 @@ export class ReportDataSource {
                  shifts: shifts.filter(shift => !shift.hidden),
                  positions: positions,
                  positionMap: toIdMap(positions),
+                 employeeMap: toIdMap(employees),
                  reportSheets: reportSheets,
                  specialCalendarDates: specialCalendarDates,
                  calendarDays: this.calendarDaysCalculator

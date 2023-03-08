@@ -1,7 +1,6 @@
 import { ScheduleCell, ScheduleRow, ScheduleRowValue } from "../../../../model/ui/schedule-table/table-data";
 import { Position } from "../../../../model/position";
 import { EmployeeScheduleDTO } from "../../../../model/dto/employee-schedule-dto";
-import { CalendarDay } from "../../../../lib/ngx-schedule-table/model/calendar-day";
 import { Composition } from "../../../../model/composition";
 import { convertCompositionToInterval } from "../../../../model/ui/schedule-table/row-interval";
 import { IntervalCreator } from "../../../../services/creator/interval-creator.service";
@@ -9,6 +8,7 @@ import { CellCollector } from "../../../../shared/collectors/cell-collector";
 import { Injectable } from "@angular/core";
 import { RowGroup } from "../../../../lib/ngx-schedule-table/model/data/row-group";
 import { WorkDay } from "../../../../model/workday";
+import { InitialData } from "../../../../model/datasource/initial-data";
 
 @Injectable()
 export class TableRowProcessor {
@@ -18,24 +18,25 @@ export class TableRowProcessor {
 
   insertNewOrUpdateExistingRow(group: RowGroup,
                                dto: EmployeeScheduleDTO,
-                               calendarDays: CalendarDay[],
+                               initData: InitialData,
                                composition: Composition,
                                position:    Position,
                                workingNorm: number,
                                isSubstitution: boolean): ScheduleRow {
     const value = new ScheduleRowValue();
-    value.employee = dto.employee;
+    value.employee = initData.employeeMap.get(dto.employeeId);
     value.position = position;
     value.compositions = [composition];
     value.isSubstitution = isSubstitution;
     value.workingNorm = workingNorm;
 
     const result = <ScheduleRow> group.addOrMerge(value.employee.id, value, (row => {
-      row.value.compositions.push(composition);
-      row.value.compositions.sort((a, b) => a.from.diff(b.from));
+      const rowValue: ScheduleRowValue = row.value;
+      rowValue.compositions.push(composition);
+      rowValue.compositions.sort((a, b) => a.from.diff(b.from));
     }));
 
-    result.cells = this.cellCollector.collect<WorkDay, ScheduleCell>(calendarDays, dto.workDays, false);
+    result.cells = this.cellCollector.collect<WorkDay, ScheduleCell>(initData.calendarDays, dto.workDays, false);
     result.cells.forEach((cell: ScheduleCell) => cell.parent = result);
 
     return result;

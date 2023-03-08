@@ -3,9 +3,7 @@ import { Employee } from "../../employee";
 import { Position } from "../../position";
 import { Cell } from "../../../lib/ngx-schedule-table/model/data/cell";
 import { Row } from "../../../lib/ngx-schedule-table/model/data/row";
-import { RowGroup } from "../../../lib/ngx-schedule-table/model/data/row-group";
 import { RowInterval } from "./row-interval";
-import { EmployeeScheduleDTO } from "../../dto/employee-schedule-dto";
 
 export class ScheduleRowValue {
   employee:       Employee;
@@ -23,22 +21,22 @@ export class ScheduleRow extends Row {
 
   enabledCellCount: number;
 
-  static create(group: RowGroup,
-                dto: EmployeeScheduleDTO,
-                position: Position,
-                workingNorm: number,
-                isSubstitution: boolean): ScheduleRow {
-    const row = {} as ScheduleRow;
-    row.parent = group;
-    row.id = dto.employee.id;
-    row.value = new ScheduleRowValue();
-    row.value.employee = dto.employee;
-    row.value.position = position;
-    row.value.isSubstitution = isSubstitution;
-    row.value.workingNorm = workingNorm;
-    row.cells = [];
-    return row;
-  }
+  // static create(group: RowGroup,
+  //               dto: EmployeeScheduleDTO,
+  //               position: Position,
+  //               workingNorm: number,
+  //               isSubstitution: boolean): ScheduleRow {
+  //   const row = {} as ScheduleRow;
+  //   row.parent = group;
+  //   row.id = dto.employeeId;
+  //   row.value = new ScheduleRowValue();
+  //   row.value.employee = dto.employee;
+  //   row.value.position = position;
+  //   row.value.isSubstitution = isSubstitution;
+  //   row.value.workingNorm = workingNorm;
+  //   row.cells = [];
+  //   return row;
+  // }
 }
 
 export interface ScheduleCell extends Cell {

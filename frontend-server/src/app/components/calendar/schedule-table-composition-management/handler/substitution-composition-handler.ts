@@ -35,7 +35,7 @@ export class SubstitutionCompositionHandler extends AbstractCompositionHandler<S
 
       putSorted(<SubstitutionComposition>composition, dto.substitutionCompositions);
 
-      const row = this.rowProcessor.insertNewOrUpdateExistingRow(group, dto, initData.calendarDays,
+      const row = this.rowProcessor.insertNewOrUpdateExistingRow(group, dto, initData,
         composition, position, norm, true);
 
       if (parentRow) {

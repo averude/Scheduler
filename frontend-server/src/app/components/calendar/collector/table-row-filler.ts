@@ -26,7 +26,7 @@ export class TableRowFiller {
         const workingNorm = workingNormConsumer(composition);
 
         const value           = new ScheduleRowValue();
-        value.employee        = dto.employee;
+        value.employee        = initData.employeeMap.get(dto.employeeId);
         value.position        = position;
         value.compositions    = [composition];
         value.isSubstitution  = isSubstitution;

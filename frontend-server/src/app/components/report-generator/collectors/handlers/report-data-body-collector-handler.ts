@@ -47,16 +47,16 @@ export class ReportDataBodyCollectorHandler implements CollectorHandler {
       positionIntervalsMap.forEach((intervals, positionId) => {
 
         const rowValue = {
-          employee: dto.employee,
+          employee: initData.employeeMap.get(dto.employeeId),
           position: initData.positionMap.get(positionId),
           mainPosition: mainPosition,
           intervals: intervals
         } as HasEmployeePosition;
 
-        const summationResults = this.getSummationResults(initData, dto.employee.id, positionId);
+        const summationResults = this.getSummationResults(initData, dto.employeeId, positionId);
 
         tableData
-          .addOrMergeRow(mainShiftId, dto.employee.id, rowValue, () => {
+          .addOrMergeRow(mainShiftId, dto.employeeId, rowValue, () => {
             throw new Error('Merge is not supported');
           })
           .cells = collectorStrategy.collectRowCellData(dto, initData, rowValue, summationResults)

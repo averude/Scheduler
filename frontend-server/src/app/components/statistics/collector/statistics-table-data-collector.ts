@@ -9,7 +9,9 @@ import { UIPrioritySortingStrategy } from "../../calendar/utils/ui-priority-sort
 import { RowGroup } from "../../../lib/ngx-schedule-table/model/data/row-group";
 import { Row } from "../../../lib/ngx-schedule-table/model/data/row";
 import { ReportTableSortingStrategy } from "../../../shared/table-sorting-strategies/report-table-sorting-strategy";
+import { Employee } from "../../../model/employee";
 
+// TODO: refactor
 @Injectable()
 export class StatisticsTableDataCollector {
 
@@ -18,6 +20,7 @@ export class StatisticsTableDataCollector {
 
   getTableData(dtoMap: Map<number, EmployeeWorkStatDTO>,
                shifts: Shift[],
+               employeeMap: Map<number, Employee>,
                positionMap: Map<number, Position>): TableData {
     const table = new TableData(this.tableSortingStrategy);
 
@@ -32,8 +35,8 @@ export class StatisticsTableDataCollector {
     dtoMap.forEach(dto => {
       const group = table.findRowGroup(dto.shiftId);
       if (group) {
-        const rows = group.addOrMerge(dto.employee.id, {
-          employee: dto.employee,
+        const rows = group.addOrMerge(dto.employeeId, {
+          employee: employeeMap.get(dto.employeeId),
           mainPosition: positionMap.get(dto.mainPositionId)
         }, null).rows;
 
