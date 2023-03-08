@@ -275,28 +275,6 @@ CREATE TABLE IF NOT EXISTS work_schedule (
   FOREIGN KEY (scheduled_day_type_id) REFERENCES day_types(id) ON DELETE SET NULL
 ) PARTITION BY LIST (department_id);
 
-CREATE TABLE IF NOT EXISTS work_schedule_views (
-  id                    SERIAL,
-  enterprise_id         INTEGER       NOT NULL,
-  target_department_id  INTEGER       NOT NULL,
-  department_id         INTEGER       NOT NULL,
-  name                  VARCHAR(128)  NOT NULL,
-
-  PRIMARY KEY (id),
-  FOREIGN KEY (enterprise_id) REFERENCES enterprises(id) ON DELETE CASCADE ON UPDATE CASCADE,
-  FOREIGN KEY (target_department_id) REFERENCES departments(id) ON DELETE CASCADE ON UPDATE CASCADE,
-  FOREIGN KEY (department_id) REFERENCES departments(id) ON DELETE CASCADE ON UPDATE CASCADE
-);
-
-CREATE TABLE IF NOT EXISTS work_schedule_views_day_types (
-  work_schedule_view_id   INTEGER NOT NULL,
-  day_type_id             INTEGER NOT NULL,
-
-  PRIMARY KEY (work_schedule_view_id, day_type_id),
-  FOREIGN KEY (work_schedule_view_id) REFERENCES work_schedule_views(id) ON DELETE CASCADE ON UPDATE CASCADE,
-  FOREIGN KEY (day_type_id) REFERENCES day_types(id) ON DELETE CASCADE ON UPDATE CASCADE
-);
-
 CREATE TABLE IF NOT EXISTS working_norms (
   id            SERIAL,
   department_id INTEGER       NOT NULL,

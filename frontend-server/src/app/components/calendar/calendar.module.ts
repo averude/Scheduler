@@ -16,7 +16,6 @@ import { ScheduleTableDataSource } from "./data-sources/schedule-table.data-sour
 import { ScheduleTableConfigurationMenuModule } from "./schedule-table-configuration-menu/schedule-table-configuration-menu.module";
 import { TableCellComponent } from "./table-cell/table-cell.component";
 import { NameInfoCellModule } from "../shared/name-info-cell/name-info-cell.module";
-import { ScheduleViewTableComponent } from "./schedule-view-table/schedule-view-table.component";
 import { TableFilterModule } from "./table-filter/table-filter.module";
 import { CalendarContainerModule } from "../../lib/calendar-container/calendar-container.module";
 import { TableCollectorModule } from "./collector/table-collector.module";
@@ -42,7 +41,6 @@ import { DataSourceFacade } from "./data-sources/data-source.facade";
   ],
   declarations: [
     ScheduleTableComponent,
-    ScheduleViewTableComponent,
     TableCellComponent
   ],
   providers: [

@@ -8,8 +8,6 @@ import { Department } from "../../model/department";
 import { EnterpriseService } from "../../services/http/enterprise.service";
 import { Enterprise } from "../../model/enterprise";
 import { MatSidenav } from "@angular/material/sidenav";
-import { WorkScheduleViewDTOService } from "../../services/http/work-schedule-view-dto.service";
-import { WorkScheduleView } from "../../model/work-schedule-view";
 import { PaginationService } from "../../shared/paginators/pagination.service";
 
 @Component({
@@ -30,7 +28,6 @@ export class AdminComponent implements OnInit, OnDestroy {
 
   enterprise:   Enterprise;
   departments:  Department[];
-  views:        WorkScheduleView[];
 
   selectedDepartment: Department;
   orgLevelName: string;
@@ -43,8 +40,7 @@ export class AdminComponent implements OnInit, OnDestroy {
   constructor(private authService: AuthService,
               private paginationService: PaginationService,
               private enterpriseService: EnterpriseService,
-              private departmentService: DepartmentService,
-              private scheduleViewService: WorkScheduleViewDTOService) { }
+              private departmentService: DepartmentService) { }
 
   ngOnInit(): void {
     this.userAccount = this.authService.currentUserAccount;
@@ -83,8 +79,6 @@ export class AdminComponent implements OnInit, OnDestroy {
       this.departmentService.getByIds(this.userAccount.departmentIds)
         .subscribe(department => {
           this.selectedDepartment = department[0];
-          this.scheduleViewService.getAllByDepartmentId(this.selectedDepartment.id)
-            .subscribe(views => this.views = views);
           this.orgLevelName = department[0].name;
         });
     }
@@ -107,10 +101,6 @@ export class AdminComponent implements OnInit, OnDestroy {
   departmentStep(department: Department) {
     this.stepper.next();
     this.selectedDepartment = department;
-    if (this.isEnterpriseOrMultiDepartmentLevel) {
-      this.scheduleViewService.getAllByDepartmentId(this.selectedDepartment.id)
-        .subscribe(views => this.views = views);
-    }
     this.orgLevelName = department.name
   }
 }

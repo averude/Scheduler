@@ -63,12 +63,6 @@
               CALENDAR
             </button>
 
-            <ng-container *ngIf="(accessRights.isDepartmentLevel || accessRights.isEnterpriseLevel) && views && views.length > 0">
-              <button (click)="stepper.next()">
-                VIEWS
-              </button>
-            </ng-container>
-
             <button [routerLink]="'department/' + selectedDepartment?.id + '/statistics'"
                     routerLinkActive="active"
                     (click)="sideNavOpened = !sideNavOpened">
@@ -93,21 +87,6 @@
                     routerLinkActive="active"
                     (click)="sideNavOpened = !sideNavOpened">
               MANAGEMENT
-            </button>
-          </div>
-        </cdk-step>
-
-        <cdk-step>
-          <div class="buttons-container">
-            <button class="back-button"
-                    (click)="stepper.previous()">
-              BACK
-            </button>
-
-            <button *ngFor="let view of views"
-                    [routerLink]="'department/' + selectedDepartment?.id + '/view/' + view.id"
-                    (click)="sideNavOpened = !sideNavOpened">
-              {{view.name.toUpperCase()}}
             </button>
           </div>
         </cdk-step>

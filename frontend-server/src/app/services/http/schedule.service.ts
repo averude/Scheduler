@@ -37,14 +37,6 @@ export class ScheduleService {
     })));
   }
 
-  getAllByViewId(viewId: number,
-                 from: string,
-                 to: string): Observable<EmployeeScheduleDTO[]> {
-    return this.http.get<EmployeeScheduleDTO[]>(
-      `${this.config.baseUrl}/work_schedule/views/${viewId}?from=${from}&to=${to}`
-    );
-  }
-
   create(schedule: WorkDay[]): Observable<any> {
     return this.http.post<any>(
       `${this.config.baseUrl}/work_schedule`,

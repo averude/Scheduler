@@ -6,7 +6,6 @@ import { SpecialCalendarDatesTableComponent } from "./special-calendar-dates/spe
 import { NgModule } from "@angular/core";
 import { RouterModule } from "@angular/router";
 import { EnterpriseManagementComponent } from "./enterprise-management.component";
-import { WorkScheduleViewsTableComponent } from "./work-schedule-views/work-schedule-views-table/work-schedule-views-table.component";
 
 const routes = [
   {
@@ -32,10 +31,6 @@ const routes = [
       {
         path: 'special_calendar_dates',
         component: SpecialCalendarDatesTableComponent
-      },
-      {
-        path: 'work_schedule_views',
-        component: WorkScheduleViewsTableComponent
       }
     ]
   }

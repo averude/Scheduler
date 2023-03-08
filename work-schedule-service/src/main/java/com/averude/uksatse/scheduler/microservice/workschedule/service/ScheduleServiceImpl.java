@@ -2,13 +2,15 @@ package com.averude.uksatse.scheduler.microservice.workschedule.service;
 
 import com.averude.uksatse.scheduler.core.interfaces.entity.HasEmployeeId;
 import com.averude.uksatse.scheduler.core.model.dto.EmployeeScheduleDTO;
-import com.averude.uksatse.scheduler.core.model.entity.*;
+import com.averude.uksatse.scheduler.core.model.entity.Employee;
+import com.averude.uksatse.scheduler.core.model.entity.MainComposition;
+import com.averude.uksatse.scheduler.core.model.entity.SubstitutionComposition;
+import com.averude.uksatse.scheduler.core.model.entity.WorkDay;
 import com.averude.uksatse.scheduler.core.util.CollectionUtils;
 import com.averude.uksatse.scheduler.microservice.workschedule.repository.EmployeeRepository;
 import com.averude.uksatse.scheduler.microservice.workschedule.repository.ScheduleRepository;
 import com.averude.uksatse.scheduler.shared.repository.MainCompositionRepository;
 import com.averude.uksatse.scheduler.shared.repository.SubstitutionCompositionRepository;
-import com.averude.uksatse.scheduler.shared.repository.WorkScheduleViewRepository;
 import com.averude.uksatse.scheduler.shared.service.AService;
 import com.averude.uksatse.scheduler.shared.utils.DTOUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +35,6 @@ public class ScheduleServiceImpl
     private final ScheduleRepository    scheduleRepository;
     private final EmployeeRepository    employeeRepository;
 
-    private final WorkScheduleViewRepository        workScheduleViewRepository;
     private final MainCompositionRepository         mainCompositionRepository;
     private final SubstitutionCompositionRepository substitutionCompositionRepository;
 
@@ -41,14 +42,12 @@ public class ScheduleServiceImpl
     public ScheduleServiceImpl(ScheduleRepository scheduleRepository,
                                EmployeeRepository employeeRepository,
                                DTOUtil dtoUtil,
-                               WorkScheduleViewRepository workScheduleViewRepository,
                                MainCompositionRepository mainCompositionRepository,
                                SubstitutionCompositionRepository substitutionCompositionRepository) {
         super(scheduleRepository);
         this.dtoUtil = dtoUtil;
         this.scheduleRepository = scheduleRepository;
         this.employeeRepository = employeeRepository;
-        this.workScheduleViewRepository = workScheduleViewRepository;
         this.mainCompositionRepository = mainCompositionRepository;
         this.substitutionCompositionRepository = substitutionCompositionRepository;
     }
@@ -91,26 +90,6 @@ public class ScheduleServiceImpl
         var schedule = scheduleRepository.findAllByEmployeeIdsAndDateBetween(departmentId, employeeIds, from, to);
 
         return dtoUtil.createEmployeeScheduleDTOList(employees, mainCompositions, subCompositions, schedule);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<EmployeeScheduleDTO> findScheduleDTOByViewIdAndDate(Long viewId, LocalDate from, LocalDate to) {
-        var view = workScheduleViewRepository.getById(viewId).orElseThrow();
-
-        var dayTypeIds = view.getViewDayTypes()
-                .stream()
-                .map(WorkScheduleViewDayType::getDayTypeId)
-                .collect(toList());
-
-        var workDays = scheduleRepository.findAllByDepartmentIdAndDayTypeIdInAndDateBetween(view.getTargetDepartmentId(), dayTypeIds, from, to);
-
-        var employeeIds = CollectionUtils.collectSortedDistinct(HasEmployeeId::getEmployeeId, workDays);
-
-        var employees = employeeRepository.findAllById(employeeIds);
-        employees.sort(Comparator.comparing(Employee::getId));
-
-        return dtoUtil.createEmployeeScheduleDTOList(employees, workDays);
     }
 
     private List<SubstitutionComposition> getSubstitutionCompositions(List<Long> shiftIds,

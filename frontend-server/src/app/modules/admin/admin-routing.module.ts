@@ -4,7 +4,6 @@ import { AdminComponent } from "./admin.component";
 import { ScheduleTableComponent } from "../../components/calendar/schedule-table/schedule-table.component";
 import { LevelRoleGuard } from "../../guards/level-role.guard";
 import { UserAccountLevel, UserAccountRole } from "../../model/dto/user-account-dto";
-import { ScheduleViewTableComponent } from "../../components/calendar/schedule-view-table/schedule-view-table.component";
 
 const routes: Routes = [
   {
@@ -32,10 +31,6 @@ const routes: Routes = [
             path: ':departmentId/statistics',
             loadChildren: () => import('../../components/statistics/statistics.module')
               .then(mod => mod.StatisticsModule)
-          },
-          {
-            path: ':departmentId/view/:viewId',
-            component: ScheduleViewTableComponent
           },
           {
             path: ':departmentId/working_norms',
