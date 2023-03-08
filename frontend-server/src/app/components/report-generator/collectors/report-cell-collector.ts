@@ -23,7 +23,7 @@ export class ReportCellCollector {
     const dayTypeMap = initData.dayTypeMap;
     const useReportLabel = initData.useReportLabel;
 
-    const cells = this.cellCollector.collectByFn(calendarDays, dto.collection, (date => {
+    const cells = this.cellCollector.collectByFn(calendarDays, dto.workDays, (date => {
       const cell = {date: date} as ReportCellValue;
       collectorStrategy.fillDisabledCell(cell);
       return cell;

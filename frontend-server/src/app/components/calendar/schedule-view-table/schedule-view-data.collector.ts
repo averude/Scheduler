@@ -22,8 +22,8 @@ export class ScheduleViewDataCollector {
       .map(dto => {
         const row = {} as ScheduleRow;
         row.value = new ScheduleRowValue();
-        row.value.employee = dto.parent;
-        row.cells = this.cellCollector.collect<WorkDay, ScheduleCell>(initialData.calendarDays, dto.collection, true);
+        row.value.employee = dto.employee;
+        row.cells = this.cellCollector.collect<WorkDay, ScheduleCell>(initialData.calendarDays, dto.workDays, true);
         return row;
       })
       .sort((a: ScheduleRow, b: ScheduleRow) => a.value.employee.secondName.localeCompare(b.value.employee.secondName));

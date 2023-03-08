@@ -108,7 +108,7 @@ public class EmployeeWorkStatServiceImpl implements EmployeeWorkStatService {
                     var mainComposition = getLatestMainComposition(dto);
 
                     var workStatDTO = new EmployeeWorkStatDTO();
-                    workStatDTO.setEmployee(dto.getParent());
+                    workStatDTO.setEmployee(dto.getEmployee());
                     workStatDTO.setShiftId(mainComposition.getShiftId());
                     workStatDTO.setMainPositionId(mainComposition.getPositionId());
                     workStatDTO.setPositionStats(new LinkedList<>());
@@ -132,11 +132,11 @@ public class EmployeeWorkStatServiceImpl implements EmployeeWorkStatService {
                 .filter(dto -> validCollection(dto.getMainCompositions()) || validCollection(dto.getSubstitutionCompositions()))
                 .map(dto -> {
                     var mainComposition = getLatestMainComposition(dto);
-                    var countMap = countMapBuilder.build(dto.getCollection(), specialCalendarDates);
+                    var countMap = countMapBuilder.build(dto.getWorkDays(), specialCalendarDates);
                     var results = statisticsCalculator.calculateByCountMap(countMap, summationColumns);
 
                     var workStatDTO = new EmployeeWorkStatDTO();
-                    workStatDTO.setEmployee(dto.getParent());
+                    workStatDTO.setEmployee(dto.getEmployee());
                     workStatDTO.setShiftId(mainComposition.getShiftId());
                     workStatDTO.setMainPositionId(mainComposition.getPositionId());
 
@@ -155,7 +155,7 @@ public class EmployeeWorkStatServiceImpl implements EmployeeWorkStatService {
                                                        List<GenerationInterval<Long>> generationIntervals,
                                                        List<SpecialCalendarDate> specialCalendarDates,
                                                        List<SummationColumn> summationColumns) {
-        var countMap = countMapBuilder.build(dto.getCollection(), generationIntervals, specialCalendarDates);
+        var countMap = countMapBuilder.build(dto.getWorkDays(), generationIntervals, specialCalendarDates);
         var summationResults = statisticsCalculator.calculateByCountMap(countMap, summationColumns);
 
         var positionWorkStat = new EmployeePositionStat();

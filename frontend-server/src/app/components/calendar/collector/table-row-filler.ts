@@ -26,7 +26,7 @@ export class TableRowFiller {
         const workingNorm = workingNormConsumer(composition);
 
         const value           = new ScheduleRowValue();
-        value.employee        = dto.parent;
+        value.employee        = dto.employee;
         value.position        = position;
         value.compositions    = [composition];
         value.isSubstitution  = isSubstitution;
@@ -37,7 +37,7 @@ export class TableRowFiller {
             row.value.compositions.push(composition);
             row.value.compositions.sort((a, b) => a.from.diff(b.from));
           }));
-        result.cells = this.cellCollector.collect<WorkDay, ScheduleCell>(table.headerData, dto.collection, false);
+        result.cells = this.cellCollector.collect<WorkDay, ScheduleCell>(table.headerData, dto.workDays, false);
         result.cells.forEach((cell: ScheduleCell) => cell.parent = result);
       }
     }

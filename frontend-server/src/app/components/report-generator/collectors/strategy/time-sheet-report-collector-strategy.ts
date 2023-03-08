@@ -65,7 +65,7 @@ export class TimeSheetReportCollectorStrategy implements ReportCollectorStrategy
         style: TimeSheetStyles.idCellStyle
       },
       {
-        value: [getEmployeeShortName(dto.parent), rowValue.position?.shortName],
+        value: [getEmployeeShortName(dto.employee), rowValue.position?.shortName],
         style: [TimeSheetStyles.nameCellStyle, TimeSheetStyles.positionCellStyle]
       }
     ]);

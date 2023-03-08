@@ -46,10 +46,10 @@ public class DTOUtil {
 
         for (var e : employees) {
 
-            var dto = new EmployeeScheduleDTO(e, new ArrayList<>(), null, null);
+            var dto = new EmployeeScheduleDTO(e, null, null, new ArrayList<>());
 
             lastScheduleIndex = sequentialFill(e, schedule,
-                    dto.getCollection(),lastScheduleIndex,
+                    dto.getWorkDays(),lastScheduleIndex,
                     ((employee, workDay) -> employee.getId() - workDay.getEmployeeId()));
 
             result.add(dto);
@@ -73,7 +73,7 @@ public class DTOUtil {
             var dto = new EmployeeScheduleDTO(e, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
 
             lastScheduleIndex = sequentialFill(e, schedule,
-                    dto.getCollection(),lastScheduleIndex,
+                    dto.getWorkDays(),lastScheduleIndex,
                     ((employee, workDay) -> employee.getId() - workDay.getEmployeeId()));
 
             lastMainCompositionIndex = sequentialFill(e, mainCompositions,

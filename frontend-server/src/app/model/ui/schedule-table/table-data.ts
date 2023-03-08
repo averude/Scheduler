@@ -30,9 +30,9 @@ export class ScheduleRow extends Row {
                 isSubstitution: boolean): ScheduleRow {
     const row = {} as ScheduleRow;
     row.parent = group;
-    row.id = dto.parent.id;
+    row.id = dto.employee.id;
     row.value = new ScheduleRowValue();
-    row.value.employee = dto.parent;
+    row.value.employee = dto.employee;
     row.value.position = position;
     row.value.isSubstitution = isSubstitution;
     row.value.workingNorm = workingNorm;

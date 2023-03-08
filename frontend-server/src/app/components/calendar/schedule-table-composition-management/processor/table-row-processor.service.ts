@@ -24,7 +24,7 @@ export class TableRowProcessor {
                                workingNorm: number,
                                isSubstitution: boolean): ScheduleRow {
     const value = new ScheduleRowValue();
-    value.employee = dto.parent;
+    value.employee = dto.employee;
     value.position = position;
     value.compositions = [composition];
     value.isSubstitution = isSubstitution;
@@ -35,7 +35,7 @@ export class TableRowProcessor {
       row.value.compositions.sort((a, b) => a.from.diff(b.from));
     }));
 
-    result.cells = this.cellCollector.collect<WorkDay, ScheduleCell>(calendarDays, dto.collection, false);
+    result.cells = this.cellCollector.collect<WorkDay, ScheduleCell>(calendarDays, dto.workDays, false);
     result.cells.forEach((cell: ScheduleCell) => cell.parent = result);
 
     return result;

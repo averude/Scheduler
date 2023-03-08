@@ -81,7 +81,7 @@ export class ScheduleReportCollectorStrategy implements ReportCollectorStrategy 
         style: ScheduleReportStyles.idCellStyle
       },
       {
-        value: getEmployeeShortName(dto.parent),
+        value: getEmployeeShortName(dto.employee),
         style: ScheduleReportStyles.nameCellStyle
       },
       {

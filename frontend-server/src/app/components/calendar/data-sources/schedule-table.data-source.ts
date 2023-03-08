@@ -96,7 +96,7 @@ export class ScheduleTableDataSource {
                 return onPaginationFn(startDate, endDate).pipe(
                   map((calendarData) => {
                     initData.scheduleDTOs = calendarData.schedule;
-                    initData.scheduleDTOMap = toNumMap(calendarData.schedule, value => value.parent.id);
+                    initData.scheduleDTOMap = toNumMap(calendarData.schedule, value => value.employee.id);
                     initData.workingNormsMap = toNumMap(calendarData.workingNorms, value => value.shiftId);
                     initData.specialCalendarDates = calendarData.specialCalendarDates;
                     initData.calendarDays = this.calendarDaysCalculator
