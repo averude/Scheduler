@@ -3,7 +3,6 @@ import { TableRowProcessor } from "../processor/table-row-processor.service";
 import { IntervalCreator } from "../../../../services/creator/interval-creator.service";
 import { Composition } from "../../../../model/composition";
 import { ScheduleRow } from "../../../../model/ui/schedule-table/table-data";
-import { InitialData } from "../../../../model/datasource/initial-data";
 import { forkJoin, Observable } from "rxjs";
 import { map, tap } from "rxjs/operators";
 import { CUDService } from "../../../../services/http/interface/cud-service";
@@ -12,6 +11,7 @@ import { Position } from "../../../../model/position";
 import { EmployeeScheduleDTO } from "../../../../model/dto/employee-schedule-dto";
 import { CompositionHandler } from "./composition-handler";
 import { RowGroup } from "../../../../lib/ngx-schedule-table/model/data/row-group";
+import { CalendarInitData } from "../../model/calendar-init-data";
 
 export abstract class AbstractCompositionHandler<T extends Composition> implements CompositionHandler<T> {
 
@@ -24,24 +24,24 @@ export abstract class AbstractCompositionHandler<T extends Composition> implemen
                  rowGroup: RowGroup,
                  row: ScheduleRow,
                  parentRow: ScheduleRow,
-                 initData: InitialData): Observable<any[]> {
+                 calendarInitData: CalendarInitData): Observable<any[]> {
     if (!compositions || compositions.length == 0) {
       throw new Error("Wrong args");
     }
 
-    return forkJoin(this.createOrUpdateComposition(compositions, rowGroup, row, parentRow, initData));
+    return forkJoin(this.createOrUpdateComposition(compositions, rowGroup, row, parentRow, calendarInitData));
   }
 
   remove(groupData: RowGroup,
          row: ScheduleRow,
-         initData: InitialData,
+         calendarInitData: CalendarInitData,
          compositions: T[]): Observable<any[]> {
     let obs: Observable<any>[] = [];
     compositions.forEach(composition => {
       if (composition.id) {
         obs.push(this.compositionService.delete(composition.id)
           .pipe(
-            tap(res => this.rowRemover.removeRow(groupData, row, composition, initData))
+            tap(res => this.rowRemover.removeRow(groupData, row, composition, calendarInitData))
           )
         );
       }
@@ -53,15 +53,15 @@ export abstract class AbstractCompositionHandler<T extends Composition> implemen
                                     rowGroup: RowGroup,
                                     row: ScheduleRow,
                                     parentRow: ScheduleRow,
-                                    initData: InitialData): Observable<Row>[] {
+                                    calendarInitData: CalendarInitData): Observable<Row>[] {
     let obs = [];
     compositions.forEach(composition => {
-      const position = initData.positionMap.get(composition.positionId);
+      const position = calendarInitData.commonDataMaps.positionMap.get(composition.positionId);
       if (composition.id) {
         obs.push(this.compositionService.update(composition)
           .pipe(
             map((res) => {
-              return this.updateRow(initData, composition, position, rowGroup, row);
+              return this.updateRow(calendarInitData, composition, position, rowGroup, row);
             })
           ));
       } else {
@@ -69,7 +69,7 @@ export abstract class AbstractCompositionHandler<T extends Composition> implemen
           .pipe(
             map((res) => {
               composition = res;
-              return this.createRow(initData, composition, position, rowGroup, parentRow);
+              return this.createRow(calendarInitData, composition, position, rowGroup, parentRow);
             })
           ));
       }
@@ -77,13 +77,13 @@ export abstract class AbstractCompositionHandler<T extends Composition> implemen
     return obs;
   }
 
-  abstract createRow(initData: InitialData,
+  abstract createRow(calendarInitData: CalendarInitData,
                      composition: T,
                      position: Position,
                      group: RowGroup,
                      parentRow: ScheduleRow);
 
-  protected updateRow(initData: InitialData,
+  protected updateRow(calendarInitData: CalendarInitData,
                       composition: T,
                       position: Position,
                       group: RowGroup,
@@ -93,8 +93,8 @@ export abstract class AbstractCompositionHandler<T extends Composition> implemen
       throw new Error("No row provided");
     }
 
-    if (initData.scheduleDTOMap && initData.calendarDays) {
-      const dto = initData.scheduleDTOMap.get(composition.employeeId);
+    if (calendarInitData.calendarDataMaps.scheduleDTOMap && calendarInitData.calendarDays) {
+      const dto = calendarInitData.calendarDataMaps.scheduleDTOMap.get(composition.employeeId);
 
       if (updatedRow.value.position.id !== composition.positionId) {
 
@@ -108,7 +108,7 @@ export abstract class AbstractCompositionHandler<T extends Composition> implemen
           this.transfer(updatedRow, rowToMerge, composition, dto);
           updatedRow = rowToMerge;
         } else {
-          const newRow = this.rowProcessor.insertNewOrUpdateExistingRow(group, dto, initData, composition,
+          const newRow = this.rowProcessor.insertNewOrUpdateExistingRow(group, dto, calendarInitData, composition,
             position, updatedRow.value.workingNorm, updatedRow.value.isSubstitution);
           newRow.value.compositions = [];
           newRow.value.intervals    = [];

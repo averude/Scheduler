@@ -47,7 +47,7 @@
         </th>
         <app-table-cell *cellDef="let cell"
                         [cellData]="cell"
-                        [dayTypeMap]="initData.dayTypeMap"
+                        [dayTypeMap]="calendarInitData.commonDataMaps.dayTypeMap"
                         [value]="cell.value"></app-table-cell>
       </ng-container>
 
@@ -56,7 +56,7 @@
             *headerCellDef>
           <app-schedule-table-configuration-menu [enterpriseId]="enterpriseId"
                                                  [departmentId]="departmentId"
-                                                 [initData]="initData"
+                                                 [calendarInitData]="calendarInitData"
                                                  (onChangeHiddenRowVisibility)="changeHiddenRowsVisibility($event)">
           </app-schedule-table-configuration-menu>
         </th>
@@ -100,7 +100,7 @@
       </ng-container>
 
       <ng-container afterDateColumnDef
-                    *ngFor="let ratioColumn of initData.ratioColumns; let i = index">
+                    *ngFor="let ratioColumn of calendarInitData.adminData?.ratioColumns; let i = index">
         <th class="table-sticky-header th-sum"
             *headerCellDef>{{ratioColumn.name}}</th>
         <td class="sum"
@@ -116,6 +116,6 @@
 
 
 <app-schedule-table-context-menu *ngIf="accessRights?.isAdmin"
-                                 [initData]="initData"
+                                 [calendarInitData]="calendarInitData"
                                  [tableData]="tableData"
                                  [isEditableGroups]="isEditable"></app-schedule-table-context-menu>

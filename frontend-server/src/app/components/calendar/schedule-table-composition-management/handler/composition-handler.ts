@@ -1,8 +1,8 @@
 import { Composition } from "../../../../model/composition";
 import { ScheduleRow } from "../../../../model/ui/schedule-table/table-data";
-import { InitialData } from "../../../../model/datasource/initial-data";
 import { Observable } from "rxjs";
 import { RowGroup } from "../../../../lib/ngx-schedule-table/model/data/row-group";
+import { CalendarInitData } from "../../model/calendar-init-data";
 
 export interface CompositionHandler<T extends Composition> {
 
@@ -10,11 +10,11 @@ export interface CompositionHandler<T extends Composition> {
                  rowGroup: RowGroup,
                  row: ScheduleRow,
                  parentRow: ScheduleRow,
-                 initData: InitialData): Observable<any[]>;
+                 calendarInitData: CalendarInitData): Observable<any[]>;
 
   remove(groupData: RowGroup,
          row: ScheduleRow,
-         initData: InitialData,
+         calendarInitData: CalendarInitData,
          compositions: T[]): Observable<any[]>;
 
 }

@@ -1,8 +1,6 @@
 import { Injectable } from "@angular/core";
 import { forkJoin, Observable } from "rxjs";
 import { map, switchMap } from "rxjs/operators";
-import { InitialData } from "../../../model/datasource/initial-data";
-import { toIdMap, toNumMap } from "../utils/scheduler-utility";
 import * as moment from "moment";
 import { PaginationService } from "../../../shared/paginators/pagination.service";
 import { CalendarDaysCalculator } from "../../../services/calculators/calendar-days-calculator";
@@ -11,6 +9,7 @@ import { CommonDataService } from "../../../services/http/united/common-data.ser
 import { AdminCommonDataService } from "../../../services/http/united/admin-common-data.service";
 import { CalendarDataService } from "../../../services/http/united/calendar-data.service";
 import { CalendarDataDTO } from "../../../model/dto/united/calendar-data-dto";
+import { CalendarInitData } from "../model/calendar-init-data";
 
 @Injectable()
 export class ScheduleTableDataSource {
@@ -24,7 +23,7 @@ export class ScheduleTableDataSource {
 
   byDepartmentId(enterpriseId: number,
                  departmentId: number,
-                 role: UserAccountRole): Observable<InitialData> {
+                 role: UserAccountRole): Observable<CalendarInitData> {
     const obs: Observable<any>[] = [
       this.commonDataService.getByEnterpriseIdAndDepartmentId(enterpriseId, departmentId)
     ];
@@ -46,7 +45,7 @@ export class ScheduleTableDataSource {
   byShiftIds(enterpriseId: number,
              departmentId: number,
              shiftIds: number[],
-             role: UserAccountRole): Observable<InitialData> {
+             role: UserAccountRole): Observable<CalendarInitData> {
     const obs: Observable<any>[] = [
       this.commonDataService.getByEnterpriseIdAndDepartmentId(enterpriseId, departmentId)
     ];
@@ -67,23 +66,17 @@ export class ScheduleTableDataSource {
   }
 
   private getData(obs: Observable<any>[],
-                  onPaginationFn: (startDate, endDate) => Observable<CalendarDataDTO>): Observable<InitialData> {
+                  onPaginationFn: (startDate, endDate) => Observable<CalendarDataDTO>): Observable<CalendarInitData> {
     return forkJoin(obs)
       .pipe(
         map(([commonData, adminCommonData]) => {
-          const initData = new InitialData();
-          initData.dayTypeMap         = toIdMap(commonData.dayTypes);
-          initData.positions          = commonData.positions;
-          initData.positionMap        = toIdMap(commonData.positions);
-          initData.shifts             = commonData.shifts;
-          initData.employees          = commonData.employees;
-          initData.employeeMap        = toIdMap(commonData.employees);
-          initData.ratioColumns       = adminCommonData?.ratioColumns;
-          initData.patternDTOs        = adminCommonData?.patternDTOs;
-          initData.departmentDayTypes = adminCommonData?.departmentDayTypes;
-          return initData;
+          const calendarInitData = new CalendarInitData();
+          calendarInitData.setCommonDataMaps(commonData);
+          calendarInitData.commonData = commonData;
+          calendarInitData.adminData  = adminCommonData;
+          return calendarInitData;
         }),
-        switchMap((initData) =>
+        switchMap((calendarInitData: CalendarInitData) =>
           this.paginationService.onValueChange
             .pipe(
               switchMap((dateInterval) => {
@@ -91,18 +84,16 @@ export class ScheduleTableDataSource {
                 const startDate = dateInterval.from;
                 const endDate = dateInterval.to;
 
-                initData.from = moment.utc(startDate);
-                initData.to = moment.utc(endDate);
+                calendarInitData.from = moment.utc(startDate);
+                calendarInitData.to = moment.utc(endDate);
 
                 return onPaginationFn(startDate, endDate).pipe(
                   map((calendarData) => {
-                    initData.scheduleDTOs = calendarData.schedule;
-                    initData.scheduleDTOMap = toNumMap(calendarData.schedule, value => value.employeeId);
-                    initData.workingNormsMap = toNumMap(calendarData.workingNorms, value => value.shiftId);
-                    initData.specialCalendarDates = calendarData.specialCalendarDates;
-                    initData.calendarDays = this.calendarDaysCalculator
-                      .calculateCalendarDays(initData.from, initData.to, calendarData.specialCalendarDates);
-                    return initData;
+                    calendarInitData.calendarData = calendarData;
+                    calendarInitData.setCalendarDataMaps(calendarData);
+                    calendarInitData.calendarDays = this.calendarDaysCalculator
+                      .calculateCalendarDays(calendarInitData.from, calendarInitData.to, calendarData.specialCalendarDates);
+                    return calendarInitData;
                   })
                 );
               })

@@ -8,7 +8,7 @@ import { CellCollector } from "../../../../shared/collectors/cell-collector";
 import { Injectable } from "@angular/core";
 import { RowGroup } from "../../../../lib/ngx-schedule-table/model/data/row-group";
 import { WorkDay } from "../../../../model/workday";
-import { InitialData } from "../../../../model/datasource/initial-data";
+import { CalendarInitData } from "../../model/calendar-init-data";
 
 @Injectable()
 export class TableRowProcessor {
@@ -18,13 +18,13 @@ export class TableRowProcessor {
 
   insertNewOrUpdateExistingRow(group: RowGroup,
                                dto: EmployeeScheduleDTO,
-                               initData: InitialData,
+                               calendarInitData: CalendarInitData,
                                composition: Composition,
                                position:    Position,
                                workingNorm: number,
                                isSubstitution: boolean): ScheduleRow {
     const value = new ScheduleRowValue();
-    value.employee = initData.employeeMap.get(dto.employeeId);
+    value.employee = calendarInitData.commonDataMaps.employeeMap.get(dto.employeeId);
     value.position = position;
     value.compositions = [composition];
     value.isSubstitution = isSubstitution;
@@ -36,7 +36,7 @@ export class TableRowProcessor {
       rowValue.compositions.sort((a, b) => a.from.diff(b.from));
     }));
 
-    result.cells = this.cellCollector.collect<WorkDay, ScheduleCell>(initData.calendarDays, dto.workDays, false);
+    result.cells = this.cellCollector.collect<WorkDay, ScheduleCell>(calendarInitData.calendarDays, dto.workDays, false);
     result.cells.forEach((cell: ScheduleCell) => cell.parent = result);
 
     return result;

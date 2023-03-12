@@ -1,8 +1,8 @@
 import { ScheduleTableDataSource } from "../schedule-table.data-source";
 import { UserAccountDTO, UserAccountLevel } from "../../../../model/dto/user-account-dto";
 import { Observable } from "rxjs";
-import { InitialData } from "../../../../model/datasource/initial-data";
 import { AccountLevelHandler } from "./account-level-handler";
+import { CalendarInitData } from "../../model/calendar-init-data";
 
 export class DepartmentAccountLevelHandler implements AccountLevelHandler {
 
@@ -11,7 +11,7 @@ export class DepartmentAccountLevelHandler implements AccountLevelHandler {
 
   getInitialData(enterpriseId: number,
                  departmentId: number,
-                 userAccount: UserAccountDTO): Observable<InitialData> {
+                 userAccount: UserAccountDTO): Observable<CalendarInitData> {
     if (userAccount.level === UserAccountLevel.DEPARTMENT
       && userAccount.enterpriseId === enterpriseId
       && userAccount.departmentIds.indexOf(departmentId) >= 0) {

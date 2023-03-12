@@ -20,11 +20,11 @@ import { ActivatedRoute } from "@angular/router";
 import { filter, map, switchMap } from "rxjs/operators";
 import { ToolbarTemplateService } from "../../../services/top-bar/toolbar-template.service";
 import { Options } from "../../../lib/ngx-schedule-table/model/options";
-import { InitialData } from "../../../model/datasource/initial-data";
 import { TableData } from "../../../lib/ngx-schedule-table/model/data/table";
 import { RowGroup } from "../../../lib/ngx-schedule-table/model/data/row-group";
 import { fadeOutAnimation } from "../utils/animations";
 import { DataSourceFacade } from "../data-sources/data-source.facade";
+import { CalendarInitData } from "../model/calendar-init-data";
 
 @Component({
   animations: [fadeOutAnimation],
@@ -50,8 +50,8 @@ export class ScheduleTableComponent implements OnInit, AfterViewInit, OnDestroy 
   @ViewChild('paginator', { read: TemplateRef })
   paginator: TemplateRef<any>;
 
-  initData:   InitialData;
-  tableData:  TableData;
+  calendarInitData: CalendarInitData;
+  tableData:        TableData;
 
   private routeSub:         Subscription;
   private rowRenderSub:     Subscription;
@@ -90,9 +90,9 @@ export class ScheduleTableComponent implements OnInit, AfterViewInit, OnDestroy 
           }
         })
       )
-      .subscribe(([initData, tableData]: [InitialData, TableData]) => {
+      .subscribe(([initData, tableData]: [CalendarInitData, TableData]) => {
         this.proxyViewIsShown = false;
-        this.initData = initData;
+        this.calendarInitData = initData;
         this.tableData = tableData;
         this.cd.detectChanges();
       });
@@ -163,13 +163,13 @@ export class ScheduleTableComponent implements OnInit, AfterViewInit, OnDestroy 
     event.stopPropagation();
 
     if (this.isAble && this.isEditable) {
-      this.tableManager.newRow(rowGroup, this.initData);
+      this.tableManager.newRow(rowGroup, this.calendarInitData);
     }
   }
 
   updateRow(rowData) {
     if (this.isRowEditable(rowData)) {
-      this.tableManager.editRow(rowData, this.initData);
+      this.tableManager.editRow(rowData, this.calendarInitData);
     }
   }
 

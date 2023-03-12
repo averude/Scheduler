@@ -11,6 +11,7 @@ import * as moment from 'moment';
 import { SidePanelStepperComponent } from "../../../../lib/side-panel-stepper/side-panel-stepper.component";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { CalendarDay } from "../../../../lib/ngx-schedule-table/model/calendar-day";
+import { CalendarInitData } from "../../model/calendar-init-data";
 
 @Component({
   selector: 'app-add-main-composition-dialog',
@@ -46,9 +47,10 @@ export class AddMainCompositionDialogComponent extends DialogBaseComponent<MainC
     super(null, dialogRef);
 
     this.shift        = data.shift;
-    this.employees    = data.initData.employees;
-    this.calendarDays = data.initData.calendarDays;
-    this.positions    = data.initData.positions;
+    const initData: CalendarInitData = data.calendarInitData;
+    this.employees    = initData.commonData.employees;
+    this.calendarDays = initData.calendarDays;
+    this.positions    = initData.commonData.positions;
   }
 
   fillInTheForm(t: MainComposition) {

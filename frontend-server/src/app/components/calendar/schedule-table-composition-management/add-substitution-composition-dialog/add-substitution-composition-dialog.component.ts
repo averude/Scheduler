@@ -7,6 +7,7 @@ import { Employee } from "../../../../model/employee";
 import { MainComposition } from "../../../../model/composition";
 import { MAT_DATE_FORMATS } from "@angular/material/core";
 import { DATE_FORMAT } from "../../../../shared/utils/utils";
+import { CalendarInitData } from "../../model/calendar-init-data";
 
 @Component({
   selector: 'app-add-substitution-composition-dialog',
@@ -36,10 +37,11 @@ export class AddSubstitutionCompositionDialogComponent implements OnInit {
               @Inject(MAT_DIALOG_DATA) data) {
     this.from       = data.from;
     this.to         = data.to;
-    this.shifts     = data.initData.shifts
+    const calendarInitData: CalendarInitData = data.calendarInitData;
+    this.shifts     = calendarInitData.commonData.shifts
       .filter(shift => !shift.hidden)
       .sort((a, b) => b.uiPriority - a.uiPriority);
-    this.positions  = data.initData.positions;
+    this.positions  = calendarInitData.commonData.positions;
     this.employee   = data.employee;
 
     this.mainComposition = data.mainComposition;

@@ -9,7 +9,7 @@ import { TableSumCalculator } from "../../../../services/calculators/table-sum-c
 import { removeFromArray } from "../../../../services/utils";
 import { TableData } from "../../../../lib/ngx-schedule-table/model/data/table";
 import { RowGroup } from "../../../../lib/ngx-schedule-table/model/data/row-group";
-import { InitialData } from "../../../../model/datasource/initial-data";
+import { CalendarInitData } from "../../model/calendar-init-data";
 
 @Injectable()
 export class TableRowRemover {
@@ -22,9 +22,9 @@ export class TableRowRemover {
   removeRow(groupData: RowGroup,
             row: ScheduleRow,
             composition: Composition,
-            initData: InitialData) {
+            calendarInitData: CalendarInitData) {
     const table = groupData.parent;
-    const dto = initData.scheduleDTOMap.get(composition.employeeId);
+    const dto = calendarInitData.calendarDataMaps.scheduleDTOMap.get(composition.employeeId);
 
     if (row.value.isSubstitution) {
       // Remove composition from initial data
@@ -47,7 +47,7 @@ export class TableRowRemover {
     this.tableRenderer.nextRowCommand({
       rowId: row.id,
       command: (rowData: ScheduleRow) => {
-        this.sumCalculator.calculateRow(rowData, dto.mainCompositions, initData);
+        this.sumCalculator.calculateRow(rowData, dto.mainCompositions, calendarInitData);
         this.cellEnabledSetter.processRow(rowData, table.from, table.to)
       }
     });

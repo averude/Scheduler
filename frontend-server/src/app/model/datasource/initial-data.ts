@@ -1,6 +1,5 @@
 import { Shift } from "../shift";
 import { Position } from "../position";
-import { Employee } from "../employee";
 import { EmployeeScheduleDTO } from "../dto/employee-schedule-dto";
 import { WorkingNorm } from "../working-norm";
 import { CalendarDay } from "../../lib/ngx-schedule-table/model/calendar-day";
@@ -9,9 +8,6 @@ import { SpecialCalendarDate } from "../special-calendar-date";
 import { Moment } from "moment";
 import { BasicDTO } from "../dto/basic-dto";
 import { ShiftPattern } from "../shift-pattern";
-import { DepartmentDayType } from "../department-day-type";
-import { PatternUnit } from "../pattern-unit";
-import { RatioColumn } from "../ratio-column";
 
 export class IData {
   dayTypeMap:   Map<number, DayType>;
@@ -25,18 +21,10 @@ export class IData {
   specialCalendarDates: SpecialCalendarDate[];
 }
 
-export class InitialData extends IData {
-  from:               Moment;
-  to:                 Moment;
-  scheduleDTOMap:     Map<number, EmployeeScheduleDTO>;
-  employees:          Employee[];
-  departmentDayTypes: DepartmentDayType[];
-  patternDTOs:        BasicDTO<ShiftPattern, PatternUnit>[];
-  ratioColumns:       RatioColumn[];
-  employeeMap:        Map<number, Employee>;
-}
-
-export class WorkingNormInitialData extends InitialData {
+export class WorkingNormInitialData {
+  shifts:           Shift[];
+  from:             Moment;
+  to:               Moment;
   workingNormDTOs:  BasicDTO<Shift, WorkingNorm>[];
   shiftPatterns:    ShiftPattern[];
 }

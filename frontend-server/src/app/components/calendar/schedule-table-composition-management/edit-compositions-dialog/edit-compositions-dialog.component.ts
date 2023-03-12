@@ -5,6 +5,7 @@ import { Position } from "../../../../model/position";
 import { FormArray, FormBuilder } from "@angular/forms";
 import { MAT_DATE_FORMATS } from "@angular/material/core";
 import { DATE_FORMAT } from "../../../../shared/utils/utils";
+import { CalendarInitData } from "../../model/calendar-init-data";
 
 @Component({
   selector: 'app-edit-compositions-dialog',
@@ -33,7 +34,8 @@ export class EditCompositionsDialogComponent implements OnInit {
     this.compositionForms = this.fb.array([]);
     this.compositions = data.compositions;
     this.employeeName = data.employeeName;
-    this.positions    = data.initData.positions;
+    const calendarInitData: CalendarInitData = data.calendarInitData;
+    this.positions    = calendarInitData.commonData.positions;
   }
 
   ngOnInit(): void {

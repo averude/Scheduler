@@ -1,11 +1,11 @@
 import { Composition } from "../../../model/composition";
 import { TableData } from "../../../lib/ngx-schedule-table/model/data/table";
-import { InitialData } from "../../../model/datasource/initial-data";
 import { EmployeeScheduleDTO } from "../../../model/dto/employee-schedule-dto";
 import { CellCollector } from "../../../shared/collectors/cell-collector";
 import { Injectable } from "@angular/core";
 import { ScheduleCell, ScheduleRow, ScheduleRowValue } from "../../../model/ui/schedule-table/table-data";
 import { WorkDay } from "../../../model/workday";
+import { CalendarInitData } from "../model/calendar-init-data";
 
 @Injectable()
 export class TableRowFiller {
@@ -13,20 +13,20 @@ export class TableRowFiller {
   constructor(private cellCollector: CellCollector) {}
 
   fill<T extends Composition>(table: TableData,
-                              initData: InitialData,
+                              initData: CalendarInitData,
                               dto: EmployeeScheduleDTO,
                               compositions: T[],
                               isSubstitution: boolean,
                               workingNormConsumer: (composition: T) => number) {
     for (const composition of compositions) {
-      const position = initData.positionMap.get(composition.positionId);
+      const position = initData.commonDataMaps.positionMap.get(composition.positionId);
 
       const rowGroup = table.findRowGroup(composition.shiftId);
       if (rowGroup) {
         const workingNorm = workingNormConsumer(composition);
 
         const value           = new ScheduleRowValue();
-        value.employee        = initData.employeeMap.get(dto.employeeId);
+        value.employee        = initData.commonDataMaps.employeeMap.get(dto.employeeId);
         value.position        = position;
         value.compositions    = [composition];
         value.isSubstitution  = isSubstitution;

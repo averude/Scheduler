@@ -4,9 +4,9 @@ import { Row } from "../../lib/ngx-schedule-table/model/data/row";
 import { Composition } from "../../model/composition";
 import { CellEnabledSetter } from "../../shared/collectors/cell-enabled-setter";
 import { TableData } from "../../lib/ngx-schedule-table/model/data/table";
-import { InitialData } from "../../model/datasource/initial-data";
 import { WorkDay } from "../../model/workday";
 import { RatioColumn } from "../../model/ratio-column";
+import { CalendarInitData } from "../../components/calendar/model/calendar-init-data";
 
 @Injectable()
 export class TableSumCalculator {
@@ -32,26 +32,26 @@ export class TableSumCalculator {
   }
 
   calculate(row: Row,
-            initData: InitialData) {
-    const dto = initData.scheduleDTOMap.get(row.id);
-    this.calculateRow(row, dto.mainCompositions, initData);
+            calendarInitData: CalendarInitData) {
+    const dto = calendarInitData.calendarDataMaps.scheduleDTOMap.get(row.id);
+    this.calculateRow(row, dto.mainCompositions, calendarInitData);
   }
 
   calculateRow(row: Row,
                mainCompositions: Composition[],
-               initData: InitialData) {
+               calendarInitData: CalendarInitData) {
     let sum = 0;
     const rowCells = row.cells;
     const rowValue = row.value;
     const workingNorm = rowValue.workingNorm;
 
-    this.cellEnabledSetter.processCells(rowCells, mainCompositions, initData.from, initData.to,
+    this.cellEnabledSetter.processCells(rowCells, mainCompositions, calendarInitData.from, calendarInitData.to,
       (cell => sum += calculateHoursByHasTime(cell.value)));
 
     rowValue.sum = roundToTwo(sum);
     rowValue.diff = roundToTwo(rowValue.sum - workingNorm);
 
-    const ratioColumns: RatioColumn[] = initData.ratioColumns;
+    const ratioColumns: RatioColumn[] = calendarInitData.adminData?.ratioColumns;
     if (ratioColumns) {
       rowValue.userCols = ratioColumns.map(col => {
         const ratioDayTypeId: number = col.dayTypeId;
@@ -59,7 +59,7 @@ export class TableSumCalculator {
         let stsSum = 0;
         const cells = rowCells
           .filter(cell => (<WorkDay> cell.value)?.scheduledDayTypeId === ratioDayTypeId);
-        this.cellEnabledSetter.processCells(cells, mainCompositions, initData.from, initData.to,
+        this.cellEnabledSetter.processCells(cells, mainCompositions, calendarInitData.from, calendarInitData.to,
           (cell => stsSum += calculateHoursByHasTime(cell?.value)));
 
         return roundToTwo((rowValue.sum - stsSum) / workingNorm);

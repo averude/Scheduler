@@ -10,7 +10,7 @@ import { NotificationsService } from "angular2-notifications";
 import { AuthService } from "../../../services/http/auth.service";
 import { UserAccessRights } from "../../../model/user";
 import { GenerationService } from "../../../services/http/generation.service";
-import { InitialData } from "../../../model/datasource/initial-data";
+import { CalendarInitData } from "../model/calendar-init-data";
 
 @Component({
   selector: 'app-schedule-table-configuration-menu',
@@ -21,7 +21,7 @@ export class ScheduleTableConfigurationMenuComponent implements OnInit, OnDestro
 
   @Input() enterpriseId: number;
   @Input() departmentId: number;
-  @Input() initData: InitialData;
+  @Input() calendarInitData: CalendarInitData;
 
   @Output() onChangeHiddenRowVisibility: EventEmitter<boolean> = new EventEmitter<boolean>();
 
@@ -92,7 +92,7 @@ export class ScheduleTableConfigurationMenuComponent implements OnInit, OnDestro
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = false;
     dialogConfig.autoFocus = true;
-    dialogConfig.data = getGenerationUnits(this.initData.shifts.filter(shift => !shift.hidden));
+    dialogConfig.data = getGenerationUnits(this.calendarInitData.commonData.shifts.filter(shift => !shift.hidden));
 
     this.dialog.open(AvrEntityGenerationDialogComponent, dialogConfig)
       .afterClosed()

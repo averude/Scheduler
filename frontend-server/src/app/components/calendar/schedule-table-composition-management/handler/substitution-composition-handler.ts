@@ -4,7 +4,6 @@ import { TableRowRemover } from "../processor/table-row-remover";
 import { TableRowProcessor } from "../processor/table-row-processor.service";
 import { IntervalCreator } from "../../../../services/creator/interval-creator.service";
 import { SubstitutionCompositionService } from "../../../../services/http/substitution-composition.service";
-import { InitialData } from "../../../../model/datasource/initial-data";
 import { Position } from "../../../../model/position";
 import { ScheduleRow } from "../../../../model/ui/schedule-table/table-data";
 import { putSorted } from "../../../../services/utils";
@@ -12,6 +11,7 @@ import { convertCompositionToInterval } from "../../../../model/ui/schedule-tabl
 import { EmployeeScheduleDTO } from "../../../../model/dto/employee-schedule-dto";
 import { AbstractCompositionHandler } from "./abstract-composition-handler";
 import { RowGroup } from "../../../../lib/ngx-schedule-table/model/data/row-group";
+import { CalendarInitData } from "../../model/calendar-init-data";
 
 @Injectable()
 export class SubstitutionCompositionHandler extends AbstractCompositionHandler<SubstitutionComposition> {
@@ -23,19 +23,19 @@ export class SubstitutionCompositionHandler extends AbstractCompositionHandler<S
     super(rowRemover, rowProcessor, intervalCreator, compositionService);
   }
 
-  createRow(initData: InitialData,
+  createRow(calendarInitData: CalendarInitData,
             composition: SubstitutionComposition,
             position: Position,
             group: RowGroup,
             parentRow: ScheduleRow) {
-    if (initData.scheduleDTOMap && initData.calendarDays) {
+    if (calendarInitData.calendarDataMaps.scheduleDTOMap && calendarInitData.calendarDays) {
 
-      const dto = initData.scheduleDTOMap.get(composition.employeeId);
-      const norm = initData.workingNormsMap.get(composition.mainComposition.shiftId)?.hours || 0;
+      const dto = calendarInitData.calendarDataMaps.scheduleDTOMap.get(composition.employeeId);
+      const norm = calendarInitData.calendarDataMaps.workingNormsMap.get(composition.mainComposition.shiftId)?.hours || 0;
 
       putSorted(<SubstitutionComposition>composition, dto.substitutionCompositions);
 
-      const row = this.rowProcessor.insertNewOrUpdateExistingRow(group, dto, initData,
+      const row = this.rowProcessor.insertNewOrUpdateExistingRow(group, dto, calendarInitData,
         composition, position, norm, true);
 
       if (parentRow) {

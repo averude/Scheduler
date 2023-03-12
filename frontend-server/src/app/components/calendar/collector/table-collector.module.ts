@@ -8,9 +8,9 @@ import { DataCollectorModule } from "../../../shared/collectors/data-collector.m
 import { HeaderDataCollectorHandler } from "./handlers/header-data-collector-handler";
 import { BodyDataCollectorHandler } from "./handlers/body-data-collector-handler";
 import { AfterDataCollectedCollectorHandler } from "./handlers/after-data-collected-collector-handler";
-import { CollectorHandler } from "../../../shared/collectors/collector-handler";
+import { ICollectorHandler } from "../../../shared/collectors/collector-handler";
 
-export const SCHEDULE_COLLECTOR_HANDLERS = new InjectionToken<CollectorHandler>('Schedule collector handlers');
+export const SCHEDULE_COLLECTOR_HANDLERS = new InjectionToken<ICollectorHandler>('Schedule collector handlers');
 
 @NgModule({
   imports: [

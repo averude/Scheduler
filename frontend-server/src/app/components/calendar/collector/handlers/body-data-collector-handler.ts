@@ -1,34 +1,34 @@
 import { Injectable } from "@angular/core";
-import { CollectorHandler } from "../../../../shared/collectors/collector-handler";
+import { ICollectorHandler } from "../../../../shared/collectors/collector-handler";
 import { TableRowFiller } from "../table-row-filler";
-import { InitialData } from "../../../../model/datasource/initial-data";
 import { TableData } from "../../../../lib/ngx-schedule-table/model/data/table";
 import { RowGroup } from "../../../../lib/ngx-schedule-table/model/data/row-group";
+import { CalendarInitData } from "../../model/calendar-init-data";
 
 @Injectable()
-export class BodyDataCollectorHandler implements CollectorHandler {
+export class BodyDataCollectorHandler implements ICollectorHandler {
 
   constructor(private rowFiller: TableRowFiller) {
   }
 
-  handle(initData: InitialData, tableData: TableData) {
-    tableData.from = initData.from;
-    tableData.to = initData.to;
+  handle(calendarInitData: CalendarInitData, tableData: TableData) {
+    tableData.from = calendarInitData.from;
+    tableData.to = calendarInitData.to;
 
-    initData.shifts.forEach(shift => {
+    calendarInitData.commonData.shifts.forEach(shift => {
       const group = new RowGroup();
       group.id = shift.id;
       group.value = shift;
       tableData.addGroup(group, (value => value.id - group.id));
     });
 
-    for (let [employeeId, dto] of initData.scheduleDTOMap) {
+    for (let [employeeId, dto] of calendarInitData.calendarDataMaps.scheduleDTOMap) {
 
-      this.rowFiller.fill(tableData, initData, dto, dto.mainCompositions, false,
-        (composition => initData.workingNormsMap.get(composition.shiftId)?.hours || 0));
+      this.rowFiller.fill(tableData, calendarInitData, dto, dto.mainCompositions, false,
+        (composition => calendarInitData.calendarDataMaps.workingNormsMap.get(composition.shiftId)?.hours || 0));
 
-      this.rowFiller.fill(tableData, initData, dto, dto.substitutionCompositions, true,
-        (composition => initData.workingNormsMap.get(composition.mainComposition.shiftId)?.hours || 0))
+      this.rowFiller.fill(tableData, calendarInitData, dto, dto.substitutionCompositions, true,
+        (composition => calendarInitData.calendarDataMaps.workingNormsMap.get(composition.mainComposition.shiftId)?.hours || 0))
     }
   }
 }

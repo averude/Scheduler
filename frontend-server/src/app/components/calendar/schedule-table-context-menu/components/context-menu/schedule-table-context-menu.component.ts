@@ -12,8 +12,8 @@ import { DepartmentDayType } from "../../../../../model/department-day-type";
 import { TableStateService } from "../../../../../lib/ngx-schedule-table/service/table-state.service";
 import { CalendarDay } from "../../../../../lib/ngx-schedule-table/model/calendar-day";
 import { TableManager } from "../../../schedule-table-composition-management/manager/table-manager";
-import { InitialData } from "../../../../../model/datasource/initial-data";
 import { TableData } from "../../../../../lib/ngx-schedule-table/model/data/table";
+import { CalendarInitData } from "../../../model/calendar-init-data";
 
 @Component({
   selector: 'app-schedule-table-context-menu',
@@ -29,29 +29,29 @@ export class ScheduleTableContextMenuComponent implements OnInit, OnDestroy {
   @ViewChild('tableHeaderMenu')
   tableHeaderMenu: ContextMenuComponent;
 
-  private initialData: InitialData;
+  private initialData: CalendarInitData;
 
   serviceDayTypes:     DepartmentDayType[] = [];
   noServiceDepartmentDayTypes: DepartmentDayType[] = [];
 
-  get initData(): InitialData {
+  get calendarInitData(): CalendarInitData {
     return this.initialData;
   }
 
-  @Input() set initData(initData: InitialData) {
-    this.initialData = initData;
+  @Input() set calendarInitData(calendarInitData: CalendarInitData) {
+    this.initialData = calendarInitData;
 
     this.serviceDayTypes = [];
 
-    if (initData) {
-      for (let dayType of initData.dayTypeMap.values()) {
+    if (calendarInitData) {
+      for (let dayType of calendarInitData.commonDataMaps.dayTypeMap.values()) {
         if (dayType.usePreviousValue) {
           this.serviceDayTypes.push({dayType: dayType} as DepartmentDayType);
         }
       }
 
-      this.noServiceDepartmentDayTypes = initData.departmentDayTypes
-        .filter(departmentDayType => !departmentDayType.dayType.usePreviousValue);
+      this.noServiceDepartmentDayTypes = calendarInitData.adminData?.departmentDayTypes
+        ?.filter(departmentDayType => !departmentDayType.dayType.usePreviousValue);
     }
   };
 
@@ -110,7 +110,7 @@ export class ScheduleTableContextMenuComponent implements OnInit, OnDestroy {
     this.dialog.open(CustomDaytypeDialogComponent, config)
       .afterClosed().subscribe(customDay => {
         if (customDay) {
-          this.scheduleGenerationService.generateScheduleByUnit(this.initData, customDay, selectionData);
+          this.scheduleGenerationService.generateScheduleByUnit(this.calendarInitData, customDay, selectionData);
         }
     });
   }
@@ -142,7 +142,7 @@ export class ScheduleTableContextMenuComponent implements OnInit, OnDestroy {
         }
       }
 
-      this.scheduleGenerationService.generateForCells(this.initData, departmentDayType, cells);
+      this.scheduleGenerationService.generateForCells(this.calendarInitData, departmentDayType, cells);
     }
   }
 
@@ -159,11 +159,11 @@ export class ScheduleTableContextMenuComponent implements OnInit, OnDestroy {
   }
 
   byPattern(dto, event, offset) {
-    this.scheduleGenerationService.generateSchedule(this.initData, dto, event, offset);
+    this.scheduleGenerationService.generateSchedule(this.calendarInitData, dto, event, offset);
   }
 
   byDepartmentDayType(departmentDayType, event) {
-    this.scheduleGenerationService.generateScheduleByDepartmentDayType(this.initData, departmentDayType, event);
+    this.scheduleGenerationService.generateScheduleByDepartmentDayType(this.calendarInitData, departmentDayType, event);
   }
 
 }

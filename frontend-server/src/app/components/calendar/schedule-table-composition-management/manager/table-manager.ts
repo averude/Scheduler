@@ -6,7 +6,6 @@ import { SelectionData } from "../../../../lib/ngx-schedule-table/model/selectio
 import { AddSubstitutionCompositionDialogComponent } from "../add-substitution-composition-dialog/add-substitution-composition-dialog.component";
 import { MatDialog } from "@angular/material/dialog";
 import { Injectable } from "@angular/core";
-import { InitialData } from "../../../../model/datasource/initial-data";
 import { filter, switchMap } from "rxjs/operators";
 import { NotificationsService } from "angular2-notifications";
 import { TableRenderer } from "../../../../lib/ngx-schedule-table/service/table-renderer.service";
@@ -17,6 +16,7 @@ import { CompositionHandler } from "../handler/composition-handler";
 import { MainCompositionHandler } from "../handler/main-composition-handler";
 import { SubstitutionCompositionHandler } from "../handler/substitution-composition-handler";
 import { RowGroup } from "../../../../lib/ngx-schedule-table/model/data/row-group";
+import { CalendarInitData } from "../../model/calendar-init-data";
 
 @Injectable()
 export class TableManager {
@@ -30,10 +30,10 @@ export class TableManager {
               private substitutionCompositionHandler: SubstitutionCompositionHandler) {
   }
 
-  newRow(rowGroup: RowGroup, initData: InitialData) {
+  newRow(rowGroup: RowGroup, calendarInitData: CalendarInitData) {
     const data = {
       shift: rowGroup.value,
-      initData: initData
+      calendarInitData: calendarInitData
     };
 
     return this.dialog.open(AddMainCompositionDialogComponent, {data: data})
@@ -41,19 +41,18 @@ export class TableManager {
       .pipe(
         filter(value => !!value),
         switchMap((mainShiftCompositions: MainComposition[]) => this.mainCompositionHandler
-          .createOrUpdate(mainShiftCompositions, rowGroup, null,
-            null, data.initData))
+          .createOrUpdate(mainShiftCompositions, rowGroup, null, null, data.calendarInitData))
       )
       .subscribe(res => {
         this.tableRenderer.renderRowGroup(rowGroup.id);
 
         res.forEach(row => {
           this.cellEnabledSetter.process(row);
-          this.sumCalculator.calculate(row, initData);
+          this.sumCalculator.calculate(row, calendarInitData);
 
           this.tableRenderer.nextRowCommand({
             rowId: row.id,
-            command: (rowData: ScheduleRow) => this.sumCalculator.calculate(rowData, initData)
+            command: (rowData: ScheduleRow) => this.sumCalculator.calculate(rowData, calendarInitData)
           });
         });
 
@@ -61,7 +60,7 @@ export class TableManager {
       });
   }
 
-  editRow(row: ScheduleRow, initData: InitialData) {
+  editRow(row: ScheduleRow, calendarInitData: CalendarInitData) {
     if (!row || !row.parent) {
       return;
     }
@@ -69,7 +68,7 @@ export class TableManager {
     const groupData = row.parent;
     const data = {
       compositions: row.value.compositions,
-      initData: initData,
+      calendarInitData: calendarInitData,
       employeeName: getEmployeeShortName(row.value.employee)
     };
 
@@ -81,13 +80,13 @@ export class TableManager {
 
   }
 
-  addSubstitutionDialog(selectionData: SelectionData, initData: InitialData) {
+  addSubstitutionDialog(selectionData: SelectionData, calendarInitData: CalendarInitData) {
     const mainCompositionRow = <ScheduleRow> selectionData.row;
 
     const data = {
       from: selectionData.selectedCells[0].date.isoString,
       to: selectionData.selectedCells[selectionData.selectedCells.length - 1].date.isoString,
-      initData: initData,
+      calendarInitData: calendarInitData,
       employee: mainCompositionRow.value.employee,
       // TODO: Has to be reworked.
       //  Add ability to check whether date interval of selected data
@@ -103,8 +102,7 @@ export class TableManager {
             const destinationGroup = mainCompositionRow.parent.parent.findRowGroup(value.shiftId);
 
             return this.substitutionCompositionHandler
-              .createOrUpdate([value], destinationGroup, null,
-                mainCompositionRow, data.initData);
+              .createOrUpdate([value], destinationGroup, null, mainCompositionRow, data.calendarInitData);
           }
         })
       )
@@ -116,7 +114,7 @@ export class TableManager {
           // TODO: It seems like this operation isn't needed
           //  because substitution compositions doesn't play any role
           //  in changing overall row sum
-          this.sumCalculator.calculate(row, initData);
+          this.sumCalculator.calculate(row, calendarInitData);
 
           this.tableRenderer.renderRowGroup(row.parent.id);
           this.tableRenderer.nextRowCommand({
@@ -145,20 +143,20 @@ export class TableManager {
           case 'save' : {
 
             compositionHandler
-              .createOrUpdate(compositions, rowGroup, row, null, data.initData)
+              .createOrUpdate(compositions, rowGroup, row, null, data.calendarInitData)
               .subscribe(res => {
 
                 // TODO: Make distinct by id
                 res.forEach(row => {
                   this.cellEnabledSetter.process(row);
-                  this.sumCalculator.calculate(row, data.initData);
+                  this.sumCalculator.calculate(row, data.calendarInitData);
 
                   this.tableRenderer.renderRowGroup(row.parent.id);
                   this.tableRenderer.nextRowCommand({
                     rowId: row.id,
                     command: (rowData: ScheduleRow) => {
                       this.cellEnabledSetter.process(rowData);
-                      this.sumCalculator.calculate(rowData, data.initData);
+                      this.sumCalculator.calculate(rowData, data.calendarInitData);
                     }
                   });
                 });
@@ -170,7 +168,7 @@ export class TableManager {
 
           case 'delete' : {
             compositionHandler
-              .remove(rowGroup, row, data.initData, compositions)
+              .remove(rowGroup, row, data.calendarInitData, compositions)
               .subscribe(res => {
                 this.notificationsService.success('Removed');
               });

@@ -1,12 +1,12 @@
 import { Injectable } from "@angular/core";
-import { CollectorHandler } from "../../../../shared/collectors/collector-handler";
-import { InitialData } from "../../../../model/datasource/initial-data";
+import { ICollectorHandler } from "../../../../shared/collectors/collector-handler";
 import { TableData } from "../../../../lib/ngx-schedule-table/model/data/table";
+import { CalendarInitData } from "../../model/calendar-init-data";
 
 @Injectable()
-export class HeaderDataCollectorHandler implements CollectorHandler {
+export class HeaderDataCollectorHandler implements ICollectorHandler {
 
-  handle(initData: InitialData, tableData: TableData) {
-    tableData.headerData = initData.calendarDays;
+  handle(calendarInitData: CalendarInitData, tableData: TableData) {
+    tableData.headerData = calendarInitData.calendarDays;
   }
 }
