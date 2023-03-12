@@ -1,5 +1,5 @@
 import { CollectorHandler } from "../../../../shared/collectors/collector-handler";
-import { WorkingNormInitialData } from "../../../../model/datasource/initial-data";
+import { WorkingNormInitialData } from "../../model/initial-data";
 import { TableData } from "../../../../lib/ngx-schedule-table/model/data/table";
 import { Injectable } from "@angular/core";
 

@@ -1,7 +1,7 @@
 import { map } from "rxjs/operators";
 import { WorkingNormService } from "../../../services/http/working-norm.service";
 import { forkJoin, Observable } from "rxjs";
-import { WorkingNormInitialData } from "../../../model/datasource/initial-data";
+import { WorkingNormInitialData } from "../model/initial-data";
 import * as moment from "moment";
 import { Injectable } from "@angular/core";
 import { ShiftPatternService } from "../../../services/http/shift-pattern.service";

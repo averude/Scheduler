@@ -20,8 +20,6 @@ export class ReportCellCollector {
                initData: ReportInitialData,
                intervals: RowInterval[]) {
     const calendarDays = initData.calendarDays;
-    const dayTypeMap = initData.dayTypeMap;
-    const useReportLabel = initData.useReportLabel;
 
     const cells = this.cellCollector.collectByFn(calendarDays, dto.workDays, (date => {
       const cell = {date: date} as ReportCellValue;

@@ -29,7 +29,7 @@ import { filter, map, switchMap } from "rxjs/operators";
 import { Options } from "../../../lib/ngx-schedule-table/model/options";
 import { TableData } from "../../../lib/ngx-schedule-table/model/data/table";
 import { WorkingNormDataSource } from "../data-source/working-norm.data-source";
-import { WorkingNormInitialData } from "../../../model/datasource/initial-data";
+import { WorkingNormInitialData } from "../model/initial-data";
 import { PaginationService } from "../../../shared/paginators/pagination.service";
 import { TableDataCollector } from "../../../shared/collectors/table-data-collector";
 import { WORKING_NORM_COLLECTOR_HANDLERS } from "../collector/working-norm-collector.module";
