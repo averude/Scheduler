@@ -1,12 +1,6 @@
 import { Injectable } from "@angular/core";
-import { SpecialCalendarDateService } from "../../../services/http/special-calendar-date.service";
-import { ScheduleService } from "../../../services/http/schedule.service";
-import { DayTypeService } from "../../../services/http/day-type.service";
 import { ReportSheetDTOService } from "../../../services/http/report-sheet-dto.service";
-import { ShiftService } from "../../../services/http/shift.service";
-import { PositionService } from "../../../services/http/position.service";
 import { StatisticsService } from "../../../services/http/statistics.service";
-import { WorkingNormService } from "../../../services/http/working-norm.service";
 import { forkJoin, Observable } from "rxjs";
 import { SummationMode } from "../../../model/dto/employee-work-stat-dto";
 import { map } from "rxjs/operators";
@@ -14,35 +8,26 @@ import { ReportInitialData } from "../model/report-initial-data";
 import { toIdMap } from "../../calendar/utils/scheduler-utility";
 import { CalendarDaysCalculator } from "../../../services/calculators/calendar-days-calculator";
 import * as moment from "moment";
-import { EmployeeService } from "../../../services/http/employee.service";
+import { CalendarDataService } from "../../../services/http/united/calendar-data.service";
+import { CommonDataService } from "../../../services/http/united/common-data.service";
 
 @Injectable()
 export class ReportDataSource {
 
-  constructor(private specialCalendarDateService: SpecialCalendarDateService,
-              private calendarDaysCalculator: CalendarDaysCalculator,
-              private scheduleService: ScheduleService,
-              private dayTypeService: DayTypeService,
+  constructor(private calendarDaysCalculator: CalendarDaysCalculator,
               private reportSheetDTOService: ReportSheetDTOService,
-              private shiftService: ShiftService,
-              private positionService: PositionService,
-              private employeeService: EmployeeService,
               private statisticsService: StatisticsService,
-              private workingNormService: WorkingNormService){}
+              private commonDataService: CommonDataService,
+              private calendarDataService: CalendarDataService){}
 
   byDepartmentId(enterpriseId: number,
                  departmentId: number,
                  from: string,
                  to: string): Observable<ReportInitialData> {
     const sources: Observable<any>[] = [
-      this.scheduleService.getAllByDepartmentId(departmentId, from, to),
-      this.workingNormService.getAllByDepartmentId(departmentId, from, to),
-      this.specialCalendarDateService.getAllByEnterpriseId(enterpriseId, from, to),
+      this.calendarDataService.getByEnterpriseIdAndDepartmentIdAndDate(enterpriseId, departmentId, from, to),
       this.statisticsService.getSummationDTOMapByDepartmentId(SummationMode.PER_POSITION, enterpriseId, departmentId, from, to,),
-      this.dayTypeService.getMapByEnterpriseId(enterpriseId),
-      this.shiftService.getAllByDepartmentId(departmentId),
-      this.positionService.getAllByDepartmentId(departmentId),
-      this.employeeService.getAllByDepartmentId(departmentId),
+      this.commonDataService.getByEnterpriseIdAndDepartmentId(enterpriseId, departmentId),
       this.reportSheetDTOService.getAllByDepartmentId(departmentId)
     ];
 
@@ -55,14 +40,9 @@ export class ReportDataSource {
              from:          string,
              to:            string): Observable<ReportInitialData> {
     const sources: Observable<any>[] = [
-      this.scheduleService.getAllByShiftIds(shiftIds, from, to),
-      this.workingNormService.getAllByDepartmentId(departmentId, from, to),
-      this.specialCalendarDateService.getAllByEnterpriseId(enterpriseId, from, to),
+      this.calendarDataService.getByEnterpriseIdAndDepartmentIdAndShiftIdsAndDate(enterpriseId, departmentId, shiftIds, from, to),
       this.statisticsService.getSummationDTOMapByShiftIds(SummationMode.PER_POSITION, enterpriseId, departmentId, shiftIds, from, to,),
-      this.dayTypeService.getMapByEnterpriseId(enterpriseId),
-      this.shiftService.getAllByShiftIds(shiftIds),
-      this.positionService.getAllByDepartmentId(departmentId),
-      this.employeeService.getAllByDepartmentId(departmentId)
+      this.commonDataService.getByEnterpriseIdAndDepartmentId(enterpriseId, departmentId),
     ];
 
     return this.getObservable(from, to, sources);
@@ -73,27 +53,20 @@ export class ReportDataSource {
                         sources: Observable<any>[]): Observable<ReportInitialData> {
     return forkJoin(sources)
       .pipe(
-        map((
-          [
-            schedule, workingNorms,
-            specialCalendarDates,
-            summationDTOMap, dayTypeMap, shifts,
-            positions, employees, reportSheets
-          ]
-          ) => (
+        map(([calendarData, summationDTOMap, commonData, reportSheets]) => (
                {
-                 scheduleDTOs: schedule,
-                 workingNorms: workingNorms,
+                 scheduleDTOs: calendarData.schedule,
+                 workingNorms: calendarData.workingNorms,
                  summationDTOMap: summationDTOMap,
-                 dayTypeMap: dayTypeMap,
-                 shifts: shifts.filter(shift => !shift.hidden),
-                 positions: positions,
-                 positionMap: toIdMap(positions),
-                 employeeMap: toIdMap(employees),
+                 dayTypeMap: toIdMap(commonData.dayTypes),
+                 shifts: commonData.shifts.filter(shift => !shift.hidden),
+                 positions: commonData.positions,
+                 positionMap: toIdMap(commonData.positions),
+                 employeeMap: toIdMap(commonData.employees),
                  reportSheets: reportSheets,
-                 specialCalendarDates: specialCalendarDates,
+                 specialCalendarDates: calendarData.specialCalendarDates,
                  calendarDays: this.calendarDaysCalculator
-                   .calculateCalendarDays(moment.utc(from), moment.utc(to), specialCalendarDates)
+                   .calculateCalendarDays(moment.utc(from), moment.utc(to), calendarData.specialCalendarDates)
                } as ReportInitialData
           )
         )
