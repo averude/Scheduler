@@ -1,7 +1,7 @@
 import { RowGroup, TableSortingStrategy } from "../../lib/ngx-schedule-table/model/data/row-group";
 import { Row } from "../../lib/ngx-schedule-table/model/data/row";
 import { binarySearch, binarySearchInsertIndex } from "../../lib/ngx-schedule-table/utils/collection-utils";
-import { ScheduleRowValue } from "../../model/ui/schedule-table/table-data";
+import { ScheduleRowValue } from "../../components/calendar/model/table-data";
 import { Shift } from "../../model/shift";
 import { Injectable } from "@angular/core";
 

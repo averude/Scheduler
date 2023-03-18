@@ -1,6 +1,6 @@
 import { FilteringStrategy } from "../../../lib/ngx-schedule-table/model/data/filtering-strategy";
 import { TableData } from "../../../lib/ngx-schedule-table/model/data/table";
-import { ScheduleRow } from "../../../model/ui/schedule-table/table-data";
+import { ScheduleRow } from "../model/table-data";
 import { Injectable } from "@angular/core";
 
 @Injectable()

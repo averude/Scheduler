@@ -1,4 +1,4 @@
-import { TableCellComponent } from "../table-cell/table-cell.component";
+import { TableCellComponent } from "../components/table-cell/table-cell.component";
 import { DayType } from "../../../model/day-type";
 import { WorkDay } from "../../../model/workday";
 import { calculateHoursByHasTime, getWorkDayDayTypeId } from "../../../shared/utils/utils";

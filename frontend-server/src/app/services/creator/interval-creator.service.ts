@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Composition, MainComposition, SubstitutionComposition } from "../../model/composition";
 import { convertCompositionToInterval, RowInterval } from "../../model/ui/schedule-table/row-interval";
-import { ScheduleRow } from "../../model/ui/schedule-table/table-data";
+import { ScheduleRow } from "../../components/calendar/model/table-data";
 import { EmployeeScheduleDTO } from "../../model/dto/employee-schedule-dto";
 import { Moment } from "moment";
 

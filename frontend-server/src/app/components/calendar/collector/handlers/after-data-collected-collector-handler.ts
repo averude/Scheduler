@@ -4,7 +4,7 @@ import { IntervalCreator } from "../../../../services/creator/interval-creator.s
 import { TableSumCalculator } from "../../../../services/calculators/table-sum-calculator.service";
 import { CellEnabledSetter } from "../../../../shared/collectors/cell-enabled-setter";
 import { TableData } from "../../../../lib/ngx-schedule-table/model/data/table";
-import { ScheduleRow } from "../../../../model/ui/schedule-table/table-data";
+import { ScheduleRow } from "../../model/table-data";
 import { convertCompositionToInterval } from "../../../../model/ui/schedule-table/row-interval";
 import { CalendarInitData } from "../../model/calendar-init-data";
 

@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { Employee } from "../../../model/employee";
 import { getEmployeeShortName } from "../../../shared/utils/utils";
 import { IdEntity } from "../../../model/interface/id-entity";
-import { ScheduleCell } from "../../../model/ui/schedule-table/table-data";
+import { ScheduleCell } from "../model/table-data";
 import { WorkDay } from "../../../model/workday";
 
 @Injectable()

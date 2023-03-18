@@ -3,7 +3,7 @@ import { TableData } from "../../../lib/ngx-schedule-table/model/data/table";
 import { EmployeeScheduleDTO } from "../../../model/dto/employee-schedule-dto";
 import { CellCollector } from "../../../shared/collectors/cell-collector";
 import { Injectable } from "@angular/core";
-import { ScheduleCell, ScheduleRow, ScheduleRowValue } from "../../../model/ui/schedule-table/table-data";
+import { ScheduleCell, ScheduleRow, ScheduleRowValue } from "../model/table-data";
 import { WorkDay } from "../../../model/workday";
 import { CalendarInitData } from "../model/calendar-init-data";
 

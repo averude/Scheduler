@@ -1,4 +1,4 @@
-import { ScheduleRow } from "../../model/ui/schedule-table/table-data";
+import { ScheduleRow } from "../../components/calendar/model/table-data";
 import { Moment } from "moment";
 import { Injectable } from "@angular/core";
 import { HasDuration } from "../../model/composition";
