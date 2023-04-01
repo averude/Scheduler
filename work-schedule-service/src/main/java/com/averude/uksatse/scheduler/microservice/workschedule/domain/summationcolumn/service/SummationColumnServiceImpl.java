@@ -2,8 +2,8 @@ package com.averude.uksatse.scheduler.microservice.workschedule.domain.summation
 
 import com.averude.uksatse.scheduler.core.model.entity.SummationColumn;
 import com.averude.uksatse.scheduler.core.model.entity.SummationColumnDayTypeRange;
-import com.averude.uksatse.scheduler.microservice.workschedule.repository.SummationColumnDayTypeRangeRepository;
-import com.averude.uksatse.scheduler.microservice.workschedule.repository.SummationColumnRepository;
+import com.averude.uksatse.scheduler.microservice.workschedule.shared.repository.SummationColumnDayTypeRangeRepository;
+import com.averude.uksatse.scheduler.microservice.workschedule.shared.repository.SummationColumnRepository;
 import com.averude.uksatse.scheduler.microservice.workschedule.shared.service.AByEnterpriseIdDtoService;
 import com.averude.uksatse.scheduler.microservice.workschedule.shared.utils.BasicDtoSavingUtil;
 import org.springframework.stereotype.Service;

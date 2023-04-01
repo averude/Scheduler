@@ -1,17 +1,16 @@
-package com.averude.uksatse.scheduler.microservice.workschedule.repository;
+package com.averude.uksatse.scheduler.microservice.workschedule.shared.repository;
 
 import com.averude.uksatse.scheduler.core.model.entity.Employee;
-import com.averude.uksatse.scheduler.microservice.workschedule.repository.interfaces.IByDepartmentIdRepository;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
 @CacheConfig(cacheNames = "department_employees")
-public interface EmployeeRepository extends IByDepartmentIdRepository<Employee, Long> {
+public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
-    @Override
     List<Employee> findAllByDepartmentId(Long departmentId);
 
     @Cacheable(key = "#departmentId")

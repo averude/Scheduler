@@ -3,8 +3,8 @@ package com.averude.uksatse.scheduler.microservice.workschedule.domain.workingno
 import com.averude.uksatse.scheduler.core.model.dto.BasicDto;
 import com.averude.uksatse.scheduler.core.model.entity.WorkingNorm;
 import com.averude.uksatse.scheduler.core.model.entity.structure.Shift;
-import com.averude.uksatse.scheduler.microservice.workschedule.repository.ShiftRepository;
-import com.averude.uksatse.scheduler.microservice.workschedule.repository.WorkingNormRepository;
+import com.averude.uksatse.scheduler.microservice.workschedule.shared.repository.ShiftRepository;
+import com.averude.uksatse.scheduler.microservice.workschedule.shared.repository.WorkingNormRepository;
 import com.averude.uksatse.scheduler.microservice.workschedule.shared.service.AService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

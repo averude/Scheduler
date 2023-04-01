@@ -1,7 +1,7 @@
-package com.averude.uksatse.scheduler.microservice.workschedule.repository;
+package com.averude.uksatse.scheduler.microservice.workschedule.shared.repository;
 
 import com.averude.uksatse.scheduler.core.model.entity.SummationColumnDayTypeRange;
-import com.averude.uksatse.scheduler.microservice.workschedule.repository.interfaces.IByEnterpriseIdRepository;
+import com.averude.uksatse.scheduler.microservice.workschedule.shared.repository.interfaces.IByEnterpriseIdRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.QueryHints;
 

@@ -1,9 +1,9 @@
 package com.averude.uksatse.scheduler.microservice.workschedule.domain.enterprise.service;
 
 import com.averude.uksatse.scheduler.core.model.entity.structure.Enterprise;
-import com.averude.uksatse.scheduler.microservice.workschedule.repository.EnterpriseRepository;
 import com.averude.uksatse.scheduler.microservice.workschedule.shared.manager.ScheduleTablePartitionManager;
 import com.averude.uksatse.scheduler.microservice.workschedule.shared.manager.TablePartitionManager;
+import com.averude.uksatse.scheduler.microservice.workschedule.shared.repository.EnterpriseRepository;
 import com.averude.uksatse.scheduler.microservice.workschedule.shared.service.AService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

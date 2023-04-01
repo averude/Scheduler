@@ -1,10 +1,10 @@
-package com.averude.uksatse.scheduler.microservice.workschedule.security;
+package com.averude.uksatse.scheduler.microservice.workschedule.shared.security;
 
 import com.averude.uksatse.scheduler.core.interfaces.entity.Composition;
 import com.averude.uksatse.scheduler.core.model.entity.MainComposition;
 import com.averude.uksatse.scheduler.core.model.entity.WorkDay;
-import com.averude.uksatse.scheduler.microservice.workschedule.repository.MainCompositionRepository;
-import com.averude.uksatse.scheduler.microservice.workschedule.repository.SubstitutionCompositionRepository;
+import com.averude.uksatse.scheduler.microservice.workschedule.shared.repository.MainCompositionRepository;
+import com.averude.uksatse.scheduler.microservice.workschedule.shared.repository.SubstitutionCompositionRepository;
 import com.averude.uksatse.scheduler.security.details.UserLevels;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;

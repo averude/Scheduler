@@ -1,18 +1,17 @@
-package com.averude.uksatse.scheduler.microservice.workschedule.repository;
+package com.averude.uksatse.scheduler.microservice.workschedule.shared.repository;
 
 import com.averude.uksatse.scheduler.core.model.entity.SpecialCalendarDate;
-import com.averude.uksatse.scheduler.microservice.workschedule.repository.interfaces.IByEnterpriseIdAndDateRepository;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.QueryHints;
 
 import javax.persistence.QueryHint;
 import java.time.LocalDate;
 import java.util.List;
 
-public interface SpecialCalendarDateRepository extends IByEnterpriseIdAndDateRepository<SpecialCalendarDate, Long> {
+public interface SpecialCalendarDateRepository extends JpaRepository<SpecialCalendarDate, Long> {
 
-    @Override
     @QueryHints(value = {
             @QueryHint(name = org.hibernate.annotations.QueryHints.READ_ONLY, value = "true")
     }, forCounting = false)

@@ -1,7 +1,7 @@
 package com.averude.uksatse.scheduler.microservice.workschedule.domain.shift.service;
 
 import com.averude.uksatse.scheduler.core.model.entity.structure.Shift;
-import com.averude.uksatse.scheduler.microservice.workschedule.repository.ShiftRepository;
+import com.averude.uksatse.scheduler.microservice.workschedule.shared.repository.ShiftRepository;
 import com.averude.uksatse.scheduler.microservice.workschedule.shared.service.AService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

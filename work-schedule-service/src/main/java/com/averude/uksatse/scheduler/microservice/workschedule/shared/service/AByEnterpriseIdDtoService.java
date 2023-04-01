@@ -4,7 +4,7 @@ import com.averude.uksatse.scheduler.core.interfaces.service.IByEnterpriseIdDtoS
 import com.averude.uksatse.scheduler.core.interfaces.service.IByEnterpriseIdService;
 import com.averude.uksatse.scheduler.core.interfaces.service.IDtoService;
 import com.averude.uksatse.scheduler.core.model.dto.BasicDto;
-import com.averude.uksatse.scheduler.microservice.workschedule.repository.interfaces.IByEnterpriseIdRepository;
+import com.averude.uksatse.scheduler.microservice.workschedule.shared.repository.interfaces.IByEnterpriseIdRepository;
 import com.averude.uksatse.scheduler.microservice.workschedule.shared.utils.BasicDtoSavingUtil;
 import org.springframework.transaction.annotation.Transactional;
 

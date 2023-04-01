@@ -12,8 +12,8 @@ import com.averude.uksatse.scheduler.microservice.workschedule.domain.statistics
 import com.averude.uksatse.scheduler.microservice.workschedule.domain.statistics.calculator.StatisticsCalculator;
 import com.averude.uksatse.scheduler.microservice.workschedule.domain.statistics.exceptions.UnsupportedSummationCalculationModeException;
 import com.averude.uksatse.scheduler.microservice.workschedule.domain.workschedule.service.ScheduleService;
-import com.averude.uksatse.scheduler.microservice.workschedule.repository.SpecialCalendarDateRepository;
-import com.averude.uksatse.scheduler.microservice.workschedule.repository.SummationColumnRepository;
+import com.averude.uksatse.scheduler.microservice.workschedule.shared.repository.SpecialCalendarDateRepository;
+import com.averude.uksatse.scheduler.microservice.workschedule.shared.repository.SummationColumnRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -32,7 +32,7 @@ public class EmployeeWorkStatServiceImpl implements EmployeeWorkStatService {
 
     private final StatisticsCalculator          statisticsCalculator;
     private final SummationColumnRepository     summationColumnRepository;
-    private final ScheduleService scheduleService;
+    private final ScheduleService               scheduleService;
     private final SpecialCalendarDateRepository specialCalendarDateRepository;
     private final CountMapBuilder               countMapBuilder;
     private final PositionIntervalMapBuilder    intervalMapBuilder;

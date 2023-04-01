@@ -1,4 +1,4 @@
-package com.averude.uksatse.scheduler.microservice.workschedule.repository.interfaces;
+package com.averude.uksatse.scheduler.microservice.workschedule.shared.repository.interfaces;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.NoRepositoryBean;

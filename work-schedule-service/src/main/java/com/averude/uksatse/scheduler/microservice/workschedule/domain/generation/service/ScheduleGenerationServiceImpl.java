@@ -8,7 +8,7 @@ import com.averude.uksatse.scheduler.core.model.entity.WorkDay;
 import com.averude.uksatse.scheduler.core.model.interval.GenerationInterval;
 import com.averude.uksatse.scheduler.core.util.OffsetCalculator;
 import com.averude.uksatse.scheduler.microservice.workschedule.domain.generation.schedule.ScheduleGenerator;
-import com.averude.uksatse.scheduler.microservice.workschedule.repository.*;
+import com.averude.uksatse.scheduler.microservice.workschedule.shared.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

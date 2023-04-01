@@ -1,7 +1,7 @@
 package com.averude.uksatse.scheduler.microservice.workschedule.domain.position.service;
 
 import com.averude.uksatse.scheduler.core.model.entity.Position;
-import com.averude.uksatse.scheduler.microservice.workschedule.repository.PositionRepository;
+import com.averude.uksatse.scheduler.microservice.workschedule.shared.repository.PositionRepository;
 import com.averude.uksatse.scheduler.microservice.workschedule.shared.service.AService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

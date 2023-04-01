@@ -34,7 +34,7 @@ import org.springframework.web.filter.CorsFilter;
         "com.averude.uksatse.scheduler.microservice.workschedule.shared.utils",
 })
 @EnableJpaRepositories(basePackages = {
-        "com.averude.uksatse.scheduler.microservice.workschedule.repository"
+        "com.averude.uksatse.scheduler.microservice.workschedule.shared.repository"
 })
 public class WorkScheduleServiceApplication {
 

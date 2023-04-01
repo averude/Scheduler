@@ -1,14 +1,17 @@
-package com.averude.uksatse.scheduler.microservice.workschedule.repository;
+package com.averude.uksatse.scheduler.microservice.workschedule.shared.repository;
 
 import com.averude.uksatse.scheduler.core.model.entity.ShiftPattern;
-import com.averude.uksatse.scheduler.microservice.workschedule.repository.interfaces.IByDepartmentIdRepository;
 import org.springframework.data.jpa.repository.EntityGraph;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.QueryHints;
 
 import javax.persistence.QueryHint;
+import java.util.List;
 import java.util.Optional;
 
-public interface ShiftPatternRepository extends IByDepartmentIdRepository<ShiftPattern, Long> {
+public interface ShiftPatternRepository extends JpaRepository<ShiftPattern, Long> {
+
+    List<ShiftPattern> findAllByDepartmentId(Long departmentId);
 
     @QueryHints(value = {
             @QueryHint(name = org.hibernate.annotations.QueryHints.READ_ONLY, value = "true")
