@@ -1,4 +1,4 @@
-package com.averude.uksatse.scheduler.statistics.builder;
+package com.averude.uksatse.scheduler.microservice.workschedule.domain.statistics.builder;
 
 import com.averude.uksatse.scheduler.core.interfaces.entity.HasDate;
 import com.averude.uksatse.scheduler.core.interfaces.entity.HasDateDuration;

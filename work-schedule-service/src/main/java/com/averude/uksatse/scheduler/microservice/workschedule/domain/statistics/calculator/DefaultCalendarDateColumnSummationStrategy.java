@@ -1,14 +1,14 @@
-package com.averude.uksatse.scheduler.statistics.calculator;
+package com.averude.uksatse.scheduler.microservice.workschedule.domain.statistics.calculator;
 
 import com.averude.uksatse.scheduler.core.model.entity.SummationColumn;
 import com.averude.uksatse.scheduler.core.model.entity.SummationColumnDayTypeRange;
 import com.averude.uksatse.scheduler.core.model.wrapper.WorkDayWrapper;
-import com.averude.uksatse.scheduler.statistics.strategy.CalculationStrategy;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.statistics.strategy.CalculationStrategy;
 
 import java.util.List;
 import java.util.Map;
 
-class NoSpecialCalendarDateColumnSummationStrategy implements CalendarDateColumnSummationStrategy {
+class DefaultCalendarDateColumnSummationStrategy implements CalendarDateColumnSummationStrategy {
 
     @Override
     public long getSummationColumnSum(SummationColumn summationColumn,
@@ -18,8 +18,13 @@ class NoSpecialCalendarDateColumnSummationStrategy implements CalendarDateColumn
         long summationColumnSum = 0;
 
         for (var entry : countMap.entrySet()) {
-            var workDay = entry.getKey().getWorkDay();
-            summationColumnSum += calculationStrategy.getSum(workDay, dayTypeRanges) * entry.getValue();
+
+            var wrapper = entry.getKey();
+            if (summationColumn.getSpecialCalendarDateTypes()
+                    .contains(wrapper.getSpecialDateType())) {
+                var workDay = wrapper.getWorkDay();
+                summationColumnSum += calculationStrategy.getSum(workDay, dayTypeRanges) * entry.getValue();
+            }
         }
         return summationColumnSum;
     }

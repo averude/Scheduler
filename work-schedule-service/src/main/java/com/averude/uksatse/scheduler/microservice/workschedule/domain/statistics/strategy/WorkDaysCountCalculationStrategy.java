@@ -1,4 +1,4 @@
-package com.averude.uksatse.scheduler.statistics.strategy;
+package com.averude.uksatse.scheduler.microservice.workschedule.domain.statistics.strategy;
 
 import com.averude.uksatse.scheduler.core.interfaces.entity.HasDayTypeId;
 import com.averude.uksatse.scheduler.core.interfaces.entity.HasTime;

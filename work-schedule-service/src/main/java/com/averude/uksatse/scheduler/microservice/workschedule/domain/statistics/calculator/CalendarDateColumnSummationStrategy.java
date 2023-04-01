@@ -1,9 +1,9 @@
-package com.averude.uksatse.scheduler.statistics.calculator;
+package com.averude.uksatse.scheduler.microservice.workschedule.domain.statistics.calculator;
 
 import com.averude.uksatse.scheduler.core.model.entity.SummationColumn;
 import com.averude.uksatse.scheduler.core.model.entity.SummationColumnDayTypeRange;
 import com.averude.uksatse.scheduler.core.model.wrapper.WorkDayWrapper;
-import com.averude.uksatse.scheduler.statistics.strategy.CalculationStrategy;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.statistics.strategy.CalculationStrategy;
 
 import java.util.List;
 import java.util.Map;

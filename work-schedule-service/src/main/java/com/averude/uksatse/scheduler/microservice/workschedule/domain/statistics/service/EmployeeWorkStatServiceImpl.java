@@ -7,13 +7,13 @@ import com.averude.uksatse.scheduler.core.model.dto.EmployeeWorkStatDTO;
 import com.averude.uksatse.scheduler.core.model.entity.SpecialCalendarDate;
 import com.averude.uksatse.scheduler.core.model.entity.SummationColumn;
 import com.averude.uksatse.scheduler.core.model.interval.GenerationInterval;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.statistics.builder.CountMapBuilder;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.statistics.builder.PositionIntervalMapBuilder;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.statistics.calculator.StatisticsCalculator;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.statistics.exceptions.UnsupportedSummationCalculationModeException;
 import com.averude.uksatse.scheduler.microservice.workschedule.domain.workschedule.service.ScheduleService;
 import com.averude.uksatse.scheduler.microservice.workschedule.repository.SpecialCalendarDateRepository;
 import com.averude.uksatse.scheduler.microservice.workschedule.repository.SummationColumnRepository;
-import com.averude.uksatse.scheduler.statistics.builder.CountMapBuilder;
-import com.averude.uksatse.scheduler.statistics.builder.PositionIntervalMapBuilder;
-import com.averude.uksatse.scheduler.statistics.calculator.StatisticsCalculator;
-import com.averude.uksatse.scheduler.statistics.exceptions.UnsupportedSummationCalculationModeException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

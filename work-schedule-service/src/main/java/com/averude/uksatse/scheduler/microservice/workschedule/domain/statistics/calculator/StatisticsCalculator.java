@@ -1,4 +1,4 @@
-package com.averude.uksatse.scheduler.statistics.calculator;
+package com.averude.uksatse.scheduler.microservice.workschedule.domain.statistics.calculator;
 
 import com.averude.uksatse.scheduler.core.model.dto.SummationResult;
 import com.averude.uksatse.scheduler.core.model.entity.SummationColumn;

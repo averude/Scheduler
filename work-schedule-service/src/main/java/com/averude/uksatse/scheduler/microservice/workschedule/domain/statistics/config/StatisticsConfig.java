@@ -1,6 +1,6 @@
-package com.averude.uksatse.scheduler.statistics.config;
+package com.averude.uksatse.scheduler.microservice.workschedule.domain.statistics.config;
 
-import com.averude.uksatse.scheduler.statistics.strategy.CalculationStrategy;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.statistics.strategy.CalculationStrategy;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
