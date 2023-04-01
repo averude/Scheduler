@@ -1,7 +1,6 @@
 package com.averude.uksatse.scheduler.security.controller.base;
 
 import com.averude.uksatse.scheduler.core.interfaces.entity.HasDepartmentId;
-import com.averude.uksatse.scheduler.shared.repository.DepartmentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -13,7 +12,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.averude.uksatse.scheduler.core.util.CollectionUtils.containsAllLong;
-import static com.averude.uksatse.scheduler.security.details.UserLevels.*;
+import static com.averude.uksatse.scheduler.security.details.UserLevels.DEPARTMENT;
+import static com.averude.uksatse.scheduler.security.details.UserLevels.SHIFT;
 import static com.averude.uksatse.scheduler.security.utils.SecurityUtils.getLongClaim;
 import static com.averude.uksatse.scheduler.security.utils.SecurityUtils.getLongListClaim;
 import static java.util.stream.Collectors.toList;
@@ -23,7 +23,6 @@ import static java.util.stream.Collectors.toList;
 @RequiredArgsConstructor
 public class DepartmentLevelSecurity {
 
-    private final DepartmentRepository      departmentRepository;
     private final AccessMapSecurityChecker  accessMapSecurityChecker;
 
     public boolean hasShiftsPermission(Authentication authentication,
@@ -97,9 +96,10 @@ public class DepartmentLevelSecurity {
                     .anyMatch(accDep -> accDep.equals(departmentId));
         }
 
-        if (level.equals(ENTERPRISE)) {
-            return departmentRepository.existsByEnterpriseIdAndId(enterpriseId, departmentId);
-        }
+// Temporary disabled
+//        if (level.equals(ENTERPRISE)) {
+//            return departmentRepository.existsByEnterpriseIdAndId(enterpriseId, departmentId);
+//        }
 
         log.error("No required level found during check");
         return false;

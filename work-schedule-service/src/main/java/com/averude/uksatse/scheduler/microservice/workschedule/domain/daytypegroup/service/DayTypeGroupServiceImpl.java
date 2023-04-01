@@ -2,7 +2,7 @@ package com.averude.uksatse.scheduler.microservice.workschedule.domain.daytypegr
 
 import com.averude.uksatse.scheduler.core.model.entity.DayTypeGroup;
 import com.averude.uksatse.scheduler.microservice.workschedule.repository.DayTypeGroupRepository;
-import com.averude.uksatse.scheduler.shared.service.AService;
+import com.averude.uksatse.scheduler.microservice.workschedule.shared.service.AService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

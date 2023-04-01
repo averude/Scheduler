@@ -1,7 +1,7 @@
 package com.averude.uksatse.scheduler.microservice.workschedule.repository;
 
 import com.averude.uksatse.scheduler.core.model.entity.DayType;
-import com.averude.uksatse.scheduler.shared.repository.interfaces.IByEnterpriseIdRepository;
+import com.averude.uksatse.scheduler.microservice.workschedule.repository.interfaces.IByEnterpriseIdRepository;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;

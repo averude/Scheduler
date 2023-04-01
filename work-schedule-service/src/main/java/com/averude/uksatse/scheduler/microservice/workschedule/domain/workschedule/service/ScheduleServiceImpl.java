@@ -8,11 +8,11 @@ import com.averude.uksatse.scheduler.core.model.entity.SubstitutionComposition;
 import com.averude.uksatse.scheduler.core.model.entity.WorkDay;
 import com.averude.uksatse.scheduler.core.util.CollectionUtils;
 import com.averude.uksatse.scheduler.microservice.workschedule.repository.EmployeeRepository;
+import com.averude.uksatse.scheduler.microservice.workschedule.repository.MainCompositionRepository;
 import com.averude.uksatse.scheduler.microservice.workschedule.repository.ScheduleRepository;
-import com.averude.uksatse.scheduler.shared.repository.MainCompositionRepository;
-import com.averude.uksatse.scheduler.shared.repository.SubstitutionCompositionRepository;
-import com.averude.uksatse.scheduler.shared.service.AService;
-import com.averude.uksatse.scheduler.shared.utils.DTOUtil;
+import com.averude.uksatse.scheduler.microservice.workschedule.repository.SubstitutionCompositionRepository;
+import com.averude.uksatse.scheduler.microservice.workschedule.shared.service.AService;
+import com.averude.uksatse.scheduler.microservice.workschedule.shared.utils.DTOUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,7 +35,7 @@ public class ScheduleServiceImpl
     private final ScheduleRepository    scheduleRepository;
     private final EmployeeRepository    employeeRepository;
 
-    private final MainCompositionRepository         mainCompositionRepository;
+    private final MainCompositionRepository mainCompositionRepository;
     private final SubstitutionCompositionRepository substitutionCompositionRepository;
 
     @Autowired

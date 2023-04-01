@@ -1,10 +1,10 @@
 package com.averude.uksatse.scheduler.microservice.workschedule.domain.generation.service;
 
-import com.averude.uksatse.scheduler.generator.timenorm.WorkingNormGenerator;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.generation.timenorm.WorkingNormGenerator;
 import com.averude.uksatse.scheduler.microservice.workschedule.repository.ShiftPatternRepository;
+import com.averude.uksatse.scheduler.microservice.workschedule.repository.ShiftRepository;
 import com.averude.uksatse.scheduler.microservice.workschedule.repository.SpecialCalendarDateRepository;
 import com.averude.uksatse.scheduler.microservice.workschedule.repository.WorkingNormRepository;
-import com.averude.uksatse.scheduler.shared.repository.ShiftRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

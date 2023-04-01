@@ -26,8 +26,6 @@
 
     <modules>
         <module>core</module>
-        <module>shared</module>
-        <module>generators</module>
         <module>auth-server</module>
         <module>work-schedule-service</module>
         <module>security</module>

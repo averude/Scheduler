@@ -28,15 +28,12 @@ import org.springframework.web.filter.CorsFilter;
         "com.averude.uksatse.scheduler.core.util",
         "com.averude.uksatse.scheduler.security.logging",
         "com.averude.uksatse.scheduler.core.errorhandler",
-        "com.averude.uksatse.scheduler.statistics",
         "com.averude.uksatse.scheduler.security",
-        "com.averude.uksatse.scheduler.generator",
-        "com.averude.uksatse.scheduler.shared.manager",
-        "com.averude.uksatse.scheduler.shared.service",
-        "com.averude.uksatse.scheduler.shared.utils",
+        "com.averude.uksatse.scheduler.microservice.workschedule.shared.manager",
+        "com.averude.uksatse.scheduler.microservice.workschedule.shared.service",
+        "com.averude.uksatse.scheduler.microservice.workschedule.shared.utils",
 })
 @EnableJpaRepositories(basePackages = {
-        "com.averude.uksatse.scheduler.shared.repository",
         "com.averude.uksatse.scheduler.microservice.workschedule.repository"
 })
 public class WorkScheduleServiceApplication {

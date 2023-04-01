@@ -1,8 +1,8 @@
 package com.averude.uksatse.scheduler.microservice.workschedule.domain.composition.service;
 
 import com.averude.uksatse.scheduler.core.model.entity.MainComposition;
-import com.averude.uksatse.scheduler.shared.repository.MainCompositionRepository;
-import com.averude.uksatse.scheduler.shared.service.AService;
+import com.averude.uksatse.scheduler.microservice.workschedule.repository.MainCompositionRepository;
+import com.averude.uksatse.scheduler.microservice.workschedule.shared.service.AService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

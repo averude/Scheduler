@@ -1,7 +1,7 @@
 package com.averude.uksatse.scheduler.microservice.workschedule.repository;
 
 import com.averude.uksatse.scheduler.core.model.entity.WorkingNorm;
-import com.averude.uksatse.scheduler.shared.repository.interfaces.IByDepartmentIdAndDateRepository;
+import com.averude.uksatse.scheduler.microservice.workschedule.repository.interfaces.IByDepartmentIdAndDateRepository;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.QueryHints;

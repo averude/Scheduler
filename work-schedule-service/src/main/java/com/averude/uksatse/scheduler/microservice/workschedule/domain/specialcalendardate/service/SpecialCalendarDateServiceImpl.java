@@ -2,7 +2,7 @@ package com.averude.uksatse.scheduler.microservice.workschedule.domain.specialca
 
 import com.averude.uksatse.scheduler.core.model.entity.SpecialCalendarDate;
 import com.averude.uksatse.scheduler.microservice.workschedule.repository.SpecialCalendarDateRepository;
-import com.averude.uksatse.scheduler.shared.service.AService;
+import com.averude.uksatse.scheduler.microservice.workschedule.shared.service.AService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
