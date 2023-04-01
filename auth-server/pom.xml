@@ -20,11 +20,6 @@
         </dependency>
         <dependency>
             <groupId>com.averude.uksatse.scheduler</groupId>
-            <artifactId>shared</artifactId>
-            <version>0.2.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.averude.uksatse.scheduler</groupId>
             <artifactId>security</artifactId>
             <version>0.2.0</version>
         </dependency>

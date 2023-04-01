@@ -18,11 +18,6 @@
             <version>0.2.0</version>
         </dependency>
         <dependency>
-            <groupId>com.averude.uksatse.scheduler</groupId>
-            <artifactId>shared</artifactId>
-            <version>0.2.0</version>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-core</artifactId>
         </dependency>
@@ -33,6 +28,10 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-oauth2-jose</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
         </dependency>
 
         <dependency>

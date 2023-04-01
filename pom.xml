@@ -29,7 +29,6 @@
         <module>auth-server</module>
         <module>work-schedule-service</module>
         <module>security</module>
-        <module>test-kit</module>
     </modules>
 
     <dependencyManagement>

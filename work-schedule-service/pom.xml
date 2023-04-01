@@ -79,12 +79,6 @@
             <artifactId>h2</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>com.averude.uksatse.scheduler</groupId>
-            <artifactId>test-kit</artifactId>
-            <version>0.2.0</version>
-            <scope>test</scope>
-        </dependency>
 
         <dependency>
             <groupId>org.springframework.security</groupId>
