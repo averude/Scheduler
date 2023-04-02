@@ -1,6 +1,6 @@
 package com.averude.uksatse.scheduler.microservice.workschedule.domain.composition.controller;
 
-import com.averude.uksatse.scheduler.core.model.entity.SubstitutionComposition;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.composition.entity.SubstitutionComposition;
 import com.averude.uksatse.scheduler.microservice.workschedule.domain.composition.service.SubstitutionCompositionService;
 import com.averude.uksatse.scheduler.security.annotations.IsEnterpriseOrDepartmentAdmin;
 import com.averude.uksatse.scheduler.security.logging.Logged;

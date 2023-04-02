@@ -1,7 +1,7 @@
 package com.averude.uksatse.scheduler.microservice.workschedule.domain.workschedule.controller;
 
-import com.averude.uksatse.scheduler.core.model.dto.EmployeeScheduleDTO;
-import com.averude.uksatse.scheduler.core.model.entity.WorkDay;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.workschedule.dto.EmployeeScheduleDTO;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.workschedule.entity.WorkDay;
 import com.averude.uksatse.scheduler.microservice.workschedule.domain.workschedule.service.ScheduleService;
 import com.averude.uksatse.scheduler.security.logging.Logged;
 import lombok.RequiredArgsConstructor;

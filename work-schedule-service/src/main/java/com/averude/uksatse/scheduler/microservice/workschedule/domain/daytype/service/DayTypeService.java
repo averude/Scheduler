@@ -2,7 +2,7 @@ package com.averude.uksatse.scheduler.microservice.workschedule.domain.daytype.s
 
 import com.averude.uksatse.scheduler.core.interfaces.service.IByEnterpriseIdService;
 import com.averude.uksatse.scheduler.core.interfaces.service.IService;
-import com.averude.uksatse.scheduler.core.model.entity.DayType;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.daytype.entity.DayType;
 
 public interface DayTypeService extends IByEnterpriseIdService<DayType, Long>, IService<DayType, Long> {
 }

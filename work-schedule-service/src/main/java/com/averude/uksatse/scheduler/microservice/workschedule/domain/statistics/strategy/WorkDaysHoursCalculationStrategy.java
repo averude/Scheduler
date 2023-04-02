@@ -1,17 +1,17 @@
 package com.averude.uksatse.scheduler.microservice.workschedule.domain.statistics.strategy;
 
-import com.averude.uksatse.scheduler.core.interfaces.entity.HasDayTypeId;
-import com.averude.uksatse.scheduler.core.interfaces.entity.HasTime;
-import com.averude.uksatse.scheduler.core.interfaces.entity.HasTimeDuration;
-import com.averude.uksatse.scheduler.core.util.TimeCalculator;
+import com.averude.uksatse.scheduler.microservice.workschedule.shared.model.interfaces.HasDayTypeId;
+import com.averude.uksatse.scheduler.microservice.workschedule.shared.model.interfaces.HasTime;
+import com.averude.uksatse.scheduler.microservice.workschedule.shared.model.interfaces.HasTimeDuration;
+import com.averude.uksatse.scheduler.microservice.workschedule.shared.utils.TimeCalculator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-import static com.averude.uksatse.scheduler.core.model.entity.SummationColumnType.HOURS_SUM;
 import static com.averude.uksatse.scheduler.core.util.CollectionUtils.binarySearch;
 import static com.averude.uksatse.scheduler.core.util.CollectionUtils.findMatches;
+import static com.averude.uksatse.scheduler.microservice.workschedule.domain.summationcolumn.entity.SummationColumnType.HOURS_SUM;
 
 @Component
 @RequiredArgsConstructor

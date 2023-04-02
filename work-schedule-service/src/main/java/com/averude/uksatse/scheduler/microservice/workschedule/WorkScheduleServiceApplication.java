@@ -18,20 +18,15 @@ import org.springframework.web.filter.CorsFilter;
 @EnableCaching
 @EnableAspectJAutoProxy
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-@EntityScan("com.averude.uksatse.scheduler.core.model.entity")
+@EntityScan("com.averude.uksatse.scheduler.microservice.workschedule.domain")
 @SpringBootApplication(exclude = UserDetailsServiceAutoConfiguration.class)
 @ComponentScan(basePackages = {
         "com.averude.uksatse.scheduler.microservice.workschedule",
         "com.averude.uksatse.scheduler.core.configuration",
         "com.averude.uksatse.scheduler.core.json",
-        "com.averude.uksatse.scheduler.core.creator",
         "com.averude.uksatse.scheduler.core.util",
-        "com.averude.uksatse.scheduler.security.logging",
         "com.averude.uksatse.scheduler.core.errorhandler",
-        "com.averude.uksatse.scheduler.security",
-        "com.averude.uksatse.scheduler.microservice.workschedule.shared.manager",
-        "com.averude.uksatse.scheduler.microservice.workschedule.shared.service",
-        "com.averude.uksatse.scheduler.microservice.workschedule.shared.utils",
+        "com.averude.uksatse.scheduler.security"
 })
 @EnableJpaRepositories(basePackages = {
         "com.averude.uksatse.scheduler.microservice.workschedule.shared.repository"

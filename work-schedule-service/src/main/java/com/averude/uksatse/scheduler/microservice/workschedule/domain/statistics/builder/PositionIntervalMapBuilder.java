@@ -1,9 +1,9 @@
 package com.averude.uksatse.scheduler.microservice.workschedule.domain.statistics.builder;
 
-import com.averude.uksatse.scheduler.core.creator.GenerationIntervalCreator;
-import com.averude.uksatse.scheduler.core.interfaces.entity.Composition;
-import com.averude.uksatse.scheduler.core.interfaces.entity.HasDateDuration;
-import com.averude.uksatse.scheduler.core.model.interval.GenerationInterval;
+import com.averude.uksatse.scheduler.microservice.workschedule.shared.creator.GenerationIntervalCreator;
+import com.averude.uksatse.scheduler.microservice.workschedule.shared.model.interfaces.Composition;
+import com.averude.uksatse.scheduler.microservice.workschedule.shared.model.interfaces.HasDateDuration;
+import com.averude.uksatse.scheduler.microservice.workschedule.shared.model.interval.GenerationInterval;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -11,7 +11,7 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
-import static com.averude.uksatse.scheduler.core.util.IntervalUtils.intersection;
+import static com.averude.uksatse.scheduler.microservice.workschedule.shared.utils.IntervalUtils.intersection;
 
 @RequiredArgsConstructor
 @Component

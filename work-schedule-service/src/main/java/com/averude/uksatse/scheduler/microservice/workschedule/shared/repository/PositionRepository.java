@@ -1,6 +1,6 @@
 package com.averude.uksatse.scheduler.microservice.workschedule.shared.repository;
 
-import com.averude.uksatse.scheduler.core.model.entity.Position;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.position.entity.Position;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;

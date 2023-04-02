@@ -1,6 +1,6 @@
 package com.averude.uksatse.scheduler.microservice.workschedule.domain.employee.service;
 
-import com.averude.uksatse.scheduler.core.model.entity.Employee;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.employee.entity.Employee;
 import com.averude.uksatse.scheduler.microservice.workschedule.shared.repository.EmployeeRepository;
 import com.averude.uksatse.scheduler.microservice.workschedule.shared.service.AService;
 import org.springframework.beans.factory.annotation.Autowired;

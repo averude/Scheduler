@@ -1,8 +1,8 @@
 package com.averude.uksatse.scheduler.microservice.workschedule.domain.summationcolumn.controller;
 
 import com.averude.uksatse.scheduler.core.model.dto.BasicDto;
-import com.averude.uksatse.scheduler.core.model.entity.SummationColumn;
-import com.averude.uksatse.scheduler.core.model.entity.SummationColumnDayTypeRange;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.summationcolumn.entity.SummationColumn;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.summationcolumn.entity.SummationColumnDayTypeRange;
 import com.averude.uksatse.scheduler.microservice.workschedule.domain.summationcolumn.service.SummationColumnService;
 import com.averude.uksatse.scheduler.security.annotations.IsEnterpriseAdmin;
 import com.averude.uksatse.scheduler.security.logging.Logged;

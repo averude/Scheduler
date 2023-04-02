@@ -1,6 +1,6 @@
 package com.averude.uksatse.scheduler.microservice.workschedule.domain.daytype.controller;
 
-import com.averude.uksatse.scheduler.core.model.entity.DayType;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.daytype.entity.DayType;
 import com.averude.uksatse.scheduler.microservice.workschedule.domain.daytype.service.DayTypeService;
 import com.averude.uksatse.scheduler.security.annotations.IsEnterpriseAdmin;
 import com.averude.uksatse.scheduler.security.logging.Logged;

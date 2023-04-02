@@ -1,8 +1,8 @@
 package com.averude.uksatse.scheduler.microservice.workschedule.domain.statistics.strategy;
 
-import com.averude.uksatse.scheduler.core.interfaces.entity.HasDayTypeId;
-import com.averude.uksatse.scheduler.core.interfaces.entity.HasTime;
-import com.averude.uksatse.scheduler.core.interfaces.entity.HasTimeDuration;
+import com.averude.uksatse.scheduler.microservice.workschedule.shared.model.interfaces.HasDayTypeId;
+import com.averude.uksatse.scheduler.microservice.workschedule.shared.model.interfaces.HasTime;
+import com.averude.uksatse.scheduler.microservice.workschedule.shared.model.interfaces.HasTimeDuration;
 
 import java.util.List;
 

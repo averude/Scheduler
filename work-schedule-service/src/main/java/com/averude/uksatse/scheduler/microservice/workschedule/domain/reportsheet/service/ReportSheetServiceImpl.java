@@ -1,8 +1,8 @@
 package com.averude.uksatse.scheduler.microservice.workschedule.domain.reportsheet.service;
 
-import com.averude.uksatse.scheduler.core.model.dto.ReportSheetDTO;
-import com.averude.uksatse.scheduler.core.model.entity.ReportSheet;
-import com.averude.uksatse.scheduler.core.model.entity.ReportSheetShift;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.reportsheet.dto.ReportSheetDTO;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.reportsheet.entity.ReportSheet;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.reportsheet.entity.ReportSheetShift;
 import com.averude.uksatse.scheduler.microservice.workschedule.shared.repository.ReportSheetRepository;
 import com.averude.uksatse.scheduler.microservice.workschedule.shared.repository.ReportSheetShiftRepository;
 import com.averude.uksatse.scheduler.microservice.workschedule.shared.service.AService;

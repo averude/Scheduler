@@ -1,8 +1,8 @@
 package com.averude.uksatse.scheduler.microservice.workschedule.domain.workingnorm.controller;
 
 import com.averude.uksatse.scheduler.core.model.dto.BasicDto;
-import com.averude.uksatse.scheduler.core.model.entity.WorkingNorm;
-import com.averude.uksatse.scheduler.core.model.entity.structure.Shift;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.shift.entity.Shift;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.workingnorm.entity.WorkingNorm;
 import com.averude.uksatse.scheduler.microservice.workschedule.domain.workingnorm.service.WorkingNormService;
 import com.averude.uksatse.scheduler.security.logging.Logged;
 import lombok.RequiredArgsConstructor;

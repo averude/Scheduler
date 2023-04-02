@@ -2,7 +2,7 @@ package com.averude.uksatse.scheduler.microservice.workschedule.domain.generatio
 
 import org.springframework.stereotype.Component;
 
-import static com.averude.uksatse.scheduler.core.model.entity.SpecialCalendarDateType.EXTRA_WEEKEND;
+import static com.averude.uksatse.scheduler.microservice.workschedule.domain.specialcalendardate.entity.SpecialCalendarDateType.EXTRA_WEEKEND;
 
 @Component
 public class ExtraWeekendPatternRuleProcessor extends SpecialCalendarDatePatternRuleProcessor {

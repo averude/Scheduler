@@ -1,6 +1,6 @@
 package com.averude.uksatse.scheduler.microservice.workschedule.domain.statistics.controller;
 
-import com.averude.uksatse.scheduler.core.model.dto.EmployeeWorkStatDTO;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.statistics.dto.EmployeeWorkStatDTO;
 import com.averude.uksatse.scheduler.microservice.workschedule.domain.statistics.service.EmployeeWorkStatService;
 import com.averude.uksatse.scheduler.security.logging.Logged;
 import lombok.RequiredArgsConstructor;

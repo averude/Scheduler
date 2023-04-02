@@ -1,8 +1,8 @@
 package com.averude.uksatse.scheduler.microservice.workschedule.domain.united.dto;
 
-import com.averude.uksatse.scheduler.core.model.dto.EmployeeScheduleDTO;
-import com.averude.uksatse.scheduler.core.model.entity.SpecialCalendarDate;
-import com.averude.uksatse.scheduler.core.model.entity.WorkingNorm;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.specialcalendardate.entity.SpecialCalendarDate;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.workingnorm.entity.WorkingNorm;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.workschedule.dto.EmployeeScheduleDTO;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

@@ -1,6 +1,6 @@
 package com.averude.uksatse.scheduler.microservice.workschedule.shared.repository;
 
-import com.averude.uksatse.scheduler.core.model.entity.structure.Department;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.department.entity.Department;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

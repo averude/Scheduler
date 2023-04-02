@@ -1,15 +1,15 @@
 package com.averude.uksatse.scheduler.microservice.workschedule.domain.generation.schedule.processor;
 
-import com.averude.uksatse.scheduler.core.model.entity.ShiftPatternGenerationRule;
-import com.averude.uksatse.scheduler.core.model.entity.SpecialCalendarDate;
-import com.averude.uksatse.scheduler.core.model.entity.WorkDay;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.shiftpattern.entity.ShiftPatternGenerationRule;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.specialcalendardate.entity.SpecialCalendarDate;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.workschedule.entity.WorkDay;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
 
-import static com.averude.uksatse.scheduler.core.model.entity.SpecialCalendarDateType.DAY_OF_WEEK;
 import static com.averude.uksatse.scheduler.microservice.workschedule.domain.generation.utils.GenerationUtils.updateWorkDay;
+import static com.averude.uksatse.scheduler.microservice.workschedule.domain.specialcalendardate.entity.SpecialCalendarDateType.DAY_OF_WEEK;
 
 @Component
 public class DayOfWeekPatternRuleProcessor implements PatternRuleProcessor {

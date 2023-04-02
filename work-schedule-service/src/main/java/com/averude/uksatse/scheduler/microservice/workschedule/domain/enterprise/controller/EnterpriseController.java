@@ -1,6 +1,6 @@
 package com.averude.uksatse.scheduler.microservice.workschedule.domain.enterprise.controller;
 
-import com.averude.uksatse.scheduler.core.model.entity.structure.Enterprise;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.enterprise.entity.Enterprise;
 import com.averude.uksatse.scheduler.microservice.workschedule.domain.enterprise.service.EnterpriseService;
 import com.averude.uksatse.scheduler.security.annotations.IsGlobalAdmin;
 import com.averude.uksatse.scheduler.security.logging.Logged;

@@ -1,12 +1,12 @@
 package com.averude.uksatse.scheduler.microservice.workschedule.domain.generation.timenorm;
 
-import com.averude.uksatse.scheduler.core.model.entity.PatternUnit;
-import com.averude.uksatse.scheduler.core.model.entity.ShiftPattern;
-import com.averude.uksatse.scheduler.core.model.entity.SpecialCalendarDate;
-import com.averude.uksatse.scheduler.core.model.entity.WorkingNorm;
-import com.averude.uksatse.scheduler.core.model.entity.structure.Shift;
-import com.averude.uksatse.scheduler.core.util.OffsetCalculator;
-import com.averude.uksatse.scheduler.core.util.TimeCalculator;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.shift.entity.Shift;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.shiftpattern.entity.PatternUnit;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.shiftpattern.entity.ShiftPattern;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.specialcalendardate.entity.SpecialCalendarDate;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.workingnorm.entity.WorkingNorm;
+import com.averude.uksatse.scheduler.microservice.workschedule.shared.utils.OffsetCalculator;
+import com.averude.uksatse.scheduler.microservice.workschedule.shared.utils.TimeCalculator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

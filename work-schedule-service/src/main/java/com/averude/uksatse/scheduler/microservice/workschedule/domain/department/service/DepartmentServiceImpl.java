@@ -1,6 +1,6 @@
 package com.averude.uksatse.scheduler.microservice.workschedule.domain.department.service;
 
-import com.averude.uksatse.scheduler.core.model.entity.structure.Department;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.department.entity.Department;
 import com.averude.uksatse.scheduler.microservice.workschedule.shared.manager.ScheduleTablePartitionManager;
 import com.averude.uksatse.scheduler.microservice.workschedule.shared.manager.TablePartitionManager;
 import com.averude.uksatse.scheduler.microservice.workschedule.shared.repository.DepartmentRepository;

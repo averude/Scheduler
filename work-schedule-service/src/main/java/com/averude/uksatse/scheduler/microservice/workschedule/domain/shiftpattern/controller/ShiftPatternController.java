@@ -1,9 +1,9 @@
 package com.averude.uksatse.scheduler.microservice.workschedule.domain.shiftpattern.controller;
 
 import com.averude.uksatse.scheduler.core.model.dto.BasicDto;
-import com.averude.uksatse.scheduler.core.model.dto.ShiftPatternDTO;
-import com.averude.uksatse.scheduler.core.model.entity.PatternUnit;
-import com.averude.uksatse.scheduler.core.model.entity.ShiftPattern;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.shiftpattern.dto.ShiftPatternDTO;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.shiftpattern.entity.PatternUnit;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.shiftpattern.entity.ShiftPattern;
 import com.averude.uksatse.scheduler.microservice.workschedule.domain.shiftpattern.service.ShiftPatternService;
 import com.averude.uksatse.scheduler.security.annotations.IsEnterpriseOrDepartmentAdmin;
 import com.averude.uksatse.scheduler.security.logging.Logged;

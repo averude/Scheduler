@@ -1,17 +1,17 @@
 package com.averude.uksatse.scheduler.microservice.workschedule.domain.statistics.service;
 
-import com.averude.uksatse.scheduler.core.interfaces.entity.Composition;
-import com.averude.uksatse.scheduler.core.model.dto.EmployeePositionStat;
-import com.averude.uksatse.scheduler.core.model.dto.EmployeeScheduleDTO;
-import com.averude.uksatse.scheduler.core.model.dto.EmployeeWorkStatDTO;
-import com.averude.uksatse.scheduler.core.model.entity.SpecialCalendarDate;
-import com.averude.uksatse.scheduler.core.model.entity.SummationColumn;
-import com.averude.uksatse.scheduler.core.model.interval.GenerationInterval;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.specialcalendardate.entity.SpecialCalendarDate;
 import com.averude.uksatse.scheduler.microservice.workschedule.domain.statistics.builder.CountMapBuilder;
 import com.averude.uksatse.scheduler.microservice.workschedule.domain.statistics.builder.PositionIntervalMapBuilder;
 import com.averude.uksatse.scheduler.microservice.workschedule.domain.statistics.calculator.StatisticsCalculator;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.statistics.dto.EmployeePositionStat;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.statistics.dto.EmployeeWorkStatDTO;
 import com.averude.uksatse.scheduler.microservice.workschedule.domain.statistics.exceptions.UnsupportedSummationCalculationModeException;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.summationcolumn.entity.SummationColumn;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.workschedule.dto.EmployeeScheduleDTO;
 import com.averude.uksatse.scheduler.microservice.workschedule.domain.workschedule.service.ScheduleService;
+import com.averude.uksatse.scheduler.microservice.workschedule.shared.model.interfaces.Composition;
+import com.averude.uksatse.scheduler.microservice.workschedule.shared.model.interval.GenerationInterval;
 import com.averude.uksatse.scheduler.microservice.workschedule.shared.repository.SpecialCalendarDateRepository;
 import com.averude.uksatse.scheduler.microservice.workschedule.shared.repository.SummationColumnRepository;
 import lombok.RequiredArgsConstructor;

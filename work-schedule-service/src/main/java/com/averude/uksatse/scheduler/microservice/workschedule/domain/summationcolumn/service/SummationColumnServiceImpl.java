@@ -1,7 +1,7 @@
 package com.averude.uksatse.scheduler.microservice.workschedule.domain.summationcolumn.service;
 
-import com.averude.uksatse.scheduler.core.model.entity.SummationColumn;
-import com.averude.uksatse.scheduler.core.model.entity.SummationColumnDayTypeRange;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.summationcolumn.entity.SummationColumn;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.summationcolumn.entity.SummationColumnDayTypeRange;
 import com.averude.uksatse.scheduler.microservice.workschedule.shared.repository.SummationColumnDayTypeRangeRepository;
 import com.averude.uksatse.scheduler.microservice.workschedule.shared.repository.SummationColumnRepository;
 import com.averude.uksatse.scheduler.microservice.workschedule.shared.service.AByEnterpriseIdDtoService;

@@ -1,6 +1,6 @@
 package com.averude.uksatse.scheduler.microservice.workschedule.shared.repository;
 
-import com.averude.uksatse.scheduler.core.model.entity.WorkingNorm;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.workingnorm.entity.WorkingNorm;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.JpaRepository;

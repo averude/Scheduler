@@ -2,7 +2,7 @@ package com.averude.uksatse.scheduler.microservice.workschedule.domain.generatio
 
 import org.springframework.stereotype.Component;
 
-import static com.averude.uksatse.scheduler.core.model.entity.SpecialCalendarDateType.HOLIDAY;
+import static com.averude.uksatse.scheduler.microservice.workschedule.domain.specialcalendardate.entity.SpecialCalendarDateType.HOLIDAY;
 
 @Component
 public class HolidayPatternRuleProcessor extends SpecialCalendarDatePatternRuleProcessor {

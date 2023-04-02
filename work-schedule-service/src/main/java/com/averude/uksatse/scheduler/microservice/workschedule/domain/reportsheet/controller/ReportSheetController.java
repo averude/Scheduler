@@ -1,6 +1,6 @@
 package com.averude.uksatse.scheduler.microservice.workschedule.domain.reportsheet.controller;
 
-import com.averude.uksatse.scheduler.core.model.dto.ReportSheetDTO;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.reportsheet.dto.ReportSheetDTO;
 import com.averude.uksatse.scheduler.microservice.workschedule.domain.reportsheet.service.ReportSheetService;
 import com.averude.uksatse.scheduler.security.annotations.IsEnterpriseOrDepartmentAdmin;
 import com.averude.uksatse.scheduler.security.logging.Logged;

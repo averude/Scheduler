@@ -3,8 +3,8 @@ package com.averude.uksatse.scheduler.microservice.workschedule.domain.summation
 import com.averude.uksatse.scheduler.core.interfaces.service.IByEnterpriseIdDtoService;
 import com.averude.uksatse.scheduler.core.interfaces.service.IByEnterpriseIdService;
 import com.averude.uksatse.scheduler.core.interfaces.service.IDtoService;
-import com.averude.uksatse.scheduler.core.model.entity.SummationColumn;
-import com.averude.uksatse.scheduler.core.model.entity.SummationColumnDayTypeRange;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.summationcolumn.entity.SummationColumn;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.summationcolumn.entity.SummationColumnDayTypeRange;
 
 public interface SummationColumnService extends
         IByEnterpriseIdDtoService<SummationColumn, SummationColumnDayTypeRange, Long>,

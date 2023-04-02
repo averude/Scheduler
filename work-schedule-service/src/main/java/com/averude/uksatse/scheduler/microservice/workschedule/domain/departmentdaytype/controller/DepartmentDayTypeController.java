@@ -1,6 +1,6 @@
 package com.averude.uksatse.scheduler.microservice.workschedule.domain.departmentdaytype.controller;
 
-import com.averude.uksatse.scheduler.core.model.entity.DepartmentDayType;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.departmentdaytype.entity.DepartmentDayType;
 import com.averude.uksatse.scheduler.microservice.workschedule.domain.departmentdaytype.service.DepartmentDayTypeService;
 import com.averude.uksatse.scheduler.security.annotations.IsEnterpriseOrDepartmentAdmin;
 import com.averude.uksatse.scheduler.security.logging.Logged;

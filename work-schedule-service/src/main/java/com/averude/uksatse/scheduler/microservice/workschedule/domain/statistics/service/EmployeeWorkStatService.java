@@ -1,6 +1,6 @@
 package com.averude.uksatse.scheduler.microservice.workschedule.domain.statistics.service;
 
-import com.averude.uksatse.scheduler.core.model.dto.EmployeeWorkStatDTO;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.statistics.dto.EmployeeWorkStatDTO;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;

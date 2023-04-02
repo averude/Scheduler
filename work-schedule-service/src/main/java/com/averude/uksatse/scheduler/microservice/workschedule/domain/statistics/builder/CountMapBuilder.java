@@ -1,11 +1,11 @@
 package com.averude.uksatse.scheduler.microservice.workschedule.domain.statistics.builder;
 
-import com.averude.uksatse.scheduler.core.interfaces.entity.HasDate;
-import com.averude.uksatse.scheduler.core.interfaces.entity.HasDateDuration;
-import com.averude.uksatse.scheduler.core.model.entity.SpecialCalendarDate;
-import com.averude.uksatse.scheduler.core.model.entity.WorkDay;
-import com.averude.uksatse.scheduler.core.model.interval.GenerationInterval;
-import com.averude.uksatse.scheduler.core.model.wrapper.WorkDayWrapper;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.specialcalendardate.entity.SpecialCalendarDate;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.statistics.wrapper.WorkDayWrapper;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.workschedule.entity.WorkDay;
+import com.averude.uksatse.scheduler.microservice.workschedule.shared.model.interfaces.HasDate;
+import com.averude.uksatse.scheduler.microservice.workschedule.shared.model.interfaces.HasDateDuration;
+import com.averude.uksatse.scheduler.microservice.workschedule.shared.model.interval.GenerationInterval;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import static com.averude.uksatse.scheduler.core.util.IntervalUtils.isBetween;
+import static com.averude.uksatse.scheduler.microservice.workschedule.shared.utils.IntervalUtils.isBetween;
 
 @Component
 public class CountMapBuilder {

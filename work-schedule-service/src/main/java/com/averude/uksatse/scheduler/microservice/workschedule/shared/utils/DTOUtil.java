@@ -1,8 +1,14 @@
 package com.averude.uksatse.scheduler.microservice.workschedule.shared.utils;
 
-import com.averude.uksatse.scheduler.core.model.dto.EmployeeScheduleDTO;
-import com.averude.uksatse.scheduler.core.model.dto.ShiftPatternDTO;
-import com.averude.uksatse.scheduler.core.model.entity.*;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.composition.entity.MainComposition;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.composition.entity.SubstitutionComposition;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.employee.entity.Employee;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.shiftpattern.dto.ShiftPatternDTO;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.shiftpattern.entity.PatternUnit;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.shiftpattern.entity.ShiftPattern;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.shiftpattern.entity.ShiftPatternGenerationRule;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.workschedule.dto.EmployeeScheduleDTO;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.workschedule.entity.WorkDay;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

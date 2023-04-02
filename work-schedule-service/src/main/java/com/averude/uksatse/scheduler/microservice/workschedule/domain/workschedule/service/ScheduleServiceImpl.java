@@ -1,12 +1,12 @@
 package com.averude.uksatse.scheduler.microservice.workschedule.domain.workschedule.service;
 
-import com.averude.uksatse.scheduler.core.interfaces.entity.HasEmployeeId;
-import com.averude.uksatse.scheduler.core.model.dto.EmployeeScheduleDTO;
-import com.averude.uksatse.scheduler.core.model.entity.Employee;
-import com.averude.uksatse.scheduler.core.model.entity.MainComposition;
-import com.averude.uksatse.scheduler.core.model.entity.SubstitutionComposition;
-import com.averude.uksatse.scheduler.core.model.entity.WorkDay;
 import com.averude.uksatse.scheduler.core.util.CollectionUtils;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.composition.entity.MainComposition;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.composition.entity.SubstitutionComposition;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.employee.entity.Employee;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.workschedule.dto.EmployeeScheduleDTO;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.workschedule.entity.WorkDay;
+import com.averude.uksatse.scheduler.microservice.workschedule.shared.model.interfaces.HasEmployeeId;
 import com.averude.uksatse.scheduler.microservice.workschedule.shared.repository.EmployeeRepository;
 import com.averude.uksatse.scheduler.microservice.workschedule.shared.repository.MainCompositionRepository;
 import com.averude.uksatse.scheduler.microservice.workschedule.shared.repository.ScheduleRepository;

@@ -1,8 +1,8 @@
 package com.averude.uksatse.scheduler.microservice.workschedule.domain.generation.utils;
 
-import com.averude.uksatse.scheduler.core.interfaces.entity.HasDayTypeAndTime;
-import com.averude.uksatse.scheduler.core.model.entity.SpecialCalendarDate;
-import com.averude.uksatse.scheduler.core.model.entity.WorkDay;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.specialcalendardate.entity.SpecialCalendarDate;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.workschedule.entity.WorkDay;
+import com.averude.uksatse.scheduler.microservice.workschedule.shared.model.interfaces.HasDayTypeAndTime;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;

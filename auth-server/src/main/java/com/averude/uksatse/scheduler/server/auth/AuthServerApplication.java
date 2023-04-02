@@ -20,11 +20,10 @@ import org.springframework.web.filter.CorsFilter;
 })
 @EntityScan(basePackages = {
         "com.averude.uksatse.scheduler.security.model.entity",
-        "com.averude.uksatse.scheduler.core.model.entity"
+        "com.averude.uksatse.scheduler.server.auth.entity"
 })
 @EnableJpaRepositories({
-        "com.averude.uksatse.scheduler.server.auth.repository",
-        "com.averude.uksatse.scheduler.shared.repository"
+        "com.averude.uksatse.scheduler.server.auth.repository"
 })
 public class AuthServerApplication {
     public static void main(String[] args) {

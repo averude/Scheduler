@@ -1,6 +1,6 @@
 package com.averude.uksatse.scheduler.microservice.workschedule.shared.repository;
 
-import com.averude.uksatse.scheduler.core.model.entity.ShiftPatternGenerationRule;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.shiftpattern.entity.ShiftPatternGenerationRule;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.QueryHints;

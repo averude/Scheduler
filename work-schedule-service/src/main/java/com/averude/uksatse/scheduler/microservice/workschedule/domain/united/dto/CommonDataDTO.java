@@ -1,9 +1,9 @@
 package com.averude.uksatse.scheduler.microservice.workschedule.domain.united.dto;
 
-import com.averude.uksatse.scheduler.core.model.entity.DayType;
-import com.averude.uksatse.scheduler.core.model.entity.Employee;
-import com.averude.uksatse.scheduler.core.model.entity.Position;
-import com.averude.uksatse.scheduler.core.model.entity.structure.Shift;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.daytype.entity.DayType;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.employee.entity.Employee;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.position.entity.Position;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.shift.entity.Shift;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

@@ -12,8 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.averude.uksatse.scheduler.core.util.CollectionUtils.containsAllLong;
-import static com.averude.uksatse.scheduler.security.details.UserLevels.DEPARTMENT;
-import static com.averude.uksatse.scheduler.security.details.UserLevels.SHIFT;
+import static com.averude.uksatse.scheduler.security.details.UserLevels.*;
 import static com.averude.uksatse.scheduler.security.utils.SecurityUtils.getLongClaim;
 import static com.averude.uksatse.scheduler.security.utils.SecurityUtils.getLongListClaim;
 import static java.util.stream.Collectors.toList;
@@ -96,10 +95,10 @@ public class DepartmentLevelSecurity {
                     .anyMatch(accDep -> accDep.equals(departmentId));
         }
 
-// Temporary disabled
-//        if (level.equals(ENTERPRISE)) {
-//            return departmentRepository.existsByEnterpriseIdAndId(enterpriseId, departmentId);
-//        }
+        if (level.equals(ENTERPRISE)) {
+            // Temporary
+            return true;
+        }
 
         log.error("No required level found during check");
         return false;

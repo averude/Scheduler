@@ -1,6 +1,6 @@
 package com.averude.uksatse.scheduler.microservice.workschedule.shared.repository;
 
-import com.averude.uksatse.scheduler.core.model.entity.SummationColumn;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.summationcolumn.entity.SummationColumn;
 import com.averude.uksatse.scheduler.microservice.workschedule.shared.repository.interfaces.IByEnterpriseIdRepository;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.QueryHints;

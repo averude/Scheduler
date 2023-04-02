@@ -1,6 +1,6 @@
 package com.averude.uksatse.scheduler.microservice.workschedule.domain.shift.controller;
 
-import com.averude.uksatse.scheduler.core.model.entity.structure.Shift;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.shift.entity.Shift;
 import com.averude.uksatse.scheduler.microservice.workschedule.domain.shift.service.ShiftService;
 import com.averude.uksatse.scheduler.security.annotations.IsEnterpriseOrDepartmentAdmin;
 import com.averude.uksatse.scheduler.security.logging.Logged;

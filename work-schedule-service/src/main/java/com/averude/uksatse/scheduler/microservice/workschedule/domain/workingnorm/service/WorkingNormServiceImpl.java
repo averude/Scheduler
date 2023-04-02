@@ -1,8 +1,8 @@
 package com.averude.uksatse.scheduler.microservice.workschedule.domain.workingnorm.service;
 
 import com.averude.uksatse.scheduler.core.model.dto.BasicDto;
-import com.averude.uksatse.scheduler.core.model.entity.WorkingNorm;
-import com.averude.uksatse.scheduler.core.model.entity.structure.Shift;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.shift.entity.Shift;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.workingnorm.entity.WorkingNorm;
 import com.averude.uksatse.scheduler.microservice.workschedule.shared.repository.ShiftRepository;
 import com.averude.uksatse.scheduler.microservice.workschedule.shared.repository.WorkingNormRepository;
 import com.averude.uksatse.scheduler.microservice.workschedule.shared.service.AService;

@@ -1,14 +1,14 @@
 package com.averude.uksatse.scheduler.microservice.workschedule.domain.statistics.strategy;
 
-import com.averude.uksatse.scheduler.core.interfaces.entity.HasDayTypeId;
-import com.averude.uksatse.scheduler.core.interfaces.entity.HasTime;
-import com.averude.uksatse.scheduler.core.interfaces.entity.HasTimeDuration;
+import com.averude.uksatse.scheduler.microservice.workschedule.shared.model.interfaces.HasDayTypeId;
+import com.averude.uksatse.scheduler.microservice.workschedule.shared.model.interfaces.HasTime;
+import com.averude.uksatse.scheduler.microservice.workschedule.shared.model.interfaces.HasTimeDuration;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-import static com.averude.uksatse.scheduler.core.model.entity.SummationColumnType.COUNT;
 import static com.averude.uksatse.scheduler.core.util.CollectionUtils.binarySearch;
+import static com.averude.uksatse.scheduler.microservice.workschedule.domain.summationcolumn.entity.SummationColumnType.COUNT;
 
 @Component
 public class WorkDaysCountCalculationStrategy implements CalculationStrategy {

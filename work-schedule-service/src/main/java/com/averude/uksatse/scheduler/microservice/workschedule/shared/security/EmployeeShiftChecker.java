@@ -1,8 +1,8 @@
 package com.averude.uksatse.scheduler.microservice.workschedule.shared.security;
 
-import com.averude.uksatse.scheduler.core.interfaces.entity.Composition;
-import com.averude.uksatse.scheduler.core.model.entity.MainComposition;
-import com.averude.uksatse.scheduler.core.model.entity.WorkDay;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.composition.entity.MainComposition;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.workschedule.entity.WorkDay;
+import com.averude.uksatse.scheduler.microservice.workschedule.shared.model.interfaces.Composition;
 import com.averude.uksatse.scheduler.microservice.workschedule.shared.repository.MainCompositionRepository;
 import com.averude.uksatse.scheduler.microservice.workschedule.shared.repository.SubstitutionCompositionRepository;
 import com.averude.uksatse.scheduler.security.details.UserLevels;
@@ -16,7 +16,7 @@ import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 import java.util.function.Predicate;
 
-import static com.averude.uksatse.scheduler.core.util.IntervalUtils.isBetween;
+import static com.averude.uksatse.scheduler.microservice.workschedule.shared.utils.IntervalUtils.isBetween;
 import static com.averude.uksatse.scheduler.security.utils.SecurityUtils.getLongListClaim;
 import static java.util.stream.Collectors.toList;
 

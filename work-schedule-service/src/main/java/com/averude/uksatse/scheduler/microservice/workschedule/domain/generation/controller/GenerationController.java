@@ -1,6 +1,6 @@
 package com.averude.uksatse.scheduler.microservice.workschedule.domain.generation.controller;
 
-import com.averude.uksatse.scheduler.core.model.dto.GenerationDTO;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.generation.dto.GenerationDTO;
 import com.averude.uksatse.scheduler.microservice.workschedule.domain.generation.service.ScheduleGenerationService;
 import com.averude.uksatse.scheduler.microservice.workschedule.domain.generation.service.WorkingNormGenerationService;
 import com.averude.uksatse.scheduler.security.logging.Logged;

@@ -1,14 +1,14 @@
 package com.averude.uksatse.scheduler.microservice.workschedule.domain.generation.service;
 
-import com.averude.uksatse.scheduler.core.creator.GenerationIntervalCreator;
-import com.averude.uksatse.scheduler.core.interfaces.entity.Composition;
-import com.averude.uksatse.scheduler.core.model.entity.ShiftPattern;
-import com.averude.uksatse.scheduler.core.model.entity.SpecialCalendarDate;
-import com.averude.uksatse.scheduler.core.model.entity.WorkDay;
-import com.averude.uksatse.scheduler.core.model.interval.GenerationInterval;
-import com.averude.uksatse.scheduler.core.util.OffsetCalculator;
 import com.averude.uksatse.scheduler.microservice.workschedule.domain.generation.schedule.ScheduleGenerator;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.shiftpattern.entity.ShiftPattern;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.specialcalendardate.entity.SpecialCalendarDate;
+import com.averude.uksatse.scheduler.microservice.workschedule.domain.workschedule.entity.WorkDay;
+import com.averude.uksatse.scheduler.microservice.workschedule.shared.creator.GenerationIntervalCreator;
+import com.averude.uksatse.scheduler.microservice.workschedule.shared.model.interfaces.Composition;
+import com.averude.uksatse.scheduler.microservice.workschedule.shared.model.interval.GenerationInterval;
 import com.averude.uksatse.scheduler.microservice.workschedule.shared.repository.*;
+import com.averude.uksatse.scheduler.microservice.workschedule.shared.utils.OffsetCalculator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static com.averude.uksatse.scheduler.core.util.SpecialCalendarDateUtil.getSpecialDateMap;
+import static com.averude.uksatse.scheduler.microservice.workschedule.shared.utils.SpecialCalendarDateUtil.getSpecialDateMap;
 
 @Slf4j
 @Service
